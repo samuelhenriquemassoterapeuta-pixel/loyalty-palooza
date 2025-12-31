@@ -2,107 +2,119 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display&display=swap');
 
 @layer base {
   :root {
-    --background: 220 20% 97%;
-    --foreground: 220 25% 10%;
+    /* Resinkra Color Palette - Organic & Natural */
+    --background: 45 30% 96%;
+    --foreground: 70 35% 12%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 220 25% 10%;
+    --card: 45 25% 98%;
+    --card-foreground: 70 35% 12%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 220 25% 10%;
+    --popover: 45 25% 98%;
+    --popover-foreground: 70 35% 12%;
 
-    --primary: 160 84% 39%;
-    --primary-foreground: 0 0% 100%;
+    /* Folha Sombra - Primary Green */
+    --primary: 70 35% 24%;
+    --primary-foreground: 45 30% 92%;
 
-    --secondary: 220 14% 96%;
-    --secondary-foreground: 220 25% 10%;
+    /* Areia Serena - Secondary */
+    --secondary: 45 20% 88%;
+    --secondary-foreground: 70 35% 12%;
 
-    --muted: 220 14% 96%;
-    --muted-foreground: 220 10% 46%;
+    --muted: 45 15% 90%;
+    --muted-foreground: 70 15% 45%;
 
-    --accent: 38 92% 50%;
-    --accent-foreground: 0 0% 100%;
+    /* Canela com Mel - Accent */
+    --accent: 30 45% 35%;
+    --accent-foreground: 45 30% 96%;
 
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 100%;
+    /* Meditação - Success/Highlight */
+    --highlight: 100 25% 42%;
+    --highlight-foreground: 45 30% 96%;
 
-    --border: 220 13% 91%;
-    --input: 220 13% 91%;
-    --ring: 160 84% 39%;
+    --destructive: 0 65% 50%;
+    --destructive-foreground: 45 30% 96%;
+
+    --border: 45 15% 85%;
+    --input: 45 15% 85%;
+    --ring: 70 35% 24%;
 
     --radius: 1rem;
 
-    /* Custom tokens */
-    --gradient-primary: linear-gradient(135deg, hsl(160 84% 39%) 0%, hsl(175 84% 32%) 100%);
-    --gradient-accent: linear-gradient(135deg, hsl(38 92% 50%) 0%, hsl(28 92% 55%) 100%);
-    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%) 0%, hsl(220 20% 98%) 100%);
-    --gradient-hero: linear-gradient(180deg, hsl(160 84% 39% / 0.1) 0%, hsl(220 20% 97%) 100%);
+    /* Custom tokens - Resinkra */
+    --gradient-primary: linear-gradient(135deg, hsl(70 35% 24%) 0%, hsl(70 40% 30%) 100%);
+    --gradient-accent: linear-gradient(135deg, hsl(30 45% 35%) 0%, hsl(25 50% 40%) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(45 25% 98%) 0%, hsl(45 20% 95%) 100%);
+    --gradient-hero: linear-gradient(180deg, hsl(70 35% 24% / 0.08) 0%, hsl(45 30% 96%) 100%);
     
-    --shadow-card: 0 4px 24px -4px hsl(220 25% 10% / 0.08);
-    --shadow-button: 0 4px 14px -2px hsl(160 84% 39% / 0.4);
-    --shadow-elevated: 0 20px 40px -8px hsl(220 25% 10% / 0.15);
+    --shadow-card: 0 4px 24px -4px hsl(70 35% 12% / 0.08);
+    --shadow-button: 0 4px 14px -2px hsl(70 35% 24% / 0.35);
+    --shadow-elevated: 0 20px 40px -8px hsl(70 35% 12% / 0.12);
 
-    --font-display: 'Plus Jakarta Sans', system-ui, sans-serif;
+    --font-display: 'DM Sans', system-ui, sans-serif;
+    --font-serif: 'DM Serif Display', Georgia, serif;
 
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 160 84% 39%;
+    --sidebar-background: 45 25% 97%;
+    --sidebar-foreground: 70 35% 12%;
+    --sidebar-primary: 70 35% 24%;
+    --sidebar-primary-foreground: 45 30% 92%;
+    --sidebar-accent: 45 20% 92%;
+    --sidebar-accent-foreground: 70 35% 12%;
+    --sidebar-border: 45 15% 85%;
+    --sidebar-ring: 70 35% 24%;
   }
 
   .dark {
-    --background: 220 25% 8%;
-    --foreground: 220 20% 98%;
+    --background: 70 25% 8%;
+    --foreground: 45 25% 95%;
 
-    --card: 220 25% 12%;
-    --card-foreground: 220 20% 98%;
+    --card: 70 20% 12%;
+    --card-foreground: 45 25% 95%;
 
-    --popover: 220 25% 12%;
-    --popover-foreground: 220 20% 98%;
+    --popover: 70 20% 12%;
+    --popover-foreground: 45 25% 95%;
 
-    --primary: 160 84% 45%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 70 40% 45%;
+    --primary-foreground: 70 35% 10%;
 
-    --secondary: 220 20% 18%;
-    --secondary-foreground: 220 20% 98%;
+    --secondary: 70 15% 18%;
+    --secondary-foreground: 45 25% 95%;
 
-    --muted: 220 20% 18%;
-    --muted-foreground: 220 15% 60%;
+    --muted: 70 15% 18%;
+    --muted-foreground: 45 15% 60%;
 
-    --accent: 38 92% 55%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 30 50% 50%;
+    --accent-foreground: 70 35% 10%;
 
-    --destructive: 0 72% 50%;
-    --destructive-foreground: 0 0% 100%;
+    --highlight: 100 30% 50%;
+    --highlight-foreground: 70 35% 10%;
 
-    --border: 220 20% 20%;
-    --input: 220 20% 20%;
-    --ring: 160 84% 45%;
+    --destructive: 0 60% 45%;
+    --destructive-foreground: 45 30% 96%;
 
-    --gradient-primary: linear-gradient(135deg, hsl(160 84% 45%) 0%, hsl(175 84% 38%) 100%);
-    --gradient-card: linear-gradient(145deg, hsl(220 25% 12%) 0%, hsl(220 25% 14%) 100%);
-    --gradient-hero: linear-gradient(180deg, hsl(160 84% 45% / 0.15) 0%, hsl(220 25% 8%) 100%);
+    --border: 70 15% 20%;
+    --input: 70 15% 20%;
+    --ring: 70 40% 45%;
 
-    --shadow-card: 0 4px 24px -4px hsl(0 0% 0% / 0.3);
-    --shadow-button: 0 4px 14px -2px hsl(160 84% 45% / 0.3);
-    --shadow-elevated: 0 20px 40px -8px hsl(0 0% 0% / 0.4);
+    --gradient-primary: linear-gradient(135deg, hsl(70 40% 45%) 0%, hsl(70 45% 50%) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(70 20% 12%) 0%, hsl(70 20% 14%) 100%);
+    --gradient-hero: linear-gradient(180deg, hsl(70 40% 45% / 0.12) 0%, hsl(70 25% 8%) 100%);
 
-    --sidebar-background: 220 25% 10%;
-    --sidebar-foreground: 220 20% 98%;
-    --sidebar-primary: 160 84% 45%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 220 20% 15%;
-    --sidebar-accent-foreground: 220 20% 98%;
-    --sidebar-border: 220 20% 18%;
-    --sidebar-ring: 160 84% 45%;
+    --shadow-card: 0 4px 24px -4px hsl(0 0% 0% / 0.4);
+    --shadow-button: 0 4px 14px -2px hsl(70 40% 45% / 0.3);
+    --shadow-elevated: 0 20px 40px -8px hsl(0 0% 0% / 0.5);
+
+    --sidebar-background: 70 20% 10%;
+    --sidebar-foreground: 45 25% 95%;
+    --sidebar-primary: 70 40% 45%;
+    --sidebar-primary-foreground: 70 35% 10%;
+    --sidebar-accent: 70 15% 15%;
+    --sidebar-accent-foreground: 45 25% 95%;
+    --sidebar-border: 70 15% 18%;
+    --sidebar-ring: 70 40% 45%;
   }
 }
 
@@ -156,5 +168,9 @@
 
   .safe-bottom {
     padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .font-serif {
+    font-family: var(--font-serif);
   }
 }
