@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Bell, Settings } from "lucide-react";
+import resinkraLogo from "@/assets/resinkra-logo.png";
 
 interface HeaderProps {
   userName: string;
@@ -19,9 +20,16 @@ export const Header = ({ userName }: HeaderProps) => {
       animate={{ opacity: 1, y: 0 }}
       className="flex items-center justify-between py-4"
     >
-      <div>
-        <p className="text-sm text-muted-foreground">{getGreeting()},</p>
-        <h1 className="text-xl font-bold text-foreground">{userName}</h1>
+      <div className="flex items-center gap-3">
+        <img 
+          src={resinkraLogo} 
+          alt="Resinkra" 
+          className="h-10 w-10 rounded-xl object-cover"
+        />
+        <div>
+          <p className="text-sm text-muted-foreground">{getGreeting()},</p>
+          <h1 className="text-xl font-bold text-foreground">{userName}</h1>
+        </div>
       </div>
 
       <div className="flex items-center gap-2">
