@@ -1,14 +1,17 @@
 import { motion } from "framer-motion";
-import { QrCode, Send, Receipt, Gift } from "lucide-react";
+import { QrCode, ShoppingBag, Receipt, Gift } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const actions = [
-  { icon: QrCode, label: "Pagar", color: "bg-primary/10 text-primary" },
-  { icon: Send, label: "Transferir", color: "bg-accent/10 text-accent" },
-  { icon: Receipt, label: "Extrato", color: "bg-secondary text-foreground" },
-  { icon: Gift, label: "Resgatar", color: "bg-primary/10 text-primary" },
+  { icon: QrCode, label: "Pagar", color: "bg-primary/10 text-primary", path: null },
+  { icon: ShoppingBag, label: "Loja", color: "bg-accent/10 text-accent", path: "/loja" },
+  { icon: Receipt, label: "Extrato", color: "bg-secondary text-foreground", path: null },
+  { icon: Gift, label: "Resgatar", color: "bg-primary/10 text-primary", path: null },
 ];
 
 export const QuickActions = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="grid grid-cols-4 gap-3">
       {actions.map((action, index) => (
@@ -18,6 +21,7 @@ export const QuickActions = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: index * 0.1, duration: 0.4 }}
           whileTap={{ scale: 0.95 }}
+          onClick={() => action.path && navigate(action.path)}
           className="flex flex-col items-center gap-2 p-4 rounded-2xl bg-card shadow-card hover:shadow-elevated transition-shadow"
         >
           <div className={`p-3 rounded-xl ${action.color}`}>
