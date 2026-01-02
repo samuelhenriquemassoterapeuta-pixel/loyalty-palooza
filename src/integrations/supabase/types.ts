@@ -14,16 +14,299 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      agendamentos: {
+        Row: {
+          created_at: string
+          data_hora: string
+          id: string
+          observacoes: string | null
+          servico: string
+          status: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          data_hora: string
+          id?: string
+          observacoes?: string | null
+          servico: string
+          status?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          data_hora?: string
+          id?: string
+          observacoes?: string | null
+          servico?: string
+          status?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      avaliacoes: {
+        Row: {
+          agendamento_id: string | null
+          comentario: string | null
+          created_at: string
+          id: string
+          nota: number
+          produto_id: string | null
+          user_id: string
+        }
+        Insert: {
+          agendamento_id?: string | null
+          comentario?: string | null
+          created_at?: string
+          id?: string
+          nota: number
+          produto_id?: string | null
+          user_id: string
+        }
+        Update: {
+          agendamento_id?: string | null
+          comentario?: string | null
+          created_at?: string
+          id?: string
+          nota?: number
+          produto_id?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "avaliacoes_agendamento_id_fkey"
+            columns: ["agendamento_id"]
+            isOneToOne: false
+            referencedRelation: "agendamentos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "avaliacoes_produto_id_fkey"
+            columns: ["produto_id"]
+            isOneToOne: false
+            referencedRelation: "produtos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      favoritos: {
+        Row: {
+          created_at: string
+          id: string
+          produto_id: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          produto_id?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          produto_id?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "favoritos_produto_id_fkey"
+            columns: ["produto_id"]
+            isOneToOne: false
+            referencedRelation: "produtos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      notificacoes: {
+        Row: {
+          created_at: string
+          id: string
+          lida: boolean | null
+          mensagem: string
+          tipo: string
+          titulo: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          lida?: boolean | null
+          mensagem: string
+          tipo?: string
+          titulo: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          lida?: boolean | null
+          mensagem?: string
+          tipo?: string
+          titulo?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      pedido_itens: {
+        Row: {
+          id: string
+          pedido_id: string
+          preco_unitario: number
+          produto_id: string
+          quantidade: number
+        }
+        Insert: {
+          id?: string
+          pedido_id: string
+          preco_unitario: number
+          produto_id: string
+          quantidade?: number
+        }
+        Update: {
+          id?: string
+          pedido_id?: string
+          preco_unitario?: number
+          produto_id?: string
+          quantidade?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pedido_itens_pedido_id_fkey"
+            columns: ["pedido_id"]
+            isOneToOne: false
+            referencedRelation: "pedidos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pedido_itens_produto_id_fkey"
+            columns: ["produto_id"]
+            isOneToOne: false
+            referencedRelation: "produtos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pedidos: {
+        Row: {
+          created_at: string
+          id: string
+          status: string
+          total: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          status?: string
+          total: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          status?: string
+          total?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      produtos: {
+        Row: {
+          categoria: string | null
+          created_at: string
+          descricao: string | null
+          disponivel: boolean | null
+          id: string
+          imagem_url: string | null
+          nome: string
+          preco: number
+        }
+        Insert: {
+          categoria?: string | null
+          created_at?: string
+          descricao?: string | null
+          disponivel?: boolean | null
+          id?: string
+          imagem_url?: string | null
+          nome: string
+          preco: number
+        }
+        Update: {
+          categoria?: string | null
+          created_at?: string
+          descricao?: string | null
+          disponivel?: boolean | null
+          id?: string
+          imagem_url?: string | null
+          nome?: string
+          preco?: number
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          id: string
+          nome: string | null
+          telefone: string | null
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          id: string
+          nome?: string | null
+          telefone?: string | null
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          id?: string
+          nome?: string | null
+          telefone?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +433,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "user"],
+    },
   },
 } as const
