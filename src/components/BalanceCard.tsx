@@ -1,7 +1,8 @@
 import { motion } from "framer-motion";
-import { Eye, EyeOff, TrendingUp, Sparkles, Loader2 } from "lucide-react";
+import { Eye, EyeOff, TrendingUp, Sparkles } from "lucide-react";
 import { useState } from "react";
 import { useTransacoes } from "@/hooks/useTransacoes";
+import { BalanceCardSkeleton } from "@/components/skeletons";
 
 export const BalanceCard = () => {
   const [showBalance, setShowBalance] = useState(true);
@@ -13,6 +14,10 @@ export const BalanceCard = () => {
       currency: "BRL",
     }).format(value);
   };
+
+  if (loading) {
+    return <BalanceCardSkeleton />;
+  }
 
   return (
     <motion.div
@@ -64,16 +69,9 @@ export const BalanceCard = () => {
           animate={{ opacity: 1, y: 0 }}
           className="mb-6"
         >
-          {loading ? (
-            <div className="flex items-center gap-2">
-              <Loader2 className="w-6 h-6 animate-spin" />
-              <span className="text-lg opacity-70">Carregando...</span>
-            </div>
-          ) : (
-            <h2 className="text-4xl font-bold tracking-tight font-serif">
-              {showBalance ? formatCurrency(stats.saldo) : "R$ ••••••"}
-            </h2>
-          )}
+          <h2 className="text-4xl font-bold tracking-tight font-serif">
+            {showBalance ? formatCurrency(stats.saldo) : "R$ ••••••"}
+          </h2>
         </motion.div>
 
         <motion.div 
@@ -88,7 +86,7 @@ export const BalanceCard = () => {
           <div className="flex-1">
             <p className="text-xs opacity-80">Cashback acumulado</p>
             <p className="font-semibold">
-              {loading ? "..." : showBalance ? formatCurrency(stats.totalCashback) : "R$ ••••"}
+              {showBalance ? formatCurrency(stats.totalCashback) : "R$ ••••"}
             </p>
           </div>
           <div className="text-xs font-medium px-2 py-1 rounded-full bg-primary-foreground/20">

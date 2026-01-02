@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import { usePacotes, useMeusPacotes, Pacote } from "@/hooks/usePacotes";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { MeusPacotesListSkeleton, PacotesListSkeleton } from "@/components/skeletons";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -92,9 +93,7 @@ const Pacotes = () => {
             className="space-y-4"
           >
             {loadingMeus ? (
-              <div className="flex justify-center py-12">
-                <Loader2 className="w-8 h-8 text-primary animate-spin" />
-              </div>
+              <MeusPacotesListSkeleton />
             ) : meusPacotes.length === 0 ? (
               <Card className="border-dashed">
                 <CardContent className="p-6 text-center">
@@ -167,9 +166,7 @@ const Pacotes = () => {
             className="space-y-4"
           >
             {loadingPacotes ? (
-              <div className="flex justify-center py-12">
-                <Loader2 className="w-8 h-8 text-primary animate-spin" />
-              </div>
+              <PacotesListSkeleton />
             ) : pacotes.length === 0 ? (
               <div className="text-center py-12">
                 <p className="text-muted-foreground">Nenhum pacote disponível no momento.</p>

@@ -1,11 +1,11 @@
 import { motion } from "framer-motion";
-import { Plus, CreditCard, ArrowUpRight, ArrowDownLeft, Loader2, Send
-} from "lucide-react";
+import { Plus, CreditCard, Send } from "lucide-react";
 import { BottomNavigation } from "@/components/BottomNavigation";
 import { Button } from "@/components/ui/button";
 import { useTransacoes } from "@/hooks/useTransacoes";
 import { useProfile } from "@/hooks/useProfile";
 import { useNavigate } from "react-router-dom";
+import { WalletPageSkeleton } from "@/components/skeletons";
 
 const Wallet = () => {
   const navigate = useNavigate();
@@ -20,6 +20,17 @@ const Wallet = () => {
   };
 
   const displayName = profile?.nome || "Usuário";
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background pb-24">
+        <div className="max-w-lg mx-auto px-4 safe-top pt-4">
+          <WalletPageSkeleton />
+        </div>
+        <BottomNavigation />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background pb-24">
@@ -40,13 +51,7 @@ const Wallet = () => {
           className="gradient-primary rounded-2xl p-6 text-primary-foreground mb-6"
         >
           <p className="text-sm opacity-80 mb-1">Saldo total</p>
-          {loading ? (
-            <div className="flex items-center gap-2 mb-4">
-              <Loader2 className="w-6 h-6 animate-spin" />
-            </div>
-          ) : (
-            <h2 className="text-4xl font-bold mb-4">{formatCurrency(stats.saldo)}</h2>
-          )}
+          <h2 className="text-4xl font-bold mb-4">{formatCurrency(stats.saldo)}</h2>
           
           <div className="flex gap-3">
             <Button 
@@ -118,19 +123,11 @@ const Wallet = () => {
           <div className="grid grid-cols-2 gap-3">
             <div className="p-4 rounded-2xl bg-card shadow-card">
               <p className="text-sm text-muted-foreground mb-1">Total gasto</p>
-              {loading ? (
-                <Loader2 className="w-5 h-5 text-primary animate-spin" />
-              ) : (
-                <p className="text-xl font-bold text-foreground">{formatCurrency(stats.totalGasto)}</p>
-              )}
+              <p className="text-xl font-bold text-foreground">{formatCurrency(stats.totalGasto)}</p>
             </div>
             <div className="p-4 rounded-2xl bg-card shadow-card">
               <p className="text-sm text-muted-foreground mb-1">Cashback ganho</p>
-              {loading ? (
-                <Loader2 className="w-5 h-5 text-primary animate-spin" />
-              ) : (
-                <p className="text-xl font-bold text-primary">{formatCurrency(stats.totalCashback)}</p>
-              )}
+              <p className="text-xl font-bold text-primary">{formatCurrency(stats.totalCashback)}</p>
             </div>
           </div>
         </motion.section>

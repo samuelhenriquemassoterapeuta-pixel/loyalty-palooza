@@ -1,8 +1,9 @@
 import { motion } from "framer-motion";
-import { ArrowDownLeft, ArrowUpRight, ChevronRight, Sparkles, Loader2 } from "lucide-react";
+import { ArrowDownLeft, ArrowUpRight, ChevronRight, Sparkles } from "lucide-react";
 import { useTransacoes } from "@/hooks/useTransacoes";
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { TransactionHistorySkeleton } from "@/components/skeletons";
 
 const container = {
   hidden: { opacity: 0 },
@@ -42,16 +43,7 @@ export const TransactionHistory = () => {
   };
 
   if (loading) {
-    return (
-      <section>
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-bold text-foreground">Histórico</h3>
-        </div>
-        <div className="flex justify-center py-8">
-          <Loader2 className="w-6 h-6 text-primary animate-spin" />
-        </div>
-      </section>
-    );
+    return <TransactionHistorySkeleton />;
   }
 
   if (transacoes.length === 0) {
