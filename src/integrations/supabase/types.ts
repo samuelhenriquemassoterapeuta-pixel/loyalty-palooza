@@ -148,6 +148,80 @@ export type Database = {
         }
         Relationships: []
       }
+      pacotes: {
+        Row: {
+          created_at: string
+          descricao: string | null
+          disponivel: boolean | null
+          id: string
+          nome: string
+          preco: number
+          preco_original: number | null
+          total_sessoes: number
+          validade_dias: number | null
+        }
+        Insert: {
+          created_at?: string
+          descricao?: string | null
+          disponivel?: boolean | null
+          id?: string
+          nome: string
+          preco: number
+          preco_original?: number | null
+          total_sessoes: number
+          validade_dias?: number | null
+        }
+        Update: {
+          created_at?: string
+          descricao?: string | null
+          disponivel?: boolean | null
+          id?: string
+          nome?: string
+          preco?: number
+          preco_original?: number | null
+          total_sessoes?: number
+          validade_dias?: number | null
+        }
+        Relationships: []
+      }
+      pacotes_usuario: {
+        Row: {
+          data_compra: string
+          data_validade: string
+          id: string
+          pacote_id: string
+          sessoes_usadas: number | null
+          status: string | null
+          user_id: string
+        }
+        Insert: {
+          data_compra?: string
+          data_validade: string
+          id?: string
+          pacote_id: string
+          sessoes_usadas?: number | null
+          status?: string | null
+          user_id: string
+        }
+        Update: {
+          data_compra?: string
+          data_validade?: string
+          id?: string
+          pacote_id?: string
+          sessoes_usadas?: number | null
+          status?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pacotes_usuario_pacote_id_fkey"
+            columns: ["pacote_id"]
+            isOneToOne: false
+            referencedRelation: "pacotes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       pedido_itens: {
         Row: {
           id: string
@@ -271,6 +345,69 @@ export type Database = {
           nome?: string | null
           telefone?: string | null
           updated_at?: string
+        }
+        Relationships: []
+      }
+      servicos: {
+        Row: {
+          categoria: string | null
+          created_at: string
+          descricao: string | null
+          disponivel: boolean | null
+          duracao: number
+          id: string
+          nome: string
+          preco: number
+        }
+        Insert: {
+          categoria?: string | null
+          created_at?: string
+          descricao?: string | null
+          disponivel?: boolean | null
+          duracao: number
+          id?: string
+          nome: string
+          preco: number
+        }
+        Update: {
+          categoria?: string | null
+          created_at?: string
+          descricao?: string | null
+          disponivel?: boolean | null
+          duracao?: number
+          id?: string
+          nome?: string
+          preco?: number
+        }
+        Relationships: []
+      }
+      transacoes: {
+        Row: {
+          created_at: string
+          descricao: string | null
+          id: string
+          referencia_id: string | null
+          tipo: string
+          user_id: string
+          valor: number
+        }
+        Insert: {
+          created_at?: string
+          descricao?: string | null
+          id?: string
+          referencia_id?: string | null
+          tipo: string
+          user_id: string
+          valor: number
+        }
+        Update: {
+          created_at?: string
+          descricao?: string | null
+          id?: string
+          referencia_id?: string | null
+          tipo?: string
+          user_id?: string
+          valor?: number
         }
         Relationships: []
       }
