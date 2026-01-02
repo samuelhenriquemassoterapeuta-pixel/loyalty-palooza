@@ -1,14 +1,10 @@
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import agendarIcon from "@/assets/icons/agendar-icon.png";
-import lojaIcon from "@/assets/icons/loja-icon.png";
-import historicoIcon from "@/assets/icons/historico-icon.png";
-import transferirIcon from "@/assets/icons/transferir-icon.png";
+import { Calendar, ShoppingBag, History, Send } from "lucide-react";
 
 const actions = [
   { 
-    icon: null,
-    customIcon: agendarIcon,
+    icon: Calendar,
     label: "Agendar", 
     description: "Nova sessão",
     gradient: "from-primary/20 to-primary/5",
@@ -16,8 +12,7 @@ const actions = [
     path: "/agendamento" 
   },
   { 
-    icon: null,
-    customIcon: lojaIcon,
+    icon: ShoppingBag,
     label: "Loja", 
     description: "Produtos",
     gradient: "from-accent/20 to-accent/5",
@@ -25,8 +20,7 @@ const actions = [
     path: "/loja" 
   },
   { 
-    icon: null,
-    customIcon: historicoIcon,
+    icon: History,
     label: "Histórico", 
     description: "Compras",
     gradient: "from-highlight/20 to-highlight/5",
@@ -34,8 +28,7 @@ const actions = [
     path: "/loja" 
   },
   { 
-    icon: null,
-    customIcon: transferirIcon,
+    icon: Send,
     label: "Transferir", 
     description: "Enviar créditos",
     gradient: "from-secondary/30 to-secondary/10",
@@ -133,15 +126,7 @@ export const QuickActions = () => {
               }}
             />
             
-            {action.customIcon ? (
-              <img 
-                src={action.customIcon} 
-                alt={action.label} 
-                className="w-10 h-10 object-contain relative z-10 transition-transform duration-300 group-hover:scale-110" 
-              />
-            ) : action.icon ? (
-              <action.icon size={40} className={`${action.iconColor} relative z-10`} />
-            ) : null}
+            <action.icon size={40} className={`${action.iconColor} relative z-10`} />
           </motion.div>
           
           {/* Label with fade effect */}
