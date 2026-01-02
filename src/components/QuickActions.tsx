@@ -86,7 +86,7 @@ export const QuickActions = () => {
           whileTap={{ scale: 0.92 }}
           whileHover={{ y: -6, scale: 1.02 }}
           onClick={() => action.path && navigate(action.path)}
-          className={`group relative flex flex-col items-center gap-2 p-4 rounded-2xl bg-card shadow-card hover:shadow-elevated transition-all duration-300 overflow-hidden ${
+          className={`group relative flex flex-col items-center gap-2 p-4 rounded-3xl bg-card shadow-card hover:shadow-elevated transition-all duration-300 overflow-hidden ${
             !action.path ? "opacity-60" : ""
           }`}
         >
