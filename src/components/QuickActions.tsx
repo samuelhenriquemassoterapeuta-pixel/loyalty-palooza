@@ -103,7 +103,7 @@ export const QuickActions = () => {
           
           {/* Icon with enhanced effects and pulse */}
           <motion.div 
-            className={`relative z-10 p-3 rounded-xl bg-gradient-to-br ${action.gradient} transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg`}
+            className={`relative z-10 p-4 rounded-xl bg-gradient-to-br ${action.gradient} transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg`}
             animate={{ 
               scale: [1, 1.05, 1],
             }}
