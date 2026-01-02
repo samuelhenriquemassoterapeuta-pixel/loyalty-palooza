@@ -79,38 +79,60 @@ export const QuickActions = () => {
       animate="show"
       className="grid grid-cols-4 gap-2"
     >
-      {actions.map((action) => (
+      {actions.map((action, index) => (
         <motion.button
           key={action.label}
           variants={item}
           whileTap={{ scale: 0.92 }}
-          whileHover={{ y: -4 }}
+          whileHover={{ y: -6, scale: 1.02 }}
           onClick={() => action.path && navigate(action.path)}
           className={`group relative flex flex-col items-center gap-2 p-4 rounded-2xl bg-card shadow-card hover:shadow-elevated transition-all duration-300 overflow-hidden ${
             !action.path ? "opacity-60" : ""
           }`}
         >
-          {/* Gradient background */}
-          <div className={`absolute inset-0 bg-gradient-to-br ${action.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
+          {/* Animated gradient background */}
+          <div className={`absolute inset-0 bg-gradient-to-br ${action.gradient} opacity-0 group-hover:opacity-100 transition-all duration-500`} />
           
-          {/* Icon */}
-          <div className={`relative z-10 p-3 rounded-xl bg-gradient-to-br ${action.gradient} transition-transform duration-300 group-hover:scale-110`}>
-            {action.customIcon ? (
-              <img src={action.customIcon} alt={action.label} className="w-5 h-5 object-contain" />
-            ) : action.icon ? (
-              <action.icon size={20} className={action.iconColor} />
-            ) : null}
+          {/* Shimmer effect on hover */}
+          <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out" />
           </div>
           
-          {/* Label */}
+          {/* Glow effect */}
+          <div className={`absolute -inset-1 bg-gradient-to-br ${action.gradient} opacity-0 group-hover:opacity-40 blur-xl transition-opacity duration-500 -z-10`} />
+          
+          {/* Icon with enhanced effects */}
+          <motion.div 
+            className={`relative z-10 p-3 rounded-xl bg-gradient-to-br ${action.gradient} transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg`}
+            whileHover={{ rotate: [0, -5, 5, 0] }}
+            transition={{ duration: 0.4 }}
+          >
+            {/* Inner glow */}
+            <div className="absolute inset-0 rounded-xl bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            
+            {action.customIcon ? (
+              <img 
+                src={action.customIcon} 
+                alt={action.label} 
+                className="w-6 h-6 object-contain relative z-10 transition-transform duration-300 group-hover:scale-110" 
+              />
+            ) : action.icon ? (
+              <action.icon size={24} className={`${action.iconColor} relative z-10`} />
+            ) : null}
+          </motion.div>
+          
+          {/* Label with fade effect */}
           <div className="relative z-10 text-center">
-            <span className="block text-xs font-semibold text-foreground">
+            <span className="block text-xs font-semibold text-foreground transition-colors duration-300 group-hover:text-primary">
               {action.label}
             </span>
-            <span className="block text-[9px] text-muted-foreground mt-0.5">
+            <span className="block text-[9px] text-muted-foreground mt-0.5 transition-all duration-300 group-hover:text-foreground/70">
               {action.description}
             </span>
           </div>
+          
+          {/* Bottom accent line */}
+          <div className={`absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-gradient-to-r ${action.gradient.replace('/20', '').replace('/5', '').replace('/30', '').replace('/10', '')} group-hover:w-3/4 transition-all duration-500 rounded-full`} />
         </motion.button>
       ))}
     </motion.div>
