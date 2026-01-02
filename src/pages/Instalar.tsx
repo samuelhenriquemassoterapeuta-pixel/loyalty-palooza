@@ -1,8 +1,11 @@
 import { useState, useEffect } from "react";
-import { Download, Smartphone, Share, Plus, Check, ArrowLeft, Zap, Bell, Shield, Sparkles } from "lucide-react";
+import { Download, Smartphone, Share, Plus, Check, ArrowLeft, Zap, Bell, Shield, Sparkles, QrCode } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import QRCode from "react-qr-code";
+
+const APP_URL = "https://d9766493-319f-4158-82d6-caca99a7199a.lovableproject.com/instalar";
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
@@ -265,6 +268,31 @@ const Instalar = () => {
               </div>
             </div>
           )}
+        </motion.div>
+
+        {/* QR Code Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.4 }}
+          className="space-y-4"
+        >
+          <h3 className="text-lg font-semibold text-foreground flex items-center gap-2">
+            <QrCode size={18} className="text-highlight" />
+            Escaneie para instalar
+          </h3>
+          <div className="flex flex-col items-center p-6 bg-white rounded-2xl border border-border/50 shadow-lg">
+            <QRCode 
+              value={APP_URL} 
+              size={180}
+              style={{ height: "auto", maxWidth: "100%", width: "100%" }}
+              viewBox={`0 0 180 180`}
+              level="M"
+            />
+            <p className="text-xs text-muted-foreground mt-4 text-center">
+              Escaneie com a câmera do celular
+            </p>
+          </div>
         </motion.div>
 
         {/* Continue without installing */}
