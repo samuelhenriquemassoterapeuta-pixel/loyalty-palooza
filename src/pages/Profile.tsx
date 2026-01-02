@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import { 
   User, 
   Bell, 
@@ -26,6 +27,9 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
+import { SecuritySheet } from "@/components/profile/SecuritySheet";
+import { DevicesSheet } from "@/components/profile/DevicesSheet";
+import { HelpSheet } from "@/components/profile/HelpSheet";
 
 const menuItems = [
   { icon: User, label: "Dados pessoais", description: "Nome, email, telefone", action: "dados" },
@@ -37,9 +41,13 @@ const menuItems = [
 ];
 
 const Profile = () => {
+  const navigate = useNavigate();
   const { user, signOut } = useAuth();
   const { profile, loading, updateProfile, uploadAvatar } = useProfile();
   const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [securitySheetOpen, setSecuritySheetOpen] = useState(false);
+  const [devicesSheetOpen, setDevicesSheetOpen] = useState(false);
+  const [helpSheetOpen, setHelpSheetOpen] = useState(false);
   const [nome, setNome] = useState("");
   const [telefone, setTelefone] = useState("");
   const [saving, setSaving] = useState(false);
@@ -90,10 +98,27 @@ const Profile = () => {
   };
 
   const handleMenuClick = (action: string) => {
-    if (action === "dados") {
-      handleOpenEditDialog();
-    } else {
-      toast.info("Em breve!");
+    switch (action) {
+      case "dados":
+        handleOpenEditDialog();
+        break;
+      case "notificacoes":
+        navigate("/notificacoes");
+        break;
+      case "seguranca":
+        setSecuritySheetOpen(true);
+        break;
+      case "dispositivos":
+        setDevicesSheetOpen(true);
+        break;
+      case "ajuda":
+        setHelpSheetOpen(true);
+        break;
+      case "termos":
+        toast.info("Termos de uso em breve!");
+        break;
+      default:
+        break;
     }
   };
 
@@ -266,6 +291,11 @@ const Profile = () => {
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* Sheets */}
+      <SecuritySheet open={securitySheetOpen} onOpenChange={setSecuritySheetOpen} />
+      <DevicesSheet open={devicesSheetOpen} onOpenChange={setDevicesSheetOpen} />
+      <HelpSheet open={helpSheetOpen} onOpenChange={setHelpSheetOpen} />
 
       <BottomNavigation />
     </div>
