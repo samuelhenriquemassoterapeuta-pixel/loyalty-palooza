@@ -7,9 +7,19 @@ import { Progress } from "@/components/ui/progress";
 import { ArrowLeft, Package, Check, Clock, Sparkles, Loader2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-import { usePacotes, useMeusPacotes } from "@/hooks/usePacotes";
+import { usePacotes, useMeusPacotes, Pacote } from "@/hooks/usePacotes";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 const Pacotes = () => {
   const navigate = useNavigate();
@@ -17,17 +27,29 @@ const Pacotes = () => {
   const { pacotes, loading: loadingPacotes } = usePacotes();
   const { meusPacotes, loading: loadingMeus, comprarPacote } = useMeusPacotes();
   const [comprando, setComprando] = useState<string | null>(null);
+  const [confirmDialog, setConfirmDialog] = useState<{
+    open: boolean;
+    pacote: Pacote | null;
+  }>({ open: false, pacote: null });
 
-  const handleComprar = async (pacoteId: string, nome: string, validadeDias: number) => {
-    setComprando(pacoteId);
-    const { error } = await comprarPacote(pacoteId, validadeDias);
+  const handleOpenConfirm = (pacote: Pacote) => {
+    setConfirmDialog({ open: true, pacote });
+  };
+
+  const handleComprar = async () => {
+    const pacote = confirmDialog.pacote;
+    if (!pacote) return;
+
+    setConfirmDialog({ open: false, pacote: null });
+    setComprando(pacote.id);
+    const { error } = await comprarPacote(pacote.id, pacote.validade_dias || 365);
     setComprando(null);
 
     if (error) {
       toast.error("Erro ao comprar pacote. Tente novamente.");
     } else {
       toast.success("Pacote adquirido!", {
-        description: `${nome} foi adicionado aos seus pacotes.`,
+        description: `${pacote.nome} foi adicionado aos seus pacotes.`,
       });
       setActiveTab("meus");
     }
@@ -198,7 +220,7 @@ const Pacotes = () => {
                           </p>
                         </div>
                         <Button 
-                          onClick={() => handleComprar(pacote.id, pacote.nome, pacote.validade_dias || 365)}
+                          onClick={() => handleOpenConfirm(pacote)}
                           disabled={comprando === pacote.id}
                         >
                           {comprando === pacote.id ? (
@@ -225,6 +247,25 @@ const Pacotes = () => {
           </motion.div>
         )}
       </div>
+
+      {/* Confirm Purchase Dialog */}
+      <AlertDialog open={confirmDialog.open} onOpenChange={(open) => setConfirmDialog({ open, pacote: null })}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Confirmar compra</AlertDialogTitle>
+            <AlertDialogDescription>
+              Deseja comprar o pacote <strong>{confirmDialog.pacote?.nome}</strong> por{" "}
+              <strong>R$ {confirmDialog.pacote?.preco.toFixed(2).replace(".", ",")}</strong>?
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction onClick={handleComprar}>
+              Confirmar compra
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
 
       <BottomNavigation />
     </div>

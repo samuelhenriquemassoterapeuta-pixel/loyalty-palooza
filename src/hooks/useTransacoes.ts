@@ -15,6 +15,7 @@ export interface Transacao {
 export interface UserStats {
   saldo: number;
   totalCashback: number;
+  totalGasto: number;
   totalCompras: number;
   totalAgendamentos: number;
 }
@@ -25,6 +26,7 @@ export const useTransacoes = () => {
   const [stats, setStats] = useState<UserStats>({
     saldo: 0,
     totalCashback: 0,
+    totalGasto: 0,
     totalCompras: 0,
     totalAgendamentos: 0,
   });
@@ -52,18 +54,25 @@ export const useTransacoes = () => {
       
       // Calcular estatísticas
       const cashback = (data || [])
-        .filter(t => t.tipo === "cashback")
+        .filter(t => t.tipo === "cashback" || t.tipo === "credito")
+        .filter(t => Number(t.valor) > 0)
         .reduce((acc, t) => acc + Number(t.valor), 0);
       
-      // Saldo é a soma de todas as transações (cashback + créditos - débitos)
+      // Total gasto (débitos - valores negativos)
+      const gasto = Math.abs((data || [])
+        .filter(t => Number(t.valor) < 0)
+        .reduce((acc, t) => acc + Number(t.valor), 0));
+      
+      // Saldo é a soma de todas as transações
       const saldoTotal = (data || []).reduce((acc, t) => acc + Number(t.valor), 0);
       
-      const compras = (data || []).filter(t => t.tipo === "compra").length;
+      const compras = (data || []).filter(t => t.tipo === "compra" || t.tipo === "debito").length;
       const agendamentos = (data || []).filter(t => t.tipo === "agendamento").length;
       
       setStats({
         saldo: saldoTotal,
         totalCashback: cashback,
+        totalGasto: gasto,
         totalCompras: compras,
         totalAgendamentos: agendamentos,
       });

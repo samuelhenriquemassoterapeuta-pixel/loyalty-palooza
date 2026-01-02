@@ -1,15 +1,25 @@
 import { motion } from "framer-motion";
-import { Plus, CreditCard, ArrowUpRight, ArrowDownLeft } from "lucide-react";
+import { Plus, CreditCard, ArrowUpRight, ArrowDownLeft, Loader2, Send
+} from "lucide-react";
 import { BottomNavigation } from "@/components/BottomNavigation";
 import { Button } from "@/components/ui/button";
+import { useTransacoes } from "@/hooks/useTransacoes";
+import { useProfile } from "@/hooks/useProfile";
+import { useNavigate } from "react-router-dom";
 
 const Wallet = () => {
+  const navigate = useNavigate();
+  const { stats, loading } = useTransacoes();
+  const { profile } = useProfile();
+
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat("pt-BR", {
       style: "currency",
       currency: "BRL",
     }).format(value);
   };
+
+  const displayName = profile?.nome || "Usuário";
 
   return (
     <div className="min-h-screen bg-background pb-24">
@@ -30,16 +40,22 @@ const Wallet = () => {
           className="gradient-primary rounded-2xl p-6 text-primary-foreground mb-6"
         >
           <p className="text-sm opacity-80 mb-1">Saldo total</p>
-          <h2 className="text-4xl font-bold mb-4">{formatCurrency(1250.45)}</h2>
+          {loading ? (
+            <div className="flex items-center gap-2 mb-4">
+              <Loader2 className="w-6 h-6 animate-spin" />
+            </div>
+          ) : (
+            <h2 className="text-4xl font-bold mb-4">{formatCurrency(stats.saldo)}</h2>
+          )}
           
           <div className="flex gap-3">
-            <Button variant="glass" className="flex-1">
-              <ArrowDownLeft size={18} />
-              Depositar
-            </Button>
-            <Button variant="glass" className="flex-1">
-              <ArrowUpRight size={18} />
-              Sacar
+            <Button 
+              variant="secondary" 
+              className="flex-1 bg-primary-foreground/20 text-primary-foreground border-0 hover:bg-primary-foreground/30"
+              onClick={() => navigate("/transferir")}
+            >
+              <Send size={18} className="mr-2" />
+              Transferir
             </Button>
           </div>
         </motion.div>
@@ -72,7 +88,7 @@ const Wallet = () => {
                 <div className="flex justify-between items-end">
                   <div>
                     <p className="text-[10px] opacity-70">TITULAR</p>
-                    <p className="text-sm font-medium">JOÃO SILVA</p>
+                    <p className="text-sm font-medium uppercase">{displayName}</p>
                   </div>
                   <div>
                     <p className="text-[10px] opacity-70">VALIDADE</p>
@@ -102,11 +118,19 @@ const Wallet = () => {
           <div className="grid grid-cols-2 gap-3">
             <div className="p-4 rounded-2xl bg-card shadow-card">
               <p className="text-sm text-muted-foreground mb-1">Total gasto</p>
-              <p className="text-xl font-bold text-foreground">{formatCurrency(2450.80)}</p>
+              {loading ? (
+                <Loader2 className="w-5 h-5 text-primary animate-spin" />
+              ) : (
+                <p className="text-xl font-bold text-foreground">{formatCurrency(stats.totalGasto)}</p>
+              )}
             </div>
             <div className="p-4 rounded-2xl bg-card shadow-card">
               <p className="text-sm text-muted-foreground mb-1">Cashback ganho</p>
-              <p className="text-xl font-bold text-primary">{formatCurrency(156.32)}</p>
+              {loading ? (
+                <Loader2 className="w-5 h-5 text-primary animate-spin" />
+              ) : (
+                <p className="text-xl font-bold text-primary">{formatCurrency(stats.totalCashback)}</p>
+              )}
             </div>
           </div>
         </motion.section>

@@ -50,6 +50,23 @@ export const useAgendamentos = () => {
     if (!user) return { error: new Error("Usuário não autenticado"), data: null };
 
     try {
+      // Verificar se já existe agendamento neste horário
+      const { data: existente, error: checkError } = await supabase
+        .from("agendamentos")
+        .select("id")
+        .eq("data_hora", data_hora.toISOString())
+        .eq("status", "agendado")
+        .maybeSingle();
+
+      if (checkError) throw checkError;
+
+      if (existente) {
+        return { 
+          error: new Error("Este horário já está ocupado. Por favor, escolha outro."), 
+          data: null 
+        };
+      }
+
       const { data, error } = await supabase
         .from("agendamentos")
         .insert({
@@ -69,6 +86,42 @@ export const useAgendamentos = () => {
     } catch (err: any) {
       return { error: err, data: null };
     }
+  };
+
+  // Função para verificar horários disponíveis em uma data
+  const checkHorarioDisponivel = async (data: Date, horario: string): Promise<boolean> => {
+    const [hours, minutes] = horario.split(":").map(Number);
+    const dataHora = new Date(data);
+    dataHora.setHours(hours, minutes, 0, 0);
+
+    const { data: existente } = await supabase
+      .from("agendamentos")
+      .select("id")
+      .eq("data_hora", dataHora.toISOString())
+      .eq("status", "agendado")
+      .maybeSingle();
+
+    return !existente;
+  };
+
+  const getHorariosOcupados = async (data: Date): Promise<string[]> => {
+    const startOfDay = new Date(data);
+    startOfDay.setHours(0, 0, 0, 0);
+    
+    const endOfDay = new Date(data);
+    endOfDay.setHours(23, 59, 59, 999);
+
+    const { data: agendamentosDoDia } = await supabase
+      .from("agendamentos")
+      .select("data_hora")
+      .eq("status", "agendado")
+      .gte("data_hora", startOfDay.toISOString())
+      .lte("data_hora", endOfDay.toISOString());
+
+    return (agendamentosDoDia || []).map(a => {
+      const d = new Date(a.data_hora);
+      return `${d.getHours().toString().padStart(2, "0")}:${d.getMinutes().toString().padStart(2, "0")}`;
+    });
   };
 
   const cancelAgendamento = async (id: string) => {
@@ -108,6 +161,8 @@ export const useAgendamentos = () => {
     createAgendamento,
     cancelAgendamento,
     getProximosAgendamentos,
+    checkHorarioDisponivel,
+    getHorariosOcupados,
     refetch: fetchAgendamentos,
   };
 };

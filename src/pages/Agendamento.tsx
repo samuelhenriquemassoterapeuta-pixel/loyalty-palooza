@@ -29,7 +29,7 @@ const horarios = [
 
 const Agendamento = () => {
   const navigate = useNavigate();
-  const { agendamentos, loading, createAgendamento, cancelAgendamento, getProximosAgendamentos } = useAgendamentos();
+  const { agendamentos, loading, createAgendamento, cancelAgendamento, getProximosAgendamentos, getHorariosOcupados } = useAgendamentos();
   const { servicos, loading: loadingServicos } = useServicos();
   
   const [activeTab, setActiveTab] = useState("novo");
@@ -40,6 +40,23 @@ const Agendamento = () => {
   const [saving, setSaving] = useState(false);
   const [cancelDialogOpen, setCancelDialogOpen] = useState(false);
   const [agendamentoToCancel, setAgendamentoToCancel] = useState<string | null>(null);
+  const [horariosOcupados, setHorariosOcupados] = useState<string[]>([]);
+  const [loadingHorarios, setLoadingHorarios] = useState(false);
+
+  // Carregar horários ocupados quando a data muda
+  const handleDateSelect = async (date: Date | undefined) => {
+    setSelectedDate(date);
+    setSelectedHorario(null);
+    
+    if (date) {
+      setLoadingHorarios(true);
+      const ocupados = await getHorariosOcupados(date);
+      setHorariosOcupados(ocupados);
+      setLoadingHorarios(false);
+    } else {
+      setHorariosOcupados([]);
+    }
+  };
 
   const handleConfirmar = async () => {
     if (!selectedDate || !selectedHorario || !selectedServico) return;
@@ -53,7 +70,7 @@ const Agendamento = () => {
     setSaving(false);
 
     if (error) {
-      toast.error("Erro ao agendar. Tente novamente.");
+      toast.error(error.message || "Erro ao agendar. Tente novamente.");
     } else {
       toast.success("Agendamento realizado com sucesso!", {
         description: `Sua sessão foi agendada para ${format(dataHora, "dd/MM/yyyy 'às' HH:mm", { locale: ptBR })}`,
@@ -62,6 +79,7 @@ const Agendamento = () => {
       setSelectedDate(undefined);
       setSelectedHorario(null);
       setSelectedServico(null);
+      setHorariosOcupados([]);
       setActiveTab("agendados");
     }
   };
@@ -282,7 +300,7 @@ const Agendamento = () => {
                     <Calendar
                       mode="single"
                       selected={selectedDate}
-                      onSelect={setSelectedDate}
+                      onSelect={handleDateSelect}
                       locale={ptBR}
                       disabled={(date) => date < new Date() || date.getDay() === 0}
                       className="rounded-md"
@@ -299,18 +317,35 @@ const Agendamento = () => {
                 animate={{ opacity: 1, x: 0 }}
               >
                 <h2 className="text-lg font-medium text-foreground mb-4">Escolha o horário</h2>
-                <div className="grid grid-cols-3 gap-3">
-                  {horarios.map((horario) => (
-                    <Button
-                      key={horario}
-                      variant={selectedHorario === horario ? "default" : "outline"}
-                      className="h-14"
-                      onClick={() => setSelectedHorario(horario)}
-                    >
-                      {horario}
-                    </Button>
-                  ))}
-                </div>
+                {loadingHorarios ? (
+                  <div className="flex justify-center py-8">
+                    <Loader2 className="w-6 h-6 text-primary animate-spin" />
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-3 gap-3">
+                    {horarios.map((horario) => {
+                      const isOcupado = horariosOcupados.includes(horario);
+                      return (
+                        <Button
+                          key={horario}
+                          variant={selectedHorario === horario ? "default" : "outline"}
+                          className={`h-14 ${isOcupado ? "opacity-50 line-through" : ""}`}
+                          onClick={() => !isOcupado && setSelectedHorario(horario)}
+                          disabled={isOcupado}
+                        >
+                          {horario}
+                          {isOcupado && <span className="sr-only">(ocupado)</span>}
+                        </Button>
+                      );
+                    })}
+                  </div>
+                )}
+                
+                {horariosOcupados.length > 0 && (
+                  <p className="text-xs text-muted-foreground mt-3 text-center">
+                    Horários riscados já estão ocupados
+                  </p>
+                )}
 
                 {selectedDate && selectedHorario && selectedServico && (
                   <Card className="mt-6 bg-primary/5 border-primary/20">
