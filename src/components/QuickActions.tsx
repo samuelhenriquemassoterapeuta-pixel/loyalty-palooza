@@ -137,10 +137,10 @@ export const QuickActions = () => {
               <img 
                 src={action.customIcon} 
                 alt={action.label} 
-                className="w-8 h-8 object-contain relative z-10 transition-transform duration-300 group-hover:scale-110" 
+                className="w-10 h-10 object-contain relative z-10 transition-transform duration-300 group-hover:scale-110" 
               />
             ) : action.icon ? (
-              <action.icon size={32} className={`${action.iconColor} relative z-10`} />
+              <action.icon size={40} className={`${action.iconColor} relative z-10`} />
             ) : null}
           </motion.div>
           
