@@ -1,7 +1,8 @@
 import { motion } from "framer-motion";
-import { Send, ShoppingBag, Receipt } from "lucide-react";
+import { Send, Receipt } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import agendarIcon from "@/assets/icons/agendar-icon.png";
+import lojaIcon from "@/assets/icons/loja-icon.png";
 
 const actions = [
   { 
@@ -14,8 +15,8 @@ const actions = [
     path: "/agendamento" 
   },
   { 
-    icon: ShoppingBag,
-    customIcon: null,
+    icon: null,
+    customIcon: lojaIcon,
     label: "Loja", 
     description: "Produtos",
     gradient: "from-accent/20 to-accent/5",
