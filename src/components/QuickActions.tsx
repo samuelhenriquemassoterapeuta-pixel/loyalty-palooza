@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import agendarIcon from "@/assets/icons/agendar-icon.png";
+import agendarIcon from "@/assets/icons/agendar-icon-new.png";
 import lojaIcon from "@/assets/icons/loja-icon.png";
 import historicoIcon from "@/assets/icons/historico-icon.png";
 import transferirIcon from "@/assets/icons/transferir-icon.png";
