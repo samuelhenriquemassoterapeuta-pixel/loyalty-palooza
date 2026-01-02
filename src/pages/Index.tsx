@@ -3,6 +3,7 @@ import { BalanceCard } from "@/components/BalanceCard";
 import { QuickActions } from "@/components/QuickActions";
 import { TransactionHistory } from "@/components/TransactionHistory";
 import { BottomNavigation } from "@/components/BottomNavigation";
+import { InstallBanner } from "@/components/InstallBanner";
 
 const Index = () => {
   return (
@@ -11,6 +12,7 @@ const Index = () => {
         <Header />
         
         <main className="space-y-6 mt-2">
+          <InstallBanner />
           <BalanceCard />
           <QuickActions />
           <TransactionHistory />
