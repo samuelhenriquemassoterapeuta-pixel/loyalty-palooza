@@ -13,11 +13,13 @@ import {
   Smartphone,
   Camera,
   Loader2,
-  Download
+  Download,
+  Crown
 } from "lucide-react";
 import { BottomNavigation } from "@/components/BottomNavigation";
 import { useAuth } from "@/contexts/AuthContext";
 import { useProfile } from "@/hooks/useProfile";
+import { useAdmin } from "@/hooks/useAdmin";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -32,20 +34,13 @@ import { SecuritySheet } from "@/components/profile/SecuritySheet";
 import { DevicesSheet } from "@/components/profile/DevicesSheet";
 import { HelpSheet } from "@/components/profile/HelpSheet";
 
-const menuItems = [
-  { icon: User, label: "Dados pessoais", description: "Nome, email, telefone", action: "dados" },
-  { icon: Bell, label: "Notificações", description: "Gerencie seus alertas", action: "notificacoes" },
-  { icon: Shield, label: "Segurança", description: "Senha e autenticação", action: "seguranca" },
-  { icon: Smartphone, label: "Dispositivos", description: "Gerencie seus acessos", action: "dispositivos" },
-  { icon: Download, label: "Instalar App", description: "Adicione à tela inicial", action: "instalar" },
-  { icon: HelpCircle, label: "Ajuda", description: "FAQ e suporte", action: "ajuda" },
-  { icon: FileText, label: "Termos de uso", description: "Políticas e condições", action: "termos" },
-];
+// Menu items are now defined inside the component to access isAdmin
 
 const Profile = () => {
   const navigate = useNavigate();
   const { user, signOut } = useAuth();
   const { profile, loading, updateProfile, uploadAvatar } = useProfile();
+  const { isAdmin } = useAdmin();
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [securitySheetOpen, setSecuritySheetOpen] = useState(false);
   const [devicesSheetOpen, setDevicesSheetOpen] = useState(false);
@@ -54,6 +49,18 @@ const Profile = () => {
   const [telefone, setTelefone] = useState("");
   const [saving, setSaving] = useState(false);
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
+
+  // Menu items with conditional admin option
+  const allMenuItems = [
+    { icon: User, label: "Dados pessoais", description: "Nome, email, telefone", action: "dados" },
+    { icon: Bell, label: "Notificações", description: "Gerencie seus alertas", action: "notificacoes" },
+    { icon: Shield, label: "Segurança", description: "Senha e autenticação", action: "seguranca" },
+    { icon: Smartphone, label: "Dispositivos", description: "Gerencie seus acessos", action: "dispositivos" },
+    { icon: Download, label: "Instalar App", description: "Adicione à tela inicial", action: "instalar" },
+    ...(isAdmin ? [{ icon: Crown, label: "Painel Admin", description: "Gerenciar app", action: "admin" }] : []),
+    { icon: HelpCircle, label: "Ajuda", description: "FAQ e suporte", action: "ajuda" },
+    { icon: FileText, label: "Termos de uso", description: "Políticas e condições", action: "termos" },
+  ];
 
   const handleLogout = async () => {
     await signOut();
@@ -115,6 +122,9 @@ const Profile = () => {
         break;
       case "instalar":
         navigate("/instalar");
+        break;
+      case "admin":
+        navigate("/admin");
         break;
       case "ajuda":
         setHelpSheetOpen(true);
@@ -223,7 +233,7 @@ const Profile = () => {
           transition={{ delay: 0.2 }}
           className="space-y-2"
         >
-          {menuItems.map((item, index) => (
+          {allMenuItems.map((item, index) => (
             <motion.button
               key={item.label}
               initial={{ opacity: 0, x: -20 }}
