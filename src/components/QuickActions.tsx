@@ -1,8 +1,9 @@
 import { motion } from "framer-motion";
-import { Send, Receipt } from "lucide-react";
+import { Receipt } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import agendarIcon from "@/assets/icons/agendar-icon.png";
 import lojaIcon from "@/assets/icons/loja-icon.png";
+import transferirIcon from "@/assets/icons/transferir-icon.png";
 
 const actions = [
   { 
@@ -33,8 +34,8 @@ const actions = [
     path: "/loja" 
   },
   { 
-    icon: Send,
-    customIcon: null,
+    icon: null,
+    customIcon: transferirIcon,
     label: "Transferir", 
     description: "Enviar créditos",
     gradient: "from-secondary/30 to-secondary/10",
