@@ -1,11 +1,11 @@
 import { motion } from "framer-motion";
-import { Home, CalendarDays, CreditCard, User } from "lucide-react";
+import { Home, CalendarDays, Package, User } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const navItems = [
   { icon: Home, label: "Início", path: "/" },
   { icon: CalendarDays, label: "Agendar", path: "/agendamento" },
-  { icon: CreditCard, label: "Carteira", path: "/wallet" },
+  { icon: Package, label: "Pacotes", path: "/pacotes" },
   { icon: User, label: "Perfil", path: "/profile" },
 ];
 
