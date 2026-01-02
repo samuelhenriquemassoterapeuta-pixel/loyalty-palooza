@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { ArrowLeft, Bell, Check, CheckCheck, Loader2, BellOff } from "lucide-react";
+import { ArrowLeft, Bell, Check, CheckCheck, BellOff } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -8,6 +8,7 @@ import { useNotificacoes } from "@/hooks/useNotificacoes";
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { toast } from "sonner";
+import { NotificacoesListSkeleton } from "@/components/skeletons";
 
 const getIconByTipo = (tipo: string) => {
   switch (tipo) {
@@ -74,9 +75,7 @@ const Notificacoes = () => {
         </div>
 
         {loading ? (
-          <div className="flex justify-center py-12">
-            <Loader2 className="w-8 h-8 text-primary animate-spin" />
-          </div>
+          <NotificacoesListSkeleton />
         ) : notificacoes.length === 0 ? (
           <div className="text-center py-12">
             <BellOff className="w-12 h-12 text-muted-foreground mx-auto mb-4" />

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowLeft, ShoppingBag, Leaf, Sparkles, Loader2, Package } from "lucide-react";
+import { ArrowLeft, ShoppingBag, Leaf, Sparkles, Package } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -12,6 +12,7 @@ import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { ProdutoCard } from "@/components/loja/ProdutoCard";
 import { CarrinhoFlutuante } from "@/components/loja/CarrinhoFlutuante";
+import { ProdutosGridSkeleton, PedidosListSkeleton } from "@/components/skeletons";
 
 interface CarrinhoItem {
   produto: Produto;
@@ -141,9 +142,7 @@ export default function Loja() {
 
           <TabsContent value="pedidos" className="mt-4">
             {loadingPedidos ? (
-              <div className="flex justify-center py-12">
-                <Loader2 className="w-8 h-8 text-primary animate-spin" />
-              </div>
+              <PedidosListSkeleton />
             ) : pedidos.length === 0 ? (
               <div className="text-center py-12">
                 <Package className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
@@ -214,9 +213,7 @@ export default function Loja() {
             </div>
 
             {loadingProdutos ? (
-              <div className="flex justify-center py-12">
-                <Loader2 className="w-8 h-8 text-primary animate-spin" />
-              </div>
+              <ProdutosGridSkeleton />
             ) : produtosFiltrados.length === 0 ? (
               <div className="text-center py-12">
                 <Package className="w-12 h-12 text-muted-foreground mx-auto mb-4" />

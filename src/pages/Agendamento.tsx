@@ -12,6 +12,7 @@ import { format } from "date-fns";
 import { useAgendamentos } from "@/hooks/useAgendamentos";
 import { useServicos, Servico } from "@/hooks/useServicos";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ServicosListSkeleton, AgendamentosListSkeleton } from "@/components/skeletons";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -43,7 +44,6 @@ const Agendamento = () => {
   const [horariosOcupados, setHorariosOcupados] = useState<string[]>([]);
   const [loadingHorarios, setLoadingHorarios] = useState(false);
 
-  // Carregar horários ocupados quando a data muda
   const handleDateSelect = async (date: Date | undefined) => {
     setSelectedDate(date);
     setSelectedHorario(null);
@@ -144,9 +144,7 @@ const Agendamento = () => {
 
           <TabsContent value="agendados" className="mt-4">
             {loading ? (
-              <div className="flex justify-center py-12">
-                <Loader2 className="w-8 h-8 text-primary animate-spin" />
-              </div>
+              <AgendamentosListSkeleton />
             ) : agendamentos.length === 0 ? (
               <div className="text-center py-12">
                 <CalendarDays className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
@@ -245,9 +243,7 @@ const Agendamento = () => {
                 <h2 className="text-lg font-medium text-foreground mb-4">Escolha o serviço</h2>
                 
                 {loadingServicos ? (
-                  <div className="flex justify-center py-12">
-                    <Loader2 className="w-8 h-8 text-primary animate-spin" />
-                  </div>
+                  <ServicosListSkeleton />
                 ) : servicos.length === 0 ? (
                   <div className="text-center py-12">
                     <p className="text-muted-foreground">Nenhum serviço disponível no momento.</p>
