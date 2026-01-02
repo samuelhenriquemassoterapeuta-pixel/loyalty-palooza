@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { QrCode, ShoppingBag, Receipt, CalendarDays } from "lucide-react";
+import { Send, ShoppingBag, Receipt, CalendarDays } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const actions = [
@@ -28,12 +28,12 @@ const actions = [
     path: "/loja" 
   },
   { 
-    icon: QrCode, 
-    label: "Pagar", 
-    description: "QR Code",
-    gradient: "from-muted-foreground/20 to-muted-foreground/5",
-    iconColor: "text-muted-foreground",
-    path: null 
+    icon: Send, 
+    label: "Transferir", 
+    description: "Enviar créditos",
+    gradient: "from-secondary/30 to-secondary/10",
+    iconColor: "text-foreground",
+    path: "/transferir" 
   },
 ];
 

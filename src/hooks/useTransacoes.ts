@@ -55,11 +55,14 @@ export const useTransacoes = () => {
         .filter(t => t.tipo === "cashback")
         .reduce((acc, t) => acc + Number(t.valor), 0);
       
+      // Saldo é a soma de todas as transações (cashback + créditos - débitos)
+      const saldoTotal = (data || []).reduce((acc, t) => acc + Number(t.valor), 0);
+      
       const compras = (data || []).filter(t => t.tipo === "compra").length;
       const agendamentos = (data || []).filter(t => t.tipo === "agendamento").length;
       
       setStats({
-        saldo: cashback, // Saldo é o cashback acumulado
+        saldo: saldoTotal,
         totalCashback: cashback,
         totalCompras: compras,
         totalAgendamentos: agendamentos,
