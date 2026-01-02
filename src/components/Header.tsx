@@ -3,12 +3,14 @@ import { Bell, Settings } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useProfile } from "@/hooks/useProfile";
 import { useAuth } from "@/contexts/AuthContext";
+import { useNotificacoes } from "@/hooks/useNotificacoes";
 import resinkraLogo from "@/assets/resinkra-logo.png";
 
 export const Header = () => {
   const navigate = useNavigate();
   const { profile, loading } = useProfile();
   const { user } = useAuth();
+  const { naoLidas } = useNotificacoes();
 
   const getGreeting = () => {
     const hour = new Date().getHours();
@@ -48,7 +50,11 @@ export const Header = () => {
           onClick={() => navigate("/notificacoes")}
         >
           <Bell size={20} className="text-foreground" />
-          <span className="absolute top-2 right-2 w-2 h-2 bg-accent rounded-full" />
+          {naoLidas.length > 0 && (
+            <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 bg-primary text-primary-foreground text-[10px] font-bold rounded-full flex items-center justify-center">
+              {naoLidas.length > 9 ? "9+" : naoLidas.length}
+            </span>
+          )}
         </button>
         <button 
           className="p-2.5 rounded-xl bg-card shadow-card hover:shadow-elevated transition-shadow"
