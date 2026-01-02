@@ -101,14 +101,37 @@ export const QuickActions = () => {
           {/* Glow effect */}
           <div className={`absolute -inset-1 bg-gradient-to-br ${action.gradient} opacity-0 group-hover:opacity-40 blur-xl transition-opacity duration-500 -z-10`} />
           
-          {/* Icon with enhanced effects */}
+          {/* Icon with enhanced effects and pulse */}
           <motion.div 
             className={`relative z-10 p-3 rounded-xl bg-gradient-to-br ${action.gradient} transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg`}
-            whileHover={{ rotate: [0, -5, 5, 0] }}
-            transition={{ duration: 0.4 }}
+            animate={{ 
+              scale: [1, 1.05, 1],
+            }}
+            transition={{ 
+              duration: 2,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: index * 0.2
+            }}
+            whileHover={{ rotate: [0, -5, 5, 0], scale: 1.1 }}
           >
             {/* Inner glow */}
             <div className="absolute inset-0 rounded-xl bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            
+            {/* Pulse ring effect */}
+            <motion.div 
+              className={`absolute inset-0 rounded-xl bg-gradient-to-br ${action.gradient}`}
+              animate={{ 
+                scale: [1, 1.3, 1.3],
+                opacity: [0.4, 0, 0]
+              }}
+              transition={{ 
+                duration: 2,
+                repeat: Infinity,
+                ease: "easeOut",
+                delay: index * 0.2
+              }}
+            />
             
             {action.customIcon ? (
               <img 
