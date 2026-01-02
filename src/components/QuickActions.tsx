@@ -1,8 +1,8 @@
 import { motion } from "framer-motion";
-import { Receipt } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import agendarIcon from "@/assets/icons/agendar-icon.png";
 import lojaIcon from "@/assets/icons/loja-icon.png";
+import historicoIcon from "@/assets/icons/historico-icon.png";
 import transferirIcon from "@/assets/icons/transferir-icon.png";
 
 const actions = [
@@ -25,8 +25,8 @@ const actions = [
     path: "/loja" 
   },
   { 
-    icon: Receipt,
-    customIcon: null,
+    icon: null,
+    customIcon: historicoIcon,
     label: "Histórico", 
     description: "Compras",
     gradient: "from-highlight/20 to-highlight/5",
