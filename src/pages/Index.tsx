@@ -8,7 +8,7 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background gradient-hero pb-24">
       <div className="max-w-lg mx-auto px-4 safe-top">
-        <Header userName="João" />
+        <Header />
         
         <main className="space-y-6 mt-2">
           <BalanceCard balance={1250.45} pendingCashback={78.32} />

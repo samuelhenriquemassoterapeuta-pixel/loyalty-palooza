@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { 
   User, 
@@ -8,20 +9,112 @@ import {
   LogOut, 
   ChevronRight,
   Settings,
-  Smartphone
+  Smartphone,
+  Camera,
+  Loader2
 } from "lucide-react";
 import { BottomNavigation } from "@/components/BottomNavigation";
+import { useAuth } from "@/contexts/AuthContext";
+import { useProfile } from "@/hooks/useProfile";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { toast } from "sonner";
 
 const menuItems = [
-  { icon: User, label: "Dados pessoais", description: "Nome, email, telefone" },
-  { icon: Bell, label: "Notificações", description: "Gerencie seus alertas" },
-  { icon: Shield, label: "Segurança", description: "Senha e autenticação" },
-  { icon: Smartphone, label: "Dispositivos", description: "Gerencie seus acessos" },
-  { icon: HelpCircle, label: "Ajuda", description: "FAQ e suporte" },
-  { icon: FileText, label: "Termos de uso", description: "Políticas e condições" },
+  { icon: User, label: "Dados pessoais", description: "Nome, email, telefone", action: "dados" },
+  { icon: Bell, label: "Notificações", description: "Gerencie seus alertas", action: "notificacoes" },
+  { icon: Shield, label: "Segurança", description: "Senha e autenticação", action: "seguranca" },
+  { icon: Smartphone, label: "Dispositivos", description: "Gerencie seus acessos", action: "dispositivos" },
+  { icon: HelpCircle, label: "Ajuda", description: "FAQ e suporte", action: "ajuda" },
+  { icon: FileText, label: "Termos de uso", description: "Políticas e condições", action: "termos" },
 ];
 
 const Profile = () => {
+  const { user, signOut } = useAuth();
+  const { profile, loading, updateProfile, uploadAvatar } = useProfile();
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [nome, setNome] = useState("");
+  const [telefone, setTelefone] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [uploadingAvatar, setUploadingAvatar] = useState(false);
+
+  const handleLogout = async () => {
+    await signOut();
+    toast.success("Até logo!");
+  };
+
+  const handleOpenEditDialog = () => {
+    setNome(profile?.nome || "");
+    setTelefone(profile?.telefone || "");
+    setEditDialogOpen(true);
+  };
+
+  const handleSaveProfile = async () => {
+    setSaving(true);
+    const { error } = await updateProfile({ nome, telefone });
+    setSaving(false);
+    
+    if (error) {
+      toast.error("Erro ao salvar perfil");
+    } else {
+      toast.success("Perfil atualizado!");
+      setEditDialogOpen(false);
+    }
+  };
+
+  const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 2 * 1024 * 1024) {
+      toast.error("Imagem muito grande. Máximo 2MB.");
+      return;
+    }
+
+    setUploadingAvatar(true);
+    const { error } = await uploadAvatar(file);
+    setUploadingAvatar(false);
+
+    if (error) {
+      toast.error("Erro ao enviar foto");
+    } else {
+      toast.success("Foto atualizada!");
+    }
+  };
+
+  const handleMenuClick = (action: string) => {
+    if (action === "dados") {
+      handleOpenEditDialog();
+    } else {
+      toast.info("Em breve!");
+    }
+  };
+
+  const getInitial = () => {
+    if (profile?.nome) return profile.nome.charAt(0).toUpperCase();
+    if (user?.email) return user.email.charAt(0).toUpperCase();
+    return "U";
+  };
+
+  const getDisplayName = () => {
+    return profile?.nome || user?.email?.split("@")[0] || "Usuário";
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <Loader2 className="w-8 h-8 text-primary animate-spin" />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-background pb-24">
       <div className="max-w-lg mx-auto px-4 safe-top pt-4">
@@ -31,14 +124,41 @@ const Profile = () => {
           animate={{ opacity: 1, y: 0 }}
           className="flex items-center gap-4 mb-6"
         >
-          <div className="w-16 h-16 rounded-full gradient-primary flex items-center justify-center text-primary-foreground text-2xl font-bold">
-            J
+          <div className="relative">
+            {profile?.avatar_url ? (
+              <img 
+                src={profile.avatar_url} 
+                alt="Avatar" 
+                className="w-16 h-16 rounded-full object-cover"
+              />
+            ) : (
+              <div className="w-16 h-16 rounded-full gradient-primary flex items-center justify-center text-primary-foreground text-2xl font-bold">
+                {getInitial()}
+              </div>
+            )}
+            <label className="absolute -bottom-1 -right-1 p-1.5 rounded-full bg-primary text-primary-foreground cursor-pointer hover:opacity-90 transition-opacity">
+              {uploadingAvatar ? (
+                <Loader2 size={14} className="animate-spin" />
+              ) : (
+                <Camera size={14} />
+              )}
+              <input 
+                type="file" 
+                accept="image/*" 
+                className="hidden" 
+                onChange={handleAvatarChange}
+                disabled={uploadingAvatar}
+              />
+            </label>
           </div>
           <div className="flex-1">
-            <h1 className="text-xl font-bold text-foreground">João Silva</h1>
-            <p className="text-sm text-muted-foreground">joao.silva@email.com</p>
+            <h1 className="text-xl font-bold text-foreground">{getDisplayName()}</h1>
+            <p className="text-sm text-muted-foreground">{user?.email}</p>
           </div>
-          <button className="p-2.5 rounded-xl bg-card shadow-card">
+          <button 
+            className="p-2.5 rounded-xl bg-card shadow-card"
+            onClick={handleOpenEditDialog}
+          >
             <Settings size={20} className="text-foreground" />
           </button>
         </motion.div>
@@ -52,16 +172,16 @@ const Profile = () => {
         >
           <div className="grid grid-cols-3 gap-4 text-center">
             <div>
-              <p className="text-2xl font-bold">R$ 1.250</p>
+              <p className="text-2xl font-bold">R$ 0</p>
               <p className="text-xs opacity-80">Total cashback</p>
             </div>
             <div className="border-x border-primary-foreground/20">
-              <p className="text-2xl font-bold">47</p>
+              <p className="text-2xl font-bold">0</p>
               <p className="text-xs opacity-80">Compras</p>
             </div>
             <div>
-              <p className="text-2xl font-bold">12</p>
-              <p className="text-xs opacity-80">Meses ativos</p>
+              <p className="text-2xl font-bold">0</p>
+              <p className="text-xs opacity-80">Agendamentos</p>
             </div>
           </div>
         </motion.div>
@@ -79,6 +199,7 @@ const Profile = () => {
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.2 + index * 0.05 }}
+              onClick={() => handleMenuClick(item.action)}
               className="w-full flex items-center gap-4 p-4 rounded-xl bg-card shadow-card hover:shadow-elevated transition-all"
             >
               <div className="p-2.5 rounded-xl bg-secondary">
@@ -98,6 +219,7 @@ const Profile = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
+          onClick={handleLogout}
           className="w-full flex items-center justify-center gap-2 mt-6 p-4 rounded-xl bg-destructive/10 text-destructive font-semibold hover:bg-destructive/20 transition-colors"
         >
           <LogOut size={20} />
@@ -108,6 +230,42 @@ const Profile = () => {
           Versão 1.0.0
         </p>
       </div>
+
+      {/* Edit Dialog */}
+      <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
+        <DialogContent className="max-w-sm mx-4">
+          <DialogHeader>
+            <DialogTitle>Editar perfil</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 pt-4">
+            <div className="space-y-2">
+              <Label htmlFor="nome">Nome</Label>
+              <Input
+                id="nome"
+                value={nome}
+                onChange={(e) => setNome(e.target.value)}
+                placeholder="Seu nome"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="telefone">Telefone</Label>
+              <Input
+                id="telefone"
+                value={telefone}
+                onChange={(e) => setTelefone(e.target.value)}
+                placeholder="(00) 00000-0000"
+              />
+            </div>
+            <Button 
+              className="w-full" 
+              onClick={handleSaveProfile}
+              disabled={saving}
+            >
+              {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : "Salvar"}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
 
       <BottomNavigation />
     </div>
