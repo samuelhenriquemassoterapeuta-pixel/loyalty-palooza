@@ -1,7 +1,6 @@
 import { Header } from "@/components/Header";
 import { BalanceCard } from "@/components/BalanceCard";
 import { QuickActions } from "@/components/QuickActions";
-import { CashbackOffers } from "@/components/CashbackOffers";
 import { TransactionHistory } from "@/components/TransactionHistory";
 import { BottomNavigation } from "@/components/BottomNavigation";
 
@@ -14,7 +13,6 @@ const Index = () => {
         <main className="space-y-6 mt-2">
           <BalanceCard balance={1250.45} pendingCashback={78.32} />
           <QuickActions />
-          <CashbackOffers />
           <TransactionHistory />
         </main>
       </div>
