@@ -1,10 +1,12 @@
 import { motion } from "framer-motion";
-import { Send, ShoppingBag, Receipt, CalendarDays } from "lucide-react";
+import { Send, ShoppingBag, Receipt } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import agendarIcon from "@/assets/icons/agendar-icon.png";
 
 const actions = [
   { 
-    icon: CalendarDays, 
+    icon: null,
+    customIcon: agendarIcon,
     label: "Agendar", 
     description: "Nova sessão",
     gradient: "from-primary/20 to-primary/5",
@@ -12,7 +14,8 @@ const actions = [
     path: "/agendamento" 
   },
   { 
-    icon: ShoppingBag, 
+    icon: ShoppingBag,
+    customIcon: null,
     label: "Loja", 
     description: "Produtos",
     gradient: "from-accent/20 to-accent/5",
@@ -20,7 +23,8 @@ const actions = [
     path: "/loja" 
   },
   { 
-    icon: Receipt, 
+    icon: Receipt,
+    customIcon: null,
     label: "Histórico", 
     description: "Compras",
     gradient: "from-highlight/20 to-highlight/5",
@@ -28,7 +32,8 @@ const actions = [
     path: "/loja" 
   },
   { 
-    icon: Send, 
+    icon: Send,
+    customIcon: null,
     label: "Transferir", 
     description: "Enviar créditos",
     gradient: "from-secondary/30 to-secondary/10",
@@ -88,7 +93,11 @@ export const QuickActions = () => {
           
           {/* Icon */}
           <div className={`relative z-10 p-3 rounded-xl bg-gradient-to-br ${action.gradient} transition-transform duration-300 group-hover:scale-110`}>
-            <action.icon size={20} className={action.iconColor} />
+            {action.customIcon ? (
+              <img src={action.customIcon} alt={action.label} className="w-5 h-5 object-contain" />
+            ) : action.icon ? (
+              <action.icon size={20} className={action.iconColor} />
+            ) : null}
           </div>
           
           {/* Label */}
