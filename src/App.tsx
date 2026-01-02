@@ -14,6 +14,7 @@ import Wallet from "./pages/Wallet";
 import Profile from "./pages/Profile";
 import Notificacoes from "./pages/Notificacoes";
 import Instalar from "./pages/Instalar";
+import Transferir from "./pages/Transferir";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -35,6 +36,7 @@ const App = () => (
             <Route path="/wallet" element={<ProtectedRoute><Wallet /></ProtectedRoute>} />
             <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
             <Route path="/notificacoes" element={<ProtectedRoute><Notificacoes /></ProtectedRoute>} />
+            <Route path="/transferir" element={<ProtectedRoute><Transferir /></ProtectedRoute>} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
