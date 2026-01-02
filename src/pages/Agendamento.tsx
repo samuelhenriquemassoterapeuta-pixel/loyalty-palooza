@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import { ptBR } from "date-fns/locale";
 import { format } from "date-fns";
 import { useAgendamentos } from "@/hooks/useAgendamentos";
+import { useServicos, Servico } from "@/hooks/useServicos";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   AlertDialog,
@@ -26,23 +27,16 @@ const horarios = [
   "09:00", "10:00", "11:00", "14:00", "15:00", "16:00", "17:00", "18:00"
 ];
 
-const servicos = [
-  { id: 1, nome: "Massagem Relaxante", duracao: "60 min", preco: 150 },
-  { id: 2, nome: "Massagem Terapêutica", duracao: "60 min", preco: 180 },
-  { id: 3, nome: "Drenagem Linfática", duracao: "50 min", preco: 160 },
-  { id: 4, nome: "Pedras Quentes", duracao: "90 min", preco: 220 },
-  { id: 5, nome: "Reflexologia", duracao: "45 min", preco: 120 },
-];
-
 const Agendamento = () => {
   const navigate = useNavigate();
   const { agendamentos, loading, createAgendamento, cancelAgendamento, getProximosAgendamentos } = useAgendamentos();
+  const { servicos, loading: loadingServicos } = useServicos();
   
   const [activeTab, setActiveTab] = useState("novo");
   const [step, setStep] = useState(1);
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [selectedHorario, setSelectedHorario] = useState<string | null>(null);
-  const [selectedServico, setSelectedServico] = useState<number | null>(null);
+  const [selectedServico, setSelectedServico] = useState<Servico | null>(null);
   const [saving, setSaving] = useState(false);
   const [cancelDialogOpen, setCancelDialogOpen] = useState(false);
   const [agendamentoToCancel, setAgendamentoToCancel] = useState<string | null>(null);
@@ -50,15 +44,12 @@ const Agendamento = () => {
   const handleConfirmar = async () => {
     if (!selectedDate || !selectedHorario || !selectedServico) return;
 
-    const servico = servicos.find(s => s.id === selectedServico);
-    if (!servico) return;
-
     const [hours, minutes] = selectedHorario.split(":").map(Number);
     const dataHora = new Date(selectedDate);
     dataHora.setHours(hours, minutes, 0, 0);
 
     setSaving(true);
-    const { error } = await createAgendamento(dataHora, servico.nome);
+    const { error } = await createAgendamento(dataHora, selectedServico.nome);
     setSaving(false);
 
     if (error) {
@@ -234,34 +225,48 @@ const Agendamento = () => {
                 className="space-y-4"
               >
                 <h2 className="text-lg font-medium text-foreground mb-4">Escolha o serviço</h2>
-                {servicos.map((servico) => (
-                  <Card
-                    key={servico.id}
-                    className={`cursor-pointer transition-all ${
-                      selectedServico === servico.id
-                        ? "border-primary bg-primary/5"
-                        : "border-border hover:border-primary/50"
-                    }`}
-                    onClick={() => setSelectedServico(servico.id)}
-                  >
-                    <CardContent className="p-4 flex justify-between items-center">
-                      <div>
-                        <h3 className="font-medium text-foreground">{servico.nome}</h3>
-                        <p className="text-sm text-muted-foreground flex items-center gap-1">
-                          <Clock size={14} /> {servico.duracao}
-                        </p>
-                      </div>
-                      <div className="text-right">
-                        <p className="font-semibold text-primary">
-                          R$ {servico.preco.toFixed(2).replace('.', ',')}
-                        </p>
-                        {selectedServico === servico.id && (
-                          <Check className="text-primary ml-auto" size={20} />
-                        )}
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
+                
+                {loadingServicos ? (
+                  <div className="flex justify-center py-12">
+                    <Loader2 className="w-8 h-8 text-primary animate-spin" />
+                  </div>
+                ) : servicos.length === 0 ? (
+                  <div className="text-center py-12">
+                    <p className="text-muted-foreground">Nenhum serviço disponível no momento.</p>
+                  </div>
+                ) : (
+                  servicos.map((servico) => (
+                    <Card
+                      key={servico.id}
+                      className={`cursor-pointer transition-all ${
+                        selectedServico?.id === servico.id
+                          ? "border-primary bg-primary/5"
+                          : "border-border hover:border-primary/50"
+                      }`}
+                      onClick={() => setSelectedServico(servico)}
+                    >
+                      <CardContent className="p-4 flex justify-between items-center">
+                        <div>
+                          <h3 className="font-medium text-foreground">{servico.nome}</h3>
+                          {servico.descricao && (
+                            <p className="text-xs text-muted-foreground mt-0.5">{servico.descricao}</p>
+                          )}
+                          <p className="text-sm text-muted-foreground flex items-center gap-1 mt-1">
+                            <Clock size={14} /> {servico.duracao} min
+                          </p>
+                        </div>
+                        <div className="text-right">
+                          <p className="font-semibold text-primary">
+                            R$ {servico.preco.toFixed(2).replace('.', ',')}
+                          </p>
+                          {selectedServico?.id === servico.id && (
+                            <Check className="text-primary ml-auto" size={20} />
+                          )}
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))
+                )}
               </motion.div>
             )}
 
@@ -313,11 +318,11 @@ const Agendamento = () => {
                       <CardTitle className="text-base">Resumo do Agendamento</CardTitle>
                     </CardHeader>
                     <CardContent className="text-sm space-y-1">
-                      <p><strong>Serviço:</strong> {servicos.find(s => s.id === selectedServico)?.nome}</p>
+                      <p><strong>Serviço:</strong> {selectedServico.nome}</p>
                       <p><strong>Data:</strong> {format(selectedDate, "dd/MM/yyyy", { locale: ptBR })}</p>
                       <p><strong>Horário:</strong> {selectedHorario}</p>
                       <p className="text-primary font-semibold pt-2">
-                        Total: R$ {servicos.find(s => s.id === selectedServico)?.preco.toFixed(2).replace('.', ',')}
+                        Total: R$ {selectedServico.preco.toFixed(2).replace('.', ',')}
                       </p>
                     </CardContent>
                   </Card>

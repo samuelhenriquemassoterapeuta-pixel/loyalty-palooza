@@ -1,94 +1,27 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowLeft, ShoppingBag, Leaf, Sparkles, Plus, Check, Loader2, Package } from "lucide-react";
+import { ArrowLeft, ShoppingBag, Leaf, Sparkles, Loader2, Package } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { BottomNavigation } from "@/components/BottomNavigation";
 import { useToast } from "@/hooks/use-toast";
 import { useProdutos, usePedidos, Produto } from "@/hooks/usePedidos";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-
-// Produtos mock para quando o banco estiver vazio
-const produtosMock: Omit<Produto, "id" | "created_at">[] = [
-  {
-    nome: "Kit Óleos Essenciais",
-    descricao: "Lavanda, eucalipto e hortelã para relaxamento",
-    preco: 89.90,
-    categoria: "spa",
-    imagem_url: "🧴",
-    disponivel: true,
-  },
-  {
-    nome: "Vela Aromática Relaxante",
-    descricao: "Aroma suave de baunilha e canela",
-    preco: 45.00,
-    categoria: "spa",
-    imagem_url: "🕯️",
-    disponivel: true,
-  },
-  {
-    nome: "Sal de Banho Detox",
-    descricao: "Sal marinho com ervas purificantes",
-    preco: 38.00,
-    categoria: "spa",
-    imagem_url: "🛁",
-    disponivel: true,
-  },
-  {
-    nome: "Óleo de Massagem Premium",
-    descricao: "Blend exclusivo para massagem relaxante",
-    preco: 75.00,
-    categoria: "spa",
-    imagem_url: "💆",
-    disponivel: true,
-  },
-  {
-    nome: "Chá Detox Resinkra",
-    descricao: "Blend de ervas para desintoxicação",
-    preco: 32.00,
-    categoria: "gastronomia",
-    imagem_url: "🍵",
-    disponivel: true,
-  },
-  {
-    nome: "Granola Artesanal",
-    descricao: "Com castanhas e frutas secas orgânicas",
-    preco: 28.00,
-    categoria: "gastronomia",
-    imagem_url: "🥣",
-    disponivel: true,
-  },
-  {
-    nome: "Mel Orgânico 500g",
-    descricao: "Mel puro de florada silvestre",
-    preco: 42.00,
-    categoria: "gastronomia",
-    imagem_url: "🍯",
-    disponivel: true,
-  },
-  {
-    nome: "Mix de Nuts Premium",
-    descricao: "Castanhas, amêndoas e nozes selecionadas",
-    preco: 55.00,
-    categoria: "gastronomia",
-    imagem_url: "🥜",
-    disponivel: true,
-  },
-];
+import { ProdutoCard } from "@/components/loja/ProdutoCard";
+import { CarrinhoFlutuante } from "@/components/loja/CarrinhoFlutuante";
 
 interface CarrinhoItem {
-  produto: Produto | (Omit<Produto, "id" | "created_at"> & { id: string });
+  produto: Produto;
   quantidade: number;
 }
 
 export default function Loja() {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { produtos: produtosBanco, loading: loadingProdutos } = useProdutos();
+  const { produtos, loading: loadingProdutos } = useProdutos();
   const { pedidos, loading: loadingPedidos, createPedido } = usePedidos();
   
   const [activeTab, setActiveTab] = useState("loja");
@@ -96,16 +29,11 @@ export default function Loja() {
   const [carrinho, setCarrinho] = useState<CarrinhoItem[]>([]);
   const [saving, setSaving] = useState(false);
 
-  // Use produtos do banco ou mock se vazio
-  const produtos = produtosBanco.length > 0 
-    ? produtosBanco 
-    : produtosMock.map((p, i) => ({ ...p, id: `mock-${i}`, created_at: new Date().toISOString() }));
-
   const produtosFiltrados = categoriaAtiva === "todos" 
     ? produtos 
     : produtos.filter(p => p.categoria === categoriaAtiva);
 
-  const handleAdicionarCarrinho = (produto: typeof produtos[0]) => {
+  const handleToggleCarrinho = (produto: Produto) => {
     const existente = carrinho.find(item => item.produto.id === produto.id);
     
     if (existente) {
@@ -129,16 +57,6 @@ export default function Loja() {
 
   const handleReservar = async () => {
     if (carrinho.length === 0) return;
-
-    // Se são produtos mock, só simular
-    if (carrinho[0].produto.id.startsWith("mock-")) {
-      toast({
-        title: "Pedido reservado! ✅",
-        description: "Retire seus produtos na clínica.",
-      });
-      setCarrinho([]);
-      return;
-    }
 
     setSaving(true);
     const itens = carrinho.map(item => ({
@@ -299,47 +217,21 @@ export default function Loja() {
               <div className="flex justify-center py-12">
                 <Loader2 className="w-8 h-8 text-primary animate-spin" />
               </div>
+            ) : produtosFiltrados.length === 0 ? (
+              <div className="text-center py-12">
+                <Package className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+                <p className="text-muted-foreground">Nenhum produto encontrado</p>
+              </div>
             ) : (
               <div className="grid grid-cols-2 gap-3">
                 {produtosFiltrados.map((produto, index) => (
-                  <motion.div
+                  <ProdutoCard
                     key={produto.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.05 }}
-                  >
-                    <Card className="p-3 relative overflow-hidden">
-                      <div className="text-4xl mb-2 text-center">
-                        {produto.imagem_url?.startsWith("http") ? (
-                          <img src={produto.imagem_url} alt={produto.nome} className="w-12 h-12 mx-auto object-cover rounded" />
-                        ) : (
-                          produto.imagem_url || "📦"
-                        )}
-                      </div>
-                      
-                      <h3 className="font-medium text-sm line-clamp-1">{produto.nome}</h3>
-                      <p className="text-[10px] text-muted-foreground line-clamp-2 mt-0.5 min-h-[28px]">
-                        {produto.descricao}
-                      </p>
-                      
-                      <div className="flex items-center justify-between mt-2">
-                        <div>
-                          <p className="font-bold text-sm">
-                            R$ {produto.preco.toFixed(2).replace('.', ',')}
-                          </p>
-                        </div>
-                        
-                        <Button
-                          size="icon"
-                          variant={noCarrinho(produto.id) ? "default" : "outline"}
-                          className="h-8 w-8"
-                          onClick={() => handleAdicionarCarrinho(produto)}
-                        >
-                          {noCarrinho(produto.id) ? <Check size={16} /> : <Plus size={16} />}
-                        </Button>
-                      </div>
-                    </Card>
-                  </motion.div>
+                    produto={produto}
+                    index={index}
+                    noCarrinho={noCarrinho(produto.id)}
+                    onToggle={() => handleToggleCarrinho(produto)}
+                  />
                 ))}
               </div>
             )}
@@ -348,32 +240,12 @@ export default function Loja() {
 
         {/* Carrinho Flutuante */}
         {carrinho.length > 0 && activeTab === "loja" && (
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="fixed bottom-20 left-4 right-4 max-w-lg mx-auto"
-          >
-            <Card className="p-4 bg-primary text-primary-foreground shadow-lg">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium">
-                    {carrinho.length} {carrinho.length === 1 ? 'item' : 'itens'} no carrinho
-                  </p>
-                  <p className="text-xs opacity-90">
-                    Total: R$ {totalCarrinho.toFixed(2).replace('.', ',')}
-                  </p>
-                </div>
-                <Button 
-                  variant="secondary" 
-                  size="sm"
-                  onClick={handleReservar}
-                  disabled={saving}
-                >
-                  {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : "Reservar"}
-                </Button>
-              </div>
-            </Card>
-          </motion.div>
+          <CarrinhoFlutuante
+            quantidade={carrinho.length}
+            total={totalCarrinho}
+            saving={saving}
+            onReservar={handleReservar}
+          />
         )}
       </div>
 

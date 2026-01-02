@@ -1,49 +1,8 @@
 import { motion } from "framer-motion";
-import { ArrowDownLeft, ArrowUpRight, ChevronRight, Sparkles } from "lucide-react";
-
-interface Transaction {
-  id: string;
-  description: string;
-  amount: number;
-  cashback: number;
-  date: string;
-  type: "income" | "expense";
-}
-
-const transactions: Transaction[] = [
-  {
-    id: "1",
-    description: "Massagem Relaxante",
-    amount: -150.0,
-    cashback: 7.50,
-    date: "Hoje, 14:32",
-    type: "expense",
-  },
-  {
-    id: "2",
-    description: "Cashback recebido",
-    amount: 45.5,
-    cashback: 0,
-    date: "Ontem, 09:15",
-    type: "income",
-  },
-  {
-    id: "3",
-    description: "Kit Óleos Essenciais",
-    amount: -89.9,
-    cashback: 4.50,
-    date: "22 Dez, 20:45",
-    type: "expense",
-  },
-  {
-    id: "4",
-    description: "Drenagem Linfática",
-    amount: -160.0,
-    cashback: 8.0,
-    date: "21 Dez, 18:20",
-    type: "expense",
-  },
-];
+import { ArrowDownLeft, ArrowUpRight, ChevronRight, Sparkles, Loader2 } from "lucide-react";
+import { useTransacoes } from "@/hooks/useTransacoes";
+import { formatDistanceToNow } from "date-fns";
+import { ptBR } from "date-fns/locale";
 
 const container = {
   hidden: { opacity: 0 },
@@ -69,6 +28,8 @@ const item = {
 };
 
 export const TransactionHistory = () => {
+  const { transacoes, loading } = useTransacoes();
+
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat("pt-BR", {
       style: "currency",
@@ -76,15 +37,48 @@ export const TransactionHistory = () => {
     }).format(Math.abs(value));
   };
 
+  const getTransactionType = (tipo: string) => {
+    return tipo === "cashback" ? "income" : "expense";
+  };
+
+  if (loading) {
+    return (
+      <section>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-bold text-foreground">Histórico</h3>
+        </div>
+        <div className="flex justify-center py-8">
+          <Loader2 className="w-6 h-6 text-primary animate-spin" />
+        </div>
+      </section>
+    );
+  }
+
+  if (transacoes.length === 0) {
+    return (
+      <section>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-bold text-foreground">Histórico</h3>
+        </div>
+        <div className="text-center py-8 text-muted-foreground">
+          <p>Nenhuma transação ainda.</p>
+          <p className="text-sm mt-1">Suas movimentações aparecerão aqui.</p>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section>
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <h3 className="text-lg font-bold text-foreground">Histórico</h3>
-          <span className="pill text-[10px]">
-            <Sparkles size={10} />
-            Novo
-          </span>
+          {transacoes.length > 0 && (
+            <span className="pill text-[10px]">
+              <Sparkles size={10} />
+              {transacoes.length}
+            </span>
+          )}
         </div>
         <button className="text-sm font-medium text-primary flex items-center gap-1 hover:gap-2 transition-all">
           Ver tudo <ChevronRight size={16} />
@@ -97,54 +91,50 @@ export const TransactionHistory = () => {
         animate="show"
         className="space-y-3"
       >
-        {transactions.map((transaction) => (
-          <motion.div
-            key={transaction.id}
-            variants={item}
-            whileHover={{ x: 4 }}
-            className="group flex items-center gap-4 p-4 rounded-2xl bg-card shadow-card hover:shadow-elevated transition-all duration-300 cursor-pointer"
-          >
-            <div
-              className={`p-2.5 rounded-xl transition-transform duration-300 group-hover:scale-110 ${
-                transaction.type === "income"
-                  ? "bg-gradient-to-br from-primary/20 to-primary/5 text-primary"
-                  : "bg-gradient-to-br from-muted to-muted/50 text-muted-foreground"
-              }`}
+        {transacoes.slice(0, 5).map((transacao) => {
+          const type = getTransactionType(transacao.tipo);
+          const date = formatDistanceToNow(new Date(transacao.created_at), { 
+            addSuffix: true, 
+            locale: ptBR 
+          });
+
+          return (
+            <motion.div
+              key={transacao.id}
+              variants={item}
+              whileHover={{ x: 4 }}
+              className="group flex items-center gap-4 p-4 rounded-2xl bg-card shadow-card hover:shadow-elevated transition-all duration-300 cursor-pointer"
             >
-              {transaction.type === "income" ? (
-                <ArrowDownLeft size={20} />
-              ) : (
-                <ArrowUpRight size={20} />
-              )}
-            </div>
-
-            <div className="flex-1 min-w-0">
-              <p className="font-semibold text-foreground truncate">
-                {transaction.description}
-              </p>
-              <p className="text-xs text-muted-foreground">{transaction.date}</p>
-            </div>
-
-            <div className="text-right">
-              <p
-                className={`font-bold ${
-                  transaction.type === "income"
-                    ? "text-primary"
-                    : "text-foreground"
+              <div
+                className={`p-2.5 rounded-xl transition-transform duration-300 group-hover:scale-110 ${
+                  type === "income"
+                    ? "bg-gradient-to-br from-primary/20 to-primary/5 text-primary"
+                    : "bg-gradient-to-br from-muted to-muted/50 text-muted-foreground"
                 }`}
               >
-                {transaction.type === "income" ? "+" : "-"}
-                {formatCurrency(transaction.amount)}
-              </p>
-              {transaction.cashback > 0 && (
-                <p className="text-xs text-primary font-medium flex items-center justify-end gap-1">
-                  <Sparkles size={10} />
-                  +{formatCurrency(transaction.cashback)}
+                {type === "income" ? (
+                  <ArrowDownLeft size={20} />
+                ) : (
+                  <ArrowUpRight size={20} />
+                )}
+              </div>
+
+              <div className="flex-1 min-w-0">
+                <p className="font-semibold text-foreground truncate">
+                  {transacao.descricao || transacao.tipo}
                 </p>
-              )}
-            </div>
-          </motion.div>
-        ))}
+                <p className="text-xs text-muted-foreground capitalize">{date}</p>
+              </div>
+
+              <div className="text-right">
+                <p className={`font-bold ${type === "income" ? "text-primary" : "text-foreground"}`}>
+                  {type === "income" ? "+" : "-"}
+                  {formatCurrency(transacao.valor)}
+                </p>
+              </div>
+            </motion.div>
+          );
+        })}
       </motion.div>
     </section>
   );

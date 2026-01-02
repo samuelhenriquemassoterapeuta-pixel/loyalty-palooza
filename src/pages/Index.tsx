@@ -11,7 +11,7 @@ const Index = () => {
         <Header />
         
         <main className="space-y-6 mt-2">
-          <BalanceCard balance={1250.45} pendingCashback={78.32} />
+          <BalanceCard />
           <QuickActions />
           <TransactionHistory />
         </main>

@@ -1,14 +1,11 @@
 import { motion } from "framer-motion";
-import { Eye, EyeOff, TrendingUp, Sparkles } from "lucide-react";
+import { Eye, EyeOff, TrendingUp, Sparkles, Loader2 } from "lucide-react";
 import { useState } from "react";
+import { useTransacoes } from "@/hooks/useTransacoes";
 
-interface BalanceCardProps {
-  balance: number;
-  pendingCashback: number;
-}
-
-export const BalanceCard = ({ balance, pendingCashback }: BalanceCardProps) => {
+export const BalanceCard = () => {
   const [showBalance, setShowBalance] = useState(true);
+  const { stats, loading } = useTransacoes();
 
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat("pt-BR", {
@@ -21,7 +18,7 @@ export const BalanceCard = ({ balance, pendingCashback }: BalanceCardProps) => {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, type: "spring", stiffness: 100 }}
+      transition={{ duration: 0.5, type: "spring" as const, stiffness: 100 }}
       className="relative overflow-hidden rounded-3xl p-6 text-primary-foreground shadow-elevated"
     >
       {/* Background gradient */}
@@ -67,9 +64,16 @@ export const BalanceCard = ({ balance, pendingCashback }: BalanceCardProps) => {
           animate={{ opacity: 1, y: 0 }}
           className="mb-6"
         >
-          <h2 className="text-4xl font-bold tracking-tight font-serif">
-            {showBalance ? formatCurrency(balance) : "R$ ••••••"}
-          </h2>
+          {loading ? (
+            <div className="flex items-center gap-2">
+              <Loader2 className="w-6 h-6 animate-spin" />
+              <span className="text-lg opacity-70">Carregando...</span>
+            </div>
+          ) : (
+            <h2 className="text-4xl font-bold tracking-tight font-serif">
+              {showBalance ? formatCurrency(stats.saldo) : "R$ ••••••"}
+            </h2>
+          )}
         </motion.div>
 
         <motion.div 
@@ -82,9 +86,9 @@ export const BalanceCard = ({ balance, pendingCashback }: BalanceCardProps) => {
             <TrendingUp size={18} className="text-primary-foreground" />
           </div>
           <div className="flex-1">
-            <p className="text-xs opacity-80">Cashback pendente</p>
+            <p className="text-xs opacity-80">Cashback acumulado</p>
             <p className="font-semibold">
-              {showBalance ? formatCurrency(pendingCashback) : "R$ ••••"}
+              {loading ? "..." : showBalance ? formatCurrency(stats.totalCashback) : "R$ ••••"}
             </p>
           </div>
           <div className="text-xs font-medium px-2 py-1 rounded-full bg-primary-foreground/20">
