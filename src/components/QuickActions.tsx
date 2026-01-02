@@ -103,7 +103,7 @@ export const QuickActions = () => {
           
           {/* Icon with enhanced effects and pulse */}
           <motion.div 
-            className={`relative z-10 p-4 rounded-xl bg-gradient-to-br ${action.gradient} transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg`}
+            className={`relative z-10 p-4 rounded-2xl bg-gradient-to-br ${action.gradient} transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg`}
             animate={{ 
               scale: [1, 1.05, 1],
             }}
@@ -116,11 +116,11 @@ export const QuickActions = () => {
             whileHover={{ rotate: [0, -5, 5, 0], scale: 1.1 }}
           >
             {/* Inner glow */}
-            <div className="absolute inset-0 rounded-xl bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            <div className="absolute inset-0 rounded-2xl bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             
             {/* Pulse ring effect */}
             <motion.div 
-              className={`absolute inset-0 rounded-xl bg-gradient-to-br ${action.gradient}`}
+              className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${action.gradient}`}
               animate={{ 
                 scale: [1, 1.3, 1.3],
                 opacity: [0.4, 0, 0]
