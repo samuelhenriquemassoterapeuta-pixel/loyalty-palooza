@@ -12,7 +12,8 @@ import {
   Settings,
   Smartphone,
   Camera,
-  Loader2
+  Loader2,
+  Download
 } from "lucide-react";
 import { BottomNavigation } from "@/components/BottomNavigation";
 import { useAuth } from "@/contexts/AuthContext";
@@ -36,6 +37,7 @@ const menuItems = [
   { icon: Bell, label: "Notificações", description: "Gerencie seus alertas", action: "notificacoes" },
   { icon: Shield, label: "Segurança", description: "Senha e autenticação", action: "seguranca" },
   { icon: Smartphone, label: "Dispositivos", description: "Gerencie seus acessos", action: "dispositivos" },
+  { icon: Download, label: "Instalar App", description: "Adicione à tela inicial", action: "instalar" },
   { icon: HelpCircle, label: "Ajuda", description: "FAQ e suporte", action: "ajuda" },
   { icon: FileText, label: "Termos de uso", description: "Políticas e condições", action: "termos" },
 ];
@@ -110,6 +112,9 @@ const Profile = () => {
         break;
       case "dispositivos":
         setDevicesSheetOpen(true);
+        break;
+      case "instalar":
+        navigate("/instalar");
         break;
       case "ajuda":
         setHelpSheetOpen(true);
