@@ -212,23 +212,63 @@ export default function Loja() {
                 </Button>
               </div>
             ) : (
-              <div className="space-y-3">
+              <div className="space-y-4">
                 {pedidos.map((pedido) => (
-                  <Card key={pedido.id} className="p-4">
-                    <div className="flex justify-between items-start">
-                      <div>
-                        <p className="font-semibold text-foreground">
-                          Pedido #{pedido.id.slice(0, 8)}
-                        </p>
-                        <p className="text-sm text-muted-foreground">
-                          {format(new Date(pedido.created_at), "dd/MM/yyyy 'às' HH:mm", { locale: ptBR })}
-                        </p>
-                        <p className="text-primary font-semibold mt-2">
-                          R$ {pedido.total.toFixed(2).replace('.', ',')}
-                        </p>
+                  <Card key={pedido.id} className="overflow-hidden">
+                    {/* Header do pedido */}
+                    <div className="p-4 border-b border-border">
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <p className="font-semibold text-foreground">
+                            Pedido #{pedido.id.slice(0, 8)}
+                          </p>
+                          <p className="text-sm text-muted-foreground">
+                            {format(new Date(pedido.created_at), "dd/MM/yyyy 'às' HH:mm", { locale: ptBR })}
+                          </p>
+                        </div>
+                        <span className={`text-xs px-2 py-1 rounded-full ${getStatusColor(pedido.status)}`}>
+                          {getStatusLabel(pedido.status)}
+                        </span>
                       </div>
-                      <span className={`text-xs px-2 py-1 rounded-full ${getStatusColor(pedido.status)}`}>
-                        {getStatusLabel(pedido.status)}
+                    </div>
+
+                    {/* Itens do pedido */}
+                    {pedido.pedido_itens && pedido.pedido_itens.length > 0 && (
+                      <div className="p-3 bg-muted/30 space-y-2">
+                        {pedido.pedido_itens.map((item) => (
+                          <div key={item.id} className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-md bg-muted flex items-center justify-center text-lg shrink-0">
+                              {item.produtos?.imagem_url?.startsWith("http") ? (
+                                <img
+                                  src={item.produtos.imagem_url}
+                                  alt={item.produtos?.nome || "Produto"}
+                                  className="w-full h-full object-cover rounded-md"
+                                />
+                              ) : (
+                                item.produtos?.imagem_url || "📦"
+                              )}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <p className="text-sm font-medium line-clamp-1">
+                                {item.produtos?.nome || "Produto"}
+                              </p>
+                              <p className="text-xs text-muted-foreground">
+                                {item.quantidade}x R$ {item.preco_unitario.toFixed(2).replace('.', ',')}
+                              </p>
+                            </div>
+                            <p className="text-sm font-semibold text-primary shrink-0">
+                              R$ {(item.quantidade * item.preco_unitario).toFixed(2).replace('.', ',')}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* Total */}
+                    <div className="p-4 flex justify-between items-center">
+                      <span className="text-sm text-muted-foreground">Total do pedido</span>
+                      <span className="font-bold text-primary">
+                        R$ {pedido.total.toFixed(2).replace('.', ',')}
                       </span>
                     </div>
                   </Card>
