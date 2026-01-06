@@ -124,8 +124,15 @@ const Auth = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background gradient-hero flex flex-col">
-      <div className="flex-1 flex flex-col items-center justify-center px-6 py-12">
+    <div className="min-h-screen bg-background gradient-hero flex flex-col relative overflow-hidden">
+      {/* Decorative elements */}
+      <div className="absolute top-20 right-10 w-32 h-32 bg-accent/10 rounded-full blur-3xl" />
+      <div className="absolute bottom-40 left-5 w-40 h-40 bg-primary/10 rounded-full blur-3xl" />
+      <div className="absolute top-1/3 left-10 w-3 h-3 bg-accent rounded-full animate-pulse-soft" />
+      <div className="absolute top-1/4 right-20 w-2 h-2 bg-highlight rounded-full animate-bounce-subtle" />
+      <div className="absolute bottom-1/3 right-10 w-4 h-4 bg-warning/60 rounded-full animate-float" />
+      
+      <div className="flex-1 flex flex-col items-center justify-center px-6 py-12 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -133,12 +140,15 @@ const Auth = () => {
         >
           {/* Logo */}
           <div className="flex flex-col items-center mb-8">
-            <img 
-              src={resinkraLogo} 
-              alt="Resinkra" 
-              className="h-20 w-20 rounded-2xl object-cover shadow-elevated mb-4"
-            />
-            <h1 className="text-2xl font-bold text-foreground">Resinkra</h1>
+            <div className="relative">
+              <div className="absolute -inset-2 bg-gradient-to-br from-primary/20 to-accent/20 rounded-3xl blur-lg" />
+              <img 
+                src={resinkraLogo} 
+                alt="Resinkra" 
+                className="relative h-20 w-20 rounded-2xl object-cover shadow-elevated mb-4"
+              />
+            </div>
+            <h1 className="text-2xl font-bold text-foreground mt-2">Resinkra</h1>
             <p className="text-muted-foreground text-sm mt-1">
               {mode === "login" && "Bem-vindo de volta"}
               {mode === "signup" && "Crie sua conta"}
@@ -230,7 +240,7 @@ const Auth = () => {
                 <button
                   type="button"
                   onClick={() => switchMode("forgot-password")}
-                  className="text-sm text-primary hover:underline"
+                  className="text-sm text-accent hover:text-accent/80 font-medium hover:underline transition-colors"
                 >
                   Esqueceu sua senha?
                 </button>
@@ -261,7 +271,7 @@ const Auth = () => {
                 {mode === "login" ? "Não tem uma conta?" : "Já tem uma conta?"}
                 <button
                   onClick={() => switchMode(mode === "login" ? "signup" : "login")}
-                  className="ml-1 text-primary font-semibold hover:underline"
+                  className="ml-1 text-accent font-semibold hover:underline"
                 >
                   {mode === "login" ? "Cadastre-se" : "Fazer login"}
                 </button>
