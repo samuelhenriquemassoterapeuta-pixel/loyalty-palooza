@@ -54,8 +54,7 @@ export const useTransacoes = () => {
       
       // Calcular estatísticas
       const cashback = (data || [])
-        .filter(t => t.tipo === "cashback" || t.tipo === "credito")
-        .filter(t => Number(t.valor) > 0)
+        .filter(t => t.tipo === "cashback")
         .reduce((acc, t) => acc + Number(t.valor), 0);
       
       // Total gasto (débitos - valores negativos)

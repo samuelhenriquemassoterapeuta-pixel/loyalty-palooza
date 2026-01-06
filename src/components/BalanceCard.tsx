@@ -74,24 +74,31 @@ export const BalanceCard = () => {
           </h2>
         </motion.div>
 
+        {/* Cashback Card */}
         <motion.div 
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.2 }}
           className="flex items-center gap-3 bg-primary-foreground/10 rounded-2xl px-4 py-3 backdrop-blur-sm"
         >
-          <div className="p-2 rounded-xl bg-primary-foreground/10">
-            <TrendingUp size={18} className="text-primary-foreground" />
+          <div className="p-2 rounded-xl bg-green-500/20">
+            <TrendingUp size={18} className="text-green-300" />
           </div>
           <div className="flex-1">
             <p className="text-xs opacity-80">Cashback acumulado</p>
-            <p className="font-semibold">
+            <p className="font-bold text-lg text-green-300">
               {showBalance ? formatCurrency(stats.totalCashback) : "R$ ••••"}
             </p>
           </div>
-          <div className="text-xs font-medium px-2 py-1 rounded-full bg-primary-foreground/20">
-            +5%
-          </div>
+          {stats.totalCashback > 0 && (
+            <motion.div 
+              animate={{ scale: [1, 1.1, 1] }}
+              transition={{ repeat: Infinity, duration: 2 }}
+              className="text-xs font-bold px-2 py-1 rounded-full bg-green-500/30 text-green-200"
+            >
+              💰 Disponível
+            </motion.div>
+          )}
         </motion.div>
       </div>
     </motion.div>
