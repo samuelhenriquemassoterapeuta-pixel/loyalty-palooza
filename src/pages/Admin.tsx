@@ -89,7 +89,7 @@ const Admin = () => {
   const { isAdmin, loading: loadingAdmin } = useAdmin();
   const queryClient = useQueryClient();
   
-  const [activeTab, setActiveTab] = useState("produtos");
+  const [activeTab, setActiveTab] = useState("dashboard");
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<any>(null);
   const [formData, setFormData] = useState<any>({});
