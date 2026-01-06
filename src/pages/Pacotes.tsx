@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { BottomNavigation } from "@/components/BottomNavigation";
 import { Progress } from "@/components/ui/progress";
-import { ArrowLeft, Package, Check, Clock, Sparkles, Loader2, Calendar } from "lucide-react";
+import { ArrowLeft, Package, Check, Clock, Sparkles, Loader2, Calendar, AlertTriangle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { usePacotes, useMeusPacotes, Pacote } from "@/hooks/usePacotes";
@@ -106,14 +106,42 @@ const Pacotes = () => {
               const progresso = (planoAtivo.sessoes_usadas / pacote.total_sessoes) * 100;
               const dataValidade = new Date(planoAtivo.data_validade);
               const diasRestantes = Math.ceil((dataValidade.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24));
+              const alertaBaixo = sessoesRestantes < 3;
               
               return (
-                <Card className="overflow-hidden border-primary/30 bg-gradient-to-br from-primary/10 via-background to-accent/5">
+                <Card className={`overflow-hidden ${alertaBaixo ? 'border-destructive/50 bg-gradient-to-br from-destructive/10 via-background to-destructive/5' : 'border-primary/30 bg-gradient-to-br from-primary/10 via-background to-accent/5'}`}>
                   <CardContent className="p-5">
+                    {/* Alerta de Sessões Baixas */}
+                    {alertaBaixo && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="flex items-center gap-2 p-3 mb-4 rounded-xl bg-destructive/10 border border-destructive/20"
+                      >
+                        <motion.div
+                          animate={{ rotate: [0, -10, 10, -10, 0] }}
+                          transition={{ duration: 0.5, repeat: Infinity, repeatDelay: 2 }}
+                        >
+                          <AlertTriangle className="text-destructive" size={18} />
+                        </motion.div>
+                        <div className="flex-1">
+                          <p className="text-sm font-medium text-destructive">Sessões acabando!</p>
+                          <p className="text-xs text-muted-foreground">Renove seu plano para continuar</p>
+                        </div>
+                        <Button 
+                          size="sm" 
+                          variant="destructive"
+                          onClick={() => setActiveTab("loja")}
+                        >
+                          Renovar
+                        </Button>
+                      </motion.div>
+                    )}
+
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center gap-2">
-                        <div className="p-2 rounded-xl bg-primary/20">
-                          <Clock className="text-primary" size={20} />
+                        <div className={`p-2 rounded-xl ${alertaBaixo ? 'bg-destructive/20' : 'bg-primary/20'}`}>
+                          <Clock className={alertaBaixo ? 'text-destructive' : 'text-primary'} size={20} />
                         </div>
                         <div>
                           <p className="text-xs text-muted-foreground">Plano Ativo</p>
@@ -127,11 +155,15 @@ const Pacotes = () => {
                     </div>
                     
                     {/* Sessões Restantes Destaque */}
-                    <div className="flex items-center justify-center gap-3 py-4 mb-4 rounded-2xl bg-gradient-to-r from-primary/20 via-primary/10 to-primary/20">
+                    <div className={`flex items-center justify-center gap-3 py-4 mb-4 rounded-2xl ${
+                      alertaBaixo 
+                        ? 'bg-gradient-to-r from-destructive/20 via-destructive/10 to-destructive/20' 
+                        : 'bg-gradient-to-r from-primary/20 via-primary/10 to-primary/20'
+                    }`}>
                       <motion.div
-                        animate={{ scale: [1, 1.1, 1] }}
-                        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                        className="text-4xl font-bold text-primary"
+                        animate={{ scale: alertaBaixo ? [1, 1.15, 1] : [1, 1.1, 1] }}
+                        transition={{ duration: alertaBaixo ? 0.8 : 2, repeat: Infinity, ease: "easeInOut" }}
+                        className={`text-4xl font-bold ${alertaBaixo ? 'text-destructive' : 'text-primary'}`}
                       >
                         {sessoesRestantes}
                       </motion.div>
