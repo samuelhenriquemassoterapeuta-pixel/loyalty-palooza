@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowLeft, ShoppingBag, Leaf, Sparkles, Package } from "lucide-react";
+import { ArrowLeft, Leaf, Sparkles, Package } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -12,6 +12,7 @@ import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { ProdutoCard } from "@/components/loja/ProdutoCard";
 import { CarrinhoFlutuante } from "@/components/loja/CarrinhoFlutuante";
+import { CarrinhoSheet } from "@/components/loja/CarrinhoSheet";
 import { ProdutosGridSkeleton, PedidosListSkeleton } from "@/components/skeletons";
 
 interface CarrinhoItem {
@@ -29,6 +30,7 @@ export default function Loja() {
   const [categoriaAtiva, setCategoriaAtiva] = useState<"todos" | "spa" | "gastronomia">("todos");
   const [carrinho, setCarrinho] = useState<CarrinhoItem[]>([]);
   const [saving, setSaving] = useState(false);
+  const [carrinhoOpen, setCarrinhoOpen] = useState(false);
 
   const produtosFiltrados = categoriaAtiva === "todos" 
     ? produtos 
@@ -56,6 +58,28 @@ export default function Loja() {
 
   const totalCarrinho = carrinho.reduce((acc, item) => acc + item.produto.preco * item.quantidade, 0);
 
+  const handleUpdateQuantidade = (produtoId: string, delta: number) => {
+    setCarrinho(carrinho.map(item => {
+      if (item.produto.id === produtoId) {
+        const novaQtd = item.quantidade + delta;
+        if (novaQtd <= 0) return item;
+        return { ...item, quantidade: novaQtd };
+      }
+      return item;
+    }));
+  };
+
+  const handleRemoverDoCarrinho = (produtoId: string) => {
+    const item = carrinho.find(i => i.produto.id === produtoId);
+    setCarrinho(carrinho.filter(i => i.produto.id !== produtoId));
+    if (item) {
+      toast({
+        title: "Produto removido",
+        description: `${item.produto.nome} foi removido do carrinho.`,
+      });
+    }
+  };
+
   const handleReservar = async () => {
     if (carrinho.length === 0) return;
 
@@ -81,6 +105,7 @@ export default function Loja() {
         description: "Retire seus produtos na clínica.",
       });
       setCarrinho([]);
+      setCarrinhoOpen(false);
       setActiveTab("pedidos");
     }
   };
@@ -122,14 +147,15 @@ export default function Loja() {
             <h1 className="text-lg font-semibold">Loja Resinkra</h1>
             <p className="text-xs text-muted-foreground">Produtos exclusivos</p>
           </div>
-          <div className="relative">
-            <ShoppingBag size={24} className="text-primary" />
-            {carrinho.length > 0 && (
-              <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
-                {carrinho.length}
-              </span>
-            )}
-          </div>
+          <CarrinhoSheet
+            carrinho={carrinho}
+            onUpdateQuantidade={handleUpdateQuantidade}
+            onRemover={handleRemoverDoCarrinho}
+            onReservar={handleReservar}
+            saving={saving}
+            open={carrinhoOpen}
+            onOpenChange={setCarrinhoOpen}
+          />
         </div>
       </div>
 
