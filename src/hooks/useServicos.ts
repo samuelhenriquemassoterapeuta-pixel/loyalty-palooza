@@ -10,6 +10,7 @@ export interface Servico {
   categoria: string | null;
   disponivel: boolean | null;
   created_at: string;
+  cashback_percentual: number;
 }
 
 export const useServicos = () => {

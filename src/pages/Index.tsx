@@ -6,7 +6,7 @@ import { BottomNavigation } from "@/components/BottomNavigation";
 import { InstallBanner } from "@/components/InstallBanner";
 import { useAdmin } from "@/hooks/useAdmin";
 import { useNavigate } from "react-router-dom";
-import { Settings } from "lucide-react";
+import { Settings, Gift } from "lucide-react";
 import { motion } from "framer-motion";
 
 const Index = () => {
@@ -23,6 +23,25 @@ const Index = () => {
           <BalanceCard />
           <QuickActions />
           
+          {/* Referral Banner */}
+          <motion.button
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={() => navigate("/indicacoes")}
+            className="w-full flex items-center gap-3 p-4 rounded-2xl bg-gradient-to-r from-green-500/10 via-emerald-500/10 to-green-500/10 border border-green-500/20 hover:border-green-500/40 transition-all"
+          >
+            <div className="p-2 rounded-xl bg-green-500/20">
+              <Gift className="text-green-500" size={20} />
+            </div>
+            <div className="flex-1 text-left">
+              <p className="font-semibold text-foreground">Indique e Ganhe</p>
+              <p className="text-xs text-muted-foreground">Ganhe R$ 10 por cada amigo indicado</p>
+            </div>
+            <div className="text-xs px-2 py-1 rounded-full bg-green-500/20 text-green-600 font-medium">
+              R$ 10
+            </div>
+          </motion.button>
           {/* Admin Quick Access */}
           {isAdmin && (
             <motion.button

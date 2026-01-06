@@ -11,6 +11,7 @@ export interface Produto {
   categoria: string | null;
   disponivel: boolean;
   created_at: string;
+  cashback_percentual: number;
 }
 
 export interface Pedido {

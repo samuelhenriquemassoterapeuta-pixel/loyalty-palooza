@@ -13,6 +13,7 @@ import Notificacoes from "@/pages/Notificacoes";
 import Instalar from "@/pages/Instalar";
 import Transferir from "@/pages/Transferir";
 import Admin from "@/pages/Admin";
+import Indicacoes from "@/pages/Indicacoes";
 import NotFound from "@/pages/NotFound";
 
 export const AnimatedRoutes = () => {
@@ -123,6 +124,16 @@ export const AnimatedRoutes = () => {
             <ProtectedRoute>
               <PageTransition>
                 <Admin />
+              </PageTransition>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/indicacoes"
+          element={
+            <ProtectedRoute>
+              <PageTransition>
+                <Indicacoes />
               </PageTransition>
             </ProtectedRoute>
           }

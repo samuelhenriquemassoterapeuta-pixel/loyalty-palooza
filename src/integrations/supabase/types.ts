@@ -118,6 +118,51 @@ export type Database = {
           },
         ]
       }
+      indicacoes: {
+        Row: {
+          cashback_valor: number
+          created_at: string
+          id: string
+          indicado_id: string
+          indicador_id: string
+          processado_at: string | null
+          status: string
+        }
+        Insert: {
+          cashback_valor?: number
+          created_at?: string
+          id?: string
+          indicado_id: string
+          indicador_id: string
+          processado_at?: string | null
+          status?: string
+        }
+        Update: {
+          cashback_valor?: number
+          created_at?: string
+          id?: string
+          indicado_id?: string
+          indicador_id?: string
+          processado_at?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "indicacoes_indicado_id_fkey"
+            columns: ["indicado_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "indicacoes_indicador_id_fkey"
+            columns: ["indicador_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       notificacoes: {
         Row: {
           created_at: string
@@ -290,6 +335,7 @@ export type Database = {
       }
       produtos: {
         Row: {
+          cashback_percentual: number | null
           categoria: string | null
           created_at: string
           descricao: string | null
@@ -300,6 +346,7 @@ export type Database = {
           preco: number
         }
         Insert: {
+          cashback_percentual?: number | null
           categoria?: string | null
           created_at?: string
           descricao?: string | null
@@ -310,6 +357,7 @@ export type Database = {
           preco: number
         }
         Update: {
+          cashback_percentual?: number | null
           categoria?: string | null
           created_at?: string
           descricao?: string | null
@@ -324,32 +372,47 @@ export type Database = {
       profiles: {
         Row: {
           avatar_url: string | null
+          codigo_indicacao: string | null
           created_at: string
           id: string
+          indicado_por: string | null
           nome: string | null
           telefone: string | null
           updated_at: string
         }
         Insert: {
           avatar_url?: string | null
+          codigo_indicacao?: string | null
           created_at?: string
           id: string
+          indicado_por?: string | null
           nome?: string | null
           telefone?: string | null
           updated_at?: string
         }
         Update: {
           avatar_url?: string | null
+          codigo_indicacao?: string | null
           created_at?: string
           id?: string
+          indicado_por?: string | null
           nome?: string | null
           telefone?: string | null
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "profiles_indicado_por_fkey"
+            columns: ["indicado_por"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       servicos: {
         Row: {
+          cashback_percentual: number | null
           categoria: string | null
           created_at: string
           descricao: string | null
@@ -360,6 +423,7 @@ export type Database = {
           preco: number
         }
         Insert: {
+          cashback_percentual?: number | null
           categoria?: string | null
           created_at?: string
           descricao?: string | null
@@ -370,6 +434,7 @@ export type Database = {
           preco: number
         }
         Update: {
+          cashback_percentual?: number | null
           categoria?: string | null
           created_at?: string
           descricao?: string | null
