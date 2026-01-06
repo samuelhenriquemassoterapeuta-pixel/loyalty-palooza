@@ -528,15 +528,25 @@ const Admin = () => {
               )}
 
               {activeTab === "servicos" && (
-                <div className="space-y-2">
-                  <Label>Duração (min)</Label>
-                  <Input
-                    type="number"
-                    value={formData.duracao || ""}
-                    onChange={(e) => setFormData({ ...formData, duracao: e.target.value })}
-                    placeholder="60"
-                  />
-                </div>
+                <>
+                  <div className="space-y-2">
+                    <Label>Duração (min)</Label>
+                    <Input
+                      type="number"
+                      value={formData.duracao || ""}
+                      onChange={(e) => setFormData({ ...formData, duracao: e.target.value })}
+                      placeholder="60"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Categoria</Label>
+                    <Input
+                      value={formData.categoria || ""}
+                      onChange={(e) => setFormData({ ...formData, categoria: e.target.value })}
+                      placeholder="Ex: massagem, estética"
+                    />
+                  </div>
+                </>
               )}
 
               {activeTab === "pacotes" && (
