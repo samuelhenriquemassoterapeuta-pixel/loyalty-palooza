@@ -12,7 +12,8 @@ import {
   Trash2,
   Loader2,
   X,
-  Check
+  Check,
+  Percent
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -40,6 +41,7 @@ interface Produto {
   categoria: string | null;
   imagem_url: string | null;
   disponivel: boolean | null;
+  cashback_percentual: number | null;
 }
 
 interface Servico {
@@ -50,6 +52,7 @@ interface Servico {
   duracao: number;
   categoria: string | null;
   disponivel: boolean | null;
+  cashback_percentual: number | null;
 }
 
 interface Pacote {
@@ -127,9 +130,9 @@ const Admin = () => {
   const getDefaultFormData = () => {
     switch (activeTab) {
       case "produtos":
-        return { nome: "", descricao: "", preco: "", categoria: "", imagem_url: "", disponivel: true };
+        return { nome: "", descricao: "", preco: "", categoria: "", imagem_url: "", disponivel: true, cashback_percentual: "" };
       case "servicos":
-        return { nome: "", descricao: "", preco: "", duracao: "", categoria: "", disponivel: true };
+        return { nome: "", descricao: "", preco: "", duracao: "", categoria: "", disponivel: true, cashback_percentual: "" };
       case "pacotes":
         return { nome: "", descricao: "", preco: "", preco_original: "", total_sessoes: "", validade_dias: "365", disponivel: true };
       default:
@@ -159,6 +162,9 @@ const Admin = () => {
       if (dataToSave.duracao) dataToSave.duracao = parseInt(dataToSave.duracao);
       if (dataToSave.total_sessoes) dataToSave.total_sessoes = parseInt(dataToSave.total_sessoes);
       if (dataToSave.validade_dias) dataToSave.validade_dias = parseInt(dataToSave.validade_dias);
+      if (dataToSave.cashback_percentual !== undefined) {
+        dataToSave.cashback_percentual = dataToSave.cashback_percentual ? parseFloat(dataToSave.cashback_percentual) : 0;
+      }
 
       if (editingItem) {
         const { error } = await supabase
@@ -332,9 +338,17 @@ const Admin = () => {
                       )}
                     </div>
                     <p className="text-sm text-muted-foreground">{produto.categoria}</p>
-                    <p className="text-sm font-semibold text-primary">
-                      R$ {produto.preco.toFixed(2).replace(".", ",")}
-                    </p>
+                    <div className="flex items-center gap-2">
+                      <p className="text-sm font-semibold text-primary">
+                        R$ {produto.preco.toFixed(2).replace(".", ",")}
+                      </p>
+                      {(produto.cashback_percentual ?? 0) > 0 && (
+                        <span className="text-xs px-2 py-0.5 rounded-full bg-green-500/20 text-green-600 flex items-center gap-0.5">
+                          <Percent size={10} />
+                          {produto.cashback_percentual}%
+                        </span>
+                      )}
+                    </div>
                   </div>
                   <div className="flex items-center gap-2">
                     <Switch
@@ -381,9 +395,17 @@ const Admin = () => {
                       )}
                     </div>
                     <p className="text-sm text-muted-foreground">{servico.duracao} min</p>
-                    <p className="text-sm font-semibold text-primary">
-                      R$ {servico.preco.toFixed(2).replace(".", ",")}
-                    </p>
+                    <div className="flex items-center gap-2">
+                      <p className="text-sm font-semibold text-primary">
+                        R$ {servico.preco.toFixed(2).replace(".", ",")}
+                      </p>
+                      {(servico.cashback_percentual ?? 0) > 0 && (
+                        <span className="text-xs px-2 py-0.5 rounded-full bg-green-500/20 text-green-600 flex items-center gap-0.5">
+                          <Percent size={10} />
+                          {servico.cashback_percentual}%
+                        </span>
+                      )}
+                    </div>
                   </div>
                   <div className="flex items-center gap-2">
                     <Switch
@@ -531,12 +553,41 @@ const Admin = () => {
             </div>
 
             {activeTab === "produtos" && (
+              <>
+                <div className="space-y-2">
+                  <Label>URL da imagem</Label>
+                  <Input
+                    value={formData.imagem_url || ""}
+                    onChange={(e) => setFormData({ ...formData, imagem_url: e.target.value })}
+                    placeholder="https://..."
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Cashback (%)</Label>
+                  <Input
+                    type="number"
+                    step="0.1"
+                    min="0"
+                    max="100"
+                    value={formData.cashback_percentual || ""}
+                    onChange={(e) => setFormData({ ...formData, cashback_percentual: e.target.value })}
+                    placeholder="0"
+                  />
+                </div>
+              </>
+            )}
+
+            {activeTab === "servicos" && (
               <div className="space-y-2">
-                <Label>URL da imagem</Label>
+                <Label>Cashback (%)</Label>
                 <Input
-                  value={formData.imagem_url || ""}
-                  onChange={(e) => setFormData({ ...formData, imagem_url: e.target.value })}
-                  placeholder="https://..."
+                  type="number"
+                  step="0.1"
+                  min="0"
+                  max="100"
+                  value={formData.cashback_percentual || ""}
+                  onChange={(e) => setFormData({ ...formData, cashback_percentual: e.target.value })}
+                  placeholder="0"
                 />
               </div>
             )}
