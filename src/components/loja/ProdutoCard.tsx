@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Plus, Check } from "lucide-react";
+import { Plus, Check, Percent } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 
@@ -9,6 +9,7 @@ interface Produto {
   descricao: string | null;
   preco: number;
   imagem_url: string | null;
+  cashback_percentual?: number;
 }
 
 interface ProdutoCardProps {
@@ -19,6 +20,8 @@ interface ProdutoCardProps {
 }
 
 export const ProdutoCard = ({ produto, index, noCarrinho, onToggle }: ProdutoCardProps) => {
+  const cashback = produto.cashback_percentual || 0;
+  
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -26,6 +29,14 @@ export const ProdutoCard = ({ produto, index, noCarrinho, onToggle }: ProdutoCar
       transition={{ delay: index * 0.05 }}
     >
       <Card className="p-3 relative overflow-hidden hover:shadow-elevated transition-shadow">
+        {/* Cashback badge */}
+        {cashback > 0 && (
+          <div className="absolute top-2 right-2 flex items-center gap-1 px-2 py-1 rounded-full bg-green-500/20 text-green-600 text-[10px] font-semibold">
+            <Percent size={10} />
+            {cashback}% cashback
+          </div>
+        )}
+        
         <div className="text-4xl mb-2 text-center">
           {produto.imagem_url?.startsWith("http") ? (
             <img 
@@ -44,9 +55,16 @@ export const ProdutoCard = ({ produto, index, noCarrinho, onToggle }: ProdutoCar
         </p>
         
         <div className="flex items-center justify-between mt-2">
-          <p className="font-bold text-sm">
-            R$ {produto.preco.toFixed(2).replace('.', ',')}
-          </p>
+          <div>
+            <p className="font-bold text-sm">
+              R$ {produto.preco.toFixed(2).replace('.', ',')}
+            </p>
+            {cashback > 0 && (
+              <p className="text-[9px] text-green-600">
+                +R$ {(produto.preco * cashback / 100).toFixed(2).replace('.', ',')} volta
+              </p>
+            )}
+          </div>
           
           <Button
             size="icon"
