@@ -13,8 +13,21 @@ import {
   Loader2,
   X,
   Check,
-  Percent
+  Percent,
+  ShoppingBag,
+  Clock,
+  CheckCircle,
+  XCircle
 } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -113,6 +126,42 @@ const Admin = () => {
       return data;
     },
   });
+
+  const { data: pedidos = [], isLoading: loadingPedidos } = useQuery({
+    queryKey: ["admin-pedidos"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("pedidos")
+        .select(`
+          *,
+          profiles (nome),
+          pedido_itens (
+            id,
+            quantidade,
+            preco_unitario,
+            produtos (nome)
+          )
+        `)
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      return data;
+    },
+  });
+
+  const updatePedidoStatus = async (pedidoId: string, newStatus: string) => {
+    try {
+      const { error } = await supabase
+        .from("pedidos")
+        .update({ status: newStatus })
+        .eq("id", pedidoId);
+      
+      if (error) throw error;
+      queryClient.invalidateQueries({ queryKey: ["admin-pedidos"] });
+      toast.success(`Status atualizado para ${newStatus}`);
+    } catch (error: any) {
+      toast.error("Erro ao atualizar status");
+    }
+  };
 
   // Handlers
   const openCreateDialog = () => {
@@ -299,16 +348,112 @@ const Admin = () => {
         {/* Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <div className="flex items-center justify-between mb-4">
-            <TabsList>
+            <TabsList className="grid grid-cols-4">
+              <TabsTrigger value="pedidos">Pedidos</TabsTrigger>
               <TabsTrigger value="produtos">Produtos</TabsTrigger>
               <TabsTrigger value="servicos">Serviços</TabsTrigger>
               <TabsTrigger value="pacotes">Pacotes</TabsTrigger>
             </TabsList>
-            <Button size="sm" onClick={openCreateDialog}>
-              <Plus className="w-4 h-4 mr-1" />
-              Novo
-            </Button>
+            {activeTab !== "pedidos" && (
+              <Button size="sm" onClick={openCreateDialog}>
+                <Plus className="w-4 h-4 mr-1" />
+                Novo
+              </Button>
+            )}
           </div>
+
+          {/* Pedidos */}
+          <TabsContent value="pedidos" className="space-y-3">
+            {loadingPedidos ? (
+              <div className="flex justify-center py-8">
+                <Loader2 className="w-6 h-6 text-primary animate-spin" />
+              </div>
+            ) : pedidos.length === 0 ? (
+              <div className="text-center py-8 text-muted-foreground">
+                Nenhum pedido encontrado
+              </div>
+            ) : (
+              pedidos.map((pedido: any) => (
+                <motion.div
+                  key={pedido.id}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="p-4 rounded-xl bg-card shadow-card space-y-3"
+                >
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <p className="font-semibold text-foreground">
+                        Pedido #{pedido.id.slice(0, 8)}
+                      </p>
+                      <p className="text-sm text-muted-foreground">
+                        {pedido.profiles?.nome || "Cliente"}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        {format(new Date(pedido.created_at), "dd/MM/yyyy 'às' HH:mm", { locale: ptBR })}
+                      </p>
+                    </div>
+                    <Select
+                      value={pedido.status}
+                      onValueChange={(value) => updatePedidoStatus(pedido.id, value)}
+                    >
+                      <SelectTrigger className="w-[140px]">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="pendente">
+                          <div className="flex items-center gap-2">
+                            <Clock size={14} className="text-yellow-600" />
+                            Pendente
+                          </div>
+                        </SelectItem>
+                        <SelectItem value="confirmado">
+                          <div className="flex items-center gap-2">
+                            <Check size={14} className="text-blue-600" />
+                            Confirmado
+                          </div>
+                        </SelectItem>
+                        <SelectItem value="entregue">
+                          <div className="flex items-center gap-2">
+                            <CheckCircle size={14} className="text-green-600" />
+                            Entregue
+                          </div>
+                        </SelectItem>
+                        <SelectItem value="cancelado">
+                          <div className="flex items-center gap-2">
+                            <XCircle size={14} className="text-red-600" />
+                            Cancelado
+                          </div>
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  {/* Itens do pedido */}
+                  {pedido.pedido_itens && pedido.pedido_itens.length > 0 && (
+                    <div className="bg-muted/50 rounded-lg p-2 space-y-1">
+                      {pedido.pedido_itens.map((item: any) => (
+                        <div key={item.id} className="flex justify-between text-sm">
+                          <span className="text-muted-foreground">
+                            {item.quantidade}x {item.produtos?.nome || "Produto"}
+                          </span>
+                          <span className="font-medium">
+                            R$ {(item.quantidade * item.preco_unitario).toFixed(2).replace('.', ',')}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  <div className="flex justify-between items-center pt-2 border-t border-border">
+                    <span className="text-sm text-muted-foreground">Total</span>
+                    <span className="font-bold text-primary">
+                      R$ {pedido.total.toFixed(2).replace('.', ',')}
+                    </span>
+                  </div>
+                </motion.div>
+              ))
+            )}
+          </TabsContent>
 
           {/* Produtos */}
           <TabsContent value="produtos" className="space-y-3">
