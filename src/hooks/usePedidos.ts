@@ -91,10 +91,16 @@ export const usePedidos = () => {
     }
   };
 
-  const createPedido = async (itens: { produto_id: string; quantidade: number; preco_unitario: number }[]) => {
-    if (!user) return { error: new Error("Usuário não autenticado"), data: null };
+  const createPedido = async (
+    itens: { produto_id: string; quantidade: number; preco_unitario: number }[],
+    totalComDesconto?: number
+  ) => {
+    if (!user) return { error: new Error("Usuário não autenticado"), data: null, pedidoId: null };
 
-    const total = itens.reduce((acc, item) => acc + item.preco_unitario * item.quantidade, 0);
+    // Se totalComDesconto foi passado, usa ele; caso contrário, calcula normalmente
+    const total = totalComDesconto !== undefined 
+      ? totalComDesconto 
+      : itens.reduce((acc, item) => acc + item.preco_unitario * item.quantidade, 0);
 
     try {
       // Create pedido
@@ -125,9 +131,9 @@ export const usePedidos = () => {
       if (itensError) throw itensError;
 
       await fetchPedidos();
-      return { error: null, data: pedido };
+      return { error: null, data: pedido, pedidoId: pedido.id };
     } catch (err: any) {
-      return { error: err, data: null };
+      return { error: err, data: null, pedidoId: null };
     }
   };
 

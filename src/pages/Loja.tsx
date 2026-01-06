@@ -8,6 +8,7 @@ import { Card } from "@/components/ui/card";
 import { BottomNavigation } from "@/components/BottomNavigation";
 import { useToast } from "@/hooks/use-toast";
 import { useProdutos, usePedidos, Produto } from "@/hooks/usePedidos";
+import { useTransacoes } from "@/hooks/useTransacoes";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -26,6 +27,7 @@ export default function Loja() {
   const { toast } = useToast();
   const { produtos, loading: loadingProdutos } = useProdutos();
   const { pedidos, loading: loadingPedidos, createPedido } = usePedidos();
+  const { stats, createTransacao, refetch: refetchTransacoes } = useTransacoes();
   
   const [activeTab, setActiveTab] = useState("loja");
   const [categoriaAtiva, setCategoriaAtiva] = useState<"todos" | "spa" | "gastronomia">("todos");
@@ -33,6 +35,7 @@ export default function Loja() {
   const [saving, setSaving] = useState(false);
   const [carrinhoOpen, setCarrinhoOpen] = useState(false);
   const [busca, setBusca] = useState("");
+  const [usarCashback, setUsarCashback] = useState(false);
 
   const produtosFiltrados = produtos
     .filter(p => categoriaAtiva === "todos" || p.categoria === categoriaAtiva)
@@ -82,34 +85,56 @@ export default function Loja() {
     }
   };
 
-  const handleReservar = async () => {
+  const handleReservar = async (usarCashbackNoPedido: boolean, valorCashbackUsado: number) => {
     if (carrinho.length === 0) return;
 
     setSaving(true);
+    
+    // Calcular total considerando desconto
+    const subtotal = carrinho.reduce((acc, item) => acc + item.produto.preco * item.quantidade, 0);
+    const totalComDesconto = subtotal - valorCashbackUsado;
+    
     const itens = carrinho.map(item => ({
       produto_id: item.produto.id,
       quantidade: item.quantidade,
       preco_unitario: item.produto.preco,
     }));
 
-    const { error } = await createPedido(itens);
-    setSaving(false);
-
+    // Criar pedido com total já descontado
+    const { error, pedidoId } = await createPedido(itens, totalComDesconto);
+    
     if (error) {
+      setSaving(false);
       toast({
         title: "Erro ao criar pedido",
         description: "Tente novamente.",
         variant: "destructive",
       });
-    } else {
-      toast({
-        title: "Pedido reservado! ✅",
-        description: "Retire seus produtos na clínica.",
-      });
-      setCarrinho([]);
-      setCarrinhoOpen(false);
-      setActiveTab("pedidos");
+      return;
     }
+
+    // Se usou cashback, criar transação de débito
+    if (usarCashbackNoPedido && valorCashbackUsado > 0) {
+      await createTransacao(
+        "uso_cashback",
+        -valorCashbackUsado,
+        `Usado no pedido #${pedidoId?.slice(0, 8)}`,
+        pedidoId
+      );
+      await refetchTransacoes();
+    }
+
+    setSaving(false);
+    toast({
+      title: "Pedido reservado! ✅",
+      description: valorCashbackUsado > 0 
+        ? `Você economizou R$ ${valorCashbackUsado.toFixed(2).replace('.', ',')} com cashback!`
+        : "Retire seus produtos na clínica.",
+    });
+    setCarrinho([]);
+    setCarrinhoOpen(false);
+    setUsarCashback(false);
+    setActiveTab("pedidos");
   };
 
   const getStatusColor = (status: string) => {
@@ -157,6 +182,9 @@ export default function Loja() {
             saving={saving}
             open={carrinhoOpen}
             onOpenChange={setCarrinhoOpen}
+            saldoCashback={stats.totalCashback}
+            usarCashback={usarCashback}
+            onToggleCashback={setUsarCashback}
           />
         </div>
       </div>
@@ -288,7 +316,7 @@ export default function Loja() {
             quantidade={carrinho.length}
             total={totalCarrinho}
             saving={saving}
-            onReservar={handleReservar}
+            onReservar={() => setCarrinhoOpen(true)}
           />
         )}
       </div>

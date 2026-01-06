@@ -1,6 +1,7 @@
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import { ShoppingBag, Plus, Minus, Trash2, Loader2 } from "lucide-react";
+import { Switch } from "@/components/ui/switch";
+import { ShoppingBag, Plus, Minus, Trash2, Loader2, Wallet } from "lucide-react";
 import { Produto } from "@/hooks/usePedidos";
 
 interface CarrinhoItem {
@@ -12,10 +13,13 @@ interface CarrinhoSheetProps {
   carrinho: CarrinhoItem[];
   onUpdateQuantidade: (produtoId: string, delta: number) => void;
   onRemover: (produtoId: string) => void;
-  onReservar: () => void;
+  onReservar: (usarCashback: boolean, valorCashbackUsado: number) => void;
   saving: boolean;
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  saldoCashback: number;
+  usarCashback: boolean;
+  onToggleCashback: (usar: boolean) => void;
 }
 
 export const CarrinhoSheet = ({
@@ -26,12 +30,23 @@ export const CarrinhoSheet = ({
   saving,
   open,
   onOpenChange,
+  saldoCashback,
+  usarCashback,
+  onToggleCashback,
 }: CarrinhoSheetProps) => {
-  const total = carrinho.reduce((acc, item) => acc + item.produto.preco * item.quantidade, 0);
-  const totalCashback = carrinho.reduce((acc, item) => {
+  const subtotal = carrinho.reduce((acc, item) => acc + item.produto.preco * item.quantidade, 0);
+  const totalCashbackGanho = carrinho.reduce((acc, item) => {
     const cashback = item.produto.cashback_percentual || 0;
     return acc + (item.produto.preco * item.quantidade * cashback) / 100;
   }, 0);
+
+  // Calcular desconto de cashback (não pode ser maior que o subtotal ou saldo disponível)
+  const descontoCashback = usarCashback ? Math.min(saldoCashback, subtotal) : 0;
+  const totalFinal = subtotal - descontoCashback;
+
+  const formatCurrency = (value: number) => {
+    return `R$ ${value.toFixed(2).replace('.', ',')}`;
+  };
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
@@ -45,7 +60,7 @@ export const CarrinhoSheet = ({
           )}
         </button>
       </SheetTrigger>
-      <SheetContent side="bottom" className="h-[80vh] rounded-t-3xl">
+      <SheetContent side="bottom" className="h-[85vh] rounded-t-3xl">
         <SheetHeader>
           <SheetTitle className="flex items-center gap-2">
             <ShoppingBag className="text-primary" size={20} />
@@ -92,11 +107,11 @@ export const CarrinhoSheet = ({
                       <div className="flex-1 min-w-0">
                         <h4 className="font-medium text-sm line-clamp-1">{item.produto.nome}</h4>
                         <p className="text-primary font-semibold text-sm">
-                          R$ {(item.produto.preco * item.quantidade).toFixed(2).replace('.', ',')}
+                          {formatCurrency(item.produto.preco * item.quantidade)}
                         </p>
                         {cashback > 0 && (
                           <p className="text-[10px] text-green-600">
-                            +R$ {itemCashback.toFixed(2).replace('.', ',')} cashback
+                            +{formatCurrency(itemCashback)} cashback
                           </p>
                         )}
 
@@ -140,30 +155,74 @@ export const CarrinhoSheet = ({
 
               {/* Resumo e botão de reservar */}
               <div className="border-t border-border pt-4 space-y-3">
+                {/* Subtotal */}
                 <div className="flex justify-between items-center">
                   <span className="text-muted-foreground">Subtotal</span>
-                  <span className="font-semibold">
-                    R$ {total.toFixed(2).replace('.', ',')}
-                  </span>
+                  <span className="font-semibold">{formatCurrency(subtotal)}</span>
                 </div>
-                {totalCashback > 0 && (
+
+                {/* Usar Cashback */}
+                {saldoCashback > 0 && (
+                  <div className="flex items-center justify-between p-3 rounded-lg bg-green-500/10 border border-green-500/20">
+                    <div className="flex items-center gap-2">
+                      <Wallet className="text-green-600" size={18} />
+                      <div>
+                        <p className="text-sm font-medium text-green-700">Usar cashback</p>
+                        <p className="text-xs text-green-600">
+                          Saldo: {formatCurrency(saldoCashback)}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      {usarCashback && (
+                        <span className="text-sm font-semibold text-green-700">
+                          -{formatCurrency(descontoCashback)}
+                        </span>
+                      )}
+                      <Switch
+                        checked={usarCashback}
+                        onCheckedChange={onToggleCashback}
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {/* Desconto aplicado */}
+                {descontoCashback > 0 && (
                   <div className="flex justify-between items-center text-green-600">
-                    <span className="text-sm">Cashback total</span>
+                    <span className="text-sm">Desconto cashback</span>
                     <span className="font-semibold text-sm">
-                      +R$ {totalCashback.toFixed(2).replace('.', ',')}
+                      -{formatCurrency(descontoCashback)}
                     </span>
                   </div>
                 )}
+
+                {/* Total */}
+                <div className="flex justify-between items-center pt-2 border-t border-border">
+                  <span className="font-semibold">Total a pagar</span>
+                  <span className="font-bold text-lg text-primary">
+                    {formatCurrency(totalFinal)}
+                  </span>
+                </div>
+
+                {/* Cashback a ganhar */}
+                {totalCashbackGanho > 0 && (
+                  <div className="flex justify-between items-center text-green-600 text-sm">
+                    <span>Cashback nesta compra</span>
+                    <span className="font-semibold">+{formatCurrency(totalCashbackGanho)}</span>
+                  </div>
+                )}
+
                 <Button
                   className="w-full"
                   size="lg"
-                  onClick={onReservar}
+                  onClick={() => onReservar(usarCashback, descontoCashback)}
                   disabled={saving}
                 >
                   {saving ? (
                     <Loader2 className="w-5 h-5 animate-spin" />
                   ) : (
-                    "Reservar Pedido"
+                    `Reservar Pedido${totalFinal > 0 ? ` • ${formatCurrency(totalFinal)}` : ' • Grátis!'}`
                   )}
                 </Button>
               </div>
