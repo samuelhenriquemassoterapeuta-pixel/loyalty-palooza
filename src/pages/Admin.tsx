@@ -17,8 +17,13 @@ import {
   ShoppingBag,
   Clock,
   CheckCircle,
-  XCircle
+  XCircle,
+  TrendingUp,
+  DollarSign,
+  BarChart3,
+  Calendar
 } from "lucide-react";
+import { Card } from "@/components/ui/card";
 import {
   Select,
   SelectContent,
@@ -161,6 +166,46 @@ const Admin = () => {
     } catch (error: any) {
       toast.error("Erro ao atualizar status");
     }
+  };
+
+  // Fetch transações para estatísticas
+  const { data: transacoes = [] } = useQuery({
+    queryKey: ["admin-transacoes"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("transacoes")
+        .select("*")
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      return data;
+    },
+  });
+
+  // Calcular estatísticas
+  const stats = {
+    totalVendas: pedidos.reduce((acc: number, p: any) => acc + (p.total || 0), 0),
+    totalPedidos: pedidos.length,
+    pedidosPendentes: pedidos.filter((p: any) => p.status === "pendente").length,
+    pedidosEntregues: pedidos.filter((p: any) => p.status === "entregue").length,
+    totalCashbackDistribuido: transacoes
+      .filter((t: any) => t.tipo === "cashback")
+      .reduce((acc: number, t: any) => acc + Number(t.valor), 0),
+    totalCashbackUsado: Math.abs(transacoes
+      .filter((t: any) => t.tipo === "uso_cashback")
+      .reduce((acc: number, t: any) => acc + Number(t.valor), 0)),
+    usuariosAtivos: usuarios.length,
+    vendasHoje: pedidos
+      .filter((p: any) => {
+        const hoje = new Date();
+        const dataPedido = new Date(p.created_at);
+        return dataPedido.toDateString() === hoje.toDateString();
+      })
+      .reduce((acc: number, p: any) => acc + (p.total || 0), 0),
+    pedidosHoje: pedidos.filter((p: any) => {
+      const hoje = new Date();
+      const dataPedido = new Date(p.created_at);
+      return dataPedido.toDateString() === hoje.toDateString();
+    }).length,
   };
 
   // Handlers
@@ -348,19 +393,145 @@ const Admin = () => {
         {/* Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <div className="flex items-center justify-between mb-4">
-            <TabsList className="grid grid-cols-4">
+            <TabsList className="grid grid-cols-5 w-full">
+              <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
               <TabsTrigger value="pedidos">Pedidos</TabsTrigger>
               <TabsTrigger value="produtos">Produtos</TabsTrigger>
               <TabsTrigger value="servicos">Serviços</TabsTrigger>
               <TabsTrigger value="pacotes">Pacotes</TabsTrigger>
             </TabsList>
-            {activeTab !== "pedidos" && (
+          </div>
+          
+          {activeTab !== "pedidos" && activeTab !== "dashboard" && (
+            <div className="flex justify-end mb-4">
               <Button size="sm" onClick={openCreateDialog}>
                 <Plus className="w-4 h-4 mr-1" />
                 Novo
               </Button>
-            )}
-          </div>
+            </div>
+          )}
+
+          {/* Dashboard */}
+          <TabsContent value="dashboard" className="space-y-6">
+            {/* Cards principais */}
+            <div className="grid grid-cols-2 gap-4">
+              <Card className="p-4 space-y-2">
+                <div className="flex items-center gap-2 text-muted-foreground">
+                  <DollarSign size={18} />
+                  <span className="text-sm">Total em Vendas</span>
+                </div>
+                <p className="text-2xl font-bold text-foreground">
+                  R$ {stats.totalVendas.toFixed(2).replace('.', ',')}
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  {stats.totalPedidos} pedidos
+                </p>
+              </Card>
+
+              <Card className="p-4 space-y-2">
+                <div className="flex items-center gap-2 text-muted-foreground">
+                  <Calendar size={18} />
+                  <span className="text-sm">Vendas Hoje</span>
+                </div>
+                <p className="text-2xl font-bold text-primary">
+                  R$ {stats.vendasHoje.toFixed(2).replace('.', ',')}
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  {stats.pedidosHoje} pedidos
+                </p>
+              </Card>
+
+              <Card className="p-4 space-y-2">
+                <div className="flex items-center gap-2 text-green-600">
+                  <TrendingUp size={18} />
+                  <span className="text-sm">Cashback Distribuído</span>
+                </div>
+                <p className="text-2xl font-bold text-green-600">
+                  R$ {stats.totalCashbackDistribuido.toFixed(2).replace('.', ',')}
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  R$ {stats.totalCashbackUsado.toFixed(2).replace('.', ',')} usado
+                </p>
+              </Card>
+
+              <Card className="p-4 space-y-2">
+                <div className="flex items-center gap-2 text-muted-foreground">
+                  <Users size={18} />
+                  <span className="text-sm">Usuários</span>
+                </div>
+                <p className="text-2xl font-bold text-foreground">
+                  {stats.usuariosAtivos}
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  cadastrados
+                </p>
+              </Card>
+            </div>
+
+            {/* Status dos pedidos */}
+            <Card className="p-4">
+              <h3 className="font-semibold text-foreground mb-4 flex items-center gap-2">
+                <BarChart3 size={18} />
+                Status dos Pedidos
+              </h3>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Clock size={16} className="text-yellow-600" />
+                    <span className="text-sm">Pendentes</span>
+                  </div>
+                  <span className="font-bold text-yellow-600">{stats.pedidosPendentes}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Check size={16} className="text-blue-600" />
+                    <span className="text-sm">Confirmados</span>
+                  </div>
+                  <span className="font-bold text-blue-600">
+                    {pedidos.filter((p: any) => p.status === "confirmado").length}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <CheckCircle size={16} className="text-green-600" />
+                    <span className="text-sm">Entregues</span>
+                  </div>
+                  <span className="font-bold text-green-600">{stats.pedidosEntregues}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <XCircle size={16} className="text-red-600" />
+                    <span className="text-sm">Cancelados</span>
+                  </div>
+                  <span className="font-bold text-red-600">
+                    {pedidos.filter((p: any) => p.status === "cancelado").length}
+                  </span>
+                </div>
+              </div>
+            </Card>
+
+            {/* Resumo rápido */}
+            <Card className="p-4">
+              <h3 className="font-semibold text-foreground mb-4">Resumo do Catálogo</h3>
+              <div className="grid grid-cols-3 gap-4 text-center">
+                <div>
+                  <Package className="w-6 h-6 text-primary mx-auto mb-1" />
+                  <p className="text-xl font-bold">{produtos.length}</p>
+                  <p className="text-xs text-muted-foreground">Produtos</p>
+                </div>
+                <div>
+                  <Scissors className="w-6 h-6 text-accent mx-auto mb-1" />
+                  <p className="text-xl font-bold">{servicos.length}</p>
+                  <p className="text-xs text-muted-foreground">Serviços</p>
+                </div>
+                <div>
+                  <Gift className="w-6 h-6 text-highlight mx-auto mb-1" />
+                  <p className="text-xl font-bold">{pacotes.length}</p>
+                  <p className="text-xs text-muted-foreground">Pacotes</p>
+                </div>
+              </div>
+            </Card>
+          </TabsContent>
 
           {/* Pedidos */}
           <TabsContent value="pedidos" className="space-y-3">
