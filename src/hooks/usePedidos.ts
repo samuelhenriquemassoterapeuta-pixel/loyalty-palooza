@@ -163,9 +163,27 @@ export const usePedidos = () => {
     }
   };
 
+  const cancelPedido = async (pedidoId: string) => {
+    if (!user) return { error: new Error("Usuário não autenticado") };
+
+    try {
+      const { error } = await supabase
+        .from("pedidos")
+        .update({ status: "cancelado" })
+        .eq("id", pedidoId)
+        .eq("user_id", user.id);
+
+      if (error) throw error;
+      await fetchPedidos();
+      return { error: null };
+    } catch (err: any) {
+      return { error: err };
+    }
+  };
+
   useEffect(() => {
     fetchPedidos();
   }, [user]);
 
-  return { pedidos, loading, error, createPedido, refetch: fetchPedidos };
+  return { pedidos, loading, error, createPedido, cancelPedido, refetch: fetchPedidos };
 };

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowLeft, Leaf, Sparkles, Package, Search, X } from "lucide-react";
+import { ArrowLeft, Leaf, Sparkles, Package, Search, X, XCircle } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -26,7 +26,7 @@ export default function Loja() {
   const navigate = useNavigate();
   const { toast } = useToast();
   const { produtos, loading: loadingProdutos } = useProdutos();
-  const { pedidos, loading: loadingPedidos, createPedido } = usePedidos();
+  const { pedidos, loading: loadingPedidos, createPedido, cancelPedido } = usePedidos();
   const { stats, createTransacao, refetch: refetchTransacoes } = useTransacoes();
   
   const [activeTab, setActiveTab] = useState("loja");
@@ -264,12 +264,39 @@ export default function Loja() {
                       </div>
                     )}
 
-                    {/* Total */}
+                    {/* Total e ações */}
                     <div className="p-4 flex justify-between items-center">
-                      <span className="text-sm text-muted-foreground">Total do pedido</span>
-                      <span className="font-bold text-primary">
-                        R$ {pedido.total.toFixed(2).replace('.', ',')}
-                      </span>
+                      <div>
+                        <span className="text-sm text-muted-foreground">Total do pedido</span>
+                        <p className="font-bold text-primary">
+                          R$ {pedido.total.toFixed(2).replace('.', ',')}
+                        </p>
+                      </div>
+                      {pedido.status === "pendente" && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="text-destructive border-destructive/30 hover:bg-destructive/10"
+                          onClick={async () => {
+                            const { error } = await cancelPedido(pedido.id);
+                            if (error) {
+                              toast({
+                                title: "Erro ao cancelar",
+                                description: "Tente novamente.",
+                                variant: "destructive",
+                              });
+                            } else {
+                              toast({
+                                title: "Pedido cancelado",
+                                description: "Seu pedido foi cancelado com sucesso.",
+                              });
+                            }
+                          }}
+                        >
+                          <XCircle size={16} className="mr-1" />
+                          Cancelar
+                        </Button>
+                      )}
                     </div>
                   </Card>
                 ))}
