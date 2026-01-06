@@ -39,8 +39,8 @@ export const Header = () => {
           className="h-10 w-10 rounded-xl object-cover"
         />
         <div>
-          <p className="text-sm text-muted-foreground">{getGreeting()},</p>
-          <h1 className="text-xl font-bold text-foreground">{getDisplayName()}</h1>
+          <h1 className="text-lg font-bold text-primary">Resinkra</h1>
+          <p className="text-xs text-muted-foreground">{getGreeting()}, {getDisplayName()}</p>
         </div>
       </div>
 
