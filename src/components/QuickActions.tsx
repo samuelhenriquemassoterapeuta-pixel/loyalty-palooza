@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { Calendar, ShoppingBag, History, Send } from "lucide-react";
+import { Calendar, ShoppingBag, Clock, Send } from "lucide-react";
 
 const actions = [
   { 
@@ -12,19 +12,19 @@ const actions = [
     path: "/agendamento" 
   },
   { 
+    icon: Clock,
+    label: "Planos", 
+    description: "Horas",
+    gradient: "from-highlight/20 to-highlight/5",
+    iconColor: "text-highlight",
+    path: "/pacotes" 
+  },
+  { 
     icon: ShoppingBag,
     label: "Loja", 
     description: "Produtos",
     gradient: "from-accent/20 to-accent/5",
     iconColor: "text-accent",
-    path: "/loja" 
-  },
-  { 
-    icon: History,
-    label: "Histórico", 
-    description: "Compras",
-    gradient: "from-highlight/20 to-highlight/5",
-    iconColor: "text-highlight",
     path: "/loja" 
   },
   { 

@@ -64,24 +64,29 @@ const Pacotes = () => {
           <Button variant="ghost" size="icon" onClick={() => navigate("/")}>
             <ArrowLeft size={24} />
           </Button>
-          <h1 className="text-xl font-semibold text-foreground">Pacotes</h1>
+          <div>
+            <h1 className="text-xl font-semibold text-foreground">Plano de Horas</h1>
+            <p className="text-xs text-muted-foreground">Gerencie seus pacotes e sessões</p>
+          </div>
         </div>
 
         {/* Tabs */}
         <div className="flex gap-2 mb-6">
           <Button
             variant={activeTab === "meus" ? "default" : "outline"}
-            className="flex-1"
+            className="flex-1 gap-2"
             onClick={() => setActiveTab("meus")}
           >
-            Meus Pacotes
+            <Clock size={16} />
+            Meu Plano
           </Button>
           <Button
             variant={activeTab === "loja" ? "default" : "outline"}
-            className="flex-1"
+            className="flex-1 gap-2"
             onClick={() => setActiveTab("loja")}
           >
-            Comprar Pacotes
+            <Sparkles size={16} />
+            Comprar Planos
           </Button>
         </div>
 
