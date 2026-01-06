@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { BottomNavigation } from "@/components/BottomNavigation";
 import { Progress } from "@/components/ui/progress";
-import { ArrowLeft, Package, Check, Clock, Sparkles, Loader2 } from "lucide-react";
+import { ArrowLeft, Package, Check, Clock, Sparkles, Loader2, Calendar } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { usePacotes, useMeusPacotes, Pacote } from "@/hooks/usePacotes";
@@ -90,6 +90,82 @@ const Pacotes = () => {
           </Button>
         </div>
 
+        {/* Resumo do Plano Ativo */}
+        {!loadingMeus && meusPacotes.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="mb-6"
+          >
+            {(() => {
+              const planoAtivo = meusPacotes.find(p => p.status === 'ativo');
+              if (!planoAtivo || !planoAtivo.pacote) return null;
+              
+              const pacote = planoAtivo.pacote;
+              const sessoesRestantes = pacote.total_sessoes - planoAtivo.sessoes_usadas;
+              const progresso = (planoAtivo.sessoes_usadas / pacote.total_sessoes) * 100;
+              const dataValidade = new Date(planoAtivo.data_validade);
+              const diasRestantes = Math.ceil((dataValidade.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24));
+              
+              return (
+                <Card className="overflow-hidden border-primary/30 bg-gradient-to-br from-primary/10 via-background to-accent/5">
+                  <CardContent className="p-5">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center gap-2">
+                        <div className="p-2 rounded-xl bg-primary/20">
+                          <Clock className="text-primary" size={20} />
+                        </div>
+                        <div>
+                          <p className="text-xs text-muted-foreground">Plano Ativo</p>
+                          <h3 className="font-semibold text-foreground">{pacote.nome}</h3>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-xs text-muted-foreground">Válido por</p>
+                        <p className="text-sm font-medium text-foreground">{diasRestantes} dias</p>
+                      </div>
+                    </div>
+                    
+                    {/* Sessões Restantes Destaque */}
+                    <div className="flex items-center justify-center gap-3 py-4 mb-4 rounded-2xl bg-gradient-to-r from-primary/20 via-primary/10 to-primary/20">
+                      <motion.div
+                        animate={{ scale: [1, 1.1, 1] }}
+                        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                        className="text-4xl font-bold text-primary"
+                      >
+                        {sessoesRestantes}
+                      </motion.div>
+                      <div className="text-left">
+                        <p className="text-sm font-medium text-foreground">sessões</p>
+                        <p className="text-xs text-muted-foreground">restantes</p>
+                      </div>
+                    </div>
+                    
+                    {/* Barra de Progresso */}
+                    <div className="space-y-2">
+                      <div className="flex justify-between text-xs">
+                        <span className="text-muted-foreground">Utilizadas</span>
+                        <span className="text-foreground font-medium">
+                          {planoAtivo.sessoes_usadas} de {pacote.total_sessoes}
+                        </span>
+                      </div>
+                      <Progress value={progresso} className="h-2" />
+                    </div>
+                    
+                    <Button
+                      className="w-full mt-4"
+                      onClick={() => navigate("/agendamento")}
+                    >
+                      <Calendar size={16} className="mr-2" />
+                      Agendar Sessão
+                    </Button>
+                  </CardContent>
+                </Card>
+              );
+            })()}
+          </motion.div>
+        )}
+
         {/* Meus Pacotes */}
         {activeTab === "meus" && (
           <motion.div
@@ -104,61 +180,69 @@ const Pacotes = () => {
                 <CardContent className="p-6 text-center">
                   <Package className="mx-auto text-muted-foreground mb-3" size={48} />
                   <p className="text-muted-foreground">
-                    Você ainda não possui pacotes ativos.
+                    Você ainda não possui planos ativos.
                   </p>
                   <Button
                     variant="link"
                     className="mt-2"
                     onClick={() => setActiveTab("loja")}
                   >
-                    Explorar pacotes disponíveis
+                    Explorar planos disponíveis
                   </Button>
                 </CardContent>
               </Card>
             ) : (
-              meusPacotes.map((meuPacote) => {
-                const pacote = meuPacote.pacote;
-                if (!pacote) return null;
-                
-                const sessoesRestantes = pacote.total_sessoes - meuPacote.sessoes_usadas;
-                const progresso = (meuPacote.sessoes_usadas / pacote.total_sessoes) * 100;
-                const dataValidade = new Date(meuPacote.data_validade);
+              <>
+                <h3 className="text-sm font-medium text-muted-foreground">Todos os Planos</h3>
+                {meusPacotes.map((meuPacote) => {
+                  const pacote = meuPacote.pacote;
+                  if (!pacote) return null;
+                  
+                  const sessoesRestantes = pacote.total_sessoes - meuPacote.sessoes_usadas;
+                  const progresso = (meuPacote.sessoes_usadas / pacote.total_sessoes) * 100;
+                  const dataValidade = new Date(meuPacote.data_validade);
 
-                return (
-                  <Card key={meuPacote.id} className="overflow-hidden">
-                    <CardHeader className="pb-2">
-                      <div className="flex items-start justify-between">
-                        <div>
-                          <CardTitle className="text-base">{pacote.nome}</CardTitle>
-                          <p className="text-xs text-muted-foreground flex items-center gap-1 mt-1">
-                            <Clock size={12} /> Válido até {format(dataValidade, "dd/MM/yyyy", { locale: ptBR })}
-                          </p>
+                  return (
+                    <Card key={meuPacote.id} className="overflow-hidden">
+                      <CardHeader className="pb-2">
+                        <div className="flex items-start justify-between">
+                          <div>
+                            <CardTitle className="text-base">{pacote.nome}</CardTitle>
+                            <p className="text-xs text-muted-foreground flex items-center gap-1 mt-1">
+                              <Clock size={12} /> Válido até {format(dataValidade, "dd/MM/yyyy", { locale: ptBR })}
+                            </p>
+                          </div>
+                          <div className={`px-3 py-1 rounded-full text-sm font-medium ${
+                            meuPacote.status === 'ativo' 
+                              ? 'bg-primary/10 text-primary' 
+                              : 'bg-muted text-muted-foreground'
+                          }`}>
+                            {sessoesRestantes} restantes
+                          </div>
                         </div>
-                        <div className="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm font-medium">
-                          {sessoesRestantes} restantes
+                      </CardHeader>
+                      <CardContent className="space-y-3">
+                        <div className="space-y-1">
+                          <div className="flex justify-between text-sm">
+                            <span className="text-muted-foreground">Progresso</span>
+                            <span className="text-foreground font-medium">
+                              {meuPacote.sessoes_usadas}/{pacote.total_sessoes} sessões
+                            </span>
+                          </div>
+                          <Progress value={progresso} className="h-2" />
                         </div>
-                      </div>
-                    </CardHeader>
-                    <CardContent className="space-y-3">
-                      <div className="space-y-1">
-                        <div className="flex justify-between text-sm">
-                          <span className="text-muted-foreground">Progresso</span>
-                          <span className="text-foreground font-medium">
-                            {meuPacote.sessoes_usadas}/{pacote.total_sessoes} sessões
-                          </span>
-                        </div>
-                        <Progress value={progresso} className="h-2" />
-                      </div>
-                      <Button
-                        className="w-full"
-                        onClick={() => navigate("/agendamento")}
-                      >
-                        Agendar Sessão
-                      </Button>
-                    </CardContent>
-                  </Card>
-                );
-              })
+                        <Button
+                          className="w-full"
+                          variant={meuPacote.status === 'ativo' ? 'default' : 'outline'}
+                          onClick={() => navigate("/agendamento")}
+                        >
+                          Agendar Sessão
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  );
+                })}
+              </>
             )}
           </motion.div>
         )}
