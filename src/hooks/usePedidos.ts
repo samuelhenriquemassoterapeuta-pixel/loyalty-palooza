@@ -14,6 +14,18 @@ export interface Produto {
   cashback_percentual: number;
 }
 
+export interface PedidoItemComProduto {
+  id: string;
+  pedido_id: string;
+  produto_id: string;
+  quantidade: number;
+  preco_unitario: number;
+  produtos: {
+    nome: string;
+    imagem_url: string | null;
+  } | null;
+}
+
 export interface Pedido {
   id: string;
   user_id: string;
@@ -21,6 +33,7 @@ export interface Pedido {
   total: number;
   created_at: string;
   updated_at: string;
+  pedido_itens?: PedidoItemComProduto[];
 }
 
 export interface PedidoItem {
@@ -78,7 +91,20 @@ export const usePedidos = () => {
       setLoading(true);
       const { data, error } = await supabase
         .from("pedidos")
-        .select("*")
+        .select(`
+          *,
+          pedido_itens (
+            id,
+            pedido_id,
+            produto_id,
+            quantidade,
+            preco_unitario,
+            produtos (
+              nome,
+              imagem_url
+            )
+          )
+        `)
         .eq("user_id", user.id)
         .order("created_at", { ascending: false });
 
