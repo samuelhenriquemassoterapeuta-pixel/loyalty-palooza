@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowLeft, Leaf, Sparkles, Package } from "lucide-react";
+import { ArrowLeft, Leaf, Sparkles, Package, Search, X } from "lucide-react";
+import { Input } from "@/components/ui/input";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -31,10 +32,11 @@ export default function Loja() {
   const [carrinho, setCarrinho] = useState<CarrinhoItem[]>([]);
   const [saving, setSaving] = useState(false);
   const [carrinhoOpen, setCarrinhoOpen] = useState(false);
+  const [busca, setBusca] = useState("");
 
-  const produtosFiltrados = categoriaAtiva === "todos" 
-    ? produtos 
-    : produtos.filter(p => p.categoria === categoriaAtiva);
+  const produtosFiltrados = produtos
+    .filter(p => categoriaAtiva === "todos" || p.categoria === categoriaAtiva)
+    .filter(p => p.nome.toLowerCase().includes(busca.toLowerCase()));
 
   const handleToggleCarrinho = (produto: Produto) => {
     const existente = carrinho.find(item => item.produto.id === produto.id);
@@ -208,6 +210,25 @@ export default function Loja() {
           </TabsContent>
 
           <TabsContent value="loja" className="mt-4 space-y-4">
+            {/* Campo de Busca */}
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={18} />
+              <Input
+                placeholder="Buscar produtos..."
+                value={busca}
+                onChange={(e) => setBusca(e.target.value)}
+                className="pl-10 pr-10"
+              />
+              {busca && (
+                <button
+                  onClick={() => setBusca("")}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                >
+                  <X size={18} />
+                </button>
+              )}
+            </div>
+
             {/* Filtros de Categoria */}
             <div className="flex gap-2">
               <Button
