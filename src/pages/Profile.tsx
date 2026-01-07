@@ -57,9 +57,9 @@ const Profile = () => {
     { icon: Shield, label: "Segurança", description: "Senha e autenticação", action: "seguranca" },
     { icon: Smartphone, label: "Dispositivos", description: "Gerencie seus acessos", action: "dispositivos" },
     { icon: Download, label: "Instalar App", description: "Adicione à tela inicial", action: "instalar" },
+    { icon: FileText, label: "Manual do App", description: "Como usar o Resinkra", action: "manual" },
     ...(isAdmin ? [{ icon: Crown, label: "Painel Admin", description: "Gerenciar app", action: "admin" }] : []),
     { icon: HelpCircle, label: "Ajuda", description: "FAQ e suporte", action: "ajuda" },
-    { icon: FileText, label: "Termos de uso", description: "Políticas e condições", action: "termos" },
   ];
 
   const handleLogout = async () => {
@@ -123,14 +123,14 @@ const Profile = () => {
       case "instalar":
         navigate("/instalar");
         break;
+      case "manual":
+        navigate("/manual");
+        break;
       case "admin":
         navigate("/admin");
         break;
       case "ajuda":
         setHelpSheetOpen(true);
-        break;
-      case "termos":
-        toast.info("Termos de uso em breve!");
         break;
       default:
         break;
