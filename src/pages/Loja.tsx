@@ -160,8 +160,9 @@ export default function Loja() {
   return (
     <div className="min-h-screen bg-background pb-32">
       {/* Header */}
-      <div className="bg-card border-b border-border px-4 py-4 safe-top">
-        <div className="max-w-lg mx-auto flex items-center gap-4">
+      <div className="relative overflow-hidden bg-gradient-to-r from-primary/5 via-accent/5 to-primary/5 border-b border-border px-4 py-4 safe-top">
+        <div className="absolute -top-10 -right-10 w-24 h-24 bg-accent/10 rounded-full blur-2xl" />
+        <div className="max-w-lg mx-auto flex items-center gap-4 relative z-10">
           <Button
             variant="ghost"
             size="icon"
@@ -171,7 +172,7 @@ export default function Loja() {
             <ArrowLeft size={20} />
           </Button>
           <div className="flex-1">
-            <h1 className="text-lg font-semibold">Loja Resinkra</h1>
+            <h1 className="text-lg font-semibold text-primary">Loja Resinkra</h1>
             <p className="text-xs text-muted-foreground">Produtos exclusivos</p>
           </div>
           <CarrinhoSheet

@@ -7,32 +7,36 @@ const actions = [
     icon: Calendar,
     label: "Agendar", 
     description: "Nova sessão",
-    gradient: "from-primary/20 to-primary/5",
+    gradient: "from-primary/30 to-primary/10",
     iconColor: "text-primary",
+    iconBg: "bg-primary/20",
     path: "/agendamento" 
   },
   { 
     icon: Clock,
     label: "Planos", 
     description: "Horas",
-    gradient: "from-highlight/20 to-highlight/5",
+    gradient: "from-highlight/30 to-highlight/10",
     iconColor: "text-highlight",
+    iconBg: "bg-highlight/20",
     path: "/pacotes" 
   },
   { 
     icon: ShoppingBag,
     label: "Loja", 
     description: "Produtos",
-    gradient: "from-accent/20 to-accent/5",
+    gradient: "from-accent/30 to-accent/10",
     iconColor: "text-accent",
+    iconBg: "bg-accent/20",
     path: "/loja" 
   },
   { 
     icon: Send,
     label: "Transferir", 
     description: "Enviar créditos",
-    gradient: "from-secondary/30 to-secondary/10",
-    iconColor: "text-foreground",
+    gradient: "from-info/30 to-info/10",
+    iconColor: "text-info",
+    iconBg: "bg-info/20",
     path: "/transferir" 
   },
 ];
@@ -96,7 +100,7 @@ export const QuickActions = () => {
           
           {/* Icon with enhanced effects and pulse */}
           <motion.div 
-            className={`relative z-10 p-4 rounded-2xl bg-gradient-to-br ${action.gradient} transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg`}
+            className={`relative z-10 p-4 rounded-2xl ${action.iconBg} shadow-md transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg`}
             animate={{ 
               scale: [1, 1.05, 1],
             }}
@@ -109,14 +113,14 @@ export const QuickActions = () => {
             whileHover={{ rotate: [0, -5, 5, 0], scale: 1.1 }}
           >
             {/* Inner glow */}
-            <div className="absolute inset-0 rounded-2xl bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            <div className="absolute inset-0 rounded-2xl bg-white/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             
             {/* Pulse ring effect */}
             <motion.div 
-              className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${action.gradient}`}
+              className={`absolute inset-0 rounded-2xl ${action.iconBg}`}
               animate={{ 
                 scale: [1, 1.3, 1.3],
-                opacity: [0.4, 0, 0]
+                opacity: [0.6, 0, 0]
               }}
               transition={{ 
                 duration: 2,
@@ -126,7 +130,7 @@ export const QuickActions = () => {
               }}
             />
             
-            <action.icon size={40} className={`${action.iconColor} relative z-10`} />
+            <action.icon size={40} className={`${action.iconColor} relative z-10 drop-shadow-sm`} />
           </motion.div>
           
           {/* Label with fade effect */}

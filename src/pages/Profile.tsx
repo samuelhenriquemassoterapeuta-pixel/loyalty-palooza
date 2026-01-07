@@ -208,9 +208,13 @@ const Profile = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="gradient-primary rounded-2xl p-5 text-primary-foreground mb-6"
+          className="relative overflow-hidden rounded-2xl p-5 text-primary-foreground mb-6"
         >
-          <div className="grid grid-cols-3 gap-4 text-center">
+          <div className="absolute inset-0 gradient-primary" />
+          <div className="absolute -top-10 -right-10 w-32 h-32 rounded-full bg-accent/20 blur-2xl" />
+          <div className="absolute -bottom-8 -left-8 w-24 h-24 rounded-full bg-highlight/20 blur-xl" />
+          
+          <div className="relative z-10 grid grid-cols-3 gap-4 text-center">
             <div>
               <p className="text-2xl font-bold">R$ 0</p>
               <p className="text-xs opacity-80">Total cashback</p>
@@ -240,16 +244,16 @@ const Profile = () => {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.2 + index * 0.05 }}
               onClick={() => handleMenuClick(item.action)}
-              className="w-full flex items-center gap-4 p-4 rounded-xl bg-card shadow-card hover:shadow-elevated transition-all"
+              className="w-full flex items-center gap-4 p-4 rounded-xl bg-card shadow-card hover:shadow-elevated hover:border-l-4 hover:border-l-primary transition-all group"
             >
-              <div className="p-2.5 rounded-xl bg-secondary">
-                <item.icon size={20} className="text-foreground" />
+              <div className="p-2.5 rounded-xl bg-gradient-to-br from-primary/10 to-accent/10 group-hover:from-primary/20 group-hover:to-accent/20 transition-all">
+                <item.icon size={20} className="text-primary" />
               </div>
               <div className="flex-1 text-left">
-                <p className="font-semibold text-foreground">{item.label}</p>
+                <p className="font-semibold text-foreground group-hover:text-primary transition-colors">{item.label}</p>
                 <p className="text-xs text-muted-foreground">{item.description}</p>
               </div>
-              <ChevronRight size={20} className="text-muted-foreground" />
+              <ChevronRight size={20} className="text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all" />
             </motion.button>
           ))}
         </motion.div>
