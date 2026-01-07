@@ -19,9 +19,12 @@ import {
   Users,
   Bell,
   Shield,
-  Smartphone
+  Smartphone,
+  Play,
+  Video
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { BottomNavigation } from "@/components/BottomNavigation";
@@ -38,6 +41,8 @@ interface ManualSection {
   title: string;
   description: string;
   color: string;
+  videoUrl?: string;
+  videoThumbnail?: string;
   content: {
     title: string;
     steps: string[];
@@ -51,6 +56,8 @@ const manualSections: ManualSection[] = [
     title: "Primeiros Passos",
     description: "Como começar a usar o Resinkra",
     color: "from-primary/20 to-primary/5",
+    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    videoThumbnail: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=400&h=225&fit=crop",
     content: [
       {
         title: "Criando sua conta",
@@ -78,6 +85,8 @@ const manualSections: ManualSection[] = [
     title: "Agendamentos",
     description: "Como agendar suas sessões",
     color: "from-primary/20 to-accent/10",
+    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    videoThumbnail: "https://images.unsplash.com/photo-1506784983877-45594efa4cbe?w=400&h=225&fit=crop",
     content: [
       {
         title: "Fazer um agendamento",
@@ -105,6 +114,8 @@ const manualSections: ManualSection[] = [
     title: "Loja",
     description: "Compre produtos exclusivos",
     color: "from-accent/20 to-accent/5",
+    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    videoThumbnail: "https://images.unsplash.com/photo-1472851294608-062f824d29cc?w=400&h=225&fit=crop",
     content: [
       {
         title: "Comprando produtos",
@@ -132,6 +143,8 @@ const manualSections: ManualSection[] = [
     title: "Pacotes",
     description: "Planos e sessões",
     color: "from-highlight/20 to-highlight/5",
+    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    videoThumbnail: "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=400&h=225&fit=crop",
     content: [
       {
         title: "Adquirindo um pacote",
@@ -159,6 +172,8 @@ const manualSections: ManualSection[] = [
     title: "Transferências",
     description: "Envie créditos para amigos",
     color: "from-info/20 to-info/5",
+    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    videoThumbnail: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=400&h=225&fit=crop",
     content: [
       {
         title: "Transferindo créditos",
@@ -186,6 +201,8 @@ const manualSections: ManualSection[] = [
     title: "Programa de Indicações",
     description: "Indique amigos e ganhe",
     color: "from-accent/20 to-highlight/10",
+    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    videoThumbnail: "https://images.unsplash.com/photo-1521791136064-7986c2920216?w=400&h=225&fit=crop",
     content: [
       {
         title: "Como indicar",
@@ -213,6 +230,8 @@ const manualSections: ManualSection[] = [
     title: "Cashback",
     description: "Entenda como funciona",
     color: "from-green-500/20 to-green-500/5",
+    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    videoThumbnail: "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=400&h=225&fit=crop",
     content: [
       {
         title: "Ganhando cashback",
@@ -266,6 +285,7 @@ const faqItems = [
 export default function Manual() {
   const navigate = useNavigate();
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
+  const [playingVideo, setPlayingVideo] = useState<string | null>(null);
 
   const handleExportPDF = () => {
     // Create printable content
@@ -393,34 +413,87 @@ export default function Manual() {
               exit={{ opacity: 0, height: 0 }}
               className="overflow-hidden"
             >
-              <Card className="p-4 border-primary/20">
-                {manualSections
-                  .find(s => s.id === expandedSection)
-                  ?.content.map((item, idx) => (
-                    <div key={idx} className={idx > 0 ? "mt-6 pt-6 border-t border-border" : ""}>
-                      <h4 className="font-semibold text-primary mb-3 flex items-center gap-2">
-                        <ChevronRight size={16} />
-                        {item.title}
-                      </h4>
-                      <ul className="space-y-2">
-                        {item.steps.map((step, stepIdx) => (
-                          <motion.li
-                            key={stepIdx}
-                            initial={{ opacity: 0, x: -10 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: stepIdx * 0.1 }}
-                            className="flex items-start gap-3 text-sm"
-                          >
-                            <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary/10 text-primary text-xs font-bold flex items-center justify-center">
-                              {stepIdx + 1}
-                            </span>
-                            <span className="text-muted-foreground">{step}</span>
-                          </motion.li>
-                        ))}
-                      </ul>
-                    </div>
-                  ))}
-              </Card>
+              {(() => {
+                const currentSection = manualSections.find(s => s.id === expandedSection);
+                if (!currentSection) return null;
+                
+                return (
+                  <Card className="p-4 border-primary/20 space-y-4">
+                    {/* Video Tutorial */}
+                    {currentSection.videoUrl && (
+                      <div className="space-y-2">
+                        <h4 className="font-semibold text-primary flex items-center gap-2">
+                          <Video size={16} />
+                          Vídeo Tutorial
+                        </h4>
+                        <div className="rounded-xl overflow-hidden border border-border/50 shadow-lg">
+                          <AspectRatio ratio={16 / 9}>
+                            {playingVideo === currentSection.id ? (
+                              <iframe
+                                src={`${currentSection.videoUrl}?autoplay=1`}
+                                className="w-full h-full"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowFullScreen
+                                title={`Tutorial: ${currentSection.title}`}
+                              />
+                            ) : (
+                              <button
+                                onClick={() => setPlayingVideo(currentSection.id)}
+                                className="relative w-full h-full group"
+                              >
+                                <img
+                                  src={currentSection.videoThumbnail}
+                                  alt={`Thumbnail: ${currentSection.title}`}
+                                  className="w-full h-full object-cover"
+                                />
+                                <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors flex items-center justify-center">
+                                  <motion.div
+                                    whileHover={{ scale: 1.1 }}
+                                    whileTap={{ scale: 0.95 }}
+                                    className="w-16 h-16 rounded-full bg-primary/90 text-primary-foreground flex items-center justify-center shadow-xl"
+                                  >
+                                    <Play size={28} className="ml-1" />
+                                  </motion.div>
+                                </div>
+                                <div className="absolute bottom-3 left-3 bg-black/60 text-white text-xs px-2 py-1 rounded-md flex items-center gap-1">
+                                  <Video size={12} />
+                                  Assistir tutorial
+                                </div>
+                              </button>
+                            )}
+                          </AspectRatio>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Step by Step Content */}
+                    {currentSection.content.map((item, idx) => (
+                      <div key={idx} className={idx > 0 || currentSection.videoUrl ? "pt-4 border-t border-border" : ""}>
+                        <h4 className="font-semibold text-primary mb-3 flex items-center gap-2">
+                          <ChevronRight size={16} />
+                          {item.title}
+                        </h4>
+                        <ul className="space-y-2">
+                          {item.steps.map((step, stepIdx) => (
+                            <motion.li
+                              key={stepIdx}
+                              initial={{ opacity: 0, x: -10 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              transition={{ delay: stepIdx * 0.1 }}
+                              className="flex items-start gap-3 text-sm"
+                            >
+                              <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary/10 text-primary text-xs font-bold flex items-center justify-center">
+                                {stepIdx + 1}
+                              </span>
+                              <span className="text-muted-foreground">{step}</span>
+                            </motion.li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                  </Card>
+                );
+              })()}
             </motion.div>
           )}
         </AnimatePresence>
