@@ -12,14 +12,9 @@ import {
   HelpCircle,
   Download,
   ChevronRight,
-  ChevronDown,
-  Sparkles,
-  Clock,
-  CreditCard,
-  Users,
-  Bell,
-  Shield,
-  Smartphone
+  Play,
+  X,
+  Sparkles
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -31,6 +26,12 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 interface ManualSection {
   id: string;
@@ -38,6 +39,8 @@ interface ManualSection {
   title: string;
   description: string;
   color: string;
+  videoUrl?: string; // YouTube embed URL
+  videoDuration?: string;
   content: {
     title: string;
     steps: string[];
@@ -51,6 +54,8 @@ const manualSections: ManualSection[] = [
     title: "Primeiros Passos",
     description: "Como começar a usar o Resinkra",
     color: "from-primary/20 to-primary/5",
+    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    videoDuration: "2:30",
     content: [
       {
         title: "Criando sua conta",
@@ -78,6 +83,8 @@ const manualSections: ManualSection[] = [
     title: "Agendamentos",
     description: "Como agendar suas sessões",
     color: "from-primary/20 to-accent/10",
+    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    videoDuration: "3:15",
     content: [
       {
         title: "Fazer um agendamento",
@@ -105,6 +112,8 @@ const manualSections: ManualSection[] = [
     title: "Loja",
     description: "Compre produtos exclusivos",
     color: "from-accent/20 to-accent/5",
+    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    videoDuration: "2:45",
     content: [
       {
         title: "Comprando produtos",
@@ -132,6 +141,8 @@ const manualSections: ManualSection[] = [
     title: "Pacotes",
     description: "Planos e sessões",
     color: "from-highlight/20 to-highlight/5",
+    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    videoDuration: "2:00",
     content: [
       {
         title: "Adquirindo um pacote",
@@ -159,6 +170,8 @@ const manualSections: ManualSection[] = [
     title: "Transferências",
     description: "Envie créditos para amigos",
     color: "from-info/20 to-info/5",
+    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    videoDuration: "1:45",
     content: [
       {
         title: "Transferindo créditos",
@@ -186,6 +199,8 @@ const manualSections: ManualSection[] = [
     title: "Programa de Indicações",
     description: "Indique amigos e ganhe",
     color: "from-accent/20 to-highlight/10",
+    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    videoDuration: "2:20",
     content: [
       {
         title: "Como indicar",
@@ -213,6 +228,8 @@ const manualSections: ManualSection[] = [
     title: "Cashback",
     description: "Entenda como funciona",
     color: "from-green-500/20 to-green-500/5",
+    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    videoDuration: "2:10",
     content: [
       {
         title: "Ganhando cashback",
@@ -266,9 +283,23 @@ const faqItems = [
 export default function Manual() {
   const navigate = useNavigate();
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
+  const [videoModal, setVideoModal] = useState<{ open: boolean; url: string; title: string }>({
+    open: false,
+    url: "",
+    title: ""
+  });
+
+  const handlePlayVideo = (section: ManualSection) => {
+    if (section.videoUrl) {
+      setVideoModal({
+        open: true,
+        url: section.videoUrl,
+        title: section.title
+      });
+    }
+  };
 
   const handleExportPDF = () => {
-    // Create printable content
     const printContent = `
       <html>
         <head>
@@ -296,11 +327,11 @@ export default function Manual() {
               ${section.content.map(item => `
                 <h3>${item.title}</h3>
                 <ul>
-                  ${item.steps.map(step => `<li>${step}</li>`).join('')}
+                  ${item.steps.map(step => `<li>${step}</li>`).join("")}
                 </ul>
-              `).join('')}
+              `).join("")}
             </div>
-          `).join('')}
+          `).join("")}
           
           <h2>❓ Perguntas Frequentes</h2>
           ${faqItems.map(item => `
@@ -308,7 +339,7 @@ export default function Manual() {
               <p class="faq-q">${item.question}</p>
               <p>${item.answer}</p>
             </div>
-          `).join('')}
+          `).join("")}
           
           <p style="margin-top: 40px; text-align: center; color: #666;">
             © ${new Date().getFullYear()} Resinkra - Todos os direitos reservados
@@ -317,7 +348,7 @@ export default function Manual() {
       </html>
     `;
 
-    const printWindow = window.open('', '_blank');
+    const printWindow = window.open("", "_blank");
     if (printWindow) {
       printWindow.document.write(printContent);
       printWindow.document.close();
@@ -367,20 +398,41 @@ export default function Manual() {
         {/* Sections Grid */}
         <div className="grid grid-cols-2 gap-3">
           {manualSections.map((section, index) => (
-            <motion.button
+            <motion.div
               key={section.id}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.05 }}
-              onClick={() => setExpandedSection(expandedSection === section.id ? null : section.id)}
-              className={`p-4 rounded-2xl bg-gradient-to-br ${section.color} border border-border/50 text-left transition-all hover:shadow-lg ${
-                expandedSection === section.id ? 'ring-2 ring-primary' : ''
+              className={`relative p-4 rounded-2xl bg-gradient-to-br ${section.color} border border-border/50 transition-all hover:shadow-lg ${
+                expandedSection === section.id ? "ring-2 ring-primary" : ""
               }`}
             >
-              <section.icon size={28} className="text-primary mb-2" />
-              <h3 className="font-semibold text-sm">{section.title}</h3>
-              <p className="text-xs text-muted-foreground mt-1">{section.description}</p>
-            </motion.button>
+              {/* Video Play Button */}
+              {section.videoUrl && (
+                <button
+                  onClick={() => handlePlayVideo(section)}
+                  className="absolute top-2 right-2 p-2 rounded-full bg-primary text-primary-foreground shadow-lg hover:scale-110 transition-transform"
+                >
+                  <Play size={14} fill="currentColor" />
+                </button>
+              )}
+              
+              <button
+                onClick={() => setExpandedSection(expandedSection === section.id ? null : section.id)}
+                className="w-full text-left"
+              >
+                <section.icon size={28} className="text-primary mb-2" />
+                <h3 className="font-semibold text-sm">{section.title}</h3>
+                <p className="text-xs text-muted-foreground mt-1">{section.description}</p>
+                
+                {section.videoDuration && (
+                  <div className="flex items-center gap-1 mt-2 text-xs text-primary">
+                    <Play size={10} />
+                    <span>{section.videoDuration}</span>
+                  </div>
+                )}
+              </button>
+            </motion.div>
           ))}
         </div>
 
@@ -394,6 +446,27 @@ export default function Manual() {
               className="overflow-hidden"
             >
               <Card className="p-4 border-primary/20">
+                {/* Video Banner */}
+                {manualSections.find(s => s.id === expandedSection)?.videoUrl && (
+                  <button
+                    onClick={() => {
+                      const section = manualSections.find(s => s.id === expandedSection);
+                      if (section) handlePlayVideo(section);
+                    }}
+                    className="w-full mb-4 p-4 rounded-xl bg-gradient-to-r from-primary/20 to-accent/20 flex items-center gap-3 hover:from-primary/30 hover:to-accent/30 transition-all group"
+                  >
+                    <div className="p-3 rounded-full bg-primary text-primary-foreground group-hover:scale-110 transition-transform">
+                      <Play size={20} fill="currentColor" />
+                    </div>
+                    <div className="text-left">
+                      <p className="font-semibold text-sm">Assistir Tutorial em Vídeo</p>
+                      <p className="text-xs text-muted-foreground">
+                        Duração: {manualSections.find(s => s.id === expandedSection)?.videoDuration}
+                      </p>
+                    </div>
+                  </button>
+                )}
+                
                 {manualSections
                   .find(s => s.id === expandedSection)
                   ?.content.map((item, idx) => (
@@ -472,6 +545,29 @@ export default function Manual() {
           </div>
         </section>
       </div>
+
+      {/* Video Modal */}
+      <Dialog open={videoModal.open} onOpenChange={(open) => setVideoModal({ ...videoModal, open })}>
+        <DialogContent className="max-w-lg p-0 overflow-hidden">
+          <DialogHeader className="p-4 pb-0">
+            <DialogTitle className="flex items-center gap-2">
+              <Play size={18} className="text-primary" />
+              {videoModal.title}
+            </DialogTitle>
+          </DialogHeader>
+          <div className="aspect-video bg-black">
+            {videoModal.open && (
+              <iframe
+                src={`${videoModal.url}?autoplay=1`}
+                title={videoModal.title}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                className="w-full h-full"
+              />
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
 
       <BottomNavigation />
     </div>
