@@ -29,16 +29,16 @@ const Index = () => {
             animate={{ opacity: 1, y: 0 }}
             whileTap={{ scale: 0.98 }}
             onClick={() => navigate("/indicacoes")}
-            className="w-full flex items-center gap-3 p-4 rounded-2xl bg-gradient-to-r from-green-500/10 via-emerald-500/10 to-green-500/10 border border-green-500/20 hover:border-green-500/40 transition-all"
+            className="w-full flex items-center gap-3 p-4 rounded-2xl bg-gradient-to-r from-accent/20 via-highlight/15 to-accent/20 border border-accent/30 hover:border-accent/50 hover:shadow-lg transition-all"
           >
-            <div className="p-2 rounded-xl bg-green-500/20">
-              <Gift className="text-green-500" size={20} />
+            <div className="p-2.5 rounded-xl bg-accent/30 shadow-sm">
+              <Gift className="text-accent" size={22} />
             </div>
             <div className="flex-1 text-left">
               <p className="font-semibold text-foreground">Indique e Ganhe</p>
               <p className="text-xs text-muted-foreground">Ganhe R$ 10 por cada amigo indicado</p>
             </div>
-            <div className="text-xs px-2 py-1 rounded-full bg-green-500/20 text-green-600 font-medium">
+            <div className="text-xs px-3 py-1.5 rounded-full bg-accent text-accent-foreground font-bold shadow-sm">
               R$ 10
             </div>
           </motion.button>
