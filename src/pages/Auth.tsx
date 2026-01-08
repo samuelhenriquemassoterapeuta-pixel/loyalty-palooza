@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Eye, EyeOff, Leaf, Mail, Lock, User, ArrowLeft } from "lucide-react";
+import { Eye, EyeOff, Mail, Lock, User, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -11,7 +11,7 @@ import { toast } from "sonner";
 import { z } from "zod";
 import logoMarrom from "@/assets/logo-marrom.png";
 import simboloVerde from "@/assets/simbolo-verde.png";
-import iconeFlor from "@/assets/icone-flor.png";
+import { PageLoading, ButtonLoader } from "@/components/LoadingSpinner";
 
 const emailSchema = z.string().email("Email inválido");
 const passwordSchema = z.string().min(6, "Senha deve ter pelo menos 6 caracteres");
@@ -118,11 +118,7 @@ const Auth = () => {
   };
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <img src={iconeFlor} alt="Carregando" className="w-16 h-16 animate-pulse" />
-      </div>
-    );
+    return <PageLoading text="Verificando..." />;
   }
 
   return (
@@ -259,7 +255,7 @@ const Auth = () => {
               className="w-full h-12 gradient-primary text-primary-foreground font-semibold shadow-button hover:opacity-90 transition-opacity"
             >
             {isSubmitting ? (
-                <img src={iconeFlor} alt="" className="w-5 h-5 animate-spin" />
+                <ButtonLoader />
               ) : mode === "login" ? (
                 "Entrar"
               ) : mode === "signup" ? (
