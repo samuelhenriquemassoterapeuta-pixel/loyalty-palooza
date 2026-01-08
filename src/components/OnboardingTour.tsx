@@ -8,15 +8,16 @@ import {
   ShoppingBag,
   Gift,
   Wallet,
-  Sparkles,
   Check
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+import simboloVerde from "@/assets/simbolo-verde.png";
 
 interface OnboardingStep {
   id: number;
-  icon: React.ElementType;
+  icon?: React.ElementType;
+  image?: string;
   title: string;
   description: string;
   color: string;
@@ -26,7 +27,7 @@ interface OnboardingStep {
 const steps: OnboardingStep[] = [
   {
     id: 1,
-    icon: Sparkles,
+    image: simboloVerde,
     title: "Bem-vindo ao Resinkra!",
     description: "Seu app completo para agendamentos, compras e muito mais. Vamos fazer um tour rápido?",
     color: "from-primary to-primary/80",
@@ -101,6 +102,7 @@ export const OnboardingTour = ({ onComplete, isOpen }: OnboardingTourProps) => {
 
   const step = steps[currentStep];
   const Icon = step.icon;
+  const StepImage = step.image;
   const isLastStep = currentStep === steps.length - 1;
 
   return (
@@ -132,7 +134,11 @@ export const OnboardingTour = ({ onComplete, isOpen }: OnboardingTourProps) => {
               transition={{ delay: 0.2, type: "spring" }}
               className="relative z-10 p-6 rounded-full bg-white/20 backdrop-blur-sm"
             >
-              <Icon size={48} className="text-white" />
+              {StepImage ? (
+                <img src={StepImage} alt="" className="w-16 h-16 object-contain" />
+              ) : Icon ? (
+                <Icon size={48} className="text-white" />
+              ) : null}
             </motion.div>
 
             {/* Skip button */}

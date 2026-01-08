@@ -16,6 +16,7 @@ import {
   Download,
   Crown
 } from "lucide-react";
+import iconeFlor from "@/assets/icone-flor.png";
 import { BottomNavigation } from "@/components/BottomNavigation";
 import { useAuth } from "@/contexts/AuthContext";
 import { useProfile } from "@/hooks/useProfile";
@@ -150,7 +151,7 @@ const Profile = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
-        <Loader2 className="w-8 h-8 text-primary animate-spin" />
+        <img src={iconeFlor} alt="Carregando" className="w-12 h-12 animate-pulse" />
       </div>
     );
   }
