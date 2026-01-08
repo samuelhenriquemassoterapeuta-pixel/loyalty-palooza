@@ -4,13 +4,14 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { BottomNavigation } from "@/components/BottomNavigation";
 import { Progress } from "@/components/ui/progress";
-import { ArrowLeft, Package, Check, Clock, Sparkles, Loader2, Calendar, AlertTriangle } from "lucide-react";
+import { ArrowLeft, Package, Check, Clock, Sparkles, Calendar, AlertTriangle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { usePacotes, useMeusPacotes, Pacote } from "@/hooks/usePacotes";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { MeusPacotesListSkeleton, PacotesListSkeleton } from "@/components/skeletons";
+import { ButtonLoader } from "@/components/LoadingSpinner";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -342,7 +343,7 @@ const Pacotes = () => {
                           disabled={comprando === pacote.id}
                         >
                           {comprando === pacote.id ? (
-                            <Loader2 className="w-4 h-4 animate-spin" />
+                            <ButtonLoader />
                           ) : (
                             "Comprar"
                           )}

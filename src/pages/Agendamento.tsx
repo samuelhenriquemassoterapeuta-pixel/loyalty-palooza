@@ -4,7 +4,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { BottomNavigation } from "@/components/BottomNavigation";
-import { ArrowLeft, Clock, Check, Loader2, CalendarDays, X } from "lucide-react";
+import { ArrowLeft, Clock, Check, CalendarDays, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { ptBR } from "date-fns/locale";
@@ -13,6 +13,7 @@ import { useAgendamentos } from "@/hooks/useAgendamentos";
 import { useServicos, Servico } from "@/hooks/useServicos";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ServicosListSkeleton, AgendamentosListSkeleton } from "@/components/skeletons";
+import { LoadingSpinner, ButtonLoader } from "@/components/LoadingSpinner";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -315,7 +316,7 @@ const Agendamento = () => {
                 <h2 className="text-lg font-medium text-foreground mb-4">Escolha o horário</h2>
                 {loadingHorarios ? (
                   <div className="flex justify-center py-8">
-                    <Loader2 className="w-6 h-6 text-primary animate-spin" />
+                    <LoadingSpinner size="sm" />
                   </div>
                 ) : (
                   <div className="grid grid-cols-3 gap-3">
@@ -378,7 +379,7 @@ const Agendamento = () => {
                   onClick={handleConfirmar}
                 >
                   {saving ? (
-                    <Loader2 className="w-4 h-4 animate-spin" />
+                    <ButtonLoader />
                   ) : (
                     "Confirmar Agendamento"
                   )}

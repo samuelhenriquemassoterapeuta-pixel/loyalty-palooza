@@ -10,7 +10,6 @@ import {
   Plus,
   Pencil,
   Trash2,
-  Loader2,
   X,
   Check,
   Percent,
@@ -23,6 +22,7 @@ import {
   BarChart3,
   Calendar
 } from "lucide-react";
+import { PageLoading, ButtonLoader, LoadingSpinner } from "@/components/LoadingSpinner";
 import { Card } from "@/components/ui/card";
 import {
   Select,
@@ -310,11 +310,7 @@ const Admin = () => {
   };
 
   if (loadingAdmin) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <Loader2 className="w-8 h-8 text-primary animate-spin" />
-      </div>
-    );
+    return <PageLoading text="Verificando permissões..." />;
   }
 
   if (!isAdmin) {
@@ -537,7 +533,7 @@ const Admin = () => {
           <TabsContent value="pedidos" className="space-y-3">
             {loadingPedidos ? (
               <div className="flex justify-center py-8">
-                <Loader2 className="w-6 h-6 text-primary animate-spin" />
+                <LoadingSpinner size="sm" />
               </div>
             ) : pedidos.length === 0 ? (
               <div className="text-center py-8 text-muted-foreground">
@@ -630,7 +626,7 @@ const Admin = () => {
           <TabsContent value="produtos" className="space-y-3">
             {loadingProdutos ? (
               <div className="flex justify-center py-8">
-                <Loader2 className="w-6 h-6 text-primary animate-spin" />
+                <LoadingSpinner size="sm" />
               </div>
             ) : produtos.length === 0 ? (
               <div className="text-center py-8 text-muted-foreground">
@@ -687,7 +683,7 @@ const Admin = () => {
           <TabsContent value="servicos" className="space-y-3">
             {loadingServicos ? (
               <div className="flex justify-center py-8">
-                <Loader2 className="w-6 h-6 text-primary animate-spin" />
+                <LoadingSpinner size="sm" />
               </div>
             ) : servicos.length === 0 ? (
               <div className="text-center py-8 text-muted-foreground">
@@ -744,7 +740,7 @@ const Admin = () => {
           <TabsContent value="pacotes" className="space-y-3">
             {loadingPacotes ? (
               <div className="flex justify-center py-8">
-                <Loader2 className="w-6 h-6 text-primary animate-spin" />
+                <LoadingSpinner size="sm" />
               </div>
             ) : pacotes.length === 0 ? (
               <div className="text-center py-8 text-muted-foreground">
@@ -957,7 +953,7 @@ const Admin = () => {
                 Cancelar
               </Button>
               <Button className="flex-1" onClick={handleSave} disabled={saving}>
-                {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : "Salvar"}
+                {saving ? <ButtonLoader /> : "Salvar"}
               </Button>
             </div>
           </div>
