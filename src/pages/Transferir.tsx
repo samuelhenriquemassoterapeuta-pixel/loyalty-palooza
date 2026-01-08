@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowLeft, Send, User, Loader2, CheckCircle } from "lucide-react";
+import { ArrowLeft, Send, User, CheckCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,6 +10,8 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useTransacoes } from "@/hooks/useTransacoes";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { ButtonLoader } from "@/components/LoadingSpinner";
+import simboloVerde from "@/assets/simbolo-verde.png";
 
 const Transferir = () => {
   const navigate = useNavigate();
@@ -121,7 +123,7 @@ const Transferir = () => {
             transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
             className="w-20 h-20 rounded-full bg-primary/20 flex items-center justify-center mx-auto mb-4"
           >
-            <CheckCircle className="w-10 h-10 text-primary" />
+            <img src={simboloVerde} alt="" className="w-12 h-12 object-contain" />
           </motion.div>
           <h2 className="text-xl font-bold text-foreground mb-2">Transferência realizada!</h2>
           <p className="text-muted-foreground">
@@ -187,11 +189,7 @@ const Transferir = () => {
               onClick={buscarUsuario}
               disabled={buscando}
             >
-              {buscando ? (
-                <Loader2 className="w-4 h-4 animate-spin" />
-              ) : (
-                "Buscar"
-              )}
+              {buscando ? <ButtonLoader /> : "Buscar"}
             </Button>
           </div>
         </motion.div>
@@ -253,7 +251,7 @@ const Transferir = () => {
               disabled={transferindo}
             >
               {transferindo ? (
-                <Loader2 className="w-5 h-5 animate-spin" />
+                <ButtonLoader />
               ) : (
                 <>
                   <Send className="w-5 h-5" />

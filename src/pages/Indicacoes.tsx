@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowLeft, Copy, Gift, Users, Check, Loader2, Share2 } from "lucide-react";
+import { ArrowLeft, Copy, Gift, Users, Check, Share2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { BottomNavigation } from "@/components/BottomNavigation";
 import { useIndicacoes } from "@/hooks/useIndicacoes";
 import { toast } from "sonner";
+import { ButtonLoader } from "@/components/LoadingSpinner";
 
 const Indicacoes = () => {
   const navigate = useNavigate();
@@ -141,7 +142,7 @@ const Indicacoes = () => {
                   onClick={handleAplicarCodigo}
                   disabled={!codigoInput.trim() || aplicando}
                 >
-                  {aplicando ? <Loader2 className="animate-spin" size={18} /> : "Aplicar"}
+                  {aplicando ? <ButtonLoader /> : "Aplicar"}
                 </Button>
               </div>
             </Card>
