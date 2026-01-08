@@ -9,7 +9,9 @@ import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { z } from "zod";
-import resinkraLogo from "@/assets/resinkra-logo.png";
+import logoMarrom from "@/assets/logo-marrom.png";
+import simboloVerde from "@/assets/simbolo-verde.png";
+import iconeFlor from "@/assets/icone-flor.png";
 
 const emailSchema = z.string().email("Email inválido");
 const passwordSchema = z.string().min(6, "Senha deve ter pelo menos 6 caracteres");
@@ -118,7 +120,7 @@ const Auth = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
-        <Leaf className="w-12 h-12 text-primary animate-pulse" />
+        <img src={iconeFlor} alt="Carregando" className="w-16 h-16 animate-pulse" />
       </div>
     );
   }
@@ -141,15 +143,19 @@ const Auth = () => {
           {/* Logo */}
           <div className="flex flex-col items-center mb-8">
             <div className="relative">
-              <div className="absolute -inset-2 bg-gradient-to-br from-primary/20 to-accent/20 rounded-3xl blur-lg" />
+              <div className="absolute -inset-3 bg-gradient-to-br from-primary/20 to-accent/20 rounded-full blur-xl" />
               <img 
-                src={resinkraLogo} 
+                src={simboloVerde} 
                 alt="Resinkra" 
-                className="relative h-20 w-20 rounded-2xl object-cover shadow-elevated mb-4"
+                className="relative h-24 w-24 object-contain mb-4"
               />
             </div>
-            <h1 className="text-2xl font-bold text-foreground mt-2">Resinkra</h1>
-            <p className="text-muted-foreground text-sm mt-1">
+            <img 
+              src={logoMarrom} 
+              alt="Resinkra" 
+              className="h-7 object-contain mt-2"
+            />
+            <p className="text-muted-foreground text-sm mt-2">
               {mode === "login" && "Bem-vindo de volta"}
               {mode === "signup" && "Crie sua conta"}
               {mode === "forgot-password" && "Recuperar senha"}
@@ -252,8 +258,8 @@ const Auth = () => {
               disabled={isSubmitting}
               className="w-full h-12 gradient-primary text-primary-foreground font-semibold shadow-button hover:opacity-90 transition-opacity"
             >
-              {isSubmitting ? (
-                <Leaf className="w-5 h-5 animate-spin" />
+            {isSubmitting ? (
+                <img src={iconeFlor} alt="" className="w-5 h-5 animate-spin" />
               ) : mode === "login" ? (
                 "Entrar"
               ) : mode === "signup" ? (

@@ -4,7 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { useProfile } from "@/hooks/useProfile";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNotificacoes } from "@/hooks/useNotificacoes";
-import resinkraLogo from "@/assets/resinkra-logo.png";
+import logoMarrom from "@/assets/logo-marrom.png";
+import simboloVerde from "@/assets/simbolo-verde.png";
 
 export const Header = () => {
   const navigate = useNavigate();
@@ -34,13 +35,17 @@ export const Header = () => {
     >
       <div className="flex items-center gap-3">
         <img 
-          src={resinkraLogo} 
+          src={simboloVerde} 
           alt="Resinkra" 
-          className="h-10 w-10 rounded-xl object-cover"
+          className="h-11 w-11 object-contain"
         />
         <div>
-          <h1 className="text-lg font-bold text-primary">Resinkra</h1>
-          <p className="text-xs text-muted-foreground">{getGreeting()}, {getDisplayName()}</p>
+          <img 
+            src={logoMarrom} 
+            alt="Resinkra" 
+            className="h-5 object-contain"
+          />
+          <p className="text-xs text-muted-foreground mt-0.5">{getGreeting()}, {getDisplayName()}</p>
         </div>
       </div>
 
