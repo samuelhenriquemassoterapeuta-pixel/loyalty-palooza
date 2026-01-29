@@ -1,16 +1,69 @@
+import { useRef } from "react";
 import { ArrowLeft, Download, Printer } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import QRCode from "react-qr-code";
 import logoMarrom from "@/assets/logo-marrom.png";
+import { toast } from "@/hooks/use-toast";
 
 const APP_URL = "https://d9766493-319f-4158-82d6-caca99a7199a.lovableproject.com/instalar";
 
 const QRCodePrint = () => {
   const navigate = useNavigate();
+  const qrRef = useRef<HTMLDivElement>(null);
 
   const handlePrint = () => {
     window.print();
+  };
+
+  const handleDownload = async () => {
+    if (!qrRef.current) return;
+
+    try {
+      const svg = qrRef.current.querySelector("svg");
+      if (!svg) return;
+
+      const svgData = new XMLSerializer().serializeToString(svg);
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+      const img = new Image();
+
+      // Set canvas size with padding for better quality
+      const size = 400;
+      const padding = 40;
+      canvas.width = size + padding * 2;
+      canvas.height = size + padding * 2;
+
+      img.onload = () => {
+        if (!ctx) return;
+        
+        // White background
+        ctx.fillStyle = "white";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        // Draw QR code centered
+        ctx.drawImage(img, padding, padding, size, size);
+
+        // Download
+        const link = document.createElement("a");
+        link.download = "resinkra-qrcode.png";
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+
+        toast({
+          title: "Download concluído!",
+          description: "QR Code salvo como resinkra-qrcode.png",
+        });
+      };
+
+      img.src = "data:image/svg+xml;base64," + btoa(unescape(encodeURIComponent(svgData)));
+    } catch (error) {
+      toast({
+        title: "Erro ao baixar",
+        description: "Não foi possível gerar a imagem",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
@@ -24,11 +77,16 @@ const QRCodePrint = () => {
           >
             <ArrowLeft size={20} className="text-foreground" />
           </button>
-          <h1 className="text-lg font-semibold text-foreground">QR Code para Impressão</h1>
-          <Button onClick={handlePrint} size="sm" variant="outline" className="gap-2">
-            <Printer size={16} />
-            Imprimir
-          </Button>
+          <h1 className="text-lg font-semibold text-foreground">QR Code</h1>
+          <div className="flex gap-2">
+            <Button onClick={handleDownload} size="sm" variant="outline" className="gap-2">
+              <Download size={16} />
+              PNG
+            </Button>
+            <Button onClick={handlePrint} size="sm" variant="outline" className="gap-2">
+              <Printer size={16} />
+            </Button>
+          </div>
         </div>
       </header>
 
@@ -46,7 +104,7 @@ const QRCodePrint = () => {
 
           {/* QR Code */}
           <div className="flex justify-center mb-8">
-            <div className="p-4 bg-white rounded-2xl print:p-0">
+            <div ref={qrRef} className="p-4 bg-white rounded-2xl print:p-0">
               <QRCode 
                 value={APP_URL} 
                 size={280}
