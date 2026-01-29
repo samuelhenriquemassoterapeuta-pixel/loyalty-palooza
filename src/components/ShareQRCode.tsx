@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { QrCode, Share2, X } from "lucide-react";
+import { QrCode, Share2, X, Printer } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Link } from "react-router-dom";
 import QRCode from "react-qr-code";
 
 const APP_URL = "https://d9766493-319f-4158-82d6-caca99a7199a.lovableproject.com/instalar";
@@ -58,6 +59,13 @@ export const ShareQRCode = () => {
                 <p className="text-xs text-muted-foreground mt-4 text-center">
                   Escaneie para instalar o app
                 </p>
+                <Link 
+                  to="/qrcode" 
+                  className="mt-3 flex items-center gap-1.5 text-xs text-primary hover:text-primary/80 transition-colors"
+                >
+                  <Printer size={14} />
+                  Versão para impressão
+                </Link>
               </div>
             </div>
           </motion.div>
