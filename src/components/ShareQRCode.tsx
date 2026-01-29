@@ -1,13 +1,60 @@
-import { useState } from "react";
-import { QrCode, Share2, X, Printer } from "lucide-react";
+import { useState, useRef } from "react";
+import { QrCode, Share2, X, Printer, Download } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 import QRCode from "react-qr-code";
+import { toast } from "@/hooks/use-toast";
 
 const APP_URL = "https://d9766493-319f-4158-82d6-caca99a7199a.lovableproject.com/instalar";
 
 export const ShareQRCode = () => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const qrRef = useRef<HTMLDivElement>(null);
+
+  const handleDownload = async () => {
+    if (!qrRef.current) return;
+
+    try {
+      const svg = qrRef.current.querySelector("svg");
+      if (!svg) return;
+
+      const svgData = new XMLSerializer().serializeToString(svg);
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+      const img = new Image();
+
+      const size = 400;
+      const padding = 40;
+      canvas.width = size + padding * 2;
+      canvas.height = size + padding * 2;
+
+      img.onload = () => {
+        if (!ctx) return;
+        
+        ctx.fillStyle = "white";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, padding, padding, size, size);
+
+        const link = document.createElement("a");
+        link.download = "resinkra-qrcode.png";
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+
+        toast({
+          title: "Download concluído!",
+          description: "QR Code salvo como resinkra-qrcode.png",
+        });
+      };
+
+      img.src = "data:image/svg+xml;base64," + btoa(unescape(encodeURIComponent(svgData)));
+    } catch (error) {
+      toast({
+        title: "Erro ao baixar",
+        description: "Não foi possível gerar a imagem",
+        variant: "destructive",
+      });
+    }
+  };
 
   return (
     <motion.div
@@ -49,23 +96,35 @@ export const ShareQRCode = () => {
               </button>
               
               <div className="flex flex-col items-center">
-                <QRCode 
-                  value={APP_URL} 
-                  size={160}
-                  style={{ height: "auto", maxWidth: "100%", width: "100%" }}
-                  viewBox={`0 0 160 160`}
-                  level="M"
-                />
+                <div ref={qrRef}>
+                  <QRCode 
+                    value={APP_URL} 
+                    size={160}
+                    style={{ height: "auto", maxWidth: "100%", width: "100%" }}
+                    viewBox={`0 0 160 160`}
+                    level="M"
+                  />
+                </div>
                 <p className="text-xs text-muted-foreground mt-4 text-center">
                   Escaneie para instalar o app
                 </p>
-                <Link 
-                  to="/qrcode" 
-                  className="mt-3 flex items-center gap-1.5 text-xs text-primary hover:text-primary/80 transition-colors"
-                >
-                  <Printer size={14} />
-                  Versão para impressão
-                </Link>
+                
+                <div className="flex items-center gap-4 mt-3">
+                  <button 
+                    onClick={handleDownload}
+                    className="flex items-center gap-1.5 text-xs text-primary hover:text-primary/80 transition-colors"
+                  >
+                    <Download size={14} />
+                    Baixar PNG
+                  </button>
+                  <Link 
+                    to="/qrcode" 
+                    className="flex items-center gap-1.5 text-xs text-primary hover:text-primary/80 transition-colors"
+                  >
+                    <Printer size={14} />
+                    Imprimir
+                  </Link>
+                </div>
               </div>
             </div>
           </motion.div>
