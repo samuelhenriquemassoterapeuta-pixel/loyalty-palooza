@@ -20,8 +20,10 @@ import {
   TrendingUp,
   DollarSign,
   BarChart3,
-  Calendar
+  Calendar,
+  FileText
 } from "lucide-react";
+import { AuditLogsViewer } from "@/components/admin/AuditLogsViewer";
 import { PageLoading, ButtonLoader, LoadingSpinner } from "@/components/LoadingSpinner";
 import { Card } from "@/components/ui/card";
 import {
@@ -389,12 +391,16 @@ const Admin = () => {
         {/* Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <div className="flex items-center justify-between mb-4">
-            <TabsList className="grid grid-cols-5 w-full">
+            <TabsList className="grid grid-cols-6 w-full">
               <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
               <TabsTrigger value="pedidos">Pedidos</TabsTrigger>
               <TabsTrigger value="produtos">Produtos</TabsTrigger>
               <TabsTrigger value="servicos">Serviços</TabsTrigger>
               <TabsTrigger value="pacotes">Pacotes</TabsTrigger>
+              <TabsTrigger value="auditoria" className="flex items-center gap-1">
+                <FileText size={14} />
+                <span className="hidden sm:inline">Auditoria</span>
+              </TabsTrigger>
             </TabsList>
           </div>
           
@@ -783,6 +789,11 @@ const Admin = () => {
                 </motion.div>
               ))
             )}
+          </TabsContent>
+
+          {/* Auditoria */}
+          <TabsContent value="auditoria">
+            <AuditLogsViewer />
           </TabsContent>
         </Tabs>
       </div>
