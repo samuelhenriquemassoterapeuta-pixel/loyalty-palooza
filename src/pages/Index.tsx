@@ -4,6 +4,7 @@ import { QuickActions } from "@/components/QuickActions";
 import { TransactionHistory } from "@/components/TransactionHistory";
 import { BottomNavigation } from "@/components/BottomNavigation";
 import { InstallBanner } from "@/components/InstallBanner";
+import { ShareQRCode } from "@/components/ShareQRCode";
 import { OnboardingTour, useOnboarding } from "@/components/OnboardingTour";
 import { useAdmin } from "@/hooks/useAdmin";
 import { useNavigate } from "react-router-dom";
@@ -46,6 +47,9 @@ const Index = () => {
                 R$ 10
               </div>
             </motion.button>
+
+            {/* Share QR Code */}
+            <ShareQRCode />
             {/* Admin Quick Access */}
             {isAdmin && (
               <motion.button
