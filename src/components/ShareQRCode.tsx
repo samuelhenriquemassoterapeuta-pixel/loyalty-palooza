@@ -1,5 +1,5 @@
-import { useState, useRef } from "react";
-import { QrCode, Share2, X, Printer, Download, Copy, Check, ExternalLink } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
+import { QrCode, Share2, X, Printer, Download, Copy, Check, ExternalLink, Smartphone } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 import QRCode from "react-qr-code";
@@ -7,10 +7,40 @@ import { toast } from "@/hooks/use-toast";
 
 const APP_URL = "https://d9766493-319f-4158-82d6-caca99a7199a.lovableproject.com/instalar";
 
+// Robust mobile detection
+const detectMobile = (): boolean => {
+  if (typeof window === "undefined" || typeof navigator === "undefined") return false;
+  
+  // Check user agent for mobile devices
+  const userAgent = navigator.userAgent || navigator.vendor || (window as any).opera || "";
+  const mobileRegex = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini|mobile|tablet/i;
+  
+  // Check for touch capability
+  const hasTouch = "ontouchstart" in window || navigator.maxTouchPoints > 0;
+  
+  // Check screen width (typical mobile breakpoint)
+  const isSmallScreen = window.innerWidth <= 768;
+  
+  // Check if standalone (PWA installed)
+  const isStandalone = window.matchMedia("(display-mode: standalone)").matches;
+  
+  return mobileRegex.test(userAgent) || (hasTouch && isSmallScreen) || isStandalone;
+};
+
 export const ShareQRCode = () => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const qrRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setIsMobile(detectMobile());
+    
+    // Update on resize
+    const handleResize = () => setIsMobile(detectMobile());
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const handleCopyLink = async () => {
     try {
@@ -38,19 +68,25 @@ export const ShareQRCode = () => {
           text: "Baixe o app Resinkra para agendamentos, compras e muito mais!",
           url: APP_URL,
         });
+        return;
       } catch (error) {
-        // User cancelled or share failed - fallback to copy
-        if ((error as Error).name !== "AbortError") {
-          handleCopyLink();
-        }
+        // User cancelled - don't show fallback
+        if ((error as Error).name === "AbortError") return;
       }
-    } else {
-      // Fallback for browsers that don't support Web Share API
-      handleCopyLink();
+    }
+    
+    // Fallback: copy link and show toast with share suggestions
+    await handleCopyLink();
+    if (isMobile) {
+      toast({
+        title: "Link copiado!",
+        description: "Cole no WhatsApp, Instagram ou qualquer app para compartilhar",
+      });
     }
   };
 
   const canNativeShare = typeof navigator !== "undefined" && !!navigator.share;
+  const showShareButton = canNativeShare || isMobile;
 
   const handleDownload = async () => {
     if (!qrRef.current) return;
@@ -151,12 +187,12 @@ export const ShareQRCode = () => {
                 </p>
                 
                 <div className="flex flex-wrap items-center justify-center gap-3 mt-3">
-                  {canNativeShare && (
+                  {showShareButton && (
                     <button 
                       onClick={handleNativeShare}
                       className="flex items-center gap-1.5 text-xs font-medium text-white bg-primary hover:bg-primary/90 px-3 py-1.5 rounded-full transition-colors"
                     >
-                      <ExternalLink size={14} />
+                      {canNativeShare ? <ExternalLink size={14} /> : <Smartphone size={14} />}
                       Compartilhar
                     </button>
                   )}
