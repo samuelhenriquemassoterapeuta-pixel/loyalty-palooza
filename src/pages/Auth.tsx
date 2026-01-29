@@ -24,10 +24,11 @@ const Auth = () => {
   const [mode, setMode] = useState<AuthMode>("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [nome, setNome] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [errors, setErrors] = useState<{ email?: string; password?: string; nome?: string }>({});
+  const [errors, setErrors] = useState<{ email?: string; password?: string; confirmPassword?: string; nome?: string }>({});
 
   const { signIn, signUp, user, loading } = useAuth();
   const navigate = useNavigate();
@@ -39,7 +40,7 @@ const Auth = () => {
   }, [user, loading, navigate]);
 
   const validateForm = () => {
-    const newErrors: { email?: string; password?: string; nome?: string } = {};
+    const newErrors: { email?: string; password?: string; confirmPassword?: string; nome?: string } = {};
     
     const emailResult = emailSchema.safeParse(email);
     if (!emailResult.success) {
@@ -58,6 +59,11 @@ const Auth = () => {
         if (strength < 2) {
           newErrors.password = "Senha muito fraca. Adicione letras maiúsculas, números ou símbolos.";
         }
+      }
+      
+      // Check confirm password match
+      if (mode === "signup" && password !== confirmPassword) {
+        newErrors.confirmPassword = "As senhas não coincidem";
       }
     }
 
@@ -124,6 +130,7 @@ const Auth = () => {
   const switchMode = (newMode: AuthMode) => {
     setMode(newMode);
     setErrors({});
+    setConfirmPassword("");
   };
 
   if (loading) {
@@ -256,6 +263,27 @@ const Auth = () => {
                     </motion.div>
                   )}
                 </AnimatePresence>
+              </div>
+            )}
+
+            {/* Confirm Password Field - only in signup mode */}
+            {mode === "signup" && (
+              <div className="space-y-2">
+                <Label htmlFor="confirmPassword" className="text-foreground">Confirmar Senha</Label>
+                <div className="relative">
+                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                  <Input
+                    id="confirmPassword"
+                    type={showPassword ? "text" : "password"}
+                    placeholder="••••••••"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    className="pl-10 h-12 bg-card border-border"
+                  />
+                </div>
+                {errors.confirmPassword && (
+                  <p className="text-sm text-destructive">{errors.confirmPassword}</p>
+                )}
               </div>
             )}
 
