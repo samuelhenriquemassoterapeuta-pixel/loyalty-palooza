@@ -5,7 +5,7 @@ const config: CapacitorConfig = {
   appName: 'Resinkra',
   webDir: 'dist',
   server: {
-    url: 'https://d9766493-319f-4158-82d6-caca99a7199a.lovableproject.com?forceHideBadge=true',
+    url: 'https://resinkra.com.br?forceHideBadge=true',
     cleartext: true
   }
 };

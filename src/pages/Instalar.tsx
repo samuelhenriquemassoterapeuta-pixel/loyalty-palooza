@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import QRCode from "react-qr-code";
 
-const APP_URL = "https://d9766493-319f-4158-82d6-caca99a7199a.lovableproject.com/instalar";
+const APP_URL = "https://resinkra.com.br/instalar";
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
