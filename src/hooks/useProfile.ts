@@ -59,11 +59,39 @@ export const useProfile = () => {
     }
   };
 
+  // Allowed image types and size limit for avatar uploads
+  const ALLOWED_AVATAR_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+  const MAX_AVATAR_SIZE = 5 * 1024 * 1024; // 5MB
+
+  // Map MIME types to file extensions
+  const MIME_TO_EXT: Record<string, string> = {
+    'image/jpeg': 'jpg',
+    'image/png': 'png', 
+    'image/webp': 'webp',
+    'image/gif': 'gif',
+  };
+
   const uploadAvatar = async (file: File) => {
     if (!user) return { error: new Error("Usuário não autenticado"), url: null };
 
+    // Client-side validation (defense in depth - server also validates)
+    if (!ALLOWED_AVATAR_TYPES.includes(file.type)) {
+      return { 
+        error: new Error("Formato não suportado. Use JPG, PNG, WEBP ou GIF."), 
+        url: null 
+      };
+    }
+
+    if (file.size > MAX_AVATAR_SIZE) {
+      return { 
+        error: new Error("Arquivo muito grande. Máximo: 5MB."), 
+        url: null 
+      };
+    }
+
     try {
-      const fileExt = file.name.split(".").pop();
+      // Use MIME type to determine extension (prevents extension spoofing)
+      const fileExt = MIME_TO_EXT[file.type] || 'jpg';
       const fileName = `${user.id}/avatar.${fileExt}`;
 
       const { error: uploadError } = await supabase.storage
