@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Eye, EyeOff, Mail, Lock, User, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,6 +12,7 @@ import { z } from "zod";
 import logoMarrom from "@/assets/logo-marrom.png";
 import simboloVerde from "@/assets/simbolo-verde.png";
 import { PageLoading, ButtonLoader } from "@/components/LoadingSpinner";
+import { PasswordStrengthMeter, calculatePasswordStrength } from "@/components/PasswordStrengthMeter";
 
 const emailSchema = z.string().email("Email inválido");
 const passwordSchema = z.string().min(6, "Senha deve ter pelo menos 6 caracteres");
@@ -49,6 +50,14 @@ const Auth = () => {
       const passwordResult = passwordSchema.safeParse(password);
       if (!passwordResult.success) {
         newErrors.password = passwordResult.error.errors[0].message;
+      }
+      
+      // For signup, recommend stronger passwords
+      if (mode === "signup" && password.length >= 6) {
+        const strength = calculatePasswordStrength(password);
+        if (strength < 2) {
+          newErrors.password = "Senha muito fraca. Adicione letras maiúsculas, números ou símbolos.";
+        }
       }
     }
 
@@ -233,6 +242,20 @@ const Auth = () => {
                 {errors.password && (
                   <p className="text-sm text-destructive">{errors.password}</p>
                 )}
+                
+                {/* Password strength meter - only show in signup mode */}
+                <AnimatePresence>
+                  {mode === "signup" && password && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      exit={{ opacity: 0, height: 0 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <PasswordStrengthMeter password={password} className="mt-3" />
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             )}
 
