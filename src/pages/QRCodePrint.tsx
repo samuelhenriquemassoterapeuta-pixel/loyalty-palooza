@@ -6,7 +6,7 @@ import QRCode from "react-qr-code";
 import logoMarrom from "@/assets/logo-marrom.png";
 import { toast } from "@/hooks/use-toast";
 
-const APP_URL = "https://d9766493-319f-4158-82d6-caca99a7199a.lovableproject.com/instalar";
+const APP_URL = "https://resinkra.com.br/instalar";
 
 const QRCodePrint = () => {
   const navigate = useNavigate();
