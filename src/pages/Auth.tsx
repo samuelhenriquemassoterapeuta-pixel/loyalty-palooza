@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Eye, EyeOff, Mail, Lock, User, ArrowLeft } from "lucide-react";
+import { Eye, EyeOff, Mail, Lock, User, ArrowLeft, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -13,6 +14,7 @@ import logoMarrom from "@/assets/logo-marrom.png";
 import simboloVerde from "@/assets/simbolo-verde.png";
 import { PageLoading, ButtonLoader } from "@/components/LoadingSpinner";
 import { PasswordStrengthMeter, calculatePasswordStrength } from "@/components/PasswordStrengthMeter";
+import { useRateLimit } from "@/hooks/useRateLimit";
 
 const emailSchema = z.string().email("Email inválido");
 const passwordSchema = z.string().min(6, "Senha deve ter pelo menos 6 caracteres");
@@ -32,6 +34,7 @@ const Auth = () => {
 
   const { signIn, signUp, user, loading } = useAuth();
   const navigate = useNavigate();
+  const { rateLimitStatus, checkRateLimit, recordAttempt, getTimeUntilUnblock } = useRateLimit();
 
   useEffect(() => {
     if (!loading && user) {
@@ -100,14 +103,39 @@ const Auth = () => {
           setMode("login");
         }
       } else if (mode === "login") {
+        // Check rate limit before attempting login
+        const status = await checkRateLimit(email);
+        if (status?.isBlocked) {
+          const timeLeft = getTimeUntilUnblock();
+          toast.error("Muitas tentativas de login", {
+            description: `Tente novamente em ${timeLeft || "alguns minutos"}.`,
+          });
+          setIsSubmitting(false);
+          return;
+        }
+
         const { error } = await signIn(email, password);
         if (error) {
+          // Record failed attempt
+          await recordAttempt(email, false);
+          
           if (error.message.includes("Invalid login credentials")) {
-            toast.error("Email ou senha incorretos");
+            const remaining = (status?.remainingAttempts ?? 5) - 1;
+            if (remaining > 0) {
+              toast.error("Email ou senha incorretos", {
+                description: `${remaining} tentativa${remaining === 1 ? "" : "s"} restante${remaining === 1 ? "" : "s"}.`,
+              });
+            } else {
+              toast.error("Email ou senha incorretos", {
+                description: "Conta bloqueada temporariamente. Tente novamente em 15 minutos.",
+              });
+            }
           } else {
             toast.error("Erro ao fazer login. Tente novamente.");
           }
         } else {
+          // Record successful attempt
+          await recordAttempt(email, true);
           toast.success("Login realizado com sucesso!");
         }
       } else {
@@ -183,6 +211,16 @@ const Auth = () => {
               <ArrowLeft size={18} />
               <span className="text-sm">Voltar para login</span>
             </button>
+          )}
+
+          {/* Rate Limit Warning */}
+          {mode === "login" && rateLimitStatus?.isBlocked && (
+            <Alert variant="destructive" className="mb-4">
+              <AlertTriangle className="h-4 w-4" />
+              <AlertDescription>
+                Muitas tentativas de login. Tente novamente em {getTimeUntilUnblock() || "alguns minutos"}.
+              </AlertDescription>
+            </Alert>
           )}
 
           {/* Form */}
