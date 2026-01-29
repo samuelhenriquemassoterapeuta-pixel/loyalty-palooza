@@ -50,7 +50,7 @@ export const useAgendamentos = () => {
     if (!user) return { error: new Error("Usuário não autenticado"), data: null };
 
     try {
-      // Verificar se já existe agendamento neste horário
+      // Quick client-side check (database also enforces uniqueness via unique index)
       const { data: existente, error: checkError } = await supabase
         .from("agendamentos")
         .select("id")
@@ -79,7 +79,16 @@ export const useAgendamentos = () => {
         .select()
         .single();
 
-      if (error) throw error;
+      // Handle unique constraint violation (race condition protection)
+      if (error) {
+        if (error.code === '23505') {
+          return { 
+            error: new Error("Este horário já está ocupado. Por favor, escolha outro."), 
+            data: null 
+          };
+        }
+        throw error;
+      }
       
       await fetchAgendamentos();
       return { error: null, data };

@@ -91,17 +91,12 @@ const Profile = () => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    if (file.size > 2 * 1024 * 1024) {
-      toast.error("Imagem muito grande. Máximo 2MB.");
-      return;
-    }
-
     setUploadingAvatar(true);
     const { error } = await uploadAvatar(file);
     setUploadingAvatar(false);
 
     if (error) {
-      toast.error("Erro ao enviar foto");
+      toast.error(error.message || "Erro ao enviar foto");
     } else {
       toast.success("Foto atualizada!");
     }
