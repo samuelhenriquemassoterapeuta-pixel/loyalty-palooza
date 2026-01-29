@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { QrCode, Share2, X, Printer, Download } from "lucide-react";
+import { QrCode, Share2, X, Printer, Download, Copy, Check } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 import QRCode from "react-qr-code";
@@ -9,7 +9,26 @@ const APP_URL = "https://d9766493-319f-4158-82d6-caca99a7199a.lovableproject.com
 
 export const ShareQRCode = () => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [copied, setCopied] = useState(false);
   const qrRef = useRef<HTMLDivElement>(null);
+
+  const handleCopyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(APP_URL);
+      setCopied(true);
+      toast({
+        title: "Link copiado!",
+        description: "Compartilhe com seus amigos",
+      });
+      setTimeout(() => setCopied(false), 2000);
+    } catch (error) {
+      toast({
+        title: "Erro ao copiar",
+        description: "Não foi possível copiar o link",
+        variant: "destructive",
+      });
+    }
+  };
 
   const handleDownload = async () => {
     if (!qrRef.current) return;
@@ -110,6 +129,13 @@ export const ShareQRCode = () => {
                 </p>
                 
                 <div className="flex items-center gap-4 mt-3">
+                  <button 
+                    onClick={handleCopyLink}
+                    className="flex items-center gap-1.5 text-xs text-primary hover:text-primary/80 transition-colors"
+                  >
+                    {copied ? <Check size={14} /> : <Copy size={14} />}
+                    {copied ? "Copiado!" : "Copiar link"}
+                  </button>
                   <button 
                     onClick={handleDownload}
                     className="flex items-center gap-1.5 text-xs text-primary hover:text-primary/80 transition-colors"
