@@ -11,6 +11,7 @@ import Wallet from "@/pages/Wallet";
 import Profile from "@/pages/Profile";
 import Notificacoes from "@/pages/Notificacoes";
 import Instalar from "@/pages/Instalar";
+import QRCodePrint from "@/pages/QRCodePrint";
 import Transferir from "@/pages/Transferir";
 import Admin from "@/pages/Admin";
 import Indicacoes from "@/pages/Indicacoes";
@@ -36,6 +37,14 @@ export const AnimatedRoutes = () => {
           element={
             <PageTransition>
               <Instalar />
+            </PageTransition>
+          }
+        />
+        <Route
+          path="/qrcode"
+          element={
+            <PageTransition>
+              <QRCodePrint />
             </PageTransition>
           }
         />
