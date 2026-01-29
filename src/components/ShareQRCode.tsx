@@ -101,8 +101,7 @@ export const ShareQRCode = () => {
 
   const canNativeShare = typeof navigator !== "undefined" && !!navigator.share;
   const showShareButton = canNativeShare || isMobile;
-  // TEMP: Forçar exibição dos botões sociais para visualização
-  const showSocialButtons = true; // Original: isMobile && !canNativeShare;
+  const showSocialButtons = isMobile && !canNativeShare;
 
   const handleDownload = async () => {
     if (!qrRef.current) return;
