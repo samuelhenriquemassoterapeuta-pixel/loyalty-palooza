@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { QrCode, Share2, X, Printer, Download, Copy, Check } from "lucide-react";
+import { QrCode, Share2, X, Printer, Download, Copy, Check, ExternalLink } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 import QRCode from "react-qr-code";
@@ -29,6 +29,28 @@ export const ShareQRCode = () => {
       });
     }
   };
+
+  const handleNativeShare = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: "Resinkra - Instale nosso App",
+          text: "Baixe o app Resinkra para agendamentos, compras e muito mais!",
+          url: APP_URL,
+        });
+      } catch (error) {
+        // User cancelled or share failed - fallback to copy
+        if ((error as Error).name !== "AbortError") {
+          handleCopyLink();
+        }
+      }
+    } else {
+      // Fallback for browsers that don't support Web Share API
+      handleCopyLink();
+    }
+  };
+
+  const canNativeShare = typeof navigator !== "undefined" && !!navigator.share;
 
   const handleDownload = async () => {
     if (!qrRef.current) return;
@@ -128,7 +150,16 @@ export const ShareQRCode = () => {
                   Escaneie para instalar o app
                 </p>
                 
-                <div className="flex items-center gap-4 mt-3">
+                <div className="flex flex-wrap items-center justify-center gap-3 mt-3">
+                  {canNativeShare && (
+                    <button 
+                      onClick={handleNativeShare}
+                      className="flex items-center gap-1.5 text-xs font-medium text-white bg-primary hover:bg-primary/90 px-3 py-1.5 rounded-full transition-colors"
+                    >
+                      <ExternalLink size={14} />
+                      Compartilhar
+                    </button>
+                  )}
                   <button 
                     onClick={handleCopyLink}
                     className="flex items-center gap-1.5 text-xs text-primary hover:text-primary/80 transition-colors"
