@@ -21,6 +21,9 @@ import { BottomNavigation } from "@/components/BottomNavigation";
 import { useAuth } from "@/contexts/AuthContext";
 import { useProfile } from "@/hooks/useProfile";
 import { useAdmin } from "@/hooks/useAdmin";
+import { useTransacoes } from "@/hooks/useTransacoes";
+import { usePedidos } from "@/hooks/usePedidos";
+import { useAgendamentos } from "@/hooks/useAgendamentos";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -42,6 +45,14 @@ const Profile = () => {
   const { user, signOut } = useAuth();
   const { profile, loading, updateProfile, uploadAvatar } = useProfile();
   const { isAdmin } = useAdmin();
+  const { stats: transacoesStats } = useTransacoes();
+  const { pedidos } = usePedidos();
+  const { agendamentos } = useAgendamentos();
+  
+  // Contagem real de compras (pedidos não cancelados)
+  const totalCompras = pedidos.filter(p => p.status !== "cancelado").length;
+  // Contagem real de agendamentos (não cancelados)
+  const totalAgendamentos = agendamentos.filter(a => a.status !== "cancelado").length;
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [securitySheetOpen, setSecuritySheetOpen] = useState(false);
   const [devicesSheetOpen, setDevicesSheetOpen] = useState(false);
@@ -208,15 +219,17 @@ const Profile = () => {
           
           <div className="relative z-10 grid grid-cols-3 gap-4 text-center">
             <div>
-              <p className="text-2xl font-bold">R$ 0</p>
+              <p className="text-2xl font-bold">
+                R$ {transacoesStats.totalCashback.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ".")}
+              </p>
               <p className="text-xs opacity-80">Total cashback</p>
             </div>
             <div className="border-x border-primary-foreground/20">
-              <p className="text-2xl font-bold">0</p>
+              <p className="text-2xl font-bold">{totalCompras}</p>
               <p className="text-xs opacity-80">Compras</p>
             </div>
             <div>
-              <p className="text-2xl font-bold">0</p>
+              <p className="text-2xl font-bold">{totalAgendamentos}</p>
               <p className="text-xs opacity-80">Agendamentos</p>
             </div>
           </div>
