@@ -4,7 +4,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { BottomNavigation } from "@/components/BottomNavigation";
-import { ArrowLeft, Clock, Check, CalendarDays, X, User } from "lucide-react";
+import { ArrowLeft, Clock, Check, CalendarDays, X, User, Star } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { ptBR } from "date-fns/locale";
@@ -13,9 +13,11 @@ import { useAgendamentos } from "@/hooks/useAgendamentos";
 import { useServicos, Servico } from "@/hooks/useServicos";
 import { useTerapeutas, Terapeuta } from "@/hooks/useTerapeutas";
 import { TerapeutaSelector } from "@/components/agendamento/TerapeutaSelector";
+import { AvaliacaoDialog } from "@/components/agendamento/AvaliacaoDialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ServicosListSkeleton, AgendamentosListSkeleton } from "@/components/skeletons";
 import { LoadingSpinner, ButtonLoader } from "@/components/LoadingSpinner";
+import { useAvaliacoes } from "@/hooks/useAvaliacoes";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -36,6 +38,7 @@ const Agendamento = () => {
   const { agendamentos, loading, createAgendamento, cancelAgendamento, getProximosAgendamentos, getHorariosOcupados } = useAgendamentos();
   const { servicos, loading: loadingServicos } = useServicos();
   const { terapeutas, loading: loadingTerapeutas } = useTerapeutas();
+  const { createAvaliacao, getAvaliacaoByAgendamento } = useAvaliacoes();
   
   const [activeTab, setActiveTab] = useState("novo");
   const [step, setStep] = useState(1);
@@ -48,6 +51,12 @@ const Agendamento = () => {
   const [agendamentoToCancel, setAgendamentoToCancel] = useState<string | null>(null);
   const [horariosOcupados, setHorariosOcupados] = useState<string[]>([]);
   const [loadingHorarios, setLoadingHorarios] = useState(false);
+  const [avaliacaoDialogOpen, setAvaliacaoDialogOpen] = useState(false);
+  const [agendamentoToRate, setAgendamentoToRate] = useState<{
+    id: string;
+    servico: string;
+    terapeutaNome?: string;
+  } | null>(null);
 
   const handleDateSelect = (date: Date | undefined) => {
     setSelectedDate(date);
@@ -105,6 +114,20 @@ const Agendamento = () => {
     
     setCancelDialogOpen(false);
     setAgendamentoToCancel(null);
+  };
+
+  const handleAvaliar = async (nota: number, comentario?: string) => {
+    if (!agendamentoToRate) return;
+
+    const { error } = await createAvaliacao(agendamentoToRate.id, nota, comentario);
+    
+    if (error) {
+      toast.error("Erro ao enviar avaliação");
+    } else {
+      toast.success("Avaliação enviada! Obrigado pelo feedback 💚");
+    }
+    
+    setAgendamentoToRate(null);
   };
 
   const canProceed = () => {
@@ -213,9 +236,35 @@ const Agendamento = () => {
                                 Cancelado
                               </span>
                             ) : isPast ? (
-                              <span className="text-xs px-2 py-1 rounded-full bg-muted text-muted-foreground">
-                                Concluído
-                              </span>
+                              <>
+                                <span className="text-xs px-2 py-1 rounded-full bg-muted text-muted-foreground">
+                                  Concluído
+                                </span>
+                                {getAvaliacaoByAgendamento(agendamento.id) ? (
+                                  <div className="flex items-center justify-end gap-0.5 mt-2 text-yellow-500">
+                                    {[...Array(getAvaliacaoByAgendamento(agendamento.id)?.nota || 0)].map((_, i) => (
+                                      <Star key={i} size={14} className="fill-current" />
+                                    ))}
+                                  </div>
+                                ) : (
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    className="mt-2 text-primary hover:text-primary"
+                                    onClick={() => {
+                                      setAgendamentoToRate({
+                                        id: agendamento.id,
+                                        servico: agendamento.servico,
+                                        terapeutaNome: agendamento.terapeutas?.nome,
+                                      });
+                                      setAvaliacaoDialogOpen(true);
+                                    }}
+                                  >
+                                    <Star size={14} className="mr-1" />
+                                    Avaliar
+                                  </Button>
+                                )}
+                              </>
                             ) : (
                               <>
                                 <span className="text-xs px-2 py-1 rounded-full bg-primary/10 text-primary">
@@ -447,6 +496,15 @@ const Agendamento = () => {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      {/* Avaliação Dialog */}
+      <AvaliacaoDialog
+        open={avaliacaoDialogOpen}
+        onOpenChange={setAvaliacaoDialogOpen}
+        servicoNome={agendamentoToRate?.servico || ""}
+        terapeutaNome={agendamentoToRate?.terapeutaNome}
+        onSubmit={handleAvaliar}
+      />
 
       <BottomNavigation />
     </div>
