@@ -174,6 +174,53 @@ export const useAgendamentos = () => {
     }
   };
 
+  const reagendarAgendamento = async (id: string, novaDataHora: Date) => {
+    if (!user) return { error: new Error("Usuário não autenticado"), data: null };
+
+    try {
+      // Verificar se o novo horário está disponível
+      const { data: existente, error: checkError } = await supabase
+        .from("agendamentos")
+        .select("id")
+        .eq("data_hora", novaDataHora.toISOString())
+        .eq("status", "agendado")
+        .neq("id", id)
+        .maybeSingle();
+
+      if (checkError) throw checkError;
+
+      if (existente) {
+        return { 
+          error: new Error("Este horário já está ocupado. Por favor, escolha outro."), 
+          data: null 
+        };
+      }
+
+      const { data, error } = await supabase
+        .from("agendamentos")
+        .update({ data_hora: novaDataHora.toISOString() })
+        .eq("id", id)
+        .eq("user_id", user.id)
+        .select()
+        .single();
+
+      if (error) {
+        if (error.code === '23505') {
+          return { 
+            error: new Error("Este horário já está ocupado. Por favor, escolha outro."), 
+            data: null 
+          };
+        }
+        throw error;
+      }
+
+      await fetchAgendamentos();
+      return { error: null, data };
+    } catch (err: any) {
+      return { error: err, data: null };
+    }
+  };
+
   const getProximosAgendamentos = () => {
     const now = new Date();
     return agendamentos.filter(
@@ -191,6 +238,7 @@ export const useAgendamentos = () => {
     error,
     createAgendamento,
     cancelAgendamento,
+    reagendarAgendamento,
     getProximosAgendamentos,
     checkHorarioDisponivel,
     getHorariosOcupados,

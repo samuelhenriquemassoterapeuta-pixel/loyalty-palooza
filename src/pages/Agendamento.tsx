@@ -4,7 +4,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { BottomNavigation } from "@/components/BottomNavigation";
-import { ArrowLeft, Clock, Check, CalendarDays, X, User, Star } from "lucide-react";
+import { ArrowLeft, Clock, Check, CalendarDays, X, User, Star, RefreshCw } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { ptBR } from "date-fns/locale";
@@ -14,6 +14,7 @@ import { useServicos, Servico } from "@/hooks/useServicos";
 import { useTerapeutas, Terapeuta } from "@/hooks/useTerapeutas";
 import { TerapeutaSelector } from "@/components/agendamento/TerapeutaSelector";
 import { AvaliacaoDialog } from "@/components/agendamento/AvaliacaoDialog";
+import { ReagendarDialog } from "@/components/agendamento/ReagendarDialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ServicosListSkeleton, AgendamentosListSkeleton } from "@/components/skeletons";
 import { LoadingSpinner, ButtonLoader } from "@/components/LoadingSpinner";
@@ -35,7 +36,7 @@ const horarios = [
 
 const Agendamento = () => {
   const navigate = useNavigate();
-  const { agendamentos, loading, createAgendamento, cancelAgendamento, getProximosAgendamentos, getHorariosOcupados } = useAgendamentos();
+  const { agendamentos, loading, createAgendamento, cancelAgendamento, reagendarAgendamento, getProximosAgendamentos, getHorariosOcupados } = useAgendamentos();
   const { servicos, loading: loadingServicos } = useServicos();
   const { terapeutas, loading: loadingTerapeutas } = useTerapeutas();
   const { createAvaliacao, getAvaliacaoByAgendamento } = useAvaliacoes();
@@ -55,6 +56,13 @@ const Agendamento = () => {
   const [agendamentoToRate, setAgendamentoToRate] = useState<{
     id: string;
     servico: string;
+    terapeutaNome?: string;
+  } | null>(null);
+  const [reagendarDialogOpen, setReagendarDialogOpen] = useState(false);
+  const [agendamentoToReagendar, setAgendamentoToReagendar] = useState<{
+    id: string;
+    servico: string;
+    terapeutaId?: string;
     terapeutaNome?: string;
   } | null>(null);
 
@@ -128,6 +136,22 @@ const Agendamento = () => {
     }
     
     setAgendamentoToRate(null);
+  };
+
+  const handleReagendar = async (novaDataHora: Date) => {
+    if (!agendamentoToReagendar) return;
+
+    const { error } = await reagendarAgendamento(agendamentoToReagendar.id, novaDataHora);
+    
+    if (error) {
+      toast.error(error.message || "Erro ao reagendar");
+    } else {
+      toast.success("Agendamento reagendado com sucesso!", {
+        description: `Nova data: ${format(novaDataHora, "dd/MM/yyyy 'às' HH:mm", { locale: ptBR })}`,
+      });
+    }
+    
+    setAgendamentoToReagendar(null);
   };
 
   const canProceed = () => {
@@ -270,10 +294,29 @@ const Agendamento = () => {
                                 <span className="text-xs px-2 py-1 rounded-full bg-primary/10 text-primary">
                                   Confirmado
                                 </span>
+                                <div className="flex gap-1 mt-2">
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    className="text-primary hover:text-primary"
+                                    onClick={() => {
+                                      setAgendamentoToReagendar({
+                                        id: agendamento.id,
+                                        servico: agendamento.servico,
+                                        terapeutaId: agendamento.terapeuta_id || undefined,
+                                        terapeutaNome: agendamento.terapeutas?.nome,
+                                      });
+                                      setReagendarDialogOpen(true);
+                                    }}
+                                  >
+                                    <RefreshCw size={14} className="mr-1" />
+                                    Reagendar
+                                  </Button>
+                                </div>
                                 <Button
                                   variant="ghost"
                                   size="sm"
-                                  className="mt-2 text-destructive hover:text-destructive"
+                                  className="text-destructive hover:text-destructive"
                                   onClick={() => {
                                     setAgendamentoToCancel(agendamento.id);
                                     setCancelDialogOpen(true);
@@ -504,6 +547,17 @@ const Agendamento = () => {
         servicoNome={agendamentoToRate?.servico || ""}
         terapeutaNome={agendamentoToRate?.terapeutaNome}
         onSubmit={handleAvaliar}
+      />
+
+      {/* Reagendar Dialog */}
+      <ReagendarDialog
+        open={reagendarDialogOpen}
+        onOpenChange={setReagendarDialogOpen}
+        servicoNome={agendamentoToReagendar?.servico || ""}
+        terapeutaId={agendamentoToReagendar?.terapeutaId}
+        terapeutaNome={agendamentoToReagendar?.terapeutaNome}
+        onSubmit={handleReagendar}
+        getHorariosOcupados={getHorariosOcupados}
       />
 
       <BottomNavigation />
