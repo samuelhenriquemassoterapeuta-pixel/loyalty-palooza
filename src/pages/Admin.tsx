@@ -24,6 +24,7 @@ import {
   FileText
 } from "lucide-react";
 import { AuditLogsViewer } from "@/components/admin/AuditLogsViewer";
+import { TerapeutasTab } from "@/components/admin/TerapeutasTab";
 import { PageLoading, ButtonLoader, LoadingSpinner } from "@/components/LoadingSpinner";
 import { Card } from "@/components/ui/card";
 import {
@@ -391,12 +392,13 @@ const Admin = () => {
         {/* Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <div className="flex items-center justify-between mb-4">
-            <TabsList className="grid grid-cols-6 w-full">
+            <TabsList className="grid grid-cols-7 w-full">
               <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
               <TabsTrigger value="pedidos">Pedidos</TabsTrigger>
               <TabsTrigger value="produtos">Produtos</TabsTrigger>
               <TabsTrigger value="servicos">Serviços</TabsTrigger>
               <TabsTrigger value="pacotes">Pacotes</TabsTrigger>
+              <TabsTrigger value="terapeutas">Terapeutas</TabsTrigger>
               <TabsTrigger value="auditoria" className="flex items-center gap-1">
                 <FileText size={14} />
                 <span className="hidden sm:inline">Auditoria</span>
@@ -404,7 +406,7 @@ const Admin = () => {
             </TabsList>
           </div>
           
-          {activeTab !== "pedidos" && activeTab !== "dashboard" && (
+          {activeTab !== "pedidos" && activeTab !== "dashboard" && activeTab !== "terapeutas" && activeTab !== "auditoria" && (
             <div className="flex justify-end mb-4">
               <Button size="sm" onClick={openCreateDialog}>
                 <Plus className="w-4 h-4 mr-1" />
@@ -794,6 +796,11 @@ const Admin = () => {
           {/* Auditoria */}
           <TabsContent value="auditoria">
             <AuditLogsViewer />
+          </TabsContent>
+
+          {/* Terapeutas */}
+          <TabsContent value="terapeutas">
+            <TerapeutasTab />
           </TabsContent>
         </Tabs>
       </div>
