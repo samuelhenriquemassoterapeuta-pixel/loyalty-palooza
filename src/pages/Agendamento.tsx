@@ -11,6 +11,8 @@ import { ptBR } from "date-fns/locale";
 import { format } from "date-fns";
 import { useAgendamentos } from "@/hooks/useAgendamentos";
 import { useServicos, Servico } from "@/hooks/useServicos";
+import { useTerapeutas, Terapeuta } from "@/hooks/useTerapeutas";
+import { TerapeutaSelector } from "@/components/agendamento/TerapeutaSelector";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ServicosListSkeleton, AgendamentosListSkeleton } from "@/components/skeletons";
 import { LoadingSpinner, ButtonLoader } from "@/components/LoadingSpinner";
@@ -33,12 +35,14 @@ const Agendamento = () => {
   const navigate = useNavigate();
   const { agendamentos, loading, createAgendamento, cancelAgendamento, getProximosAgendamentos, getHorariosOcupados } = useAgendamentos();
   const { servicos, loading: loadingServicos } = useServicos();
+  const { terapeutas, loading: loadingTerapeutas } = useTerapeutas();
   
   const [activeTab, setActiveTab] = useState("novo");
   const [step, setStep] = useState(1);
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [selectedHorario, setSelectedHorario] = useState<string | null>(null);
   const [selectedServico, setSelectedServico] = useState<Servico | null>(null);
+  const [selectedTerapeuta, setSelectedTerapeuta] = useState<Terapeuta | null>(null);
   const [saving, setSaving] = useState(false);
   const [cancelDialogOpen, setCancelDialogOpen] = useState(false);
   const [agendamentoToCancel, setAgendamentoToCancel] = useState<string | null>(null);
@@ -67,7 +71,7 @@ const Agendamento = () => {
     dataHora.setHours(hours, minutes, 0, 0);
 
     setSaving(true);
-    const { error } = await createAgendamento(dataHora, selectedServico.nome);
+    const { error } = await createAgendamento(dataHora, selectedServico.nome, undefined, selectedTerapeuta?.id);
     setSaving(false);
 
     if (error) {
@@ -80,6 +84,7 @@ const Agendamento = () => {
       setSelectedDate(undefined);
       setSelectedHorario(null);
       setSelectedServico(null);
+      setSelectedTerapeuta(null);
       setHorariosOcupados([]);
       setActiveTab("agendados");
     }
@@ -102,8 +107,9 @@ const Agendamento = () => {
 
   const canProceed = () => {
     if (step === 1) return selectedServico !== null;
-    if (step === 2) return selectedDate !== undefined;
-    if (step === 3) return selectedHorario !== null;
+    if (step === 2) return selectedTerapeuta !== null;
+    if (step === 3) return selectedDate !== undefined;
+    if (step === 4) return selectedHorario !== null;
     return false;
   };
 
@@ -224,7 +230,7 @@ const Agendamento = () => {
           <TabsContent value="novo" className="mt-4">
             {/* Progress */}
             <div className="flex gap-2 mb-6">
-              {[1, 2, 3].map((s) => (
+              {[1, 2, 3, 4].map((s) => (
                 <div
                   key={s}
                   className={`h-1 flex-1 rounded-full transition-colors ${
@@ -285,8 +291,23 @@ const Agendamento = () => {
               </motion.div>
             )}
 
-            {/* Step 2: Data */}
+            {/* Step 2: Terapeuta */}
             {step === 2 && (
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+              >
+                <TerapeutaSelector
+                  terapeutas={terapeutas}
+                  loading={loadingTerapeutas}
+                  selectedId={selectedTerapeuta?.id || null}
+                  onSelect={setSelectedTerapeuta}
+                />
+              </motion.div>
+            )}
+
+            {/* Step 3: Data */}
+            {step === 3 && (
               <motion.div
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -307,8 +328,8 @@ const Agendamento = () => {
               </motion.div>
             )}
 
-            {/* Step 3: Horário */}
-            {step === 3 && (
+            {/* Step 4: Horário */}
+            {step === 4 && (
               <motion.div
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -351,6 +372,7 @@ const Agendamento = () => {
                     </CardHeader>
                     <CardContent className="text-sm space-y-1">
                       <p><strong>Serviço:</strong> {selectedServico.nome}</p>
+                      <p><strong>Terapeuta:</strong> {selectedTerapeuta?.nome}</p>
                       <p><strong>Data:</strong> {format(selectedDate, "dd/MM/yyyy", { locale: ptBR })}</p>
                       <p><strong>Horário:</strong> {selectedHorario}</p>
                       <p className="text-primary font-semibold pt-2">
@@ -364,7 +386,7 @@ const Agendamento = () => {
 
             {/* Botão de ação */}
             <div className="mt-6">
-              {step < 3 ? (
+              {step < 4 ? (
                 <Button
                   className="w-full"
                   disabled={!canProceed()}

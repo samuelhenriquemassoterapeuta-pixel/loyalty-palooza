@@ -22,6 +22,7 @@ export type Database = {
           observacoes: string | null
           servico: string
           status: string
+          terapeuta_id: string | null
           user_id: string
         }
         Insert: {
@@ -31,6 +32,7 @@ export type Database = {
           observacoes?: string | null
           servico: string
           status?: string
+          terapeuta_id?: string | null
           user_id: string
         }
         Update: {
@@ -40,9 +42,18 @@ export type Database = {
           observacoes?: string | null
           servico?: string
           status?: string
+          terapeuta_id?: string | null
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "agendamentos_terapeuta_id_fkey"
+            columns: ["terapeuta_id"]
+            isOneToOne: false
+            referencedRelation: "terapeutas"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       audit_logs: {
         Row: {
@@ -503,6 +514,33 @@ export type Database = {
           id?: string
           nome?: string
           preco?: number
+        }
+        Relationships: []
+      }
+      terapeutas: {
+        Row: {
+          created_at: string
+          disponivel: boolean | null
+          especialidade: string | null
+          foto_url: string | null
+          id: string
+          nome: string
+        }
+        Insert: {
+          created_at?: string
+          disponivel?: boolean | null
+          especialidade?: string | null
+          foto_url?: string | null
+          id?: string
+          nome: string
+        }
+        Update: {
+          created_at?: string
+          disponivel?: boolean | null
+          especialidade?: string | null
+          foto_url?: string | null
+          id?: string
+          nome?: string
         }
         Relationships: []
       }
