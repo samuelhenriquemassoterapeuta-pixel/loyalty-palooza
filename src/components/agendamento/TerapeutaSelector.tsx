@@ -1,5 +1,5 @@
  import { motion } from "framer-motion";
- import { User, Check, Loader2 } from "lucide-react";
+import { User, Check, Loader2, Star } from "lucide-react";
  import { Card } from "@/components/ui/card";
  import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
  import { Terapeuta } from "@/hooks/useTerapeutas";
@@ -67,6 +67,14 @@
                    {terapeuta.especialidade && (
                      <p className="text-xs text-muted-foreground">{terapeuta.especialidade}</p>
                    )}
+                    {terapeuta.media_avaliacoes !== undefined && terapeuta.total_avaliacoes! > 0 && (
+                      <div className="flex items-center gap-1 mt-1">
+                        <Star size={12} className="fill-yellow-400 text-yellow-400" />
+                        <span className="text-xs text-muted-foreground">
+                          {terapeuta.media_avaliacoes.toFixed(1)} ({terapeuta.total_avaliacoes} {terapeuta.total_avaliacoes === 1 ? 'avaliação' : 'avaliações'})
+                        </span>
+                      </div>
+                    )}
                  </div>
                  
                  {selectedId === terapeuta.id && (
