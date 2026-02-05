@@ -11,6 +11,11 @@ export interface Agendamento {
   observacoes: string | null;
   terapeuta_id: string | null;
   created_at: string;
+  terapeutas?: {
+    id: string;
+    nome: string;
+    especialidade: string | null;
+  } | null;
 }
 
 export const useAgendamentos = () => {
@@ -30,7 +35,14 @@ export const useAgendamentos = () => {
       setLoading(true);
       const { data, error } = await supabase
         .from("agendamentos")
-        .select("*")
+        .select(`
+          *,
+          terapeutas (
+            id,
+            nome,
+            especialidade
+          )
+        `)
         .eq("user_id", user.id)
         .order("data_hora", { ascending: true });
 
