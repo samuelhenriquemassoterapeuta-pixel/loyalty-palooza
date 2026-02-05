@@ -1,14 +1,25 @@
+import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
-import { ArrowLeft, Bell, Check, CheckCheck, BellOff } from "lucide-react";
+import { ArrowLeft, Bell, Check, CheckCheck, BellOff, Filter } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { BottomNavigation } from "@/components/BottomNavigation";
 import { useNotificacoes } from "@/hooks/useNotificacoes";
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { toast } from "sonner";
 import { NotificacoesListSkeleton } from "@/components/skeletons";
+
+const TIPOS_NOTIFICACAO = [
+  { value: "todos", label: "Todos", icon: "🔔" },
+  { value: "agendamento", label: "Agendamentos", icon: "📅" },
+  { value: "pedido", label: "Pedidos", icon: "🛒" },
+  { value: "promocao", label: "Promoções", icon: "🎉" },
+  { value: "lembrete", label: "Lembretes", icon: "⏰" },
+  { value: "geral", label: "Geral", icon: "📢" },
+];
 
 const getIconByTipo = (tipo: string) => {
   switch (tipo) {
@@ -28,6 +39,20 @@ const getIconByTipo = (tipo: string) => {
 const Notificacoes = () => {
   const navigate = useNavigate();
   const { notificacoes, naoLidas, loading, marcarComoLida, marcarTodasComoLidas } = useNotificacoes();
+  const [filtroAtivo, setFiltroAtivo] = useState("todos");
+
+  const notificacoesFiltradas = useMemo(() => {
+    if (filtroAtivo === "todos") return notificacoes;
+    return notificacoes.filter((n) => n.tipo === filtroAtivo);
+  }, [notificacoes, filtroAtivo]);
+
+  const contadorPorTipo = useMemo(() => {
+    const contador: Record<string, number> = { todos: notificacoes.length };
+    notificacoes.forEach((n) => {
+      contador[n.tipo] = (contador[n.tipo] || 0) + 1;
+    });
+    return contador;
+  }, [notificacoes]);
 
   const handleMarcarLida = async (id: string) => {
     const { error } = await marcarComoLida(id);
@@ -74,19 +99,63 @@ const Notificacoes = () => {
           )}
         </div>
 
+        {/* Filtros por tipo */}
+        <div className="flex gap-2 overflow-x-auto pb-3 scrollbar-hide -mx-4 px-4">
+          {TIPOS_NOTIFICACAO.map((tipo) => {
+            const count = contadorPorTipo[tipo.value] || 0;
+            const isActive = filtroAtivo === tipo.value;
+            
+            // Não mostrar tipos sem notificações (exceto "todos")
+            if (tipo.value !== "todos" && count === 0) return null;
+            
+            return (
+              <Button
+                key={tipo.value}
+                variant={isActive ? "default" : "outline"}
+                size="sm"
+                onClick={() => setFiltroAtivo(tipo.value)}
+                className={`shrink-0 gap-1.5 ${isActive ? "" : "bg-background"}`}
+              >
+                <span>{tipo.icon}</span>
+                <span>{tipo.label}</span>
+                {count > 0 && (
+                  <Badge 
+                    variant={isActive ? "secondary" : "outline"} 
+                    className="ml-1 h-5 px-1.5 text-xs"
+                  >
+                    {count}
+                  </Badge>
+                )}
+              </Button>
+            );
+          })}
+        </div>
+
         {loading ? (
           <NotificacoesListSkeleton />
-        ) : notificacoes.length === 0 ? (
+        ) : notificacoesFiltradas.length === 0 ? (
           <div className="text-center py-12">
             <BellOff className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-            <p className="text-muted-foreground">Nenhuma notificação</p>
-            <p className="text-sm text-muted-foreground mt-1">
-              Você receberá alertas sobre agendamentos e pedidos aqui
+            <p className="text-muted-foreground">
+              {filtroAtivo === "todos" 
+                ? "Nenhuma notificação" 
+                : `Nenhuma notificação de ${TIPOS_NOTIFICACAO.find(t => t.value === filtroAtivo)?.label.toLowerCase()}`
+              }
             </p>
+            {filtroAtivo !== "todos" && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setFiltroAtivo("todos")}
+                className="mt-2 text-primary"
+              >
+                Ver todas
+              </Button>
+            )}
           </div>
         ) : (
           <div className="space-y-3">
-            {notificacoes.map((notificacao, index) => (
+            {notificacoesFiltradas.map((notificacao, index) => (
               <motion.div
                 key={notificacao.id}
                 initial={{ opacity: 0, y: 10 }}
