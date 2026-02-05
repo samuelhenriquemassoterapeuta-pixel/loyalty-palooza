@@ -128,19 +128,26 @@ export const useAgendamentos = () => {
     return !existente;
   };
 
-  const getHorariosOcupados = async (data: Date): Promise<string[]> => {
+  const getHorariosOcupados = async (data: Date, terapeutaId?: string): Promise<string[]> => {
     const startOfDay = new Date(data);
     startOfDay.setHours(0, 0, 0, 0);
     
     const endOfDay = new Date(data);
     endOfDay.setHours(23, 59, 59, 999);
 
-    const { data: agendamentosDoDia } = await supabase
+    let query = supabase
       .from("agendamentos")
       .select("data_hora")
       .eq("status", "agendado")
       .gte("data_hora", startOfDay.toISOString())
       .lte("data_hora", endOfDay.toISOString());
+    
+    // Filtrar por terapeuta se especificado
+    if (terapeutaId) {
+      query = query.eq("terapeuta_id", terapeutaId);
+    }
+
+    const { data: agendamentosDoDia } = await query;
 
     return (agendamentosDoDia || []).map(a => {
       const d = new Date(a.data_hora);

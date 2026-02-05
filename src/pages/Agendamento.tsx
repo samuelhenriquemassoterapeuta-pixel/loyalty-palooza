@@ -49,18 +49,20 @@ const Agendamento = () => {
   const [horariosOcupados, setHorariosOcupados] = useState<string[]>([]);
   const [loadingHorarios, setLoadingHorarios] = useState(false);
 
-  const handleDateSelect = async (date: Date | undefined) => {
+  const handleDateSelect = (date: Date | undefined) => {
     setSelectedDate(date);
     setSelectedHorario(null);
+    setHorariosOcupados([]);
+  };
+
+  // Buscar horários ocupados quando avançar para o step de horário
+  const fetchHorariosOcupados = async () => {
+    if (!selectedDate || !selectedTerapeuta) return;
     
-    if (date) {
-      setLoadingHorarios(true);
-      const ocupados = await getHorariosOcupados(date);
-      setHorariosOcupados(ocupados);
-      setLoadingHorarios(false);
-    } else {
-      setHorariosOcupados([]);
-    }
+    setLoadingHorarios(true);
+    const ocupados = await getHorariosOcupados(selectedDate, selectedTerapeuta.id);
+    setHorariosOcupados(ocupados);
+    setLoadingHorarios(false);
   };
 
   const handleConfirmar = async () => {
@@ -111,6 +113,16 @@ const Agendamento = () => {
     if (step === 3) return selectedDate !== undefined;
     if (step === 4) return selectedHorario !== null;
     return false;
+  };
+
+  const handleNextStep = async () => {
+    if (step === 3 && selectedDate && selectedTerapeuta) {
+      // Ao avançar do step 3 (data) para o step 4 (horário), buscar horários ocupados
+      setStep(4);
+      await fetchHorariosOcupados();
+    } else {
+      setStep(step + 1);
+    }
   };
 
   const proximosAgendamentos = getProximosAgendamentos();
@@ -396,7 +408,7 @@ const Agendamento = () => {
                 <Button
                   className="w-full"
                   disabled={!canProceed()}
-                  onClick={() => setStep(step + 1)}
+                  onClick={handleNextStep}
                 >
                   Continuar
                 </Button>
