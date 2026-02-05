@@ -9,6 +9,7 @@ export interface Agendamento {
   servico: string;
   status: string;
   observacoes: string | null;
+  terapeuta_id: string | null;
   created_at: string;
 }
 
@@ -45,7 +46,8 @@ export const useAgendamentos = () => {
   const createAgendamento = async (
     data_hora: Date,
     servico: string,
-    observacoes?: string
+    observacoes?: string,
+    terapeuta_id?: string
   ) => {
     if (!user) return { error: new Error("Usuário não autenticado"), data: null };
 
@@ -74,6 +76,7 @@ export const useAgendamentos = () => {
           data_hora: data_hora.toISOString(),
           servico,
           observacoes,
+          terapeuta_id,
           status: "agendado",
         })
         .select()
