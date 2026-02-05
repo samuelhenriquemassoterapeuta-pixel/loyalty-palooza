@@ -4,7 +4,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { BottomNavigation } from "@/components/BottomNavigation";
-import { ArrowLeft, Clock, Check, CalendarDays, X } from "lucide-react";
+import { ArrowLeft, Clock, Check, CalendarDays, X, User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { ptBR } from "date-fns/locale";
@@ -180,6 +180,12 @@ const Agendamento = () => {
                         <div className="flex justify-between items-start">
                           <div>
                             <h3 className="font-semibold text-foreground">{agendamento.servico}</h3>
+                            {agendamento.terapeutas && (
+                              <p className="text-sm text-primary flex items-center gap-1 mt-0.5">
+                                <User size={14} />
+                                {agendamento.terapeutas.nome}
+                              </p>
+                            )}
                             <p className="text-sm text-muted-foreground flex items-center gap-1 mt-1">
                               <CalendarDays size={14} />
                               {format(dataHora, "dd/MM/yyyy", { locale: ptBR })}
