@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
-import { motion } from "framer-motion";
-import { ArrowLeft, Bell, Check, CheckCheck, BellOff, Filter } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ArrowLeft, Bell, Check, CheckCheck, BellOff, Filter, Trash2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -38,8 +38,9 @@ const getIconByTipo = (tipo: string) => {
 
 const Notificacoes = () => {
   const navigate = useNavigate();
-  const { notificacoes, naoLidas, loading, marcarComoLida, marcarTodasComoLidas } = useNotificacoes();
+  const { notificacoes, naoLidas, loading, marcarComoLida, marcarTodasComoLidas, excluirNotificacao } = useNotificacoes();
   const [filtroAtivo, setFiltroAtivo] = useState("todos");
+  const [excluindo, setExcluindo] = useState<string | null>(null);
 
   const notificacoesFiltradas = useMemo(() => {
     if (filtroAtivo === "todos") return notificacoes;
@@ -66,7 +67,19 @@ const Notificacoes = () => {
     if (error) {
       toast.error("Erro ao marcar notificações");
     } else {
-      toast.success("Todas marcadas como lidas");
+    toast.success("Todas marcadas como lidas");
+    }
+  };
+
+  const handleExcluir = async (e: React.MouseEvent, id: string) => {
+    e.stopPropagation();
+    setExcluindo(id);
+    const { error } = await excluirNotificacao(id);
+    setExcluindo(null);
+    if (error) {
+      toast.error("Erro ao excluir notificação");
+    } else {
+      toast.success("Notificação excluída");
     }
   };
 
@@ -155,12 +168,15 @@ const Notificacoes = () => {
           </div>
         ) : (
           <div className="space-y-3">
+          <AnimatePresence mode="popLayout">
             {notificacoesFiltradas.map((notificacao, index) => (
               <motion.div
                 key={notificacao.id}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, x: -100 }}
                 transition={{ delay: index * 0.05 }}
+                layout
               >
                 <Card 
                   className={`p-4 cursor-pointer transition-all ${
@@ -179,9 +195,20 @@ const Notificacoes = () => {
                         <h3 className={`font-medium text-foreground ${!notificacao.lida ? "font-semibold" : ""}`}>
                           {notificacao.titulo}
                         </h3>
-                        {!notificacao.lida && (
-                          <span className="w-2 h-2 bg-primary rounded-full shrink-0 mt-2" />
-                        )}
+                        <div className="flex items-center gap-1 shrink-0">
+                          {!notificacao.lida && (
+                            <span className="w-2 h-2 bg-primary rounded-full" />
+                          )}
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8 text-muted-foreground hover:text-destructive"
+                            onClick={(e) => handleExcluir(e, notificacao.id)}
+                            disabled={excluindo === notificacao.id}
+                          >
+                            <Trash2 size={16} className={excluindo === notificacao.id ? "animate-pulse" : ""} />
+                          </Button>
+                        </div>
                       </div>
                       <p className="text-sm text-muted-foreground mt-1">
                         {notificacao.mensagem}
@@ -197,6 +224,7 @@ const Notificacoes = () => {
                 </Card>
               </motion.div>
             ))}
+          </AnimatePresence>
           </div>
         )}
       </div>
