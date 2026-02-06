@@ -11,6 +11,16 @@ import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { toast } from "sonner";
 import { NotificacoesListSkeleton } from "@/components/skeletons";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 const TIPOS_NOTIFICACAO = [
   { value: "todos", label: "Todos", icon: "🔔" },
@@ -41,6 +51,7 @@ const Notificacoes = () => {
   const { notificacoes, naoLidas, loading, marcarComoLida, marcarTodasComoLidas, excluirNotificacao } = useNotificacoes();
   const [filtroAtivo, setFiltroAtivo] = useState("todos");
   const [excluindo, setExcluindo] = useState<string | null>(null);
+  const [notificacaoParaExcluir, setNotificacaoParaExcluir] = useState<string | null>(null);
 
   const notificacoesFiltradas = useMemo(() => {
     if (filtroAtivo === "todos") return notificacoes;
@@ -71,11 +82,19 @@ const Notificacoes = () => {
     }
   };
 
-  const handleExcluir = async (e: React.MouseEvent, id: string) => {
+  const handleAbrirConfirmacao = (e: React.MouseEvent, id: string) => {
     e.stopPropagation();
-    setExcluindo(id);
-    const { error } = await excluirNotificacao(id);
+    setNotificacaoParaExcluir(id);
+  };
+
+  const handleConfirmarExclusao = async () => {
+    if (!notificacaoParaExcluir) return;
+    
+    setExcluindo(notificacaoParaExcluir);
+    const { error } = await excluirNotificacao(notificacaoParaExcluir);
     setExcluindo(null);
+    setNotificacaoParaExcluir(null);
+    
     if (error) {
       toast.error("Erro ao excluir notificação");
     } else {
@@ -203,7 +222,7 @@ const Notificacoes = () => {
                             variant="ghost"
                             size="icon"
                             className="h-8 w-8 text-muted-foreground hover:text-destructive"
-                            onClick={(e) => handleExcluir(e, notificacao.id)}
+                            onClick={(e) => handleAbrirConfirmacao(e, notificacao.id)}
                             disabled={excluindo === notificacao.id}
                           >
                             <Trash2 size={16} className={excluindo === notificacao.id ? "animate-pulse" : ""} />
@@ -228,6 +247,26 @@ const Notificacoes = () => {
           </div>
         )}
       </div>
+
+      <AlertDialog open={!!notificacaoParaExcluir} onOpenChange={(open) => !open && setNotificacaoParaExcluir(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Excluir notificação?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Esta ação não pode ser desfeita. A notificação será removida permanentemente.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction 
+              onClick={handleConfirmarExclusao}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              Excluir
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
 
       <BottomNavigation />
     </div>
