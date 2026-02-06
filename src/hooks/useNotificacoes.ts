@@ -82,6 +82,25 @@ export const useNotificacoes = () => {
     }
   };
 
+  const excluirNotificacao = async (id: string) => {
+    if (!user) return { error: new Error("Usuário não autenticado") };
+
+    try {
+      const { error } = await supabase
+        .from("notificacoes")
+        .delete()
+        .eq("id", id)
+        .eq("user_id", user.id);
+
+      if (error) throw error;
+      
+      setNotificacoes(prev => prev.filter(n => n.id !== id));
+      return { error: null };
+    } catch (err: any) {
+      return { error: err };
+    }
+  };
+
   const naoLidas = notificacoes.filter(n => !n.lida);
 
   useEffect(() => {
@@ -120,6 +139,7 @@ export const useNotificacoes = () => {
     error,
     marcarComoLida,
     marcarTodasComoLidas,
+    excluirNotificacao,
     refetch: fetchNotificacoes,
   };
 };
