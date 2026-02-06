@@ -48,10 +48,12 @@ const getIconByTipo = (tipo: string) => {
 
 const Notificacoes = () => {
   const navigate = useNavigate();
-  const { notificacoes, naoLidas, loading, loadingMore, hasMore, marcarComoLida, marcarTodasComoLidas, excluirNotificacao, loadMore } = useNotificacoes();
+  const { notificacoes, naoLidas, loading, loadingMore, hasMore, marcarComoLida, marcarTodasComoLidas, excluirNotificacao, excluirTodasNotificacoes, loadMore } = useNotificacoes();
   const [filtroAtivo, setFiltroAtivo] = useState("todos");
   const [excluindo, setExcluindo] = useState<string | null>(null);
+  const [excluindoTodas, setExcluindoTodas] = useState(false);
   const [notificacaoParaExcluir, setNotificacaoParaExcluir] = useState<string | null>(null);
+  const [confirmarExcluirTodas, setConfirmarExcluirTodas] = useState(false);
   const observerRef = useRef<IntersectionObserver | null>(null);
 
   const lastNotificationRef = useCallback((node: HTMLDivElement | null) => {
@@ -116,6 +118,19 @@ const Notificacoes = () => {
     }
   };
 
+  const handleExcluirTodas = async () => {
+    setExcluindoTodas(true);
+    const { error } = await excluirTodasNotificacoes();
+    setExcluindoTodas(false);
+    setConfirmarExcluirTodas(false);
+    
+    if (error) {
+      toast.error("Erro ao excluir notificações");
+    } else {
+      toast.success("Todas as notificações foram excluídas");
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background pb-24">
       <div className="max-w-lg mx-auto px-4 safe-top">
@@ -132,17 +147,30 @@ const Notificacoes = () => {
             <h1 className="text-xl font-semibold text-foreground">Notificações</h1>
           </div>
           
-          {naoLidas.length > 0 && (
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={handleMarcarTodasLidas}
-              className="text-primary"
-            >
-              <CheckCheck size={18} className="mr-1" />
-              Marcar todas
-            </Button>
-          )}
+          <div className="flex items-center gap-1">
+            {notificacoes.length > 0 && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setConfirmarExcluirTodas(true)}
+                className="text-destructive hover:text-destructive"
+              >
+                <Trash2 size={18} className="mr-1" />
+                Limpar
+              </Button>
+            )}
+            {naoLidas.length > 0 && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleMarcarTodasLidas}
+                className="text-primary"
+              >
+                <CheckCheck size={18} className="mr-1" />
+                Marcar todas
+              </Button>
+            )}
+          </div>
         </div>
 
         {/* Filtros por tipo */}
@@ -293,6 +321,34 @@ const Notificacoes = () => {
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
             >
               Excluir
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <AlertDialog open={confirmarExcluirTodas} onOpenChange={setConfirmarExcluirTodas}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Excluir todas as notificações?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Esta ação não pode ser desfeita. Todas as {notificacoes.length} notificações serão removidas permanentemente.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={excluindoTodas}>Cancelar</AlertDialogCancel>
+            <AlertDialogAction 
+              onClick={handleExcluirTodas}
+              disabled={excluindoTodas}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              {excluindoTodas ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Excluindo...
+                </>
+              ) : (
+                "Excluir todas"
+              )}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
