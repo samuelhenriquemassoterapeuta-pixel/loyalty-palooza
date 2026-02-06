@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -12,13 +12,17 @@ export interface Notificacao {
   created_at: string;
 }
 
+const PAGE_SIZE = 10;
+
 export const useNotificacoes = () => {
   const { user } = useAuth();
   const [notificacoes, setNotificacoes] = useState<Notificacao[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchNotificacoes = async () => {
+  const fetchNotificacoes = async (reset = true) => {
     if (!user) {
       setNotificacoes([]);
       setLoading(false);
@@ -26,21 +30,46 @@ export const useNotificacoes = () => {
     }
 
     try {
-      setLoading(true);
+      if (reset) {
+        setLoading(true);
+        setHasMore(true);
+      } else {
+        setLoadingMore(true);
+      }
+
+      const offset = reset ? 0 : notificacoes.length;
+
       const { data, error } = await supabase
         .from("notificacoes")
         .select("*")
         .eq("user_id", user.id)
-        .order("created_at", { ascending: false });
+        .order("created_at", { ascending: false })
+        .range(offset, offset + PAGE_SIZE - 1);
 
       if (error) throw error;
-      setNotificacoes(data || []);
+
+      const newData = data || [];
+      
+      if (reset) {
+        setNotificacoes(newData);
+      } else {
+        setNotificacoes(prev => [...prev, ...newData]);
+      }
+
+      setHasMore(newData.length === PAGE_SIZE);
     } catch (err: any) {
       setError(err.message);
     } finally {
       setLoading(false);
+      setLoadingMore(false);
     }
   };
+
+  const loadMore = useCallback(() => {
+    if (!loadingMore && hasMore) {
+      fetchNotificacoes(false);
+    }
+  }, [loadingMore, hasMore, notificacoes.length]);
 
   const marcarComoLida = async (id: string) => {
     if (!user) return { error: new Error("Usuário não autenticado") };
@@ -136,10 +165,13 @@ export const useNotificacoes = () => {
     notificacoes,
     naoLidas,
     loading,
+    loadingMore,
+    hasMore,
     error,
     marcarComoLida,
     marcarTodasComoLidas,
     excluirNotificacao,
-    refetch: fetchNotificacoes,
+    loadMore,
+    refetch: () => fetchNotificacoes(true),
   };
 };
