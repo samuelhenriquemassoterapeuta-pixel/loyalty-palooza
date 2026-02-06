@@ -1,6 +1,6 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef, useCallback, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, Bell, Check, CheckCheck, BellOff, Filter, Trash2 } from "lucide-react";
+import { ArrowLeft, Bell, Check, CheckCheck, BellOff, Filter, Trash2, Loader2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -48,10 +48,24 @@ const getIconByTipo = (tipo: string) => {
 
 const Notificacoes = () => {
   const navigate = useNavigate();
-  const { notificacoes, naoLidas, loading, marcarComoLida, marcarTodasComoLidas, excluirNotificacao } = useNotificacoes();
+  const { notificacoes, naoLidas, loading, loadingMore, hasMore, marcarComoLida, marcarTodasComoLidas, excluirNotificacao, loadMore } = useNotificacoes();
   const [filtroAtivo, setFiltroAtivo] = useState("todos");
   const [excluindo, setExcluindo] = useState<string | null>(null);
   const [notificacaoParaExcluir, setNotificacaoParaExcluir] = useState<string | null>(null);
+  const observerRef = useRef<IntersectionObserver | null>(null);
+
+  const lastNotificationRef = useCallback((node: HTMLDivElement | null) => {
+    if (loadingMore) return;
+    if (observerRef.current) observerRef.current.disconnect();
+    
+    observerRef.current = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting && hasMore && filtroAtivo === "todos") {
+        loadMore();
+      }
+    });
+    
+    if (node) observerRef.current.observe(node);
+  }, [loadingMore, hasMore, loadMore, filtroAtivo]);
 
   const notificacoesFiltradas = useMemo(() => {
     if (filtroAtivo === "todos") return notificacoes;
@@ -188,62 +202,78 @@ const Notificacoes = () => {
         ) : (
           <div className="space-y-3">
           <AnimatePresence mode="popLayout">
-            {notificacoesFiltradas.map((notificacao, index) => (
-              <motion.div
-                key={notificacao.id}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, x: -100 }}
-                transition={{ delay: index * 0.05 }}
-                layout
-              >
-                <Card 
-                  className={`p-4 cursor-pointer transition-all ${
-                    !notificacao.lida 
-                      ? "bg-primary/5 border-primary/20" 
-                      : "opacity-70"
-                  }`}
-                  onClick={() => !notificacao.lida && handleMarcarLida(notificacao.id)}
+            {notificacoesFiltradas.map((notificacao, index) => {
+              const isLast = index === notificacoesFiltradas.length - 1;
+              return (
+                <motion.div
+                  key={notificacao.id}
+                  ref={isLast ? lastNotificationRef : undefined}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, x: -100 }}
+                  transition={{ delay: Math.min(index * 0.05, 0.3) }}
+                  layout
                 >
-                  <div className="flex gap-3">
-                    <div className="text-2xl">
-                      {getIconByTipo(notificacao.tipo)}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-start justify-between gap-2">
-                        <h3 className={`font-medium text-foreground ${!notificacao.lida ? "font-semibold" : ""}`}>
-                          {notificacao.titulo}
-                        </h3>
-                        <div className="flex items-center gap-1 shrink-0">
-                          {!notificacao.lida && (
-                            <span className="w-2 h-2 bg-primary rounded-full" />
-                          )}
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="h-8 w-8 text-muted-foreground hover:text-destructive"
-                            onClick={(e) => handleAbrirConfirmacao(e, notificacao.id)}
-                            disabled={excluindo === notificacao.id}
-                          >
-                            <Trash2 size={16} className={excluindo === notificacao.id ? "animate-pulse" : ""} />
-                          </Button>
-                        </div>
+                  <Card 
+                    className={`p-4 cursor-pointer transition-all ${
+                      !notificacao.lida 
+                        ? "bg-primary/5 border-primary/20" 
+                        : "opacity-70"
+                    }`}
+                    onClick={() => !notificacao.lida && handleMarcarLida(notificacao.id)}
+                  >
+                    <div className="flex gap-3">
+                      <div className="text-2xl">
+                        {getIconByTipo(notificacao.tipo)}
                       </div>
-                      <p className="text-sm text-muted-foreground mt-1">
-                        {notificacao.mensagem}
-                      </p>
-                      <p className="text-xs text-muted-foreground mt-2">
-                        {formatDistanceToNow(new Date(notificacao.created_at), { 
-                          addSuffix: true, 
-                          locale: ptBR 
-                        })}
-                      </p>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-start justify-between gap-2">
+                          <h3 className={`font-medium text-foreground ${!notificacao.lida ? "font-semibold" : ""}`}>
+                            {notificacao.titulo}
+                          </h3>
+                          <div className="flex items-center gap-1 shrink-0">
+                            {!notificacao.lida && (
+                              <span className="w-2 h-2 bg-primary rounded-full" />
+                            )}
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-8 w-8 text-muted-foreground hover:text-destructive"
+                              onClick={(e) => handleAbrirConfirmacao(e, notificacao.id)}
+                              disabled={excluindo === notificacao.id}
+                            >
+                              <Trash2 size={16} className={excluindo === notificacao.id ? "animate-pulse" : ""} />
+                            </Button>
+                          </div>
+                        </div>
+                        <p className="text-sm text-muted-foreground mt-1">
+                          {notificacao.mensagem}
+                        </p>
+                        <p className="text-xs text-muted-foreground mt-2">
+                          {formatDistanceToNow(new Date(notificacao.created_at), { 
+                            addSuffix: true, 
+                            locale: ptBR 
+                          })}
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                </Card>
-              </motion.div>
-            ))}
+                  </Card>
+                </motion.div>
+              );
+            })}
           </AnimatePresence>
+          
+          {loadingMore && (
+            <div className="flex justify-center py-4">
+              <Loader2 className="h-6 w-6 animate-spin text-primary" />
+            </div>
+          )}
+          
+          {!hasMore && notificacoesFiltradas.length > 0 && filtroAtivo === "todos" && (
+            <p className="text-center text-sm text-muted-foreground py-4">
+              Todas as notificações carregadas
+            </p>
+          )}
           </div>
         )}
       </div>
