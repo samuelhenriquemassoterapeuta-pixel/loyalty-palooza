@@ -1,6 +1,12 @@
 import { motion } from "framer-motion";
 import { Sparkles, Star, Zap } from "lucide-react";
 import type { Achievement } from "@/hooks/useAchievements";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 // XP config: regular badges = 100 XP, secret badges = 250 XP
 const XP_PER_BADGE = 100;
@@ -164,26 +170,41 @@ export const XpLevelCard = ({ achievements }: XpLevelCardProps) => {
         </div>
 
         {/* Level milestones */}
-        <div className="flex items-center justify-between mt-3 pt-3 border-t border-border/30">
-          {LEVELS.slice(0, 7).map((lvl) => (
-            <div key={lvl.level} className="flex flex-col items-center gap-0.5">
-              <motion.div
-                className={`w-7 h-7 rounded-lg flex items-center justify-center text-sm transition-all ${
-                  totalXp >= lvl.minXp
-                    ? "bg-primary/20 border border-primary/30"
-                    : "bg-muted/40 border border-border/30 grayscale opacity-40"
-                }`}
-                animate={lvl.level === level.level ? { scale: [1, 1.1, 1] } : {}}
-                transition={lvl.level === level.level ? { duration: 2, repeat: Infinity } : {}}
-              >
-                {totalXp >= lvl.minXp ? lvl.icon : <Star size={10} className="text-muted-foreground" />}
-              </motion.div>
-              <span className={`text-[8px] font-medium ${totalXp >= lvl.minXp ? "text-foreground" : "text-muted-foreground/40"}`}>
-                {lvl.level}
-              </span>
-            </div>
-          ))}
-        </div>
+        <TooltipProvider delayDuration={0}>
+          <div className="flex items-center justify-between mt-3 pt-3 border-t border-border/30">
+            {LEVELS.slice(0, 7).map((lvl) => (
+              <Tooltip key={lvl.level}>
+                <TooltipTrigger asChild>
+                  <div className="flex flex-col items-center gap-0.5 cursor-pointer">
+                    <motion.div
+                      className={`w-7 h-7 rounded-lg flex items-center justify-center text-sm transition-all ${
+                        totalXp >= lvl.minXp
+                          ? "bg-primary/20 border border-primary/30"
+                          : "bg-muted/40 border border-border/30 grayscale opacity-40"
+                      }`}
+                      animate={lvl.level === level.level ? { scale: [1, 1.1, 1] } : {}}
+                      transition={lvl.level === level.level ? { duration: 2, repeat: Infinity } : {}}
+                    >
+                      {totalXp >= lvl.minXp ? lvl.icon : <Star size={10} className="text-muted-foreground" />}
+                    </motion.div>
+                    <span className={`text-[8px] font-medium ${totalXp >= lvl.minXp ? "text-foreground" : "text-muted-foreground/40"}`}>
+                      {lvl.level}
+                    </span>
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent side="top" className="text-center">
+                  <p className="font-semibold text-xs">{lvl.icon} {lvl.name}</p>
+                  <p className="text-[10px] text-muted-foreground">
+                    {lvl.minXp === 0 ? "Nível inicial" : `${lvl.minXp} XP necessário`}
+                  </p>
+                  {totalXp >= lvl.minXp && (
+                    <p className="text-[10px] text-primary font-medium mt-0.5">✓ Desbloqueado</p>
+                  )}
+                </TooltipContent>
+              </Tooltip>
+            ))}
+          </div>
+        </TooltipProvider>
       </div>
     </div>
   );
