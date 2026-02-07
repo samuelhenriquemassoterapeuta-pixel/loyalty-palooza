@@ -22,6 +22,7 @@ import Cashback from "@/pages/Cashback";
 import Corporativo from "@/pages/Corporativo";
 import Alongamento from "@/pages/Alongamento";
 import Protocolos from "@/pages/Protocolos";
+import Conquistas from "@/pages/Conquistas";
 import NotFound from "@/pages/NotFound";
 
 /** Shows landing for visitors, dashboard for authenticated users */
@@ -204,6 +205,16 @@ export const AnimatedRoutes = () => {
             <ProtectedRoute>
               <PageTransition>
                 <Protocolos />
+              </PageTransition>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/conquistas"
+          element={
+            <ProtectedRoute>
+              <PageTransition>
+                <Conquistas />
               </PageTransition>
             </ProtectedRoute>
           }

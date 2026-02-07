@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
-import { Trophy } from "lucide-react";
+import { Trophy, ChevronRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { Progress } from "@/components/ui/progress";
 import type { Achievement } from "@/hooks/useAchievements";
 
@@ -12,6 +13,8 @@ export const AchievementBadges = ({
   achievements,
   totalUnlocked,
 }: AchievementBadgesProps) => {
+  const navigate = useNavigate();
+
   // Show unlocked first, then closest to completion
   const sorted = [...achievements].sort((a, b) => {
     if (a.unlocked && !b.unlocked) return -1;
@@ -26,16 +29,22 @@ export const AchievementBadges = ({
       transition={{ delay: 0.1 }}
       className="rounded-2xl border border-border/60 bg-card p-4"
     >
-      {/* Header */}
-      <div className="flex items-center justify-between mb-3">
+      {/* Header — clickable to navigate */}
+      <button
+        onClick={() => navigate("/conquistas")}
+        className="w-full flex items-center justify-between mb-3 group"
+      >
         <div className="flex items-center gap-2">
           <Trophy className="text-primary" size={16} />
           <h3 className="font-semibold text-foreground text-sm">Conquistas</h3>
         </div>
-        <span className="text-xs font-medium text-muted-foreground">
-          {totalUnlocked}/{achievements.length}
-        </span>
-      </div>
+        <div className="flex items-center gap-1">
+          <span className="text-xs font-medium text-muted-foreground">
+            {totalUnlocked}/{achievements.length}
+          </span>
+          <ChevronRight size={14} className="text-muted-foreground group-hover:text-primary transition-colors" />
+        </div>
+      </button>
 
       {/* Badges Grid */}
       <div className="grid grid-cols-4 gap-2">

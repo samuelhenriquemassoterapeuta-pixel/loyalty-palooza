@@ -1104,6 +1104,17 @@ export type Database = {
           next_attempt_at: string
         }[]
       }
+      get_achievements_ranking: {
+        Args: { p_limit?: number }
+        Returns: {
+          is_current_user: boolean
+          nome_exibicao: string
+          posicao: number
+          tier_nome: string
+          total_gasto: number
+          total_sessoes: number
+        }[]
+      }
       get_user_tier: {
         Args: { p_user_id: string }
         Returns: {
