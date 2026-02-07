@@ -6,6 +6,7 @@ import { InstallBanner } from "@/components/InstallBanner";
 import { ShareQRCode } from "@/components/ShareQRCode";
 import { OnboardingTour, useOnboarding } from "@/components/OnboardingTour";
 import { AppLayout } from "@/components/AppLayout";
+import { HomeDashboard } from "@/components/home/HomeDashboard";
 import { useAdmin } from "@/hooks/useAdmin";
 import { useNavigate } from "react-router-dom";
 import { Settings, Gift } from "lucide-react";
@@ -31,6 +32,7 @@ const Index = () => {
                 <div className="lg:col-span-3 space-y-6">
                   <InstallBanner />
                   <BalanceCard />
+                  <HomeDashboard />
                   <QuickActions />
                   
                   {/* Referral Banner */}
