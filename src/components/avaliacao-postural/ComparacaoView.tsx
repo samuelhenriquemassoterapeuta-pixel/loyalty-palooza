@@ -4,6 +4,7 @@ import { ArrowLeftRight, Grid3X3, X, ChevronLeft, ChevronRight, Layers, Columns2
 import { Button } from "@/components/ui/button";
 import { AvaliacaoPostural, VistaPostural } from "@/hooks/useAvaliacaoPostural";
 import { ImageSliderCompare } from "./ImageSliderCompare";
+import { ExportPosturalPdfButton } from "./ExportPosturalPdfButton";
 import { toast } from "sonner";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -220,6 +221,10 @@ export const ComparacaoView = ({ avaliacoes, onClose }: ComparacaoViewProps) => 
               <Columns2 size={14} />
             </Button>
           </div>
+          <ExportPosturalPdfButton
+            leftAvaliacao={left}
+            rightAvaliacao={right}
+          />
           <Button
             variant="ghost"
             size="icon"
