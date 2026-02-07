@@ -12,6 +12,7 @@ import { AvaliacaoCard } from "@/components/avaliacao-postural/AvaliacaoCard";
 import { AvaliacaoDetail } from "@/components/avaliacao-postural/AvaliacaoDetail";
 import { ComparacaoView } from "@/components/avaliacao-postural/ComparacaoView";
 import { PausasPosturaisSection } from "@/components/pausas-posturais/PausasPosturaisSection";
+import { AngleEvolutionCharts } from "@/components/avaliacao-postural/AngleEvolutionCharts";
 
 const stagger = {
   hidden: { opacity: 0 },
@@ -142,6 +143,13 @@ export default function AvaliacaoPosturalPage() {
                       </p>
                       <p className="text-[10px] text-muted-foreground uppercase tracking-wide">Fotos</p>
                     </div>
+                  </motion.div>
+                )}
+
+                {/* Angle Evolution Charts */}
+                {avaliacoes.length > 0 && (
+                  <motion.div variants={fadeUp}>
+                    <AngleEvolutionCharts />
                   </motion.div>
                 )}
 
