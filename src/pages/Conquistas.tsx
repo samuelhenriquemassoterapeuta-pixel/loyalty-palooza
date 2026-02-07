@@ -5,9 +5,11 @@ import { AppLayout } from "@/components/AppLayout";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAchievementCelebration } from "@/hooks/useAchievementCelebration";
 import { useRanking } from "@/hooks/useRanking";
+import { useLevelUpCelebration } from "@/hooks/useLevelUpCelebration";
 import { AchievementsSummary } from "@/components/conquistas/AchievementsSummary";
 import { AchievementDetailCard } from "@/components/conquistas/AchievementDetailCard";
 import { AchievementCelebration } from "@/components/conquistas/AchievementCelebration";
+import { LevelUpCelebration } from "@/components/conquistas/LevelUpCelebration";
 import { RankingList } from "@/components/conquistas/RankingList";
 import { XpLevelCard } from "@/components/conquistas/XpLevelCard";
 
@@ -33,6 +35,7 @@ const fadeUp = {
 const Conquistas = () => {
   const { achievements, totalUnlocked, celebration, dismiss } = useAchievementCelebration();
   const { ranking, myPosition, isLoading: rankingLoading } = useRanking();
+  const { celebration: levelUp, dismiss: dismissLevelUp } = useLevelUpCelebration(achievements);
   const [filter, setFilter] = useState<FilterMode>("todos");
 
   const categories = useMemo(() => {
@@ -196,6 +199,13 @@ const Conquistas = () => {
         isOpen={!!celebration}
         achievement={celebration}
         onClose={dismiss}
+      />
+      <LevelUpCelebration
+        isOpen={levelUp.isOpen}
+        levelName={levelUp.levelName}
+        levelIcon={levelUp.levelIcon}
+        levelNumber={levelUp.levelNumber}
+        onClose={dismissLevelUp}
       />
     </AppLayout>
   );
