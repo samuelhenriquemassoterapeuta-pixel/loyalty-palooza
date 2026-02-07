@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Flame, TrendingUp } from "lucide-react";
+import { AnimatedCounter } from "@/components/ui/animated-counter";
 import { useNavigate } from "react-router-dom";
 
 interface StreakSummaryCardProps {
@@ -70,7 +71,7 @@ export const StreakSummaryCard = ({
 
       <div className="flex items-end gap-2">
         <span className="text-3xl font-black text-foreground leading-none">
-          {streak}
+          <AnimatedCounter value={streak} duration={0.8} />
         </span>
         <span className="text-sm text-muted-foreground mb-0.5">
           {streak === 1 ? "dia" : "dias"} seguidos

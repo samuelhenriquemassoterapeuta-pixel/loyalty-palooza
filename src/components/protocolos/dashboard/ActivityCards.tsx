@@ -1,5 +1,6 @@
 import { motion, type Variants } from "framer-motion";
 import { Trophy, Scale, CheckCircle2, Camera, Flame, Target } from "lucide-react";
+import { CircularProgress } from "@/components/ui/circular-progress";
 import type { ProgressStats } from "@/hooks/useProgressStats";
 
 interface GoalsProgressCardProps {
@@ -9,24 +10,26 @@ interface GoalsProgressCardProps {
 
 export const GoalsProgressCard = ({ stats, variants }: GoalsProgressCardProps) => (
   <motion.div variants={variants} className="p-4 rounded-xl bg-card border border-border">
-    <div className="flex items-center justify-between mb-3">
-      <div className="flex items-center gap-2">
-        <Trophy size={15} className="text-warning" />
-        <span className="text-sm font-medium text-foreground">Metas</span>
-      </div>
-      <span className="text-sm font-bold text-primary">{stats.metasProgresso}%</span>
-    </div>
-    <div className="h-2 rounded-full bg-muted overflow-hidden mb-2">
-      <motion.div
-        initial={{ width: 0 }}
-        animate={{ width: `${stats.metasProgresso}%` }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
-        className="h-full rounded-full gradient-primary"
+    <div className="flex items-center gap-4">
+      <CircularProgress
+        value={stats.metasProgresso}
+        size={64}
+        strokeWidth={5}
+        progressColor="hsl(var(--primary))"
+        label={
+          <span className="text-xs font-bold text-primary">{stats.metasProgresso}%</span>
+        }
       />
+      <div className="flex-1">
+        <div className="flex items-center gap-2 mb-1">
+          <Trophy size={15} className="text-warning" />
+          <span className="text-sm font-medium text-foreground">Metas</span>
+        </div>
+        <p className="text-xs text-muted-foreground">
+          {stats.metasConcluidas} de {stats.metasTotal} metas concluídas
+        </p>
+      </div>
     </div>
-    <p className="text-xs text-muted-foreground">
-      {stats.metasConcluidas} de {stats.metasTotal} metas concluídas
-    </p>
   </motion.div>
 );
 

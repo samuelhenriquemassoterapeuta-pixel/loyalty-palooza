@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Bell, ChevronRight } from "lucide-react";
+import { TextReveal } from "@/components/ui/text-reveal";
 import { useNavigate } from "react-router-dom";
 import { useProfile } from "@/hooks/useProfile";
 import { useAuth } from "@/contexts/AuthContext";
@@ -60,10 +61,10 @@ export const Header = () => {
         </div>
         <div className="text-left">
           <p className="text-[11px] text-muted-foreground leading-tight">
-            {getGreeting()} 👋
+            <TextReveal text={`${getGreeting()} 👋`} delay={0.3} />
           </p>
           <p className="text-sm font-bold text-foreground leading-tight flex items-center gap-1">
-            {getDisplayName()}
+            <TextReveal text={getDisplayName()} delay={0.5} />
             <ChevronRight size={14} className="text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
           </p>
         </div>

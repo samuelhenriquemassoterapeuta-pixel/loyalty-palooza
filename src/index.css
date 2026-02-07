@@ -417,4 +417,45 @@
     background: hsl(var(--highlight) / 0.1);
     color: hsl(var(--highlight));
   }
+
+  /* Tap bounce — satisfying press feedback */
+  .tap-bounce {
+    @apply transition-transform duration-150;
+  }
+
+  .tap-bounce:active {
+    transform: scale(0.96);
+  }
+
+  /* Pulse glow ring */
+  .pulse-ring {
+    @apply relative;
+  }
+
+  .pulse-ring::after {
+    content: '';
+    @apply absolute inset-0 rounded-full;
+    animation: pulse-ring-anim 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    box-shadow: 0 0 0 0 hsl(var(--primary) / 0.4);
+  }
+
+  @keyframes pulse-ring-anim {
+    0%, 100% {
+      box-shadow: 0 0 0 0 hsl(var(--primary) / 0.4);
+    }
+    50% {
+      box-shadow: 0 0 0 8px hsl(var(--primary) / 0);
+    }
+  }
+
+  /* Number pop — for counters finishing */
+  .number-pop {
+    animation: number-pop-anim 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  }
+
+  @keyframes number-pop-anim {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.08); }
+    100% { transform: scale(1); }
+  }
 }

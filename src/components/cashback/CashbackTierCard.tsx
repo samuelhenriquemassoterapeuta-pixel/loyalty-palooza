@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Crown, ChevronRight, Sparkles } from "lucide-react";
-import { Progress } from "@/components/ui/progress";
+import { CircularProgress } from "@/components/ui/circular-progress";
 import { UserTier, TIER_CONFIG, TierName } from "@/hooks/useUserTier";
 
 const formatCurrency = (value: number) =>
@@ -48,27 +48,37 @@ export const CashbackTierCard = ({ tier, showValues }: CashbackTierCardProps) =>
       <div className="p-4 space-y-4">
         {/* Progress to next tier */}
         {tier.proximo_tier_nome && (
-          <div>
-            <div className="flex items-center justify-between text-xs mb-2">
-              <span className="text-muted-foreground">
+          <div className="flex items-center gap-4">
+            <CircularProgress
+              value={tier.progresso_percentual}
+              size={72}
+              strokeWidth={6}
+              progressColor={`hsl(var(--primary))`}
+              label={
+                <span className="text-sm font-bold text-foreground">
+                  {Math.round(tier.progresso_percentual)}%
+                </span>
+              }
+            />
+            <div className="flex-1 min-w-0">
+              <p className="text-xs text-muted-foreground mb-0.5">
                 Progresso para{" "}
                 <span className="font-semibold text-foreground">
                   {TIER_CONFIG[tier.proximo_tier_nome as TierName]?.emoji}{" "}
                   {tier.proximo_tier_nome}
                 </span>
-              </span>
-              <span className="font-semibold text-foreground">
+              </p>
+              <p className="text-sm font-semibold text-foreground">
                 {showValues
                   ? `${formatCurrency(tier.total_gasto)} / ${formatCurrency(tier.proximo_tier_limite!)}`
                   : "••• / •••"}
-              </span>
+              </p>
+              <p className="text-[10px] text-muted-foreground mt-0.5">
+                {showValues
+                  ? `Faltam ${formatCurrency(tier.proximo_tier_limite! - tier.total_gasto)}`
+                  : "••••••"}
+              </p>
             </div>
-            <Progress value={tier.progresso_percentual} className="h-2.5" />
-            <p className="text-[10px] text-muted-foreground mt-1.5">
-              {showValues
-                ? `Faltam ${formatCurrency(tier.proximo_tier_limite! - tier.total_gasto)} para o próximo nível`
-                : "••••••"}
-            </p>
           </div>
         )}
 
