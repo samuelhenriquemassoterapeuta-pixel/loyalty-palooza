@@ -3,8 +3,10 @@ import { motion } from "framer-motion";
 import { ArrowLeft, Eye, EyeOff } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useTransacoes } from "@/hooks/useTransacoes";
+import { useUserTier } from "@/hooks/useUserTier";
 import { BottomNavigation } from "@/components/BottomNavigation";
 import { CashbackBalanceCard } from "@/components/cashback/CashbackBalanceCard";
+import { CashbackTierCard } from "@/components/cashback/CashbackTierCard";
 import { CashbackEvolutionChart } from "@/components/cashback/CashbackEvolutionChart";
 import { CashbackHistoryList } from "@/components/cashback/CashbackHistoryList";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -12,6 +14,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 const Cashback = () => {
   const navigate = useNavigate();
   const { transacoes, loading } = useTransacoes();
+  const { tier, loading: tierLoading } = useUserTier();
   const [showValues, setShowValues] = useState(true);
 
   const cashbackStats = useMemo(() => {
@@ -62,9 +65,11 @@ const Cashback = () => {
           </button>
         </motion.div>
 
-        {loading ? (
+        {loading || tierLoading ? (
           <div className="space-y-4">
             <Skeleton className="h-48 rounded-3xl" />
+            <Skeleton className="h-44 rounded-2xl" />
+            <Skeleton className="h-20 rounded-2xl" />
             <Skeleton className="h-64 rounded-2xl" />
             <Skeleton className="h-40 rounded-2xl" />
           </div>
@@ -77,6 +82,11 @@ const Cashback = () => {
               totalUsado={cashbackStats.totalUsado}
               showValues={showValues}
             />
+
+            {/* Tier Card */}
+            {tier && (
+              <CashbackTierCard tier={tier} showValues={showValues} />
+            )}
 
             {/* How cashback works */}
             <motion.div

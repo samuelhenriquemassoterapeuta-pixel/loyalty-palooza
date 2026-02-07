@@ -618,6 +618,17 @@ export type Database = {
           next_attempt_at: string
         }[]
       }
+      get_user_tier: {
+        Args: { p_user_id: string }
+        Returns: {
+          progresso_percentual: number
+          proximo_tier_limite: number
+          proximo_tier_nome: string
+          tier_multiplier: number
+          tier_name: string
+          total_gasto: number
+        }[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
