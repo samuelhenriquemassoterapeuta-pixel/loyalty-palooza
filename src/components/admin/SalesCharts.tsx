@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { TrendingUp, PieChart as PieChartIcon, BarChart3 } from "lucide-react";
 import {
@@ -16,7 +16,7 @@ import {
   Bar,
   Legend,
 } from "recharts";
-import { format, subDays, startOfDay, isAfter } from "date-fns";
+import { format, subDays, subMonths, startOfDay } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
 interface Pedido {
@@ -43,6 +43,14 @@ interface SalesChartsProps {
   transacoes: Transacao[];
 }
 
+type PeriodKey = "7d" | "30d" | "3m";
+
+const PERIOD_OPTIONS: { key: PeriodKey; label: string }[] = [
+  { key: "7d", label: "7 dias" },
+  { key: "30d", label: "30 dias" },
+  { key: "3m", label: "3 meses" },
+];
+
 const COLORS = {
   primary: "hsl(78, 55%, 28%)",
   accent: "hsl(25, 65%, 42%)",
@@ -55,8 +63,19 @@ const COLORS = {
 
 const PIE_COLORS = [COLORS.warning, COLORS.info, COLORS.highlight, COLORS.destructive];
 
-const formatCurrency = (value: number) =>
-  `R$ ${value.toFixed(0)}`;
+const formatCurrency = (value: number) => `R$ ${value.toFixed(0)}`;
+
+const getStartDate = (period: PeriodKey): Date => {
+  const now = new Date();
+  switch (period) {
+    case "7d":
+      return startOfDay(subDays(now, 6));
+    case "30d":
+      return startOfDay(subDays(now, 29));
+    case "3m":
+      return startOfDay(subMonths(now, 3));
+  }
+};
 
 const CustomTooltipVendas = ({ active, payload, label }: any) => {
   if (!active || !payload?.length) return null;
@@ -72,38 +91,102 @@ const CustomTooltipVendas = ({ active, payload, label }: any) => {
   );
 };
 
-export const SalesCharts = ({ pedidos, transacoes }: SalesChartsProps) => {
-  // --- Vendas dos últimos 7 dias ---
-  const vendasDiarias = useMemo(() => {
-    const days = 7;
-    const result = [];
-    for (let i = days - 1; i >= 0; i--) {
-      const day = startOfDay(subDays(new Date(), i));
-      const nextDay = startOfDay(subDays(new Date(), i - 1));
+const PeriodSelector = ({
+  selected,
+  onChange,
+}: {
+  selected: PeriodKey;
+  onChange: (p: PeriodKey) => void;
+}) => (
+  <div className="flex gap-1 bg-muted/50 rounded-lg p-0.5">
+    {PERIOD_OPTIONS.map((opt) => (
+      <button
+        key={opt.key}
+        onClick={() => onChange(opt.key)}
+        className={`px-3 py-1 rounded-md text-xs font-medium transition-all ${
+          selected === opt.key
+            ? "bg-primary text-primary-foreground shadow-sm"
+            : "text-muted-foreground hover:text-foreground"
+        }`}
+      >
+        {opt.label}
+      </button>
+    ))}
+  </div>
+);
 
-      const vendasDia = pedidos
+export const SalesCharts = ({ pedidos, transacoes }: SalesChartsProps) => {
+  const [period, setPeriod] = useState<PeriodKey>("7d");
+
+  const startDate = useMemo(() => getStartDate(period), [period]);
+
+  // Filter data by period
+  const filteredPedidos = useMemo(
+    () => pedidos.filter((p) => new Date(p.created_at) >= startDate),
+    [pedidos, startDate]
+  );
+
+  const filteredTransacoes = useMemo(
+    () => transacoes.filter((t) => new Date(t.created_at) >= startDate),
+    [transacoes, startDate]
+  );
+
+  // --- Vendas por período ---
+  const vendasDiarias = useMemo(() => {
+    const now = new Date();
+    const days = period === "7d" ? 7 : period === "30d" ? 30 : 90;
+    const result = [];
+
+    for (let i = days - 1; i >= 0; i--) {
+      const day = startOfDay(subDays(now, i));
+      const nextDay = startOfDay(subDays(now, i - 1));
+
+      const vendasDia = filteredPedidos
         .filter((p) => {
           const d = new Date(p.created_at);
           return d >= day && d < nextDay && p.status !== "cancelado";
         })
         .reduce((acc, p) => acc + (p.total || 0), 0);
 
-      const cashbackDia = transacoes
+      const cashbackDia = filteredTransacoes
         .filter((t) => {
           const d = new Date(t.created_at);
           return d >= day && d < nextDay && t.tipo === "cashback";
         })
         .reduce((acc, t) => acc + Number(t.valor), 0);
 
+      const labelFormat =
+        period === "3m" ? "dd/MM" : period === "30d" ? "dd/MM" : "EEE";
+
       result.push({
-        dia: format(day, "EEE", { locale: ptBR }),
+        dia: format(day, labelFormat, { locale: ptBR }),
         diaCompleto: format(day, "dd/MM", { locale: ptBR }),
         vendas: vendasDia,
         cashback: cashbackDia,
       });
     }
+
+    // For 30d and 3m, aggregate into weekly buckets to keep chart readable
+    if (period === "30d" || period === "3m") {
+      const bucketSize = period === "30d" ? 5 : 7;
+      const aggregated = [];
+      for (let i = 0; i < result.length; i += bucketSize) {
+        const slice = result.slice(i, i + bucketSize);
+        const label = slice.length > 1
+          ? `${slice[0].diaCompleto}-${slice[slice.length - 1].diaCompleto}`
+          : slice[0].diaCompleto;
+        aggregated.push({
+          dia: label,
+          diaCompleto: label,
+          vendas: slice.reduce((s, d) => s + d.vendas, 0),
+          cashback: slice.reduce((s, d) => s + d.cashback, 0),
+        });
+      }
+      return aggregated;
+    }
+
     return result;
-  }, [pedidos, transacoes]);
+  }, [filteredPedidos, filteredTransacoes, period]);
 
   // --- Status dos pedidos (pie) ---
   const statusData = useMemo(() => {
@@ -113,16 +196,16 @@ export const SalesCharts = ({ pedidos, transacoes }: SalesChartsProps) => {
       entregue: { name: "Entregues", value: 0 },
       cancelado: { name: "Cancelados", value: 0 },
     };
-    pedidos.forEach((p) => {
+    filteredPedidos.forEach((p) => {
       if (statusMap[p.status]) statusMap[p.status].value++;
     });
     return Object.values(statusMap).filter((s) => s.value > 0);
-  }, [pedidos]);
+  }, [filteredPedidos]);
 
   // --- Top produtos vendidos ---
   const topProdutos = useMemo(() => {
     const produtoMap: Record<string, { nome: string; quantidade: number; receita: number }> = {};
-    pedidos
+    filteredPedidos
       .filter((p) => p.status !== "cancelado")
       .forEach((p) => {
         p.pedido_itens?.forEach((item) => {
@@ -141,7 +224,14 @@ export const SalesCharts = ({ pedidos, transacoes }: SalesChartsProps) => {
         ...p,
         nome: p.nome.length > 12 ? p.nome.slice(0, 12) + "…" : p.nome,
       }));
-  }, [pedidos]);
+  }, [filteredPedidos]);
+
+  // --- Period title ---
+  const periodTitle = period === "7d"
+    ? "Últimos 7 Dias"
+    : period === "30d"
+    ? "Últimos 30 Dias"
+    : "Últimos 3 Meses";
 
   const hasData = pedidos.length > 0;
 
@@ -160,10 +250,13 @@ export const SalesCharts = ({ pedidos, transacoes }: SalesChartsProps) => {
     <div className="space-y-4">
       {/* Vendas Diárias - Area Chart */}
       <Card className="p-4">
-        <h3 className="font-semibold text-foreground mb-4 flex items-center gap-2 text-sm sm:text-base">
-          <TrendingUp size={18} className="text-primary" />
-          Vendas dos Últimos 7 Dias
-        </h3>
+        <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
+          <h3 className="font-semibold text-foreground flex items-center gap-2 text-sm sm:text-base">
+            <TrendingUp size={18} className="text-primary" />
+            Vendas — {periodTitle}
+          </h3>
+          <PeriodSelector selected={period} onChange={setPeriod} />
+        </div>
         <div className="h-52 sm:h-64">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={vendasDiarias} margin={{ top: 5, right: 10, left: -15, bottom: 0 }}>
@@ -180,9 +273,13 @@ export const SalesCharts = ({ pedidos, transacoes }: SalesChartsProps) => {
               <CartesianGrid strokeDasharray="3 3" stroke="hsl(45, 25%, 82%)" />
               <XAxis
                 dataKey="diaCompleto"
-                tick={{ fontSize: 11, fill: "hsl(75, 20%, 40%)" }}
+                tick={{ fontSize: 10, fill: "hsl(75, 20%, 40%)" }}
                 axisLine={false}
                 tickLine={false}
+                interval={period === "7d" ? 0 : "preserveStartEnd"}
+                angle={period !== "7d" ? -25 : 0}
+                textAnchor={period !== "7d" ? "end" : "middle"}
+                height={period !== "7d" ? 45 : 30}
               />
               <YAxis
                 tick={{ fontSize: 11, fill: "hsl(75, 20%, 40%)" }}
@@ -219,40 +316,46 @@ export const SalesCharts = ({ pedidos, transacoes }: SalesChartsProps) => {
             <PieChartIcon size={18} className="text-accent" />
             Status dos Pedidos
           </h3>
-          <div className="h-48">
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <Pie
-                  data={statusData}
-                  cx="50%"
-                  cy="50%"
-                  innerRadius={40}
-                  outerRadius={70}
-                  paddingAngle={4}
-                  dataKey="value"
-                  animationBegin={0}
-                  animationDuration={800}
-                >
-                  {statusData.map((_, index) => (
-                    <Cell key={`cell-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} />
-                  ))}
-                </Pie>
-                <Tooltip
-                  formatter={(value: number, name: string) => [`${value} pedidos`, name]}
-                  contentStyle={{
-                    borderRadius: "8px",
-                    fontSize: "12px",
-                    border: "1px solid hsl(45, 25%, 82%)",
-                  }}
-                />
-                <Legend
-                  iconType="circle"
-                  iconSize={8}
-                  wrapperStyle={{ fontSize: "11px" }}
-                />
-              </PieChart>
-            </ResponsiveContainer>
-          </div>
+          {statusData.length === 0 ? (
+            <p className="text-muted-foreground text-sm text-center py-8">
+              Sem pedidos no período
+            </p>
+          ) : (
+            <div className="h-48">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={statusData}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={40}
+                    outerRadius={70}
+                    paddingAngle={4}
+                    dataKey="value"
+                    animationBegin={0}
+                    animationDuration={800}
+                  >
+                    {statusData.map((_, index) => (
+                      <Cell key={`cell-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} />
+                    ))}
+                  </Pie>
+                  <Tooltip
+                    formatter={(value: number, name: string) => [`${value} pedidos`, name]}
+                    contentStyle={{
+                      borderRadius: "8px",
+                      fontSize: "12px",
+                      border: "1px solid hsl(45, 25%, 82%)",
+                    }}
+                  />
+                  <Legend
+                    iconType="circle"
+                    iconSize={8}
+                    wrapperStyle={{ fontSize: "11px" }}
+                  />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+          )}
         </Card>
 
         {/* Top Produtos - Bar Chart */}
@@ -263,7 +366,7 @@ export const SalesCharts = ({ pedidos, transacoes }: SalesChartsProps) => {
           </h3>
           {topProdutos.length === 0 ? (
             <p className="text-muted-foreground text-sm text-center py-8">
-              Sem dados de produtos
+              Sem dados de produtos no período
             </p>
           ) : (
             <div className="h-48">
