@@ -17,7 +17,6 @@ import {
   Crown
 } from "lucide-react";
 import { PageLoading } from "@/components/LoadingSpinner";
-import { BottomNavigation } from "@/components/BottomNavigation";
 import { AppLayout } from "@/components/AppLayout";
 import { useAuth } from "@/contexts/AuthContext";
 import { useProfile } from "@/hooks/useProfile";
@@ -39,7 +38,22 @@ import { SecuritySheet } from "@/components/profile/SecuritySheet";
 import { DevicesSheet } from "@/components/profile/DevicesSheet";
 import { HelpSheet } from "@/components/profile/HelpSheet";
 
-// Menu items are now defined inside the component to access isAdmin
+const stagger = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: { staggerChildren: 0.06, delayChildren: 0.05 },
+  },
+};
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 16 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { type: "spring" as const, stiffness: 260, damping: 24 },
+  },
+};
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -50,9 +64,7 @@ const Profile = () => {
   const { pedidos } = usePedidos();
   const { agendamentos } = useAgendamentos();
   
-  // Contagem real de compras (pedidos não cancelados)
   const totalCompras = pedidos.filter(p => p.status !== "cancelado").length;
-  // Contagem real de agendamentos (não cancelados)
   const totalAgendamentos = agendamentos.filter(a => a.status !== "cancelado").length;
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [securitySheetOpen, setSecuritySheetOpen] = useState(false);
@@ -63,7 +75,6 @@ const Profile = () => {
   const [saving, setSaving] = useState(false);
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
 
-  // Menu items with conditional admin option
   const allMenuItems = [
     { icon: User, label: "Dados pessoais", description: "Nome, email, telefone", action: "dados" },
     { icon: Bell, label: "Notificações", description: "Gerencie seus alertas", action: "notificacoes" },
@@ -161,169 +172,168 @@ const Profile = () => {
 
   return (
     <AppLayout>
-    <div className="min-h-screen bg-background pb-24 lg:pb-8">
-      <div className="max-w-lg mx-auto px-4 safe-top pt-4">
-        {/* Profile Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="flex items-center gap-4 mb-6"
-        >
-          <div className="relative">
-            {profile?.avatar_url ? (
-              <img 
-                src={profile.avatar_url} 
-                alt="Avatar" 
-                className="w-16 h-16 rounded-full object-cover"
-              />
-            ) : (
-              <div className="w-16 h-16 rounded-full gradient-primary flex items-center justify-center text-primary-foreground text-2xl font-bold">
-                {getInitial()}
-              </div>
-            )}
-            <label className="absolute -bottom-1 -right-1 p-1.5 rounded-full bg-primary text-primary-foreground cursor-pointer hover:opacity-90 transition-opacity">
-              {uploadingAvatar ? (
-                <Loader2 size={14} className="animate-spin" />
-              ) : (
-                <Camera size={14} />
-              )}
-              <input 
-                type="file" 
-                accept="image/*" 
-                className="hidden" 
-                onChange={handleAvatarChange}
-                disabled={uploadingAvatar}
-              />
-            </label>
-          </div>
-          <div className="flex-1">
-            <h1 className="text-xl font-bold text-foreground">{getDisplayName()}</h1>
-            <p className="text-sm text-muted-foreground">{user?.email}</p>
-          </div>
-          <button 
-            className="p-2.5 rounded-xl bg-card shadow-card"
-            onClick={handleOpenEditDialog}
+      <div className="min-h-screen bg-background gradient-hero pb-24 lg:pb-8">
+        <div className="max-w-lg lg:max-w-4xl mx-auto px-4 lg:px-8 safe-top pt-4">
+          <motion.div
+            variants={stagger}
+            initial="hidden"
+            animate="show"
+            className="space-y-5"
           >
-            <Settings size={20} className="text-foreground" />
-          </button>
-        </motion.div>
+            {/* Profile Header */}
+            <motion.div
+              variants={fadeUp}
+              className="flex items-center gap-4"
+            >
+              <div className="relative">
+                {profile?.avatar_url ? (
+                  <img 
+                    src={profile.avatar_url} 
+                    alt="Avatar" 
+                    className="w-16 h-16 rounded-full object-cover ring-2 ring-primary/20"
+                  />
+                ) : (
+                  <div className="w-16 h-16 rounded-full gradient-primary flex items-center justify-center text-primary-foreground text-2xl font-bold ring-2 ring-primary/20">
+                    {getInitial()}
+                  </div>
+                )}
+                <label className="absolute -bottom-1 -right-1 p-1.5 rounded-full bg-primary text-primary-foreground cursor-pointer hover:opacity-90 transition-opacity shadow-button">
+                  {uploadingAvatar ? (
+                    <Loader2 size={14} className="animate-spin" />
+                  ) : (
+                    <Camera size={14} />
+                  )}
+                  <input 
+                    type="file" 
+                    accept="image/*" 
+                    className="hidden" 
+                    onChange={handleAvatarChange}
+                    disabled={uploadingAvatar}
+                  />
+                </label>
+              </div>
+              <div className="flex-1">
+                <h1 className="text-xl font-bold text-foreground">{getDisplayName()}</h1>
+                <p className="text-sm text-muted-foreground">{user?.email}</p>
+              </div>
+              <button 
+                className="p-2.5 rounded-xl glass-card-strong shadow-card"
+                onClick={handleOpenEditDialog}
+              >
+                <Settings size={20} className="text-foreground" />
+              </button>
+            </motion.div>
 
-        {/* Stats Card */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="relative overflow-hidden rounded-2xl p-5 text-primary-foreground mb-6"
-        >
-          <div className="absolute inset-0 gradient-primary" />
-          <div className="absolute -top-10 -right-10 w-32 h-32 rounded-full bg-accent/20 blur-2xl" />
-          <div className="absolute -bottom-8 -left-8 w-24 h-24 rounded-full bg-highlight/20 blur-xl" />
-          
-          <div className="relative z-10 grid grid-cols-3 gap-4 text-center">
-            <div>
-              <p className="text-2xl font-bold">
-                R$ {transacoesStats.totalCashback.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ".")}
-              </p>
-              <p className="text-xs opacity-80">Total cashback</p>
-            </div>
-            <div className="border-x border-primary-foreground/20">
-              <p className="text-2xl font-bold">{totalCompras}</p>
-              <p className="text-xs opacity-80">Compras</p>
-            </div>
-            <div>
-              <p className="text-2xl font-bold">{totalAgendamentos}</p>
-              <p className="text-xs opacity-80">Agendamentos</p>
-            </div>
-          </div>
-        </motion.div>
+            {/* Stats Card */}
+            <motion.div
+              variants={fadeUp}
+              className="relative overflow-hidden rounded-3xl p-5 text-primary-foreground shimmer-badge"
+            >
+              <div className="absolute inset-0 gradient-primary" />
+              <div className="absolute -top-10 -right-10 w-32 h-32 rounded-full bg-accent/20 blur-2xl" />
+              <div className="absolute -bottom-8 -left-8 w-24 h-24 rounded-full bg-highlight/20 blur-xl" />
+              
+              <div className="relative z-10 grid grid-cols-3 gap-4 text-center">
+                <div>
+                  <p className="text-2xl font-bold font-serif">
+                    R$ {transacoesStats.totalCashback.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ".")}
+                  </p>
+                  <p className="text-xs opacity-80">Total cashback</p>
+                </div>
+                <div className="border-x border-primary-foreground/20">
+                  <p className="text-2xl font-bold font-serif">{totalCompras}</p>
+                  <p className="text-xs opacity-80">Compras</p>
+                </div>
+                <div>
+                  <p className="text-2xl font-bold font-serif">{totalAgendamentos}</p>
+                  <p className="text-xs opacity-80">Agendamentos</p>
+                </div>
+              </div>
+            </motion.div>
 
-        {/* Menu Items */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.2 }}
-          className="space-y-2"
-        >
-          {allMenuItems.map((item, index) => (
+            {/* Menu Items */}
+            <motion.div variants={fadeUp} className="space-y-2.5">
+              <p className="section-label px-1">Configurações</p>
+              <div className="space-y-2">
+                {allMenuItems.map((item) => (
+                  <motion.button
+                    key={item.label}
+                    variants={fadeUp}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => handleMenuClick(item.action)}
+                    className="w-full flex items-center gap-4 p-4 rounded-2xl glass-card-strong hover:shadow-elevated transition-all group"
+                  >
+                    <div className="p-2.5 rounded-xl bg-gradient-to-br from-primary/10 to-accent/10 group-hover:from-primary/20 group-hover:to-accent/20 transition-all">
+                      <item.icon size={20} className="text-primary" />
+                    </div>
+                    <div className="flex-1 text-left">
+                      <p className="font-semibold text-foreground group-hover:text-primary transition-colors">{item.label}</p>
+                      <p className="text-xs text-muted-foreground">{item.description}</p>
+                    </div>
+                    <ChevronRight size={20} className="text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all" />
+                  </motion.button>
+                ))}
+              </div>
+            </motion.div>
+
+            {/* Logout Button */}
             <motion.button
-              key={item.label}
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.2 + index * 0.05 }}
-              onClick={() => handleMenuClick(item.action)}
-              className="w-full flex items-center gap-4 p-4 rounded-xl bg-card shadow-card hover:shadow-elevated hover:border-l-4 hover:border-l-primary transition-all group"
+              variants={fadeUp}
+              whileTap={{ scale: 0.98 }}
+              onClick={handleLogout}
+              className="w-full flex items-center justify-center gap-2 p-4 rounded-2xl bg-destructive/10 text-destructive font-semibold hover:bg-destructive/20 transition-colors"
             >
-              <div className="p-2.5 rounded-xl bg-gradient-to-br from-primary/10 to-accent/10 group-hover:from-primary/20 group-hover:to-accent/20 transition-all">
-                <item.icon size={20} className="text-primary" />
-              </div>
-              <div className="flex-1 text-left">
-                <p className="font-semibold text-foreground group-hover:text-primary transition-colors">{item.label}</p>
-                <p className="text-xs text-muted-foreground">{item.description}</p>
-              </div>
-              <ChevronRight size={20} className="text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all" />
+              <LogOut size={20} />
+              Sair da conta
             </motion.button>
-          ))}
-        </motion.div>
 
-        {/* Logout Button */}
-        <motion.button
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
-          onClick={handleLogout}
-          className="w-full flex items-center justify-center gap-2 mt-6 p-4 rounded-xl bg-destructive/10 text-destructive font-semibold hover:bg-destructive/20 transition-colors"
-        >
-          <LogOut size={20} />
-          Sair da conta
-        </motion.button>
+            <p className="text-center text-xs text-muted-foreground pb-4">
+              Versão 1.0.0
+            </p>
+          </motion.div>
+        </div>
 
-        <p className="text-center text-xs text-muted-foreground mt-6">
-          Versão 1.0.0
-        </p>
+        {/* Edit Dialog */}
+        <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
+          <DialogContent className="max-w-sm mx-4">
+            <DialogHeader>
+              <DialogTitle>Editar perfil</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4 pt-4">
+              <div className="space-y-2">
+                <Label htmlFor="nome">Nome</Label>
+                <Input
+                  id="nome"
+                  value={nome}
+                  onChange={(e) => setNome(e.target.value)}
+                  placeholder="Seu nome"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="telefone">Telefone</Label>
+                <Input
+                  id="telefone"
+                  value={telefone}
+                  onChange={(e) => setTelefone(e.target.value)}
+                  placeholder="(00) 00000-0000"
+                />
+              </div>
+              <Button 
+                className="w-full" 
+                onClick={handleSaveProfile}
+                disabled={saving}
+              >
+                {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : "Salvar"}
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
+
+        {/* Sheets */}
+        <SecuritySheet open={securitySheetOpen} onOpenChange={setSecuritySheetOpen} />
+        <DevicesSheet open={devicesSheetOpen} onOpenChange={setDevicesSheetOpen} />
+        <HelpSheet open={helpSheetOpen} onOpenChange={setHelpSheetOpen} />
       </div>
-
-      {/* Edit Dialog */}
-      <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
-        <DialogContent className="max-w-sm mx-4">
-          <DialogHeader>
-            <DialogTitle>Editar perfil</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4 pt-4">
-            <div className="space-y-2">
-              <Label htmlFor="nome">Nome</Label>
-              <Input
-                id="nome"
-                value={nome}
-                onChange={(e) => setNome(e.target.value)}
-                placeholder="Seu nome"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="telefone">Telefone</Label>
-              <Input
-                id="telefone"
-                value={telefone}
-                onChange={(e) => setTelefone(e.target.value)}
-                placeholder="(00) 00000-0000"
-              />
-            </div>
-            <Button 
-              className="w-full" 
-              onClick={handleSaveProfile}
-              disabled={saving}
-            >
-              {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : "Salvar"}
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
-
-      {/* Sheets */}
-      <SecuritySheet open={securitySheetOpen} onOpenChange={setSecuritySheetOpen} />
-      <DevicesSheet open={devicesSheetOpen} onOpenChange={setDevicesSheetOpen} />
-      <HelpSheet open={helpSheetOpen} onOpenChange={setHelpSheetOpen} />
-
-    </div>
     </AppLayout>
   );
 };
