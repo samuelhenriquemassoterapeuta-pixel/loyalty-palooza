@@ -14,7 +14,8 @@ import {
   Camera,
   Loader2,
   Download,
-  Crown
+  Crown,
+  Scissors
 } from "lucide-react";
 import { PageLoading } from "@/components/LoadingSpinner";
 import { AppLayout } from "@/components/AppLayout";
@@ -37,6 +38,7 @@ import { toast } from "sonner";
 import { SecuritySheet } from "@/components/profile/SecuritySheet";
 import { DevicesSheet } from "@/components/profile/DevicesSheet";
 import { HelpSheet } from "@/components/profile/HelpSheet";
+import { HistoricoCirurgicoSheet } from "@/components/profile/HistoricoCirurgicoSheet";
 
 const stagger = {
   hidden: { opacity: 0 },
@@ -70,6 +72,7 @@ const Profile = () => {
   const [securitySheetOpen, setSecuritySheetOpen] = useState(false);
   const [devicesSheetOpen, setDevicesSheetOpen] = useState(false);
   const [helpSheetOpen, setHelpSheetOpen] = useState(false);
+  const [cirurgicoSheetOpen, setCirurgicoSheetOpen] = useState(false);
   const [nome, setNome] = useState("");
   const [telefone, setTelefone] = useState("");
   const [saving, setSaving] = useState(false);
@@ -77,6 +80,7 @@ const Profile = () => {
 
   const allMenuItems = [
     { icon: User, label: "Dados pessoais", description: "Nome, email, telefone", action: "dados" },
+    { icon: Scissors, label: "Histórico cirúrgico", description: "Cirurgias e pós-operatório", action: "cirurgico" },
     { icon: Bell, label: "Notificações", description: "Gerencie seus alertas", action: "notificacoes" },
     { icon: Shield, label: "Segurança", description: "Senha e autenticação", action: "seguranca" },
     { icon: Smartphone, label: "Dispositivos", description: "Gerencie seus acessos", action: "dispositivos" },
@@ -129,6 +133,9 @@ const Profile = () => {
     switch (action) {
       case "dados":
         handleOpenEditDialog();
+        break;
+      case "cirurgico":
+        setCirurgicoSheetOpen(true);
         break;
       case "notificacoes":
         navigate("/notificacoes");
@@ -333,6 +340,7 @@ const Profile = () => {
         <SecuritySheet open={securitySheetOpen} onOpenChange={setSecuritySheetOpen} />
         <DevicesSheet open={devicesSheetOpen} onOpenChange={setDevicesSheetOpen} />
         <HelpSheet open={helpSheetOpen} onOpenChange={setHelpSheetOpen} />
+        <HistoricoCirurgicoSheet open={cirurgicoSheetOpen} onOpenChange={setCirurgicoSheetOpen} />
       </div>
     </AppLayout>
   );
