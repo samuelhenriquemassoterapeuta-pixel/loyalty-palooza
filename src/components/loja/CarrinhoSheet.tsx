@@ -1,7 +1,7 @@
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
-import { ShoppingBag, Plus, Minus, Trash2, Loader2, Wallet } from "lucide-react";
+import { ShoppingBag, Plus, Minus, Trash2, Loader2, Wallet, Tag } from "lucide-react";
 import { Produto } from "@/hooks/usePedidos";
 
 interface CarrinhoItem {
@@ -20,6 +20,12 @@ interface CarrinhoSheetProps {
   saldoCashback: number;
   usarCashback: boolean;
   onToggleCashback: (usar: boolean) => void;
+  /** Level-based store discount percentage (0-15) */
+  levelDiscountPercent?: number;
+  /** Level name for display */
+  levelName?: string;
+  /** Level icon */
+  levelIcon?: string;
 }
 
 export const CarrinhoSheet = ({
@@ -33,16 +39,25 @@ export const CarrinhoSheet = ({
   saldoCashback,
   usarCashback,
   onToggleCashback,
+  levelDiscountPercent = 0,
+  levelName,
+  levelIcon,
 }: CarrinhoSheetProps) => {
+  const hasLevelDiscount = levelDiscountPercent > 0;
+
   const subtotal = carrinho.reduce((acc, item) => acc + item.produto.preco * item.quantidade, 0);
+  const levelDiscountValue = hasLevelDiscount ? subtotal * (levelDiscountPercent / 100) : 0;
+  const subtotalAfterLevelDiscount = subtotal - levelDiscountValue;
+
   const totalCashbackGanho = carrinho.reduce((acc, item) => {
     const cashback = item.produto.cashback_percentual || 0;
-    return acc + (item.produto.preco * item.quantidade * cashback) / 100;
+    const itemPrice = item.produto.preco * (1 - levelDiscountPercent / 100);
+    return acc + (itemPrice * item.quantidade * cashback) / 100;
   }, 0);
 
-  // Calcular desconto de cashback (não pode ser maior que o subtotal ou saldo disponível)
-  const descontoCashback = usarCashback ? Math.min(saldoCashback, subtotal) : 0;
-  const totalFinal = subtotal - descontoCashback;
+  // Calcular desconto de cashback (não pode ser maior que o subtotal com desconto de nível ou saldo disponível)
+  const descontoCashback = usarCashback ? Math.min(saldoCashback, subtotalAfterLevelDiscount) : 0;
+  const totalFinal = subtotalAfterLevelDiscount - descontoCashback;
 
   const formatCurrency = (value: number) => {
     return `R$ ${value.toFixed(2).replace('.', ',')}`;
@@ -83,7 +98,8 @@ export const CarrinhoSheet = ({
               <div className="flex-1 overflow-y-auto space-y-3 pb-4">
                 {carrinho.map((item) => {
                   const cashback = item.produto.cashback_percentual || 0;
-                  const itemCashback = (item.produto.preco * item.quantidade * cashback) / 100;
+                  const itemPriceWithDiscount = item.produto.preco * (1 - levelDiscountPercent / 100);
+                  const itemCashback = (itemPriceWithDiscount * item.quantidade * cashback) / 100;
                   
                   return (
                     <div
@@ -106,9 +122,20 @@ export const CarrinhoSheet = ({
                       {/* Info */}
                       <div className="flex-1 min-w-0">
                         <h4 className="font-medium text-sm line-clamp-1">{item.produto.nome}</h4>
-                        <p className="text-primary font-semibold text-sm">
-                          {formatCurrency(item.produto.preco * item.quantidade)}
-                        </p>
+                        {hasLevelDiscount ? (
+                          <div>
+                            <p className="text-[10px] text-muted-foreground line-through">
+                              {formatCurrency(item.produto.preco * item.quantidade)}
+                            </p>
+                            <p className="text-primary font-semibold text-sm">
+                              {formatCurrency(itemPriceWithDiscount * item.quantidade)}
+                            </p>
+                          </div>
+                        ) : (
+                          <p className="text-primary font-semibold text-sm">
+                            {formatCurrency(item.produto.preco * item.quantidade)}
+                          </p>
+                        )}
                         {cashback > 0 && (
                           <p className="text-[10px] text-green-600">
                             +{formatCurrency(itemCashback)} cashback
@@ -158,8 +185,30 @@ export const CarrinhoSheet = ({
                 {/* Subtotal */}
                 <div className="flex justify-between items-center">
                   <span className="text-muted-foreground">Subtotal</span>
-                  <span className="font-semibold">{formatCurrency(subtotal)}</span>
+                  <span className={`font-semibold ${hasLevelDiscount ? 'line-through text-muted-foreground text-sm' : ''}`}>
+                    {formatCurrency(subtotal)}
+                  </span>
                 </div>
+
+                {/* Level discount */}
+                {hasLevelDiscount && (
+                  <div className="flex items-center justify-between p-3 rounded-lg bg-primary/10 border border-primary/20">
+                    <div className="flex items-center gap-2">
+                      <Tag className="text-primary" size={18} />
+                      <div>
+                        <p className="text-sm font-medium text-primary">
+                          {levelIcon} Desconto nível {levelName}
+                        </p>
+                        <p className="text-xs text-primary/70">
+                          -{levelDiscountPercent}% em todos os produtos
+                        </p>
+                      </div>
+                    </div>
+                    <span className="text-sm font-semibold text-primary">
+                      -{formatCurrency(levelDiscountValue)}
+                    </span>
+                  </div>
+                )}
 
                 {/* Usar Cashback */}
                 {saldoCashback > 0 && (

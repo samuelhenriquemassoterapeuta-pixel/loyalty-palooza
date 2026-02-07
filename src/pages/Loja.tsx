@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowLeft, Leaf, Sparkles, Package, Search, X, XCircle, Dumbbell, Apple, ShoppingBag } from "lucide-react";
+import { ArrowLeft, Leaf, Sparkles, Package, Search, X, XCircle, Dumbbell, Apple, ShoppingBag, Tag } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -15,6 +15,7 @@ import { CarrinhoFlutuante } from "@/components/loja/CarrinhoFlutuante";
 import { CarrinhoSheet } from "@/components/loja/CarrinhoSheet";
 import { ProdutosGridSkeleton, PedidosListSkeleton } from "@/components/skeletons";
 import { AppLayout } from "@/components/AppLayout";
+import { useLevelBenefits } from "@/hooks/useLevelBenefits";
 
 interface CarrinhoItem {
   produto: Produto;
@@ -44,6 +45,7 @@ export default function Loja() {
   const { produtos, loading: loadingProdutos } = useProdutos();
   const { pedidos, loading: loadingPedidos, createPedido, cancelPedido } = usePedidos();
   const { stats, createTransacao, refetch: refetchTransacoes } = useTransacoes();
+  const { storeDiscountPercent, levelName, levelIcon, cashbackBonusPercent } = useLevelBenefits();
   
   const [activeTab, setActiveTab] = useState("loja");
   const [categoriaAtiva, setCategoriaAtiva] = useState<string>("todos");
@@ -76,7 +78,10 @@ export default function Loja() {
   };
 
   const noCarrinho = (id: string) => carrinho.some(item => item.produto.id === id);
-  const totalCarrinho = carrinho.reduce((acc, item) => acc + item.produto.preco * item.quantidade, 0);
+  const totalCarrinho = carrinho.reduce((acc, item) => {
+    const discounted = item.produto.preco * (1 - storeDiscountPercent / 100);
+    return acc + discounted * item.quantidade;
+  }, 0);
 
   const handleUpdateQuantidade = (produtoId: string, delta: number) => {
     setCarrinho(carrinho.map(item => {
@@ -106,12 +111,15 @@ export default function Loja() {
     setSaving(true);
     
     const subtotal = carrinho.reduce((acc, item) => acc + item.produto.preco * item.quantidade, 0);
-    const totalComDesconto = subtotal - valorCashbackUsado;
+    const levelDiscountValue = subtotal * (storeDiscountPercent / 100);
+    const subtotalAfterLevelDiscount = subtotal - levelDiscountValue;
+    const totalComDesconto = subtotalAfterLevelDiscount - valorCashbackUsado;
     
+    const discountMultiplier = 1 - storeDiscountPercent / 100;
     const itens = carrinho.map(item => ({
       produto_id: item.produto.id,
       quantidade: item.quantidade,
-      preco_unitario: item.produto.preco,
+      preco_unitario: Math.round(item.produto.preco * discountMultiplier * 100) / 100,
     }));
 
     const { error, pedidoId } = await createPedido(itens, totalComDesconto);
@@ -196,12 +204,36 @@ export default function Loja() {
             saldoCashback={stats.totalCashback}
             usarCashback={usarCashback}
             onToggleCashback={setUsarCashback}
+            levelDiscountPercent={storeDiscountPercent}
+            levelName={levelName}
+            levelIcon={levelIcon}
           />
         </div>
       </div>
 
       <div className="max-w-lg lg:max-w-4xl mx-auto px-4 lg:px-8 space-y-5">
         <motion.div variants={stagger} initial="hidden" animate="show" className="space-y-5">
+          {/* Level benefits banner */}
+          {storeDiscountPercent > 0 && (
+            <motion.div
+              variants={fadeUp}
+              className="flex items-center gap-3 p-3 rounded-2xl bg-primary/10 border border-primary/20"
+            >
+              <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center text-lg shrink-0">
+                {levelIcon}
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-semibold text-primary">
+                  Nível {levelName} — {storeDiscountPercent}% off
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  Desconto aplicado automaticamente{cashbackBonusPercent > 0 ? ` • +${cashbackBonusPercent}% bônus cashback` : ''}
+                </p>
+              </div>
+              <Tag size={18} className="text-primary shrink-0" />
+            </motion.div>
+          )}
+
           <motion.div variants={fadeUp}>
             <Tabs value={activeTab} onValueChange={setActiveTab}>
               <TabsList className="grid w-full grid-cols-2">
@@ -406,6 +438,7 @@ export default function Loja() {
                         index={index}
                         noCarrinho={noCarrinho(produto.id)}
                         onToggle={() => handleToggleCarrinho(produto)}
+                        levelDiscountPercent={storeDiscountPercent}
                       />
                     ))}
                   </div>
