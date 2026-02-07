@@ -98,6 +98,196 @@ interface MeasurementRow {
   color: string;
 }
 
+// ── Executive Summary helpers ────────────────────
+
+interface MeasurementAnalysis {
+  improvements: { label: string; vista: string; delta: number }[];
+  concerns: { label: string; vista: string; delta: number }[];
+  stable: { label: string; vista: string }[];
+  overallStatus: "excelente" | "bom" | "moderado" | "atencao";
+}
+
+function analyzeMeasurements(rows: MeasurementRow[]): MeasurementAnalysis {
+  const improvements: MeasurementAnalysis["improvements"] = [];
+  const concerns: MeasurementAnalysis["concerns"] = [];
+  const stable: MeasurementAnalysis["stable"] = [];
+
+  for (const row of rows) {
+    if (row.delta === null) continue;
+    const absDelta = Math.abs(row.delta);
+    if (absDelta <= 1) {
+      stable.push({ label: row.label, vista: row.vista });
+    } else if (row.delta < 0) {
+      improvements.push({ label: row.label, vista: row.vista, delta: row.delta });
+    } else {
+      concerns.push({ label: row.label, vista: row.vista, delta: row.delta });
+    }
+  }
+
+  improvements.sort((a, b) => a.delta - b.delta);
+  concerns.sort((a, b) => b.delta - a.delta);
+
+  const total = improvements.length + concerns.length + stable.length;
+  let overallStatus: MeasurementAnalysis["overallStatus"];
+  if (total === 0) overallStatus = "bom";
+  else if (concerns.length === 0 && improvements.length > 0) overallStatus = "excelente";
+  else if (improvements.length >= concerns.length) overallStatus = "bom";
+  else if (concerns.length > improvements.length * 2) overallStatus = "atencao";
+  else overallStatus = "moderado";
+
+  return { improvements, concerns, stable, overallStatus };
+}
+
+const RECOMMENDATION_MAP: Record<string, string> = {
+  Ombros: "Exercícios de mobilidade e fortalecimento da cintura escapular",
+  Quadril: "Alongamento de flexores do quadril e fortalecimento do core",
+  Joelhos: "Avaliação de alinhamento dos MMII e fortalecimento muscular",
+  "Inclinação Cabeça": "Reeducação cervical e fortalecimento da musculatura profunda",
+  "Coluna Lateral": "Consciência postural e exercícios de extensão torácica",
+  "Projeção Cabeça": "Correção da anteriorização cefálica com retração cervical",
+  "Lordose Lombar": "Fortalecimento abdominal e alongamento de paravertebrais",
+  "Linha de Prumo": "Treino de equilíbrio e consciência do centro de gravidade",
+};
+
+function generateRecommendations(analysis: MeasurementAnalysis): string[] {
+  const recs: string[] = [];
+  for (const c of analysis.concerns.slice(0, 3)) {
+    const rec = RECOMMENDATION_MAP[c.label];
+    recs.push(rec ? `${c.label}: ${rec}` : `${c.label}: Acompanhamento específico recomendado`);
+  }
+  if (analysis.improvements.length > 0) {
+    recs.push("Manter protocolo atual para as áreas com melhora observada");
+  }
+  if (recs.length === 0) {
+    recs.push("Manter acompanhamento regular e protocolo de exercícios preventivos");
+  }
+  return recs;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function renderExecutiveSummary(
+  pdf: any,
+  analysis: MeasurementAnalysis,
+  recommendations: string[],
+  margin: number,
+  startY: number,
+  contentWidth: number,
+  pageHeight: number
+): number {
+  let y = startY;
+
+  pdf.setTextColor(60, 60, 60);
+  pdf.setFontSize(10);
+  pdf.setFont("helvetica", "bold");
+  pdf.text("Resumo Executivo", margin, y);
+  y += 5;
+
+  const statusConfig: Record<
+    string,
+    { bg: [number, number, number]; fg: [number, number, number]; label: string }
+  > = {
+    excelente: { bg: [220, 252, 231], fg: [22, 101, 52], label: "✓ EVOLUÇÃO EXCELENTE" },
+    bom: { bg: [219, 234, 254], fg: [30, 64, 175], label: "↑ BOA EVOLUÇÃO" },
+    moderado: { bg: [254, 249, 195], fg: [133, 77, 14], label: "→ EVOLUÇÃO MODERADA" },
+    atencao: { bg: [254, 226, 226], fg: [153, 27, 27], label: "⚠ ATENÇÃO NECESSÁRIA" },
+  };
+  const status = statusConfig[analysis.overallStatus] || statusConfig.bom;
+
+  // Badge
+  pdf.setFillColor(...status.bg);
+  pdf.roundedRect(margin, y, 52, 6, 2, 2, "F");
+  pdf.setTextColor(...status.fg);
+  pdf.setFontSize(6);
+  pdf.setFont("helvetica", "bold");
+  pdf.text(status.label, margin + 2, y + 4);
+
+  // Stats
+  const statsX = margin + 56;
+  pdf.setTextColor(100, 100, 100);
+  pdf.setFontSize(6);
+  pdf.setFont("helvetica", "normal");
+  pdf.text(
+    `${analysis.improvements.length} melhora(s) · ${analysis.concerns.length} ponto(s) de atenção · ${analysis.stable.length} estável(is)`,
+    statsX,
+    y + 4
+  );
+  y += 10;
+
+  // Findings columns
+  const colWidth = (contentWidth - 4) / 2;
+  const maxFindings = Math.max(
+    Math.min(analysis.improvements.length, 4),
+    Math.min(analysis.concerns.length, 4)
+  );
+
+  // Left: Improvements
+  if (analysis.improvements.length > 0) {
+    const impH = Math.min(analysis.improvements.length, 4) * 4 + 8;
+    pdf.setFillColor(240, 253, 244);
+    pdf.roundedRect(margin, y, colWidth, impH, 2, 2, "F");
+    pdf.setTextColor(22, 101, 52);
+    pdf.setFontSize(6);
+    pdf.setFont("helvetica", "bold");
+    pdf.text("MELHORIAS OBSERVADAS", margin + 3, y + 4);
+    pdf.setFont("helvetica", "normal");
+    let iy = y + 8;
+    for (const imp of analysis.improvements.slice(0, 4)) {
+      pdf.setTextColor(34, 150, 80);
+      pdf.text(`↓ ${Math.abs(imp.delta)}°`, margin + 3, iy);
+      pdf.setTextColor(60, 60, 60);
+      pdf.text(`${imp.label} (${imp.vista})`, margin + 14, iy);
+      iy += 4;
+    }
+  }
+
+  // Right: Concerns
+  const rightX = margin + colWidth + 4;
+  if (analysis.concerns.length > 0) {
+    const conH = Math.min(analysis.concerns.length, 4) * 4 + 8;
+    pdf.setFillColor(254, 242, 242);
+    pdf.roundedRect(rightX, y, colWidth, conH, 2, 2, "F");
+    pdf.setTextColor(153, 27, 27);
+    pdf.setFontSize(6);
+    pdf.setFont("helvetica", "bold");
+    pdf.text("PONTOS DE ATENÇÃO", rightX + 3, y + 4);
+    pdf.setFont("helvetica", "normal");
+    let cy = y + 8;
+    for (const con of analysis.concerns.slice(0, 4)) {
+      pdf.setTextColor(220, 60, 60);
+      pdf.text(`↑ ${con.delta}°`, rightX + 3, cy);
+      pdf.setTextColor(60, 60, 60);
+      pdf.text(`${con.label} (${con.vista})`, rightX + 14, cy);
+      cy += 4;
+    }
+  }
+
+  y += maxFindings > 0 ? maxFindings * 4 + 12 : 2;
+
+  // Recommendations box
+  if (y + recommendations.length * 4 + 10 > pageHeight - margin) {
+    pdf.addPage();
+    y = margin;
+  }
+  const recH = recommendations.length * 4 + 8;
+  pdf.setFillColor(245, 245, 240);
+  pdf.roundedRect(margin, y, contentWidth, recH, 2, 2, "F");
+  pdf.setTextColor(80, 80, 80);
+  pdf.setFontSize(6);
+  pdf.setFont("helvetica", "bold");
+  pdf.text("RECOMENDAÇÕES", margin + 3, y + 4);
+  pdf.setFont("helvetica", "normal");
+  pdf.setTextColor(60, 60, 60);
+  let ry = y + 8;
+  for (const rec of recommendations) {
+    const recLines = pdf.splitTextToSize(`• ${rec}`, contentWidth - 8);
+    pdf.text(recLines, margin + 3, ry);
+    ry += recLines.length * 3.5;
+  }
+  y += Math.max(recH, ry - y) + 4;
+
+  return y;
+}
+
 // ── PDF section renderers ────────────────────────
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -295,6 +485,7 @@ export async function generatePosturalPdf(
   const margin = 12;
   const contentWidth = pageWidth - margin * 2;
   let y = margin;
+  let measurementRows: MeasurementRow[] = [];
 
   // ── Header ──────────────────────────────────────
   pdf.setFillColor(34, 87, 64);
@@ -343,6 +534,63 @@ export async function generatePosturalPdf(
   pdf.text(leftDate, margin + 3, y + 9);
   pdf.text(rightDate, margin + cardWidth + 7, y + 9);
   y += 18;
+
+  // ── Pre-fetch measurements for executive summary ──
+  if (userId) {
+    const measurementResults = await Promise.all(
+      VISTAS.flatMap((v) =>
+        (["left", "right"] as const).map(async (side) => ({
+          vistaKey: v.key,
+          vistaLabel: v.label,
+          side,
+          lines: await fetchMeasurements(
+            side === "left" ? left.id : right.id,
+            v.key,
+            userId
+          ),
+        }))
+      )
+    );
+
+    const getLines = (vistaKey: VistaPostural, side: "left" | "right"): ReferenceLine[] =>
+      measurementResults.find((r) => r.vistaKey === vistaKey && r.side === side)?.lines || [];
+
+    for (const v of VISTAS) {
+      const leftLines = getLines(v.key, "left");
+      const rightLines = getLines(v.key, "right");
+      const allIds = new Set([...leftLines.map((l) => l.id), ...rightLines.map((l) => l.id)]);
+
+      for (const lineId of allIds) {
+        const lLine = leftLines.find((l) => l.id === lineId);
+        const rLine = rightLines.find((l) => l.id === lineId);
+        const refLine = lLine || rLine;
+        if (!refLine) continue;
+
+        const lAngle = lLine ? calcLineAngle(lLine.start, lLine.end, lLine.referenceAxis) : null;
+        const rAngle = rLine ? calcLineAngle(rLine.start, rLine.end, rLine.referenceAxis) : null;
+        const delta =
+          lAngle !== null && rAngle !== null
+            ? Math.round((rAngle - lAngle) * 10) / 10
+            : null;
+
+        measurementRows.push({
+          vista: v.label,
+          label: refLine.label,
+          leftAngle: lAngle,
+          rightAngle: rAngle,
+          delta,
+          color: refLine.color,
+        });
+      }
+    }
+  }
+
+  // ── Executive Summary ─────────────────────────
+  if (measurementRows.length > 0) {
+    const analysis = analyzeMeasurements(measurementRows);
+    const recommendations = generateRecommendations(analysis);
+    y = renderExecutiveSummary(pdf, analysis, recommendations, margin, y, contentWidth, pageHeight);
+  }
 
   // ── Photos side by side per vista ──────────────
   pdf.setTextColor(60, 60, 60);
@@ -486,62 +734,13 @@ export async function generatePosturalPdf(
   }
 
   // ── Measurements Comparative Table ─────────────
-  if (userId) {
-    const measurementResults = await Promise.all(
-      VISTAS.flatMap((v) =>
-        (["left", "right"] as const).map(async (side) => ({
-          vistaKey: v.key,
-          vistaLabel: v.label,
-          side,
-          lines: await fetchMeasurements(
-            side === "left" ? left.id : right.id,
-            v.key,
-            userId
-          ),
-        }))
-      )
-    );
-
-    const getLines = (vistaKey: VistaPostural, side: "left" | "right"): ReferenceLine[] =>
-      measurementResults.find((r) => r.vistaKey === vistaKey && r.side === side)?.lines || [];
-
-    const rows: MeasurementRow[] = [];
-    for (const v of VISTAS) {
-      const leftLines = getLines(v.key, "left");
-      const rightLines = getLines(v.key, "right");
-      const allIds = new Set([...leftLines.map((l) => l.id), ...rightLines.map((l) => l.id)]);
-
-      for (const lineId of allIds) {
-        const lLine = leftLines.find((l) => l.id === lineId);
-        const rLine = rightLines.find((l) => l.id === lineId);
-        const refLine = lLine || rLine;
-        if (!refLine) continue;
-
-        const lAngle = lLine ? calcLineAngle(lLine.start, lLine.end, lLine.referenceAxis) : null;
-        const rAngle = rLine ? calcLineAngle(rLine.start, rLine.end, rLine.referenceAxis) : null;
-        const delta = lAngle !== null && rAngle !== null
-          ? Math.round((rAngle - lAngle) * 10) / 10
-          : null;
-
-        rows.push({
-          vista: v.label,
-          label: refLine.label,
-          leftAngle: lAngle,
-          rightAngle: rAngle,
-          delta,
-          color: refLine.color,
-        });
-      }
+  if (measurementRows.length > 0) {
+    const tableEstimate = 22 + measurementRows.length * 6;
+    if (y + tableEstimate > pageHeight - margin) {
+      pdf.addPage();
+      y = margin;
     }
-
-    if (rows.length > 0) {
-      const tableEstimate = 22 + rows.length * 6;
-      if (y + tableEstimate > pageHeight - margin) {
-        pdf.addPage();
-        y = margin;
-      }
-      y = renderMeasurementsTable(pdf, rows, margin, y, contentWidth, pageHeight);
-    }
+    y = renderMeasurementsTable(pdf, measurementRows, margin, y, contentWidth, pageHeight);
   }
 
   // ── Observations ───────────────────────────────
