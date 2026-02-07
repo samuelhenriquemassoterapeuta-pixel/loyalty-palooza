@@ -3,13 +3,15 @@ import { Eye, EyeOff, TrendingUp, Sparkles, ChevronRight, Crown } from "lucide-r
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTransacoes } from "@/hooks/useTransacoes";
-import { useUserTier, TIER_CONFIG, TierName } from "@/hooks/useUserTier";
+import { TIER_CONFIG, TierName } from "@/hooks/useUserTier";
+import { useTierCelebration } from "@/hooks/useTierCelebration";
+import { TierCelebration } from "@/components/TierCelebration";
 import { BalanceCardSkeleton } from "@/components/skeletons";
 
 export const BalanceCard = () => {
   const [showBalance, setShowBalance] = useState(true);
   const { stats, loading } = useTransacoes();
-  const { tier, loading: tierLoading } = useUserTier();
+  const { tier, loading: tierLoading, celebration, dismiss } = useTierCelebration();
   const navigate = useNavigate();
 
   const formatCurrency = (value: number) => {
@@ -24,10 +26,16 @@ export const BalanceCard = () => {
   }
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, type: "spring" as const, stiffness: 100 }}
+    <>
+      {celebration && (
+        <TierCelebration
+          isOpen={true}
+          tierName={celebration.tierName}
+          multiplier={celebration.multiplier}
+          onClose={dismiss}
+        />
+      )}
+      <motion.div
       className="relative overflow-hidden rounded-3xl p-6 text-primary-foreground shadow-elevated"
     >
       {/* Background gradient */}
@@ -126,5 +134,6 @@ export const BalanceCard = () => {
         </div>
       </div>
     </motion.div>
+    </>
   );
 };
