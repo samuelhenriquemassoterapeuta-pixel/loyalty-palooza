@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Plus, FileText, Users } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ArrowLeft, Plus, FileText, Users, Shield } from "lucide-react";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -18,6 +19,12 @@ import { AdminFormDialog } from "@/components/admin/AdminFormDialog";
 import { TerapeutasTab } from "@/components/admin/TerapeutasTab";
 import { AuditLogsViewer } from "@/components/admin/AuditLogsViewer";
 import { IndicacoesTab } from "@/components/admin/IndicacoesTab";
+
+const tabContentVariants = {
+  hidden: { opacity: 0, y: 12 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] as [number, number, number, number] } },
+  exit: { opacity: 0, y: -8, transition: { duration: 0.15 } },
+};
 
 const Admin = () => {
   const navigate = useNavigate();
@@ -88,7 +95,6 @@ const Admin = () => {
     },
   });
 
-  // Stats
   const stats = {
     totalVendas: pedidos.reduce((acc: number, p: any) => acc + (p.total || 0), 0),
     totalPedidos: pedidos.length,
@@ -116,7 +122,6 @@ const Admin = () => {
     totalPacotes: pacotes.length,
   };
 
-  // Handlers
   const getDefaultFormData = () => {
     switch (activeTab) {
       case "produtos":
@@ -223,11 +228,18 @@ const Admin = () => {
   if (!isAdmin) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center p-4">
-        <div className="text-center">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="text-center"
+        >
+          <div className="w-16 h-16 rounded-2xl gradient-primary flex items-center justify-center mx-auto mb-4 shadow-button">
+            <Shield className="w-8 h-8 text-primary-foreground" />
+          </div>
           <h1 className="text-xl font-bold text-foreground mb-2">Acesso negado</h1>
           <p className="text-muted-foreground mb-4">Você não tem permissão para acessar esta página.</p>
           <Button onClick={() => navigate("/")}>Voltar ao início</Button>
-        </div>
+        </motion.div>
       </div>
     );
   }
@@ -237,133 +249,169 @@ const Admin = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
-      <div className="bg-card shadow-card sticky top-0 z-10">
+      {/* Animated Header */}
+      <motion.div
+        initial={{ y: -20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.4, ease: "easeOut" }}
+        className="gradient-primary shadow-button sticky top-0 z-10"
+      >
         <div className="max-w-4xl mx-auto px-4 safe-top">
           <div className="flex items-center gap-3 py-4">
             <button
               onClick={() => navigate(-1)}
-              className="p-2 rounded-xl hover:bg-secondary transition-colors"
+              className="p-2 rounded-xl bg-primary-foreground/10 hover:bg-primary-foreground/20 transition-all duration-200 active:scale-95"
             >
-              <ArrowLeft size={20} className="text-foreground" />
+              <ArrowLeft size={20} className="text-primary-foreground" />
             </button>
-            <h1 className="text-lg font-bold text-foreground">Painel Admin</h1>
+            <div className="flex-1">
+              <h1 className="text-lg font-bold text-primary-foreground">Painel Admin</h1>
+              <p className="text-xs text-primary-foreground/70">Gerencie seu negócio</p>
+            </div>
+            <div className="w-10 h-10 rounded-xl bg-primary-foreground/10 flex items-center justify-center">
+              <Shield size={20} className="text-primary-foreground" />
+            </div>
           </div>
         </div>
-      </div>
+      </motion.div>
 
       <div className="max-w-4xl mx-auto px-4 py-6">
-        <StatsCards
-          totalProdutos={produtos.length}
-          totalServicos={servicos.length}
-          totalPacotes={pacotes.length}
-          totalUsuarios={usuarios.length}
-        />
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+        >
+          <StatsCards
+            totalProdutos={produtos.length}
+            totalServicos={servicos.length}
+            totalPacotes={pacotes.length}
+            totalUsuarios={usuarios.length}
+          />
+        </motion.div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           {/* Scrollable tabs */}
-          <div className="mb-4 -mx-4 px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="mb-4 -mx-4 px-4"
+          >
             <ScrollArea className="w-full">
-              <TabsList className="inline-flex w-auto min-w-full sm:w-full h-auto p-1 gap-1">
-                <TabsTrigger value="dashboard" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap">
+              <TabsList className="inline-flex w-auto min-w-full sm:w-full h-auto p-1 gap-1 bg-card shadow-card">
+                <TabsTrigger value="dashboard" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap data-[state=active]:shadow-sm transition-all duration-200">
                   Dashboard
                 </TabsTrigger>
-                <TabsTrigger value="pedidos" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap">
+                <TabsTrigger value="pedidos" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap data-[state=active]:shadow-sm transition-all duration-200">
                   Pedidos
                 </TabsTrigger>
-                <TabsTrigger value="produtos" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap">
+                <TabsTrigger value="produtos" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap data-[state=active]:shadow-sm transition-all duration-200">
                   Produtos
                 </TabsTrigger>
-                <TabsTrigger value="servicos" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap">
+                <TabsTrigger value="servicos" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap data-[state=active]:shadow-sm transition-all duration-200">
                   Serviços
                 </TabsTrigger>
-                <TabsTrigger value="pacotes" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap">
+                <TabsTrigger value="pacotes" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap data-[state=active]:shadow-sm transition-all duration-200">
                   Pacotes
                 </TabsTrigger>
-                <TabsTrigger value="terapeutas" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap">
+                <TabsTrigger value="terapeutas" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap data-[state=active]:shadow-sm transition-all duration-200">
                   Terapeutas
                 </TabsTrigger>
-                <TabsTrigger value="indicacoes" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1">
+                <TabsTrigger value="indicacoes" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
                   <Users size={14} />
                   Indicações
                 </TabsTrigger>
-                <TabsTrigger value="auditoria" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1">
+                <TabsTrigger value="auditoria" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
                   <FileText size={14} />
                   Auditoria
                 </TabsTrigger>
               </TabsList>
               <ScrollBar orientation="horizontal" className="h-1.5" />
             </ScrollArea>
-          </div>
+          </motion.div>
 
           {showNewButton && (
-            <div className="flex justify-end mb-4">
-              <Button size="sm" onClick={openCreateDialog}>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="flex justify-end mb-4"
+            >
+              <Button size="sm" onClick={openCreateDialog} className="shadow-button active:scale-95 transition-transform">
                 <Plus className="w-4 h-4 mr-1" />
                 Novo
               </Button>
-            </div>
+            </motion.div>
           )}
 
-          <TabsContent value="dashboard">
-            <DashboardTab stats={stats} pedidos={pedidos} transacoes={transacoes} />
-          </TabsContent>
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeTab}
+              variants={tabContentVariants}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+            >
+              <TabsContent value="dashboard" forceMount={activeTab === "dashboard" ? true : undefined} className={activeTab !== "dashboard" ? "hidden" : ""}>
+                <DashboardTab stats={stats} pedidos={pedidos} transacoes={transacoes} />
+              </TabsContent>
 
-          <TabsContent value="pedidos">
-            <PedidosTab
-              pedidos={pedidos}
-              isLoading={loadingPedidos}
-              onUpdateStatus={updatePedidoStatus}
-            />
-          </TabsContent>
+              <TabsContent value="pedidos" forceMount={activeTab === "pedidos" ? true : undefined} className={activeTab !== "pedidos" ? "hidden" : ""}>
+                <PedidosTab
+                  pedidos={pedidos}
+                  isLoading={loadingPedidos}
+                  onUpdateStatus={updatePedidoStatus}
+                />
+              </TabsContent>
 
-          <TabsContent value="produtos">
-            <CrudListTab
-              items={produtos}
-              isLoading={loadingProdutos}
-              emptyMessage="Nenhum produto cadastrado"
-              type="produtos"
-              onEdit={openEditDialog}
-              onDelete={handleDelete}
-              onToggle={toggleDisponivel}
-            />
-          </TabsContent>
+              <TabsContent value="produtos" forceMount={activeTab === "produtos" ? true : undefined} className={activeTab !== "produtos" ? "hidden" : ""}>
+                <CrudListTab
+                  items={produtos}
+                  isLoading={loadingProdutos}
+                  emptyMessage="Nenhum produto cadastrado"
+                  type="produtos"
+                  onEdit={openEditDialog}
+                  onDelete={handleDelete}
+                  onToggle={toggleDisponivel}
+                />
+              </TabsContent>
 
-          <TabsContent value="servicos">
-            <CrudListTab
-              items={servicos}
-              isLoading={loadingServicos}
-              emptyMessage="Nenhum serviço cadastrado"
-              type="servicos"
-              onEdit={openEditDialog}
-              onDelete={handleDelete}
-              onToggle={toggleDisponivel}
-            />
-          </TabsContent>
+              <TabsContent value="servicos" forceMount={activeTab === "servicos" ? true : undefined} className={activeTab !== "servicos" ? "hidden" : ""}>
+                <CrudListTab
+                  items={servicos}
+                  isLoading={loadingServicos}
+                  emptyMessage="Nenhum serviço cadastrado"
+                  type="servicos"
+                  onEdit={openEditDialog}
+                  onDelete={handleDelete}
+                  onToggle={toggleDisponivel}
+                />
+              </TabsContent>
 
-          <TabsContent value="pacotes">
-            <CrudListTab
-              items={pacotes}
-              isLoading={loadingPacotes}
-              emptyMessage="Nenhum pacote cadastrado"
-              type="pacotes"
-              onEdit={openEditDialog}
-              onDelete={handleDelete}
-              onToggle={toggleDisponivel}
-            />
-          </TabsContent>
+              <TabsContent value="pacotes" forceMount={activeTab === "pacotes" ? true : undefined} className={activeTab !== "pacotes" ? "hidden" : ""}>
+                <CrudListTab
+                  items={pacotes}
+                  isLoading={loadingPacotes}
+                  emptyMessage="Nenhum pacote cadastrado"
+                  type="pacotes"
+                  onEdit={openEditDialog}
+                  onDelete={handleDelete}
+                  onToggle={toggleDisponivel}
+                />
+              </TabsContent>
 
-          <TabsContent value="terapeutas">
-            <TerapeutasTab />
-          </TabsContent>
+              <TabsContent value="terapeutas" forceMount={activeTab === "terapeutas" ? true : undefined} className={activeTab !== "terapeutas" ? "hidden" : ""}>
+                <TerapeutasTab />
+              </TabsContent>
 
-          <TabsContent value="indicacoes">
-            <IndicacoesTab />
-          </TabsContent>
+              <TabsContent value="indicacoes" forceMount={activeTab === "indicacoes" ? true : undefined} className={activeTab !== "indicacoes" ? "hidden" : ""}>
+                <IndicacoesTab />
+              </TabsContent>
 
-          <TabsContent value="auditoria">
-            <AuditLogsViewer />
-          </TabsContent>
+              <TabsContent value="auditoria" forceMount={activeTab === "auditoria" ? true : undefined} className={activeTab !== "auditoria" ? "hidden" : ""}>
+                <AuditLogsViewer />
+              </TabsContent>
+            </motion.div>
+          </AnimatePresence>
         </Tabs>
       </div>
 
