@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { BottomNavigation } from "@/components/BottomNavigation";
+import { AppLayout } from "@/components/AppLayout";
 import { Progress } from "@/components/ui/progress";
 import { ArrowLeft, Package, Check, Clock, Sparkles, Calendar, AlertTriangle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -58,8 +59,9 @@ const Pacotes = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background pb-24">
-      <div className="max-w-lg mx-auto px-4 safe-top">
+    <AppLayout>
+    <div className="min-h-screen bg-background pb-24 lg:pb-8">
+      <div className="max-w-lg lg:max-w-4xl mx-auto px-4 lg:px-8 safe-top">
         {/* Header */}
         <div className="flex items-center gap-3 py-4">
           <Button variant="ghost" size="icon" onClick={() => navigate("/")}>
@@ -386,8 +388,8 @@ const Pacotes = () => {
         </AlertDialogContent>
       </AlertDialog>
 
-      <BottomNavigation />
     </div>
+    </AppLayout>
   );
 };
 

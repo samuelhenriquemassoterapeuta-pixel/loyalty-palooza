@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { BottomNavigation } from "@/components/BottomNavigation";
+import { AppLayout } from "@/components/AppLayout";
 import { useNotificacoes } from "@/hooks/useNotificacoes";
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -132,8 +133,9 @@ const Notificacoes = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background pb-24">
-      <div className="max-w-lg mx-auto px-4 safe-top">
+    <AppLayout>
+    <div className="min-h-screen bg-background pb-24 lg:pb-8">
+      <div className="max-w-lg lg:max-w-4xl mx-auto px-4 lg:px-8 safe-top">
         {/* Header */}
         <div className="flex items-center justify-between py-4">
           <div className="flex items-center gap-3">
@@ -354,8 +356,8 @@ const Notificacoes = () => {
         </AlertDialogContent>
       </AlertDialog>
 
-      <BottomNavigation />
     </div>
+    </AppLayout>
   );
 };
 

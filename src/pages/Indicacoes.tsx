@@ -6,6 +6,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { BottomNavigation } from "@/components/BottomNavigation";
+import { AppLayout } from "@/components/AppLayout";
 import { useIndicacoes } from "@/hooks/useIndicacoes";
 import { toast } from "sonner";
 import { ButtonLoader } from "@/components/LoadingSpinner";
@@ -65,8 +66,9 @@ const Indicacoes = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background pb-24">
-      <div className="max-w-lg mx-auto px-4 safe-top">
+    <AppLayout>
+    <div className="min-h-screen bg-background pb-24 lg:pb-8">
+      <div className="max-w-lg lg:max-w-4xl mx-auto px-4 lg:px-8 safe-top">
         {/* Header */}
         <div className="flex items-center gap-4 py-4">
           <button 
@@ -214,8 +216,8 @@ const Indicacoes = () => {
         </div>
       </div>
       
-      <BottomNavigation />
     </div>
+    </AppLayout>
   );
 };
 

@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Search, Filter, Percent } from "lucide-react";
 import { BottomNavigation } from "@/components/BottomNavigation";
+import { AppLayout } from "@/components/AppLayout";
 import { Button } from "@/components/ui/button";
 
 const categories = ["Todos", "Compras", "Alimentação", "Transporte", "Streaming", "Viagens"];
@@ -18,8 +19,9 @@ const allOffers = [
 
 const Offers = () => {
   return (
-    <div className="min-h-screen bg-background pb-24">
-      <div className="max-w-lg mx-auto px-4 safe-top pt-4">
+    <AppLayout>
+    <div className="min-h-screen bg-background pb-24 lg:pb-8">
+      <div className="max-w-lg lg:max-w-4xl mx-auto px-4 lg:px-8 safe-top pt-4">
         <motion.h1
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -93,8 +95,8 @@ const Offers = () => {
         </div>
       </div>
 
-      <BottomNavigation />
     </div>
+    </AppLayout>
   );
 };
 

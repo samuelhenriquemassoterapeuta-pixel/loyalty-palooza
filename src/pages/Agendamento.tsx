@@ -4,6 +4,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { BottomNavigation } from "@/components/BottomNavigation";
+import { AppLayout } from "@/components/AppLayout";
 import { ArrowLeft, Clock, Check, CalendarDays, X, User, Star, RefreshCw } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -175,8 +176,9 @@ const Agendamento = () => {
   const proximosAgendamentos = getProximosAgendamentos();
 
   return (
-    <div className="min-h-screen bg-background pb-24">
-      <div className="max-w-lg mx-auto px-4 safe-top">
+    <AppLayout>
+    <div className="min-h-screen bg-background pb-24 lg:pb-8">
+      <div className="max-w-lg lg:max-w-4xl mx-auto px-4 lg:px-8 safe-top">
         {/* Header */}
         <div className="flex items-center gap-3 py-4">
           <Button
@@ -560,8 +562,8 @@ const Agendamento = () => {
         getHorariosOcupados={getHorariosOcupados}
       />
 
-      <BottomNavigation />
     </div>
+    </AppLayout>
   );
 };
 
