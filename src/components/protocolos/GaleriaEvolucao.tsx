@@ -92,7 +92,7 @@ export const GaleriaEvolucao = ({ protocoloUsuarioId }: GaleriaEvolucaoProps) =>
           <div className="grid grid-cols-2 gap-px bg-border">
             <div className="relative bg-card">
               <img
-                src={fotosBefore[0].foto_url}
+                src={fotosBefore[0].signed_url || fotosBefore[0].foto_url}
                 alt="Antes"
                 className="w-full aspect-[3/4] object-cover"
               />
@@ -102,7 +102,7 @@ export const GaleriaEvolucao = ({ protocoloUsuarioId }: GaleriaEvolucaoProps) =>
             </div>
             <div className="relative bg-card">
               <img
-                src={fotosAfter[fotosAfter.length - 1].foto_url}
+                src={fotosAfter[fotosAfter.length - 1].signed_url || fotosAfter[fotosAfter.length - 1].foto_url}
                 alt="Depois"
                 className="w-full aspect-[3/4] object-cover"
               />
@@ -145,7 +145,7 @@ export const GaleriaEvolucao = ({ protocoloUsuarioId }: GaleriaEvolucaoProps) =>
                 onClick={() => setPreview(foto.id)}
               >
                 <img
-                  src={foto.foto_url}
+                  src={foto.signed_url || foto.foto_url}
                   alt={`Foto ${foto.tipo}`}
                   className="w-full aspect-square object-cover"
                 />
@@ -179,7 +179,7 @@ export const GaleriaEvolucao = ({ protocoloUsuarioId }: GaleriaEvolucaoProps) =>
             if (!foto) return null;
             return (
               <>
-                <img src={foto.foto_url} alt="" className="w-full max-h-[70vh] object-contain" />
+                <img src={foto.signed_url || foto.foto_url} alt="" className="w-full max-h-[70vh] object-contain" />
                 <div className="p-4 flex items-center justify-between">
                   <div>
                     <Badge className={`${tipoLabels[foto.tipo]?.class ?? ""} border-0`}>
