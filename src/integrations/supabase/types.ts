@@ -358,6 +358,42 @@ export type Database = {
           },
         ]
       }
+      historico_cirurgico: {
+        Row: {
+          created_at: string
+          data_cirurgia: string
+          hospital_clinica: string | null
+          id: string
+          medico_responsavel: string | null
+          observacoes: string | null
+          tipo_cirurgia: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          data_cirurgia: string
+          hospital_clinica?: string | null
+          id?: string
+          medico_responsavel?: string | null
+          observacoes?: string | null
+          tipo_cirurgia: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          data_cirurgia?: string
+          hospital_clinica?: string | null
+          id?: string
+          medico_responsavel?: string | null
+          observacoes?: string | null
+          tipo_cirurgia?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       indicacoes: {
         Row: {
           cashback_valor: number
