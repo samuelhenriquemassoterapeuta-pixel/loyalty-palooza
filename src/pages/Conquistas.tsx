@@ -9,6 +9,7 @@ import { AchievementsSummary } from "@/components/conquistas/AchievementsSummary
 import { AchievementDetailCard } from "@/components/conquistas/AchievementDetailCard";
 import { AchievementCelebration } from "@/components/conquistas/AchievementCelebration";
 import { RankingList } from "@/components/conquistas/RankingList";
+import { XpLevelCard } from "@/components/conquistas/XpLevelCard";
 
 type FilterMode = "todos" | "desbloqueados" | "em_progresso";
 
@@ -123,6 +124,11 @@ const Conquistas = () => {
 
               {/* Conquistas Tab */}
               <TabsContent value="conquistas" className="space-y-4 mt-4">
+                {/* XP Level Card */}
+                <motion.div variants={fadeUp}>
+                  <XpLevelCard achievements={achievements} />
+                </motion.div>
+
                 <motion.div variants={fadeUp}>
                   <AchievementsSummary
                     totalUnlocked={totalUnlocked}
