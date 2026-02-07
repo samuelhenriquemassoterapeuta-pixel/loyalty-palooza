@@ -19,6 +19,11 @@ const categoriaEmoji: Record<string, string> = {
   geral: "✨",
   quadril: "🏃",
   ombros: "🤸",
+  postural_escoliose: "🔄",
+  postural_lordose: "🦴",
+  postural_cifose: "🔙",
+  postural_ombros: "🎯",
+  postural_geral: "🧍",
 };
 
 interface ExercicioCardProps {

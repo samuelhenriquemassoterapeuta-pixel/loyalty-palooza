@@ -25,6 +25,10 @@ const tipoLabels: Record<string, { label: string; class: string }> = {
     label: "Drenagem Pós-Op",
     class: "bg-info/15 text-info border-info/30",
   },
+  postural: {
+    label: "Postural",
+    class: "bg-purple-100 text-purple-700 border-purple-300 dark:bg-purple-900/30 dark:text-purple-400 dark:border-purple-700/30",
+  },
 };
 
 export const ProtocoloCard = ({
