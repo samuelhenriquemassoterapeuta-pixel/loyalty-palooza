@@ -12,6 +12,9 @@ import { toast } from "sonner";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { AvaliacaoPostural, VistaPostural } from "@/hooks/useAvaliacaoPostural";
+import { supabase } from "@/integrations/supabase/client";
+import type { Annotation } from "@/components/avaliacao-postural/annotations/types";
+import { compositeImageWithAnnotations } from "@/components/avaliacao-postural/annotations/compositeRenderer";
 
 const VISTAS: { key: VistaPostural; label: string }[] = [
   { key: "anterior", label: "Anterior" },
@@ -41,6 +44,27 @@ function getSignedUrl(av: AvaliacaoPostural, vista: VistaPostural): string | und
   return av[key] as string | undefined;
 }
 
+/** Fetch annotations for a given avaliacao + vista from the database */
+async function fetchAnnotations(
+  avaliacaoId: string,
+  vista: VistaPostural,
+  userId: string
+): Promise<Annotation[]> {
+  try {
+    const { data, error } = await supabase
+      .from("anotacoes_posturais")
+      .select("anotacoes")
+      .eq("avaliacao_id", avaliacaoId)
+      .eq("vista", vista)
+      .eq("user_id", userId)
+      .maybeSingle();
+    if (error || !data) return [];
+    return (data.anotacoes as unknown as Annotation[]) || [];
+  } catch {
+    return [];
+  }
+}
+
 interface ExportPosturalPdfButtonProps {
   leftAvaliacao: AvaliacaoPostural;
   rightAvaliacao: AvaliacaoPostural;
@@ -51,6 +75,10 @@ async function generatePosturalPdf(
   right: AvaliacaoPostural
 ): Promise<{ blob: Blob; filename: string }> {
   const { default: jsPDF } = await import("jspdf");
+
+  // Get current user for annotation queries
+  const { data: { user } } = await supabase.auth.getUser();
+  const userId = user?.id;
 
   const pdf = new jsPDF("p", "mm", "a4");
   const pageWidth = pdf.internal.pageSize.getWidth();
@@ -90,7 +118,6 @@ async function generatePosturalPdf(
   const leftDate = format(new Date(left.data), "dd 'de' MMMM 'de' yyyy", { locale: ptBR });
   const rightDate = format(new Date(right.data), "dd 'de' MMMM 'de' yyyy", { locale: ptBR });
 
-  // Info cards
   const cardWidth = contentWidth / 2 - 2;
   pdf.setFillColor(245, 245, 240);
   pdf.roundedRect(margin, y, cardWidth, 14, 2, 2, "F");
@@ -114,6 +141,13 @@ async function generatePosturalPdf(
   pdf.setFontSize(10);
   pdf.setFont("helvetica", "bold");
   pdf.text("Comparação por Vista", margin, y);
+
+  // Subtitle about annotations
+  pdf.setFontSize(6);
+  pdf.setFont("helvetica", "normal");
+  pdf.setTextColor(120, 120, 120);
+  pdf.text("(com anotações e marcações clínicas)", margin + 42, y);
+
   y += 5;
 
   // Pre-load all images in parallel
@@ -129,8 +163,57 @@ async function generatePosturalPdf(
     }))
   );
 
+  // Fetch annotations for all vistas in parallel
+  const annotationPromises = userId
+    ? VISTAS.flatMap((v) => [
+        { vistaKey: v.key, side: "left" as const, promise: fetchAnnotations(left.id, v.key, userId) },
+        { vistaKey: v.key, side: "right" as const, promise: fetchAnnotations(right.id, v.key, userId) },
+      ])
+    : [];
+
+  const annotationResults = await Promise.all(
+    annotationPromises.map(async (item) => ({
+      ...item,
+      annotations: await item.promise,
+    }))
+  );
+
   const getImage = (vistaKey: VistaPostural, side: "left" | "right") =>
     imageResults.find((r) => r.vista.key === vistaKey && r.side === side)?.dataUrl;
+
+  const getAnnotations = (vistaKey: VistaPostural, side: "left" | "right"): Annotation[] =>
+    annotationResults.find((r) => r.vistaKey === vistaKey && r.side === side)?.annotations || [];
+
+  // Composite images with annotations
+  const compositeCache = new Map<string, string | null>();
+  const getCompositeImage = async (vistaKey: VistaPostural, side: "left" | "right"): Promise<string | null> => {
+    const cacheKey = `${vistaKey}-${side}`;
+    if (compositeCache.has(cacheKey)) return compositeCache.get(cacheKey) || null;
+
+    const imgDataUrl = getImage(vistaKey, side);
+    if (!imgDataUrl) {
+      compositeCache.set(cacheKey, null);
+      return null;
+    }
+
+    const annotations = getAnnotations(vistaKey, side);
+    try {
+      const result = await compositeImageWithAnnotations(imgDataUrl, annotations, 800);
+      compositeCache.set(cacheKey, result);
+      return result;
+    } catch {
+      compositeCache.set(cacheKey, imgDataUrl);
+      return imgDataUrl;
+    }
+  };
+
+  // Pre-composite all images
+  await Promise.all(
+    VISTAS.flatMap((v) => [
+      getCompositeImage(v.key, "left"),
+      getCompositeImage(v.key, "right"),
+    ])
+  );
 
   // Layout: 2 vistas per row, each with before/after
   const photoWidth = (contentWidth - 6) / 2;
@@ -140,7 +223,6 @@ async function generatePosturalPdf(
   for (let i = 0; i < VISTAS.length; i += 2) {
     const rowVistas = VISTAS.slice(i, i + 2);
 
-    // Check if we need a new page
     if (y + photoHeight + 16 > pageHeight - margin) {
       pdf.addPage();
       y = margin;
@@ -158,6 +240,14 @@ async function generatePosturalPdf(
       pdf.roundedRect(xBase, y, photoWidth, 6, 1, 1, "F");
       pdf.text(v.label.toUpperCase(), xBase + 3, y + 4);
 
+      // Annotation indicator
+      const leftAnns = getAnnotations(v.key, "left");
+      const rightAnns = getAnnotations(v.key, "right");
+      if (leftAnns.length > 0 || rightAnns.length > 0) {
+        pdf.setFontSize(5);
+        pdf.text("✏️ com anotações", xBase + photoWidth - 25, y + 4);
+      }
+
       const imgY = y + 8;
 
       // Before label
@@ -167,45 +257,29 @@ async function generatePosturalPdf(
       pdf.text("ANTES", xBase + 1, imgY - 1);
       pdf.text("DEPOIS", xBase + photoInnerWidth + 3, imgY - 1);
 
-      // Before image
-      const beforeImg = getImage(v.key, "left");
+      // Before image (with annotations composited)
+      const beforeImg = compositeCache.get(`${v.key}-left`);
       if (beforeImg) {
         try {
           pdf.addImage(beforeImg, "JPEG", xBase, imgY, photoInnerWidth, photoHeight);
         } catch {
-          pdf.setFillColor(240, 240, 240);
-          pdf.rect(xBase, imgY, photoInnerWidth, photoHeight, "F");
-          pdf.setTextColor(150, 150, 150);
-          pdf.setFontSize(7);
-          pdf.text("Sem foto", xBase + photoInnerWidth / 2 - 6, imgY + photoHeight / 2);
+          drawPlaceholder(pdf, xBase, imgY, photoInnerWidth, photoHeight);
         }
       } else {
-        pdf.setFillColor(240, 240, 240);
-        pdf.rect(xBase, imgY, photoInnerWidth, photoHeight, "F");
-        pdf.setTextColor(150, 150, 150);
-        pdf.setFontSize(7);
-        pdf.text("Sem foto", xBase + photoInnerWidth / 2 - 6, imgY + photoHeight / 2);
+        drawPlaceholder(pdf, xBase, imgY, photoInnerWidth, photoHeight);
       }
 
-      // After image
-      const afterImg = getImage(v.key, "right");
+      // After image (with annotations composited)
+      const afterImg = compositeCache.get(`${v.key}-right`);
       const afterX = xBase + photoInnerWidth + 2;
       if (afterImg) {
         try {
           pdf.addImage(afterImg, "JPEG", afterX, imgY, photoInnerWidth, photoHeight);
         } catch {
-          pdf.setFillColor(240, 240, 240);
-          pdf.rect(afterX, imgY, photoInnerWidth, photoHeight, "F");
-          pdf.setTextColor(150, 150, 150);
-          pdf.setFontSize(7);
-          pdf.text("Sem foto", afterX + photoInnerWidth / 2 - 6, imgY + photoHeight / 2);
+          drawPlaceholder(pdf, afterX, imgY, photoInnerWidth, photoHeight);
         }
       } else {
-        pdf.setFillColor(240, 240, 240);
-        pdf.rect(afterX, imgY, photoInnerWidth, photoHeight, "F");
-        pdf.setTextColor(150, 150, 150);
-        pdf.setFontSize(7);
-        pdf.text("Sem foto", afterX + photoInnerWidth / 2 - 6, imgY + photoHeight / 2);
+        drawPlaceholder(pdf, afterX, imgY, photoInnerWidth, photoHeight);
       }
     }
 
@@ -226,47 +300,10 @@ async function generatePosturalPdf(
     y += 5;
 
     if (left.observacoes) {
-      pdf.setFillColor(245, 245, 240);
-      const obsLines = pdf.splitTextToSize(left.observacoes, contentWidth - 8);
-      const obsHeight = Math.max(12, obsLines.length * 3.5 + 8);
-      pdf.roundedRect(margin, y, contentWidth, obsHeight, 2, 2, "F");
-
-      pdf.setTextColor(120, 120, 120);
-      pdf.setFontSize(6);
-      pdf.setFont("helvetica", "bold");
-      pdf.text(
-        `AVALIAÇÃO DE ${format(new Date(left.data), "dd/MM/yyyy", { locale: ptBR })}`,
-        margin + 3,
-        y + 4
-      );
-
-      pdf.setTextColor(60, 60, 60);
-      pdf.setFontSize(7);
-      pdf.setFont("helvetica", "normal");
-      pdf.text(obsLines, margin + 3, y + 8);
-      y += obsHeight + 3;
+      y = renderObservation(pdf, left.observacoes, left.data, margin, y, contentWidth);
     }
-
     if (right.observacoes) {
-      pdf.setFillColor(245, 245, 240);
-      const obsLines = pdf.splitTextToSize(right.observacoes, contentWidth - 8);
-      const obsHeight = Math.max(12, obsLines.length * 3.5 + 8);
-      pdf.roundedRect(margin, y, contentWidth, obsHeight, 2, 2, "F");
-
-      pdf.setTextColor(120, 120, 120);
-      pdf.setFontSize(6);
-      pdf.setFont("helvetica", "bold");
-      pdf.text(
-        `AVALIAÇÃO DE ${format(new Date(right.data), "dd/MM/yyyy", { locale: ptBR })}`,
-        margin + 3,
-        y + 4
-      );
-
-      pdf.setTextColor(60, 60, 60);
-      pdf.setFontSize(7);
-      pdf.setFont("helvetica", "normal");
-      pdf.text(obsLines, margin + 3, y + 8);
-      y += obsHeight + 3;
+      y = renderObservation(pdf, right.observacoes, right.data, margin, y, contentWidth);
     }
   }
 
@@ -292,6 +329,49 @@ async function generatePosturalPdf(
   const blob = pdf.output("blob");
   return { blob, filename };
 }
+
+// ── Helper functions ─────────────────────────────
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function drawPlaceholder(pdf: any, x: number, y: number, w: number, h: number) {
+  pdf.setFillColor(240, 240, 240);
+  pdf.rect(x, y, w, h, "F");
+  pdf.setTextColor(150, 150, 150);
+  pdf.setFontSize(7);
+  pdf.text("Sem foto", x + w / 2 - 6, y + h / 2);
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function renderObservation(
+  pdf: any,
+  text: string,
+  date: string,
+  margin: number,
+  y: number,
+  contentWidth: number
+): number {
+  pdf.setFillColor(245, 245, 240);
+  const obsLines = pdf.splitTextToSize(text, contentWidth - 8);
+  const obsHeight = Math.max(12, obsLines.length * 3.5 + 8);
+  pdf.roundedRect(margin, y, contentWidth, obsHeight, 2, 2, "F");
+
+  pdf.setTextColor(120, 120, 120);
+  pdf.setFontSize(6);
+  pdf.setFont("helvetica", "bold");
+  pdf.text(
+    `AVALIAÇÃO DE ${format(new Date(date), "dd/MM/yyyy", { locale: ptBR })}`,
+    margin + 3,
+    y + 4
+  );
+
+  pdf.setTextColor(60, 60, 60);
+  pdf.setFontSize(7);
+  pdf.setFont("helvetica", "normal");
+  pdf.text(obsLines, margin + 3, y + 8);
+  return y + obsHeight + 3;
+}
+
+// ── Component ────────────────────────────────────
 
 export const ExportPosturalPdfButton = ({
   leftAvaliacao,
