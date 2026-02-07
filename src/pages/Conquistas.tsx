@@ -41,10 +41,14 @@ const Conquistas = () => {
       protocolo: { unlocked: 0, total: 0, icon: "🌱" },
       social: { unlocked: 0, total: 0, icon: "👥" },
       loja: { unlocked: 0, total: 0, icon: "🛍️" },
+      secreto: { unlocked: 0, total: 0, icon: "🔮" },
     };
 
     achievements.forEach((a) => {
-      if (cats[a.category]) {
+      if (a.secret) {
+        cats.secreto.total++;
+        if (a.unlocked) cats.secreto.unlocked++;
+      } else if (cats[a.category]) {
         cats[a.category].total++;
         if (a.unlocked) cats[a.category].unlocked++;
       }
@@ -60,7 +64,9 @@ const Conquistas = () => {
           ? "Protocolo"
           : key === "social"
           ? "Social"
-          : "Loja",
+          : key === "loja"
+          ? "Loja"
+          : "Secretas",
       ...val,
     }));
   }, [achievements]);
