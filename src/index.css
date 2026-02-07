@@ -216,6 +216,22 @@
     @apply backdrop-blur-2xl bg-card/90;
   }
 
+  .glass-card {
+    @apply backdrop-blur-lg border;
+    background: hsl(var(--card) / 0.75);
+    border-color: hsl(var(--border) / 0.5);
+  }
+
+  .glass-card-strong {
+    @apply backdrop-blur-xl border;
+    background: hsl(var(--card) / 0.85);
+    border-color: hsl(var(--border) / 0.6);
+  }
+
+  .section-label {
+    @apply text-[11px] font-semibold uppercase tracking-wider text-muted-foreground/70;
+  }
+
   .safe-top {
     padding-top: env(safe-area-inset-top);
   }

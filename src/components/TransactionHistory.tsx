@@ -10,23 +10,17 @@ const container = {
   hidden: { opacity: 0 },
   show: {
     opacity: 1,
-    transition: {
-      staggerChildren: 0.08,
-    }
-  }
+    transition: { staggerChildren: 0.06 },
+  },
 };
 
 const item = {
-  hidden: { opacity: 0, x: -20 },
-  show: { 
-    opacity: 1, 
+  hidden: { opacity: 0, x: -12 },
+  show: {
+    opacity: 1,
     x: 0,
-    transition: {
-      type: "spring" as const,
-      stiffness: 300,
-      damping: 24
-    }
-  }
+    transition: { type: "spring" as const, stiffness: 300, damping: 24 },
+  },
 };
 
 export const TransactionHistory = () => {
@@ -43,9 +37,7 @@ export const TransactionHistory = () => {
     return tipo === "cashback" ? "income" : "expense";
   };
 
-  if (loading) {
-    return <TransactionHistorySkeleton />;
-  }
+  if (loading) return <TransactionHistorySkeleton />;
 
   if (error) {
     return (
@@ -53,12 +45,7 @@ export const TransactionHistory = () => {
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-bold text-foreground">Histórico</h3>
         </div>
-        <ErrorState
-          compact
-          title="Erro ao carregar histórico"
-          message={error}
-          onRetry={refetch}
-        />
+        <ErrorState compact title="Erro ao carregar histórico" message={error} onRetry={refetch} />
       </section>
     );
   }
@@ -79,9 +66,9 @@ export const TransactionHistory = () => {
 
   return (
     <section>
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
-          <h3 className="text-lg font-bold text-foreground">Histórico</h3>
+          <h3 className="text-sm font-bold text-foreground">Histórico</h3>
           {transacoes.length > 0 && (
             <span className="pill text-[10px]">
               <Sparkles size={10} />
@@ -89,54 +76,49 @@ export const TransactionHistory = () => {
             </span>
           )}
         </div>
-        <button className="text-sm font-medium text-primary flex items-center gap-1 hover:gap-2 transition-all">
-          Ver tudo <ChevronRight size={16} />
+        <button className="text-xs font-medium text-primary flex items-center gap-0.5 hover:gap-1.5 transition-all">
+          Ver tudo <ChevronRight size={14} />
         </button>
       </div>
 
-      <motion.div 
-        variants={container}
-        initial="hidden"
-        animate="show"
-        className="space-y-3"
-      >
+      <motion.div variants={container} initial="hidden" animate="show" className="space-y-2">
         {transacoes.slice(0, 5).map((transacao) => {
           const type = getTransactionType(transacao.tipo);
-          const date = formatDistanceToNow(new Date(transacao.created_at), { 
-            addSuffix: true, 
-            locale: ptBR 
+          const date = formatDistanceToNow(new Date(transacao.created_at), {
+            addSuffix: true,
+            locale: ptBR,
           });
 
           return (
             <motion.div
               key={transacao.id}
               variants={item}
-              whileHover={{ x: 4 }}
-              className="group flex items-center gap-4 p-4 rounded-2xl bg-card shadow-card hover:shadow-elevated transition-all duration-300 cursor-pointer"
+              whileHover={{ x: 3 }}
+              className="group flex items-center gap-3 p-3.5 rounded-2xl glass-card hover:shadow-elevated transition-all duration-300 cursor-pointer"
             >
               <div
-                className={`p-2.5 rounded-xl transition-transform duration-300 group-hover:scale-110 ${
+                className={`p-2 rounded-xl transition-transform duration-300 group-hover:scale-110 ${
                   type === "income"
-                    ? "bg-gradient-to-br from-primary/20 to-primary/5 text-primary"
-                    : "bg-gradient-to-br from-muted to-muted/50 text-muted-foreground"
+                    ? "bg-primary/15 text-primary"
+                    : "bg-muted text-muted-foreground"
                 }`}
               >
-                {type === "income" ? (
-                  <ArrowDownLeft size={20} />
-                ) : (
-                  <ArrowUpRight size={20} />
-                )}
+                {type === "income" ? <ArrowDownLeft size={18} /> : <ArrowUpRight size={18} />}
               </div>
 
               <div className="flex-1 min-w-0">
-                <p className="font-semibold text-foreground truncate">
+                <p className="font-medium text-sm text-foreground truncate">
                   {transacao.descricao || transacao.tipo}
                 </p>
-                <p className="text-xs text-muted-foreground capitalize">{date}</p>
+                <p className="text-[11px] text-muted-foreground capitalize">{date}</p>
               </div>
 
               <div className="text-right">
-                <p className={`font-bold ${type === "income" ? "text-primary" : "text-foreground"}`}>
+                <p
+                  className={`font-bold text-sm ${
+                    type === "income" ? "text-primary" : "text-foreground"
+                  }`}
+                >
                   {type === "income" ? "+" : "-"}
                   {formatCurrency(transacao.valor)}
                 </p>
