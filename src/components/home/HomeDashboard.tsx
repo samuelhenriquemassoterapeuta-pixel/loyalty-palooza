@@ -1,10 +1,11 @@
 import { useMemo } from "react";
 import { useAgendamentos } from "@/hooks/useAgendamentos";
 import { useUsuarioProtocolos, useFichas } from "@/hooks/useProtocolos";
-import { useAchievements } from "@/hooks/useAchievements";
+import { useAchievementCelebration } from "@/hooks/useAchievementCelebration";
 import { NextAppointmentCard } from "./NextAppointmentCard";
 import { StreakSummaryCard } from "./StreakSummaryCard";
 import { AchievementBadges } from "./AchievementBadges";
+import { AchievementCelebration } from "@/components/conquistas/AchievementCelebration";
 import {
   differenceInDays,
   startOfDay,
@@ -63,7 +64,7 @@ export const HomeDashboard = () => {
     return { streak: currentStreak, bestStreak: best };
   }, [fichas]);
 
-  const { achievements, totalUnlocked } = useAchievements();
+  const { achievements, totalUnlocked, celebration, dismiss } = useAchievementCelebration();
 
   const protocoloNome = protocoloAtivo?.protocolos
     ? (protocoloAtivo.protocolos as { nome?: string }).nome ?? null
@@ -81,6 +82,11 @@ export const HomeDashboard = () => {
       <AchievementBadges
         achievements={achievements}
         totalUnlocked={totalUnlocked}
+      />
+      <AchievementCelebration
+        isOpen={!!celebration}
+        achievement={celebration}
+        onClose={dismiss}
       />
     </div>
   );
