@@ -9,6 +9,7 @@ import simboloVerde from "@/assets/simbolo-verde.png";
 const navLinks = [
   { label: "Início", href: "#inicio" },
   { label: "Serviços", href: "#servicos" },
+  { label: "Pacotes", href: "#pacotes" },
   { label: "Sobre", href: "#sobre" },
   { label: "Contato", href: "#contato" },
 ];
