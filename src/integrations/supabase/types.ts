@@ -556,6 +556,7 @@ export type Database = {
         Row: {
           created_at: string
           descricao: string | null
+          expira_em: string | null
           id: string
           referencia_id: string | null
           tipo: string
@@ -565,6 +566,7 @@ export type Database = {
         Insert: {
           created_at?: string
           descricao?: string | null
+          expira_em?: string | null
           id?: string
           referencia_id?: string | null
           tipo: string
@@ -574,6 +576,7 @@ export type Database = {
         Update: {
           created_at?: string
           descricao?: string | null
+          expira_em?: string | null
           id?: string
           referencia_id?: string | null
           tipo?: string
@@ -635,6 +638,22 @@ export type Database = {
           _user_id: string
         }
         Returns: boolean
+      }
+      notify_expiring_cashback: {
+        Args: never
+        Returns: {
+          dias_restantes: number
+          total_expirando: number
+          user_id: string
+        }[]
+      }
+      process_expired_cashback: {
+        Args: never
+        Returns: {
+          total_expirado: number
+          transacoes_expiradas: number
+          user_id: string
+        }[]
       }
       record_login_attempt: {
         Args: { p_email: string; p_ip_address?: string; p_success?: boolean }
