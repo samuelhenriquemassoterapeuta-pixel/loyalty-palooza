@@ -70,19 +70,22 @@ export const useAgendamentos = () => {
     }) => {
       if (!user) throw new Error("Usuário não autenticado");
 
-      // Quick client-side check (database also enforces uniqueness via unique index)
-      const { data: existente, error: checkError } = await supabase
-        .from("agendamentos")
-        .select("id")
-        .eq("data_hora", data_hora.toISOString())
-        .eq("status", "agendado")
-        .maybeSingle();
+      // Quick client-side check filtered by therapist (database also enforces via unique index)
+      if (terapeuta_id) {
+        const { data: existente, error: checkError } = await supabase
+          .from("agendamentos")
+          .select("id")
+          .eq("data_hora", data_hora.toISOString())
+          .eq("terapeuta_id", terapeuta_id)
+          .eq("status", "agendado")
+          .maybeSingle();
 
-      if (checkError) throw checkError;
-      if (existente) {
-        throw new Error(
-          "Este horário já está ocupado. Por favor, escolha outro."
-        );
+        if (checkError) throw checkError;
+        if (existente) {
+          throw new Error(
+            "Este horário já está ocupado para este terapeuta. Por favor, escolha outro."
+          );
+        }
       }
 
       const { data, error } = await supabase
@@ -100,12 +103,16 @@ export const useAgendamentos = () => {
 
       // Handle unique constraint violation (race condition protection)
       if (error) {
-        if (error.code === "23505") {
+        if (error.code === "23505" || error.message?.includes("duplicate key") || error.message?.includes("unique constraint")) {
           throw new Error(
             "Este horário já está ocupado. Por favor, escolha outro."
           );
         }
         throw error;
+      }
+
+      if (!data) {
+        throw new Error("Erro ao criar agendamento. Tente novamente.");
       }
 
       return data;
