@@ -262,6 +262,7 @@ export type Database = {
         Row: {
           created_at: string
           data: string
+          escala_eva: number | null
           gordura_corporal: number | null
           id: string
           imc: number | null
@@ -278,6 +279,7 @@ export type Database = {
         Insert: {
           created_at?: string
           data?: string
+          escala_eva?: number | null
           gordura_corporal?: number | null
           id?: string
           imc?: number | null
@@ -294,6 +296,7 @@ export type Database = {
         Update: {
           created_at?: string
           data?: string
+          escala_eva?: number | null
           gordura_corporal?: number | null
           id?: string
           imc?: number | null
