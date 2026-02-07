@@ -1,0 +1,150 @@
+import { motion } from "framer-motion";
+import { ArrowRight, Leaf, Sparkles } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import simboloVerde from "@/assets/simbolo-verde.png";
+import iconeFlor from "@/assets/icone-flor.png";
+
+export const HeroSection = () => {
+  const navigate = useNavigate();
+
+  return (
+    <section
+      id="inicio"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden"
+    >
+      {/* Background blobs */}
+      <div className="absolute inset-0 gradient-hero" />
+      <div className="absolute top-20 right-[10%] w-72 h-72 bg-primary/8 rounded-full blur-3xl" />
+      <div className="absolute bottom-20 left-[5%] w-96 h-96 bg-accent/6 rounded-full blur-3xl" />
+      <div className="absolute top-1/3 left-[15%] w-4 h-4 bg-accent/40 rounded-full animate-float" />
+      <div className="absolute top-[20%] right-[20%] w-3 h-3 bg-highlight/50 rounded-full animate-bounce-subtle" />
+      <div className="absolute bottom-[30%] right-[15%] w-5 h-5 bg-primary/20 rounded-full animate-pulse-soft" />
+
+      <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-16">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+          {/* Text content */}
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="text-center lg:text-left"
+          >
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6"
+            >
+              <Sparkles size={14} className="text-primary" />
+              <span className="text-xs font-semibold text-primary">Bem-estar com recompensas</span>
+            </motion.div>
+
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground leading-tight">
+              Cuide de você,{" "}
+              <span className="text-gradient font-serif italic">ganhe</span>{" "}
+              por isso
+            </h1>
+
+            <p className="mt-6 text-lg text-muted-foreground max-w-lg mx-auto lg:mx-0 leading-relaxed">
+              A Resinkra oferece terapias naturais com um programa exclusivo de cashback. 
+              Cada sessão é um investimento no seu bem-estar — e no seu bolso.
+            </p>
+
+            <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+              <Button
+                size="xl"
+                onClick={() => navigate("/auth")}
+                className="group"
+              >
+                Comece agora
+                <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+              </Button>
+              <Button
+                size="xl"
+                variant="outline"
+                onClick={() => {
+                  document.querySelector("#servicos")?.scrollIntoView({ behavior: "smooth" });
+                }}
+              >
+                <Leaf size={18} />
+                Conheça nossos serviços
+              </Button>
+            </div>
+
+            {/* Trust signals */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.6 }}
+              className="mt-10 flex items-center gap-6 justify-center lg:justify-start text-muted-foreground"
+            >
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-highlight" />
+                <span className="text-sm">Terapias naturais</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-accent" />
+                <span className="text-sm">Cashback real</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-primary" />
+                <span className="text-sm">100% digital</span>
+              </div>
+            </motion.div>
+          </motion.div>
+
+          {/* Visual element */}
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut", delay: 0.3 }}
+            className="relative flex items-center justify-center"
+          >
+            <div className="relative w-72 h-72 sm:w-80 sm:h-80 lg:w-96 lg:h-96">
+              {/* Outer glow ring */}
+              <div className="absolute inset-0 rounded-full bg-gradient-to-br from-primary/15 to-accent/10 blur-2xl animate-pulse-soft" />
+              
+              {/* Main circle */}
+              <div className="absolute inset-4 rounded-full bg-gradient-to-br from-primary/10 via-card to-accent/10 border border-primary/20 shadow-elevated" />
+              
+              {/* Logo center */}
+              <div className="absolute inset-0 flex items-center justify-center">
+                <img
+                  src={simboloVerde}
+                  alt="Resinkra"
+                  className="w-32 h-32 lg:w-40 lg:h-40 object-contain drop-shadow-lg animate-float"
+                />
+              </div>
+
+              {/* Floating accents */}
+              <motion.div
+                animate={{ y: [-8, 8, -8] }}
+                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute -top-2 right-8 p-3 rounded-2xl bg-card shadow-card border border-border/50"
+              >
+                <img src={iconeFlor} alt="" className="w-8 h-8 object-contain" />
+              </motion.div>
+
+              <motion.div
+                animate={{ y: [6, -6, 6] }}
+                transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+                className="absolute bottom-4 -left-4 px-4 py-2 rounded-2xl bg-card shadow-card border border-border/50"
+              >
+                <span className="text-sm font-bold text-highlight">+5% cashback</span>
+              </motion.div>
+
+              <motion.div
+                animate={{ y: [-5, 5, -5] }}
+                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                className="absolute top-1/2 -right-6 px-3 py-2 rounded-xl bg-card shadow-card border border-border/50"
+              >
+                <span className="text-xs font-semibold text-accent">⭐ 4.9</span>
+              </motion.div>
+            </div>
+          </motion.div>
+        </div>
+      </div>
+    </section>
+  );
+};

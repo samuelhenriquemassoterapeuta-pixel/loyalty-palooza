@@ -1,7 +1,9 @@
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { PageTransition } from "@/components/PageTransition";
+import { useAuth } from "@/contexts/AuthContext";
+import Landing from "@/pages/Landing";
 import Index from "@/pages/Index";
 import Auth from "@/pages/Auth";
 import Agendamento from "@/pages/Agendamento";
@@ -18,6 +20,14 @@ import Indicacoes from "@/pages/Indicacoes";
 import Manual from "@/pages/Manual";
 import Cashback from "@/pages/Cashback";
 import NotFound from "@/pages/NotFound";
+
+/** Shows landing for visitors, dashboard for authenticated users */
+const HomeRoute = () => {
+  const { user, loading } = useAuth();
+  if (loading) return null;
+  if (user) return <Index />;
+  return <Landing />;
+};
 
 export const AnimatedRoutes = () => {
   const location = useLocation();
@@ -52,11 +62,9 @@ export const AnimatedRoutes = () => {
         <Route
           path="/"
           element={
-            <ProtectedRoute>
-              <PageTransition>
-                <Index />
-              </PageTransition>
-            </ProtectedRoute>
+            <PageTransition>
+              <HomeRoute />
+            </PageTransition>
           }
         />
         <Route
