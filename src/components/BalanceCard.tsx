@@ -1,12 +1,14 @@
 import { motion } from "framer-motion";
-import { Eye, EyeOff, TrendingUp, Sparkles } from "lucide-react";
+import { Eye, EyeOff, TrendingUp, Sparkles, ChevronRight } from "lucide-react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useTransacoes } from "@/hooks/useTransacoes";
 import { BalanceCardSkeleton } from "@/components/skeletons";
 
 export const BalanceCard = () => {
   const [showBalance, setShowBalance] = useState(true);
   const { stats, loading } = useTransacoes();
+  const navigate = useNavigate();
 
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat("pt-BR", {
@@ -76,11 +78,13 @@ export const BalanceCard = () => {
         </motion.div>
 
         {/* Cashback Card */}
-        <motion.div 
+        <motion.button 
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.2 }}
-          className="flex items-center gap-3 bg-gradient-to-r from-accent/20 to-highlight/20 rounded-2xl px-4 py-3 backdrop-blur-sm border border-accent/20"
+          whileTap={{ scale: 0.98 }}
+          onClick={() => navigate("/cashback")}
+          className="w-full flex items-center gap-3 bg-gradient-to-r from-accent/20 to-highlight/20 rounded-2xl px-4 py-3 backdrop-blur-sm border border-accent/20 text-left"
         >
           <div className="p-2 rounded-xl bg-accent/30 shadow-sm">
             <TrendingUp size={18} className="text-accent-foreground" />
@@ -100,7 +104,8 @@ export const BalanceCard = () => {
               💰 Disponível
             </motion.div>
           )}
-        </motion.div>
+          <ChevronRight size={18} className="opacity-60" />
+        </motion.button>
       </div>
     </motion.div>
   );

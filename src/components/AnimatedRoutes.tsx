@@ -16,6 +16,7 @@ import Transferir from "@/pages/Transferir";
 import Admin from "@/pages/Admin";
 import Indicacoes from "@/pages/Indicacoes";
 import Manual from "@/pages/Manual";
+import Cashback from "@/pages/Cashback";
 import NotFound from "@/pages/NotFound";
 
 export const AnimatedRoutes = () => {
@@ -144,6 +145,16 @@ export const AnimatedRoutes = () => {
             <ProtectedRoute>
               <PageTransition>
                 <Indicacoes />
+              </PageTransition>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/cashback"
+          element={
+            <ProtectedRoute>
+              <PageTransition>
+                <Cashback />
               </PageTransition>
             </ProtectedRoute>
           }
