@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { HelpCircle, MessageCircle, Share2, Copy, Instagram, X, ChevronDown } from "lucide-react";
+import { HelpCircle, MessageCircle, Share2, Copy, Instagram, X, ChevronDown, ExternalLink } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
 import type { Achievement } from "@/hooks/useAchievements";
@@ -10,6 +10,16 @@ const APP_URL = "https://loyalty-palooza.lovable.app";
 const buildShareText = (achievement: Achievement) => {
   const secretLabel = achievement.secret ? " secreta" : "";
   return `🏆 Desbloqueei a conquista${secretLabel} "${achievement.name}" ${achievement.icon} no app Resinkra!\n\n${achievement.description}\n\n👉 Baixe o app: ${APP_URL}`;
+};
+
+const triggerHaptic = () => {
+  try {
+    if ("vibrate" in navigator) {
+      navigator.vibrate(50);
+    }
+  } catch {
+    // Haptic not supported — silent fail
+  }
 };
 
 interface AchievementDetailCardProps {
@@ -25,9 +35,11 @@ export const AchievementDetailCard = ({
   const isSecret = achievement.secret;
   const isRevealed = isSecret && achievement.unlocked;
   const isHidden = isSecret && !achievement.unlocked;
+  const hasNativeShare = typeof navigator !== "undefined" && !!navigator.share;
 
   const handleShare = async (e: React.MouseEvent) => {
     e.stopPropagation();
+    triggerHaptic();
     const text = buildShareText(achievement);
 
     // Try Web Share API first (mobile primary)
@@ -38,19 +50,21 @@ export const AchievementDetailCard = ({
           text,
           url: APP_URL,
         });
-        toast.success("Compartilhado com sucesso!");
+        toast.success("Compartilhado com sucesso! 🎉");
         return;
       } catch (err: any) {
         // User cancelled — don't fallback
         if (err?.name === "AbortError") return;
+        // Other errors — fall through to drawer
       }
     }
-    // Desktop fallback: toggle expanded share options
+    // Desktop / fallback: toggle expanded share options
     setShowShare((prev) => !prev);
   };
 
   const handleWhatsAppShare = (e: React.MouseEvent) => {
     e.stopPropagation();
+    triggerHaptic();
     const text = buildShareText(achievement);
     window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, "_blank");
     toast.success("Abrindo WhatsApp...");
@@ -59,6 +73,7 @@ export const AchievementDetailCard = ({
 
   const handleInstagramCopy = (e: React.MouseEvent) => {
     e.stopPropagation();
+    triggerHaptic();
     const text = buildShareText(achievement);
     navigator.clipboard.writeText(text);
     toast.success("Texto copiado! Cole nos seus Stories do Instagram 📸");
@@ -67,9 +82,10 @@ export const AchievementDetailCard = ({
 
   const handleCopyText = (e: React.MouseEvent) => {
     e.stopPropagation();
+    triggerHaptic();
     const text = buildShareText(achievement);
     navigator.clipboard.writeText(text);
-    toast.success("Texto copiado!");
+    toast.success("Texto copiado para a área de transferência!");
     setShowShare(false);
   };
 
@@ -205,26 +221,36 @@ export const AchievementDetailCard = ({
         <CategoryBadge category={isHidden ? "secreto" : achievement.category} />
       </div>
 
-      {/* Share button — always visible for unlocked */}
+      {/* Share button — visible for unlocked achievements */}
       {achievement.unlocked && (
-        <div className="px-3.5 pb-2.5 pt-0 flex items-center justify-between">
+        <div className="px-3.5 pb-2.5 pt-0 flex items-center">
           <button
             onClick={handleShare}
-            className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-primary transition-colors group"
+            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium text-muted-foreground 
+              hover:text-primary hover:bg-primary/5 active:scale-95 transition-all group"
           >
-            <Share2 size={13} className="group-hover:scale-110 transition-transform" />
-            Compartilhar
-            <motion.div
-              animate={{ rotate: showShare ? 180 : 0 }}
-              transition={{ duration: 0.2 }}
-            >
-              <ChevronDown size={12} />
-            </motion.div>
+            {hasNativeShare ? (
+              <>
+                <ExternalLink size={13} className="group-active:scale-110 transition-transform" />
+                Compartilhar
+              </>
+            ) : (
+              <>
+                <Share2 size={13} className="group-hover:scale-110 transition-transform" />
+                Compartilhar
+                <motion.div
+                  animate={{ rotate: showShare ? 180 : 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <ChevronDown size={12} />
+                </motion.div>
+              </>
+            )}
           </button>
         </div>
       )}
 
-      {/* Fallback share drawer — desktop (mobile uses Web Share API) */}
+      {/* Fallback share drawer — desktop or when Web Share fails */}
       <AnimatePresence>
         {showShare && achievement.unlocked && (
           <motion.div
