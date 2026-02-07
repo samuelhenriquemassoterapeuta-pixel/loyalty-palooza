@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { motion } from "framer-motion";
 import { ArrowLeft, Play, Pause, CheckCircle, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -10,7 +10,10 @@ import { GaleriaEvolucao } from "./GaleriaEvolucao";
 import { MetasSemanais } from "./MetasSemanais";
 import { GuiaResumoProtocolo } from "./GuiaResumoProtocolo";
 import { PosturalAssessmentLink } from "./PosturalAssessmentLink";
+import { PosturalReportButton } from "./PosturalReportButton";
 import { useUsuarioProtocolos } from "@/hooks/useProtocolos";
+import { useFichas } from "@/hooks/useProtocolos";
+import { useAvaliacoesPosturais } from "@/hooks/useAvaliacaoPostural";
 import { format, differenceInWeeks } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
@@ -36,10 +39,16 @@ export const ProtocoloDetail = ({ protocolo, onBack }: ProtocoloDetailProps) => 
   const { meus, ativar, atualizarStatus } = useUsuarioProtocolos();
   const [tab, setTab] = useState("resumo");
   const isPostural = protocolo.tipo === "postural";
+  const chartRef = useRef<HTMLDivElement>(null);
 
   const meuProtocolo = meus.find(
     (p) => p.protocolo_id === protocolo.id && (p.status === "ativo" || p.status === "pausado")
   );
+
+  // Fetch data for postural reports
+  const { fichas } = useFichas(meuProtocolo?.id || "");
+  const { avaliacoes } = useAvaliacoesPosturais();
+
 
   const isAtivo = meuProtocolo?.status === "ativo";
   const isPausado = meuProtocolo?.status === "pausado";
@@ -163,9 +172,22 @@ export const ProtocoloDetail = ({ protocolo, onBack }: ProtocoloDetailProps) => 
         </div>
       </div>
 
-      {/* Postural assessment link - only for postural protocols with active enrollment */}
+      {/* Postural assessment link + Report - only for postural protocols with active enrollment */}
       {isPostural && meuProtocolo && (
-        <PosturalAssessmentLink />
+        <>
+          <div className="flex items-center justify-between gap-2">
+            <PosturalAssessmentLink />
+          </div>
+          <div className="flex justify-end">
+            <PosturalReportButton
+              fichas={fichas}
+              avaliacoes={avaliacoes}
+              chartRef={chartRef}
+              protocoloNome={protocolo.nome}
+              protocoloUsuarioId={meuProtocolo.id}
+            />
+          </div>
+        </>
       )}
 
       {/* Tabs - show guide tab always, other tabs only if enrolled */}
@@ -193,7 +215,7 @@ export const ProtocoloDetail = ({ protocolo, onBack }: ProtocoloDetailProps) => 
               />
             </TabsContent>
             <TabsContent value="ficha" className="mt-4">
-              <FichaAcompanhamento protocoloUsuarioId={meuProtocolo.id} />
+              <FichaAcompanhamento protocoloUsuarioId={meuProtocolo.id} externalChartRef={isPostural ? chartRef : undefined} />
             </TabsContent>
             <TabsContent value="metas" className="mt-4">
               <MetasSemanais protocoloUsuarioId={meuProtocolo.id} />

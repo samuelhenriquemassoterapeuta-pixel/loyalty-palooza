@@ -20,13 +20,15 @@ import { ptBR } from "date-fns/locale";
 
 interface FichaAcompanhamentoProps {
   protocoloUsuarioId: string;
+  externalChartRef?: React.RefObject<HTMLDivElement | null>;
 }
 
-export const FichaAcompanhamento = ({ protocoloUsuarioId }: FichaAcompanhamentoProps) => {
+export const FichaAcompanhamento = ({ protocoloUsuarioId, externalChartRef }: FichaAcompanhamentoProps) => {
   const { fichas, adicionar } = useFichas(protocoloUsuarioId);
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState<Partial<FichaData>>({});
-  const chartRef = useRef<HTMLDivElement>(null);
+  const internalChartRef = useRef<HTMLDivElement>(null);
+  const chartRef = externalChartRef || internalChartRef;
 
   const handleSubmit = () => {
     adicionar.mutate(
