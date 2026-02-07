@@ -3,16 +3,17 @@ import { motion } from "framer-motion";
 import { Trophy, TrendingUp, Filter } from "lucide-react";
 import { AppLayout } from "@/components/AppLayout";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useAchievements } from "@/hooks/useAchievements";
+import { useAchievementCelebration } from "@/hooks/useAchievementCelebration";
 import { useRanking } from "@/hooks/useRanking";
 import { AchievementsSummary } from "@/components/conquistas/AchievementsSummary";
 import { AchievementDetailCard } from "@/components/conquistas/AchievementDetailCard";
+import { AchievementCelebration } from "@/components/conquistas/AchievementCelebration";
 import { RankingList } from "@/components/conquistas/RankingList";
 
 type FilterMode = "todos" | "desbloqueados" | "em_progresso";
 
 const Conquistas = () => {
-  const { achievements, totalUnlocked } = useAchievements();
+  const { achievements, totalUnlocked, celebration, dismiss } = useAchievementCelebration();
   const { ranking, myPosition, isLoading: rankingLoading } = useRanking();
   const [filter, setFilter] = useState<FilterMode>("todos");
 
@@ -148,6 +149,11 @@ const Conquistas = () => {
           </motion.div>
         </div>
       </div>
+      <AchievementCelebration
+        isOpen={!!celebration}
+        achievement={celebration}
+        onClose={dismiss}
+      />
     </AppLayout>
   );
 };
