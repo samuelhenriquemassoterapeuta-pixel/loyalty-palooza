@@ -15,6 +15,7 @@ import { useTerapeutas, Terapeuta } from "@/hooks/useTerapeutas";
 import { TerapeutaSelector } from "@/components/agendamento/TerapeutaSelector";
 import { AvaliacaoDialog } from "@/components/agendamento/AvaliacaoDialog";
 import { ReagendarDialog } from "@/components/agendamento/ReagendarDialog";
+import { PriorityBanner } from "@/components/agendamento/PriorityBanner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ServicosListSkeleton, AgendamentosListSkeleton } from "@/components/skeletons";
 import { LoadingSpinner, ButtonLoader } from "@/components/LoadingSpinner";
@@ -379,9 +380,12 @@ const Agendamento = () => {
                 )}
               </TabsContent>
 
-              <TabsContent value="novo" className="mt-4">
+              <TabsContent value="novo" className="mt-4 space-y-4">
+                {/* Priority scheduling banner */}
+                <PriorityBanner />
+
                 {/* Progress */}
-                <div className="flex gap-2 mb-6">
+                <div className="flex gap-2">
                   {[1, 2, 3, 4].map((s) => (
                     <div
                       key={s}
