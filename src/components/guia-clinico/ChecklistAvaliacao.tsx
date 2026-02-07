@@ -1,10 +1,16 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ClipboardCheck, RotateCcw, CheckCircle2, Circle, AlertTriangle, ThermometerSun, Hand, Eye, Ruler } from "lucide-react";
+import {
+  ClipboardCheck, RotateCcw, CheckCircle2, Circle, AlertTriangle,
+  ThermometerSun, Hand, Eye, Ruler, Save, History, Trash2, ChevronDown,
+} from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
+import { useChecklistsAvaliacao } from "@/hooks/useChecklistsAvaliacao";
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
 
 interface CheckItem {
   id: string;
@@ -99,9 +105,17 @@ const categoryLabels: Record<string, { label: string; color: string }> = {
   seguranca: { label: "Segurança", color: "text-destructive" },
 };
 
-export const ChecklistAvaliacao = () => {
+interface ChecklistAvaliacaoProps {
+  protocoloUsuarioId?: string;
+  agendamentoId?: string;
+}
+
+export const ChecklistAvaliacao = ({ protocoloUsuarioId, agendamentoId }: ChecklistAvaliacaoProps) => {
   const [checked, setChecked] = useState<Set<string>>(new Set());
   const [notas, setNotas] = useState("");
+  const [showHistory, setShowHistory] = useState(false);
+
+  const { checklists, salvar, excluir } = useChecklistsAvaliacao(protocoloUsuarioId);
 
   const toggleItem = (id: string) => {
     setChecked((prev) => {
@@ -115,6 +129,24 @@ export const ChecklistAvaliacao = () => {
   const reset = () => {
     setChecked(new Set());
     setNotas("");
+  };
+
+  const handleSave = () => {
+    if (checked.size === 0) return;
+    salvar.mutate(
+      {
+        itensMarcados: Array.from(checked),
+        observacoes: notas,
+        protocoloUsuarioId,
+        agendamentoId,
+      },
+      { onSuccess: reset }
+    );
+  };
+
+  const loadChecklist = (itens: string[], obs: string | null) => {
+    setChecked(new Set(itens));
+    setNotas(obs ?? "");
   };
 
   const progress = Math.round((checked.size / checklistItems.length) * 100);
@@ -238,6 +270,101 @@ export const ChecklistAvaliacao = () => {
           className="min-h-[80px] text-xs"
         />
       </Card>
+
+      {/* Save button */}
+      <Button
+        onClick={handleSave}
+        disabled={checked.size === 0 || salvar.isPending}
+        className="w-full gap-2"
+      >
+        <Save size={16} />
+        {salvar.isPending ? "Salvando..." : "Salvar avaliação"}
+      </Button>
+
+      {/* History */}
+      {checklists.length > 0 && (
+        <div className="space-y-3">
+          <button
+            onClick={() => setShowHistory(!showHistory)}
+            className="flex items-center gap-2 text-xs font-semibold text-muted-foreground hover:text-foreground transition-colors w-full"
+          >
+            <History size={14} />
+            Histórico de avaliações ({checklists.length})
+            <ChevronDown
+              size={14}
+              className={`ml-auto transition-transform ${showHistory ? "rotate-180" : ""}`}
+            />
+          </button>
+
+          <AnimatePresence>
+            {showHistory && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: "auto", opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                className="overflow-hidden space-y-2"
+              >
+                {checklists.map((cl) => (
+                  <Card key={cl.id} className="p-3 space-y-2">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <Badge variant="outline" className="text-[10px]">
+                          {cl.itens_marcados.length}/{checklistItems.length} itens
+                        </Badge>
+                        <span className="text-[11px] text-muted-foreground">
+                          {format(new Date(cl.created_at), "dd/MM/yyyy 'às' HH:mm", { locale: ptBR })}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-7 w-7"
+                          onClick={() => loadChecklist(cl.itens_marcados, cl.observacoes)}
+                          title="Carregar"
+                        >
+                          <RotateCcw size={12} />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-7 w-7 text-destructive hover:text-destructive"
+                          onClick={() => excluir.mutate(cl.id)}
+                          title="Excluir"
+                        >
+                          <Trash2 size={12} />
+                        </Button>
+                      </div>
+                    </div>
+
+                    {/* Show checked items as small badges */}
+                    <div className="flex flex-wrap gap-1">
+                      {cl.itens_marcados.map((itemId) => {
+                        const item = checklistItems.find((i) => i.id === itemId);
+                        return item ? (
+                          <Badge
+                            key={itemId}
+                            variant="secondary"
+                            className="text-[9px] py-0.5"
+                          >
+                            ✓ {item.label}
+                          </Badge>
+                        ) : null;
+                      })}
+                    </div>
+
+                    {cl.observacoes && (
+                      <p className="text-[11px] text-muted-foreground italic">
+                        {cl.observacoes}
+                      </p>
+                    )}
+                  </Card>
+                ))}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      )}
     </div>
   );
 };
