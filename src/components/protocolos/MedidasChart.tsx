@@ -29,6 +29,7 @@ interface Ficha {
   medida_torax?: number | null;
   gordura_corporal?: number | null;
   imc?: number | null;
+  escala_eva?: number | null;
 }
 
 interface MedidasChartProps {
@@ -44,7 +45,8 @@ type MetricKey =
   | "medida_coxa"
   | "medida_torax"
   | "gordura_corporal"
-  | "imc";
+  | "imc"
+  | "escala_eva";
 
 const METRICS: { key: MetricKey; label: string; suffix: string; color: string }[] = [
   { key: "peso", label: "Peso", suffix: "kg", color: "hsl(var(--primary))" },
@@ -55,11 +57,20 @@ const METRICS: { key: MetricKey; label: string; suffix: string; color: string }[
   { key: "medida_torax", label: "Tórax", suffix: "cm", color: "hsl(200, 75%, 50%)" },
   { key: "gordura_corporal", label: "Gordura", suffix: "%", color: "hsl(340, 70%, 55%)" },
   { key: "imc", label: "IMC", suffix: "", color: "hsl(160, 60%, 45%)" },
+  { key: "escala_eva", label: "Dor (EVA)", suffix: "/10", color: "hsl(15, 80%, 55%)" },
 ];
 
 type ChartMode = "single" | "compare";
 
-const CustomTooltip = ({ active, payload, label, goalValue, goalLabel }: any) => {
+const evaEmoji = (v: number) => {
+  if (v === 0) return "😊";
+  if (v <= 3) return "🙂";
+  if (v <= 6) return "😐";
+  if (v <= 8) return "😣";
+  return "😫";
+};
+
+const CustomTooltip = ({ active, payload, label, goalValue, goalLabel, isEva }: any) => {
   if (!active || !payload?.length) return null;
   return (
     <div className="bg-card/95 backdrop-blur-sm border border-border rounded-xl px-3 py-2 shadow-lg">
@@ -67,8 +78,9 @@ const CustomTooltip = ({ active, payload, label, goalValue, goalLabel }: any) =>
       {payload
         .filter((entry: any) => entry.dataKey !== "goalLine")
         .map((entry: any) => (
-          <p key={entry.dataKey} className="text-xs font-semibold" style={{ color: entry.color }}>
-            {entry.name}: {entry.value}
+          <p key={entry.dataKey} className="text-xs font-semibold flex items-center gap-1" style={{ color: entry.color }}>
+            {isEva && <span>{evaEmoji(entry.value)}</span>}
+            {entry.name}: {entry.value}{isEva ? "/10" : ""}
           </p>
         ))}
       {goalValue != null && (
@@ -316,18 +328,20 @@ export const MedidasChart = ({ fichas, protocoloUsuarioId }: MedidasChartProps) 
               <div className="grid grid-cols-3 gap-2">
                 <div className="p-2.5 rounded-xl bg-muted/40 border border-border/50 text-center">
                   <p className="text-[10px] text-muted-foreground uppercase tracking-wide">Início</p>
-                  <p className="text-sm font-bold text-foreground">
+                  <p className="text-sm font-bold text-foreground flex items-center justify-center gap-1">
+                    {selected === "escala_eva" && <span className="text-base">{evaEmoji(stats.first)}</span>}
                     {stats.first}
-                    <span className="text-[10px] font-normal text-muted-foreground ml-0.5">
+                    <span className="text-[10px] font-normal text-muted-foreground">
                       {selectedMetric.suffix}
                     </span>
                   </p>
                 </div>
                 <div className="p-2.5 rounded-xl bg-muted/40 border border-border/50 text-center">
                   <p className="text-[10px] text-muted-foreground uppercase tracking-wide">Atual</p>
-                  <p className="text-sm font-bold text-foreground">
+                  <p className="text-sm font-bold text-foreground flex items-center justify-center gap-1">
+                    {selected === "escala_eva" && <span className="text-base">{evaEmoji(stats.last)}</span>}
                     {stats.last}
-                    <span className="text-[10px] font-normal text-muted-foreground ml-0.5">
+                    <span className="text-[10px] font-normal text-muted-foreground">
                       {selectedMetric.suffix}
                     </span>
                   </p>
@@ -348,6 +362,9 @@ export const MedidasChart = ({ fichas, protocoloUsuarioId }: MedidasChartProps) 
                     {stats.diff > 0 ? "+" : ""}
                     {stats.diff}
                     <span className="text-[10px] font-normal ml-0.5">{selectedMetric.suffix}</span>
+                    {selected === "escala_eva" && stats.diff < 0 && (
+                      <span className="text-[10px] ml-1">✨ Melhora!</span>
+                    )}
                   </p>
                 </div>
               </div>
@@ -478,15 +495,47 @@ export const MedidasChart = ({ fichas, protocoloUsuarioId }: MedidasChartProps) 
                   tick={{ fontSize: 10, fill: "hsl(var(--muted-foreground))" }}
                   tickLine={false}
                   axisLine={false}
-                  domain={[(dataMin: number) => {
-                    const min = currentGoal != null ? Math.min(dataMin, currentGoal) : dataMin;
-                    return Math.floor(min - 1);
-                  }, (dataMax: number) => {
-                    const max = currentGoal != null ? Math.max(dataMax, currentGoal) : dataMax;
-                    return Math.ceil(max + 1);
-                  }]}
+                  domain={selected === "escala_eva"
+                    ? [0, 10]
+                    : [(dataMin: number) => {
+                        const min = currentGoal != null ? Math.min(dataMin, currentGoal) : dataMin;
+                        return Math.floor(min - 1);
+                      }, (dataMax: number) => {
+                        const max = currentGoal != null ? Math.max(dataMax, currentGoal) : dataMax;
+                        return Math.ceil(max + 1);
+                      }]
+                  }
                 />
-                <Tooltip content={<CustomTooltip goalValue={currentGoal} goalLabel={selectedMetric.suffix} />} />
+                <Tooltip content={<CustomTooltip goalValue={currentGoal} goalLabel={selectedMetric.suffix} isEva={selected === "escala_eva"} />} />
+                {/* EVA pain zone reference lines */}
+                {selected === "escala_eva" && (
+                  <>
+                    <ReferenceLine
+                      y={3}
+                      stroke="hsl(80, 60%, 45%)"
+                      strokeDasharray="4 4"
+                      strokeWidth={1}
+                      strokeOpacity={0.5}
+                      label={{ value: "Leve", position: "right", fontSize: 9, fill: "hsl(80, 60%, 45%)" }}
+                    />
+                    <ReferenceLine
+                      y={6}
+                      stroke="hsl(45, 80%, 50%)"
+                      strokeDasharray="4 4"
+                      strokeWidth={1}
+                      strokeOpacity={0.5}
+                      label={{ value: "Moderada", position: "right", fontSize: 9, fill: "hsl(45, 80%, 50%)" }}
+                    />
+                    <ReferenceLine
+                      y={8}
+                      stroke="hsl(15, 80%, 55%)"
+                      strokeDasharray="4 4"
+                      strokeWidth={1}
+                      strokeOpacity={0.5}
+                      label={{ value: "Intensa", position: "right", fontSize: 9, fill: "hsl(15, 80%, 55%)" }}
+                    />
+                  </>
+                )}
                 {currentGoal != null && (
                   <ReferenceLine
                     y={currentGoal}
