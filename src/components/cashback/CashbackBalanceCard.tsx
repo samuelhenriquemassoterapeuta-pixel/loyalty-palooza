@@ -1,5 +1,4 @@
-import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import { TrendingUp, TrendingDown, Sparkles } from "lucide-react";
 import { AnimatedCounter } from "@/components/ui/animated-counter";
 
@@ -19,37 +18,18 @@ export const CashbackBalanceCard = ({
   totalUsado,
   showValues,
 }: CashbackBalanceCardProps) => {
-  const cardRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: cardRef,
-    offset: ["start end", "end start"],
-  });
-
-  // Parallax layers: background orbs move at different speeds
-  const orbY1 = useTransform(scrollYProgress, [0, 1], ["-30%", "30%"]);
-  const orbY2 = useTransform(scrollYProgress, [0, 1], ["20%", "-20%"]);
-  const orbScale = useTransform(scrollYProgress, [0, 0.5, 1], [0.9, 1.1, 0.95]);
-  const contentY = useTransform(scrollYProgress, [0, 1], ["0%", "8%"]);
-
   return (
     <motion.div
-      ref={cardRef}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       className="relative overflow-hidden rounded-3xl p-6 text-primary-foreground"
     >
       {/* Background */}
       <div className="absolute inset-0 gradient-primary" />
-      <motion.div
-        style={{ y: orbY1, scale: orbScale }}
-        className="absolute -top-16 -right-16 w-40 h-40 rounded-full bg-primary-foreground/10 blur-2xl"
-      />
-      <motion.div
-        style={{ y: orbY2, scale: orbScale }}
-        className="absolute -bottom-10 -left-10 w-32 h-32 rounded-full bg-accent/20 blur-xl"
-      />
+      <div className="absolute -top-16 -right-16 w-40 h-40 rounded-full bg-primary-foreground/10 blur-2xl" />
+      <div className="absolute -bottom-10 -left-10 w-32 h-32 rounded-full bg-accent/20 blur-xl" />
 
-      <motion.div style={{ y: contentY }} className="relative z-10">
+      <div className="relative z-10">
         {/* Balance */}
         <div className="flex items-center gap-2 mb-2">
           <Sparkles size={16} className="opacity-80" />
@@ -93,7 +73,7 @@ export const CashbackBalanceCard = ({
             </div>
           </div>
         </div>
-      </motion.div>
+      </div>
     </motion.div>
   );
 };

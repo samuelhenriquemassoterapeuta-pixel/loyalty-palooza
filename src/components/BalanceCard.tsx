@@ -1,5 +1,5 @@
-import { useRef, useState } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { useState } from "react";
+import { motion } from "framer-motion";
 import { Eye, EyeOff, TrendingUp, Sparkles, ChevronRight, Crown } from "lucide-react";
 import { AnimatedCounter } from "@/components/ui/animated-counter";
 import { useNavigate } from "react-router-dom";
@@ -16,18 +16,6 @@ export const BalanceCard = () => {
   const { tier, loading: tierLoading, celebration, dismiss } = useTierCelebration();
   const navigate = useNavigate();
 
-  const cardRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: cardRef,
-    offset: ["start end", "end start"],
-  });
-
-  // Parallax layers
-  const orbY1 = useTransform(scrollYProgress, [0, 1], ["-30%", "30%"]);
-  const orbY2 = useTransform(scrollYProgress, [0, 1], ["20%", "-20%"]);
-  const orbScale = useTransform(scrollYProgress, [0, 0.5, 1], [0.9, 1.1, 0.95]);
-  const contentY = useTransform(scrollYProgress, [0, 1], ["0%", "8%"]);
-
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat("pt-BR", {
       style: "currency",
@@ -36,23 +24,17 @@ export const BalanceCard = () => {
   };
 
   if (loading) {
-    return (
-      <div ref={cardRef}>
-        <BalanceCardSkeleton />
-      </div>
-    );
+    return <BalanceCardSkeleton />;
   }
 
   if (error) {
     return (
-      <div ref={cardRef}>
-        <ErrorState
-          compact
-          title="Erro ao carregar saldo"
-          message={error}
-          onRetry={refetch}
-        />
-      </div>
+      <ErrorState
+        compact
+        title="Erro ao carregar saldo"
+        message={error}
+        onRetry={refetch}
+      />
     );
   }
 
@@ -67,21 +49,16 @@ export const BalanceCard = () => {
         />
       )}
       <motion.div
-        ref={cardRef}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
         className="relative overflow-hidden rounded-3xl p-6 text-primary-foreground shadow-elevated"
       >
         {/* Background gradient */}
         <div className="absolute inset-0 gradient-primary" />
         
-        {/* Parallax decorative elements */}
-        <motion.div
-          style={{ y: orbY1, scale: orbScale }}
-          className="absolute -top-20 -right-20 w-40 h-40 rounded-full bg-accent/30 blur-2xl"
-        />
-        <motion.div
-          style={{ y: orbY2, scale: orbScale }}
-          className="absolute -bottom-10 -left-10 w-32 h-32 rounded-full bg-highlight/30 blur-xl"
-        />
+        {/* Decorative elements */}
+        <div className="absolute -top-20 -right-20 w-40 h-40 rounded-full bg-accent/30 blur-2xl" />
+        <div className="absolute -bottom-10 -left-10 w-32 h-32 rounded-full bg-highlight/30 blur-xl" />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 rounded-full bg-primary-foreground/5 blur-3xl" />
         
         {/* Organic blob shape */}
@@ -98,8 +75,8 @@ export const BalanceCard = () => {
           className="absolute top-4 right-4 w-24 h-24 blob bg-primary-foreground/5"
         />
         
-        {/* Content with subtle parallax */}
-        <motion.div style={{ y: contentY }} className="relative z-10">
+        {/* Content */}
+        <div className="relative z-10">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
               <Sparkles size={16} className="opacity-80" />
@@ -178,7 +155,7 @@ export const BalanceCard = () => {
               <ChevronRight size={18} className="opacity-60 shrink-0" />
             </motion.button>
           </div>
-        </motion.div>
+        </div>
       </motion.div>
     </>
   );
