@@ -10,34 +10,33 @@
     <meta name="mobile-web-app-capable" content="yes" />
     
     <!-- SEO Meta Tags -->
-    <title>Resinkra - Cashback Sustentável | Ganhe Recompensas</title>
-    <meta name="description" content="Resinkra: A plataforma de cashback sustentável. Ganhe recompensas em todas as suas compras enquanto contribui para um consumo mais consciente. Baixe o app!" />
-    <meta name="keywords" content="cashback, sustentável, recompensas, consumo consciente, economia, desconto, app, aplicativo, Resinkra" />
+    <title>Resinkra | Terapias Naturais com Cashback em Cada Sessão</title>
+    <meta name="description" content="Resinkra: terapias naturais que cuidam do seu corpo e recompensam você. Agende sessões, acumule cashback e suba de nível no programa de fidelidade. 100% digital." />
+    <meta name="keywords" content="terapias naturais, cashback, bem-estar, terapia holística, agendamento, fidelidade, recompensas, saúde, Resinkra" />
     <meta name="author" content="Resinkra" />
-    <meta name="robots" content="index, follow" />
-    <link rel="canonical" href="https://app.resinkra.com" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://resinkra.com.br" />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://app.resinkra.com" />
-    <meta property="og:title" content="Resinkra - Cashback Sustentável | Ganhe Recompensas" />
-    <meta property="og:description" content="A plataforma de cashback que recompensa seu consumo consciente. Ganhe dinheiro de volta em todas as compras!" />
-    <meta property="og:image" content="https://app.resinkra.com/pwa-512x512.png" />
+    <meta property="og:url" content="https://resinkra.com.br" />
+    <meta property="og:title" content="Resinkra | Terapias Naturais com Cashback" />
+    <meta property="og:description" content="Cuide de você e ganhe por isso. Terapias naturais com programa de cashback exclusivo. Agende online, acumule créditos e indique amigos." />
+    <meta property="og:image" content="https://resinkra.com.br/pwa-512x512.png" />
     <meta property="og:image:width" content="512" />
     <meta property="og:image:height" content="512" />
-    <meta property="og:image:alt" content="Resinkra - Logo do aplicativo de cashback sustentável" />
+    <meta property="og:image:alt" content="Resinkra - Terapias naturais com cashback" />
     <meta property="og:locale" content="pt_BR" />
     <meta property="og:site_name" content="Resinkra" />
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:url" content="https://app.resinkra.com" />
-    <meta name="twitter:title" content="Resinkra - Cashback Sustentável" />
-    <meta name="twitter:description" content="Ganhe cashback em todas as suas compras. Consumo consciente com recompensas!" />
-    <meta name="twitter:image" content="https://app.resinkra.com/pwa-512x512.png" />
-    <meta name="twitter:image:alt" content="Resinkra - Cashback Sustentável" />
+    <meta name="twitter:url" content="https://resinkra.com.br" />
+    <meta name="twitter:title" content="Resinkra | Terapias Naturais com Cashback" />
+    <meta name="twitter:description" content="Cuide de você e ganhe por isso. Agende terapias naturais e acumule cashback em cada sessão." />
+    <meta name="twitter:image" content="https://resinkra.com.br/pwa-512x512.png" />
+    <meta name="twitter:image:alt" content="Resinkra - Terapias naturais com cashback" />
     <meta name="twitter:site" content="@resinkra" />
-    <meta name="twitter:creator" content="@resinkra" />
 
     <!-- Additional SEO -->
     <meta name="application-name" content="Resinkra" />
@@ -49,24 +48,60 @@
     <link rel="apple-touch-icon" href="/pwa-192x192.png" />
     <link rel="manifest" href="/manifest.webmanifest" />
 
-    <!-- Structured Data (JSON-LD) -->
+    <!-- Structured Data (JSON-LD) - Business -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "MobileApplication",
+      "@type": "HealthAndBeautyBusiness",
       "name": "Resinkra",
-      "description": "Plataforma de cashback sustentável. Ganhe recompensas em todas as suas compras enquanto contribui para um consumo mais consciente.",
-      "applicationCategory": "FinanceApplication",
-      "operatingSystem": "iOS, Android, Web",
+      "description": "Terapias naturais com programa de cashback exclusivo. Cuide do seu bem-estar e seja recompensado a cada sessão.",
+      "url": "https://resinkra.com.br",
+      "logo": "https://resinkra.com.br/pwa-512x512.png",
+      "image": "https://resinkra.com.br/pwa-512x512.png",
+      "priceRange": "$$",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "São Paulo",
+        "addressRegion": "SP",
+        "addressCountry": "BR"
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.9",
+        "bestRating": "5",
+        "ratingCount": "150"
+      },
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Terapias Naturais",
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Terapias Holísticas",
+              "description": "Sessões de terapias naturais com cashback incluso"
+            }
+          }
+        ]
+      }
+    }
+    </script>
+
+    <!-- Structured Data (JSON-LD) - WebApp -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Resinkra",
+      "description": "App de agendamento de terapias naturais com programa de cashback e fidelidade.",
+      "url": "https://resinkra.com.br",
+      "applicationCategory": "HealthApplication",
+      "operatingSystem": "Web, iOS, Android",
       "offers": {
         "@type": "Offer",
         "price": "0",
         "priceCurrency": "BRL"
-      },
-      "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.8",
-        "ratingCount": "150"
       }
     }
     </script>
