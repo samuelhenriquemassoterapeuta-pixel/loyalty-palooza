@@ -136,6 +136,42 @@ export type Database = {
           },
         ]
       }
+      avaliacoes_posturais: {
+        Row: {
+          created_at: string
+          data: string
+          foto_anterior: string | null
+          foto_lateral_direita: string | null
+          foto_lateral_esquerda: string | null
+          foto_posterior: string | null
+          id: string
+          observacoes: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          data?: string
+          foto_anterior?: string | null
+          foto_lateral_direita?: string | null
+          foto_lateral_esquerda?: string | null
+          foto_posterior?: string | null
+          id?: string
+          observacoes?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          data?: string
+          foto_anterior?: string | null
+          foto_lateral_direita?: string | null
+          foto_lateral_esquerda?: string | null
+          foto_posterior?: string | null
+          id?: string
+          observacoes?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       checklists_avaliacao: {
         Row: {
           agendamento_id: string | null

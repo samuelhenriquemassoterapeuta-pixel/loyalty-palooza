@@ -24,6 +24,7 @@ import Alongamento from "@/pages/Alongamento";
 import Protocolos from "@/pages/Protocolos";
 import Conquistas from "@/pages/Conquistas";
 import GuiaClinico from "@/pages/GuiaClinico";
+import AvaliacaoPostural from "@/pages/AvaliacaoPostural";
 import NotFound from "@/pages/NotFound";
 
 /** Shows landing for visitors, dashboard for authenticated users */
@@ -226,6 +227,16 @@ export const AnimatedRoutes = () => {
             <ProtectedRoute>
               <PageTransition>
                 <GuiaClinico />
+              </PageTransition>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/avaliacao-postural"
+          element={
+            <ProtectedRoute>
+              <PageTransition>
+                <AvaliacaoPostural />
               </PageTransition>
             </ProtectedRoute>
           }
