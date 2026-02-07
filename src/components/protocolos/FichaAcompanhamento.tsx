@@ -68,7 +68,7 @@ export const FichaAcompanhamento = ({ protocoloUsuarioId }: FichaAcompanhamentoP
         <h3 className="font-semibold text-foreground">Ficha de Acompanhamento</h3>
         <div className="flex items-center gap-2">
           {fichas.length > 0 && (
-            <ExportPdfButton fichas={fichas} chartRef={chartRef} />
+            <ExportPdfButton fichas={fichas} chartRef={chartRef} protocoloUsuarioId={protocoloUsuarioId} />
           )}
           <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
