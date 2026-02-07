@@ -4,6 +4,7 @@ import { useTransacoes } from "@/hooks/useTransacoes";
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { TransactionHistorySkeleton } from "@/components/skeletons";
+import { ErrorState } from "@/components/ErrorState";
 
 const container = {
   hidden: { opacity: 0 },
@@ -29,7 +30,7 @@ const item = {
 };
 
 export const TransactionHistory = () => {
-  const { transacoes, loading } = useTransacoes();
+  const { transacoes, loading, error, refetch } = useTransacoes();
 
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat("pt-BR", {
@@ -44,6 +45,22 @@ export const TransactionHistory = () => {
 
   if (loading) {
     return <TransactionHistorySkeleton />;
+  }
+
+  if (error) {
+    return (
+      <section>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-bold text-foreground">Histórico</h3>
+        </div>
+        <ErrorState
+          compact
+          title="Erro ao carregar histórico"
+          message={error}
+          onRetry={refetch}
+        />
+      </section>
+    );
   }
 
   if (transacoes.length === 0) {

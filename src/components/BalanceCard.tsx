@@ -7,10 +7,11 @@ import { TIER_CONFIG, TierName } from "@/hooks/useUserTier";
 import { useTierCelebration } from "@/hooks/useTierCelebration";
 import { TierCelebration } from "@/components/TierCelebration";
 import { BalanceCardSkeleton } from "@/components/skeletons";
+import { ErrorState } from "@/components/ErrorState";
 
 export const BalanceCard = () => {
   const [showBalance, setShowBalance] = useState(true);
-  const { stats, loading } = useTransacoes();
+  const { stats, loading, error, refetch } = useTransacoes();
   const { tier, loading: tierLoading, celebration, dismiss } = useTierCelebration();
   const navigate = useNavigate();
 
@@ -23,6 +24,17 @@ export const BalanceCard = () => {
 
   if (loading) {
     return <BalanceCardSkeleton />;
+  }
+
+  if (error) {
+    return (
+      <ErrorState
+        compact
+        title="Erro ao carregar saldo"
+        message={error}
+        onRetry={refetch}
+      />
+    );
   }
 
   return (

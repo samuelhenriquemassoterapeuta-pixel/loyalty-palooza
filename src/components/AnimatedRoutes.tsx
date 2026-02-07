@@ -143,7 +143,7 @@ export const AnimatedRoutes = () => {
         <Route
           path="/admin"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute requireAdmin>
               <PageTransition>
                 <Admin />
               </PageTransition>
