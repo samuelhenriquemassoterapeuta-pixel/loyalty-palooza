@@ -24,9 +24,20 @@ export interface FichaAcompanhamentoRow {
   observacoes: string | null;
 }
 
+export interface MetaSemanaiRow {
+  dateLabel: string;
+  protocolo: string;
+  semana_numero: number;
+  descricao: string;
+  meta_valor: string | null;
+  concluida: boolean;
+  data_conclusao: string | null;
+}
+
 export interface ClinicalCsvData {
   observacoes: AvaliacaoObservacao[];
   fichas: FichaAcompanhamentoRow[];
+  metas: MetaSemanaiRow[];
 }
 
 function formatDate(dateStr: string): string {
@@ -100,7 +111,29 @@ export const useClinicalCsvData = () => {
         }));
       }
 
-      return { observacoes, fichas };
+      // Fetch metas semanais concluídas
+      let metas: MetaSemanaiRow[] = [];
+      if (puIds.length > 0) {
+        const { data: metasData, error: mErr } = await supabase
+          .from("metas_semanais")
+          .select("*")
+          .in("protocolo_usuario_id", puIds)
+          .eq("concluida", true)
+          .order("created_at", { ascending: true });
+        if (mErr) throw mErr;
+
+        metas = (metasData || []).map((m) => ({
+          dateLabel: m.data_conclusao ? formatDate(m.data_conclusao) : formatDate(m.created_at),
+          protocolo: protocoloNames.get(m.protocolo_usuario_id) || "Protocolo",
+          semana_numero: m.semana_numero,
+          descricao: m.descricao,
+          meta_valor: m.meta_valor,
+          concluida: m.concluida,
+          data_conclusao: m.data_conclusao,
+        }));
+      }
+
+      return { observacoes, fichas, metas };
     },
   });
 };

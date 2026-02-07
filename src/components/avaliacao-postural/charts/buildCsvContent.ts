@@ -71,6 +71,25 @@ export function buildCsvContent(
     lines.push("");
   }
 
+  // Metas semanais concluídas section
+  if (clinicalData?.metas && clinicalData.metas.length > 0) {
+    lines.push("METAS SEMANAIS CONCLUÍDAS");
+    lines.push("Data Conclusão,Protocolo,Semana,Descrição,Valor Alvo");
+    for (const m of clinicalData.metas) {
+      const descEscaped = m.descricao.replace(/"/g, '""').replace(/\n/g, " ");
+      lines.push(
+        [
+          m.dateLabel,
+          `"${m.protocolo}"`,
+          m.semana_numero,
+          `"${descEscaped}"`,
+          m.meta_valor ? `"${m.meta_valor}"` : "",
+        ].join(",")
+      );
+    }
+    lines.push("");
+  }
+
   // Summary statistics
   lines.push("RESUMO ESTATÍSTICO");
   lines.push("Medição,Mínimo (°),Máximo (°),Média (°),Variação Total (°)");

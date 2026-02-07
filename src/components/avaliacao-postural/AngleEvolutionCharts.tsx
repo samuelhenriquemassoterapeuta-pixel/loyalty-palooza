@@ -46,7 +46,7 @@ export const AngleEvolutionCharts = () => {
 
   const hasAngleData = series.length > 0;
   const hasMeasurementData = measurementSeries.length > 0;
-  const hasClinicalData = (clinicalData?.observacoes?.length ?? 0) > 0 || (clinicalData?.fichas?.length ?? 0) > 0;
+  const hasClinicalData = (clinicalData?.observacoes?.length ?? 0) > 0 || (clinicalData?.fichas?.length ?? 0) > 0 || (clinicalData?.metas?.length ?? 0) > 0;
   const hasAnyData = hasAngleData || hasMeasurementData || hasClinicalData;
 
   if (isLoading || isMeasLoading || isClinicalLoading) {
@@ -132,7 +132,7 @@ export const AngleEvolutionCharts = () => {
           <BarChart3 size={24} className="mx-auto mb-2 text-muted-foreground/40" />
           <p className="text-xs text-muted-foreground">
             Sem dados de ângulos ainda — adicione anotações de ângulo para visualizar gráficos.
-            Seus dados clínicos ({clinicalData!.observacoes.length} observação(ões), {clinicalData!.fichas.length} ficha(s)) estão disponíveis no CSV.
+            Seus dados clínicos ({clinicalData!.observacoes.length} observação(ões), {clinicalData!.fichas.length} ficha(s), {clinicalData!.metas.length} meta(s)) estão disponíveis no CSV.
           </p>
         </div>
       )}
