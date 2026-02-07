@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Plus, TrendingDown, TrendingUp, Minus, Scale, Ruler, Activity } from "lucide-react";
 import { MedidasChart } from "./MedidasChart";
+import { ExportPdfButton } from "./ExportPdfButton";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -24,6 +25,7 @@ export const FichaAcompanhamento = ({ protocoloUsuarioId }: FichaAcompanhamentoP
   const { fichas, adicionar } = useFichas(protocoloUsuarioId);
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState<Partial<FichaData>>({});
+  const chartRef = useRef<HTMLDivElement>(null);
 
   const handleSubmit = () => {
     adicionar.mutate(
@@ -62,14 +64,18 @@ export const FichaAcompanhamento = ({ protocoloUsuarioId }: FichaAcompanhamentoP
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between gap-2">
         <h3 className="font-semibold text-foreground">Ficha de Acompanhamento</h3>
-        <Dialog open={open} onOpenChange={setOpen}>
-          <DialogTrigger asChild>
-            <Button size="sm" className="gap-1.5">
-              <Plus size={16} /> Nova Medição
-            </Button>
-          </DialogTrigger>
+        <div className="flex items-center gap-2">
+          {fichas.length > 0 && (
+            <ExportPdfButton fichas={fichas} chartRef={chartRef} />
+          )}
+          <Dialog open={open} onOpenChange={setOpen}>
+            <DialogTrigger asChild>
+              <Button size="sm" className="gap-1.5">
+                <Plus size={16} /> Nova Medição
+              </Button>
+            </DialogTrigger>
           <DialogContent className="max-h-[85vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>Registrar Medidas</DialogTitle>
@@ -126,7 +132,8 @@ export const FichaAcompanhamento = ({ protocoloUsuarioId }: FichaAcompanhamentoP
               {adicionar.isPending ? "Salvando..." : "Salvar Medidas"}
             </Button>
           </DialogContent>
-        </Dialog>
+          </Dialog>
+        </div>
       </div>
 
       {/* Current stats cards */}
@@ -171,7 +178,9 @@ export const FichaAcompanhamento = ({ protocoloUsuarioId }: FichaAcompanhamentoP
 
       {/* Evolution charts */}
       {fichas.length >= 2 && (
-        <MedidasChart fichas={fichas} protocoloUsuarioId={protocoloUsuarioId} />
+        <div ref={chartRef}>
+          <MedidasChart fichas={fichas} protocoloUsuarioId={protocoloUsuarioId} />
+        </div>
       )}
 
       {/* History list */}
