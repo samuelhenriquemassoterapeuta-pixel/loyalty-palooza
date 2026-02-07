@@ -9,6 +9,7 @@ import { toast } from "sonner";
 
 import { AngleChart } from "./charts/AngleChart";
 import { MeasurementChart } from "./charts/MeasurementChart";
+import { ComparativeSummary } from "./charts/ComparativeSummary";
 import { buildMeasurementSeries } from "./charts/measurementSeriesUtils";
 import { buildCsvContent } from "./charts/buildCsvContent";
 
@@ -182,6 +183,12 @@ export const AngleEvolutionCharts = () => {
           ))}
         </div>
       )}
+
+      {/* Comparative summary */}
+      <ComparativeSummary
+        angleSeries={series}
+        measurementSeries={measurementSeries}
+      />
     </motion.div>
   );
 };
