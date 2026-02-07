@@ -10,6 +10,7 @@ export interface Transacao {
   descricao: string | null;
   referencia_id: string | null;
   created_at: string;
+  expira_em: string | null;
 }
 
 export interface UserStats {
