@@ -5,12 +5,12 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ProgressDashboard } from "./ProgressDashboard";
-import { FichaAcompanhamento } from "./FichaAcompanhamento";
-import { GaleriaEvolucao } from "./GaleriaEvolucao";
 import { MetasSemanais } from "./MetasSemanais";
-import { GuiaResumoProtocolo } from "./GuiaResumoProtocolo";
 import { PosturalAssessmentLink } from "./PosturalAssessmentLink";
 import { PosturalReportButton } from "./PosturalReportButton";
+import { FichaAcompanhamento } from "./FichaAcompanhamento";
+import { GaleriaEvolucao } from "./GaleriaEvolucao";
+import { GuiaResumoProtocolo } from "./GuiaResumoProtocolo";
 import { useUsuarioProtocolos } from "@/hooks/useProtocolos";
 import { useFichas } from "@/hooks/useProtocolos";
 import { useAvaliacoesPosturais } from "@/hooks/useAvaliacaoPostural";
@@ -33,11 +33,12 @@ interface ProtocoloDetailProps {
 const tipoLabels: Record<string, { label: string; class: string }> = {
   emagrecimento: { label: "Emagrecimento", class: "bg-highlight/15 text-highlight" },
   drenagem_pos_operatorio: { label: "Drenagem Pós-Op", class: "bg-info/15 text-info" },
+  postural: { label: "Postural", class: "bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400" },
 };
 
 export const ProtocoloDetail = ({ protocolo, onBack }: ProtocoloDetailProps) => {
   const { meus, ativar, atualizarStatus } = useUsuarioProtocolos();
-  const [tab, setTab] = useState("resumo");
+  const [tab, setTab] = useState("progresso");
   const isPostural = protocolo.tipo === "postural";
   const chartRef = useRef<HTMLDivElement>(null);
 
@@ -45,10 +46,8 @@ export const ProtocoloDetail = ({ protocolo, onBack }: ProtocoloDetailProps) => 
     (p) => p.protocolo_id === protocolo.id && (p.status === "ativo" || p.status === "pausado")
   );
 
-  // Fetch data for postural reports
   const { fichas } = useFichas(meuProtocolo?.id || "");
   const { avaliacoes } = useAvaliacoesPosturais();
-
 
   const isAtivo = meuProtocolo?.status === "ativo";
   const isPausado = meuProtocolo?.status === "pausado";
@@ -172,62 +171,72 @@ export const ProtocoloDetail = ({ protocolo, onBack }: ProtocoloDetailProps) => 
         </div>
       </div>
 
-      {/* Postural assessment link + Report - only for postural protocols with active enrollment */}
-      {isPostural && meuProtocolo && (
-        <>
-          <div className="flex items-center justify-between gap-2">
-            <PosturalAssessmentLink />
-          </div>
-          <div className="flex justify-end">
-            <PosturalReportButton
-              fichas={fichas}
-              avaliacoes={avaliacoes}
-              chartRef={chartRef}
-              protocoloNome={protocolo.nome}
-              protocoloUsuarioId={meuProtocolo.id}
-            />
-          </div>
-        </>
-      )}
-
-      {/* Tabs - show guide tab always, other tabs only if enrolled */}
+      {/* Tabs — 3 tabs when enrolled, guide only when not */}
       <Tabs value={tab} onValueChange={setTab} className="w-full">
-        <TabsList className={`w-full grid ${meuProtocolo ? "grid-cols-5" : "grid-cols-1"}`}>
+        <TabsList className={`w-full grid ${meuProtocolo ? "grid-cols-3" : "grid-cols-1"}`}>
           {meuProtocolo && (
             <>
-              <TabsTrigger value="resumo" className="text-xs">Resumo</TabsTrigger>
-              <TabsTrigger value="ficha" className="text-xs">Medidas</TabsTrigger>
-              <TabsTrigger value="metas" className="text-xs">Metas</TabsTrigger>
-              <TabsTrigger value="galeria" className="text-xs">Fotos</TabsTrigger>
+              <TabsTrigger value="progresso" className="text-xs">Progresso</TabsTrigger>
+              <TabsTrigger value="medidas" className="text-xs">Medidas</TabsTrigger>
+              <TabsTrigger value="evolucao" className="text-xs">Evolução</TabsTrigger>
             </>
           )}
-          <TabsTrigger value="guia" className="text-xs gap-1">
-            📋 Guia
-          </TabsTrigger>
+          {!meuProtocolo && (
+            <TabsTrigger value="guia" className="text-xs gap-1">
+              📋 Guia
+            </TabsTrigger>
+          )}
         </TabsList>
+
         {meuProtocolo && (
           <>
-            <TabsContent value="resumo" className="mt-4">
+            {/* Tab Progresso = Dashboard + Metas + Postural items */}
+            <TabsContent value="progresso" className="mt-4 space-y-6">
               <ProgressDashboard
                 protocoloUsuarioId={meuProtocolo.id}
                 protocolo={protocolo}
                 dataInicio={meuProtocolo.data_inicio}
               />
-            </TabsContent>
-            <TabsContent value="ficha" className="mt-4">
-              <FichaAcompanhamento protocoloUsuarioId={meuProtocolo.id} externalChartRef={isPostural ? chartRef : undefined} />
-            </TabsContent>
-            <TabsContent value="metas" className="mt-4">
+
+              {isPostural && (
+                <div className="space-y-3">
+                  <PosturalAssessmentLink />
+                  <div className="flex justify-end">
+                    <PosturalReportButton
+                      fichas={fichas}
+                      avaliacoes={avaliacoes}
+                      chartRef={chartRef}
+                      protocoloNome={protocolo.nome}
+                      protocoloUsuarioId={meuProtocolo.id}
+                    />
+                  </div>
+                </div>
+              )}
+
               <MetasSemanais protocoloUsuarioId={meuProtocolo.id} />
             </TabsContent>
-            <TabsContent value="galeria" className="mt-4">
+
+            {/* Tab Medidas */}
+            <TabsContent value="medidas" className="mt-4">
+              <FichaAcompanhamento
+                protocoloUsuarioId={meuProtocolo.id}
+                externalChartRef={isPostural ? chartRef : undefined}
+              />
+            </TabsContent>
+
+            {/* Tab Evolução = Fotos + Guia */}
+            <TabsContent value="evolucao" className="mt-4 space-y-6">
               <GaleriaEvolucao protocoloUsuarioId={meuProtocolo.id} />
+              <GuiaResumoProtocolo tipoProtocolo={protocolo.tipo} />
             </TabsContent>
           </>
         )}
-        <TabsContent value="guia" className="mt-4">
-          <GuiaResumoProtocolo tipoProtocolo={protocolo.tipo} />
-        </TabsContent>
+
+        {!meuProtocolo && (
+          <TabsContent value="guia" className="mt-4">
+            <GuiaResumoProtocolo tipoProtocolo={protocolo.tipo} />
+          </TabsContent>
+        )}
       </Tabs>
     </motion.div>
   );
