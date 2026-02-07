@@ -21,6 +21,7 @@ export interface Achievement {
   target: number;
   current: number;
   category: "agendamento" | "cashback" | "protocolo" | "social" | "loja";
+  secret?: boolean;
 }
 
 export function useAchievements(): { achievements: Achievement[]; totalUnlocked: number } {
@@ -293,6 +294,44 @@ export function useAchievements(): { achievements: Achievement[]; totalUnlocked:
         target: 5,
         current: Math.min(pedidosCount, 5),
         category: "loja",
+      },
+
+      // ── Secretas ──
+      {
+        id: "secret_streak_14",
+        name: "Chama Eterna",
+        description: "Registre medidas por 14 dias seguidos",
+        icon: "🔮",
+        unlocked: currentStreak >= 14,
+        progress: Math.min((currentStreak / 14) * 100, 100),
+        target: 14,
+        current: Math.min(currentStreak, 14),
+        category: "protocolo",
+        secret: true,
+      },
+      {
+        id: "secret_cashback_100",
+        name: "Mestre do Cashback",
+        description: "Acumule R$ 100 em cashback",
+        icon: "✨",
+        unlocked: stats.totalCashback >= 100,
+        progress: Math.min((stats.totalCashback / 100) * 100, 100),
+        target: 100,
+        current: Math.min(stats.totalCashback, 100),
+        category: "cashback",
+        secret: true,
+      },
+      {
+        id: "secret_ten_referrals",
+        name: "Super Embaixadora",
+        description: "Indique 10 amigas para o app",
+        icon: "💫",
+        unlocked: indicacoesCount >= 10,
+        progress: Math.min((indicacoesCount / 10) * 100, 100),
+        target: 10,
+        current: Math.min(indicacoesCount, 10),
+        category: "social",
+        secret: true,
       },
     ];
 

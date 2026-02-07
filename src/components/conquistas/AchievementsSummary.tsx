@@ -45,7 +45,7 @@ export const AchievementsSummary = ({
       </div>
 
       {/* Category breakdown */}
-      <div className="grid grid-cols-2 gap-2">
+      <div className="grid grid-cols-3 gap-2">
         {categories.map((cat) => (
           <div
             key={cat.name}
