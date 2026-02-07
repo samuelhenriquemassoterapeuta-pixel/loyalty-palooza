@@ -1,11 +1,16 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { HelpCircle, MessageCircle } from "lucide-react";
+import { HelpCircle, MessageCircle, Share2, Copy, Instagram } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
 import type { Achievement } from "@/hooks/useAchievements";
 
 const APP_URL = "https://loyalty-palooza.lovable.app";
+
+const buildShareText = (achievement: Achievement) => {
+  const secretLabel = achievement.secret ? " secreta" : "";
+  return `🏆 Desbloqueei a conquista${secretLabel} "${achievement.name}" ${achievement.icon} no app Resinkra!\n\n${achievement.description}\n\n👉 Baixe o app: ${APP_URL}`;
+};
 
 interface AchievementDetailCardProps {
   achievement: Achievement;
@@ -22,17 +27,51 @@ export const AchievementDetailCard = ({
   const isHidden = isSecret && !achievement.unlocked;
 
   const handleCardClick = () => {
-    if (achievement.unlocked) {
-      setShowShare((prev) => !prev);
+    // Card click no longer toggles share — use share button instead
+  };
+
+  const handleShare = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    const text = buildShareText(achievement);
+
+    // Try Web Share API first (mobile primary)
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: `🏆 Conquista: ${achievement.name}`,
+          text,
+          url: APP_URL,
+        });
+        toast.success("Compartilhado com sucesso!");
+        return;
+      } catch (err: any) {
+        // User cancelled — don't fallback
+        if (err?.name === "AbortError") return;
+      }
     }
+    // Desktop fallback: toggle expanded share options
+    setShowShare(true);
   };
 
   const handleWhatsAppShare = (e: React.MouseEvent) => {
     e.stopPropagation();
-    const secretLabel = achievement.secret ? " secreta" : "";
-    const text = `🏆 Desbloqueei a conquista${secretLabel} *"${achievement.name}"* ${achievement.icon} no app Resinkra!\n\n${achievement.description}\n\n👉 Baixe o app: ${APP_URL}`;
+    const text = buildShareText(achievement);
     window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, "_blank");
     toast.success("Abrindo WhatsApp...");
+  };
+
+  const handleInstagramCopy = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    const text = buildShareText(achievement);
+    navigator.clipboard.writeText(text);
+    toast.success("Texto copiado! Cole nos seus Stories do Instagram 📸");
+  };
+
+  const handleCopyText = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    const text = buildShareText(achievement);
+    navigator.clipboard.writeText(text);
+    toast.success("Texto copiado!");
   };
 
   return (
@@ -164,7 +203,20 @@ export const AchievementDetailCard = ({
         <CategoryBadge category={isHidden ? "secreto" : achievement.category} />
       </div>
 
-      {/* Share drawer — slides open on click */}
+      {/* Share button — always visible for unlocked */}
+      {achievement.unlocked && (
+        <div className="px-3.5 pb-2 pt-0 flex items-center">
+          <button
+            onClick={handleShare}
+            className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-primary transition-colors"
+          >
+            <Share2 size={13} />
+            Compartilhar
+          </button>
+        </div>
+      )}
+
+      {/* Fallback share drawer — desktop only (mobile uses Web Share API) */}
       <AnimatePresence>
         {showShare && achievement.unlocked && (
           <motion.div
@@ -174,17 +226,28 @@ export const AchievementDetailCard = ({
             transition={{ duration: 0.2, ease: "easeOut" }}
             className="overflow-hidden"
           >
-            <div className="px-3.5 pb-3 pt-0.5 flex items-center gap-2 border-t border-border/30">
+            <div className="px-3.5 pb-3 pt-1 flex flex-wrap items-center gap-2 border-t border-border/30">
               <button
                 onClick={handleWhatsAppShare}
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#25D366]/15 text-[#25D366] hover:bg-[#25D366]/25 transition-colors"
               >
                 <MessageCircle size={14} />
-                Compartilhar no WhatsApp
+                WhatsApp
               </button>
-              <span className="text-[10px] text-muted-foreground">
-                Mostre sua conquista!
-              </span>
+              <button
+                onClick={handleInstagramCopy}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#E4405F]/15 text-[#E4405F] hover:bg-[#E4405F]/25 transition-colors"
+              >
+                <Instagram size={14} />
+                Instagram
+              </button>
+              <button
+                onClick={handleCopyText}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-muted text-muted-foreground hover:bg-muted/80 transition-colors"
+              >
+                <Copy size={14} />
+                Copiar
+              </button>
             </div>
           </motion.div>
         )}
