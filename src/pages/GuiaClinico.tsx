@@ -1,13 +1,14 @@
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
-import { BookOpen, ShieldAlert, Heart, Calendar, ClipboardCheck } from "lucide-react";
+import { BookOpen, ShieldAlert, Heart, Calendar, ClipboardCheck, GraduationCap } from "lucide-react";
 import { AppLayout } from "@/components/AppLayout";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ContraindicacoesSection } from "@/components/guia-clinico/ContraindicacoesSection";
 import { AutocuidadoSection } from "@/components/guia-clinico/AutocuidadoSection";
 import { TimingCirurgicoSection } from "@/components/guia-clinico/TimingCirurgicoSection";
 import { ChecklistAvaliacao } from "@/components/guia-clinico/ChecklistAvaliacao";
+import { EducativoSection } from "@/components/guia-clinico/EducativoSection";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 16 },
@@ -62,14 +63,14 @@ const GuiaClinico = () => {
             {/* Tabs */}
             <motion.div variants={fadeUp}>
               <Tabs value={tab} onValueChange={setTab} className="w-full">
-                <TabsList className="w-full grid grid-cols-4">
+                <TabsList className="w-full grid grid-cols-5">
                   <TabsTrigger value="contraindicacoes" className="text-[10px] sm:text-xs gap-1">
                     <ShieldAlert size={13} />
-                    <span className="hidden sm:inline">Contra</span>indicações
+                    <span className="hidden sm:inline">Contra</span>ind.
                   </TabsTrigger>
                   <TabsTrigger value="autocuidado" className="text-[10px] sm:text-xs gap-1">
                     <Heart size={13} />
-                    Autocuidado
+                    <span className="hidden sm:inline">Auto</span>cuid.
                   </TabsTrigger>
                   <TabsTrigger value="timing" className="text-[10px] sm:text-xs gap-1">
                     <Calendar size={13} />
@@ -77,7 +78,11 @@ const GuiaClinico = () => {
                   </TabsTrigger>
                   <TabsTrigger value="checklist" className="text-[10px] sm:text-xs gap-1">
                     <ClipboardCheck size={13} />
-                    Checklist
+                    Check
+                  </TabsTrigger>
+                  <TabsTrigger value="educativo" className="text-[10px] sm:text-xs gap-1">
+                    <GraduationCap size={13} />
+                    <span className="hidden sm:inline">Educa</span>tivo
                   </TabsTrigger>
                 </TabsList>
 
@@ -92,6 +97,9 @@ const GuiaClinico = () => {
                 </TabsContent>
                 <TabsContent value="checklist" className="mt-4">
                   <ChecklistAvaliacao />
+                </TabsContent>
+                <TabsContent value="educativo" className="mt-4">
+                  <EducativoSection />
                 </TabsContent>
               </Tabs>
             </motion.div>
