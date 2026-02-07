@@ -17,6 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { ConfirmDialog } from "@/components/ConfirmDialog";
 import { useFotos } from "@/hooks/useProtocolos";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -36,6 +37,7 @@ export const GaleriaEvolucao = ({ protocoloUsuarioId }: GaleriaEvolucaoProps) =>
   const [tipo, setTipo] = useState("durante");
   const [preview, setPreview] = useState<string | null>(null);
   const [filter, setFilter] = useState<string>("todas");
+  const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
 
   const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
@@ -211,10 +213,7 @@ export const GaleriaEvolucao = ({ protocoloUsuarioId }: GaleriaEvolucaoProps) =>
                     size="icon"
                     variant="ghost"
                     className="text-destructive hover:text-destructive"
-                    onClick={() => {
-                      remover.mutate(foto.id);
-                      setPreview(null);
-                    }}
+                    onClick={() => setDeleteConfirm(foto.id)}
                   >
                     <Trash2 size={18} />
                   </Button>
@@ -224,6 +223,23 @@ export const GaleriaEvolucao = ({ protocoloUsuarioId }: GaleriaEvolucaoProps) =>
           })()}
         </DialogContent>
       </Dialog>
+
+      {/* Confirm delete dialog */}
+      <ConfirmDialog
+        open={!!deleteConfirm}
+        onOpenChange={(open) => !open && setDeleteConfirm(null)}
+        title="Excluir foto"
+        description="Tem certeza que deseja excluir esta foto? Esta ação não pode ser desfeita."
+        confirmLabel="Excluir"
+        variant="destructive"
+        onConfirm={() => {
+          if (deleteConfirm) {
+            remover.mutate(deleteConfirm);
+            setPreview(null);
+            setDeleteConfirm(null);
+          }
+        }}
+      />
     </div>
   );
 };
