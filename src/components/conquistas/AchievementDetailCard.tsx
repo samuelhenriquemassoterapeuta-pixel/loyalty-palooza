@@ -43,7 +43,7 @@ export const AchievementDetailCard = ({
       onClick={handleCardClick}
       className={`
         rounded-xl border transition-all relative overflow-hidden
-        ${achievement.unlocked ? "cursor-pointer" : ""}
+        ${achievement.unlocked ? "cursor-pointer active:scale-[0.99]" : ""}
         ${
           achievement.unlocked
             ? "glass-card-strong border-primary/20 shadow-sm"
@@ -53,7 +53,7 @@ export const AchievementDetailCard = ({
       `}
     >
       {/* Main row */}
-      <div className="flex items-center gap-3 p-3.5">
+      <div className="flex items-center gap-3 p-3.5" onClick={handleCardClick}>
         {/* Secret reveal shimmer overlay */}
         {isRevealed && (
           <motion.div
