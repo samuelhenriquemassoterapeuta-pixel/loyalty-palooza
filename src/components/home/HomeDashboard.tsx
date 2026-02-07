@@ -5,6 +5,7 @@ import { useAchievementCelebration } from "@/hooks/useAchievementCelebration";
 import { NextAppointmentCard } from "./NextAppointmentCard";
 import { StreakSummaryCard } from "./StreakSummaryCard";
 import { AchievementBadges } from "./AchievementBadges";
+import { XpMiniBar } from "./XpMiniBar";
 import { AchievementCelebration } from "@/components/conquistas/AchievementCelebration";
 import {
   differenceInDays,
@@ -79,6 +80,7 @@ export const HomeDashboard = () => {
         protocoloNome={protocoloNome}
         hasActiveProtocol={!!protocoloAtivo}
       />
+      <XpMiniBar achievements={achievements} />
       <AchievementBadges
         achievements={achievements}
         totalUnlocked={totalUnlocked}

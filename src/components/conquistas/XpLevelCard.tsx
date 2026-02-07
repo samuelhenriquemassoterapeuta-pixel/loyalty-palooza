@@ -187,7 +187,6 @@ export const XpLevelCard = ({ achievements }: XpLevelCardProps) => {
                   const partialSegment = level.progressPercent / 100;
                   const totalSegments = LEVELS.length - 1;
                   const fillPercent = ((completedSegments + partialSegment) / totalSegments) * 100;
-                  // Clamp right edge to not overshoot last milestone
                   return `${Math.min(fillPercent, 100)}%`;
                 })(),
               }}
@@ -268,6 +267,29 @@ export const XpLevelCard = ({ achievements }: XpLevelCardProps) => {
                 );
               })}
             </div>
+
+            {/* XP summary text */}
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 1 }}
+              className="text-center text-[11px] text-muted-foreground mt-2.5 font-medium"
+            >
+              {isMaxLevel ? (
+                <span className="text-primary">✨ Você alcançou o nível máximo! Parabéns!</span>
+              ) : (
+                <>
+                  Você está a{" "}
+                  <span className="text-primary font-bold">
+                    {(nextLevel?.minXp ?? 0) - totalXp} XP
+                  </span>{" "}
+                  do próximo nível{" "}
+                  <span className="font-semibold">
+                    {nextLevel?.icon} {nextLevel?.name}
+                  </span>
+                </>
+              )}
+            </motion.p>
           </div>
         </TooltipProvider>
       </div>
