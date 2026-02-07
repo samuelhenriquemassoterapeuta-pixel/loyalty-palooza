@@ -7,6 +7,7 @@ import { ImageSliderCompare } from "./ImageSliderCompare";
 import { ExportPosturalPdfButton } from "./ExportPosturalPdfButton";
 import { ZoomableImage } from "./ZoomableImage";
 import { AnnotationLayer } from "./AnnotationLayer";
+import { MeasurementLayer } from "./MeasurementLayer";
 import { toast } from "sonner";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -178,6 +179,11 @@ export const ComparacaoView = ({ avaliacoes, onClose }: ComparacaoViewProps) => 
                 imageUrl={url}
                 containerWidth={0}
                 containerHeight={0}
+              />
+              <MeasurementLayer
+                avaliacaoId={av.id}
+                vista={vistaAtiva}
+                imageUrl={url}
               />
             </>
           ) : (
