@@ -5,3 +5,6 @@ verify_jwt = false
 
 [functions.enviar-lembretes]
 verify_jwt = false
+
+[functions.lembrete-medidas]
+verify_jwt = false
