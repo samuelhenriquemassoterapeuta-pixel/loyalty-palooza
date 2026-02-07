@@ -1,0 +1,74 @@
+import { motion } from "framer-motion";
+import { Clock, Repeat, ChevronRight } from "lucide-react";
+import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { ExercicioAlongamento } from "@/hooks/useAlongamento";
+
+const nivelConfig: Record<string, { label: string; color: string }> = {
+  iniciante: { label: "Iniciante", color: "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400" },
+  intermediario: { label: "Intermediário", color: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400" },
+  avancado: { label: "Avançado", color: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400" },
+};
+
+const categoriaEmoji: Record<string, string> = {
+  cervical: "🦴",
+  lombar: "💆",
+  membros_superiores: "💪",
+  membros_inferiores: "🦵",
+  coluna: "🧘",
+  geral: "✨",
+  quadril: "🏃",
+  ombros: "🤸",
+};
+
+interface ExercicioCardProps {
+  exercicio: ExercicioAlongamento;
+  index: number;
+  onClick?: () => void;
+}
+
+export const ExercicioCard = ({ exercicio, index, onClick }: ExercicioCardProps) => {
+  const nivel = nivelConfig[exercicio.nivel] || nivelConfig.iniciante;
+  const emoji = categoriaEmoji[exercicio.categoria] || "✨";
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3, delay: index * 0.04 }}
+    >
+      <Card
+        className="p-4 cursor-pointer hover-lift group"
+        onClick={onClick}
+      >
+        <div className="flex items-start gap-3">
+          <div className="shrink-0 w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-xl">
+            {exercicio.imagem_url || emoji}
+          </div>
+          <div className="flex-1 min-w-0">
+            <h4 className="font-semibold text-foreground text-sm line-clamp-1">{exercicio.nome}</h4>
+            {exercicio.descricao && (
+              <p className="text-xs text-muted-foreground line-clamp-2 mt-0.5">{exercicio.descricao}</p>
+            )}
+            <div className="flex items-center gap-2 mt-2 flex-wrap">
+              <Badge variant="outline" className={`text-[10px] ${nivel.color} border-0`}>
+                {nivel.label}
+              </Badge>
+              <span className="flex items-center gap-1 text-[10px] text-muted-foreground">
+                <Clock size={10} />
+                {exercicio.duracao_segundos}s
+              </span>
+              {exercicio.repeticoes && (
+                <span className="flex items-center gap-1 text-[10px] text-muted-foreground">
+                  <Repeat size={10} />
+                  {exercicio.repeticoes}x
+                </span>
+              )}
+            </div>
+          </div>
+          <ChevronRight size={16} className="text-muted-foreground shrink-0 mt-1 group-hover:text-primary transition-colors" />
+        </div>
+      </Card>
+    </motion.div>
+  );
+};
