@@ -19,6 +19,7 @@ import { AdminFormDialog } from "@/components/admin/AdminFormDialog";
 import { TerapeutasTab } from "@/components/admin/TerapeutasTab";
 import { AuditLogsViewer } from "@/components/admin/AuditLogsViewer";
 import { IndicacoesTab } from "@/components/admin/IndicacoesTab";
+import { ThemeToggle } from "@/components/admin/ThemeToggle";
 
 const tabContentVariants = {
   hidden: { opacity: 0, y: 12 },
@@ -268,9 +269,7 @@ const Admin = () => {
               <h1 className="text-lg font-bold text-primary-foreground">Painel Admin</h1>
               <p className="text-xs text-primary-foreground/70">Gerencie seu negócio</p>
             </div>
-            <div className="w-10 h-10 rounded-xl bg-primary-foreground/10 flex items-center justify-center">
-              <Shield size={20} className="text-primary-foreground" />
-            </div>
+            <ThemeToggle />
           </div>
         </div>
       </motion.div>
