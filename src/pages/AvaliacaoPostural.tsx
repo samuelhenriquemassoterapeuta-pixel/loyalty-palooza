@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, Plus, ArrowLeftRight, Scan } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 import { AppLayout } from "@/components/AppLayout";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { ConfirmDialog } from "@/components/ConfirmDialog";
@@ -10,6 +11,7 @@ import { useAvaliacoesPosturais, AvaliacaoPostural } from "@/hooks/useAvaliacaoP
 import { AvaliacaoCard } from "@/components/avaliacao-postural/AvaliacaoCard";
 import { AvaliacaoDetail } from "@/components/avaliacao-postural/AvaliacaoDetail";
 import { ComparacaoView } from "@/components/avaliacao-postural/ComparacaoView";
+import { PausasPosturaisSection } from "@/components/pausas-posturais/PausasPosturaisSection";
 
 const stagger = {
   hidden: { opacity: 0 },
@@ -167,9 +169,17 @@ export default function AvaliacaoPosturalPage() {
                       <Button onClick={handleNova} disabled={criar.isPending} className="gap-1.5">
                         <Plus size={16} />
                         Criar Primeira Avaliação
-                      </Button>
+                    </Button>
                     </div>
                   )}
+                </motion.div>
+
+                {/* Pausas Posturais Section */}
+                <motion.div variants={fadeUp}>
+                  <Separator className="my-2" />
+                </motion.div>
+                <motion.div variants={fadeUp}>
+                  <PausasPosturaisSection />
                 </motion.div>
               </motion.div>
             )}

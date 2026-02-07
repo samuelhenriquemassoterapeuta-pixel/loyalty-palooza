@@ -683,6 +683,72 @@ export type Database = {
           },
         ]
       }
+      pausas_posturais_config: {
+        Row: {
+          ativo: boolean
+          created_at: string
+          dias_semana: number[]
+          horario_fim: string
+          horario_inicio: string
+          id: string
+          intervalo_minutos: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          ativo?: boolean
+          created_at?: string
+          dias_semana?: number[]
+          horario_fim?: string
+          horario_inicio?: string
+          id?: string
+          intervalo_minutos?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          ativo?: boolean
+          created_at?: string
+          dias_semana?: number[]
+          horario_fim?: string
+          horario_inicio?: string
+          id?: string
+          intervalo_minutos?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      pausas_posturais_registro: {
+        Row: {
+          completado: boolean
+          created_at: string
+          data: string
+          duracao_segundos: number
+          exercicio_id: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          completado?: boolean
+          created_at?: string
+          data?: string
+          duracao_segundos?: number
+          exercicio_id: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          completado?: boolean
+          created_at?: string
+          data?: string
+          duracao_segundos?: number
+          exercicio_id?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       pedido_itens: {
         Row: {
           id: string
