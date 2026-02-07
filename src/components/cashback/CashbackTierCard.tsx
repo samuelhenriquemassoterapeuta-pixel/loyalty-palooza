@@ -25,7 +25,7 @@ export const CashbackTierCard = ({ tier, showValues }: CashbackTierCardProps) =>
   return (
     <div className="rounded-2xl glass-card-strong overflow-hidden">
       {/* Header */}
-      <div className={`p-4 bg-gradient-to-r ${config.color} text-primary-foreground`}>
+      <div className={`p-4 bg-gradient-to-r ${config.color} text-primary-foreground shimmer-badge`}>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2.5">
             <div className="p-2 rounded-xl bg-primary-foreground/20 backdrop-blur-sm">
@@ -91,7 +91,7 @@ export const CashbackTierCard = ({ tier, showValues }: CashbackTierCardProps) =>
                 <div
                   className={`flex-1 flex flex-col items-center gap-1 p-2 rounded-xl transition-all ${
                     isActive
-                      ? `${tConfig.bgLight} ${tConfig.borderColor} border`
+                      ? `${tConfig.bgLight} ${tConfig.borderColor} border shimmer-badge`
                       : "bg-muted/50 border border-transparent"
                   }`}
                 >
