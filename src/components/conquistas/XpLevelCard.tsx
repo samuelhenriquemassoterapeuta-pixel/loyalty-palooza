@@ -173,22 +173,29 @@ export const XpLevelCard = ({ achievements }: XpLevelCardProps) => {
         <TooltipProvider delayDuration={0}>
           <div className="relative mt-3 pt-3 border-t border-border/30">
             {/* Connector line behind milestones */}
-            <div className="absolute top-[calc(0.75rem+14px+6px)] left-[14px] right-[14px] h-[2px] bg-muted/40 rounded-full" />
-            {/* Progress fill on connector */}
+            <div className="absolute top-[calc(0.75rem+16px+4px)] left-[16px] right-[16px] h-[2px] bg-muted/40 rounded-full" />
+            {/* Progress fill — includes partial progress within current level */}
             <motion.div
-              className="absolute top-[calc(0.75rem+14px+6px)] left-[14px] h-[2px] rounded-full"
+              className="absolute top-[calc(0.75rem+16px+4px)] left-[16px] h-[2px] rounded-full"
               style={{
                 background: "linear-gradient(90deg, hsl(78 55% 28%), hsl(140 50% 38%))",
               }}
               initial={{ width: 0 }}
               animate={{
-                width: `${Math.min(((level.level - 1) / (LEVELS.length - 1)) * 100, 100)}%`,
+                width: (() => {
+                  const completedSegments = level.level - 1;
+                  const partialSegment = level.progressPercent / 100;
+                  const totalSegments = LEVELS.length - 1;
+                  const fillPercent = ((completedSegments + partialSegment) / totalSegments) * 100;
+                  // Clamp right edge to not overshoot last milestone
+                  return `${Math.min(fillPercent, 100)}%`;
+                })(),
               }}
               transition={{ duration: 1.2, ease: "easeOut", delay: 0.5 }}
             />
 
             <div className="relative flex items-center justify-between">
-              {LEVELS.slice(0, 7).map((lvl) => {
+              {LEVELS.slice(0, 7).map((lvl, i) => {
                 const isUnlocked = totalXp >= lvl.minXp;
                 const isCurrent = lvl.level === level.level;
                 const xpRemaining = lvl.minXp - totalXp;
@@ -196,40 +203,49 @@ export const XpLevelCard = ({ achievements }: XpLevelCardProps) => {
                 return (
                   <Tooltip key={lvl.level}>
                     <TooltipTrigger asChild>
-                      <div className="flex flex-col items-center gap-0.5 cursor-pointer relative">
-                        {/* Current level glow */}
+                      <motion.div
+                        className="flex flex-col items-center gap-0.5 cursor-pointer relative"
+                        initial={{ opacity: 0, y: 8 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.4 + i * 0.08, duration: 0.4, ease: "easeOut" }}
+                      >
+                        {/* Current level glow ring */}
                         {isCurrent && (
                           <motion.div
-                            className="absolute -inset-1 rounded-xl bg-primary/20 blur-sm"
-                            animate={{ opacity: [0.4, 0.8, 0.4] }}
-                            transition={{ duration: 2, repeat: Infinity }}
+                            className="absolute -inset-1.5 rounded-2xl"
+                            style={{
+                              background: "radial-gradient(circle, hsl(78 55% 28% / 0.25) 0%, transparent 70%)",
+                            }}
+                            animate={{ opacity: [0.5, 1, 0.5], scale: [0.95, 1.05, 0.95] }}
+                            transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
                           />
                         )}
                         <motion.div
-                          className={`relative w-8 h-8 rounded-xl flex items-center justify-center text-sm transition-all ${
+                          className={`relative w-9 h-9 rounded-xl flex items-center justify-center text-base transition-all ${
                             isCurrent
-                              ? "bg-primary/25 border-2 border-primary shadow-sm"
+                              ? "bg-primary/25 border-2 border-primary shadow-md shadow-primary/20"
                               : isUnlocked
                               ? "bg-primary/15 border border-primary/30"
                               : "bg-muted/40 border border-border/30 grayscale opacity-40"
                           }`}
-                          animate={isCurrent ? { scale: [1, 1.08, 1] } : {}}
-                          transition={isCurrent ? { duration: 2, repeat: Infinity } : {}}
+                          animate={isCurrent ? { scale: [1, 1.06, 1] } : {}}
+                          transition={isCurrent ? { duration: 2.5, repeat: Infinity, ease: "easeInOut" } : {}}
+                          whileHover={isUnlocked ? { scale: 1.15 } : { scale: 1.05 }}
                         >
-                          {isUnlocked ? lvl.icon : <Star size={10} className="text-muted-foreground" />}
+                          {isUnlocked ? lvl.icon : <Star size={11} className="text-muted-foreground" />}
                         </motion.div>
                         <span
-                          className={`text-[8px] font-medium ${
+                          className={`text-[7px] font-medium leading-tight text-center max-w-[40px] truncate ${
                             isCurrent
-                              ? "text-primary font-bold"
+                              ? "text-primary font-black text-[8px]"
                               : isUnlocked
-                              ? "text-foreground"
-                              : "text-muted-foreground/40"
+                              ? "text-foreground/80"
+                              : "text-muted-foreground/35"
                           }`}
                         >
-                          {isCurrent ? "VOCÊ" : lvl.level}
+                          {isCurrent ? "VOCÊ" : isUnlocked ? lvl.name : lvl.level}
                         </span>
-                      </div>
+                      </motion.div>
                     </TooltipTrigger>
                     <TooltipContent side="top" className="text-center space-y-0.5">
                       <p className="font-semibold text-xs">{lvl.icon} {lvl.name}</p>
