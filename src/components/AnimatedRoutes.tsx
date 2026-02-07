@@ -20,6 +20,7 @@ import Indicacoes from "@/pages/Indicacoes";
 import Manual from "@/pages/Manual";
 import Cashback from "@/pages/Cashback";
 import Corporativo from "@/pages/Corporativo";
+import Alongamento from "@/pages/Alongamento";
 import NotFound from "@/pages/NotFound";
 
 /** Shows landing for visitors, dashboard for authenticated users */
@@ -184,6 +185,16 @@ export const AnimatedRoutes = () => {
             <PageTransition>
               <Corporativo />
             </PageTransition>
+          }
+        />
+        <Route
+          path="/alongamento"
+          element={
+            <ProtectedRoute>
+              <PageTransition>
+                <Alongamento />
+              </PageTransition>
+            </ProtectedRoute>
           }
         />
         <Route

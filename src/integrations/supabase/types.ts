@@ -136,6 +136,54 @@ export type Database = {
           },
         ]
       }
+      exercicios_alongamento: {
+        Row: {
+          categoria: string
+          created_at: string
+          descricao: string | null
+          disponivel: boolean | null
+          duracao_segundos: number
+          id: string
+          imagem_url: string | null
+          instrucoes: string | null
+          musculos_alvo: string | null
+          nivel: string
+          nome: string
+          repeticoes: number | null
+          video_url: string | null
+        }
+        Insert: {
+          categoria?: string
+          created_at?: string
+          descricao?: string | null
+          disponivel?: boolean | null
+          duracao_segundos?: number
+          id?: string
+          imagem_url?: string | null
+          instrucoes?: string | null
+          musculos_alvo?: string | null
+          nivel?: string
+          nome: string
+          repeticoes?: number | null
+          video_url?: string | null
+        }
+        Update: {
+          categoria?: string
+          created_at?: string
+          descricao?: string | null
+          disponivel?: boolean | null
+          duracao_segundos?: number
+          id?: string
+          imagem_url?: string | null
+          instrucoes?: string | null
+          musculos_alvo?: string | null
+          nivel?: string
+          nome?: string
+          repeticoes?: number | null
+          video_url?: string | null
+        }
+        Relationships: []
+      }
       favoritos: {
         Row: {
           created_at: string
@@ -412,6 +460,90 @@ export type Database = {
           },
         ]
       }
+      plano_exercicios: {
+        Row: {
+          dia_semana: number
+          duracao_segundos: number
+          exercicio_id: string
+          id: string
+          ordem: number
+          plano_id: string
+          series: number
+        }
+        Insert: {
+          dia_semana?: number
+          duracao_segundos?: number
+          exercicio_id: string
+          id?: string
+          ordem?: number
+          plano_id: string
+          series?: number
+        }
+        Update: {
+          dia_semana?: number
+          duracao_segundos?: number
+          exercicio_id?: string
+          id?: string
+          ordem?: number
+          plano_id?: string
+          series?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "plano_exercicios_exercicio_id_fkey"
+            columns: ["exercicio_id"]
+            isOneToOne: false
+            referencedRelation: "exercicios_alongamento"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "plano_exercicios_plano_id_fkey"
+            columns: ["plano_id"]
+            isOneToOne: false
+            referencedRelation: "planos_alongamento"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      planos_alongamento: {
+        Row: {
+          created_at: string
+          descricao: string | null
+          disponivel: boolean | null
+          duracao_semanas: number
+          frequencia_semanal: number
+          id: string
+          imagem_url: string | null
+          nivel: string
+          nome: string
+          objetivo: string
+        }
+        Insert: {
+          created_at?: string
+          descricao?: string | null
+          disponivel?: boolean | null
+          duracao_semanas?: number
+          frequencia_semanal?: number
+          id?: string
+          imagem_url?: string | null
+          nivel?: string
+          nome: string
+          objetivo?: string
+        }
+        Update: {
+          created_at?: string
+          descricao?: string | null
+          disponivel?: boolean | null
+          duracao_semanas?: number
+          frequencia_semanal?: number
+          id?: string
+          imagem_url?: string | null
+          nivel?: string
+          nome?: string
+          objetivo?: string
+        }
+        Relationships: []
+      }
       produtos: {
         Row: {
           cashback_percentual: number | null
@@ -525,6 +657,47 @@ export type Database = {
         }
         Relationships: []
       }
+      sessoes_alongamento: {
+        Row: {
+          created_at: string
+          data: string
+          duracao_total_segundos: number
+          exercicios_completados: number
+          id: string
+          notas: string | null
+          plano_id: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          data?: string
+          duracao_total_segundos?: number
+          exercicios_completados?: number
+          id?: string
+          notas?: string | null
+          plano_id?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          data?: string
+          duracao_total_segundos?: number
+          exercicios_completados?: number
+          id?: string
+          notas?: string | null
+          plano_id?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sessoes_alongamento_plano_id_fkey"
+            columns: ["plano_id"]
+            isOneToOne: false
+            referencedRelation: "planos_alongamento"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       terapeutas: {
         Row: {
           created_at: string
@@ -602,6 +775,44 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      usuario_planos_alongamento: {
+        Row: {
+          created_at: string
+          data_fim: string | null
+          data_inicio: string
+          id: string
+          plano_id: string
+          status: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          data_fim?: string | null
+          data_inicio?: string
+          id?: string
+          plano_id: string
+          status?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          data_fim?: string | null
+          data_inicio?: string
+          id?: string
+          plano_id?: string
+          status?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "usuario_planos_alongamento_plano_id_fkey"
+            columns: ["plano_id"]
+            isOneToOne: false
+            referencedRelation: "planos_alongamento"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {

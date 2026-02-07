@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Home, CalendarDays, ShoppingBag, User, Gift, Wallet, Crown, Settings, Bell } from "lucide-react";
+import { Home, CalendarDays, ShoppingBag, User, Gift, Wallet, Crown, Settings, Bell, Dumbbell } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAdmin } from "@/hooks/useAdmin";
 import { useProfile } from "@/hooks/useProfile";
@@ -12,6 +12,7 @@ const navItems = [
   { icon: Home, label: "Início", path: "/" },
   { icon: CalendarDays, label: "Agendar", path: "/agendamento" },
   { icon: ShoppingBag, label: "Loja", path: "/loja" },
+  { icon: Dumbbell, label: "Alongamento", path: "/alongamento" },
   { icon: Crown, label: "Cashback", path: "/cashback" },
   { icon: Gift, label: "Indicações", path: "/indicacoes" },
   { icon: Wallet, label: "Transferir", path: "/transferir" },
