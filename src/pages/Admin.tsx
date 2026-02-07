@@ -301,7 +301,7 @@ const Admin = () => {
           )}
 
           <TabsContent value="dashboard">
-            <DashboardTab stats={stats} />
+            <DashboardTab stats={stats} pedidos={pedidos} transacoes={transacoes} />
           </TabsContent>
 
           <TabsContent value="pedidos">

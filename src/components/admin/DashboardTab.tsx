@@ -1,4 +1,5 @@
 import { Card } from "@/components/ui/card";
+import { SalesCharts } from "./SalesCharts";
 import {
   DollarSign,
   Calendar,
@@ -33,9 +34,11 @@ interface DashboardStats {
 
 interface DashboardTabProps {
   stats: DashboardStats;
+  pedidos: any[];
+  transacoes: any[];
 }
 
-export const DashboardTab = ({ stats }: DashboardTabProps) => {
+export const DashboardTab = ({ stats, pedidos, transacoes }: DashboardTabProps) => {
   return (
     <div className="space-y-6">
       {/* Cards principais */}
@@ -152,6 +155,8 @@ export const DashboardTab = ({ stats }: DashboardTabProps) => {
           </div>
         </div>
       </Card>
+      {/* Gráficos de Vendas */}
+      <SalesCharts pedidos={pedidos} transacoes={transacoes} />
     </div>
   );
 };
