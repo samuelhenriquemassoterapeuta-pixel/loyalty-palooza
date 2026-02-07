@@ -265,6 +265,37 @@
     }
   }
 
+  /* Badge shimmer sweep — premium micro-animation */
+  .shimmer-badge {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .shimmer-badge::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      105deg,
+      transparent 30%,
+      hsl(0 0% 100% / 0.35) 48%,
+      hsl(0 0% 100% / 0.45) 50%,
+      hsl(0 0% 100% / 0.35) 52%,
+      transparent 70%
+    );
+    transform: translateX(-120%);
+    animation: badge-shimmer 2.4s ease-in-out 0.6s 1 forwards;
+  }
+
+  @keyframes badge-shimmer {
+    0% {
+      transform: translateX(-120%);
+    }
+    100% {
+      transform: translateX(120%);
+    }
+  }
+
   /* Organic blob shapes */
   .blob {
     border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
