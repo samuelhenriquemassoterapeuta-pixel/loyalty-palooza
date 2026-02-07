@@ -1,5 +1,6 @@
+import { useCallback } from "react";
 import { motion } from "framer-motion";
-import { TrendingUp, Activity, BarChart3 } from "lucide-react";
+import { TrendingUp, Activity, BarChart3, Download } from "lucide-react";
 import {
   LineChart,
   Line,
@@ -10,7 +11,10 @@ import {
   ResponsiveContainer,
   ReferenceLine,
 } from "recharts";
+import { Button } from "@/components/ui/button";
 import { useAngleHistory, AngleSeries } from "@/hooks/useAngleHistory";
+import { useMeasurementHistory } from "@/hooks/useMeasurementHistory";
+import { toast } from "sonner";
 
 const COLORS = [
   "hsl(var(--primary))",
@@ -124,10 +128,92 @@ function AngleChart({ series, color }: { series: AngleSeries; color: string }) {
   );
 }
 
+function buildCsvContent(
+  angleSeries: AngleSeries[],
+  measurements: import("@/hooks/useMeasurementHistory").MeasurementDataPoint[]
+): string {
+  const BOM = "\uFEFF";
+  const lines: string[] = [];
+
+  // Angle annotations section
+  if (angleSeries.length > 0) {
+    lines.push("EVOLUÇÃO ANGULAR - ANOTAÇÕES");
+    lines.push("Vista,Medição,Data,Ângulo (°)");
+    for (const s of angleSeries) {
+      for (const p of s.points) {
+        lines.push(`${s.vistaLabel},"${s.label}",${p.dateLabel},${p.angle}`);
+      }
+    }
+    lines.push("");
+  }
+
+  // Reference line measurements section
+  if (measurements.length > 0) {
+    lines.push("MEDIÇÕES DE LINHAS DE REFERÊNCIA");
+    lines.push("Vista,Medição,Data,Ângulo (°),Eixo de Referência");
+    for (const m of measurements) {
+      lines.push(
+        `${m.vista},"${m.label}",${m.dateLabel},${m.angle},${m.referenceAxis === "vertical" ? "Vertical" : "Horizontal"}`
+      );
+    }
+    lines.push("");
+  }
+
+  // Summary statistics
+  lines.push("RESUMO ESTATÍSTICO");
+  lines.push("Medição,Mínimo (°),Máximo (°),Média (°),Variação Total (°)");
+
+  for (const s of angleSeries) {
+    if (s.points.length < 2) continue;
+    const angles = s.points.map((p) => p.angle);
+    const min = Math.min(...angles);
+    const max = Math.max(...angles);
+    const avg = Math.round(angles.reduce((a, b) => a + b, 0) / angles.length);
+    const delta = angles[angles.length - 1] - angles[0];
+    lines.push(`"${s.label}",${min},${max},${avg},${delta > 0 ? "+" : ""}${delta}`);
+  }
+
+  // Group measurements by label for stats
+  const measByLabel = new Map<string, number[]>();
+  for (const m of measurements) {
+    const key = `${m.vista} — ${m.label}`;
+    if (!measByLabel.has(key)) measByLabel.set(key, []);
+    measByLabel.get(key)!.push(m.angle);
+  }
+  for (const [label, angles] of measByLabel) {
+    if (angles.length < 2) continue;
+    const min = Math.min(...angles);
+    const max = Math.max(...angles);
+    const avg = Math.round((angles.reduce((a, b) => a + b, 0) / angles.length) * 10) / 10;
+    const delta = Math.round((angles[angles.length - 1] - angles[0]) * 10) / 10;
+    lines.push(`"${label}",${min},${max},${avg},${delta > 0 ? "+" : ""}${delta}`);
+  }
+
+  return BOM + lines.join("\n");
+}
+
 export const AngleEvolutionCharts = () => {
   const { data: series = [], isLoading } = useAngleHistory();
+  const { data: measurements = [], isLoading: isMeasLoading } = useMeasurementHistory();
 
-  if (isLoading) {
+  const handleExportCsv = useCallback(() => {
+    const csv = buildCsvContent(series, measurements);
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    const today = new Date();
+    a.download = `evolucao-postural-${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    toast.success("CSV exportado com sucesso!");
+  }, [series, measurements]);
+
+  const hasData = series.length > 0 || measurements.length > 0;
+
+  if (isLoading || isMeasLoading) {
     return (
       <div className="space-y-3">
         <div className="flex items-center gap-2 mb-1">
@@ -141,7 +227,7 @@ export const AngleEvolutionCharts = () => {
     );
   }
 
-  if (series.length === 0) {
+  if (!hasData) {
     return (
       <div className="p-6 rounded-xl bg-card border border-border text-center">
         <BarChart3 size={32} className="mx-auto mb-3 text-muted-foreground/30" />
@@ -168,12 +254,23 @@ export const AngleEvolutionCharts = () => {
       transition={{ duration: 0.3 }}
       className="space-y-4"
     >
-      <div className="flex items-center gap-2">
-        <TrendingUp size={18} className="text-primary" />
-        <h3 className="text-base font-bold text-foreground">Evolução Angular</h3>
-        <span className="text-[10px] bg-primary/10 text-primary px-1.5 py-0.5 rounded-full font-medium">
-          {series.length} {series.length === 1 ? "medição" : "medições"}
-        </span>
+      <div className="flex items-center justify-between gap-2">
+        <div className="flex items-center gap-2">
+          <TrendingUp size={18} className="text-primary" />
+          <h3 className="text-base font-bold text-foreground">Evolução Angular</h3>
+          <span className="text-[10px] bg-primary/10 text-primary px-1.5 py-0.5 rounded-full font-medium">
+            {series.length + (measurements.length > 0 ? 1 : 0)} {series.length === 1 ? "medição" : "medições"}
+          </span>
+        </div>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={handleExportCsv}
+          className="gap-1.5 text-xs h-8"
+        >
+          <Download size={14} />
+          CSV
+        </Button>
       </div>
 
       <p className="text-xs text-muted-foreground -mt-2">
