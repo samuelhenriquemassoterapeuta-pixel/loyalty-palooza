@@ -5,6 +5,7 @@ import { WeekHeaderCard } from "./dashboard/WeekHeaderCard";
 import { StreakCard } from "./dashboard/StreakCard";
 import { BodyStatsRow } from "./dashboard/BodyStatsRow";
 import { MiniWeightChart } from "./dashboard/MiniWeightChart";
+import { MiniEvaChart } from "./dashboard/MiniEvaChart";
 import {
   GoalsProgressCard,
   WeekActivityCard,
@@ -49,6 +50,7 @@ export const ProgressDashboard = ({
       <StreakCard stats={stats} fichas={fichas} variants={itemVariants} />
       <BodyStatsRow stats={stats} variants={itemVariants} />
       <MiniWeightChart fichas={fichas} variants={itemVariants} />
+      <MiniEvaChart fichas={fichas} variants={itemVariants} />
       <GoalsProgressCard stats={stats} variants={itemVariants} />
       <WeekActivityCard stats={stats} variants={itemVariants} />
       <MeasurementReminder stats={stats} variants={itemVariants} />
