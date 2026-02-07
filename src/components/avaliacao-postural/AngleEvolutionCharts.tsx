@@ -251,7 +251,9 @@ export const AngleEvolutionCharts = () => {
     toast.success("CSV exportado com sucesso!");
   }, [series, measurements, clinicalData]);
 
-  const hasData = series.length > 0 || measurements.length > 0;
+  const hasAngleData = series.length > 0 || measurements.length > 0;
+  const hasClinicalData = (clinicalData?.observacoes?.length ?? 0) > 0 || (clinicalData?.fichas?.length ?? 0) > 0;
+  const hasAnyData = hasAngleData || hasClinicalData;
 
   if (isLoading || isMeasLoading || isClinicalLoading) {
     return (
@@ -267,7 +269,7 @@ export const AngleEvolutionCharts = () => {
     );
   }
 
-  if (!hasData) {
+  if (!hasAnyData) {
     return (
       <div className="p-6 rounded-xl bg-card border border-border text-center">
         <BarChart3 size={32} className="mx-auto mb-3 text-muted-foreground/30" />
@@ -297,10 +299,12 @@ export const AngleEvolutionCharts = () => {
       <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-2">
           <TrendingUp size={18} className="text-primary" />
-          <h3 className="text-base font-bold text-foreground">Evolução Angular</h3>
-          <span className="text-[10px] bg-primary/10 text-primary px-1.5 py-0.5 rounded-full font-medium">
-            {series.length + (measurements.length > 0 ? 1 : 0)} {series.length === 1 ? "medição" : "medições"}
-          </span>
+          <h3 className="text-base font-bold text-foreground">Evolução & Dados Clínicos</h3>
+          {hasAngleData && (
+            <span className="text-[10px] bg-primary/10 text-primary px-1.5 py-0.5 rounded-full font-medium">
+              {series.length + (measurements.length > 0 ? 1 : 0)} {series.length === 1 ? "medição" : "medições"}
+            </span>
+          )}
         </div>
         <Button
           variant="outline"
@@ -314,8 +318,20 @@ export const AngleEvolutionCharts = () => {
       </div>
 
       <p className="text-xs text-muted-foreground -mt-2">
-        Acompanhe como seus ângulos posturais estão evoluindo entre as avaliações
+        {hasAngleData
+          ? "Acompanhe como seus ângulos posturais estão evoluindo entre as avaliações"
+          : "Exporte seus dados clínicos e fichas de acompanhamento em CSV"}
       </p>
+
+      {!hasAngleData && hasClinicalData && (
+        <div className="p-4 rounded-xl bg-card border border-border text-center">
+          <BarChart3 size={24} className="mx-auto mb-2 text-muted-foreground/40" />
+          <p className="text-xs text-muted-foreground">
+            Sem dados de ângulos ainda — adicione anotações de ângulo para visualizar gráficos.
+            Seus dados clínicos ({clinicalData!.observacoes.length} observação(ões), {clinicalData!.fichas.length} ficha(s)) estão disponíveis no CSV.
+          </p>
+        </div>
+      )}
 
       {Array.from(vistaGroups.entries()).map(([vistaLabel, groupSeries]) => (
         <div key={vistaLabel} className="space-y-2">
