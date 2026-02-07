@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles, X } from "lucide-react";
 import { useEffect, useState, useMemo } from "react";
+import { playCelebrationSound } from "@/lib/celebrationSound";
 import type { Achievement } from "@/hooks/useAchievements";
 
 interface AchievementCelebrationProps {
@@ -82,6 +83,7 @@ export const AchievementCelebration = ({
   useEffect(() => {
     if (isOpen) {
       setShowConfetti(true);
+      playCelebrationSound();
       const timer = setTimeout(() => setShowConfetti(false), 4000);
       return () => clearTimeout(timer);
     }
