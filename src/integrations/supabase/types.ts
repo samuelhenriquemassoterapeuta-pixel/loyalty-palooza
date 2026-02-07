@@ -213,6 +213,106 @@ export type Database = {
           },
         ]
       }
+      fichas_acompanhamento: {
+        Row: {
+          created_at: string
+          data: string
+          gordura_corporal: number | null
+          id: string
+          imc: number | null
+          medida_braco: number | null
+          medida_cintura: number | null
+          medida_coxa: number | null
+          medida_quadril: number | null
+          medida_torax: number | null
+          observacoes: string | null
+          peso: number | null
+          protocolo_usuario_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          data?: string
+          gordura_corporal?: number | null
+          id?: string
+          imc?: number | null
+          medida_braco?: number | null
+          medida_cintura?: number | null
+          medida_coxa?: number | null
+          medida_quadril?: number | null
+          medida_torax?: number | null
+          observacoes?: string | null
+          peso?: number | null
+          protocolo_usuario_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          data?: string
+          gordura_corporal?: number | null
+          id?: string
+          imc?: number | null
+          medida_braco?: number | null
+          medida_cintura?: number | null
+          medida_coxa?: number | null
+          medida_quadril?: number | null
+          medida_torax?: number | null
+          observacoes?: string | null
+          peso?: number | null
+          protocolo_usuario_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fichas_acompanhamento_protocolo_usuario_id_fkey"
+            columns: ["protocolo_usuario_id"]
+            isOneToOne: false
+            referencedRelation: "usuario_protocolos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      fotos_evolucao: {
+        Row: {
+          created_at: string
+          data: string
+          foto_url: string
+          id: string
+          observacoes: string | null
+          protocolo_usuario_id: string
+          tipo: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          data?: string
+          foto_url: string
+          id?: string
+          observacoes?: string | null
+          protocolo_usuario_id: string
+          tipo?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          data?: string
+          foto_url?: string
+          id?: string
+          observacoes?: string | null
+          protocolo_usuario_id?: string
+          tipo?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fotos_evolucao_protocolo_usuario_id_fkey"
+            columns: ["protocolo_usuario_id"]
+            isOneToOne: false
+            referencedRelation: "usuario_protocolos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       indicacoes: {
         Row: {
           cashback_valor: number
@@ -281,6 +381,50 @@ export type Database = {
           success?: boolean
         }
         Relationships: []
+      }
+      metas_semanais: {
+        Row: {
+          concluida: boolean
+          created_at: string
+          data_conclusao: string | null
+          descricao: string
+          id: string
+          meta_valor: string | null
+          protocolo_usuario_id: string
+          semana_numero: number
+          user_id: string
+        }
+        Insert: {
+          concluida?: boolean
+          created_at?: string
+          data_conclusao?: string | null
+          descricao: string
+          id?: string
+          meta_valor?: string | null
+          protocolo_usuario_id: string
+          semana_numero?: number
+          user_id: string
+        }
+        Update: {
+          concluida?: boolean
+          created_at?: string
+          data_conclusao?: string | null
+          descricao?: string
+          id?: string
+          meta_valor?: string | null
+          protocolo_usuario_id?: string
+          semana_numero?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "metas_semanais_protocolo_usuario_id_fkey"
+            columns: ["protocolo_usuario_id"]
+            isOneToOne: false
+            referencedRelation: "usuario_protocolos"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       notificacoes: {
         Row: {
@@ -621,6 +765,45 @@ export type Database = {
           },
         ]
       }
+      protocolos: {
+        Row: {
+          beneficios: string | null
+          created_at: string
+          descricao: string | null
+          disponivel: boolean | null
+          duracao_semanas: number
+          id: string
+          imagem_url: string | null
+          nome: string
+          sessoes_por_semana: number
+          tipo: string
+        }
+        Insert: {
+          beneficios?: string | null
+          created_at?: string
+          descricao?: string | null
+          disponivel?: boolean | null
+          duracao_semanas?: number
+          id?: string
+          imagem_url?: string | null
+          nome: string
+          sessoes_por_semana?: number
+          tipo?: string
+        }
+        Update: {
+          beneficios?: string | null
+          created_at?: string
+          descricao?: string | null
+          disponivel?: boolean | null
+          duracao_semanas?: number
+          id?: string
+          imagem_url?: string | null
+          nome?: string
+          sessoes_por_semana?: number
+          tipo?: string
+        }
+        Relationships: []
+      }
       servicos: {
         Row: {
           cashback_percentual: number | null
@@ -810,6 +993,47 @@ export type Database = {
             columns: ["plano_id"]
             isOneToOne: false
             referencedRelation: "planos_alongamento"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      usuario_protocolos: {
+        Row: {
+          created_at: string
+          data_fim: string | null
+          data_inicio: string
+          id: string
+          observacoes: string | null
+          protocolo_id: string
+          status: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          data_fim?: string | null
+          data_inicio?: string
+          id?: string
+          observacoes?: string | null
+          protocolo_id: string
+          status?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          data_fim?: string | null
+          data_inicio?: string
+          id?: string
+          observacoes?: string | null
+          protocolo_id?: string
+          status?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "usuario_protocolos_protocolo_id_fkey"
+            columns: ["protocolo_id"]
+            isOneToOne: false
+            referencedRelation: "protocolos"
             referencedColumns: ["id"]
           },
         ]
