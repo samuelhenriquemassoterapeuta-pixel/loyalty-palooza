@@ -1,6 +1,6 @@
-import { useMemo, useState } from "react";
-import { motion } from "framer-motion";
-import { TrendingUp, BarChart3, Layers } from "lucide-react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { TrendingUp, BarChart3, Layers, Target, X, Check } from "lucide-react";
 import {
   LineChart,
   Line,
@@ -11,10 +11,12 @@ import {
   ResponsiveContainer,
   Area,
   AreaChart,
+  ReferenceLine,
   Legend,
 } from "recharts";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { Input } from "@/components/ui/input";
 
 interface Ficha {
   id: string;
@@ -31,6 +33,7 @@ interface Ficha {
 
 interface MedidasChartProps {
   fichas: Ficha[];
+  protocoloUsuarioId?: string;
 }
 
 type MetricKey =
@@ -56,16 +59,23 @@ const METRICS: { key: MetricKey; label: string; suffix: string; color: string }[
 
 type ChartMode = "single" | "compare";
 
-const CustomTooltip = ({ active, payload, label }: any) => {
+const CustomTooltip = ({ active, payload, label, goalValue, goalLabel }: any) => {
   if (!active || !payload?.length) return null;
   return (
     <div className="bg-card/95 backdrop-blur-sm border border-border rounded-xl px-3 py-2 shadow-lg">
       <p className="text-[10px] text-muted-foreground font-medium mb-1">{label}</p>
-      {payload.map((entry: any) => (
-        <p key={entry.dataKey} className="text-xs font-semibold" style={{ color: entry.color }}>
-          {entry.name}: {entry.value}
+      {payload
+        .filter((entry: any) => entry.dataKey !== "goalLine")
+        .map((entry: any) => (
+          <p key={entry.dataKey} className="text-xs font-semibold" style={{ color: entry.color }}>
+            {entry.name}: {entry.value}
+          </p>
+        ))}
+      {goalValue != null && (
+        <p className="text-[10px] text-muted-foreground mt-0.5 border-t border-border/50 pt-1">
+          🎯 Meta: {goalValue} {goalLabel}
         </p>
-      ))}
+      )}
     </div>
   );
 };
@@ -95,7 +105,7 @@ const CompareTooltip = ({ active, payload, label }: any) => {
   );
 };
 
-export const MedidasChart = ({ fichas }: MedidasChartProps) => {
+export const MedidasChart = ({ fichas, protocoloUsuarioId }: MedidasChartProps) => {
   const [selected, setSelected] = useState<MetricKey>("peso");
   const [mode, setMode] = useState<ChartMode>("single");
   const [compareMetrics, setCompareMetrics] = useState<MetricKey[]>([
@@ -103,6 +113,58 @@ export const MedidasChart = ({ fichas }: MedidasChartProps) => {
     "medida_cintura",
     "medida_quadril",
   ]);
+  const [showGoalInput, setShowGoalInput] = useState(false);
+  const [goalDraft, setGoalDraft] = useState("");
+
+  // Persist goals per protocol in localStorage
+  const storageKey = protocoloUsuarioId ? `goals_${protocoloUsuarioId}` : "goals_default";
+
+  const [goals, setGoals] = useState<Partial<Record<MetricKey, number>>>(() => {
+    try {
+      const stored = localStorage.getItem(storageKey);
+      return stored ? JSON.parse(stored) : {};
+    } catch {
+      return {};
+    }
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(storageKey, JSON.stringify(goals));
+    } catch {}
+  }, [goals, storageKey]);
+
+  const currentGoal = goals[selected] ?? null;
+
+  const setGoalForMetric = useCallback(
+    (key: MetricKey, value: number | null) => {
+      setGoals((prev) => {
+        const next = { ...prev };
+        if (value == null) {
+          delete next[key];
+        } else {
+          next[key] = value;
+        }
+        return next;
+      });
+    },
+    []
+  );
+
+  const handleSaveGoal = () => {
+    const val = parseFloat(goalDraft);
+    if (!isNaN(val) && val > 0) {
+      setGoalForMetric(selected, val);
+    }
+    setShowGoalInput(false);
+    setGoalDraft("");
+  };
+
+  const handleRemoveGoal = () => {
+    setGoalForMetric(selected, null);
+    setShowGoalInput(false);
+    setGoalDraft("");
+  };
 
   // Filter metrics that have at least 2 data points
   const availableMetrics = useMemo(() => {
@@ -248,45 +310,135 @@ export const MedidasChart = ({ fichas }: MedidasChartProps) => {
             ))}
           </div>
 
-          {/* Summary stats */}
+          {/* Summary stats + Goal */}
           {stats && (
-            <div className="grid grid-cols-3 gap-2">
-              <div className="p-2.5 rounded-xl bg-muted/40 border border-border/50 text-center">
-                <p className="text-[10px] text-muted-foreground uppercase tracking-wide">Início</p>
-                <p className="text-sm font-bold text-foreground">
-                  {stats.first}
-                  <span className="text-[10px] font-normal text-muted-foreground ml-0.5">
-                    {selectedMetric.suffix}
-                  </span>
-                </p>
+            <div className="space-y-2">
+              <div className="grid grid-cols-3 gap-2">
+                <div className="p-2.5 rounded-xl bg-muted/40 border border-border/50 text-center">
+                  <p className="text-[10px] text-muted-foreground uppercase tracking-wide">Início</p>
+                  <p className="text-sm font-bold text-foreground">
+                    {stats.first}
+                    <span className="text-[10px] font-normal text-muted-foreground ml-0.5">
+                      {selectedMetric.suffix}
+                    </span>
+                  </p>
+                </div>
+                <div className="p-2.5 rounded-xl bg-muted/40 border border-border/50 text-center">
+                  <p className="text-[10px] text-muted-foreground uppercase tracking-wide">Atual</p>
+                  <p className="text-sm font-bold text-foreground">
+                    {stats.last}
+                    <span className="text-[10px] font-normal text-muted-foreground ml-0.5">
+                      {selectedMetric.suffix}
+                    </span>
+                  </p>
+                </div>
+                <div className="p-2.5 rounded-xl bg-muted/40 border border-border/50 text-center">
+                  <p className="text-[10px] text-muted-foreground uppercase tracking-wide">
+                    Variação
+                  </p>
+                  <p
+                    className={`text-sm font-bold ${
+                      stats.diff < 0
+                        ? "text-highlight"
+                        : stats.diff > 0
+                          ? "text-destructive"
+                          : "text-muted-foreground"
+                    }`}
+                  >
+                    {stats.diff > 0 ? "+" : ""}
+                    {stats.diff}
+                    <span className="text-[10px] font-normal ml-0.5">{selectedMetric.suffix}</span>
+                  </p>
+                </div>
               </div>
-              <div className="p-2.5 rounded-xl bg-muted/40 border border-border/50 text-center">
-                <p className="text-[10px] text-muted-foreground uppercase tracking-wide">Atual</p>
-                <p className="text-sm font-bold text-foreground">
-                  {stats.last}
-                  <span className="text-[10px] font-normal text-muted-foreground ml-0.5">
-                    {selectedMetric.suffix}
-                  </span>
-                </p>
-              </div>
-              <div className="p-2.5 rounded-xl bg-muted/40 border border-border/50 text-center">
-                <p className="text-[10px] text-muted-foreground uppercase tracking-wide">
-                  Variação
-                </p>
-                <p
-                  className={`text-sm font-bold ${
-                    stats.diff < 0
-                      ? "text-highlight"
-                      : stats.diff > 0
-                        ? "text-destructive"
-                        : "text-muted-foreground"
-                  }`}
-                >
-                  {stats.diff > 0 ? "+" : ""}
-                  {stats.diff}
-                  <span className="text-[10px] font-normal ml-0.5">{selectedMetric.suffix}</span>
-                </p>
-              </div>
+
+              {/* Goal row */}
+              <AnimatePresence mode="wait">
+                {showGoalInput ? (
+                  <motion.div
+                    key="goal-input"
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    exit={{ opacity: 0, height: 0 }}
+                    className="flex items-center gap-2"
+                  >
+                    <div className="flex-1 relative">
+                      <Input
+                        type="number"
+                        step="0.1"
+                        placeholder={`Meta de ${selectedMetric.label} (${selectedMetric.suffix})`}
+                        value={goalDraft}
+                        onChange={(e) => setGoalDraft(e.target.value)}
+                        onKeyDown={(e) => e.key === "Enter" && handleSaveGoal()}
+                        className="h-8 text-xs pr-10"
+                        autoFocus
+                      />
+                      <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-muted-foreground">
+                        {selectedMetric.suffix}
+                      </span>
+                    </div>
+                    <button
+                      onClick={handleSaveGoal}
+                      className="h-8 w-8 rounded-lg bg-primary text-primary-foreground flex items-center justify-center hover:bg-primary/90 transition-colors"
+                    >
+                      <Check size={14} />
+                    </button>
+                    <button
+                      onClick={() => { setShowGoalInput(false); setGoalDraft(""); }}
+                      className="h-8 w-8 rounded-lg bg-muted text-muted-foreground flex items-center justify-center hover:bg-muted/80 transition-colors"
+                    >
+                      <X size={14} />
+                    </button>
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="goal-display"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="flex items-center gap-2"
+                  >
+                    {currentGoal != null ? (
+                      <div className="flex-1 flex items-center gap-2 p-2 rounded-xl bg-primary/5 border border-primary/20">
+                        <Target size={14} className="text-primary shrink-0" />
+                        <div className="flex-1 min-w-0">
+                          <p className="text-[10px] text-muted-foreground">Meta de {selectedMetric.label}</p>
+                          <p className="text-sm font-bold text-primary">
+                            {currentGoal}
+                            <span className="text-[10px] font-normal ml-0.5">{selectedMetric.suffix}</span>
+                            {stats && (
+                              <span className={`text-[10px] font-medium ml-2 ${
+                                stats.last <= currentGoal ? "text-highlight" : "text-muted-foreground"
+                              }`}>
+                                {stats.last <= currentGoal ? "✓ Atingida!" : `faltam ${Number((stats.last - currentGoal).toFixed(1))}${selectedMetric.suffix}`}
+                              </span>
+                            )}
+                          </p>
+                        </div>
+                        <button
+                          onClick={() => { setGoalDraft(currentGoal.toString()); setShowGoalInput(true); }}
+                          className="text-[10px] text-muted-foreground hover:text-foreground px-2 py-1 rounded-md hover:bg-muted transition-colors"
+                        >
+                          Editar
+                        </button>
+                        <button
+                          onClick={handleRemoveGoal}
+                          className="text-muted-foreground hover:text-destructive p-1 rounded-md hover:bg-muted transition-colors"
+                        >
+                          <X size={12} />
+                        </button>
+                      </div>
+                    ) : (
+                      <button
+                        onClick={() => setShowGoalInput(true)}
+                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-medium bg-muted/60 text-muted-foreground hover:bg-muted hover:text-foreground transition-all"
+                      >
+                        <Target size={12} />
+                        Definir meta
+                      </button>
+                    )}
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           )}
 
@@ -326,9 +478,31 @@ export const MedidasChart = ({ fichas }: MedidasChartProps) => {
                   tick={{ fontSize: 10, fill: "hsl(var(--muted-foreground))" }}
                   tickLine={false}
                   axisLine={false}
-                  domain={["auto", "auto"]}
+                  domain={[(dataMin: number) => {
+                    const min = currentGoal != null ? Math.min(dataMin, currentGoal) : dataMin;
+                    return Math.floor(min - 1);
+                  }, (dataMax: number) => {
+                    const max = currentGoal != null ? Math.max(dataMax, currentGoal) : dataMax;
+                    return Math.ceil(max + 1);
+                  }]}
                 />
-                <Tooltip content={<CustomTooltip />} />
+                <Tooltip content={<CustomTooltip goalValue={currentGoal} goalLabel={selectedMetric.suffix} />} />
+                {currentGoal != null && (
+                  <ReferenceLine
+                    y={currentGoal}
+                    stroke="hsl(var(--primary))"
+                    strokeDasharray="6 4"
+                    strokeWidth={1.5}
+                    strokeOpacity={0.7}
+                    label={{
+                      value: `🎯 ${currentGoal}${selectedMetric.suffix}`,
+                      position: "right",
+                      fontSize: 10,
+                      fill: "hsl(var(--primary))",
+                      fontWeight: 600,
+                    }}
+                  />
+                )}
                 <Area
                   type="monotone"
                   dataKey="value"

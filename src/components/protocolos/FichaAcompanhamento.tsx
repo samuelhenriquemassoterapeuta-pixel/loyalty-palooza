@@ -171,7 +171,7 @@ export const FichaAcompanhamento = ({ protocoloUsuarioId }: FichaAcompanhamentoP
 
       {/* Evolution charts */}
       {fichas.length >= 2 && (
-        <MedidasChart fichas={fichas} />
+        <MedidasChart fichas={fichas} protocoloUsuarioId={protocoloUsuarioId} />
       )}
 
       {/* History list */}
