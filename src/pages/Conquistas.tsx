@@ -22,6 +22,7 @@ const Conquistas = () => {
       cashback: { unlocked: 0, total: 0, icon: "💰" },
       protocolo: { unlocked: 0, total: 0, icon: "🌱" },
       social: { unlocked: 0, total: 0, icon: "👥" },
+      loja: { unlocked: 0, total: 0, icon: "🛍️" },
     };
 
     achievements.forEach((a) => {
@@ -32,7 +33,7 @@ const Conquistas = () => {
     });
 
     return Object.entries(cats).map(([key, val]) => ({
-      name: key === "agendamento" ? "Sessões" : key === "cashback" ? "Cashback" : key === "protocolo" ? "Protocolo" : "Social",
+      name: key === "agendamento" ? "Sessões" : key === "cashback" ? "Cashback" : key === "protocolo" ? "Protocolo" : key === "social" ? "Social" : "Loja",
       ...val,
     }));
   }, [achievements]);
