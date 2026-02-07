@@ -136,6 +136,51 @@ export type Database = {
           },
         ]
       }
+      checklists_avaliacao: {
+        Row: {
+          agendamento_id: string | null
+          created_at: string
+          id: string
+          itens_marcados: string[]
+          observacoes: string | null
+          protocolo_usuario_id: string | null
+          user_id: string
+        }
+        Insert: {
+          agendamento_id?: string | null
+          created_at?: string
+          id?: string
+          itens_marcados?: string[]
+          observacoes?: string | null
+          protocolo_usuario_id?: string | null
+          user_id: string
+        }
+        Update: {
+          agendamento_id?: string | null
+          created_at?: string
+          id?: string
+          itens_marcados?: string[]
+          observacoes?: string | null
+          protocolo_usuario_id?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "checklists_avaliacao_agendamento_id_fkey"
+            columns: ["agendamento_id"]
+            isOneToOne: false
+            referencedRelation: "agendamentos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "checklists_avaliacao_protocolo_usuario_id_fkey"
+            columns: ["protocolo_usuario_id"]
+            isOneToOne: false
+            referencedRelation: "usuario_protocolos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       exercicios_alongamento: {
         Row: {
           categoria: string
