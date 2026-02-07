@@ -1,8 +1,7 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Eye, EyeOff, TrendingUp, Sparkles, ChevronRight, Crown } from "lucide-react";
 import { AnimatedCounter } from "@/components/ui/animated-counter";
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTransacoes } from "@/hooks/useTransacoes";
 import { TIER_CONFIG, TierName } from "@/hooks/useUserTier";
@@ -37,17 +36,23 @@ export const BalanceCard = () => {
   };
 
   if (loading) {
-    return <BalanceCardSkeleton />;
+    return (
+      <div ref={cardRef}>
+        <BalanceCardSkeleton />
+      </div>
+    );
   }
 
   if (error) {
     return (
-      <ErrorState
-        compact
-        title="Erro ao carregar saldo"
-        message={error}
-        onRetry={refetch}
-      />
+      <div ref={cardRef}>
+        <ErrorState
+          compact
+          title="Erro ao carregar saldo"
+          message={error}
+          onRetry={refetch}
+        />
+      </div>
     );
   }
 
