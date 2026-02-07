@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Camera, Check, RotateCcw, Grid3X3 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { VistaPostural } from "@/hooks/useAvaliacaoPostural";
+import { ZoomableImage } from "./ZoomableImage";
 
 const vistaConfig: Record<VistaPostural, { label: string; instrucao: string }> = {
   anterior: {
@@ -73,39 +74,39 @@ export const VistaCaptura = ({ vista, existingUrl, onCapture, isPending }: Vista
       >
         {hasImage ? (
           <>
-            <img
+            <ZoomableImage
               src={displayUrl}
               alt={config.label}
-              className="w-full h-full object-cover"
-            />
-            {/* Grid overlay */}
-            {showGrid && (
-              <div className="absolute inset-0 pointer-events-none">
-                {/* Vertical lines */}
-                <div className="absolute left-1/4 top-0 bottom-0 w-px bg-primary/30" />
-                <div className="absolute left-1/2 top-0 bottom-0 w-px bg-primary/50" />
-                <div className="absolute left-3/4 top-0 bottom-0 w-px bg-primary/30" />
-                {/* Horizontal lines */}
-                <div className="absolute top-1/5 left-0 right-0 h-px bg-primary/30" />
-                <div className="absolute top-2/5 left-0 right-0 h-px bg-primary/30" />
-                <div className="absolute top-1/2 left-0 right-0 h-px bg-primary/50" />
-                <div className="absolute top-3/5 left-0 right-0 h-px bg-primary/30" />
-                <div className="absolute top-4/5 left-0 right-0 h-px bg-primary/30" />
-                {/* Center crosshair */}
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-6 h-6">
-                  <div className="absolute top-1/2 left-0 right-0 h-px bg-primary/70" />
-                  <div className="absolute left-1/2 top-0 bottom-0 w-px bg-primary/70" />
+              className="w-full h-full"
+            >
+              {/* Grid overlay */}
+              {showGrid && (
+                <div className="absolute inset-0 pointer-events-none">
+                  <div className="absolute left-1/4 top-0 bottom-0 w-px bg-primary/30" />
+                  <div className="absolute left-1/2 top-0 bottom-0 w-px bg-primary/50" />
+                  <div className="absolute left-3/4 top-0 bottom-0 w-px bg-primary/30" />
+                  <div className="absolute top-1/5 left-0 right-0 h-px bg-primary/30" />
+                  <div className="absolute top-2/5 left-0 right-0 h-px bg-primary/30" />
+                  <div className="absolute top-1/2 left-0 right-0 h-px bg-primary/50" />
+                  <div className="absolute top-3/5 left-0 right-0 h-px bg-primary/30" />
+                  <div className="absolute top-4/5 left-0 right-0 h-px bg-primary/30" />
+                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-6 h-6">
+                    <div className="absolute top-1/2 left-0 right-0 h-px bg-primary/70" />
+                    <div className="absolute left-1/2 top-0 bottom-0 w-px bg-primary/70" />
+                  </div>
                 </div>
+              )}
+              {/* Status badge */}
+              <div className="absolute top-2 right-2">
+                <span className="flex items-center gap-1 text-[10px] font-medium bg-green-500/90 text-white px-2 py-0.5 rounded-full">
+                  <Check size={10} /> Capturada
+                </span>
               </div>
-            )}
-            {/* Status badge */}
-            <div className="absolute top-2 right-2">
-              <span className="flex items-center gap-1 text-[10px] font-medium bg-green-500/90 text-white px-2 py-0.5 rounded-full">
-                <Check size={10} /> Capturada
-              </span>
-            </div>
-            {/* Replace overlay on hover */}
-            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+            </ZoomableImage>
+            {/* Replace overlay on hover — outside ZoomableImage to avoid conflict */}
+            <div
+              className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none"
+            >
               <div className="flex items-center gap-2 text-white text-sm font-medium">
                 <RotateCcw size={16} />
                 Substituir foto
