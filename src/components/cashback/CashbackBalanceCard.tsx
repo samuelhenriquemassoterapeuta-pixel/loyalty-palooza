@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { TrendingUp, TrendingDown, Sparkles } from "lucide-react";
+import { AnimatedCounter } from "@/components/ui/animated-counter";
 
 interface CashbackBalanceCardProps {
   saldoDisponivel: number;
@@ -56,7 +57,11 @@ export const CashbackBalanceCard = ({
         </div>
 
         <h2 className="text-4xl font-bold tracking-tight font-serif mb-6">
-          {showValues ? formatCurrency(saldoDisponivel) : "R$ ••••••"}
+          {showValues ? (
+            <AnimatedCounter value={saldoDisponivel} format={formatCurrency} duration={1.4} />
+          ) : (
+            "R$ ••••••"
+          )}
         </h2>
 
         {/* Stats row */}
@@ -68,7 +73,9 @@ export const CashbackBalanceCard = ({
             <div>
               <p className="text-[10px] opacity-70">Total ganho</p>
               <p className="font-bold text-sm">
-                {showValues ? formatCurrency(totalGanho) : "••••"}
+                {showValues ? (
+                  <AnimatedCounter value={totalGanho} format={formatCurrency} duration={1} />
+                ) : "••••"}
               </p>
             </div>
           </div>
@@ -79,7 +86,9 @@ export const CashbackBalanceCard = ({
             <div>
               <p className="text-[10px] opacity-70">Total usado</p>
               <p className="font-bold text-sm">
-                {showValues ? formatCurrency(totalUsado) : "••••"}
+                {showValues ? (
+                  <AnimatedCounter value={totalUsado} format={formatCurrency} duration={1} />
+                ) : "••••"}
               </p>
             </div>
           </div>

@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { Plus, CreditCard, Send } from "lucide-react";
 import { AppLayout } from "@/components/AppLayout";
 import { Button } from "@/components/ui/button";
+import { AnimatedCounter } from "@/components/ui/animated-counter";
 import { useTransacoes } from "@/hooks/useTransacoes";
 import { useProfile } from "@/hooks/useProfile";
 import { useNavigate } from "react-router-dom";
@@ -78,7 +79,9 @@ const Wallet = () => {
               
               <div className="relative z-10">
                 <p className="text-sm opacity-80 mb-1">Saldo total</p>
-                <h2 className="text-4xl font-bold font-serif mb-4">{formatCurrency(stats.saldo)}</h2>
+                <h2 className="text-4xl font-bold font-serif mb-4">
+                  <AnimatedCounter value={stats.saldo} format={formatCurrency} duration={1.4} />
+                </h2>
                 
                 <div className="flex gap-3">
                   <Button 
@@ -142,11 +145,15 @@ const Wallet = () => {
               <div className="grid grid-cols-2 gap-3">
                 <div className="p-4 rounded-2xl glass-card-strong">
                   <p className="text-xs text-muted-foreground mb-1">Total gasto</p>
-                  <p className="text-xl font-bold font-serif text-foreground">{formatCurrency(stats.totalGasto)}</p>
+                  <p className="text-xl font-bold font-serif text-foreground">
+                    <AnimatedCounter value={stats.totalGasto} format={formatCurrency} />
+                  </p>
                 </div>
                 <div className="p-4 rounded-2xl glass-card-strong">
                   <p className="text-xs text-muted-foreground mb-1">Cashback ganho</p>
-                  <p className="text-xl font-bold font-serif text-primary">{formatCurrency(stats.totalCashback)}</p>
+                  <p className="text-xl font-bold font-serif text-primary">
+                    <AnimatedCounter value={stats.totalCashback} format={formatCurrency} />
+                  </p>
                 </div>
               </div>
             </motion.div>

@@ -1,5 +1,6 @@
 import { motion, type Variants } from "framer-motion";
 import { Flame, Trophy } from "lucide-react";
+import { AnimatedCounter } from "@/components/ui/animated-counter";
 import { subDays, startOfDay, isSameDay, format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import type { ProgressStats } from "@/hooks/useProgressStats";
@@ -31,7 +32,7 @@ export const StreakCard = ({ stats, fichas, variants }: StreakCardProps) => {
           </div>
           <div>
             <div className="flex items-baseline gap-1.5">
-              <span className="text-2xl font-bold text-foreground">{stats.streak}</span>
+              <span className="text-2xl font-bold text-foreground"><AnimatedCounter value={stats.streak} duration={0.8} /></span>
               <span className="text-xs text-muted-foreground">
                 {stats.streak === 1 ? "dia" : "dias"} seguidos
               </span>

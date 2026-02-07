@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Eye, EyeOff, TrendingUp, Sparkles, ChevronRight, Crown } from "lucide-react";
+import { AnimatedCounter } from "@/components/ui/animated-counter";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTransacoes } from "@/hooks/useTransacoes";
@@ -115,7 +116,11 @@ export const BalanceCard = () => {
             className="mb-6"
           >
             <h2 className="text-4xl font-bold tracking-tight font-serif">
-              {showBalance ? formatCurrency(stats.saldo) : "R$ ••••••"}
+              {showBalance ? (
+                <AnimatedCounter value={stats.saldo} format={formatCurrency} duration={1.4} />
+              ) : (
+                "R$ ••••••"
+              )}
             </h2>
           </motion.div>
 
@@ -158,7 +163,11 @@ export const BalanceCard = () => {
               <div className="flex-1 min-w-0">
                 <p className="text-xs opacity-80">Cashback</p>
                 <p className="font-bold text-lg">
-                  {showBalance ? formatCurrency(stats.totalCashback) : "R$ ••••"}
+                  {showBalance ? (
+                    <AnimatedCounter value={stats.totalCashback} format={formatCurrency} duration={1} />
+                  ) : (
+                    "R$ ••••"
+                  )}
                 </p>
               </div>
               <ChevronRight size={18} className="opacity-60 shrink-0" />
