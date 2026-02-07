@@ -7,6 +7,7 @@ import { StreakSummaryCard } from "./StreakSummaryCard";
 import { AchievementBadges } from "./AchievementBadges";
 import { NextAchievementsCard } from "./NextAchievementsCard";
 import { XpMiniBar } from "./XpMiniBar";
+import { ActiveBenefitsCard } from "./ActiveBenefitsCard";
 import { AchievementCelebration } from "@/components/conquistas/AchievementCelebration";
 import {
   differenceInDays,
@@ -82,6 +83,7 @@ export const HomeDashboard = () => {
         hasActiveProtocol={!!protocoloAtivo}
       />
       <XpMiniBar achievements={achievements} />
+      <ActiveBenefitsCard />
       <NextAchievementsCard achievements={achievements} />
       <AchievementBadges
         achievements={achievements}

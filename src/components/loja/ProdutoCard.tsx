@@ -18,6 +18,8 @@ interface ProdutoCardProps {
   onToggle: () => void;
   /** Level-based store discount percentage (0-15) */
   levelDiscountPercent?: number;
+  /** Level-based cashback bonus percentage (0-30) */
+  cashbackBonusPercent?: number;
 }
 
 const fadeUp = {
@@ -29,9 +31,11 @@ const fadeUp = {
   },
 };
 
-export const ProdutoCard = ({ produto, index, noCarrinho, onToggle, levelDiscountPercent = 0 }: ProdutoCardProps) => {
-  const cashback = produto.cashback_percentual || 0;
+export const ProdutoCard = ({ produto, index, noCarrinho, onToggle, levelDiscountPercent = 0, cashbackBonusPercent = 0 }: ProdutoCardProps) => {
+  const baseCashback = produto.cashback_percentual || 0;
+  const boostedCashback = baseCashback > 0 ? baseCashback + cashbackBonusPercent : 0;
   const hasDiscount = levelDiscountPercent > 0;
+  const hasCashbackBoost = cashbackBonusPercent > 0 && baseCashback > 0;
   const discountedPrice = hasDiscount
     ? produto.preco * (1 - levelDiscountPercent / 100)
     : produto.preco;
@@ -45,10 +49,14 @@ export const ProdutoCard = ({ produto, index, noCarrinho, onToggle, levelDiscoun
     >
       <div className="glass-card rounded-2xl p-3 relative overflow-hidden hover:shadow-elevated transition-shadow">
         {/* Cashback badge */}
-        {cashback > 0 && (
+        {baseCashback > 0 && (
           <div className="absolute top-2 right-2 flex items-center gap-1 px-2 py-1 rounded-full bg-highlight/20 text-highlight text-[10px] font-semibold">
             <Percent size={10} />
-            {cashback}% cashback
+            {hasCashbackBoost ? (
+              <span>{boostedCashback}% cashback <span className="opacity-60">({baseCashback}+{cashbackBonusPercent})</span></span>
+            ) : (
+              <span>{baseCashback}% cashback</span>
+            )}
           </div>
         )}
 
@@ -93,9 +101,9 @@ export const ProdutoCard = ({ produto, index, noCarrinho, onToggle, levelDiscoun
                 R$ {produto.preco.toFixed(2).replace('.', ',')}
               </p>
             )}
-            {cashback > 0 && (
+            {baseCashback > 0 && (
               <p className="text-[9px] text-highlight">
-                +R$ {(discountedPrice * cashback / 100).toFixed(2).replace('.', ',')} volta
+                +R$ {(discountedPrice * boostedCashback / 100).toFixed(2).replace('.', ',')} volta
               </p>
             )}
           </div>

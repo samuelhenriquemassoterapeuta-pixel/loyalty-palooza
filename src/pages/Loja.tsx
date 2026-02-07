@@ -207,6 +207,7 @@ export default function Loja() {
             levelDiscountPercent={storeDiscountPercent}
             levelName={levelName}
             levelIcon={levelIcon}
+            cashbackBonusPercent={cashbackBonusPercent}
           />
         </div>
       </div>
@@ -439,6 +440,7 @@ export default function Loja() {
                         noCarrinho={noCarrinho(produto.id)}
                         onToggle={() => handleToggleCarrinho(produto)}
                         levelDiscountPercent={storeDiscountPercent}
+                        cashbackBonusPercent={cashbackBonusPercent}
                       />
                     ))}
                   </div>

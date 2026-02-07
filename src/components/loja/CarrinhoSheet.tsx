@@ -26,6 +26,8 @@ interface CarrinhoSheetProps {
   levelName?: string;
   /** Level icon */
   levelIcon?: string;
+  /** Level-based cashback bonus percentage (0-30) */
+  cashbackBonusPercent?: number;
 }
 
 export const CarrinhoSheet = ({
@@ -42,6 +44,7 @@ export const CarrinhoSheet = ({
   levelDiscountPercent = 0,
   levelName,
   levelIcon,
+  cashbackBonusPercent = 0,
 }: CarrinhoSheetProps) => {
   const hasLevelDiscount = levelDiscountPercent > 0;
 
@@ -50,9 +53,10 @@ export const CarrinhoSheet = ({
   const subtotalAfterLevelDiscount = subtotal - levelDiscountValue;
 
   const totalCashbackGanho = carrinho.reduce((acc, item) => {
-    const cashback = item.produto.cashback_percentual || 0;
+    const baseCashback = item.produto.cashback_percentual || 0;
+    const boostedCashback = baseCashback > 0 ? baseCashback + cashbackBonusPercent : 0;
     const itemPrice = item.produto.preco * (1 - levelDiscountPercent / 100);
-    return acc + (itemPrice * item.quantidade * cashback) / 100;
+    return acc + (itemPrice * item.quantidade * boostedCashback) / 100;
   }, 0);
 
   // Calcular desconto de cashback (não pode ser maior que o subtotal com desconto de nível ou saldo disponível)
@@ -97,9 +101,10 @@ export const CarrinhoSheet = ({
               {/* Lista de itens */}
               <div className="flex-1 overflow-y-auto space-y-3 pb-4">
                 {carrinho.map((item) => {
-                  const cashback = item.produto.cashback_percentual || 0;
-                  const itemPriceWithDiscount = item.produto.preco * (1 - levelDiscountPercent / 100);
-                  const itemCashback = (itemPriceWithDiscount * item.quantidade * cashback) / 100;
+                    const baseCashback = item.produto.cashback_percentual || 0;
+                    const boostedCashback = baseCashback > 0 ? baseCashback + cashbackBonusPercent : 0;
+                    const itemPriceWithDiscount = item.produto.preco * (1 - levelDiscountPercent / 100);
+                    const itemCashback = (itemPriceWithDiscount * item.quantidade * boostedCashback) / 100;
                   
                   return (
                     <div
@@ -136,9 +141,12 @@ export const CarrinhoSheet = ({
                             {formatCurrency(item.produto.preco * item.quantidade)}
                           </p>
                         )}
-                        {cashback > 0 && (
+                        {baseCashback > 0 && (
                           <p className="text-[10px] text-green-600">
                             +{formatCurrency(itemCashback)} cashback
+                            {cashbackBonusPercent > 0 && (
+                              <span className="text-green-500/70"> (+{cashbackBonusPercent}% bônus)</span>
+                            )}
                           </p>
                         )}
 
@@ -256,9 +264,16 @@ export const CarrinhoSheet = ({
 
                 {/* Cashback a ganhar */}
                 {totalCashbackGanho > 0 && (
-                  <div className="flex justify-between items-center text-green-600 text-sm">
-                    <span>Cashback nesta compra</span>
-                    <span className="font-semibold">+{formatCurrency(totalCashbackGanho)}</span>
+                  <div className="flex justify-between items-center text-sm p-2 rounded-lg bg-highlight/10">
+                    <span className="text-highlight font-medium">
+                      Cashback nesta compra
+                      {cashbackBonusPercent > 0 && (
+                        <span className="text-[10px] block text-highlight/70">
+                          Inclui +{cashbackBonusPercent}% bônus de nível
+                        </span>
+                      )}
+                    </span>
+                    <span className="font-semibold text-highlight">+{formatCurrency(totalCashbackGanho)}</span>
                   </div>
                 )}
 
