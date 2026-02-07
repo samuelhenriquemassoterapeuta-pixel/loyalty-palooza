@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Plus, TrendingDown, TrendingUp, Minus, Scale, Ruler, Activity } from "lucide-react";
 import { MedidasChart } from "./MedidasChart";
 import { ExportPdfButton } from "./ExportPdfButton";
+import { EvaScaleInput, EvaScaleDisplay } from "./EvaScaleInput";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -113,6 +114,12 @@ export const FichaAcompanhamento = ({ protocoloUsuarioId }: FichaAcompanhamentoP
                   }
                 />
               </div>
+              <div className="col-span-2">
+                <EvaScaleInput
+                  value={form.escala_eva}
+                  onChange={(v) => setForm((prev) => ({ ...prev, escala_eva: v }))}
+                />
+              </div>
               <div className="col-span-2 space-y-1">
                 <Label className="text-xs">Observações</Label>
                 <Input
@@ -173,6 +180,10 @@ export const FichaAcompanhamento = ({ protocoloUsuarioId }: FichaAcompanhamentoP
               </motion.div>
             );
           })}
+          {/* EVA scale card */}
+          {(ultima as Record<string, unknown>).escala_eva != null && (
+            <EvaScaleDisplay value={(ultima as Record<string, unknown>).escala_eva as number} />
+          )}
         </div>
       )}
 
@@ -201,6 +212,9 @@ export const FichaAcompanhamento = ({ protocoloUsuarioId }: FichaAcompanhamentoP
                 <div className="flex items-center gap-3">
                   {f.peso && <span className="font-medium">{f.peso}kg</span>}
                   {f.medida_cintura && <span className="text-muted-foreground">{f.medida_cintura}cm</span>}
+                  {(f as Record<string, unknown>).escala_eva != null && (
+                    <span className="text-xs text-muted-foreground">EVA: {String((f as Record<string, unknown>).escala_eva)}/10</span>
+                  )}
                 </div>
               </motion.div>
             ))}

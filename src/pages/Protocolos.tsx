@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Activity, Search, Droplets, Flame } from "lucide-react";
+import { Activity, Search, Droplets, Flame, Accessibility } from "lucide-react";
 import { AppLayout } from "@/components/AppLayout";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -86,7 +86,7 @@ const Protocolos = () => {
                     </h1>
                   </div>
                   <p className="text-sm text-muted-foreground">
-                    Emagrecimento & Drenagem Pós-Operatório
+                    Emagrecimento, Drenagem & Alinhamento Postural
                   </p>
                 </motion.div>
 
@@ -129,7 +129,7 @@ const Protocolos = () => {
 
                 <motion.div variants={fadeUp}>
                   <Tabs value={tipoFilter} onValueChange={setTipoFilter}>
-                    <TabsList className="w-full grid grid-cols-3">
+                    <TabsList className="w-full grid grid-cols-4">
                       <TabsTrigger value="todos" className="text-xs gap-1">
                         <Activity size={13} /> Todos
                       </TabsTrigger>
@@ -137,13 +137,19 @@ const Protocolos = () => {
                         value="emagrecimento"
                         className="text-xs gap-1"
                       >
-                        <Flame size={13} /> Emagrecimento
+                        <Flame size={13} /> Emagrecer
                       </TabsTrigger>
                       <TabsTrigger
                         value="drenagem_pos_operatorio"
                         className="text-xs gap-1"
                       >
                         <Droplets size={13} /> Drenagem
+                      </TabsTrigger>
+                      <TabsTrigger
+                        value="postural"
+                        className="text-xs gap-1"
+                      >
+                        <Accessibility size={13} /> Postural
                       </TabsTrigger>
                     </TabsList>
                   </Tabs>

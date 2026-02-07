@@ -88,6 +88,7 @@ export interface FichaData {
   medida_braco?: number;
   medida_coxa?: number;
   medida_torax?: number;
+  escala_eva?: number;
   observacoes?: string;
 }
 
