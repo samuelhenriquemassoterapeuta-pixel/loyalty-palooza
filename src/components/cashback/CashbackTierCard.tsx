@@ -23,11 +23,7 @@ export const CashbackTierCard = ({ tier, showValues }: CashbackTierCardProps) =>
   const currentIndex = tiers.findIndex((t) => t.name === currentTierName);
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 15 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="rounded-2xl bg-card shadow-card overflow-hidden"
-    >
+    <div className="rounded-2xl glass-card-strong overflow-hidden">
       {/* Header */}
       <div className={`p-4 bg-gradient-to-r ${config.color} text-primary-foreground`}>
         <div className="flex items-center justify-between">
@@ -126,6 +122,6 @@ export const CashbackTierCard = ({ tier, showValues }: CashbackTierCardProps) =>
           })}
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 };

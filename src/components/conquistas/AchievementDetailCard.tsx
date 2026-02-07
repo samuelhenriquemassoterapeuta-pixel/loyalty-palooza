@@ -7,7 +7,10 @@ interface AchievementDetailCardProps {
   index: number;
 }
 
-export const AchievementDetailCard = ({ achievement, index }: AchievementDetailCardProps) => {
+export const AchievementDetailCard = ({
+  achievement,
+  index,
+}: AchievementDetailCardProps) => {
   return (
     <motion.div
       initial={{ opacity: 0, y: 12 }}
@@ -17,7 +20,7 @@ export const AchievementDetailCard = ({ achievement, index }: AchievementDetailC
         flex items-center gap-3 p-3.5 rounded-xl border transition-all
         ${
           achievement.unlocked
-            ? "bg-card border-primary/20 shadow-sm"
+            ? "glass-card-strong border-primary/20 shadow-sm"
             : "bg-muted/30 border-border/40"
         }
       `}
@@ -74,10 +77,22 @@ export const AchievementDetailCard = ({ achievement, index }: AchievementDetailC
 };
 
 const categoryConfig: Record<string, { label: string; color: string }> = {
-  agendamento: { label: "Sessões", color: "text-blue-600 bg-blue-100 dark:text-blue-400 dark:bg-blue-900/30" },
-  cashback: { label: "Cashback", color: "text-emerald-600 bg-emerald-100 dark:text-emerald-400 dark:bg-emerald-900/30" },
-  protocolo: { label: "Protocolo", color: "text-amber-600 bg-amber-100 dark:text-amber-400 dark:bg-amber-900/30" },
-  social: { label: "Social", color: "text-purple-600 bg-purple-100 dark:text-purple-400 dark:bg-purple-900/30" },
+  agendamento: {
+    label: "Sessões",
+    color: "text-info bg-info/10",
+  },
+  cashback: {
+    label: "Cashback",
+    color: "text-highlight bg-highlight/10",
+  },
+  protocolo: {
+    label: "Protocolo",
+    color: "text-warning bg-warning/10",
+  },
+  social: {
+    label: "Social",
+    color: "text-accent bg-accent/10",
+  },
 };
 
 const CategoryBadge = ({ category }: { category: string }) => {

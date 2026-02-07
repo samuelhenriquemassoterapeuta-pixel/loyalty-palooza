@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Clock, Calendar, Zap, ChevronRight } from "lucide-react";
+import { Clock, Calendar, ChevronRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 interface ProtocoloCardProps {
@@ -17,11 +17,21 @@ interface ProtocoloCardProps {
 }
 
 const tipoLabels: Record<string, { label: string; class: string }> = {
-  emagrecimento: { label: "Emagrecimento", class: "bg-highlight/15 text-highlight border-highlight/30" },
-  drenagem_pos_operatorio: { label: "Drenagem Pós-Op", class: "bg-info/15 text-info border-info/30" },
+  emagrecimento: {
+    label: "Emagrecimento",
+    class: "bg-highlight/15 text-highlight border-highlight/30",
+  },
+  drenagem_pos_operatorio: {
+    label: "Drenagem Pós-Op",
+    class: "bg-info/15 text-info border-info/30",
+  },
 };
 
-export const ProtocoloCard = ({ protocolo, isAtivo, onSelect }: ProtocoloCardProps) => {
+export const ProtocoloCard = ({
+  protocolo,
+  isAtivo,
+  onSelect,
+}: ProtocoloCardProps) => {
   const tipo = tipoLabels[protocolo.tipo] ?? tipoLabels.emagrecimento;
 
   return (
@@ -32,8 +42,8 @@ export const ProtocoloCard = ({ protocolo, isAtivo, onSelect }: ProtocoloCardPro
       animate={{ opacity: 1, y: 0 }}
       className={`w-full text-left p-5 rounded-2xl border transition-all duration-200 ${
         isAtivo
-          ? "bg-primary/5 border-primary/30 shadow-md"
-          : "bg-card border-border hover:border-primary/20 hover:shadow-card"
+          ? "bg-primary/5 border-primary/30 shadow-md backdrop-blur-lg"
+          : "glass-card hover:shadow-elevated"
       }`}
     >
       <div className="flex items-start justify-between gap-3">
@@ -48,7 +58,9 @@ export const ProtocoloCard = ({ protocolo, isAtivo, onSelect }: ProtocoloCardPro
               </Badge>
             )}
           </div>
-          <h3 className="font-semibold text-foreground truncate">{protocolo.nome}</h3>
+          <h3 className="font-semibold text-foreground truncate">
+            {protocolo.nome}
+          </h3>
           {protocolo.descricao && (
             <p className="text-sm text-muted-foreground mt-1 line-clamp-2">
               {protocolo.descricao}
@@ -65,7 +77,10 @@ export const ProtocoloCard = ({ protocolo, isAtivo, onSelect }: ProtocoloCardPro
             </span>
           </div>
         </div>
-        <ChevronRight size={18} className="text-muted-foreground mt-1 shrink-0" />
+        <ChevronRight
+          size={18}
+          className="text-muted-foreground mt-1 shrink-0"
+        />
       </div>
     </motion.button>
   );
