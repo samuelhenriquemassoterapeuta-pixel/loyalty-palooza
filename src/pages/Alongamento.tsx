@@ -19,6 +19,7 @@ import { PlanoCard } from "@/components/alongamento/PlanoCard";
 import { ProgressoSection } from "@/components/alongamento/ProgressoSection";
 import { SessaoPlayer } from "@/components/alongamento/SessaoPlayer";
 import { DicasSeguranca } from "@/components/alongamento/DicasSeguranca";
+import { LembretesConfig } from "@/components/alongamento/LembretesConfig";
 import { ExercicioAlongamento } from "@/hooks/useAlongamento";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Card } from "@/components/ui/card";
@@ -291,7 +292,8 @@ export default function Alongamento() {
             </TabsContent>
 
             {/* === DICAS === */}
-            <TabsContent value="dicas" className="mt-4">
+            <TabsContent value="dicas" className="mt-4 space-y-4">
+              <LembretesConfig />
               <DicasSeguranca />
             </TabsContent>
           </Tabs>
