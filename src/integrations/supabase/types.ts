@@ -358,6 +358,39 @@ export type Database = {
           },
         ]
       }
+      lembretes_alongamento: {
+        Row: {
+          ativo: boolean
+          created_at: string
+          dias_semana: number[]
+          horario: string
+          id: string
+          mensagem_personalizada: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          ativo?: boolean
+          created_at?: string
+          dias_semana?: number[]
+          horario?: string
+          id?: string
+          mensagem_personalizada?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          ativo?: boolean
+          created_at?: string
+          dias_semana?: number[]
+          horario?: string
+          id?: string
+          mensagem_personalizada?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       login_attempts: {
         Row: {
           attempted_at: string
