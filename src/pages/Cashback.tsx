@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useTransacoes } from "@/hooks/useTransacoes";
 import { useUserTier } from "@/hooks/useUserTier";
 import { BottomNavigation } from "@/components/BottomNavigation";
+import { AppLayout } from "@/components/AppLayout";
 import { CashbackBalanceCard } from "@/components/cashback/CashbackBalanceCard";
 import { CashbackTierCard } from "@/components/cashback/CashbackTierCard";
 import { CashbackEvolutionChart } from "@/components/cashback/CashbackEvolutionChart";
@@ -36,8 +37,9 @@ const Cashback = () => {
   }, [transacoes]);
 
   return (
-    <div className="min-h-screen bg-background gradient-hero pb-24">
-      <div className="max-w-lg mx-auto px-4 safe-top pt-4">
+    <AppLayout>
+    <div className="min-h-screen bg-background gradient-hero pb-24 lg:pb-8">
+      <div className="max-w-lg lg:max-w-4xl mx-auto px-4 lg:px-8 safe-top pt-4">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -10 }}
@@ -132,8 +134,8 @@ const Cashback = () => {
         )}
       </div>
 
-      <BottomNavigation />
     </div>
+    </AppLayout>
   );
 };
 

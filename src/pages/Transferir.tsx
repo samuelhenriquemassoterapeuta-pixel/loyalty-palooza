@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { BottomNavigation } from "@/components/BottomNavigation";
+import { AppLayout } from "@/components/AppLayout";
 import { useAuth } from "@/contexts/AuthContext";
 import { useTransacoes } from "@/hooks/useTransacoes";
 import { supabase } from "@/integrations/supabase/client";
@@ -135,10 +136,11 @@ const Transferir = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background pb-24">
+    <AppLayout>
+    <div className="min-h-screen bg-background pb-24 lg:pb-8">
       {/* Header */}
       <div className="bg-card shadow-card">
-        <div className="max-w-lg mx-auto px-4 safe-top">
+        <div className="max-w-lg lg:max-w-4xl mx-auto px-4 lg:px-8 safe-top">
           <div className="flex items-center gap-3 py-4">
             <button
               onClick={() => navigate(-1)}
@@ -151,7 +153,7 @@ const Transferir = () => {
         </div>
       </div>
 
-      <div className="max-w-lg mx-auto px-4 py-6 space-y-6">
+      <div className="max-w-lg lg:max-w-4xl mx-auto px-4 lg:px-8 py-6 space-y-6">
         {/* Saldo disponível */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -263,8 +265,8 @@ const Transferir = () => {
         )}
       </div>
 
-      <BottomNavigation />
     </div>
+    </AppLayout>
   );
 };
 

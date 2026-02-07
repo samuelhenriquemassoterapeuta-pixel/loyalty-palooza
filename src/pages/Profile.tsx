@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { PageLoading } from "@/components/LoadingSpinner";
 import { BottomNavigation } from "@/components/BottomNavigation";
+import { AppLayout } from "@/components/AppLayout";
 import { useAuth } from "@/contexts/AuthContext";
 import { useProfile } from "@/hooks/useProfile";
 import { useAdmin } from "@/hooks/useAdmin";
@@ -159,7 +160,8 @@ const Profile = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background pb-24">
+    <AppLayout>
+    <div className="min-h-screen bg-background pb-24 lg:pb-8">
       <div className="max-w-lg mx-auto px-4 safe-top pt-4">
         {/* Profile Header */}
         <motion.div
@@ -321,8 +323,8 @@ const Profile = () => {
       <DevicesSheet open={devicesSheetOpen} onOpenChange={setDevicesSheetOpen} />
       <HelpSheet open={helpSheetOpen} onOpenChange={setHelpSheetOpen} />
 
-      <BottomNavigation />
     </div>
+    </AppLayout>
   );
 };
 

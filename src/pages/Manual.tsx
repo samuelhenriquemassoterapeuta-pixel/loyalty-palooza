@@ -28,6 +28,7 @@ import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { BottomNavigation } from "@/components/BottomNavigation";
+import { AppLayout } from "@/components/AppLayout";
 import {
   Accordion,
   AccordionContent,
@@ -346,7 +347,8 @@ export default function Manual() {
   };
 
   return (
-    <div className="min-h-screen bg-background pb-32">
+    <AppLayout>
+    <div className="min-h-screen bg-background pb-32 lg:pb-8">
       {/* Header */}
       <div className="relative overflow-hidden bg-gradient-to-br from-primary/10 via-accent/5 to-highlight/10 border-b border-border px-4 py-6 safe-top">
         <div className="absolute -top-20 -right-20 w-40 h-40 bg-accent/20 rounded-full blur-3xl" />
@@ -546,7 +548,7 @@ export default function Manual() {
         </section>
       </div>
 
-      <BottomNavigation />
     </div>
+    </AppLayout>
   );
 }

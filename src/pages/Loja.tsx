@@ -16,6 +16,7 @@ import { ProdutoCard } from "@/components/loja/ProdutoCard";
 import { CarrinhoFlutuante } from "@/components/loja/CarrinhoFlutuante";
 import { CarrinhoSheet } from "@/components/loja/CarrinhoSheet";
 import { ProdutosGridSkeleton, PedidosListSkeleton } from "@/components/skeletons";
+import { AppLayout } from "@/components/AppLayout";
 
 interface CarrinhoItem {
   produto: Produto;
@@ -158,11 +159,12 @@ export default function Loja() {
   };
 
   return (
-    <div className="min-h-screen bg-background pb-32">
+    <AppLayout>
+    <div className="min-h-screen bg-background pb-32 lg:pb-8">
       {/* Header */}
       <div className="relative overflow-hidden bg-gradient-to-r from-primary/5 via-accent/5 to-primary/5 border-b border-border px-4 py-4 safe-top">
         <div className="absolute -top-10 -right-10 w-24 h-24 bg-accent/10 rounded-full blur-2xl" />
-        <div className="max-w-lg mx-auto flex items-center gap-4 relative z-10">
+        <div className="max-w-lg lg:max-w-4xl mx-auto flex items-center gap-4 relative z-10">
           <Button
             variant="ghost"
             size="icon"
@@ -190,7 +192,7 @@ export default function Loja() {
         </div>
       </div>
 
-      <div className="max-w-lg mx-auto px-4 py-4 space-y-4">
+      <div className="max-w-lg lg:max-w-4xl mx-auto px-4 lg:px-8 py-4 space-y-4">
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="loja">Produtos</TabsTrigger>
@@ -363,7 +365,7 @@ export default function Loja() {
                 <p className="text-muted-foreground">Nenhum produto encontrado</p>
               </div>
             ) : (
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 lg:gap-4">
                 {produtosFiltrados.map((produto, index) => (
                   <ProdutoCard
                     key={produto.id}
@@ -389,7 +391,7 @@ export default function Loja() {
         )}
       </div>
 
-      <BottomNavigation />
     </div>
+    </AppLayout>
   );
 }
