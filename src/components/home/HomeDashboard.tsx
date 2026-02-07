@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { useAgendamentos } from "@/hooks/useAgendamentos";
 import { useUsuarioProtocolos, useFichas } from "@/hooks/useProtocolos";
 import { useAchievementCelebration } from "@/hooks/useAchievementCelebration";
+import { useAchievementProximityNotifier } from "@/hooks/useAchievementProximityNotifier";
 import { NextAppointmentCard } from "./NextAppointmentCard";
 import { StreakSummaryCard } from "./StreakSummaryCard";
 import { AchievementBadges } from "./AchievementBadges";
@@ -68,6 +69,9 @@ export const HomeDashboard = () => {
   }, [fichas]);
 
   const { achievements, totalUnlocked, celebration, dismiss } = useAchievementCelebration();
+
+  // Monitor achievement proximity and create notifications
+  useAchievementProximityNotifier(achievements);
 
   const protocoloNome = protocoloAtivo?.protocolos
     ? (protocoloAtivo.protocolos as { nome?: string }).nome ?? null
