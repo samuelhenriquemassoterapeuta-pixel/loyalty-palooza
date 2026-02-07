@@ -23,6 +23,7 @@ import Corporativo from "@/pages/Corporativo";
 import Alongamento from "@/pages/Alongamento";
 import Protocolos from "@/pages/Protocolos";
 import Conquistas from "@/pages/Conquistas";
+import GuiaClinico from "@/pages/GuiaClinico";
 import NotFound from "@/pages/NotFound";
 
 /** Shows landing for visitors, dashboard for authenticated users */
@@ -215,6 +216,16 @@ export const AnimatedRoutes = () => {
             <ProtectedRoute>
               <PageTransition>
                 <Conquistas />
+              </PageTransition>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/guia-clinico"
+          element={
+            <ProtectedRoute>
+              <PageTransition>
+                <GuiaClinico />
               </PageTransition>
             </ProtectedRoute>
           }

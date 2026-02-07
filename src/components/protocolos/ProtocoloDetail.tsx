@@ -8,6 +8,7 @@ import { ProgressDashboard } from "./ProgressDashboard";
 import { FichaAcompanhamento } from "./FichaAcompanhamento";
 import { GaleriaEvolucao } from "./GaleriaEvolucao";
 import { MetasSemanais } from "./MetasSemanais";
+import { GuiaResumoProtocolo } from "./GuiaResumoProtocolo";
 import { useUsuarioProtocolos } from "@/hooks/useProtocolos";
 import { format, differenceInWeeks } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -160,33 +161,45 @@ export const ProtocoloDetail = ({ protocolo, onBack }: ProtocoloDetailProps) => 
         </div>
       </div>
 
-      {/* Tabs - only show if enrolled */}
-      {meuProtocolo && (
-        <Tabs value={tab} onValueChange={setTab} className="w-full">
-          <TabsList className="w-full grid grid-cols-4">
-            <TabsTrigger value="resumo" className="text-xs">Resumo</TabsTrigger>
-            <TabsTrigger value="ficha" className="text-xs">Medidas</TabsTrigger>
-            <TabsTrigger value="metas" className="text-xs">Metas</TabsTrigger>
-            <TabsTrigger value="galeria" className="text-xs">Fotos</TabsTrigger>
-          </TabsList>
-          <TabsContent value="resumo" className="mt-4">
-            <ProgressDashboard
-              protocoloUsuarioId={meuProtocolo.id}
-              protocolo={protocolo}
-              dataInicio={meuProtocolo.data_inicio}
-            />
-          </TabsContent>
-          <TabsContent value="ficha" className="mt-4">
-            <FichaAcompanhamento protocoloUsuarioId={meuProtocolo.id} />
-          </TabsContent>
-          <TabsContent value="metas" className="mt-4">
-            <MetasSemanais protocoloUsuarioId={meuProtocolo.id} />
-          </TabsContent>
-          <TabsContent value="galeria" className="mt-4">
-            <GaleriaEvolucao protocoloUsuarioId={meuProtocolo.id} />
-          </TabsContent>
-        </Tabs>
-      )}
+      {/* Tabs - show guide tab always, other tabs only if enrolled */}
+      <Tabs value={tab} onValueChange={setTab} className="w-full">
+        <TabsList className={`w-full grid ${meuProtocolo ? "grid-cols-5" : "grid-cols-1"}`}>
+          {meuProtocolo && (
+            <>
+              <TabsTrigger value="resumo" className="text-xs">Resumo</TabsTrigger>
+              <TabsTrigger value="ficha" className="text-xs">Medidas</TabsTrigger>
+              <TabsTrigger value="metas" className="text-xs">Metas</TabsTrigger>
+              <TabsTrigger value="galeria" className="text-xs">Fotos</TabsTrigger>
+            </>
+          )}
+          <TabsTrigger value="guia" className="text-xs gap-1">
+            📋 Guia
+          </TabsTrigger>
+        </TabsList>
+        {meuProtocolo && (
+          <>
+            <TabsContent value="resumo" className="mt-4">
+              <ProgressDashboard
+                protocoloUsuarioId={meuProtocolo.id}
+                protocolo={protocolo}
+                dataInicio={meuProtocolo.data_inicio}
+              />
+            </TabsContent>
+            <TabsContent value="ficha" className="mt-4">
+              <FichaAcompanhamento protocoloUsuarioId={meuProtocolo.id} />
+            </TabsContent>
+            <TabsContent value="metas" className="mt-4">
+              <MetasSemanais protocoloUsuarioId={meuProtocolo.id} />
+            </TabsContent>
+            <TabsContent value="galeria" className="mt-4">
+              <GaleriaEvolucao protocoloUsuarioId={meuProtocolo.id} />
+            </TabsContent>
+          </>
+        )}
+        <TabsContent value="guia" className="mt-4">
+          <GuiaResumoProtocolo tipoProtocolo={protocolo.tipo} />
+        </TabsContent>
+      </Tabs>
     </motion.div>
   );
 };
