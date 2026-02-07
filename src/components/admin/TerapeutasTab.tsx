@@ -1,6 +1,6 @@
  import { useState } from "react";
- import { motion } from "framer-motion";
- import { User, Plus, Pencil, Trash2, Check, X, Loader2 } from "lucide-react";
+import { motion } from "framer-motion";
+import { User, Plus, Pencil, Trash2, Check, X, Loader2, Mail, Phone } from "lucide-react";
  import { Card } from "@/components/ui/card";
  import { Button } from "@/components/ui/button";
  import { Input } from "@/components/ui/input";
@@ -17,25 +17,29 @@
  import { useQuery, useQueryClient } from "@tanstack/react-query";
  import { toast } from "sonner";
  
- interface Terapeuta {
-   id: string;
-   nome: string;
-   especialidade: string | null;
-   foto_url: string | null;
-   disponivel: boolean;
-   created_at: string;
- }
+interface Terapeuta {
+  id: string;
+  nome: string;
+  especialidade: string | null;
+  foto_url: string | null;
+  email: string | null;
+  telefone: string | null;
+  disponivel: boolean;
+  created_at: string;
+}
  
  export const TerapeutasTab = () => {
    const queryClient = useQueryClient();
    const [dialogOpen, setDialogOpen] = useState(false);
    const [editingItem, setEditingItem] = useState<Terapeuta | null>(null);
-   const [formData, setFormData] = useState({
-     nome: "",
-     especialidade: "",
-     foto_url: "",
-     disponivel: true,
-   });
+  const [formData, setFormData] = useState({
+    nome: "",
+    especialidade: "",
+    foto_url: "",
+    email: "",
+    telefone: "",
+    disponivel: true,
+  });
    const [saving, setSaving] = useState(false);
  
    const { data: terapeutas = [], isLoading } = useQuery({
@@ -52,18 +56,20 @@
  
    const openCreateDialog = () => {
      setEditingItem(null);
-     setFormData({ nome: "", especialidade: "", foto_url: "", disponivel: true });
+     setFormData({ nome: "", especialidade: "", foto_url: "", email: "", telefone: "", disponivel: true });
      setDialogOpen(true);
    };
  
    const openEditDialog = (item: Terapeuta) => {
      setEditingItem(item);
-     setFormData({
-       nome: item.nome,
-       especialidade: item.especialidade || "",
-       foto_url: item.foto_url || "",
-       disponivel: item.disponivel,
-     });
+    setFormData({
+      nome: item.nome,
+      especialidade: item.especialidade || "",
+      foto_url: item.foto_url || "",
+      email: item.email || "",
+      telefone: item.telefone || "",
+      disponivel: item.disponivel,
+    });
      setDialogOpen(true);
    };
  
@@ -75,12 +81,14 @@
  
      setSaving(true);
      try {
-       const dataToSave = {
-         nome: formData.nome.trim(),
-         especialidade: formData.especialidade.trim() || null,
-         foto_url: formData.foto_url.trim() || null,
-         disponivel: formData.disponivel,
-       };
+      const dataToSave = {
+        nome: formData.nome.trim(),
+        especialidade: formData.especialidade.trim() || null,
+        foto_url: formData.foto_url.trim() || null,
+        email: formData.email.trim() || null,
+        telefone: formData.telefone.trim() || null,
+        disponivel: formData.disponivel,
+      };
  
        if (editingItem) {
          const { error } = await supabase
@@ -190,11 +198,27 @@
                      <p className="font-semibold text-foreground truncate">
                        {terapeuta.nome}
                      </p>
-                     {terapeuta.especialidade && (
-                       <p className="text-sm text-muted-foreground truncate">
-                         {terapeuta.especialidade}
-                       </p>
-                     )}
+                    {terapeuta.especialidade && (
+                        <p className="text-sm text-muted-foreground truncate">
+                          {terapeuta.especialidade}
+                        </p>
+                      )}
+                      {(terapeuta.email || terapeuta.telefone) && (
+                        <div className="flex items-center gap-3 mt-0.5">
+                          {terapeuta.email && (
+                            <span className="flex items-center gap-1 text-[11px] text-muted-foreground">
+                              <Mail className="w-3 h-3" />
+                              <span className="truncate max-w-[120px]">{terapeuta.email}</span>
+                            </span>
+                          )}
+                          {terapeuta.telefone && (
+                            <span className="flex items-center gap-1 text-[11px] text-muted-foreground">
+                              <Phone className="w-3 h-3" />
+                              {terapeuta.telefone}
+                            </span>
+                          )}
+                        </div>
+                      )}
                    </div>
  
                    <div className="flex items-center gap-2">
@@ -261,17 +285,44 @@
                />
              </div>
  
-             <div className="space-y-2">
-               <Label htmlFor="foto_url">URL da Foto</Label>
-               <Input
-                 id="foto_url"
-                 value={formData.foto_url}
-                 onChange={(e) =>
-                   setFormData({ ...formData, foto_url: e.target.value })
-                 }
-                 placeholder="https://..."
-               />
-             </div>
+            <div className="space-y-2">
+                <Label htmlFor="foto_url">URL da Foto</Label>
+                <Input
+                  id="foto_url"
+                  value={formData.foto_url}
+                  onChange={(e) =>
+                    setFormData({ ...formData, foto_url: e.target.value })
+                  }
+                  placeholder="https://..."
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div className="space-y-2">
+                  <Label htmlFor="email">Email</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    value={formData.email}
+                    onChange={(e) =>
+                      setFormData({ ...formData, email: e.target.value })
+                    }
+                    placeholder="terapeuta@email.com"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="telefone">Telefone</Label>
+                  <Input
+                    id="telefone"
+                    value={formData.telefone}
+                    onChange={(e) =>
+                      setFormData({ ...formData, telefone: e.target.value })
+                    }
+                    placeholder="(11) 99999-0000"
+                  />
+                </div>
+              </div>
+
  
              <div className="flex items-center justify-between">
                <Label htmlFor="disponivel">Disponível</Label>
