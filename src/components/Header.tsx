@@ -1,10 +1,9 @@
 import { motion } from "framer-motion";
-import { Bell, Settings } from "lucide-react";
+import { Bell, ChevronRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useProfile } from "@/hooks/useProfile";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNotificacoes } from "@/hooks/useNotificacoes";
-import logoMarrom from "@/assets/logo-marrom.png";
 import simboloVerde from "@/assets/simbolo-verde.png";
 
 export const Header = () => {
@@ -22,50 +21,75 @@ export const Header = () => {
 
   const getDisplayName = () => {
     if (loading) return "...";
-    if (profile?.nome) return profile.nome;
+    if (profile?.nome) return profile.nome.split(" ")[0];
     if (user?.email) return user.email.split("@")[0];
     return "Usuário";
   };
 
+  const getInitials = () => {
+    const name = profile?.nome || user?.email?.split("@")[0] || "U";
+    return name.charAt(0).toUpperCase();
+  };
+
   return (
     <motion.header
-      initial={{ opacity: 0, y: -20 }}
+      initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="flex items-center justify-between py-4"
+      transition={{ duration: 0.4 }}
+      className="flex items-center justify-between py-3"
     >
-      <div className="flex items-center gap-3">
-        <img 
-          src={simboloVerde} 
-          alt="Resinkra" 
-          className="h-11 w-11 object-contain"
-        />
-        <div>
-          <img 
-            src={logoMarrom} 
-            alt="Resinkra" 
-            className="h-5 object-contain"
-          />
-          <p className="text-xs text-muted-foreground mt-0.5">{getGreeting()}, {getDisplayName()}</p>
+      {/* Left: Avatar + Greeting */}
+      <button
+        onClick={() => navigate("/profile")}
+        className="flex items-center gap-3 group"
+      >
+        <div className="relative">
+          {profile?.avatar_url ? (
+            <img
+              src={profile.avatar_url}
+              alt="Avatar"
+              className="w-11 h-11 rounded-2xl object-cover ring-2 ring-primary/20 group-hover:ring-primary/40 transition-all"
+            />
+          ) : (
+            <div className="w-11 h-11 rounded-2xl gradient-primary flex items-center justify-center text-primary-foreground font-bold text-sm ring-2 ring-primary/20 group-hover:ring-primary/40 transition-all">
+              {getInitials()}
+            </div>
+          )}
+          {/* Online indicator */}
+          <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-highlight border-2 border-background" />
         </div>
-      </div>
+        <div className="text-left">
+          <p className="text-[11px] text-muted-foreground leading-tight">
+            {getGreeting()} 👋
+          </p>
+          <p className="text-sm font-bold text-foreground leading-tight flex items-center gap-1">
+            {getDisplayName()}
+            <ChevronRight size={14} className="text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
+          </p>
+        </div>
+      </button>
 
+      {/* Right: Logo + Notification */}
       <div className="flex items-center gap-2">
-        <button 
-          className="relative p-2.5 rounded-xl bg-card shadow-card hover:shadow-elevated transition-shadow"
+        <img
+          src={simboloVerde}
+          alt="Resinkra"
+          className="h-8 w-8 object-contain opacity-60"
+        />
+        <button
+          className="relative p-2.5 rounded-xl glass-card hover:shadow-elevated transition-all duration-300"
           onClick={() => navigate("/notificacoes")}
         >
-          <Bell size={20} className="text-foreground" />
+          <Bell size={19} className="text-foreground" />
           {naoLidas.length > 0 && (
-            <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 bg-primary text-primary-foreground text-[10px] font-bold rounded-full flex items-center justify-center">
+            <motion.span
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 gradient-primary text-primary-foreground text-[10px] font-bold rounded-full flex items-center justify-center shadow-button"
+            >
               {naoLidas.length > 9 ? "9+" : naoLidas.length}
-            </span>
+            </motion.span>
           )}
-        </button>
-        <button 
-          className="p-2.5 rounded-xl bg-card shadow-card hover:shadow-elevated transition-shadow"
-          onClick={() => navigate("/profile")}
-        >
-          <Settings size={20} className="text-foreground" />
         </button>
       </div>
     </motion.header>

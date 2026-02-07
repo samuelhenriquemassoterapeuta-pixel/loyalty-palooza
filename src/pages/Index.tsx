@@ -12,6 +12,23 @@ import { useNavigate } from "react-router-dom";
 import { Settings, Gift } from "lucide-react";
 import { motion } from "framer-motion";
 
+const stagger = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: { staggerChildren: 0.08, delayChildren: 0.05 },
+  },
+};
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 16 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { type: "spring" as const, stiffness: 260, damping: 24 },
+  },
+};
+
 const Index = () => {
   const { isAdmin } = useAdmin();
   const navigate = useNavigate();
@@ -24,71 +41,98 @@ const Index = () => {
         <div className="min-h-screen bg-background gradient-hero pb-24 lg:pb-8">
           <div className="max-w-lg lg:max-w-5xl xl:max-w-6xl mx-auto px-4 lg:px-8 safe-top">
             <Header />
-            
-            <main className="mt-2">
+
+            <motion.main
+              variants={stagger}
+              initial="hidden"
+              animate="show"
+              className="mt-1"
+            >
               {/* Desktop: 2-column layout */}
               <div className="lg:grid lg:grid-cols-5 lg:gap-8">
                 {/* Left column - main content */}
-                <div className="lg:col-span-3 space-y-6">
-                  <InstallBanner />
-                  <BalanceCard />
-                  <HomeDashboard />
-                  <QuickActions />
-                  
+                <div className="lg:col-span-3 space-y-5">
+                  <motion.div variants={fadeUp}>
+                    <InstallBanner />
+                  </motion.div>
+
+                  <motion.div variants={fadeUp}>
+                    <BalanceCard />
+                  </motion.div>
+
+                  {/* Section: Ações rápidas */}
+                  <motion.div variants={fadeUp} className="space-y-2.5">
+                    <p className="section-label px-1">Ações rápidas</p>
+                    <QuickActions />
+                  </motion.div>
+
+                  {/* Section: Seu progresso */}
+                  <motion.div variants={fadeUp} className="space-y-2.5">
+                    <p className="section-label px-1">Seu progresso</p>
+                    <HomeDashboard />
+                  </motion.div>
+
                   {/* Referral Banner */}
                   <motion.button
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
+                    variants={fadeUp}
                     whileTap={{ scale: 0.98 }}
                     whileHover={{ scale: 1.01 }}
                     onClick={() => navigate("/indicacoes")}
-                    className="w-full flex items-center gap-3 p-4 rounded-2xl bg-gradient-to-r from-accent/20 via-highlight/15 to-accent/20 border border-accent/30 hover:border-accent/50 hover:shadow-lg transition-all"
+                    className="w-full flex items-center gap-3 p-4 rounded-2xl glass-card-strong hover:shadow-elevated transition-all duration-300"
                   >
-                    <div className="p-2.5 rounded-xl bg-accent/30 shadow-sm">
+                    <div className="p-2.5 rounded-xl bg-accent/25 shadow-sm">
                       <Gift className="text-accent" size={22} />
                     </div>
                     <div className="flex-1 text-left">
                       <p className="font-semibold text-foreground">Indique e Ganhe</p>
-                      <p className="text-xs text-muted-foreground">Ganhe R$ 10 por cada amigo indicado</p>
+                      <p className="text-xs text-muted-foreground">
+                        Ganhe R$ 10 por cada amigo indicado
+                      </p>
                     </div>
-                    <div className="text-xs px-3 py-1.5 rounded-full bg-accent text-accent-foreground font-bold shadow-sm">
+                    <div className="text-xs px-3 py-1.5 rounded-full gradient-accent text-accent-foreground font-bold shadow-sm">
                       R$ 10
                     </div>
                   </motion.button>
                 </div>
 
                 {/* Right column - sidebar content */}
-                <div className="lg:col-span-2 space-y-6 mt-6 lg:mt-0">
+                <div className="lg:col-span-2 space-y-5 mt-6 lg:mt-0">
                   {/* Share QR Code */}
-                  <ShareQRCode />
-                  
+                  <motion.div variants={fadeUp}>
+                    <ShareQRCode />
+                  </motion.div>
+
                   {/* Admin Quick Access */}
                   {isAdmin && (
                     <motion.button
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
+                      variants={fadeUp}
                       whileTap={{ scale: 0.98 }}
                       whileHover={{ scale: 1.01 }}
                       onClick={() => navigate("/admin")}
-                      className="w-full flex items-center gap-3 p-4 rounded-2xl bg-gradient-to-r from-primary/10 via-accent/10 to-primary/10 border border-primary/20 hover:border-primary/40 transition-all"
+                      className="w-full flex items-center gap-3 p-4 rounded-2xl glass-card-strong hover:shadow-elevated transition-all duration-300"
                     >
                       <div className="p-2 rounded-xl bg-primary/20">
                         <Settings className="text-primary" size={20} />
                       </div>
                       <div className="flex-1 text-left">
                         <p className="font-semibold text-foreground">Painel Admin</p>
-                        <p className="text-xs text-muted-foreground">Gerenciar produtos, serviços e pacotes</p>
+                        <p className="text-xs text-muted-foreground">
+                          Gerenciar produtos, serviços e pacotes
+                        </p>
                       </div>
                       <div className="text-xs px-2 py-1 rounded-full bg-primary/20 text-primary font-medium">
                         Admin
                       </div>
                     </motion.button>
                   )}
-                  
-                  <TransactionHistory />
+
+                  {/* Section: Histórico */}
+                  <motion.div variants={fadeUp} className="space-y-2.5">
+                    <TransactionHistory />
+                  </motion.div>
                 </div>
               </div>
-            </main>
+            </motion.main>
           </div>
         </div>
       </AppLayout>
