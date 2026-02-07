@@ -43,9 +43,19 @@ const Protocolos = () => {
     return matchSearch && matchTipo;
   });
 
-  const meusAtivos = meus.filter(
-    (m) => m.status === "ativo" || m.status === "pausado"
+  // Sort: active protocols first, then by name
+  const activeIds = new Set(
+    meus
+      .filter((m) => m.status === "ativo" || m.status === "pausado")
+      .map((m) => m.protocolo_id)
   );
+
+  const sorted = [...filtered].sort((a, b) => {
+    const aActive = activeIds.has(a.id) ? 0 : 1;
+    const bActive = activeIds.has(b.id) ? 0 : 1;
+    if (aActive !== bActive) return aActive - bActive;
+    return a.nome.localeCompare(b.nome);
+  });
 
   if (isLoading) {
     return (
@@ -84,34 +94,16 @@ const Protocolos = () => {
                     <h1 className="text-xl font-bold text-foreground">
                       Protocolos
                     </h1>
+                    {activeIds.size > 0 && (
+                      <span className="text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded-full font-medium">
+                        {activeIds.size} ativo{activeIds.size > 1 ? "s" : ""}
+                      </span>
+                    )}
                   </div>
                   <p className="text-sm text-muted-foreground">
                     Emagrecimento, Drenagem & Alinhamento Postural
                   </p>
                 </motion.div>
-
-                {/* My active protocols */}
-                {meusAtivos.length > 0 && (
-                  <motion.div variants={fadeUp} className="space-y-2.5">
-                    <p className="section-label px-1">
-                      Meus Protocolos Ativos
-                    </p>
-                    {meusAtivos.map((m) => {
-                      const prot = protocolos.find(
-                        (p) => p.id === m.protocolo_id
-                      );
-                      if (!prot) return null;
-                      return (
-                        <ProtocoloCard
-                          key={m.id}
-                          protocolo={prot}
-                          isAtivo
-                          onSelect={() => setSelectedId(prot.id)}
-                        />
-                      );
-                    })}
-                  </motion.div>
-                )}
 
                 {/* Search & filter */}
                 <motion.div variants={fadeUp} className="relative">
@@ -155,25 +147,17 @@ const Protocolos = () => {
                   </Tabs>
                 </motion.div>
 
-                {/* Protocol list */}
+                {/* Protocol list — single unified list, active ones first */}
                 <motion.div variants={fadeUp} className="space-y-3">
-                  <p className="section-label px-1">Todos os protocolos</p>
-                  {filtered.map((p) => {
-                    const meuAtivo = meus.find(
-                      (m) =>
-                        m.protocolo_id === p.id &&
-                        (m.status === "ativo" || m.status === "pausado")
-                    );
-                    return (
-                      <ProtocoloCard
-                        key={p.id}
-                        protocolo={p}
-                        isAtivo={!!meuAtivo}
-                        onSelect={() => setSelectedId(p.id)}
-                      />
-                    );
-                  })}
-                  {filtered.length === 0 && (
+                  {sorted.map((p) => (
+                    <ProtocoloCard
+                      key={p.id}
+                      protocolo={p}
+                      isAtivo={activeIds.has(p.id)}
+                      onSelect={() => setSelectedId(p.id)}
+                    />
+                  ))}
+                  {sorted.length === 0 && (
                     <div className="text-center py-12 text-muted-foreground text-sm">
                       <Activity
                         size={36}
