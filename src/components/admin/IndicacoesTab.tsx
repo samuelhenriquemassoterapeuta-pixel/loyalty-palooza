@@ -1,7 +1,8 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import {
@@ -12,8 +13,9 @@ import {
   DollarSign,
   ArrowRight,
   Percent,
+  Calendar as CalendarIcon,
 } from "lucide-react";
-import { format } from "date-fns";
+import { format, subDays, subMonths, startOfDay, isAfter } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import {
   BarChart,
@@ -43,8 +45,29 @@ interface IndicacaoComNomes {
   indicado_nome: string | null;
 }
 
+type PeriodFilter = "all" | "7d" | "30d" | "90d";
+
+const PERIOD_OPTIONS: { value: PeriodFilter; label: string }[] = [
+  { value: "all", label: "Todos" },
+  { value: "7d", label: "7 dias" },
+  { value: "30d", label: "30 dias" },
+  { value: "90d", label: "90 dias" },
+];
+
+const getFilterDate = (period: PeriodFilter): Date | null => {
+  const now = new Date();
+  switch (period) {
+    case "7d": return startOfDay(subDays(now, 7));
+    case "30d": return startOfDay(subMonths(now, 1));
+    case "90d": return startOfDay(subMonths(now, 3));
+    default: return null;
+  }
+};
+
 export const IndicacoesTab = () => {
-  const { data: indicacoes = [], isLoading } = useQuery({
+  const [period, setPeriod] = useState<PeriodFilter>("all");
+
+  const { data: allIndicacoes = [], isLoading } = useQuery({
     queryKey: ["admin-indicacoes"],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -53,7 +76,6 @@ export const IndicacoesTab = () => {
         .order("created_at", { ascending: false });
       if (error) throw error;
 
-      // Fetch profile names for all unique user IDs
       const userIds = [
         ...new Set(data.flatMap((i) => [i.indicador_id, i.indicado_id])),
       ];
@@ -73,6 +95,14 @@ export const IndicacoesTab = () => {
       })) as IndicacaoComNomes[];
     },
   });
+
+  const indicacoes = useMemo(() => {
+    const filterDate = getFilterDate(period);
+    if (!filterDate) return allIndicacoes;
+    return allIndicacoes.filter((i) =>
+      isAfter(new Date(i.created_at), filterDate)
+    );
+  }, [allIndicacoes, period]);
 
   const stats = useMemo(() => {
     const total = indicacoes.length;
@@ -142,6 +172,22 @@ export const IndicacoesTab = () => {
 
   return (
     <div className="space-y-5">
+      {/* Period Filter */}
+      <div className="flex items-center gap-2 overflow-x-auto pb-1">
+        <CalendarIcon size={14} className="text-muted-foreground shrink-0" />
+        {PERIOD_OPTIONS.map((opt) => (
+          <Button
+            key={opt.value}
+            size="sm"
+            variant={period === opt.value ? "default" : "outline"}
+            className="text-xs h-8 px-3 whitespace-nowrap"
+            onClick={() => setPeriod(opt.value)}
+          >
+            {opt.label}
+          </Button>
+        ))}
+      </div>
+
       {/* Stats Cards */}
       <div className="grid grid-cols-2 gap-3">
         <Card className="p-4 space-y-1">
