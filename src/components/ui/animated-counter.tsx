@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from "react";
-import { motion, useInView, useSpring, useTransform } from "framer-motion";
+import { useEffect, useRef, useState, useCallback } from "react";
+import { useInView } from "framer-motion";
 
 interface AnimatedCounterProps {
   value: number;
@@ -9,67 +9,63 @@ interface AnimatedCounterProps {
   duration?: number;
   /** Extra className on the <span> */
   className?: string;
-  /** If true the counter always starts from 0 when it enters the viewport */
-  alwaysAnimate?: boolean;
 }
 
 /**
- * Animated number counter with spring easing.
- * Automatically triggers when the element enters the viewport.
- *
- * Usage:
- * ```tsx
- * <AnimatedCounter value={1234.56} format={formatCurrency} className="text-4xl font-bold" />
- * ```
+ * Animated number counter with easing.
+ * Triggers when the element enters the viewport.
  */
 export const AnimatedCounter = ({
   value,
   format,
   duration = 1.2,
   className = "",
-  alwaysAnimate = false,
 }: AnimatedCounterProps) => {
   const ref = useRef<HTMLSpanElement>(null);
-  const isInView = useInView(ref, { once: !alwaysAnimate, margin: "-40px" });
-  const [displayValue, setDisplayValue] = useState(isInView ? value : 0);
+  const isInView = useInView(ref, { once: true, margin: "-40px" });
+  const [displayValue, setDisplayValue] = useState(0);
+  const rafRef = useRef<number | null>(null);
+  const startTimeRef = useRef<number | null>(null);
 
-  const spring = useSpring(0, {
-    duration: duration * 1000,
-    bounce: 0,
-  });
-
-  const rounded = useTransform(spring, (latest) => {
-    // Determine decimal places from the target value
-    const decimals = value % 1 !== 0 ? 2 : 0;
-    return parseFloat(latest.toFixed(decimals));
-  });
-
-  useEffect(() => {
-    if (isInView) {
-      spring.set(value);
-    } else {
-      spring.set(0);
+  const animate = useCallback(() => {
+    if (startTimeRef.current === null) {
+      startTimeRef.current = performance.now();
     }
-  }, [isInView, value, spring]);
+
+    const elapsed = performance.now() - startTimeRef.current;
+    const progress = Math.min(elapsed / (duration * 1000), 1);
+
+    // Ease out cubic
+    const eased = 1 - Math.pow(1 - progress, 3);
+    const current = eased * value;
+
+    // Match decimal precision of the target value
+    const decimals = value % 1 !== 0 ? 2 : 0;
+    setDisplayValue(parseFloat(current.toFixed(decimals)));
+
+    if (progress < 1) {
+      rafRef.current = requestAnimationFrame(animate);
+    }
+  }, [value, duration]);
 
   useEffect(() => {
-    const unsubscribe = rounded.on("change", (latest) => {
-      setDisplayValue(latest);
-    });
-    return unsubscribe;
-  }, [rounded]);
+    if (isInView && value !== 0) {
+      startTimeRef.current = null;
+      rafRef.current = requestAnimationFrame(animate);
+    }
 
-  const formatted = format ? format(displayValue) : String(displayValue);
+    return () => {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    };
+  }, [isInView, value, animate]);
+
+  // If value is 0, just show it directly
+  const finalValue = value === 0 ? 0 : displayValue;
+  const formatted = format ? format(finalValue) : String(finalValue);
 
   return (
-    <motion.span
-      ref={ref}
-      className={className}
-      initial={{ opacity: 0 }}
-      animate={isInView ? { opacity: 1 } : {}}
-      transition={{ duration: 0.3 }}
-    >
+    <span ref={ref} className={className}>
       {formatted}
-    </motion.span>
+    </span>
   );
 };
