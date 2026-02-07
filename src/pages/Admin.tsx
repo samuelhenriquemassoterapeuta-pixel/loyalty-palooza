@@ -71,7 +71,7 @@ const Admin = () => {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("pedidos")
-        .select(`*, profiles (nome), pedido_itens (id, quantidade, preco_unitario, produtos (nome))`)
+        .select(`*, profiles!pedidos_user_id_profiles_fkey (nome), pedido_itens (id, quantidade, preco_unitario, produtos (nome))`)
         .order("created_at", { ascending: false });
       if (error) throw error;
       return data;
