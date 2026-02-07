@@ -53,9 +53,16 @@ export const useTransacoes = () => {
       setTransacoes(data || []);
       
       // Calcular estatísticas
-      const cashback = (data || [])
+      const cashbackGanho = (data || [])
         .filter(t => t.tipo === "cashback")
         .reduce((acc, t) => acc + Number(t.valor), 0);
+      
+      const cashbackUsado = Math.abs((data || [])
+        .filter(t => t.tipo === "uso_cashback")
+        .reduce((acc, t) => acc + Number(t.valor), 0));
+      
+      // Saldo de cashback disponível = ganho - usado
+      const saldoCashback = cashbackGanho - cashbackUsado;
       
       // Total gasto (débitos - valores negativos)
       const gasto = Math.abs((data || [])
@@ -70,7 +77,7 @@ export const useTransacoes = () => {
       
       setStats({
         saldo: saldoTotal,
-        totalCashback: cashback,
+        totalCashback: saldoCashback,
         totalGasto: gasto,
         totalCompras: compras,
         totalAgendamentos: agendamentos,
