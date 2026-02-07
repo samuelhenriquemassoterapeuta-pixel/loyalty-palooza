@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { motion } from "framer-motion";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -64,6 +65,25 @@ const getFilterDate = (period: PeriodFilter): Date | null => {
   }
 };
 
+const cardVariants = {
+  hidden: { opacity: 0, y: 16, scale: 0.96 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { delay: i * 0.06, duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] as [number, number, number, number] },
+  }),
+};
+
+const listItemVariants = {
+  hidden: { opacity: 0, x: -12 },
+  visible: (i: number) => ({
+    opacity: 1,
+    x: 0,
+    transition: { delay: i * 0.04, duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] as [number, number, number, number] },
+  }),
+};
+
 export const IndicacoesTab = () => {
   const [period, setPeriod] = useState<PeriodFilter>("all");
 
@@ -114,7 +134,6 @@ export const IndicacoesTab = () => {
       .reduce((acc, i) => acc + Number(i.cashback_valor), 0);
     const ticketMedio = convertidas > 0 ? totalCashback / convertidas : 0;
 
-    // Top indicadores
     const indicadorCount = new Map<string, { nome: string; count: number; convertidos: number }>();
     indicacoes.forEach((i) => {
       const existing = indicadorCount.get(i.indicador_id) || {
@@ -130,7 +149,6 @@ export const IndicacoesTab = () => {
       .sort((a, b) => b.count - a.count)
       .slice(0, 5);
 
-    // Monthly data
     const monthlyData = new Map<string, { month: string; total: number; convertidas: number }>();
     indicacoes.forEach((i) => {
       const month = format(new Date(i.created_at), "MMM/yy", { locale: ptBR });
@@ -170,230 +188,295 @@ export const IndicacoesTab = () => {
     );
   }
 
+  const statsCards = [
+    {
+      icon: Users,
+      label: "Total Indicações",
+      value: String(stats.total),
+      colorClass: "text-muted-foreground",
+      valueClass: "text-foreground",
+      bgClass: "",
+    },
+    {
+      icon: Percent,
+      label: "Taxa Conversão",
+      value: `${stats.taxaConversao.toFixed(1)}%`,
+      sub: `${stats.convertidas} de ${stats.total}`,
+      colorClass: "text-highlight",
+      valueClass: "text-highlight",
+      bgClass: "bg-highlight/5",
+    },
+    {
+      icon: DollarSign,
+      label: "Cashback Gerado",
+      value: formatCurrency(stats.totalCashback),
+      colorClass: "text-primary",
+      valueClass: "text-primary",
+      bgClass: "bg-primary/5",
+    },
+    {
+      icon: Clock,
+      label: "Pendentes",
+      value: String(stats.pendentes),
+      sub: "aguardando 1ª compra",
+      colorClass: "text-warning",
+      valueClass: "text-warning",
+      bgClass: "bg-warning/5",
+    },
+  ];
+
   return (
     <div className="space-y-5">
       {/* Period Filter */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-1">
+      <motion.div
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="flex items-center gap-2 overflow-x-auto pb-1"
+      >
         <CalendarIcon size={14} className="text-muted-foreground shrink-0" />
         {PERIOD_OPTIONS.map((opt) => (
           <Button
             key={opt.value}
             size="sm"
             variant={period === opt.value ? "default" : "outline"}
-            className="text-xs h-8 px-3 whitespace-nowrap"
+            className={`text-xs h-8 px-3 whitespace-nowrap transition-all duration-200 ${
+              period === opt.value ? "shadow-sm scale-105" : "hover:scale-105"
+            }`}
             onClick={() => setPeriod(opt.value)}
           >
             {opt.label}
           </Button>
         ))}
-      </div>
+      </motion.div>
 
       {/* Stats Cards */}
       <div className="grid grid-cols-2 gap-3">
-        <Card className="p-4 space-y-1">
-          <div className="flex items-center gap-2 text-muted-foreground">
-            <Users size={16} />
-            <span className="text-xs">Total Indicações</span>
-          </div>
-          <p className="text-2xl font-bold text-foreground">{stats.total}</p>
-        </Card>
-
-        <Card className="p-4 space-y-1">
-          <div className="flex items-center gap-2 text-highlight">
-            <Percent size={16} />
-            <span className="text-xs">Taxa Conversão</span>
-          </div>
-          <p className="text-2xl font-bold text-highlight">
-            {stats.taxaConversao.toFixed(1)}%
-          </p>
-          <p className="text-[10px] text-muted-foreground">
-            {stats.convertidas} de {stats.total}
-          </p>
-        </Card>
-
-        <Card className="p-4 space-y-1">
-          <div className="flex items-center gap-2 text-primary">
-            <DollarSign size={16} />
-            <span className="text-xs">Cashback Gerado</span>
-          </div>
-          <p className="text-xl font-bold text-primary">
-            {formatCurrency(stats.totalCashback)}
-          </p>
-        </Card>
-
-        <Card className="p-4 space-y-1">
-          <div className="flex items-center gap-2 text-warning">
-            <Clock size={16} />
-            <span className="text-xs">Pendentes</span>
-          </div>
-          <p className="text-2xl font-bold text-warning">{stats.pendentes}</p>
-          <p className="text-[10px] text-muted-foreground">aguardando 1ª compra</p>
-        </Card>
+        {statsCards.map((card, i) => (
+          <motion.div
+            key={card.label}
+            custom={i}
+            variants={cardVariants}
+            initial="hidden"
+            animate="visible"
+          >
+            <Card className={`p-4 space-y-1 hover-lift cursor-default ${card.bgClass}`}>
+              <div className={`flex items-center gap-2 ${card.colorClass}`}>
+                <card.icon size={16} />
+                <span className="text-xs">{card.label}</span>
+              </div>
+              <p className={`text-2xl font-bold ${card.valueClass}`}>
+                {card.label === "Cashback Gerado" ? (
+                  <span className="text-xl">{card.value}</span>
+                ) : (
+                  card.value
+                )}
+              </p>
+              {card.sub && (
+                <p className="text-[10px] text-muted-foreground">{card.sub}</p>
+              )}
+            </Card>
+          </motion.div>
+        ))}
       </div>
 
       {/* Charts Row */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {/* Monthly Chart */}
         {stats.monthlyData.length > 0 && (
-          <Card className="p-4">
-            <h3 className="font-semibold text-sm text-foreground mb-3 flex items-center gap-2">
-              <TrendingUp size={16} />
-              Indicações por Mês
-            </h3>
-            <ResponsiveContainer width="100%" height={180}>
-              <BarChart data={stats.monthlyData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                <XAxis
-                  dataKey="month"
-                  tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }}
-                />
-                <YAxis
-                  tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }}
-                  allowDecimals={false}
-                />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: "hsl(var(--card))",
-                    border: "1px solid hsl(var(--border))",
-                    borderRadius: "8px",
-                    fontSize: "12px",
-                  }}
-                />
-                <Bar dataKey="total" name="Total" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
-                <Bar dataKey="convertidas" name="Convertidas" fill="hsl(var(--highlight))" radius={[4, 4, 0, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
-          </Card>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+          >
+            <Card className="p-4">
+              <h3 className="font-semibold text-sm text-foreground mb-3 flex items-center gap-2">
+                <TrendingUp size={16} />
+                Indicações por Mês
+              </h3>
+              <ResponsiveContainer width="100%" height={180}>
+                <BarChart data={stats.monthlyData}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                  <XAxis
+                    dataKey="month"
+                    tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }}
+                  />
+                  <YAxis
+                    tick={{ fontSize: 11, fill: "hsl(var(--muted-foreground))" }}
+                    allowDecimals={false}
+                  />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: "hsl(var(--card))",
+                      border: "1px solid hsl(var(--border))",
+                      borderRadius: "8px",
+                      fontSize: "12px",
+                    }}
+                  />
+                  <Bar dataKey="total" name="Total" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="convertidas" name="Convertidas" fill="hsl(var(--highlight))" radius={[4, 4, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </Card>
+          </motion.div>
         )}
 
         {/* Pie Chart */}
         {pieData.length > 0 && (
-          <Card className="p-4">
-            <h3 className="font-semibold text-sm text-foreground mb-3 flex items-center gap-2">
-              <UserCheck size={16} />
-              Status das Indicações
-            </h3>
-            <ResponsiveContainer width="100%" height={180}>
-              <PieChart>
-                <Pie
-                  data={pieData}
-                  cx="50%"
-                  cy="50%"
-                  innerRadius={45}
-                  outerRadius={70}
-                  paddingAngle={4}
-                  dataKey="value"
-                  label={({ name, percent }) =>
-                    `${name} ${(percent * 100).toFixed(0)}%`
-                  }
-                  labelLine={false}
-                >
-                  {pieData.map((entry, index) => (
-                    <Cell key={index} fill={entry.color} />
-                  ))}
-                </Pie>
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: "hsl(var(--card))",
-                    border: "1px solid hsl(var(--border))",
-                    borderRadius: "8px",
-                    fontSize: "12px",
-                  }}
-                />
-              </PieChart>
-            </ResponsiveContainer>
-          </Card>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.35 }}
+          >
+            <Card className="p-4">
+              <h3 className="font-semibold text-sm text-foreground mb-3 flex items-center gap-2">
+                <UserCheck size={16} />
+                Status das Indicações
+              </h3>
+              <ResponsiveContainer width="100%" height={180}>
+                <PieChart>
+                  <Pie
+                    data={pieData}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={45}
+                    outerRadius={70}
+                    paddingAngle={4}
+                    dataKey="value"
+                    label={({ name, percent }) =>
+                      `${name} ${(percent * 100).toFixed(0)}%`
+                    }
+                    labelLine={false}
+                  >
+                    {pieData.map((entry, index) => (
+                      <Cell key={index} fill={entry.color} />
+                    ))}
+                  </Pie>
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: "hsl(var(--card))",
+                      border: "1px solid hsl(var(--border))",
+                      borderRadius: "8px",
+                      fontSize: "12px",
+                    }}
+                  />
+                </PieChart>
+              </ResponsiveContainer>
+            </Card>
+          </motion.div>
         )}
       </div>
 
       {/* Top Indicadores */}
       {stats.topIndicadores.length > 0 && (
-        <Card className="p-4">
-          <h3 className="font-semibold text-sm text-foreground mb-3 flex items-center gap-2">
-            <Users size={16} />
-            Top Indicadores
-          </h3>
-          <div className="space-y-3">
-            {stats.topIndicadores.map((ind, i) => (
-              <div key={i} className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <span className="text-xs font-bold text-muted-foreground w-5">
-                    #{i + 1}
-                  </span>
-                  <span className="text-sm font-medium text-foreground truncate max-w-[150px]">
-                    {ind.nome}
-                  </span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Badge variant="secondary" className="text-[10px]">
-                    {ind.count} indicações
-                  </Badge>
-                  <Badge variant="outline" className="text-[10px] text-highlight border-highlight/30">
-                    {ind.convertidos} convertidas
-                  </Badge>
-                </div>
-              </div>
-            ))}
-          </div>
-        </Card>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+        >
+          <Card className="p-4">
+            <h3 className="font-semibold text-sm text-foreground mb-3 flex items-center gap-2">
+              <Users size={16} />
+              Top Indicadores
+            </h3>
+            <div className="space-y-3">
+              {stats.topIndicadores.map((ind, i) => (
+                <motion.div
+                  key={i}
+                  custom={i}
+                  variants={listItemVariants}
+                  initial="hidden"
+                  animate="visible"
+                  className="flex items-center justify-between group"
+                >
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-bold text-muted-foreground w-5">
+                      #{i + 1}
+                    </span>
+                    <span className="text-sm font-medium text-foreground truncate max-w-[150px] group-hover:text-primary transition-colors duration-200">
+                      {ind.nome}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Badge variant="secondary" className="text-[10px]">
+                      {ind.count} indicações
+                    </Badge>
+                    <Badge variant="outline" className="text-[10px] text-highlight border-highlight/30">
+                      {ind.convertidos} convertidas
+                    </Badge>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </Card>
+        </motion.div>
       )}
 
       {/* List */}
-      <Card className="p-4">
-        <h3 className="font-semibold text-sm text-foreground mb-3">
-          Histórico de Indicações ({indicacoes.length})
-        </h3>
-        {indicacoes.length === 0 ? (
-          <p className="text-sm text-muted-foreground text-center py-6">
-            Nenhuma indicação registrada ainda.
-          </p>
-        ) : (
-          <div className="space-y-3">
-            {indicacoes.map((ind) => (
-              <div
-                key={ind.id}
-                className="flex items-center gap-3 p-3 rounded-xl bg-muted/30"
-              >
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-1.5 text-sm">
-                    <span className="font-medium text-foreground truncate max-w-[100px]">
-                      {ind.indicador_nome}
-                    </span>
-                    <ArrowRight size={12} className="text-muted-foreground shrink-0" />
-                    <span className="text-muted-foreground truncate max-w-[100px]">
-                      {ind.indicado_nome}
-                    </span>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.45 }}
+      >
+        <Card className="p-4">
+          <h3 className="font-semibold text-sm text-foreground mb-3">
+            Histórico de Indicações ({indicacoes.length})
+          </h3>
+          {indicacoes.length === 0 ? (
+            <p className="text-sm text-muted-foreground text-center py-6">
+              Nenhuma indicação registrada ainda.
+            </p>
+          ) : (
+            <div className="space-y-3">
+              {indicacoes.map((ind, i) => (
+                <motion.div
+                  key={ind.id}
+                  custom={i}
+                  variants={listItemVariants}
+                  initial="hidden"
+                  animate="visible"
+                  className="flex items-center gap-3 p-3 rounded-xl bg-muted/30 hover:bg-muted/50 transition-colors duration-200"
+                >
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-1.5 text-sm">
+                      <span className="font-medium text-foreground truncate max-w-[100px]">
+                        {ind.indicador_nome}
+                      </span>
+                      <ArrowRight size={12} className="text-muted-foreground shrink-0" />
+                      <span className="text-muted-foreground truncate max-w-[100px]">
+                        {ind.indicado_nome}
+                      </span>
+                    </div>
+                    <p className="text-[10px] text-muted-foreground mt-0.5">
+                      {format(new Date(ind.created_at), "dd MMM yyyy, HH:mm", {
+                        locale: ptBR,
+                      })}
+                      {ind.processado_at &&
+                        ` • Convertida em ${format(new Date(ind.processado_at), "dd MMM", { locale: ptBR })}`}
+                    </p>
                   </div>
-                  <p className="text-[10px] text-muted-foreground mt-0.5">
-                    {format(new Date(ind.created_at), "dd MMM yyyy, HH:mm", {
-                      locale: ptBR,
-                    })}
-                    {ind.processado_at &&
-                      ` • Convertida em ${format(new Date(ind.processado_at), "dd MMM", { locale: ptBR })}`}
-                  </p>
-                </div>
-                <div className="flex items-center gap-2 shrink-0">
-                  <Badge
-                    variant={ind.status === "processado" ? "default" : "secondary"}
-                    className={`text-[10px] ${
-                      ind.status === "processado"
-                        ? "bg-highlight/20 text-highlight border-highlight/30"
-                        : "bg-warning/20 text-warning border-warning/30"
-                    }`}
-                  >
-                    {ind.status === "processado" ? "Convertida" : "Pendente"}
-                  </Badge>
-                  {ind.status === "processado" && (
-                    <span className="text-xs font-bold text-highlight">
-                      {formatCurrency(ind.cashback_valor)}
-                    </span>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </Card>
+                  <div className="flex items-center gap-2 shrink-0">
+                    <Badge
+                      variant={ind.status === "processado" ? "default" : "secondary"}
+                      className={`text-[10px] ${
+                        ind.status === "processado"
+                          ? "bg-highlight/20 text-highlight border-highlight/30"
+                          : "bg-warning/20 text-warning border-warning/30"
+                      }`}
+                    >
+                      {ind.status === "processado" ? "Convertida" : "Pendente"}
+                    </Badge>
+                    {ind.status === "processado" && (
+                      <span className="text-xs font-bold text-highlight">
+                        {formatCurrency(ind.cashback_valor)}
+                      </span>
+                    )}
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          )}
+        </Card>
+      </motion.div>
     </div>
   );
 };

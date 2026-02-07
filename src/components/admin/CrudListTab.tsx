@@ -14,6 +14,16 @@ interface CrudListTabProps {
   onToggle: (id: string, disponivel: boolean) => void;
 }
 
+const itemVariants = {
+  hidden: { opacity: 0, y: 12, scale: 0.98 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { delay: i * 0.04, duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] as [number, number, number, number] },
+  }),
+};
+
 export const CrudListTab = ({
   items,
   isLoading,
@@ -33,9 +43,13 @@ export const CrudListTab = ({
 
   if (items.length === 0) {
     return (
-      <div className="text-center py-8 text-muted-foreground">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="text-center py-8 text-muted-foreground"
+      >
         {emptyMessage}
-      </div>
+      </motion.div>
     );
   }
 
@@ -91,12 +105,14 @@ export const CrudListTab = ({
 
   return (
     <div className="space-y-3">
-      {items.map((item) => (
+      {items.map((item, index) => (
         <motion.div
           key={item.id}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="flex items-center gap-3 p-4 rounded-xl bg-card shadow-card"
+          custom={index}
+          variants={itemVariants}
+          initial="hidden"
+          animate="visible"
+          className="flex items-center gap-3 p-4 rounded-xl bg-card shadow-card hover:shadow-elevated transition-shadow duration-300"
         >
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 flex-wrap">
@@ -120,14 +136,14 @@ export const CrudListTab = ({
               size="icon"
               variant="ghost"
               onClick={() => onEdit(item)}
-              className="h-8 w-8"
+              className="h-8 w-8 hover:bg-primary/10 transition-colors"
             >
               <Pencil className="w-4 h-4" />
             </Button>
             <Button
               size="icon"
               variant="ghost"
-              className="text-destructive h-8 w-8"
+              className="text-destructive h-8 w-8 hover:bg-destructive/10 transition-colors"
               onClick={() => onDelete(item.id)}
             >
               <Trash2 className="w-4 h-4" />
