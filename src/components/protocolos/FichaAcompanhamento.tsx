@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Plus, TrendingDown, TrendingUp, Minus, Scale, Ruler, Activity } from "lucide-react";
+import { MedidasChart } from "./MedidasChart";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -166,6 +167,11 @@ export const FichaAcompanhamento = ({ protocoloUsuarioId }: FichaAcompanhamentoP
             );
           })}
         </div>
+      )}
+
+      {/* Evolution charts */}
+      {fichas.length >= 2 && (
+        <MedidasChart fichas={fichas} />
       )}
 
       {/* History list */}
