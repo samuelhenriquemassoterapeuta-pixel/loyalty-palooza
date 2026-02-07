@@ -6,6 +6,8 @@
    nome: string;
    especialidade: string | null;
    foto_url: string | null;
+   email: string | null;
+   telefone: string | null;
    disponivel: boolean;
    created_at: string;
   media_avaliacoes?: number;

@@ -109,9 +109,9 @@ export const SendToTherapistDialog = ({
         await recordSend(selected.id, "whatsapp");
         setSent(selected.id);
         toast.success(`Relatório enviado para ${selected.nome}!`);
-      } else if ((selected as any).telefone) {
+      } else if (selected.telefone) {
         // Fallback: open WhatsApp with phone number
-        const phone = (selected as any).telefone.replace(/\D/g, "");
+        const phone = selected.telefone.replace(/\D/g, "");
         const encoded = encodeURIComponent(header + text);
         window.open(`https://wa.me/${phone}?text=${encoded}`, "_blank");
         await recordSend(selected.id, "whatsapp");
@@ -154,7 +154,7 @@ export const SendToTherapistDialog = ({
         const text = buildShareText();
         const subject = encodeURIComponent(`Relatório de Evolução — ${protocoloNome || "Resinkra"}`);
         const body = encodeURIComponent(`Olá ${selected.nome},\n\nSegue meu relatório de evolução:\n\n${text}`);
-        const emailTo = (selected as any).email || "";
+        const emailTo = selected.email || "";
         window.open(`mailto:${emailTo}?subject=${subject}&body=${body}`, "_self");
 
         // Also download PDF for manual attachment

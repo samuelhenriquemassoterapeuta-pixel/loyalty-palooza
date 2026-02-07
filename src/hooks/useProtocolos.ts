@@ -187,6 +187,18 @@ export const useMetas = (protocoloUsuarioId?: string) => {
 };
 
 // ── Fotos de Evolução ──────────────────────────────
+export interface FotoWithSignedUrl {
+  id: string;
+  user_id: string;
+  protocolo_usuario_id: string;
+  data: string;
+  foto_url: string;
+  tipo: string;
+  observacoes: string | null;
+  created_at: string;
+  signed_url?: string;
+}
+
 export const useFotos = (protocoloUsuarioId?: string) => {
   const { user } = useAuth();
   const queryClient = useQueryClient();
@@ -201,7 +213,25 @@ export const useFotos = (protocoloUsuarioId?: string) => {
         .eq("protocolo_usuario_id", protocoloUsuarioId!)
         .order("data", { ascending: true });
       if (error) throw error;
-      return data;
+
+      // Generate signed URLs for each photo (valid for 1 hour)
+      const fotosWithUrls: FotoWithSignedUrl[] = await Promise.all(
+        (data || []).map(async (foto) => {
+          // Extract the storage path from the foto_url
+          const storagePath = extractStoragePath(foto.foto_url);
+          if (storagePath) {
+            const { data: signedData, error: signError } = await supabase.storage
+              .from("fotos-evolucao")
+              .createSignedUrl(storagePath, 3600); // 1 hour
+            if (!signError && signedData?.signedUrl) {
+              return { ...foto, signed_url: signedData.signedUrl };
+            }
+          }
+          return { ...foto, signed_url: foto.foto_url };
+        })
+      );
+
+      return fotosWithUrls;
     },
   });
 
@@ -219,6 +249,15 @@ export const useFotos = (protocoloUsuarioId?: string) => {
     }) => {
       if (!user) throw new Error("Não autenticado");
 
+      // Validate file type and size
+      const allowedTypes = ["image/jpeg", "image/png", "image/webp", "image/heic"];
+      if (!allowedTypes.includes(file.type)) {
+        throw new Error("Tipo de arquivo não permitido. Use JPEG, PNG ou WebP.");
+      }
+      if (file.size > 5 * 1024 * 1024) {
+        throw new Error("Arquivo muito grande. Máximo: 5MB.");
+      }
+
       const ext = file.name.split(".").pop();
       const path = `${user.id}/${pId}/${Date.now()}.${ext}`;
 
@@ -227,16 +266,13 @@ export const useFotos = (protocoloUsuarioId?: string) => {
         .upload(path, file);
       if (uploadErr) throw uploadErr;
 
-      const { data: urlData } = supabase.storage
-        .from("fotos-evolucao")
-        .getPublicUrl(path);
-
+      // Store the path reference, not the public URL
       const { error: insertErr } = await supabase
         .from("fotos_evolucao")
         .insert({
           user_id: user.id,
           protocolo_usuario_id: pId,
-          foto_url: urlData.publicUrl,
+          foto_url: path, // Store path instead of public URL
           tipo,
           observacoes,
         });
@@ -246,11 +282,19 @@ export const useFotos = (protocoloUsuarioId?: string) => {
       queryClient.invalidateQueries({ queryKey: ["fotos_evolucao"] });
       toast.success("Foto adicionada!");
     },
-    onError: () => toast.error("Erro ao enviar foto"),
+    onError: (err: Error) => toast.error(err.message || "Erro ao enviar foto"),
   });
 
   const remover = useMutation({
     mutationFn: async (id: string) => {
+      // Find the photo to get storage path
+      const foto = fotos.find((f) => f.id === id);
+      if (foto) {
+        const storagePath = extractStoragePath(foto.foto_url);
+        if (storagePath) {
+          await supabase.storage.from("fotos-evolucao").remove([storagePath]);
+        }
+      }
       const { error } = await supabase
         .from("fotos_evolucao")
         .delete()
@@ -266,3 +310,14 @@ export const useFotos = (protocoloUsuarioId?: string) => {
 
   return { fotos, isLoading, upload, remover };
 };
+
+/** Extract storage path from a foto_url (handles both old public URLs and new path-only values) */
+function extractStoragePath(fotoUrl: string): string | null {
+  // If it's already a path (new format), return as-is
+  if (!fotoUrl.startsWith("http")) {
+    return fotoUrl;
+  }
+  // If it's a full URL (old format), extract path after bucket name
+  const match = fotoUrl.match(/fotos-evolucao\/(.+)$/);
+  return match ? match[1] : null;
+}
