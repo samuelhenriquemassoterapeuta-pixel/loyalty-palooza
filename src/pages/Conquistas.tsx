@@ -12,6 +12,8 @@ import { AchievementCelebration } from "@/components/conquistas/AchievementCeleb
 import { LevelUpCelebration } from "@/components/conquistas/LevelUpCelebration";
 import { RankingList } from "@/components/conquistas/RankingList";
 import { XpLevelCard } from "@/components/conquistas/XpLevelCard";
+import { LevelRewardsCard } from "@/components/conquistas/LevelRewardsCard";
+import { calculateXpFromAchievements, getLevelFromXp } from "@/components/conquistas/xpLevelUtils";
 
 type FilterMode = "todos" | "desbloqueados" | "em_progresso";
 
@@ -37,6 +39,11 @@ const Conquistas = () => {
   const { ranking, myPosition, isLoading: rankingLoading } = useRanking();
   const { celebration: levelUp, dismiss: dismissLevelUp } = useLevelUpCelebration(achievements);
   const [filter, setFilter] = useState<FilterMode>("todos");
+
+  const currentLevel = useMemo(() => {
+    const totalXp = calculateXpFromAchievements(achievements);
+    return getLevelFromXp(totalXp).level;
+  }, [achievements]);
 
   const categories = useMemo(() => {
     const cats: Record<string, { unlocked: number; total: number; icon: string }> = {
@@ -130,6 +137,11 @@ const Conquistas = () => {
                 {/* XP Level Card */}
                 <motion.div variants={fadeUp}>
                   <XpLevelCard achievements={achievements} />
+                </motion.div>
+
+                {/* Level Rewards Card */}
+                <motion.div variants={fadeUp}>
+                  <LevelRewardsCard currentLevel={currentLevel} />
                 </motion.div>
 
                 <motion.div variants={fadeUp}>
