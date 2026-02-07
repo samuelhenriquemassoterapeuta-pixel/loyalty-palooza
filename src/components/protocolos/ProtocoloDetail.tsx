@@ -4,6 +4,7 @@ import { ArrowLeft, Play, Pause, CheckCircle, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ProgressDashboard } from "./ProgressDashboard";
 import { FichaAcompanhamento } from "./FichaAcompanhamento";
 import { GaleriaEvolucao } from "./GaleriaEvolucao";
 import { MetasSemanais } from "./MetasSemanais";
@@ -31,7 +32,7 @@ const tipoLabels: Record<string, { label: string; class: string }> = {
 
 export const ProtocoloDetail = ({ protocolo, onBack }: ProtocoloDetailProps) => {
   const { meus, ativar, atualizarStatus } = useUsuarioProtocolos();
-  const [tab, setTab] = useState("ficha");
+  const [tab, setTab] = useState("resumo");
 
   const meuProtocolo = meus.find(
     (p) => p.protocolo_id === protocolo.id && (p.status === "ativo" || p.status === "pausado")
@@ -162,11 +163,19 @@ export const ProtocoloDetail = ({ protocolo, onBack }: ProtocoloDetailProps) => 
       {/* Tabs - only show if enrolled */}
       {meuProtocolo && (
         <Tabs value={tab} onValueChange={setTab} className="w-full">
-          <TabsList className="w-full grid grid-cols-3">
+          <TabsList className="w-full grid grid-cols-4">
+            <TabsTrigger value="resumo" className="text-xs">Resumo</TabsTrigger>
             <TabsTrigger value="ficha" className="text-xs">Medidas</TabsTrigger>
             <TabsTrigger value="metas" className="text-xs">Metas</TabsTrigger>
             <TabsTrigger value="galeria" className="text-xs">Fotos</TabsTrigger>
           </TabsList>
+          <TabsContent value="resumo" className="mt-4">
+            <ProgressDashboard
+              protocoloUsuarioId={meuProtocolo.id}
+              protocolo={protocolo}
+              dataInicio={meuProtocolo.data_inicio}
+            />
+          </TabsContent>
           <TabsContent value="ficha" className="mt-4">
             <FichaAcompanhamento protocoloUsuarioId={meuProtocolo.id} />
           </TabsContent>
