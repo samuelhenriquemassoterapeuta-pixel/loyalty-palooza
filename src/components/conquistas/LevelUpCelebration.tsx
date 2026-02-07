@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles } from "lucide-react";
+import { playLevelUpSound } from "@/lib/celebrationSound";
 
 interface LevelUpCelebrationProps {
   isOpen: boolean;
@@ -65,6 +66,7 @@ export const LevelUpCelebration = ({
   useEffect(() => {
     if (isOpen) {
       setParticles(Array.from({ length: 40 }, (_, i) => i));
+      playLevelUpSound();
       const timer = setTimeout(onClose, 4000);
       return () => clearTimeout(timer);
     } else {
