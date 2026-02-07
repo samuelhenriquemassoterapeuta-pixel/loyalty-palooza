@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Plus, FileText } from "lucide-react";
+import { ArrowLeft, Plus, FileText, Users } from "lucide-react";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -17,6 +17,7 @@ import { CrudListTab } from "@/components/admin/CrudListTab";
 import { AdminFormDialog } from "@/components/admin/AdminFormDialog";
 import { TerapeutasTab } from "@/components/admin/TerapeutasTab";
 import { AuditLogsViewer } from "@/components/admin/AuditLogsViewer";
+import { IndicacoesTab } from "@/components/admin/IndicacoesTab";
 
 const Admin = () => {
   const navigate = useNavigate();
@@ -282,6 +283,10 @@ const Admin = () => {
                 <TabsTrigger value="terapeutas" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap">
                   Terapeutas
                 </TabsTrigger>
+                <TabsTrigger value="indicacoes" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1">
+                  <Users size={14} />
+                  Indicações
+                </TabsTrigger>
                 <TabsTrigger value="auditoria" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1">
                   <FileText size={14} />
                   Auditoria
@@ -350,6 +355,10 @@ const Admin = () => {
 
           <TabsContent value="terapeutas">
             <TerapeutasTab />
+          </TabsContent>
+
+          <TabsContent value="indicacoes">
+            <IndicacoesTab />
           </TabsContent>
 
           <TabsContent value="auditoria">
