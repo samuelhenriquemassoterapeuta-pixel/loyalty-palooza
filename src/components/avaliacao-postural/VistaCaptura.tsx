@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { VistaPostural } from "@/hooks/useAvaliacaoPostural";
 import { ZoomableImage } from "./ZoomableImage";
 import { AnnotationLayer } from "./AnnotationLayer";
+import { MeasurementLayer } from "./MeasurementLayer";
 
 const vistaConfig: Record<VistaPostural, { label: string; instrucao: string }> = {
   anterior: {
@@ -118,13 +119,20 @@ export const VistaCaptura = ({ vista, existingUrl, onCapture, isPending, avaliac
             </ZoomableImage>
             {/* Annotation overlay */}
             {avaliacaoId && displayUrl && (
-              <AnnotationLayer
-                avaliacaoId={avaliacaoId}
-                vista={vista}
-                imageUrl={displayUrl}
-                containerWidth={containerDims.w}
-                containerHeight={containerDims.h}
-              />
+              <>
+                <AnnotationLayer
+                  avaliacaoId={avaliacaoId}
+                  vista={vista}
+                  imageUrl={displayUrl}
+                  containerWidth={containerDims.w}
+                  containerHeight={containerDims.h}
+                />
+                <MeasurementLayer
+                  avaliacaoId={avaliacaoId}
+                  vista={vista}
+                  imageUrl={displayUrl}
+                />
+              </>
             )}
             {/* Replace overlay on hover — outside ZoomableImage to avoid conflict */}
             <div
