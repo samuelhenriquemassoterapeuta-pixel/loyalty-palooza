@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { HelpCircle, MessageCircle, Share2, Copy, Instagram } from "lucide-react";
+import { HelpCircle, MessageCircle, Share2, Copy, Instagram, X, ChevronDown } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
 import type { Achievement } from "@/hooks/useAchievements";
@@ -26,10 +26,6 @@ export const AchievementDetailCard = ({
   const isRevealed = isSecret && achievement.unlocked;
   const isHidden = isSecret && !achievement.unlocked;
 
-  const handleCardClick = () => {
-    // Card click no longer toggles share — use share button instead
-  };
-
   const handleShare = async (e: React.MouseEvent) => {
     e.stopPropagation();
     const text = buildShareText(achievement);
@@ -50,7 +46,7 @@ export const AchievementDetailCard = ({
       }
     }
     // Desktop fallback: toggle expanded share options
-    setShowShare(true);
+    setShowShare((prev) => !prev);
   };
 
   const handleWhatsAppShare = (e: React.MouseEvent) => {
@@ -58,6 +54,7 @@ export const AchievementDetailCard = ({
     const text = buildShareText(achievement);
     window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, "_blank");
     toast.success("Abrindo WhatsApp...");
+    setShowShare(false);
   };
 
   const handleInstagramCopy = (e: React.MouseEvent) => {
@@ -65,6 +62,7 @@ export const AchievementDetailCard = ({
     const text = buildShareText(achievement);
     navigator.clipboard.writeText(text);
     toast.success("Texto copiado! Cole nos seus Stories do Instagram 📸");
+    setShowShare(false);
   };
 
   const handleCopyText = (e: React.MouseEvent) => {
@@ -72,6 +70,12 @@ export const AchievementDetailCard = ({
     const text = buildShareText(achievement);
     navigator.clipboard.writeText(text);
     toast.success("Texto copiado!");
+    setShowShare(false);
+  };
+
+  const handleCloseDrawer = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setShowShare(false);
   };
 
   return (
@@ -79,10 +83,8 @@ export const AchievementDetailCard = ({
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.04 }}
-      onClick={handleCardClick}
       className={`
         rounded-xl border transition-all relative overflow-hidden
-        ${achievement.unlocked ? "cursor-pointer active:scale-[0.99]" : ""}
         ${
           achievement.unlocked
             ? "glass-card-strong border-primary/20 shadow-sm"
@@ -92,7 +94,7 @@ export const AchievementDetailCard = ({
       `}
     >
       {/* Main row */}
-      <div className="flex items-center gap-3 p-3.5" onClick={handleCardClick}>
+      <div className="flex items-center gap-3 p-3.5">
         {/* Secret reveal shimmer overlay */}
         {isRevealed && (
           <motion.div
@@ -205,49 +207,68 @@ export const AchievementDetailCard = ({
 
       {/* Share button — always visible for unlocked */}
       {achievement.unlocked && (
-        <div className="px-3.5 pb-2 pt-0 flex items-center">
+        <div className="px-3.5 pb-2.5 pt-0 flex items-center justify-between">
           <button
             onClick={handleShare}
-            className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-primary transition-colors"
+            className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-primary transition-colors group"
           >
-            <Share2 size={13} />
+            <Share2 size={13} className="group-hover:scale-110 transition-transform" />
             Compartilhar
+            <motion.div
+              animate={{ rotate: showShare ? 180 : 0 }}
+              transition={{ duration: 0.2 }}
+            >
+              <ChevronDown size={12} />
+            </motion.div>
           </button>
         </div>
       )}
 
-      {/* Fallback share drawer — desktop only (mobile uses Web Share API) */}
+      {/* Fallback share drawer — desktop (mobile uses Web Share API) */}
       <AnimatePresence>
         {showShare && achievement.unlocked && (
           <motion.div
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.2, ease: "easeOut" }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
             className="overflow-hidden"
           >
-            <div className="px-3.5 pb-3 pt-1 flex flex-wrap items-center gap-2 border-t border-border/30">
-              <button
-                onClick={handleWhatsAppShare}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#25D366]/15 text-[#25D366] hover:bg-[#25D366]/25 transition-colors"
-              >
-                <MessageCircle size={14} />
-                WhatsApp
-              </button>
-              <button
-                onClick={handleInstagramCopy}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-[#E4405F]/15 text-[#E4405F] hover:bg-[#E4405F]/25 transition-colors"
-              >
-                <Instagram size={14} />
-                Instagram
-              </button>
-              <button
-                onClick={handleCopyText}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-muted text-muted-foreground hover:bg-muted/80 transition-colors"
-              >
-                <Copy size={14} />
-                Copiar
-              </button>
+            <div className="px-3.5 pb-3 pt-2 border-t border-border/30">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-[10px] text-muted-foreground font-medium">
+                  Escolha como compartilhar
+                </span>
+                <button
+                  onClick={handleCloseDrawer}
+                  className="p-0.5 rounded-md hover:bg-muted/60 text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  <X size={12} />
+                </button>
+              </div>
+              <div className="flex flex-wrap items-center gap-2">
+                <button
+                  onClick={handleWhatsAppShare}
+                  className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold bg-[#25D366]/15 text-[#25D366] hover:bg-[#25D366]/25 active:scale-95 transition-all"
+                >
+                  <MessageCircle size={14} />
+                  WhatsApp
+                </button>
+                <button
+                  onClick={handleInstagramCopy}
+                  className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold bg-[#E4405F]/15 text-[#E4405F] hover:bg-[#E4405F]/25 active:scale-95 transition-all"
+                >
+                  <Instagram size={14} />
+                  Instagram
+                </button>
+                <button
+                  onClick={handleCopyText}
+                  className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold bg-muted text-muted-foreground hover:bg-muted/80 active:scale-95 transition-all"
+                >
+                  <Copy size={14} />
+                  Copiar texto
+                </button>
+              </div>
             </div>
           </motion.div>
         )}
