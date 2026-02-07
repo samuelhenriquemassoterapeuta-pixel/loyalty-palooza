@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import type { Achievement } from "./useAchievements";
-import { calculateXpFromAchievements, getLevelFromXp } from "@/components/conquistas/XpLevelCard";
+import { calculateXpFromAchievements, getLevelFromXp } from "@/components/conquistas/xpLevelUtils";
 
 interface LevelUpState {
   isOpen: boolean;

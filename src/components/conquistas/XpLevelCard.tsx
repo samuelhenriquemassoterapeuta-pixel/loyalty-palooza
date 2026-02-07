@@ -7,56 +7,10 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { LEVELS, calculateXpFromAchievements, getLevelFromXp } from "./xpLevelUtils";
 
-// XP config: regular badges = 100 XP, secret badges = 250 XP
-const XP_PER_BADGE = 100;
-const XP_PER_SECRET = 250;
-
-interface LevelInfo {
-  level: number;
-  name: string;
-  icon: string;
-  minXp: number;
-  maxXp: number;
-}
-
-const LEVELS: LevelInfo[] = [
-  { level: 1, name: "Curiosa", icon: "🌱", minXp: 0, maxXp: 100 },
-  { level: 2, name: "Iniciante", icon: "🌿", minXp: 100, maxXp: 300 },
-  { level: 3, name: "Praticante", icon: "🍃", minXp: 300, maxXp: 600 },
-  { level: 4, name: "Experiente", icon: "🌳", minXp: 600, maxXp: 1000 },
-  { level: 5, name: "Especialista", icon: "🌟", minXp: 1000, maxXp: 1500 },
-  { level: 6, name: "Mestra", icon: "👑", minXp: 1500, maxXp: 2100 },
-  { level: 7, name: "Lendária", icon: "💎", minXp: 2100, maxXp: Infinity },
-];
-
-export function calculateXpFromAchievements(achievements: Achievement[]) {
-  let totalXp = 0;
-  achievements.forEach((a) => {
-    if (a.unlocked) {
-      totalXp += a.secret ? XP_PER_SECRET : XP_PER_BADGE;
-    } else {
-      // Partial XP for progress on non-secret badges
-      if (!a.secret) {
-        totalXp += Math.floor((a.progress / 100) * XP_PER_BADGE * 0.25);
-      }
-    }
-  });
-  return totalXp;
-}
-
-export function getLevelFromXp(xp: number): LevelInfo & { progressPercent: number; xpInLevel: number; xpNeeded: number } {
-  let current = LEVELS[0];
-  for (const lvl of LEVELS) {
-    if (xp >= lvl.minXp) current = lvl;
-  }
-
-  const xpInLevel = xp - current.minXp;
-  const xpNeeded = current.maxXp === Infinity ? 1 : current.maxXp - current.minXp;
-  const progressPercent = current.maxXp === Infinity ? 100 : Math.min((xpInLevel / xpNeeded) * 100, 100);
-
-  return { ...current, progressPercent, xpInLevel, xpNeeded };
-}
+// Re-export for backward compatibility
+export { calculateXpFromAchievements, getLevelFromXp };
 
 interface XpLevelCardProps {
   achievements: Achievement[];
@@ -79,7 +33,6 @@ export const XpLevelCard = ({ achievements }: XpLevelCardProps) => {
         {/* Level header */}
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
-            {/* Level icon with animated ring */}
             <div className="relative">
               <motion.div
                 className="w-14 h-14 rounded-2xl bg-primary/20 border border-primary/30 flex items-center justify-center text-2xl"
@@ -109,7 +62,6 @@ export const XpLevelCard = ({ achievements }: XpLevelCardProps) => {
             </div>
           </div>
 
-          {/* XP counter */}
           <div className="text-right">
             <div className="flex items-center gap-1 justify-end">
               <Zap size={14} className="text-warning" />
@@ -138,7 +90,6 @@ export const XpLevelCard = ({ achievements }: XpLevelCardProps) => {
           </div>
 
           <div className="relative h-3 rounded-full bg-muted/60 overflow-hidden">
-            {/* Animated progress fill */}
             <motion.div
               className="absolute inset-y-0 left-0 rounded-full"
               style={{
@@ -150,8 +101,6 @@ export const XpLevelCard = ({ achievements }: XpLevelCardProps) => {
               animate={{ width: `${level.progressPercent}%` }}
               transition={{ duration: 1, ease: "easeOut", delay: 0.3 }}
             />
-
-            {/* Shimmer effect */}
             {!isMaxLevel && level.progressPercent > 5 && (
               <motion.div
                 className="absolute inset-y-0 w-8 bg-gradient-to-r from-transparent via-white/30 to-transparent"
@@ -161,7 +110,6 @@ export const XpLevelCard = ({ achievements }: XpLevelCardProps) => {
             )}
           </div>
 
-          {/* XP detail */}
           {!isMaxLevel && (
             <p className="text-[10px] text-muted-foreground text-center">
               {level.xpInLevel} / {level.xpNeeded} XP para o próximo nível
@@ -169,12 +117,10 @@ export const XpLevelCard = ({ achievements }: XpLevelCardProps) => {
           )}
         </div>
 
-        {/* Level milestones with connector line */}
+        {/* Level milestones */}
         <TooltipProvider delayDuration={0}>
           <div className="relative mt-3 pt-3 border-t border-border/30">
-            {/* Connector line behind milestones */}
             <div className="absolute top-[calc(0.75rem+16px+4px)] left-[16px] right-[16px] h-[2px] bg-muted/40 rounded-full" />
-            {/* Progress fill — includes partial progress within current level */}
             <motion.div
               className="absolute top-[calc(0.75rem+16px+4px)] left-[16px] h-[2px] rounded-full"
               style={{
@@ -208,7 +154,6 @@ export const XpLevelCard = ({ achievements }: XpLevelCardProps) => {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.4 + i * 0.08, duration: 0.4, ease: "easeOut" }}
                       >
-                        {/* Current level glow ring */}
                         {isCurrent && (
                           <motion.div
                             className="absolute -inset-1.5 rounded-2xl"
@@ -268,7 +213,6 @@ export const XpLevelCard = ({ achievements }: XpLevelCardProps) => {
               })}
             </div>
 
-            {/* XP summary text */}
             <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
