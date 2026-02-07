@@ -1,9 +1,10 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useCallback } from "react";
 import { motion } from "framer-motion";
 import { Camera, Check, RotateCcw, Grid3X3 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { VistaPostural } from "@/hooks/useAvaliacaoPostural";
 import { ZoomableImage } from "./ZoomableImage";
+import { AnnotationLayer } from "./AnnotationLayer";
 
 const vistaConfig: Record<VistaPostural, { label: string; instrucao: string }> = {
   anterior: {
@@ -29,13 +30,23 @@ interface VistaCapturaProps {
   existingUrl?: string;
   onCapture: (file: File) => void;
   isPending?: boolean;
+  avaliacaoId?: string;
 }
 
-export const VistaCaptura = ({ vista, existingUrl, onCapture, isPending }: VistaCapturaProps) => {
+export const VistaCaptura = ({ vista, existingUrl, onCapture, isPending, avaliacaoId }: VistaCapturaProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
+  const imgContainerRef = useRef<HTMLDivElement>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [showGrid, setShowGrid] = useState(true);
+  const [containerDims, setContainerDims] = useState({ w: 0, h: 0 });
   const config = vistaConfig[vista];
+
+  const updateDims = useCallback(() => {
+    if (imgContainerRef.current) {
+      const rect = imgContainerRef.current.getBoundingClientRect();
+      setContainerDims({ w: rect.width, h: rect.height });
+    }
+  }, []);
 
   const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -69,8 +80,10 @@ export const VistaCaptura = ({ vista, existingUrl, onCapture, isPending }: Vista
       </div>
 
       <div
+        ref={imgContainerRef}
         className="relative aspect-[3/4] rounded-2xl border-2 border-dashed border-border bg-muted/30 overflow-hidden cursor-pointer group"
         onClick={() => !isPending && inputRef.current?.click()}
+        onLoad={updateDims}
       >
         {hasImage ? (
           <>
@@ -103,6 +116,16 @@ export const VistaCaptura = ({ vista, existingUrl, onCapture, isPending }: Vista
                 </span>
               </div>
             </ZoomableImage>
+            {/* Annotation overlay */}
+            {avaliacaoId && displayUrl && (
+              <AnnotationLayer
+                avaliacaoId={avaliacaoId}
+                vista={vista}
+                imageUrl={displayUrl}
+                containerWidth={containerDims.w}
+                containerHeight={containerDims.h}
+              />
+            )}
             {/* Replace overlay on hover — outside ZoomableImage to avoid conflict */}
             <div
               className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none"
