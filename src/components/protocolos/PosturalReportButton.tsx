@@ -174,44 +174,148 @@ const generatePosturalPdfBlob = async (
   );
   y = 37;
 
-  // ── Section 1: EVA Chart ────────────────────────
+  // ── Section 1: EVA Line Chart (drawn natively) ──
   const evaFichas = fichas.filter((f) => f.escala_eva != null);
   if (evaFichas.length > 0) {
     pdf.setTextColor(60, 60, 60);
     pdf.setFontSize(12);
     pdf.setFont("helvetica", "bold");
-    pdf.text("📊 Escala de Dor (EVA)", margin, y);
-    y += 7;
+    pdf.text("📊 Evolução da Dor (EVA)", margin, y);
+    y += 4;
 
-    // Draw EVA timeline
-    const evaBarHeight = 8;
-    const evaWidth = contentWidth;
-    const barY = y;
+    const chartH = 50;
+    const chartW = contentWidth;
+    const chartX = margin;
+    const chartY = y;
+    const padLeft = 10;
+    const padRight = 5;
+    const padTop = 6;
+    const padBottom = 12;
+    const plotW = chartW - padLeft - padRight;
+    const plotH = chartH - padTop - padBottom;
+    const plotX = chartX + padLeft;
+    const plotY = chartY + padTop;
 
-    // Background gradient zones
-    const zones = [
-      { from: 0, to: 3, color: [144, 238, 144] },   // Green - Leve
-      { from: 3, to: 6, color: [255, 215, 0] },       // Yellow - Moderada
-      { from: 6, to: 10, color: [255, 99, 71] },      // Red - Intensa
+    checkNewPage(chartH + 20);
+
+    // Background
+    pdf.setFillColor(250, 250, 248);
+    pdf.roundedRect(chartX, chartY, chartW, chartH, 2, 2, "F");
+
+    // Pain zone bands (horizontal)
+    const zoneBands = [
+      { from: 0, to: 3, r: 220, g: 245, b: 220 },   // Green - Leve
+      { from: 3, to: 6, r: 255, g: 248, b: 220 },   // Yellow - Moderada
+      { from: 6, to: 8, r: 255, g: 235, b: 220 },   // Orange - Intensa
+      { from: 8, to: 10, r: 255, g: 220, b: 220 },  // Red - Insuportável
     ];
 
-    for (const zone of zones) {
-      const x1 = margin + (zone.from / 10) * evaWidth;
-      const w = ((zone.to - zone.from) / 10) * evaWidth;
-      pdf.setFillColor(zone.color[0], zone.color[1], zone.color[2]);
-      pdf.roundedRect(x1, barY, w, evaBarHeight, 1, 1, "F");
+    for (const band of zoneBands) {
+      const byTop = plotY + plotH - (band.to / 10) * plotH;
+      const byBot = plotY + plotH - (band.from / 10) * plotH;
+      pdf.setFillColor(band.r, band.g, band.b);
+      pdf.rect(plotX, byTop, plotW, byBot - byTop, "F");
     }
 
-    // Scale numbers
-    pdf.setFontSize(6);
-    pdf.setTextColor(100, 100, 100);
-    for (let i = 0; i <= 10; i++) {
-      const x = margin + (i / 10) * evaWidth;
-      pdf.text(String(i), x, barY + evaBarHeight + 4);
+    // Y-axis ticks & grid lines
+    pdf.setFontSize(5.5);
+    pdf.setFont("helvetica", "normal");
+    for (let v = 0; v <= 10; v += 2) {
+      const ly = plotY + plotH - (v / 10) * plotH;
+      pdf.setDrawColor(210, 210, 210);
+      pdf.setLineWidth(0.15);
+      pdf.line(plotX, ly, plotX + plotW, ly);
+      pdf.setTextColor(130, 130, 130);
+      pdf.text(String(v), chartX + 1, ly + 1.5);
     }
-    y = barY + evaBarHeight + 8;
 
-    // EVA data points as small table
+    // Reference lines at 3 and 6
+    for (const refV of [3, 6]) {
+      const ly = plotY + plotH - (refV / 10) * plotH;
+      pdf.setDrawColor(180, 180, 180);
+      pdf.setLineWidth(0.25);
+      pdf.setLineDashPattern([1.5, 1.5], 0);
+      pdf.line(plotX, ly, plotX + plotW, ly);
+    }
+    pdf.setLineDashPattern([], 0);
+
+    // X-axis labels
+    const n = evaFichas.length;
+    pdf.setFontSize(5);
+    pdf.setTextColor(130, 130, 130);
+    for (let i = 0; i < n; i++) {
+      const px = n === 1 ? plotX + plotW / 2 : plotX + (i / (n - 1)) * plotW;
+      const label = format(new Date(evaFichas[i].data), "dd/MM");
+      pdf.text(label, px - 4, plotY + plotH + 4);
+    }
+
+    // Plot data points and line
+    const evaColors = [
+      { max: 0, r: 72, g: 187, b: 120 },
+      { max: 3, r: 130, g: 200, b: 80 },
+      { max: 6, r: 230, g: 180, b: 50 },
+      { max: 8, r: 220, g: 120, b: 60 },
+      { max: 10, r: 210, g: 70, b: 60 },
+    ];
+    const getEvaColor = (v: number) =>
+      evaColors.find((c) => v <= c.max) ?? evaColors[evaColors.length - 1];
+
+    // Draw connecting line
+    if (n > 1) {
+      pdf.setDrawColor(180, 100, 70);
+      pdf.setLineWidth(0.6);
+      for (let i = 0; i < n - 1; i++) {
+        const x1 = plotX + (i / (n - 1)) * plotW;
+        const y1 = plotY + plotH - ((evaFichas[i].escala_eva ?? 0) / 10) * plotH;
+        const x2 = plotX + ((i + 1) / (n - 1)) * plotW;
+        const y2 = plotY + plotH - ((evaFichas[i + 1].escala_eva ?? 0) / 10) * plotH;
+        pdf.line(x1, y1, x2, y2);
+      }
+    }
+
+    // Draw dots with color coding
+    for (let i = 0; i < n; i++) {
+      const val = evaFichas[i].escala_eva ?? 0;
+      const px = n === 1 ? plotX + plotW / 2 : plotX + (i / (n - 1)) * plotW;
+      const py = plotY + plotH - (val / 10) * plotH;
+      const c = getEvaColor(val);
+
+      // White outline
+      pdf.setFillColor(255, 255, 255);
+      pdf.circle(px, py, 2, "F");
+      // Color fill
+      pdf.setFillColor(c.r, c.g, c.b);
+      pdf.circle(px, py, 1.5, "F");
+      // Value label on dot
+      pdf.setFontSize(4.5);
+      pdf.setFont("helvetica", "bold");
+      pdf.setTextColor(60, 60, 60);
+      pdf.text(String(val), px - 1, py - 3);
+    }
+
+    y = chartY + chartH + 3;
+
+    // Zone legend
+    const legendItems = [
+      { label: "Sem dor (0)", r: 72, g: 187, b: 120 },
+      { label: "Leve (1-3)", r: 130, g: 200, b: 80 },
+      { label: "Moderada (4-6)", r: 230, g: 180, b: 50 },
+      { label: "Intensa (7-8)", r: 220, g: 120, b: 60 },
+      { label: "Insuportável (9-10)", r: 210, g: 70, b: 60 },
+    ];
+    pdf.setFontSize(5.5);
+    pdf.setFont("helvetica", "normal");
+    let lx = margin;
+    for (const item of legendItems) {
+      pdf.setFillColor(item.r, item.g, item.b);
+      pdf.circle(lx + 1, y, 1, "F");
+      pdf.setTextColor(100, 100, 100);
+      pdf.text(item.label, lx + 3, y + 1);
+      lx += 30;
+    }
+    y += 5;
+
+    // Summary text
     if (evaFichas.length > 1) {
       const firstEva = evaFichas[0];
       const lastEva = evaFichas[evaFichas.length - 1];
@@ -235,16 +339,7 @@ const generatePosturalPdfBlob = async (
       );
       y += 6;
     }
-
-    // List all EVA measurements
-    pdf.setTextColor(100, 100, 100);
-    pdf.setFontSize(7);
-    pdf.setFont("helvetica", "normal");
-    const evaLine = evaFichas
-      .map((f) => `${format(new Date(f.data), "dd/MM")}: ${f.escala_eva}`)
-      .join("  |  ");
-    pdf.text(evaLine, margin, y, { maxWidth: contentWidth });
-    y += 8;
+    y += 2;
   }
 
   // ── Section 2: Body Measurements Chart ──────────
