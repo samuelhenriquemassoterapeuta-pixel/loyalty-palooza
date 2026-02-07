@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeftRight, Grid3X3, X, ChevronLeft, ChevronRight, Layers, Columns2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AvaliacaoPostural, VistaPostural } from "@/hooks/useAvaliacaoPostural";
@@ -201,31 +201,50 @@ export const ComparacaoView = ({ avaliacoes, onClose }: ComparacaoViewProps) => 
             </div>
           </div>
 
-          {canSlider ? (
-            <ImageSliderCompare
-              beforeUrl={leftUrl}
-              afterUrl={rightUrl}
-              beforeLabel={format(new Date(left.data), "dd/MM/yy", { locale: ptBR })}
-              afterLabel={format(new Date(right.data), "dd/MM/yy", { locale: ptBR })}
-              showGrid={showGrid}
-            />
-          ) : (
-            <div className="aspect-[3/4] rounded-xl bg-muted/30 flex items-center justify-center text-muted-foreground text-sm">
-              Selecione duas avaliações com fotos nesta vista
-            </div>
-          )}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={vistaAtiva}
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              transition={{ duration: 0.25, ease: "easeInOut" }}
+            >
+              {canSlider ? (
+                <ImageSliderCompare
+                  beforeUrl={leftUrl}
+                  afterUrl={rightUrl}
+                  beforeLabel={format(new Date(left.data), "dd/MM/yy", { locale: ptBR })}
+                  afterLabel={format(new Date(right.data), "dd/MM/yy", { locale: ptBR })}
+                  showGrid={showGrid}
+                />
+              ) : (
+                <div className="aspect-[3/4] rounded-xl bg-muted/30 flex items-center justify-center text-muted-foreground text-sm">
+                  Selecione duas avaliações com fotos nesta vista
+                </div>
+              )}
+            </motion.div>
+          </AnimatePresence>
         </>
       )}
 
       {/* Side-by-side mode */}
       {viewMode === "side-by-side" && (
-        <div className="flex gap-2">
-          <PhotoPanel av={left} side="left" />
-          <div className="flex flex-col items-center justify-center">
-            <div className="w-px h-full bg-border" />
-          </div>
-          <PhotoPanel av={right} side="right" />
-        </div>
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={vistaAtiva}
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+            transition={{ duration: 0.25, ease: "easeInOut" }}
+            className="flex gap-2"
+          >
+            <PhotoPanel av={left} side="left" />
+            <div className="flex flex-col items-center justify-center">
+              <div className="w-px h-full bg-border" />
+            </div>
+            <PhotoPanel av={right} side="right" />
+          </motion.div>
+        </AnimatePresence>
       )}
 
       {/* Legend */}
