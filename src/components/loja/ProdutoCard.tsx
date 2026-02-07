@@ -1,7 +1,6 @@
 import { motion } from "framer-motion";
 import { Plus, Check, Percent } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 
 interface Produto {
   id: string;
@@ -19,19 +18,29 @@ interface ProdutoCardProps {
   onToggle: () => void;
 }
 
+const fadeUp = {
+  hidden: { opacity: 0, y: 16 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { type: "spring" as const, stiffness: 260, damping: 24 },
+  },
+};
+
 export const ProdutoCard = ({ produto, index, noCarrinho, onToggle }: ProdutoCardProps) => {
   const cashback = produto.cashback_percentual || 0;
   
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.05 }}
+      variants={fadeUp}
+      initial="hidden"
+      animate="show"
+      transition={{ delay: index * 0.04 }}
     >
-      <Card className="p-3 relative overflow-hidden hover:shadow-elevated transition-shadow">
+      <div className="glass-card rounded-2xl p-3 relative overflow-hidden hover:shadow-elevated transition-shadow">
         {/* Cashback badge */}
         {cashback > 0 && (
-          <div className="absolute top-2 right-2 flex items-center gap-1 px-2 py-1 rounded-full bg-green-500/20 text-green-600 text-[10px] font-semibold">
+          <div className="absolute top-2 right-2 flex items-center gap-1 px-2 py-1 rounded-full bg-highlight/20 text-highlight text-[10px] font-semibold">
             <Percent size={10} />
             {cashback}% cashback
           </div>
@@ -42,7 +51,7 @@ export const ProdutoCard = ({ produto, index, noCarrinho, onToggle }: ProdutoCar
             <img 
               src={produto.imagem_url} 
               alt={produto.nome} 
-              className="w-12 h-12 mx-auto object-cover rounded" 
+              className="w-12 h-12 mx-auto object-cover rounded-xl" 
             />
           ) : (
             produto.imagem_url || "📦"
@@ -60,7 +69,7 @@ export const ProdutoCard = ({ produto, index, noCarrinho, onToggle }: ProdutoCar
               R$ {produto.preco.toFixed(2).replace('.', ',')}
             </p>
             {cashback > 0 && (
-              <p className="text-[9px] text-green-600">
+              <p className="text-[9px] text-highlight">
                 +R$ {(produto.preco * cashback / 100).toFixed(2).replace('.', ',')} volta
               </p>
             )}
@@ -69,13 +78,13 @@ export const ProdutoCard = ({ produto, index, noCarrinho, onToggle }: ProdutoCar
           <Button
             size="icon"
             variant={noCarrinho ? "default" : "outline"}
-            className="h-8 w-8"
+            className="h-8 w-8 rounded-xl"
             onClick={onToggle}
           >
             {noCarrinho ? <Check size={16} /> : <Plus size={16} />}
           </Button>
         </div>
-      </Card>
+      </div>
     </motion.div>
   );
 };

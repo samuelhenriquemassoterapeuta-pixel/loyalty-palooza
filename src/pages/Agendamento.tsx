@@ -3,7 +3,6 @@ import { motion } from "framer-motion";
 import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { BottomNavigation } from "@/components/BottomNavigation";
 import { AppLayout } from "@/components/AppLayout";
 import { ArrowLeft, Clock, Check, CalendarDays, X, User, Star, RefreshCw } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -34,6 +33,23 @@ import {
 const horarios = [
   "09:00", "10:00", "11:00", "14:00", "15:00", "16:00", "17:00", "18:00"
 ];
+
+const stagger = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: { staggerChildren: 0.06, delayChildren: 0.05 },
+  },
+};
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 16 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { type: "spring" as const, stiffness: 260, damping: 24 },
+  },
+};
 
 const Agendamento = () => {
   const navigate = useNavigate();
@@ -73,7 +89,6 @@ const Agendamento = () => {
     setHorariosOcupados([]);
   };
 
-  // Buscar horários ocupados quando avançar para o step de horário
   const fetchHorariosOcupados = async () => {
     if (!selectedDate || !selectedTerapeuta) return;
     
@@ -165,7 +180,6 @@ const Agendamento = () => {
 
   const handleNextStep = async () => {
     if (step === 3 && selectedDate && selectedTerapeuta) {
-      // Ao avançar do step 3 (data) para o step 4 (horário), buscar horários ocupados
       setStep(4);
       await fetchHorariosOcupados();
     } else {
@@ -177,13 +191,15 @@ const Agendamento = () => {
 
   return (
     <AppLayout>
-    <div className="min-h-screen bg-background pb-24 lg:pb-8">
-      <div className="max-w-lg lg:max-w-4xl mx-auto px-4 lg:px-8 safe-top">
+    <div className="min-h-screen bg-background gradient-hero pb-24 lg:pb-8">
+      <div className="max-w-lg lg:max-w-4xl mx-auto px-4 lg:px-8 safe-top pt-4">
         {/* Header */}
-        <div className="flex items-center gap-3 py-4">
-          <Button
-            variant="ghost"
-            size="icon"
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex items-center gap-3 mb-5"
+        >
+          <button
             onClick={() => {
               if (activeTab === "novo" && step > 1) {
                 setStep(step - 1);
@@ -191,337 +207,351 @@ const Agendamento = () => {
                 navigate("/");
               }
             }}
+            className="p-2 rounded-xl hover:bg-muted/50 transition-colors"
           >
-            <ArrowLeft size={24} />
-          </Button>
-          <h1 className="text-xl font-semibold text-foreground">Agendamentos</h1>
-        </div>
+            <ArrowLeft size={22} className="text-foreground" />
+          </button>
+          <div>
+            <h1 className="text-xl font-bold text-foreground">Agendamentos</h1>
+            <p className="text-xs text-muted-foreground">Agende e gerencie suas sessões</p>
+          </div>
+        </motion.div>
 
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-6">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="novo">Novo Agendamento</TabsTrigger>
-            <TabsTrigger value="agendados" className="relative">
-              Meus Agendamentos
-              {proximosAgendamentos.length > 0 && (
-                <span className="absolute -top-1 -right-1 w-5 h-5 bg-primary text-primary-foreground text-xs rounded-full flex items-center justify-center">
-                  {proximosAgendamentos.length}
-                </span>
-              )}
-            </TabsTrigger>
-          </TabsList>
+        <motion.div variants={stagger} initial="hidden" animate="show" className="space-y-5">
+          <motion.div variants={fadeUp}>
+            <Tabs value={activeTab} onValueChange={setActiveTab}>
+              <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger value="novo">Novo Agendamento</TabsTrigger>
+                <TabsTrigger value="agendados" className="relative">
+                  Meus Agendamentos
+                  {proximosAgendamentos.length > 0 && (
+                    <span className="absolute -top-1 -right-1 w-5 h-5 bg-primary text-primary-foreground text-xs rounded-full flex items-center justify-center">
+                      {proximosAgendamentos.length}
+                    </span>
+                  )}
+                </TabsTrigger>
+              </TabsList>
 
-          <TabsContent value="agendados" className="mt-4">
-            {loading ? (
-              <AgendamentosListSkeleton />
-            ) : agendamentos.length === 0 ? (
-              <div className="text-center py-12">
-                <CalendarDays className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-                <p className="text-muted-foreground">Nenhum agendamento encontrado</p>
-                <Button 
-                  variant="link" 
-                  onClick={() => setActiveTab("novo")}
-                  className="mt-2"
-                >
-                  Agendar agora
-                </Button>
-              </div>
-            ) : (
-              <div className="space-y-3">
-                {agendamentos.map((agendamento) => {
-                  const dataHora = new Date(agendamento.data_hora);
-                  const isPast = dataHora < new Date();
-                  const isCanceled = agendamento.status === "cancelado";
-
-                  return (
-                    <Card 
-                      key={agendamento.id}
-                      className={`${isCanceled ? "opacity-60" : ""} ${isPast && !isCanceled ? "bg-muted/50" : ""}`}
+              <TabsContent value="agendados" className="mt-4">
+                {loading ? (
+                  <AgendamentosListSkeleton />
+                ) : agendamentos.length === 0 ? (
+                  <div className="text-center py-12 glass-card rounded-2xl">
+                    <CalendarDays className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+                    <p className="text-muted-foreground">Nenhum agendamento encontrado</p>
+                    <Button 
+                      variant="link" 
+                      onClick={() => setActiveTab("novo")}
+                      className="mt-2"
                     >
-                      <CardContent className="p-4">
-                        <div className="flex justify-between items-start">
-                          <div>
-                            <h3 className="font-semibold text-foreground">{agendamento.servico}</h3>
-                            {agendamento.terapeutas && (
-                              <p className="text-sm text-primary flex items-center gap-1 mt-0.5">
-                                <User size={14} />
-                                {agendamento.terapeutas.nome}
-                              </p>
-                            )}
-                            <p className="text-sm text-muted-foreground flex items-center gap-1 mt-1">
-                              <CalendarDays size={14} />
-                              {format(dataHora, "dd/MM/yyyy", { locale: ptBR })}
-                            </p>
-                            <p className="text-sm text-muted-foreground flex items-center gap-1">
-                              <Clock size={14} />
-                              {format(dataHora, "HH:mm", { locale: ptBR })}
-                            </p>
-                          </div>
-                          <div className="text-right">
-                            {isCanceled ? (
-                              <span className="text-xs px-2 py-1 rounded-full bg-destructive/10 text-destructive">
-                                Cancelado
-                              </span>
-                            ) : isPast ? (
-                              <>
-                                <span className="text-xs px-2 py-1 rounded-full bg-muted text-muted-foreground">
-                                  Concluído
-                                </span>
-                                {getAvaliacaoByAgendamento(agendamento.id) ? (
-                                  <div className="flex items-center justify-end gap-0.5 mt-2 text-yellow-500">
-                                    {[...Array(getAvaliacaoByAgendamento(agendamento.id)?.nota || 0)].map((_, i) => (
-                                      <Star key={i} size={14} className="fill-current" />
-                                    ))}
-                                  </div>
-                                ) : (
-                                  <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    className="mt-2 text-primary hover:text-primary"
-                                    onClick={() => {
-                                      setAgendamentoToRate({
-                                        id: agendamento.id,
-                                        servico: agendamento.servico,
-                                        terapeutaNome: agendamento.terapeutas?.nome,
-                                      });
-                                      setAvaliacaoDialogOpen(true);
-                                    }}
-                                  >
-                                    <Star size={14} className="mr-1" />
-                                    Avaliar
-                                  </Button>
-                                )}
-                              </>
-                            ) : (
-                              <>
-                                <span className="text-xs px-2 py-1 rounded-full bg-primary/10 text-primary">
-                                  Confirmado
-                                </span>
-                                <div className="flex gap-1 mt-2">
-                                  <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    className="text-primary hover:text-primary"
-                                    onClick={() => {
-                                      setAgendamentoToReagendar({
-                                        id: agendamento.id,
-                                        servico: agendamento.servico,
-                                        terapeutaId: agendamento.terapeuta_id || undefined,
-                                        terapeutaNome: agendamento.terapeutas?.nome,
-                                      });
-                                      setReagendarDialogOpen(true);
-                                    }}
-                                  >
-                                    <RefreshCw size={14} className="mr-1" />
-                                    Reagendar
-                                  </Button>
-                                </div>
-                                <Button
-                                  variant="ghost"
-                                  size="sm"
-                                  className="text-destructive hover:text-destructive"
-                                  onClick={() => {
-                                    setAgendamentoToCancel(agendamento.id);
-                                    setCancelDialogOpen(true);
-                                  }}
-                                >
-                                  <X size={14} className="mr-1" />
-                                  Cancelar
-                                </Button>
-                              </>
-                            )}
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  );
-                })}
-              </div>
-            )}
-          </TabsContent>
-
-          <TabsContent value="novo" className="mt-4">
-            {/* Progress */}
-            <div className="flex gap-2 mb-6">
-              {[1, 2, 3, 4].map((s) => (
-                <div
-                  key={s}
-                  className={`h-1 flex-1 rounded-full transition-colors ${
-                    s <= step ? "bg-primary" : "bg-muted"
-                  }`}
-                />
-              ))}
-            </div>
-
-            {/* Step 1: Serviço */}
-            {step === 1 && (
-              <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                className="space-y-4"
-              >
-                <h2 className="text-lg font-medium text-foreground mb-4">Escolha o serviço</h2>
-                
-                {loadingServicos ? (
-                  <ServicosListSkeleton />
-                ) : servicos.length === 0 ? (
-                  <div className="text-center py-12">
-                    <p className="text-muted-foreground">Nenhum serviço disponível no momento.</p>
+                      Agendar agora
+                    </Button>
                   </div>
                 ) : (
-                  servicos.map((servico) => (
-                    <Card
-                      key={servico.id}
-                      className={`cursor-pointer transition-all ${
-                        selectedServico?.id === servico.id
-                          ? "border-primary bg-primary/5"
-                          : "border-border hover:border-primary/50"
-                      }`}
-                      onClick={() => setSelectedServico(servico)}
-                    >
-                      <CardContent className="p-4 flex justify-between items-center">
-                        <div>
-                          <h3 className="font-medium text-foreground">{servico.nome}</h3>
-                          {servico.descricao && (
-                            <p className="text-xs text-muted-foreground mt-0.5">{servico.descricao}</p>
-                          )}
-                          <p className="text-sm text-muted-foreground flex items-center gap-1 mt-1">
-                            <Clock size={14} /> {servico.duracao} min
-                          </p>
-                        </div>
-                        <div className="text-right">
-                          <p className="font-semibold text-primary">
-                            R$ {servico.preco.toFixed(2).replace('.', ',')}
-                          </p>
-                          {selectedServico?.id === servico.id && (
-                            <Check className="text-primary ml-auto" size={20} />
-                          )}
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))
-                )}
-              </motion.div>
-            )}
+                  <motion.div
+                    variants={stagger}
+                    initial="hidden"
+                    animate="show"
+                    className="space-y-3"
+                  >
+                    {agendamentos.map((agendamento) => {
+                      const dataHora = new Date(agendamento.data_hora);
+                      const isPast = dataHora < new Date();
+                      const isCanceled = agendamento.status === "cancelado";
 
-            {/* Step 2: Terapeuta */}
-            {step === 2 && (
-              <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-              >
-                <TerapeutaSelector
-                  terapeutas={terapeutas}
-                  loading={loadingTerapeutas}
-                  selectedId={selectedTerapeuta?.id || null}
-                  onSelect={setSelectedTerapeuta}
-                />
-              </motion.div>
-            )}
-
-            {/* Step 3: Data */}
-            {step === 3 && (
-              <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-              >
-                <h2 className="text-lg font-medium text-foreground mb-4">Escolha a data</h2>
-                <Card>
-                  <CardContent className="p-4 flex justify-center">
-                    <Calendar
-                      mode="single"
-                      selected={selectedDate}
-                      onSelect={handleDateSelect}
-                      locale={ptBR}
-                      disabled={(date) => date < new Date() || date.getDay() === 0}
-                      className="rounded-md"
-                    />
-                  </CardContent>
-                </Card>
-              </motion.div>
-            )}
-
-            {/* Step 4: Horário */}
-            {step === 4 && (
-              <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-              >
-                <h2 className="text-lg font-medium text-foreground mb-4">Escolha o horário</h2>
-                {loadingHorarios ? (
-                  <div className="flex justify-center py-8">
-                    <LoadingSpinner size="sm" />
-                  </div>
-                ) : (
-                  <div className="grid grid-cols-3 gap-3">
-                    {horarios.map((horario) => {
-                      const isOcupado = horariosOcupados.includes(horario);
                       return (
-                        <Button
-                          key={horario}
-                          variant={selectedHorario === horario ? "default" : "outline"}
-                          className={`h-14 ${isOcupado ? "opacity-50 line-through" : ""}`}
-                          onClick={() => !isOcupado && setSelectedHorario(horario)}
-                          disabled={isOcupado}
-                        >
-                          {horario}
-                          {isOcupado && <span className="sr-only">(ocupado)</span>}
-                        </Button>
+                        <motion.div key={agendamento.id} variants={fadeUp}>
+                          <div
+                            className={`glass-card rounded-2xl p-4 ${isCanceled ? "opacity-60" : ""} ${isPast && !isCanceled ? "bg-muted/30" : ""}`}
+                          >
+                            <div className="flex justify-between items-start">
+                              <div>
+                                <h3 className="font-semibold text-foreground">{agendamento.servico}</h3>
+                                {agendamento.terapeutas && (
+                                  <p className="text-sm text-primary flex items-center gap-1 mt-0.5">
+                                    <User size={14} />
+                                    {agendamento.terapeutas.nome}
+                                  </p>
+                                )}
+                                <p className="text-sm text-muted-foreground flex items-center gap-1 mt-1">
+                                  <CalendarDays size={14} />
+                                  {format(dataHora, "dd/MM/yyyy", { locale: ptBR })}
+                                </p>
+                                <p className="text-sm text-muted-foreground flex items-center gap-1">
+                                  <Clock size={14} />
+                                  {format(dataHora, "HH:mm", { locale: ptBR })}
+                                </p>
+                              </div>
+                              <div className="text-right">
+                                {isCanceled ? (
+                                  <span className="text-xs px-2 py-1 rounded-full bg-destructive/10 text-destructive">
+                                    Cancelado
+                                  </span>
+                                ) : isPast ? (
+                                  <>
+                                    <span className="text-xs px-2 py-1 rounded-full bg-muted text-muted-foreground">
+                                      Concluído
+                                    </span>
+                                    {getAvaliacaoByAgendamento(agendamento.id) ? (
+                                      <div className="flex items-center justify-end gap-0.5 mt-2 text-yellow-500">
+                                        {[...Array(getAvaliacaoByAgendamento(agendamento.id)?.nota || 0)].map((_, i) => (
+                                          <Star key={i} size={14} className="fill-current" />
+                                        ))}
+                                      </div>
+                                    ) : (
+                                      <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        className="mt-2 text-primary hover:text-primary"
+                                        onClick={() => {
+                                          setAgendamentoToRate({
+                                            id: agendamento.id,
+                                            servico: agendamento.servico,
+                                            terapeutaNome: agendamento.terapeutas?.nome,
+                                          });
+                                          setAvaliacaoDialogOpen(true);
+                                        }}
+                                      >
+                                        <Star size={14} className="mr-1" />
+                                        Avaliar
+                                      </Button>
+                                    )}
+                                  </>
+                                ) : (
+                                  <>
+                                    <span className="text-xs px-2 py-1 rounded-full bg-primary/10 text-primary">
+                                      Confirmado
+                                    </span>
+                                    <div className="flex gap-1 mt-2">
+                                      <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        className="text-primary hover:text-primary"
+                                        onClick={() => {
+                                          setAgendamentoToReagendar({
+                                            id: agendamento.id,
+                                            servico: agendamento.servico,
+                                            terapeutaId: agendamento.terapeuta_id || undefined,
+                                            terapeutaNome: agendamento.terapeutas?.nome,
+                                          });
+                                          setReagendarDialogOpen(true);
+                                        }}
+                                      >
+                                        <RefreshCw size={14} className="mr-1" />
+                                        Reagendar
+                                      </Button>
+                                    </div>
+                                    <Button
+                                      variant="ghost"
+                                      size="sm"
+                                      className="text-destructive hover:text-destructive"
+                                      onClick={() => {
+                                        setAgendamentoToCancel(agendamento.id);
+                                        setCancelDialogOpen(true);
+                                      }}
+                                    >
+                                      <X size={14} className="mr-1" />
+                                      Cancelar
+                                    </Button>
+                                  </>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        </motion.div>
                       );
                     })}
-                  </div>
+                  </motion.div>
                 )}
-                
-                {horariosOcupados.length > 0 && (
-                  <p className="text-xs text-muted-foreground mt-3 text-center">
-                    Horários riscados já estão ocupados
-                  </p>
+              </TabsContent>
+
+              <TabsContent value="novo" className="mt-4">
+                {/* Progress */}
+                <div className="flex gap-2 mb-6">
+                  {[1, 2, 3, 4].map((s) => (
+                    <div
+                      key={s}
+                      className={`h-1.5 flex-1 rounded-full transition-colors ${
+                        s <= step ? "bg-primary" : "bg-muted"
+                      }`}
+                    />
+                  ))}
+                </div>
+
+                {/* Step 1: Serviço */}
+                {step === 1 && (
+                  <motion.div
+                    variants={stagger}
+                    initial="hidden"
+                    animate="show"
+                    className="space-y-3"
+                  >
+                    <motion.div variants={fadeUp}>
+                      <p className="section-label px-1 mb-3">Escolha o serviço</p>
+                    </motion.div>
+                    
+                    {loadingServicos ? (
+                      <ServicosListSkeleton />
+                    ) : servicos.length === 0 ? (
+                      <div className="text-center py-12 glass-card rounded-2xl">
+                        <p className="text-muted-foreground">Nenhum serviço disponível no momento.</p>
+                      </div>
+                    ) : (
+                      servicos.map((servico, index) => (
+                        <motion.div key={servico.id} variants={fadeUp}>
+                          <div
+                            className={`glass-card rounded-2xl p-4 cursor-pointer transition-all ${
+                              selectedServico?.id === servico.id
+                                ? "ring-2 ring-primary bg-primary/5"
+                                : "hover:bg-muted/30"
+                            }`}
+                            onClick={() => setSelectedServico(servico)}
+                          >
+                            <div className="flex justify-between items-center">
+                              <div>
+                                <h3 className="font-medium text-foreground">{servico.nome}</h3>
+                                {servico.descricao && (
+                                  <p className="text-xs text-muted-foreground mt-0.5">{servico.descricao}</p>
+                                )}
+                                <p className="text-sm text-muted-foreground flex items-center gap-1 mt-1">
+                                  <Clock size={14} /> {servico.duracao} min
+                                </p>
+                              </div>
+                              <div className="text-right">
+                                <p className="font-semibold text-primary">
+                                  R$ {servico.preco.toFixed(2).replace('.', ',')}
+                                </p>
+                                {selectedServico?.id === servico.id && (
+                                  <Check className="text-primary ml-auto" size={20} />
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        </motion.div>
+                      ))
+                    )}
+                  </motion.div>
                 )}
 
-                {selectedDate && selectedHorario && selectedServico && (
-                  <Card className="mt-6 bg-primary/5 border-primary/20">
-                    <CardHeader className="pb-2">
-                      <CardTitle className="text-base">Resumo do Agendamento</CardTitle>
-                    </CardHeader>
-                    <CardContent className="text-sm space-y-1">
-                      <p><strong>Serviço:</strong> {selectedServico.nome}</p>
-                      <p><strong>Terapeuta:</strong> {selectedTerapeuta?.nome}</p>
-                      <p><strong>Data:</strong> {format(selectedDate, "dd/MM/yyyy", { locale: ptBR })}</p>
-                      <p><strong>Horário:</strong> {selectedHorario}</p>
-                      <p className="text-primary font-semibold pt-2">
-                        Total: R$ {selectedServico.preco.toFixed(2).replace('.', ',')}
+                {/* Step 2: Terapeuta */}
+                {step === 2 && (
+                  <motion.div
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                  >
+                    <TerapeutaSelector
+                      terapeutas={terapeutas}
+                      loading={loadingTerapeutas}
+                      selectedId={selectedTerapeuta?.id || null}
+                      onSelect={setSelectedTerapeuta}
+                    />
+                  </motion.div>
+                )}
+
+                {/* Step 3: Data */}
+                {step === 3 && (
+                  <motion.div
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    className="space-y-3"
+                  >
+                    <p className="section-label px-1">Escolha a data</p>
+                    <div className="glass-card rounded-2xl p-4 flex justify-center">
+                      <Calendar
+                        mode="single"
+                        selected={selectedDate}
+                        onSelect={handleDateSelect}
+                        locale={ptBR}
+                        disabled={(date) => date < new Date() || date.getDay() === 0}
+                        className="rounded-md"
+                      />
+                    </div>
+                  </motion.div>
+                )}
+
+                {/* Step 4: Horário */}
+                {step === 4 && (
+                  <motion.div
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    className="space-y-3"
+                  >
+                    <p className="section-label px-1">Escolha o horário</p>
+                    {loadingHorarios ? (
+                      <div className="flex justify-center py-8">
+                        <LoadingSpinner size="sm" />
+                      </div>
+                    ) : (
+                      <div className="grid grid-cols-3 gap-3">
+                        {horarios.map((horario) => {
+                          const isOcupado = horariosOcupados.includes(horario);
+                          return (
+                            <Button
+                              key={horario}
+                              variant={selectedHorario === horario ? "default" : "outline"}
+                              className={`h-14 rounded-xl ${isOcupado ? "opacity-50 line-through" : ""}`}
+                              onClick={() => !isOcupado && setSelectedHorario(horario)}
+                              disabled={isOcupado}
+                            >
+                              {horario}
+                              {isOcupado && <span className="sr-only">(ocupado)</span>}
+                            </Button>
+                          );
+                        })}
+                      </div>
+                    )}
+                    
+                    {horariosOcupados.length > 0 && (
+                      <p className="text-xs text-muted-foreground mt-3 text-center">
+                        Horários riscados já estão ocupados
                       </p>
-                    </CardContent>
-                  </Card>
-                )}
-              </motion.div>
-            )}
+                    )}
 
-            {/* Botão de ação */}
-            <div className="mt-6">
-              {step < 4 ? (
-                <Button
-                  className="w-full"
-                  disabled={!canProceed()}
-                  onClick={handleNextStep}
-                >
-                  Continuar
-                </Button>
-              ) : (
-                <Button
-                  className="w-full"
-                  disabled={!canProceed() || saving}
-                  onClick={handleConfirmar}
-                >
-                  {saving ? (
-                    <ButtonLoader />
+                    {selectedDate && selectedHorario && selectedServico && (
+                      <div className="glass-card-strong rounded-2xl p-5 mt-4 space-y-2">
+                        <p className="font-semibold text-foreground text-sm">Resumo do Agendamento</p>
+                        <div className="text-sm space-y-1 text-muted-foreground">
+                          <p><strong className="text-foreground">Serviço:</strong> {selectedServico.nome}</p>
+                          <p><strong className="text-foreground">Terapeuta:</strong> {selectedTerapeuta?.nome}</p>
+                          <p><strong className="text-foreground">Data:</strong> {format(selectedDate, "dd/MM/yyyy", { locale: ptBR })}</p>
+                          <p><strong className="text-foreground">Horário:</strong> {selectedHorario}</p>
+                        </div>
+                        <p className="text-primary font-semibold pt-2">
+                          Total: R$ {selectedServico.preco.toFixed(2).replace('.', ',')}
+                        </p>
+                      </div>
+                    )}
+                  </motion.div>
+                )}
+
+                {/* Botão de ação */}
+                <div className="mt-6">
+                  {step < 4 ? (
+                    <Button
+                      className="w-full rounded-xl h-12"
+                      disabled={!canProceed()}
+                      onClick={handleNextStep}
+                    >
+                      Continuar
+                    </Button>
                   ) : (
-                    "Confirmar Agendamento"
+                    <Button
+                      className="w-full rounded-xl h-12"
+                      disabled={!canProceed() || saving}
+                      onClick={handleConfirmar}
+                    >
+                      {saving ? (
+                        <ButtonLoader />
+                      ) : (
+                        "Confirmar Agendamento"
+                      )}
+                    </Button>
                   )}
-                </Button>
-              )}
-            </div>
-          </TabsContent>
-        </Tabs>
+                </div>
+              </TabsContent>
+            </Tabs>
+          </motion.div>
+        </motion.div>
       </div>
 
       {/* Cancel Dialog */}
