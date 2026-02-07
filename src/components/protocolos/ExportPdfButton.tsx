@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { FileDown, Loader2, Share2, MessageCircle, Mail, Download } from "lucide-react";
+import { Loader2, Share2, MessageCircle, Mail, Download, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -11,6 +11,7 @@ import {
 import { toast } from "sonner";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { SendToTherapistDialog } from "./SendToTherapistDialog";
 
 interface FichaRow {
   id: string;
@@ -30,6 +31,7 @@ interface ExportPdfButtonProps {
   fichas: FichaRow[];
   chartRef: React.RefObject<HTMLDivElement | null>;
   protocoloNome?: string;
+  protocoloUsuarioId?: string;
 }
 
 const FIELDS = [
@@ -306,8 +308,9 @@ const generatePdfBlob = async (
   return { blob, filename };
 };
 
-export const ExportPdfButton = ({ fichas, chartRef, protocoloNome }: ExportPdfButtonProps) => {
+export const ExportPdfButton = ({ fichas, chartRef, protocoloNome, protocoloUsuarioId }: ExportPdfButtonProps) => {
   const [exporting, setExporting] = useState(false);
+  const [therapistDialogOpen, setTherapistDialogOpen] = useState(false);
 
   const handleDownload = async () => {
     if (fichas.length === 0) return;
@@ -472,7 +475,32 @@ export const ExportPdfButton = ({ fichas, chartRef, protocoloNome }: ExportPdfBu
           <Mail size={14} />
           Enviar por Email
         </DropdownMenuItem>
+
+        {protocoloUsuarioId && (
+          <>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              onClick={() => setTherapistDialogOpen(true)}
+              className="gap-2 cursor-pointer"
+            >
+              <Send size={14} />
+              Enviar ao Terapeuta
+            </DropdownMenuItem>
+          </>
+        )}
       </DropdownMenuContent>
+
+      {protocoloUsuarioId && (
+        <SendToTherapistDialog
+          open={therapistDialogOpen}
+          onOpenChange={setTherapistDialogOpen}
+          fichas={fichas}
+          protocoloUsuarioId={protocoloUsuarioId}
+          protocoloNome={protocoloNome}
+          generatePdf={() => generatePdfBlob(fichas, chartRef, protocoloNome)}
+          buildShareText={() => buildShareText(fichas, protocoloNome)}
+        />
+      )}
     </DropdownMenu>
   );
 };

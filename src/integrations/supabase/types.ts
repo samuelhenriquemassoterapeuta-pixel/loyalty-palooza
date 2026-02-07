@@ -804,6 +804,48 @@ export type Database = {
         }
         Relationships: []
       }
+      relatorios_enviados: {
+        Row: {
+          created_at: string
+          id: string
+          metodo: string
+          protocolo_usuario_id: string
+          terapeuta_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          metodo?: string
+          protocolo_usuario_id: string
+          terapeuta_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          metodo?: string
+          protocolo_usuario_id?: string
+          terapeuta_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "relatorios_enviados_protocolo_usuario_id_fkey"
+            columns: ["protocolo_usuario_id"]
+            isOneToOne: false
+            referencedRelation: "usuario_protocolos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "relatorios_enviados_terapeuta_id_fkey"
+            columns: ["terapeuta_id"]
+            isOneToOne: false
+            referencedRelation: "terapeutas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       servicos: {
         Row: {
           cashback_percentual: number | null
@@ -885,26 +927,32 @@ export type Database = {
         Row: {
           created_at: string
           disponivel: boolean | null
+          email: string | null
           especialidade: string | null
           foto_url: string | null
           id: string
           nome: string
+          telefone: string | null
         }
         Insert: {
           created_at?: string
           disponivel?: boolean | null
+          email?: string | null
           especialidade?: string | null
           foto_url?: string | null
           id?: string
           nome: string
+          telefone?: string | null
         }
         Update: {
           created_at?: string
           disponivel?: boolean | null
+          email?: string | null
           especialidade?: string | null
           foto_url?: string | null
           id?: string
           nome?: string
+          telefone?: string | null
         }
         Relationships: []
       }
