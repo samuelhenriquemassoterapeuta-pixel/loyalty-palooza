@@ -1,11 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Play, Pause, SkipForward, CheckCircle, X, Timer } from "lucide-react";
+import { Play, Pause, SkipForward, CheckCircle, X, Timer, Wind } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { ExercicioAlongamento } from "@/hooks/useAlongamento";
-import { useEffect, useRef } from "react";
 
 interface SessaoPlayerProps {
   exercicios: ExercicioAlongamento[];
@@ -14,16 +12,23 @@ interface SessaoPlayerProps {
   onClose: () => void;
 }
 
+/** Breathing cycle: 4s inhale, 4s exhale */
+const BREATH_CYCLE = 8;
+
 export const SessaoPlayer = ({ exercicios, planoId, onComplete, onClose }: SessaoPlayerProps) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [playing, setPlaying] = useState(false);
   const [timer, setTimer] = useState(0);
   const [totalTime, setTotalTime] = useState(0);
   const [completados, setCompletados] = useState(0);
+  const [showBreathing, setShowBreathing] = useState(true);
+  const [breathPhase, setBreathPhase] = useState<"inhale" | "exhale">("inhale");
+  const [breathProgress, setBreathProgress] = useState(0);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const breathRef = useRef<NodeJS.Timeout | null>(null);
 
   const exercicio = exercicios[currentIndex];
-  const progress = ((currentIndex) / exercicios.length) * 100;
+  const progress = (currentIndex / exercicios.length) * 100;
 
   useEffect(() => {
     if (exercicio) {
@@ -31,6 +36,7 @@ export const SessaoPlayer = ({ exercicios, planoId, onComplete, onClose }: Sessa
     }
   }, [currentIndex, exercicio]);
 
+  // Main timer
   useEffect(() => {
     if (playing && timer > 0) {
       intervalRef.current = setInterval(() => {
@@ -48,6 +54,33 @@ export const SessaoPlayer = ({ exercicios, planoId, onComplete, onClose }: Sessa
       if (intervalRef.current) clearInterval(intervalRef.current);
     };
   }, [playing, timer]);
+
+  // Breathing cycle
+  useEffect(() => {
+    if (!playing || !showBreathing) {
+      if (breathRef.current) clearInterval(breathRef.current);
+      return;
+    }
+
+    let elapsed = 0;
+    breathRef.current = setInterval(() => {
+      elapsed += 100;
+      const cyclePos = (elapsed % (BREATH_CYCLE * 1000)) / 1000;
+      const halfCycle = BREATH_CYCLE / 2;
+
+      if (cyclePos < halfCycle) {
+        setBreathPhase("inhale");
+        setBreathProgress(cyclePos / halfCycle);
+      } else {
+        setBreathPhase("exhale");
+        setBreathProgress(1 - (cyclePos - halfCycle) / halfCycle);
+      }
+    }, 100);
+
+    return () => {
+      if (breathRef.current) clearInterval(breathRef.current);
+    };
+  }, [playing, showBreathing]);
 
   const handleNext = () => {
     setCompletados((c) => c + 1);
@@ -93,10 +126,21 @@ export const SessaoPlayer = ({ exercicios, planoId, onComplete, onClose }: Sessa
             {currentIndex + 1} de {exercicios.length}
           </p>
         </div>
-        <Button variant="ghost" size="sm" onClick={handleSkip}>
-          <SkipForward size={16} />
-          Pular
-        </Button>
+        <div className="flex items-center gap-1">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setShowBreathing(!showBreathing)}
+            className={showBreathing ? "text-primary" : "text-muted-foreground"}
+            title="Guia de respiração"
+          >
+            <Wind size={18} />
+          </Button>
+          <Button variant="ghost" size="sm" onClick={handleSkip}>
+            <SkipForward size={16} />
+            Pular
+          </Button>
+        </div>
       </div>
 
       <Progress value={progress} className="h-1" />
@@ -116,10 +160,21 @@ export const SessaoPlayer = ({ exercicios, planoId, onComplete, onClose }: Sessa
             </div>
 
             <h2 className="text-xl font-bold text-foreground mb-2">{exercicio.nome}</h2>
-            <p className="text-sm text-muted-foreground mb-8">{exercicio.descricao}</p>
+            <p className="text-sm text-muted-foreground mb-6">{exercicio.descricao}</p>
 
-            {/* Timer circle */}
-            <div className="relative w-40 h-40 mx-auto mb-8">
+            {/* Timer circle with breathing ring */}
+            <div className="relative w-44 h-44 mx-auto mb-6">
+              {/* Breathing ring (outer) */}
+              {showBreathing && playing && (
+                <motion.div
+                  className="absolute inset-0 rounded-full border-2 border-primary/30"
+                  animate={{
+                    scale: breathPhase === "inhale" ? [1, 1.12] : [1.12, 1],
+                  }}
+                  transition={{ duration: BREATH_CYCLE / 2, ease: "easeInOut" }}
+                />
+              )}
+
               <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
                 <circle
                   cx="50" cy="50" r="45"
@@ -141,6 +196,18 @@ export const SessaoPlayer = ({ exercicios, planoId, onComplete, onClose }: Sessa
               <div className="absolute inset-0 flex flex-col items-center justify-center">
                 <Timer size={16} className="text-muted-foreground mb-1" />
                 <span className="text-3xl font-bold text-foreground">{formatTime(timer)}</span>
+
+                {/* Breathing label */}
+                {showBreathing && playing && (
+                  <motion.span
+                    key={breathPhase}
+                    initial={{ opacity: 0, y: 4 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="text-[11px] font-medium text-primary mt-1"
+                  >
+                    {breathPhase === "inhale" ? "Inspire 🌬️" : "Expire 💨"}
+                  </motion.span>
+                )}
               </div>
             </div>
 
@@ -179,9 +246,12 @@ export const SessaoPlayer = ({ exercicios, planoId, onComplete, onClose }: Sessa
         )}
       </div>
 
-      {/* Total time */}
+      {/* Total time + breathing status */}
       <div className="text-center pb-4 text-xs text-muted-foreground">
         Tempo total: {formatTime(totalTime)} • {completados} completado{completados !== 1 ? "s" : ""}
+        {showBreathing && (
+          <span className="ml-2 text-primary">• Respiração ativa</span>
+        )}
       </div>
     </motion.div>
   );

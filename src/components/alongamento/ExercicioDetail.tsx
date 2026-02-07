@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Clock, Repeat, Target, Info } from "lucide-react";
+import { X, Clock, Repeat, Target, Info, Play, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ExercicioAlongamento } from "@/hooks/useAlongamento";
 
@@ -10,6 +10,10 @@ interface ExercicioDetailProps {
 }
 
 export const ExercicioDetail = ({ exercicio, onClose }: ExercicioDetailProps) => {
+  const [videoPlaying, setVideoPlaying] = useState(false);
+
+  const hasVideo = !!exercicio.video_url;
+
   return (
     <AnimatePresence>
       <motion.div
@@ -26,12 +30,41 @@ export const ExercicioDetail = ({ exercicio, onClose }: ExercicioDetailProps) =>
           className="bg-card rounded-3xl w-full max-w-lg max-h-[85vh] overflow-y-auto shadow-elevated"
           onClick={(e) => e.stopPropagation()}
         >
+          {/* Video Section */}
+          {hasVideo && (
+            <div className="relative w-full aspect-video bg-black rounded-t-3xl overflow-hidden">
+              {videoPlaying ? (
+                <iframe
+                  src={getEmbedUrl(exercicio.video_url!)}
+                  className="absolute inset-0 w-full h-full"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  title={exercicio.nome}
+                />
+              ) : (
+                <button
+                  onClick={() => setVideoPlaying(true)}
+                  className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-gradient-to-t from-black/60 via-black/20 to-black/40 group"
+                >
+                  <div className="w-16 h-16 rounded-full bg-primary/90 flex items-center justify-center shadow-glow group-hover:scale-110 transition-transform">
+                    <Play size={28} className="text-primary-foreground ml-1" />
+                  </div>
+                  <span className="text-sm font-medium text-white/90">
+                    Assistir demonstração
+                  </span>
+                </button>
+              )}
+            </div>
+          )}
+
           {/* Header */}
           <div className="flex items-start justify-between p-6 pb-4">
             <div className="flex items-center gap-3">
-              <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center text-2xl">
-                {exercicio.imagem_url || "🧘"}
-              </div>
+              {!hasVideo && (
+                <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center text-2xl">
+                  {exercicio.imagem_url || "🧘"}
+                </div>
+              )}
               <div>
                 <h2 className="text-lg font-bold text-foreground">{exercicio.nome}</h2>
                 <p className="text-sm text-muted-foreground capitalize">{exercicio.categoria.replace("_", " ")}</p>
@@ -95,8 +128,37 @@ export const ExercicioDetail = ({ exercicio, onClose }: ExercicioDetailProps) =>
               </div>
             </div>
           )}
+
+          {/* Video link fallback */}
+          {hasVideo && !videoPlaying && (
+            <div className="px-6 pb-6">
+              <a
+                href={exercicio.video_url!}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-xs text-primary hover:underline"
+              >
+                <ExternalLink size={12} />
+                Abrir vídeo em nova aba
+              </a>
+            </div>
+          )}
         </motion.div>
       </motion.div>
     </AnimatePresence>
   );
 };
+
+/** Convert YouTube/Vimeo URLs to embeddable format */
+function getEmbedUrl(url: string): string {
+  // YouTube
+  const ytMatch = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]+)/);
+  if (ytMatch) return `https://www.youtube.com/embed/${ytMatch[1]}?autoplay=1&rel=0`;
+
+  // Vimeo
+  const vimeoMatch = url.match(/vimeo\.com\/(\d+)/);
+  if (vimeoMatch) return `https://player.vimeo.com/video/${vimeoMatch[1]}?autoplay=1`;
+
+  // Direct video URL — use video element instead
+  return url;
+}

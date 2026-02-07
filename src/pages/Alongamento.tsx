@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ArrowLeft, Search, X, Dumbbell, BookOpen, TrendingUp, Play } from "lucide-react";
+import { ArrowLeft, Search, X, Dumbbell, BookOpen, TrendingUp, Play, Heart } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -18,6 +18,7 @@ import { ExercicioDetail } from "@/components/alongamento/ExercicioDetail";
 import { PlanoCard } from "@/components/alongamento/PlanoCard";
 import { ProgressoSection } from "@/components/alongamento/ProgressoSection";
 import { SessaoPlayer } from "@/components/alongamento/SessaoPlayer";
+import { DicasSeguranca } from "@/components/alongamento/DicasSeguranca";
 import { ExercicioAlongamento } from "@/hooks/useAlongamento";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Card } from "@/components/ui/card";
@@ -113,7 +114,7 @@ export default function Alongamento() {
 
         <div className="max-w-lg lg:max-w-4xl mx-auto px-4 lg:px-8 py-4 space-y-4">
           <Tabs value={activeTab} onValueChange={setActiveTab}>
-            <TabsList className="grid w-full grid-cols-3">
+            <TabsList className="grid w-full grid-cols-4">
               <TabsTrigger value="exercicios" className="gap-1 text-xs">
                 <Dumbbell size={14} />
                 Exercícios
@@ -125,6 +126,10 @@ export default function Alongamento() {
               <TabsTrigger value="progresso" className="gap-1 text-xs">
                 <TrendingUp size={14} />
                 Progresso
+              </TabsTrigger>
+              <TabsTrigger value="dicas" className="gap-1 text-xs">
+                <Heart size={14} />
+                Dicas
               </TabsTrigger>
             </TabsList>
 
@@ -283,6 +288,11 @@ export default function Alongamento() {
                 totalMinutos={totalMinutos}
                 totalExercicios={totalExercicios}
               />
+            </TabsContent>
+
+            {/* === DICAS === */}
+            <TabsContent value="dicas" className="mt-4">
+              <DicasSeguranca />
             </TabsContent>
           </Tabs>
         </div>
