@@ -110,19 +110,33 @@ const Agendamento = () => {
     setSaving(false);
 
     if (error) {
-      toast.error(error.message || "Erro ao agendar. Tente novamente.");
-    } else {
-      toast.success("Agendamento realizado com sucesso!", {
-        description: `Sua sessão foi agendada para ${format(dataHora, "dd/MM/yyyy 'às' HH:mm", { locale: ptBR })}`,
+      const errorMessage = error.message || "Erro ao agendar. Tente novamente.";
+      const isConflict = errorMessage.includes("ocupado") || errorMessage.includes("duplicate") || errorMessage.includes("unique");
+      
+      toast.error(isConflict ? "Horário indisponível" : "Erro ao agendar", {
+        description: isConflict 
+          ? "Este horário já está ocupado. Escolha outro horário." 
+          : errorMessage,
       });
-      setStep(1);
-      setSelectedDate(undefined);
-      setSelectedHorario(null);
-      setSelectedServico(null);
-      setSelectedTerapeuta(null);
-      setHorariosOcupados([]);
-      setActiveTab("agendados");
+      
+      // Refresh occupied slots so the conflicting one appears as blocked
+      if (isConflict) {
+        await fetchHorariosOcupados();
+      }
+      // Stay on step 4 — do NOT reset form or switch tabs
+      return;
     }
+    
+    toast.success("Agendamento realizado com sucesso!", {
+      description: `Sua sessão foi agendada para ${format(dataHora, "dd/MM/yyyy 'às' HH:mm", { locale: ptBR })}`,
+    });
+    setStep(1);
+    setSelectedDate(undefined);
+    setSelectedHorario(null);
+    setSelectedServico(null);
+    setSelectedTerapeuta(null);
+    setHorariosOcupados([]);
+    setActiveTab("agendados");
   };
 
   const handleCancelar = async () => {
