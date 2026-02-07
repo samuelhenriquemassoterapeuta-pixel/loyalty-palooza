@@ -129,7 +129,7 @@ export const BalanceCard = () => {
                 transition={{ delay: 0.15 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => navigate("/cashback")}
-                className="flex items-center gap-2 bg-primary-foreground/15 rounded-2xl px-3 py-3 backdrop-blur-sm border border-primary-foreground/10"
+                className="flex items-center gap-2 bg-primary-foreground/15 rounded-2xl px-3 py-3 backdrop-blur-sm border border-primary-foreground/10 shimmer-badge"
               >
                 <div className="p-1.5 rounded-lg bg-primary-foreground/20">
                   <Crown size={14} />
