@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeftRight, Grid3X3, X, ChevronLeft, ChevronRight } from "lucide-react";
+import { motion } from "framer-motion";
+import { ArrowLeftRight, Grid3X3, X, ChevronLeft, ChevronRight, Layers, Columns2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AvaliacaoPostural, VistaPostural } from "@/hooks/useAvaliacaoPostural";
+import { ImageSliderCompare } from "./ImageSliderCompare";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
@@ -13,6 +14,8 @@ const vistas: { key: VistaPostural; label: string }[] = [
   { key: "lateral_esquerda", label: "Lat. Esquerda" },
 ];
 
+type ViewMode = "side-by-side" | "slider";
+
 interface ComparacaoViewProps {
   avaliacoes: AvaliacaoPostural[];
   onClose: () => void;
@@ -21,6 +24,7 @@ interface ComparacaoViewProps {
 export const ComparacaoView = ({ avaliacoes, onClose }: ComparacaoViewProps) => {
   const [vistaAtiva, setVistaAtiva] = useState<VistaPostural>("anterior");
   const [showGrid, setShowGrid] = useState(true);
+  const [viewMode, setViewMode] = useState<ViewMode>("slider");
   const [leftIdx, setLeftIdx] = useState(avaliacoes.length > 1 ? 1 : 0);
   const [rightIdx, setRightIdx] = useState(0);
 
@@ -43,6 +47,47 @@ export const ComparacaoView = ({ avaliacoes, onClose }: ComparacaoViewProps) => 
     </div>
   );
 
+  const DateNavigator = ({
+    idx,
+    setIdx,
+    side,
+  }: {
+    idx: number;
+    setIdx: (v: number) => void;
+    side: "left" | "right";
+  }) => {
+    const av = avaliacoes[idx];
+    const canPrev = idx < avaliacoes.length - 1;
+    const canNext = idx > 0;
+
+    return (
+      <div className="flex items-center justify-between">
+        <Button
+          variant="ghost"
+          size="icon"
+          className="h-6 w-6"
+          disabled={!canPrev}
+          onClick={() => setIdx(idx + 1)}
+        >
+          <ChevronLeft size={14} />
+        </Button>
+        <span className="text-[10px] text-muted-foreground font-medium truncate px-1">
+          {side === "left" ? "Antes: " : "Depois: "}
+          {format(new Date(av.data), "dd/MM/yy", { locale: ptBR })}
+        </span>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="h-6 w-6"
+          disabled={!canNext}
+          onClick={() => setIdx(idx - 1)}
+        >
+          <ChevronRight size={14} />
+        </Button>
+      </div>
+    );
+  };
+
   const PhotoPanel = ({ av, side }: { av: AvaliacaoPostural; side: "left" | "right" }) => {
     const url = getSignedUrl(av, vistaAtiva);
     const idx = side === "left" ? leftIdx : rightIdx;
@@ -52,32 +97,17 @@ export const ComparacaoView = ({ avaliacoes, onClose }: ComparacaoViewProps) => 
 
     return (
       <div className="flex-1 flex flex-col min-w-0">
-        {/* Navigation */}
         <div className="flex items-center justify-between px-2 py-1.5">
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-6 w-6"
-            disabled={!canPrev}
-            onClick={() => setIdx(idx + 1)}
-          >
+          <Button variant="ghost" size="icon" className="h-6 w-6" disabled={!canPrev} onClick={() => setIdx(idx + 1)}>
             <ChevronLeft size={14} />
           </Button>
           <span className="text-[10px] text-muted-foreground font-medium truncate px-1">
             {format(new Date(av.data), "dd/MM/yy", { locale: ptBR })}
           </span>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-6 w-6"
-            disabled={!canNext}
-            onClick={() => setIdx(idx - 1)}
-          >
+          <Button variant="ghost" size="icon" className="h-6 w-6" disabled={!canNext} onClick={() => setIdx(idx - 1)}>
             <ChevronRight size={14} />
           </Button>
         </div>
-
-        {/* Photo */}
         <div className="relative aspect-[3/4] bg-muted/30 rounded-xl overflow-hidden">
           {url ? (
             <>
@@ -85,9 +115,7 @@ export const ComparacaoView = ({ avaliacoes, onClose }: ComparacaoViewProps) => 
               {showGrid && <GridOverlay />}
             </>
           ) : (
-            <div className="flex items-center justify-center h-full text-muted-foreground text-xs">
-              Sem foto
-            </div>
+            <div className="flex items-center justify-center h-full text-muted-foreground text-xs">Sem foto</div>
           )}
         </div>
       </div>
@@ -103,13 +131,12 @@ export const ComparacaoView = ({ avaliacoes, onClose }: ComparacaoViewProps) => 
     );
   }
 
+  const leftUrl = getSignedUrl(left, vistaAtiva);
+  const rightUrl = getSignedUrl(right, vistaAtiva);
+  const canSlider = !!leftUrl && !!rightUrl;
+
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="space-y-3"
-    >
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-3">
       {/* Header */}
       <div className="flex items-center justify-between">
         <h3 className="font-semibold text-foreground flex items-center gap-2">
@@ -117,12 +144,28 @@ export const ComparacaoView = ({ avaliacoes, onClose }: ComparacaoViewProps) => 
           Comparação
         </h3>
         <div className="flex items-center gap-1">
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-8 w-8"
-            onClick={() => setShowGrid(!showGrid)}
-          >
+          {/* View mode toggle */}
+          <div className="flex items-center bg-muted/50 rounded-lg p-0.5">
+            <Button
+              variant={viewMode === "slider" ? "default" : "ghost"}
+              size="icon"
+              className="h-7 w-7"
+              onClick={() => setViewMode("slider")}
+              title="Sobreposição com slider"
+            >
+              <Layers size={14} />
+            </Button>
+            <Button
+              variant={viewMode === "side-by-side" ? "default" : "ghost"}
+              size="icon"
+              className="h-7 w-7"
+              onClick={() => setViewMode("side-by-side")}
+              title="Lado a lado"
+            >
+              <Columns2 size={14} />
+            </Button>
+          </div>
+          <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setShowGrid(!showGrid)}>
             <Grid3X3 size={16} className={showGrid ? "text-primary" : "text-muted-foreground"} />
           </Button>
           <Button variant="ghost" size="icon" className="h-8 w-8" onClick={onClose}>
@@ -146,19 +189,50 @@ export const ComparacaoView = ({ avaliacoes, onClose }: ComparacaoViewProps) => 
         ))}
       </div>
 
-      {/* Side-by-side */}
-      <div className="flex gap-2">
-        <PhotoPanel av={left} side="left" />
-        {/* Divider */}
-        <div className="flex flex-col items-center justify-center">
-          <div className="w-px h-full bg-border" />
+      {/* Slider mode: date navigators above the slider */}
+      {viewMode === "slider" && (
+        <>
+          <div className="flex gap-2">
+            <div className="flex-1">
+              <DateNavigator idx={leftIdx} setIdx={setLeftIdx} side="left" />
+            </div>
+            <div className="flex-1">
+              <DateNavigator idx={rightIdx} setIdx={setRightIdx} side="right" />
+            </div>
+          </div>
+
+          {canSlider ? (
+            <ImageSliderCompare
+              beforeUrl={leftUrl}
+              afterUrl={rightUrl}
+              beforeLabel={format(new Date(left.data), "dd/MM/yy", { locale: ptBR })}
+              afterLabel={format(new Date(right.data), "dd/MM/yy", { locale: ptBR })}
+              showGrid={showGrid}
+            />
+          ) : (
+            <div className="aspect-[3/4] rounded-xl bg-muted/30 flex items-center justify-center text-muted-foreground text-sm">
+              Selecione duas avaliações com fotos nesta vista
+            </div>
+          )}
+        </>
+      )}
+
+      {/* Side-by-side mode */}
+      {viewMode === "side-by-side" && (
+        <div className="flex gap-2">
+          <PhotoPanel av={left} side="left" />
+          <div className="flex flex-col items-center justify-center">
+            <div className="w-px h-full bg-border" />
+          </div>
+          <PhotoPanel av={right} side="right" />
         </div>
-        <PhotoPanel av={right} side="right" />
-      </div>
+      )}
 
       {/* Legend */}
       <p className="text-[10px] text-center text-muted-foreground">
-        Use as setas para navegar entre avaliações • Grade alinhada para análise visual
+        {viewMode === "slider"
+          ? "Arraste o slider para comparar • Use as setas para trocar datas"
+          : "Use as setas para navegar entre avaliações • Grade alinhada para análise visual"}
       </p>
     </motion.div>
   );
