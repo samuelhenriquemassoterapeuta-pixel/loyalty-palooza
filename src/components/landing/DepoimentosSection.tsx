@@ -1,7 +1,15 @@
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Star, Quote } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
-const depoimentos = [
+interface Depoimento {
+  nome: string;
+  nota: number;
+  comentario: string;
+}
+
+const depoimentosFallback: Depoimento[] = [
   {
     nome: "Camila R.",
     nota: 5,
@@ -28,6 +36,14 @@ const depoimentos = [
   },
 ];
 
+/** Abbreviate name for privacy: "Samuel Henrique" → "Samuel H." */
+const abbreviateName = (nome: string | null): string => {
+  if (!nome) return "Cliente";
+  const parts = nome.trim().split(/\s+/);
+  if (parts.length <= 1) return parts[0];
+  return `${parts[0]} ${parts[parts.length - 1][0]}.`;
+};
+
 const StarRating = ({ nota }: { nota: number }) => (
   <div className="flex gap-0.5">
     {[...Array(5)].map((_, i) => (
@@ -50,7 +66,56 @@ const cardVariants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
 };
 
+const useDepoimentos = () => {
+  const [depoimentos, setDepoimentos] = useState<Depoimento[]>(depoimentosFallback);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchAvaliacoes = async () => {
+      try {
+        // Fetch reviews that have comments (avaliacoes table is publicly readable)
+        const { data, error } = await supabase
+          .from("avaliacoes")
+          .select("nota, comentario")
+          .not("comentario", "is", null)
+          .gte("nota", 4)
+          .order("created_at", { ascending: false })
+          .limit(8);
+
+        if (error || !data || data.length < 2) {
+          // Not enough real reviews, keep fallback
+          setLoading(false);
+          return;
+        }
+
+        // Since profiles RLS requires auth, use anonymized names
+        const realDepoimentos: Depoimento[] = data
+          .filter((a) => a.comentario && a.comentario.trim().length > 10)
+          .map((a) => ({
+            nome: "Cliente Resinkra",
+            nota: a.nota,
+            comentario: a.comentario!,
+          }));
+
+        if (realDepoimentos.length >= 2) {
+          setDepoimentos(realDepoimentos.slice(0, 4));
+        }
+      } catch {
+        // Keep fallback on any error
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAvaliacoes();
+  }, []);
+
+  return { depoimentos, loading };
+};
+
 export const DepoimentosSection = () => {
+  const { depoimentos } = useDepoimentos();
+
   return (
     <section className="py-20 lg:py-28 bg-background">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -88,15 +153,12 @@ export const DepoimentosSection = () => {
               variants={cardVariants}
               className="card-organic hover-lift p-6 flex flex-col"
             >
-              {/* Quote icon */}
               <Quote size={24} className="text-primary/20 mb-3" />
 
-              {/* Comment */}
               <p className="text-sm text-foreground leading-relaxed flex-1">
                 "{dep.comentario}"
               </p>
 
-              {/* Author */}
               <div className="mt-5 pt-4 border-t border-border/50 flex items-center justify-between">
                 <div>
                   <p className="text-sm font-bold text-foreground">{dep.nome}</p>
