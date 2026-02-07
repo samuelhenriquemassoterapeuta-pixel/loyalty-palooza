@@ -16,11 +16,7 @@ export const AchievementsSummary = ({
   const overallProgress = Math.round((totalUnlocked / totalAchievements) * 100);
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="rounded-2xl bg-gradient-to-br from-primary/15 via-primary/10 to-accent/10 border border-primary/20 p-5"
-    >
+    <div className="rounded-2xl bg-gradient-to-br from-primary/15 via-primary/10 to-accent/10 border border-primary/20 p-5 backdrop-blur-lg">
       {/* Main stat */}
       <div className="flex items-center gap-4 mb-4">
         <div className="p-3 rounded-xl bg-primary/20">
@@ -53,7 +49,7 @@ export const AchievementsSummary = ({
         {categories.map((cat) => (
           <div
             key={cat.name}
-            className="flex items-center gap-2 p-2 rounded-lg bg-background/60"
+            className="flex items-center gap-2 p-2 rounded-lg glass-card"
           >
             <span className="text-base">{cat.icon}</span>
             <div className="min-w-0">
@@ -67,6 +63,6 @@ export const AchievementsSummary = ({
           </div>
         ))}
       </div>
-    </motion.div>
+    </div>
   );
 };

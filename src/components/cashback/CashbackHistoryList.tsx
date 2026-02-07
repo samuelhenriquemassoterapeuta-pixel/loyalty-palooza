@@ -10,12 +10,18 @@ const container = {
 };
 
 const item = {
-  hidden: { opacity: 0, x: -15 },
-  show: { opacity: 1, x: 0, transition: { type: "spring" as const, stiffness: 300, damping: 24 } },
+  hidden: { opacity: 0, x: -12 },
+  show: {
+    opacity: 1,
+    x: 0,
+    transition: { type: "spring" as const, stiffness: 300, damping: 24 },
+  },
 };
 
 const formatCurrency = (value: number) =>
-  new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(Math.abs(value));
+  new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(
+    Math.abs(value)
+  );
 
 const getIcon = (tipo: string) => {
   switch (tipo) {
@@ -61,7 +67,9 @@ export const CashbackHistoryList = ({ transacoes }: CashbackHistoryListProps) =>
     return (
       <div className="text-center py-10">
         <ArrowDownLeft className="w-12 h-12 text-muted-foreground mx-auto mb-3 opacity-40" />
-        <p className="text-muted-foreground font-medium">Nenhuma movimentação de cashback</p>
+        <p className="text-muted-foreground font-medium">
+          Nenhuma movimentação de cashback
+        </p>
         <p className="text-sm text-muted-foreground mt-1">
           Faça compras ou agende serviços para acumular cashback
         </p>
@@ -74,7 +82,12 @@ export const CashbackHistoryList = ({ transacoes }: CashbackHistoryListProps) =>
       <h3 className="font-semibold text-foreground mb-3 text-sm">
         Histórico detalhado ({cashbackTransacoes.length})
       </h3>
-      <motion.div variants={container} initial="hidden" animate="show" className="space-y-2">
+      <motion.div
+        variants={container}
+        initial="hidden"
+        animate="show"
+        className="space-y-2"
+      >
         {cashbackTransacoes.map((tx) => {
           const isIncome = tx.tipo === "cashback";
           const Icon = getIcon(tx.tipo);
@@ -86,13 +99,13 @@ export const CashbackHistoryList = ({ transacoes }: CashbackHistoryListProps) =>
             <motion.div
               key={tx.id}
               variants={item}
-              className="flex items-center gap-3 p-3.5 rounded-2xl bg-card shadow-card"
+              className="flex items-center gap-3 p-3.5 rounded-2xl glass-card"
             >
               <div
                 className={`p-2 rounded-xl ${
                   isIncome
-                    ? "bg-gradient-to-br from-primary/20 to-primary/5 text-primary"
-                    : "bg-gradient-to-br from-accent/20 to-accent/5 text-accent"
+                    ? "bg-primary/15 text-primary"
+                    : "bg-accent/15 text-accent"
                 }`}
               >
                 <Icon size={18} />

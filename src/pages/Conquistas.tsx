@@ -12,6 +12,23 @@ import { RankingList } from "@/components/conquistas/RankingList";
 
 type FilterMode = "todos" | "desbloqueados" | "em_progresso";
 
+const stagger = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: { staggerChildren: 0.06, delayChildren: 0.05 },
+  },
+};
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 16 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { type: "spring" as const, stiffness: 260, damping: 24 },
+  },
+};
+
 const Conquistas = () => {
   const { achievements, totalUnlocked, celebration, dismiss } = useAchievementCelebration();
   const { ranking, myPosition, isLoading: rankingLoading } = useRanking();
@@ -34,7 +51,16 @@ const Conquistas = () => {
     });
 
     return Object.entries(cats).map(([key, val]) => ({
-      name: key === "agendamento" ? "Sessões" : key === "cashback" ? "Cashback" : key === "protocolo" ? "Protocolo" : key === "social" ? "Social" : "Loja",
+      name:
+        key === "agendamento"
+          ? "Sessões"
+          : key === "cashback"
+          ? "Cashback"
+          : key === "protocolo"
+          ? "Protocolo"
+          : key === "social"
+          ? "Social"
+          : "Loja",
       ...val,
     }));
   }, [achievements]);
@@ -61,12 +87,13 @@ const Conquistas = () => {
       <div className="min-h-screen bg-background pb-24 lg:pb-8">
         <div className="max-w-lg lg:max-w-4xl xl:max-w-5xl mx-auto px-4 lg:px-8 pt-6 safe-top">
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+            variants={stagger}
+            initial="hidden"
+            animate="show"
             className="space-y-5"
           >
             {/* Header */}
-            <div>
+            <motion.div variants={fadeUp}>
               <div className="flex items-center gap-2 mb-1">
                 <Trophy size={22} className="text-primary" />
                 <h1 className="text-xl font-bold text-foreground">Conquistas</h1>
@@ -74,28 +101,32 @@ const Conquistas = () => {
               <p className="text-sm text-muted-foreground">
                 Seu progresso e ranking na comunidade
               </p>
-            </div>
+            </motion.div>
 
             <Tabs defaultValue="conquistas">
-              <TabsList className="w-full grid grid-cols-2">
-                <TabsTrigger value="conquistas" className="text-xs gap-1.5">
-                  <Trophy size={13} /> Minhas Conquistas
-                </TabsTrigger>
-                <TabsTrigger value="ranking" className="text-xs gap-1.5">
-                  <TrendingUp size={13} /> Ranking
-                </TabsTrigger>
-              </TabsList>
+              <motion.div variants={fadeUp}>
+                <TabsList className="w-full grid grid-cols-2">
+                  <TabsTrigger value="conquistas" className="text-xs gap-1.5">
+                    <Trophy size={13} /> Minhas Conquistas
+                  </TabsTrigger>
+                  <TabsTrigger value="ranking" className="text-xs gap-1.5">
+                    <TrendingUp size={13} /> Ranking
+                  </TabsTrigger>
+                </TabsList>
+              </motion.div>
 
               {/* Conquistas Tab */}
               <TabsContent value="conquistas" className="space-y-4 mt-4">
-                <AchievementsSummary
-                  totalUnlocked={totalUnlocked}
-                  totalAchievements={achievements.length}
-                  categories={categories}
-                />
+                <motion.div variants={fadeUp}>
+                  <AchievementsSummary
+                    totalUnlocked={totalUnlocked}
+                    totalAchievements={achievements.length}
+                    categories={categories}
+                  />
+                </motion.div>
 
                 {/* Filter */}
-                <div className="flex items-center gap-2">
+                <motion.div variants={fadeUp} className="flex items-center gap-2">
                   <Filter size={14} className="text-muted-foreground" />
                   <div className="flex gap-1.5">
                     {(
@@ -121,7 +152,7 @@ const Conquistas = () => {
                       </button>
                     ))}
                   </div>
-                </div>
+                </motion.div>
 
                 {/* Achievement list */}
                 <div className="space-y-2">

@@ -3,11 +3,28 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Activity, Search, Droplets, Flame } from "lucide-react";
 import { AppLayout } from "@/components/AppLayout";
 import { Input } from "@/components/ui/input";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ProtocoloCard } from "@/components/protocolos/ProtocoloCard";
 import { ProtocoloDetail } from "@/components/protocolos/ProtocoloDetail";
 import { useProtocolos, useUsuarioProtocolos } from "@/hooks/useProtocolos";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
+
+const stagger = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: { staggerChildren: 0.06, delayChildren: 0.05 },
+  },
+};
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 16 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { type: "spring" as const, stiffness: 260, damping: 24 },
+  },
+};
 
 const Protocolos = () => {
   const { protocolos, isLoading } = useProtocolos();
@@ -26,7 +43,9 @@ const Protocolos = () => {
     return matchSearch && matchTipo;
   });
 
-  const meusAtivos = meus.filter((m) => m.status === "ativo" || m.status === "pausado");
+  const meusAtivos = meus.filter(
+    (m) => m.status === "ativo" || m.status === "pausado"
+  );
 
   if (isLoading) {
     return (
@@ -52,30 +71,35 @@ const Protocolos = () => {
             ) : (
               <motion.div
                 key="list"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
+                variants={stagger}
+                initial="hidden"
+                animate="show"
                 exit={{ opacity: 0, x: -20 }}
                 className="space-y-5"
               >
                 {/* Header */}
-                <div>
+                <motion.div variants={fadeUp}>
                   <div className="flex items-center gap-2 mb-1">
                     <Activity size={22} className="text-primary" />
-                    <h1 className="text-xl font-bold text-foreground">Protocolos</h1>
+                    <h1 className="text-xl font-bold text-foreground">
+                      Protocolos
+                    </h1>
                   </div>
                   <p className="text-sm text-muted-foreground">
                     Emagrecimento & Drenagem Pós-Operatório
                   </p>
-                </div>
+                </motion.div>
 
                 {/* My active protocols */}
                 {meusAtivos.length > 0 && (
-                  <div className="space-y-2">
-                    <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                  <motion.div variants={fadeUp} className="space-y-2.5">
+                    <p className="section-label px-1">
                       Meus Protocolos Ativos
                     </p>
                     {meusAtivos.map((m) => {
-                      const prot = protocolos.find((p) => p.id === m.protocolo_id);
+                      const prot = protocolos.find(
+                        (p) => p.id === m.protocolo_id
+                      );
                       if (!prot) return null;
                       return (
                         <ProtocoloCard
@@ -86,11 +110,11 @@ const Protocolos = () => {
                         />
                       );
                     })}
-                  </div>
+                  </motion.div>
                 )}
 
                 {/* Search & filter */}
-                <div className="relative">
+                <motion.div variants={fadeUp} className="relative">
                   <Search
                     size={16}
                     className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
@@ -101,24 +125,33 @@ const Protocolos = () => {
                     onChange={(e) => setSearch(e.target.value)}
                     className="pl-9 h-10 rounded-xl"
                   />
-                </div>
+                </motion.div>
 
-                <Tabs value={tipoFilter} onValueChange={setTipoFilter}>
-                  <TabsList className="w-full grid grid-cols-3">
-                    <TabsTrigger value="todos" className="text-xs gap-1">
-                      <Activity size={13} /> Todos
-                    </TabsTrigger>
-                    <TabsTrigger value="emagrecimento" className="text-xs gap-1">
-                      <Flame size={13} /> Emagrecimento
-                    </TabsTrigger>
-                    <TabsTrigger value="drenagem_pos_operatorio" className="text-xs gap-1">
-                      <Droplets size={13} /> Drenagem
-                    </TabsTrigger>
-                  </TabsList>
-                </Tabs>
+                <motion.div variants={fadeUp}>
+                  <Tabs value={tipoFilter} onValueChange={setTipoFilter}>
+                    <TabsList className="w-full grid grid-cols-3">
+                      <TabsTrigger value="todos" className="text-xs gap-1">
+                        <Activity size={13} /> Todos
+                      </TabsTrigger>
+                      <TabsTrigger
+                        value="emagrecimento"
+                        className="text-xs gap-1"
+                      >
+                        <Flame size={13} /> Emagrecimento
+                      </TabsTrigger>
+                      <TabsTrigger
+                        value="drenagem_pos_operatorio"
+                        className="text-xs gap-1"
+                      >
+                        <Droplets size={13} /> Drenagem
+                      </TabsTrigger>
+                    </TabsList>
+                  </Tabs>
+                </motion.div>
 
                 {/* Protocol list */}
-                <div className="space-y-3">
+                <motion.div variants={fadeUp} className="space-y-3">
+                  <p className="section-label px-1">Todos os protocolos</p>
                   {filtered.map((p) => {
                     const meuAtivo = meus.find(
                       (m) =>
@@ -136,11 +169,14 @@ const Protocolos = () => {
                   })}
                   {filtered.length === 0 && (
                     <div className="text-center py-12 text-muted-foreground text-sm">
-                      <Activity size={36} className="mx-auto mb-3 opacity-30" />
+                      <Activity
+                        size={36}
+                        className="mx-auto mb-3 opacity-30"
+                      />
                       <p>Nenhum protocolo encontrado.</p>
                     </div>
                   )}
-                </div>
+                </motion.div>
               </motion.div>
             )}
           </AnimatePresence>
