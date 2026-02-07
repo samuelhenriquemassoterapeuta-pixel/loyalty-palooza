@@ -14,6 +14,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { useAngleHistory, AngleSeries } from "@/hooks/useAngleHistory";
 import { useMeasurementHistory } from "@/hooks/useMeasurementHistory";
+import { useClinicalCsvData, type ClinicalCsvData } from "@/hooks/useClinicalCsvData";
 import { toast } from "sonner";
 
 const COLORS = [
@@ -130,7 +131,8 @@ function AngleChart({ series, color }: { series: AngleSeries; color: string }) {
 
 function buildCsvContent(
   angleSeries: AngleSeries[],
-  measurements: import("@/hooks/useMeasurementHistory").MeasurementDataPoint[]
+  measurements: import("@/hooks/useMeasurementHistory").MeasurementDataPoint[],
+  clinicalData?: ClinicalCsvData
 ): string {
   const BOM = "\uFEFF";
   const lines: string[] = [];
@@ -154,6 +156,43 @@ function buildCsvContent(
     for (const m of measurements) {
       lines.push(
         `${m.vista},"${m.label}",${m.dateLabel},${m.angle},${m.referenceAxis === "vertical" ? "Vertical" : "Horizontal"}`
+      );
+    }
+    lines.push("");
+  }
+
+  // Clinical observations section
+  if (clinicalData?.observacoes && clinicalData.observacoes.length > 0) {
+    lines.push("OBSERVAÇÕES CLÍNICAS - AVALIAÇÕES POSTURAIS");
+    lines.push("Data,Observações");
+    for (const obs of clinicalData.observacoes) {
+      const escaped = obs.observacoes.replace(/"/g, '""').replace(/\n/g, " ");
+      lines.push(`${obs.dateLabel},"${escaped}"`);
+    }
+    lines.push("");
+  }
+
+  // Fichas de acompanhamento section
+  if (clinicalData?.fichas && clinicalData.fichas.length > 0) {
+    lines.push("FICHAS DE ACOMPANHAMENTO - PROTOCOLOS");
+    lines.push("Data,Protocolo,Peso (kg),IMC,Gordura (%),Cintura (cm),Quadril (cm),Braço (cm),Coxa (cm),Tórax (cm),EVA (0-10),Observações");
+    for (const f of clinicalData.fichas) {
+      const obsEscaped = f.observacoes ? f.observacoes.replace(/"/g, '""').replace(/\n/g, " ") : "";
+      lines.push(
+        [
+          f.dateLabel,
+          `"${f.protocolo}"`,
+          f.peso ?? "",
+          f.imc ?? "",
+          f.gordura_corporal ?? "",
+          f.medida_cintura ?? "",
+          f.medida_quadril ?? "",
+          f.medida_braco ?? "",
+          f.medida_coxa ?? "",
+          f.medida_torax ?? "",
+          f.escala_eva ?? "",
+          `"${obsEscaped}"`,
+        ].join(",")
       );
     }
     lines.push("");
@@ -195,9 +234,10 @@ function buildCsvContent(
 export const AngleEvolutionCharts = () => {
   const { data: series = [], isLoading } = useAngleHistory();
   const { data: measurements = [], isLoading: isMeasLoading } = useMeasurementHistory();
+  const { data: clinicalData, isLoading: isClinicalLoading } = useClinicalCsvData();
 
   const handleExportCsv = useCallback(() => {
-    const csv = buildCsvContent(series, measurements);
+    const csv = buildCsvContent(series, measurements, clinicalData);
     const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -209,11 +249,11 @@ export const AngleEvolutionCharts = () => {
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
     toast.success("CSV exportado com sucesso!");
-  }, [series, measurements]);
+  }, [series, measurements, clinicalData]);
 
   const hasData = series.length > 0 || measurements.length > 0;
 
-  if (isLoading || isMeasLoading) {
+  if (isLoading || isMeasLoading || isClinicalLoading) {
     return (
       <div className="space-y-3">
         <div className="flex items-center gap-2 mb-1">
