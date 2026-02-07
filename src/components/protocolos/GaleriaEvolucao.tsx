@@ -1,5 +1,6 @@
 import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { toast } from "sonner";
 import { Camera, Plus, Trash2, X, ImageIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -37,9 +38,26 @@ export const GaleriaEvolucao = ({ protocoloUsuarioId }: GaleriaEvolucaoProps) =>
   const [filter, setFilter] = useState<string>("todas");
   const fileRef = useRef<HTMLInputElement>(null);
 
+  const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+  const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/heic"];
+
   const handleUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+
+    // Client-side validation before attempting upload
+    if (!ALLOWED_TYPES.includes(file.type)) {
+      toast.error("Formato não suportado. Use JPEG, PNG ou WebP.");
+      if (fileRef.current) fileRef.current.value = "";
+      return;
+    }
+
+    if (file.size > MAX_FILE_SIZE) {
+      toast.error(`Arquivo muito grande (${(file.size / 1024 / 1024).toFixed(1)}MB). Máximo: 5MB.`);
+      if (fileRef.current) fileRef.current.value = "";
+      return;
+    }
+
     upload.mutate({ file, tipo, protocoloUsuarioId });
     if (fileRef.current) fileRef.current.value = "";
   };
@@ -67,7 +85,7 @@ export const GaleriaEvolucao = ({ protocoloUsuarioId }: GaleriaEvolucaoProps) =>
           <input
             ref={fileRef}
             type="file"
-            accept="image/*"
+            accept=".jpg,.jpeg,.png,.webp,.heic"
             className="hidden"
             onChange={handleUpload}
           />

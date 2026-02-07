@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import { useCallback, useMemo } from "react";
 
 export interface Agendamento {
   id: string;
@@ -20,19 +21,16 @@ export interface Agendamento {
 
 export const useAgendamentos = () => {
   const { user } = useAuth();
-  const [agendamentos, setAgendamentos] = useState<Agendamento[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const queryClient = useQueryClient();
 
-  const fetchAgendamentos = async () => {
-    if (!user) {
-      setAgendamentos([]);
-      setLoading(false);
-      return;
-    }
-
-    try {
-      setLoading(true);
+  const {
+    data: agendamentos = [],
+    isLoading: loading,
+    error: queryError,
+  } = useQuery({
+    queryKey: ["agendamentos", user?.id],
+    enabled: !!user,
+    queryFn: async () => {
       const { data, error } = await supabase
         .from("agendamentos")
         .select(`
@@ -43,27 +41,35 @@ export const useAgendamentos = () => {
             especialidade
           )
         `)
-        .eq("user_id", user.id)
+        .eq("user_id", user!.id)
         .order("data_hora", { ascending: true });
 
       if (error) throw error;
-      setAgendamentos(data || []);
-    } catch (err: any) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
+      return (data || []) as Agendamento[];
+    },
+    staleTime: 30_000,
+  });
 
-  const createAgendamento = async (
-    data_hora: Date,
-    servico: string,
-    observacoes?: string,
-    terapeuta_id?: string
-  ) => {
-    if (!user) return { error: new Error("Usuário não autenticado"), data: null };
+  const error = queryError ? (queryError as Error).message : null;
 
-    try {
+  const invalidate = () =>
+    queryClient.invalidateQueries({ queryKey: ["agendamentos"] });
+
+  // ── Criar agendamento ──────────────────────────────
+  const createMutation = useMutation({
+    mutationFn: async ({
+      data_hora,
+      servico,
+      observacoes,
+      terapeuta_id,
+    }: {
+      data_hora: Date;
+      servico: string;
+      observacoes?: string;
+      terapeuta_id?: string;
+    }) => {
+      if (!user) throw new Error("Usuário não autenticado");
+
       // Quick client-side check (database also enforces uniqueness via unique index)
       const { data: existente, error: checkError } = await supabase
         .from("agendamentos")
@@ -73,12 +79,10 @@ export const useAgendamentos = () => {
         .maybeSingle();
 
       if (checkError) throw checkError;
-
       if (existente) {
-        return { 
-          error: new Error("Este horário já está ocupado. Por favor, escolha outro."), 
-          data: null 
-        };
+        throw new Error(
+          "Este horário já está ocupado. Por favor, escolha outro."
+        );
       }
 
       const { data, error } = await supabase
@@ -96,89 +100,73 @@ export const useAgendamentos = () => {
 
       // Handle unique constraint violation (race condition protection)
       if (error) {
-        if (error.code === '23505') {
-          return { 
-            error: new Error("Este horário já está ocupado. Por favor, escolha outro."), 
-            data: null 
-          };
+        if (error.code === "23505") {
+          throw new Error(
+            "Este horário já está ocupado. Por favor, escolha outro."
+          );
         }
         throw error;
       }
-      
-      await fetchAgendamentos();
-      return { error: null, data };
-    } catch (err: any) {
-      return { error: err, data: null };
-    }
-  };
 
-  // Função para verificar horários disponíveis em uma data
-  const checkHorarioDisponivel = async (data: Date, horario: string): Promise<boolean> => {
-    const [hours, minutes] = horario.split(":").map(Number);
-    const dataHora = new Date(data);
-    dataHora.setHours(hours, minutes, 0, 0);
+      return data;
+    },
+    onSuccess: invalidate,
+  });
 
-    const { data: existente } = await supabase
-      .from("agendamentos")
-      .select("id")
-      .eq("data_hora", dataHora.toISOString())
-      .eq("status", "agendado")
-      .maybeSingle();
-
-    return !existente;
-  };
-
-  const getHorariosOcupados = async (data: Date, terapeutaId?: string): Promise<string[]> => {
-    const startOfDay = new Date(data);
-    startOfDay.setHours(0, 0, 0, 0);
-    
-    const endOfDay = new Date(data);
-    endOfDay.setHours(23, 59, 59, 999);
-
-    let query = supabase
-      .from("agendamentos")
-      .select("data_hora")
-      .eq("status", "agendado")
-      .gte("data_hora", startOfDay.toISOString())
-      .lte("data_hora", endOfDay.toISOString());
-    
-    // Filtrar por terapeuta se especificado
-    if (terapeutaId) {
-      query = query.eq("terapeuta_id", terapeutaId);
-    }
-
-    const { data: agendamentosDoDia } = await query;
-
-    return (agendamentosDoDia || []).map(a => {
-      const d = new Date(a.data_hora);
-      return `${d.getHours().toString().padStart(2, "0")}:${d.getMinutes().toString().padStart(2, "0")}`;
-    });
-  };
-
-  const cancelAgendamento = async (id: string) => {
-    if (!user) return { error: new Error("Usuário não autenticado") };
-
+  const createAgendamento = async (
+    data_hora: Date,
+    servico: string,
+    observacoes?: string,
+    terapeuta_id?: string
+  ) => {
     try {
+      const data = await createMutation.mutateAsync({
+        data_hora,
+        servico,
+        observacoes,
+        terapeuta_id,
+      });
+      return { error: null, data };
+    } catch (err: unknown) {
+      return { error: err as Error, data: null };
+    }
+  };
+
+  // ── Cancelar agendamento ───────────────────────────
+  const cancelMutation = useMutation({
+    mutationFn: async (id: string) => {
+      if (!user) throw new Error("Usuário não autenticado");
       const { error } = await supabase
         .from("agendamentos")
         .update({ status: "cancelado" })
         .eq("id", id)
         .eq("user_id", user.id);
-
       if (error) throw error;
-      
-      await fetchAgendamentos();
+    },
+    onSuccess: invalidate,
+  });
+
+  const cancelAgendamento = async (id: string) => {
+    try {
+      await cancelMutation.mutateAsync(id);
       return { error: null };
-    } catch (err: any) {
-      return { error: err };
+    } catch (err: unknown) {
+      return { error: err as Error };
     }
   };
 
-  const reagendarAgendamento = async (id: string, novaDataHora: Date) => {
-    if (!user) return { error: new Error("Usuário não autenticado"), data: null };
+  // ── Reagendar ──────────────────────────────────────
+  const reagendarMutation = useMutation({
+    mutationFn: async ({
+      id,
+      novaDataHora,
+    }: {
+      id: string;
+      novaDataHora: Date;
+    }) => {
+      if (!user) throw new Error("Usuário não autenticado");
 
-    try {
-      // Verificar se o novo horário está disponível
+      // Verificar disponibilidade
       const { data: existente, error: checkError } = await supabase
         .from("agendamentos")
         .select("id")
@@ -188,12 +176,10 @@ export const useAgendamentos = () => {
         .maybeSingle();
 
       if (checkError) throw checkError;
-
       if (existente) {
-        return { 
-          error: new Error("Este horário já está ocupado. Por favor, escolha outro."), 
-          data: null 
-        };
+        throw new Error(
+          "Este horário já está ocupado. Por favor, escolha outro."
+        );
       }
 
       const { data, error } = await supabase
@@ -205,32 +191,85 @@ export const useAgendamentos = () => {
         .single();
 
       if (error) {
-        if (error.code === '23505') {
-          return { 
-            error: new Error("Este horário já está ocupado. Por favor, escolha outro."), 
-            data: null 
-          };
+        if (error.code === "23505") {
+          throw new Error(
+            "Este horário já está ocupado. Por favor, escolha outro."
+          );
         }
         throw error;
       }
+      return data;
+    },
+    onSuccess: invalidate,
+  });
 
-      await fetchAgendamentos();
+  const reagendarAgendamento = async (id: string, novaDataHora: Date) => {
+    try {
+      const data = await reagendarMutation.mutateAsync({ id, novaDataHora });
       return { error: null, data };
-    } catch (err: any) {
-      return { error: err, data: null };
+    } catch (err: unknown) {
+      return { error: err as Error, data: null };
     }
   };
 
-  const getProximosAgendamentos = () => {
+  // ── Verificar horários disponíveis ─────────────────
+  const checkHorarioDisponivel = useCallback(
+    async (data: Date, horario: string): Promise<boolean> => {
+      const [hours, minutes] = horario.split(":").map(Number);
+      const dataHora = new Date(data);
+      dataHora.setHours(hours, minutes, 0, 0);
+
+      const { data: existente } = await supabase
+        .from("agendamentos")
+        .select("id")
+        .eq("data_hora", dataHora.toISOString())
+        .eq("status", "agendado")
+        .maybeSingle();
+
+      return !existente;
+    },
+    []
+  );
+
+  const getHorariosOcupados = useCallback(
+    async (data: Date, terapeutaId?: string): Promise<string[]> => {
+      const startOfDay = new Date(data);
+      startOfDay.setHours(0, 0, 0, 0);
+
+      const endOfDay = new Date(data);
+      endOfDay.setHours(23, 59, 59, 999);
+
+      let query = supabase
+        .from("agendamentos")
+        .select("data_hora")
+        .eq("status", "agendado")
+        .gte("data_hora", startOfDay.toISOString())
+        .lte("data_hora", endOfDay.toISOString());
+
+      if (terapeutaId) {
+        query = query.eq("terapeuta_id", terapeutaId);
+      }
+
+      const { data: agendamentosDoDia } = await query;
+
+      return (agendamentosDoDia || []).map((a) => {
+        const d = new Date(a.data_hora);
+        return `${d.getHours().toString().padStart(2, "0")}:${d
+          .getMinutes()
+          .toString()
+          .padStart(2, "0")}`;
+      });
+    },
+    []
+  );
+
+  // ── Próximos agendamentos ──────────────────────────
+  const getProximosAgendamentos = useCallback(() => {
     const now = new Date();
     return agendamentos.filter(
       (a) => new Date(a.data_hora) >= now && a.status === "agendado"
     );
-  };
-
-  useEffect(() => {
-    fetchAgendamentos();
-  }, [user]);
+  }, [agendamentos]);
 
   return {
     agendamentos,
@@ -242,6 +281,6 @@ export const useAgendamentos = () => {
     getProximosAgendamentos,
     checkHorarioDisponivel,
     getHorariosOcupados,
-    refetch: fetchAgendamentos,
+    refetch: invalidate,
   };
 };
