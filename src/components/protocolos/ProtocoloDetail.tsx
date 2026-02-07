@@ -9,6 +9,7 @@ import { FichaAcompanhamento } from "./FichaAcompanhamento";
 import { GaleriaEvolucao } from "./GaleriaEvolucao";
 import { MetasSemanais } from "./MetasSemanais";
 import { GuiaResumoProtocolo } from "./GuiaResumoProtocolo";
+import { PosturalAssessmentLink } from "./PosturalAssessmentLink";
 import { useUsuarioProtocolos } from "@/hooks/useProtocolos";
 import { format, differenceInWeeks } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -34,6 +35,7 @@ const tipoLabels: Record<string, { label: string; class: string }> = {
 export const ProtocoloDetail = ({ protocolo, onBack }: ProtocoloDetailProps) => {
   const { meus, ativar, atualizarStatus } = useUsuarioProtocolos();
   const [tab, setTab] = useState("resumo");
+  const isPostural = protocolo.tipo === "postural";
 
   const meuProtocolo = meus.find(
     (p) => p.protocolo_id === protocolo.id && (p.status === "ativo" || p.status === "pausado")
@@ -160,6 +162,11 @@ export const ProtocoloDetail = ({ protocolo, onBack }: ProtocoloDetailProps) => 
           )}
         </div>
       </div>
+
+      {/* Postural assessment link - only for postural protocols with active enrollment */}
+      {isPostural && meuProtocolo && (
+        <PosturalAssessmentLink />
+      )}
 
       {/* Tabs - show guide tab always, other tabs only if enrolled */}
       <Tabs value={tab} onValueChange={setTab} className="w-full">
