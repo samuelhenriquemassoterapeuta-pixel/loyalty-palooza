@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Plus, Check, Percent } from "lucide-react";
+import { Plus, Check, Percent, Tag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface Produto {
@@ -16,6 +16,8 @@ interface ProdutoCardProps {
   index: number;
   noCarrinho: boolean;
   onToggle: () => void;
+  /** Level-based store discount percentage (0-15) */
+  levelDiscountPercent?: number;
 }
 
 const fadeUp = {
@@ -27,8 +29,12 @@ const fadeUp = {
   },
 };
 
-export const ProdutoCard = ({ produto, index, noCarrinho, onToggle }: ProdutoCardProps) => {
+export const ProdutoCard = ({ produto, index, noCarrinho, onToggle, levelDiscountPercent = 0 }: ProdutoCardProps) => {
   const cashback = produto.cashback_percentual || 0;
+  const hasDiscount = levelDiscountPercent > 0;
+  const discountedPrice = hasDiscount
+    ? produto.preco * (1 - levelDiscountPercent / 100)
+    : produto.preco;
   
   return (
     <motion.div
@@ -43,6 +49,14 @@ export const ProdutoCard = ({ produto, index, noCarrinho, onToggle }: ProdutoCar
           <div className="absolute top-2 right-2 flex items-center gap-1 px-2 py-1 rounded-full bg-highlight/20 text-highlight text-[10px] font-semibold">
             <Percent size={10} />
             {cashback}% cashback
+          </div>
+        )}
+
+        {/* Level discount badge */}
+        {hasDiscount && (
+          <div className="absolute top-2 left-2 flex items-center gap-1 px-2 py-1 rounded-full bg-primary/15 text-primary text-[10px] font-semibold">
+            <Tag size={10} />
+            -{levelDiscountPercent}%
           </div>
         )}
         
@@ -65,12 +79,23 @@ export const ProdutoCard = ({ produto, index, noCarrinho, onToggle }: ProdutoCar
         
         <div className="flex items-center justify-between mt-2">
           <div>
-            <p className="font-bold text-sm">
-              R$ {produto.preco.toFixed(2).replace('.', ',')}
-            </p>
+            {hasDiscount ? (
+              <>
+                <p className="text-[10px] text-muted-foreground line-through">
+                  R$ {produto.preco.toFixed(2).replace('.', ',')}
+                </p>
+                <p className="font-bold text-sm text-primary">
+                  R$ {discountedPrice.toFixed(2).replace('.', ',')}
+                </p>
+              </>
+            ) : (
+              <p className="font-bold text-sm">
+                R$ {produto.preco.toFixed(2).replace('.', ',')}
+              </p>
+            )}
             {cashback > 0 && (
               <p className="text-[9px] text-highlight">
-                +R$ {(produto.preco * cashback / 100).toFixed(2).replace('.', ',')} volta
+                +R$ {(discountedPrice * cashback / 100).toFixed(2).replace('.', ',')} volta
               </p>
             )}
           </div>
