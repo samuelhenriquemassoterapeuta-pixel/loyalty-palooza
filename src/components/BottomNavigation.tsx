@@ -1,10 +1,11 @@
 import { motion } from "framer-motion";
-import { Home, CalendarDays, ShoppingBag, User } from "lucide-react";
+import { Home, CalendarDays, ShoppingBag, Activity, User } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const navItems = [
   { icon: Home, label: "Início", path: "/" },
   { icon: CalendarDays, label: "Agendar", path: "/agendamento" },
+  { icon: Activity, label: "Protocolos", path: "/protocolos" },
   { icon: ShoppingBag, label: "Loja", path: "/loja" },
   { icon: User, label: "Perfil", path: "/profile" },
 ];
@@ -25,7 +26,7 @@ export const BottomNavigation = () => {
                   key={item.path}
                   onClick={() => navigate(item.path)}
                   whileTap={{ scale: 0.9 }}
-                  className={`relative flex flex-col items-center gap-1 py-2 px-5 rounded-xl transition-all duration-300 ${
+                  className={`relative flex flex-col items-center gap-1 py-2 px-3 rounded-xl transition-all duration-300 ${
                     isActive 
                       ? "bg-primary/10" 
                       : "hover:bg-muted/50"
