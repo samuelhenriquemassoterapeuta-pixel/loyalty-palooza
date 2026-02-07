@@ -10,6 +10,7 @@ const navLinks = [
   { label: "Início", href: "#inicio" },
   { label: "Serviços", href: "#servicos" },
   { label: "Pacotes", href: "#pacotes" },
+  { label: "Corporativo", href: "/corporativo", isRoute: true },
   { label: "Sobre", href: "#sobre" },
   { label: "Contato", href: "#contato" },
 ];
@@ -25,10 +26,14 @@ export const LandingHeader = () => {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const scrollTo = (href: string) => {
+  const handleNavClick = (link: typeof navLinks[0]) => {
     setMobileMenuOpen(false);
-    const el = document.querySelector(href);
-    el?.scrollIntoView({ behavior: "smooth" });
+    if ('isRoute' in link && link.isRoute) {
+      navigate(link.href);
+    } else {
+      const el = document.querySelector(link.href);
+      el?.scrollIntoView({ behavior: "smooth" });
+    }
   };
 
   return (
@@ -46,7 +51,7 @@ export const LandingHeader = () => {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 lg:h-20">
             {/* Logo */}
-            <button onClick={() => scrollTo("#inicio")} className="flex items-center gap-2.5">
+            <button onClick={() => handleNavClick({ label: "Início", href: "#inicio" })} className="flex items-center gap-2.5">
               <img src={simboloVerde} alt="Resinkra" className="h-9 w-9 object-contain" />
               <img src={logoMarrom} alt="Resinkra" className="h-4 lg:h-5 object-contain" />
             </button>
@@ -56,7 +61,7 @@ export const LandingHeader = () => {
               {navLinks.map((link) => (
                 <button
                   key={link.href}
-                  onClick={() => scrollTo(link.href)}
+                  onClick={() => handleNavClick(link)}
                   className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
                 >
                   {link.label}
@@ -105,7 +110,7 @@ export const LandingHeader = () => {
               {navLinks.map((link) => (
                 <button
                   key={link.href}
-                  onClick={() => scrollTo(link.href)}
+                  onClick={() => handleNavClick(link)}
                   className="block w-full text-left py-3 px-4 rounded-xl text-sm font-medium text-foreground hover:bg-muted/50 transition-colors"
                 >
                   {link.label}

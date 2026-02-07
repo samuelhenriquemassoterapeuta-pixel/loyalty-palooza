@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowLeft, Leaf, Sparkles, Package, Search, X, XCircle } from "lucide-react";
+import { ArrowLeft, Leaf, Sparkles, Package, Search, X, XCircle, Dumbbell, Apple, ShoppingBag } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -31,7 +31,7 @@ export default function Loja() {
   const { stats, createTransacao, refetch: refetchTransacoes } = useTransacoes();
   
   const [activeTab, setActiveTab] = useState("loja");
-  const [categoriaAtiva, setCategoriaAtiva] = useState<"todos" | "spa" | "gastronomia">("todos");
+  const [categoriaAtiva, setCategoriaAtiva] = useState<string>("todos");
   const [carrinho, setCarrinho] = useState<CarrinhoItem[]>([]);
   const [saving, setSaving] = useState(false);
   const [carrinhoOpen, setCarrinhoOpen] = useState(false);
@@ -327,34 +327,50 @@ export default function Loja() {
               )}
             </div>
 
-            {/* Filtros de Categoria */}
-            <div className="flex gap-2">
-              <Button
-                variant={categoriaAtiva === "todos" ? "default" : "outline"}
-                size="sm"
-                onClick={() => setCategoriaAtiva("todos")}
-                className="flex-1"
-              >
-                Todos
-              </Button>
-              <Button
-                variant={categoriaAtiva === "spa" ? "default" : "outline"}
-                size="sm"
-                onClick={() => setCategoriaAtiva("spa")}
-                className="flex-1 gap-1"
-              >
-                <Sparkles size={14} />
-                Home SPA
-              </Button>
-              <Button
-                variant={categoriaAtiva === "gastronomia" ? "default" : "outline"}
-                size="sm"
-                onClick={() => setCategoriaAtiva("gastronomia")}
-                className="flex-1 gap-1"
-              >
-                <Leaf size={14} />
-                Gastronomia
-              </Button>
+            {/* Filtros de Categoria - Dinâmicos */}
+            <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none">
+              {(() => {
+                const categoriasUnicas = Array.from(
+                  new Set(produtos.map(p => p.categoria).filter(Boolean))
+                ) as string[];
+                
+                const categoriasConfig: Record<string, { icon: typeof Sparkles; label: string }> = {
+                  spa: { icon: Sparkles, label: "Home SPA" },
+                  gastronomia: { icon: Leaf, label: "Gastronomia" },
+                  emagrecimento: { icon: Apple, label: "Emagrecimento" },
+                  alongamento: { icon: Dumbbell, label: "Alongamento" },
+                };
+
+                return (
+                  <>
+                    <Button
+                      variant={categoriaAtiva === "todos" ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => setCategoriaAtiva("todos")}
+                      className="shrink-0"
+                    >
+                      <ShoppingBag size={14} />
+                      Todos
+                    </Button>
+                    {categoriasUnicas.map((cat) => {
+                      const config = categoriasConfig[cat] || { icon: Package, label: cat.charAt(0).toUpperCase() + cat.slice(1) };
+                      const Icon = config.icon;
+                      return (
+                        <Button
+                          key={cat}
+                          variant={categoriaAtiva === cat ? "default" : "outline"}
+                          size="sm"
+                          onClick={() => setCategoriaAtiva(cat)}
+                          className="shrink-0 gap-1"
+                        >
+                          <Icon size={14} />
+                          {config.label}
+                        </Button>
+                      );
+                    })}
+                  </>
+                );
+              })()}
             </div>
 
             {loadingProdutos ? (
