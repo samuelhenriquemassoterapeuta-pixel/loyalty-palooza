@@ -6,6 +6,7 @@ import { AvaliacaoPostural, VistaPostural } from "@/hooks/useAvaliacaoPostural";
 import { ImageSliderCompare } from "./ImageSliderCompare";
 import { ExportPosturalPdfButton } from "./ExportPosturalPdfButton";
 import { ZoomableImage } from "./ZoomableImage";
+import { AnnotationLayer } from "./AnnotationLayer";
 import { toast } from "sonner";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -167,9 +168,18 @@ export const ComparacaoView = ({ avaliacoes, onClose }: ComparacaoViewProps) => 
         </div>
         <div className="relative aspect-[3/4] bg-muted/30 rounded-xl overflow-hidden">
           {url ? (
-            <ZoomableImage src={url} alt={vistaAtiva} className="w-full h-full">
-              {showGrid && <GridOverlay />}
-            </ZoomableImage>
+            <>
+              <ZoomableImage src={url} alt={vistaAtiva} className="w-full h-full">
+                {showGrid && <GridOverlay />}
+              </ZoomableImage>
+              <AnnotationLayer
+                avaliacaoId={av.id}
+                vista={vistaAtiva}
+                imageUrl={url}
+                containerWidth={0}
+                containerHeight={0}
+              />
+            </>
           ) : (
             <div className="flex items-center justify-center h-full text-muted-foreground text-xs">Sem foto</div>
           )}

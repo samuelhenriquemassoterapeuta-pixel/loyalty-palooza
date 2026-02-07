@@ -55,6 +55,44 @@ export type Database = {
           },
         ]
       }
+      anotacoes_posturais: {
+        Row: {
+          anotacoes: Json
+          avaliacao_id: string
+          created_at: string
+          id: string
+          updated_at: string
+          user_id: string
+          vista: string
+        }
+        Insert: {
+          anotacoes?: Json
+          avaliacao_id: string
+          created_at?: string
+          id?: string
+          updated_at?: string
+          user_id: string
+          vista: string
+        }
+        Update: {
+          anotacoes?: Json
+          avaliacao_id?: string
+          created_at?: string
+          id?: string
+          updated_at?: string
+          user_id?: string
+          vista?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "anotacoes_posturais_avaliacao_id_fkey"
+            columns: ["avaliacao_id"]
+            isOneToOne: false
+            referencedRelation: "avaliacoes_posturais"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       audit_logs: {
         Row: {
           created_at: string

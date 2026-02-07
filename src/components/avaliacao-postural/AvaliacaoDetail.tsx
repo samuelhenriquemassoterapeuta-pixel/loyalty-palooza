@@ -73,6 +73,7 @@ export const AvaliacaoDetail = ({ avaliacao, onBack }: AvaliacaoDetailProps) => 
             existingUrl={getSignedUrl(vista)}
             onCapture={(file) => handleCapture(vista, file)}
             isPending={pendingVista === vista}
+            avaliacaoId={avaliacao.id}
           />
         ))}
       </div>
