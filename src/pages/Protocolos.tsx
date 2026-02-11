@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { Activity, Search, Droplets, Accessibility, TreePine, ChevronDown, Dumbbell, ArrowRight } from "lucide-react";
+import { Activity, Search, Droplets, Accessibility, TreePine, ChevronDown, Dumbbell, ArrowRight, Apple } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AppLayout } from "@/components/AppLayout";
 import { Input } from "@/components/ui/input";
 import { ProtocoloCard } from "@/components/protocolos/ProtocoloCard";
+import { DietasSection } from "@/components/protocolos/DietasSection";
 import { useProtocolos, useUsuarioProtocolos } from "@/hooks/useProtocolos";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { stagger, fadeUp, gruposProtocolos } from "@/components/protocolos/protocoloConstants";
@@ -38,6 +39,7 @@ const Protocolos = () => {
   const { meus } = useUsuarioProtocolos();
   const [search, setSearch] = useState("");
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set());
+  const [showDietas, setShowDietas] = useState(false);
 
   const toggleGroup = (tipo: string) => {
     setExpandedGroups((prev) => {
@@ -194,6 +196,39 @@ const Protocolos = () => {
                         className="overflow-hidden"
                       >
                         <div className="pt-3 space-y-3">
+                          {/* CTA for Drenagem section - Dietas */}
+                          {grupo.tipo === "drenagem_pos_operatorio" && (
+                            <motion.div
+                              initial={{ opacity: 0, y: 8 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ duration: 0.2 }}
+                            >
+                              <Button
+                                onClick={() => setShowDietas(!showDietas)}
+                                variant={showDietas ? "default" : "outline"}
+                                className="w-full gap-2 rounded-xl h-12 text-sm font-semibold shadow-md"
+                              >
+                                <Apple size={18} />
+                                {showDietas ? "Ocultar Dietas Personalizadas" : "Dietas Personalizadas"}
+                                <ArrowRight size={16} className={showDietas ? "rotate-90" : ""} />
+                              </Button>
+
+                              <AnimatePresence>
+                                {showDietas && (
+                                  <motion.div
+                                    initial={{ height: 0, opacity: 0 }}
+                                    animate={{ height: "auto", opacity: 1 }}
+                                    exit={{ height: 0, opacity: 0 }}
+                                    transition={{ duration: 0.3 }}
+                                    className="overflow-hidden mt-3"
+                                  >
+                                    <DietasSection />
+                                  </motion.div>
+                                )}
+                              </AnimatePresence>
+                            </motion.div>
+                          )}
+
                           {/* CTA for Alongamento section */}
                           {grupo.tipo === "alongamento" && (
                             <motion.div
