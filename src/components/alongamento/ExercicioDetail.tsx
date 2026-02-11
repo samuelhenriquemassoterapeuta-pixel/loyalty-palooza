@@ -12,8 +12,9 @@ interface ExercicioDetailProps {
 
 export const ExercicioDetail = ({ exercicio, onClose }: ExercicioDetailProps) => {
   const [videoPlaying, setVideoPlaying] = useState(false);
+  const [videoError, setVideoError] = useState(false);
 
-  const hasVideo = !!exercicio.video_url;
+  const hasVideo = !!exercicio.video_url && !videoError;
   const isDirectVideo = hasVideo && /\.(mp4|webm|ogg|mov)(\?|$)/i.test(exercicio.video_url!);
   return (
     <AnimatePresence>
@@ -31,8 +32,8 @@ export const ExercicioDetail = ({ exercicio, onClose }: ExercicioDetailProps) =>
           className="bg-card rounded-3xl w-full max-w-lg max-h-[85vh] overflow-y-auto shadow-elevated"
           onClick={(e) => e.stopPropagation()}
         >
-          {/* Video Section */}
-          {hasVideo && (
+          {/* Video / Animation Section */}
+          {hasVideo ? (
             <div className="relative w-full aspect-[9/16] max-h-[50vh] bg-black rounded-t-3xl overflow-hidden">
               {videoPlaying ? (
                 isDirectVideo ? (
@@ -44,6 +45,7 @@ export const ExercicioDetail = ({ exercicio, onClose }: ExercicioDetailProps) =>
                     muted
                     playsInline
                     controls
+                    onError={() => setVideoError(true)}
                   />
                 ) : (
                   <iframe
@@ -68,20 +70,23 @@ export const ExercicioDetail = ({ exercicio, onClose }: ExercicioDetailProps) =>
                 </button>
               )}
             </div>
+          ) : (
+            /* Enhanced SVG animation fallback */
+            <div className="relative w-full aspect-square max-h-[40vh] bg-gradient-to-b from-primary/5 to-primary/10 rounded-t-3xl overflow-hidden flex items-center justify-center">
+              <ExercicioAnimado tipo={exercicio.categoria} size={180} className="opacity-80" />
+              <div className="absolute bottom-3 left-0 right-0 text-center">
+                <span className="text-xs text-muted-foreground bg-background/80 backdrop-blur-sm px-3 py-1 rounded-full">
+                  Animação ilustrativa
+                </span>
+              </div>
+            </div>
           )}
 
           {/* Header */}
           <div className="flex items-start justify-between p-6 pb-4">
-            <div className="flex items-center gap-3">
-              {!hasVideo && (
-                <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center overflow-hidden">
-                  <ExercicioAnimado tipo={exercicio.categoria} size={48} />
-                </div>
-              )}
-              <div>
-                <h2 className="text-lg font-bold text-foreground">{exercicio.nome}</h2>
-                <p className="text-sm text-muted-foreground capitalize">{exercicio.categoria.replace("_", " ")}</p>
-              </div>
+            <div>
+              <h2 className="text-lg font-bold text-foreground">{exercicio.nome}</h2>
+              <p className="text-sm text-muted-foreground capitalize">{exercicio.categoria.replace("_", " ")}</p>
             </div>
             <Button variant="ghost" size="icon" onClick={onClose} className="shrink-0">
               <X size={20} />
