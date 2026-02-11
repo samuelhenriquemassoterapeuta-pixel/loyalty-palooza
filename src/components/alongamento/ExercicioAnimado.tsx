@@ -4,6 +4,7 @@ interface ExercicioAnimadoProps {
   tipo: string;
   size?: number;
   className?: string;
+  animated?: boolean;
 }
 
 // Animated stick-figure SVG illustrations for each exercise category
@@ -415,8 +416,22 @@ const animacoes: Record<string, React.FC<{ size: number }>> = {
   ),
 };
 
-export const ExercicioAnimado = ({ tipo, size = 64, className = "" }: ExercicioAnimadoProps) => {
-  const Animacao = animacoes[tipo] || animacoes.geral;
+// Static stick-figure for small sizes (avoids Framer Motion SVG attribute errors)
+const StaticFigure = ({ size }: { size: number }) => (
+  <svg width={size} height={size} viewBox="0 0 80 80" fill="none">
+    <circle cx="40" cy="16" r="8" stroke="currentColor" strokeWidth="2.5" fill="none" />
+    <line x1="40" y1="24" x2="40" y2="50" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+    <line x1="40" y1="32" x2="24" y2="44" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+    <line x1="40" y1="32" x2="56" y2="44" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+    <line x1="40" y1="50" x2="28" y2="70" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+    <line x1="40" y1="50" x2="52" y2="70" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+  </svg>
+);
+
+export const ExercicioAnimado = ({ tipo, size = 64, className = "", animated = true }: ExercicioAnimadoProps) => {
+  // Use static SVG for small sizes to avoid Framer Motion SVG rendering errors
+  const useStatic = !animated || size <= 48;
+  const Animacao = useStatic ? StaticFigure : (animacoes[tipo] || animacoes.geral);
   return (
     <div className={`text-primary ${className}`}>
       <Animacao size={size} />

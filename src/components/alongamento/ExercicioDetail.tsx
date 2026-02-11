@@ -73,7 +73,7 @@ export const ExercicioDetail = ({ exercicio, onClose }: ExercicioDetailProps) =>
           ) : (
             /* Enhanced SVG animation fallback */
             <div className="relative w-full aspect-square max-h-[40vh] bg-gradient-to-b from-primary/5 to-primary/10 rounded-t-3xl overflow-hidden flex items-center justify-center">
-              <ExercicioAnimado tipo={exercicio.categoria} size={180} className="opacity-80" />
+              <ExercicioAnimado tipo={exercicio.categoria} size={180} className="opacity-80" animated={true} />
               <div className="absolute bottom-3 left-0 right-0 text-center">
                 <span className="text-xs text-muted-foreground bg-background/80 backdrop-blur-sm px-3 py-1 rounded-full">
                   Animação ilustrativa
