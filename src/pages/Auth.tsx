@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Eye, EyeOff, Mail, Lock, User, ArrowLeft, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -35,14 +35,16 @@ const Auth = () => {
 
   const { signIn, signUp, user, loading } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { rateLimitStatus, checkRateLimit, recordAttempt, getTimeUntilUnblock } = useRateLimit();
   const [googleLoading, setGoogleLoading] = useState(false);
   const [appleLoading, setAppleLoading] = useState(false);
   useEffect(() => {
     if (!loading && user) {
-      navigate("/");
+      const redirectTo = searchParams.get("redirect") || "/";
+      navigate(redirectTo);
     }
-  }, [user, loading, navigate]);
+  }, [user, loading, navigate, searchParams]);
 
   const validateForm = () => {
     const newErrors: { email?: string; password?: string; confirmPassword?: string; nome?: string } = {};
