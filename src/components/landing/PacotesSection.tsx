@@ -4,6 +4,7 @@ import { Check, Crown, Sparkles, ArrowRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
+import { useParallax } from "@/hooks/useParallax";
 
 interface Pacote {
   id: string;
@@ -17,12 +18,12 @@ interface Pacote {
 
 const containerVariants = {
   hidden: {},
-  visible: { transition: { staggerChildren: 0.12 } },
+  visible: { transition: { staggerChildren: 0.15 } },
 };
 
 const cardVariants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+  hidden: { opacity: 0, y: 40, scale: 0.95 },
+  visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.6, ease: [0, 0, 0.2, 1] as const } },
 };
 
 const formatPrice = (value: number) =>
@@ -57,6 +58,7 @@ const usePacotesPublic = () => {
 export const PacotesSection = () => {
   const navigate = useNavigate();
   const { pacotes, loading } = usePacotesPublic();
+  const { ref, y } = useParallax({ speed: 0.15 });
 
   // Don't render section if no packages and not loading
   if (!loading && pacotes.length === 0) return null;
@@ -65,13 +67,20 @@ export const PacotesSection = () => {
     pacotes.length >= 3 ? 1 : pacotes.length === 2 ? 1 : 0;
 
   return (
-    <section id="pacotes" className="py-14 sm:py-20 lg:py-28 bg-card/50">
-      <div className="max-w-6xl mx-auto px-5 sm:px-6 lg:px-8">
+    <section id="pacotes" ref={ref} className="py-14 sm:py-20 lg:py-28 bg-card/50 relative overflow-hidden">
+      {/* Parallax decorative blob */}
+      <motion.div
+        style={{ y }}
+        className="absolute -top-16 left-[8%] w-72 h-72 bg-highlight/4 rounded-full blur-3xl pointer-events-none hidden lg:block"
+      />
+
+      <div className="max-w-6xl mx-auto px-5 sm:px-6 lg:px-8 relative z-10">
         {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.7 }}
           className="text-center mb-8 sm:mb-14"
         >
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-highlight/10 border border-highlight/20 mb-4">
@@ -123,7 +132,8 @@ export const PacotesSection = () => {
                 <motion.div
                   key={pacote.id}
                   variants={cardVariants}
-                  className={`relative card-organic hover-lift p-6 flex flex-col ${
+                  whileHover={{ y: -8, scale: 1.02, transition: { duration: 0.25 } }}
+                  className={`relative card-organic p-6 flex flex-col ${
                     isBestValue
                       ? "ring-2 ring-primary shadow-elevated"
                       : ""

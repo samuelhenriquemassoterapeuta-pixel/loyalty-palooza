@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Star, Quote } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { useParallax } from "@/hooks/useParallax";
 
 interface Depoimento {
   nome: string;
@@ -36,14 +37,6 @@ const depoimentosFallback: Depoimento[] = [
   },
 ];
 
-/** Abbreviate name for privacy: "Samuel Henrique" → "Samuel H." */
-const abbreviateName = (nome: string | null): string => {
-  if (!nome) return "Cliente";
-  const parts = nome.trim().split(/\s+/);
-  if (parts.length <= 1) return parts[0];
-  return `${parts[0]} ${parts[parts.length - 1][0]}.`;
-};
-
 const StarRating = ({ nota }: { nota: number }) => (
   <div className="flex gap-0.5">
     {[...Array(5)].map((_, i) => (
@@ -62,8 +55,13 @@ const containerVariants = {
 };
 
 const cardVariants = {
-  hidden: { opacity: 0, y: 25 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+  hidden: { opacity: 0, y: 35, rotateX: 8 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    rotateX: 0,
+    transition: { duration: 0.6, ease: [0, 0, 0.2, 1] as const },
+  },
 };
 
 const useDepoimentos = () => {
@@ -73,7 +71,6 @@ const useDepoimentos = () => {
   useEffect(() => {
     const fetchAvaliacoes = async () => {
       try {
-        // Fetch reviews that have comments (avaliacoes table is publicly readable)
         const { data, error } = await supabase
           .from("avaliacoes")
           .select("nota, comentario")
@@ -83,12 +80,10 @@ const useDepoimentos = () => {
           .limit(8);
 
         if (error || !data || data.length < 2) {
-          // Not enough real reviews, keep fallback
           setLoading(false);
           return;
         }
 
-        // Since profiles RLS requires auth, use anonymized names
         const realDepoimentos: Depoimento[] = data
           .filter((a) => a.comentario && a.comentario.trim().length > 10)
           .map((a) => ({
@@ -115,15 +110,23 @@ const useDepoimentos = () => {
 
 export const DepoimentosSection = () => {
   const { depoimentos } = useDepoimentos();
+  const { ref, y } = useParallax({ speed: 0.12 });
 
   return (
-    <section className="py-14 sm:py-20 lg:py-28 bg-background">
-      <div className="max-w-6xl mx-auto px-5 sm:px-6 lg:px-8">
+    <section ref={ref} className="py-14 sm:py-20 lg:py-28 bg-background relative overflow-hidden">
+      {/* Parallax background */}
+      <motion.div
+        style={{ y }}
+        className="absolute -top-32 left-[10%] w-72 h-72 bg-accent/5 rounded-full blur-3xl pointer-events-none hidden lg:block"
+      />
+
+      <div className="max-w-6xl mx-auto px-5 sm:px-6 lg:px-8 relative z-10">
         {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.7 }}
           className="text-center mb-8 sm:mb-14"
         >
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/10 border border-accent/20 mb-4">
@@ -139,19 +142,22 @@ export const DepoimentosSection = () => {
           </p>
         </motion.div>
 
-        {/* Cards grid */}
+        {/* Cards grid with perspective */}
         <motion.div
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-60px" }}
           className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6"
+          style={{ perspective: 1000 }}
         >
           {depoimentos.map((dep, i) => (
             <motion.div
               key={i}
               variants={cardVariants}
-              className="card-organic hover-lift p-6 flex flex-col"
+              whileHover={{ y: -8, scale: 1.02, transition: { duration: 0.25 } }}
+              className="card-organic p-6 flex flex-col"
+              style={{ transformStyle: "preserve-3d" }}
             >
               <Quote size={24} className="text-primary/20 mb-3" />
 
