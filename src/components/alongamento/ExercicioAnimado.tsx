@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 
 interface ExercicioAnimadoProps {
-  tipo: "cervical" | "lombar" | "ombros" | "quadril" | "coluna" | "membros_superiores" | "membros_inferiores" | "geral";
+  tipo: string;
   size?: number;
   className?: string;
 }
@@ -188,6 +188,203 @@ const animacoes: Record<string, React.FC<{ size: number }>> = {
         stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"
         animate={{ x2: [52, 56, 52] }}
         transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+      />
+    </svg>
+  ),
+  yoga: ({ size }) => (
+    <svg width={size} height={size} viewBox="0 0 80 80" fill="none">
+      {/* Head */}
+      <circle cx="40" cy="12" r="7" stroke="currentColor" strokeWidth="2.5" fill="none" />
+      {/* Body - tree pose */}
+      <line x1="40" y1="19" x2="40" y2="48" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+      {/* Arms up in namaste */}
+      <motion.line
+        x1="40" y1="28" x2="24" y2="18"
+        stroke="currentColor" strokeWidth="2" strokeLinecap="round"
+        animate={{ x2: [24, 28, 24], y2: [18, 12, 18] }}
+        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+      />
+      <motion.line
+        x1="40" y1="28" x2="56" y2="18"
+        stroke="currentColor" strokeWidth="2" strokeLinecap="round"
+        animate={{ x2: [56, 52, 56], y2: [18, 12, 18] }}
+        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+      />
+      {/* Standing leg */}
+      <line x1="40" y1="48" x2="40" y2="72" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+      {/* Bent leg - tree pose */}
+      <motion.path
+        d="M40 52 L30 58 L34 48"
+        stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"
+        animate={{ d: ["M40 52 L30 58 L34 48", "M40 52 L28 56 L32 46", "M40 52 L30 58 L34 48"] }}
+        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+      />
+    </svg>
+  ),
+  pilates: ({ size }) => (
+    <svg width={size} height={size} viewBox="0 0 80 80" fill="none">
+      {/* Lying position - the hundred */}
+      <circle cx="18" cy="38" r="6" stroke="currentColor" strokeWidth="2.5" fill="none" />
+      {/* Torso - curling up */}
+      <motion.path
+        d="M24 38 Q35 38 50 42"
+        stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" fill="none"
+        animate={{ d: ["M24 38 Q35 38 50 42", "M24 36 Q35 32 50 42", "M24 38 Q35 38 50 42"] }}
+        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+      />
+      {/* Legs raised */}
+      <motion.line
+        x1="50" y1="42" x2="68" y2="30"
+        stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"
+        animate={{ y2: [30, 24, 30] }}
+        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+      />
+      <motion.line
+        x1="50" y1="42" x2="66" y2="34"
+        stroke="currentColor" strokeWidth="2" strokeLinecap="round"
+        animate={{ y2: [34, 28, 34] }}
+        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 0.2 }}
+      />
+      {/* Arms pulsing */}
+      <motion.line
+        x1="30" y1="36" x2="36" y2="46"
+        stroke="currentColor" strokeWidth="2" strokeLinecap="round"
+        animate={{ y2: [46, 50, 46] }}
+        transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+      />
+      <motion.line
+        x1="34" y1="35" x2="40" y2="45"
+        stroke="currentColor" strokeWidth="2" strokeLinecap="round"
+        animate={{ y2: [45, 49, 45] }}
+        transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+      />
+      {/* Floor line */}
+      <line x1="10" y1="44" x2="70" y2="44" stroke="currentColor" strokeWidth="1" strokeLinecap="round" opacity="0.3" />
+    </svg>
+  ),
+  respiracao: ({ size }) => (
+    <svg width={size} height={size} viewBox="0 0 80 80" fill="none">
+      {/* Head */}
+      <circle cx="40" cy="16" r="7" stroke="currentColor" strokeWidth="2.5" fill="none" />
+      {/* Body seated */}
+      <line x1="40" y1="23" x2="40" y2="48" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+      {/* Arms on knees */}
+      <line x1="40" y1="32" x2="26" y2="52" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+      <line x1="40" y1="32" x2="54" y2="52" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+      {/* Crossed legs */}
+      <path d="M40 48 Q32 56 24 60" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" fill="none" />
+      <path d="M40 48 Q48 56 56 60" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" fill="none" />
+      {/* Breathing circle - expanding/contracting */}
+      <motion.circle
+        cx="40" cy="38"
+        r="10"
+        stroke="currentColor" strokeWidth="1.5" fill="none"
+        opacity="0.4"
+        animate={{ r: [8, 14, 8], opacity: [0.2, 0.5, 0.2] }}
+        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+      />
+      <motion.circle
+        cx="40" cy="38"
+        r="6"
+        stroke="currentColor" strokeWidth="1" fill="none"
+        opacity="0.3"
+        animate={{ r: [5, 10, 5], opacity: [0.15, 0.4, 0.15] }}
+        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.3 }}
+      />
+    </svg>
+  ),
+  postural_escoliose: ({ size }) => (
+    <svg width={size} height={size} viewBox="0 0 80 80" fill="none">
+      <circle cx="40" cy="14" r="7" stroke="currentColor" strokeWidth="2.5" fill="none" />
+      <motion.path
+        d="M40 21 Q44 32 36 42 Q40 50 40 55"
+        stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" fill="none"
+        animate={{ d: ["M40 21 Q44 32 36 42 Q40 50 40 55", "M40 21 Q40 32 40 42 Q40 50 40 55", "M40 21 Q44 32 36 42 Q40 50 40 55"] }}
+        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+      />
+      <line x1="40" y1="30" x2="26" y2="40" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+      <line x1="40" y1="30" x2="54" y2="40" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+      <line x1="40" y1="55" x2="30" y2="72" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+      <line x1="40" y1="55" x2="50" y2="72" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+    </svg>
+  ),
+  postural_lordose: ({ size }) => (
+    <svg width={size} height={size} viewBox="0 0 80 80" fill="none">
+      <circle cx="40" cy="14" r="7" stroke="currentColor" strokeWidth="2.5" fill="none" />
+      <motion.path
+        d="M40 21 Q40 30 42 38 Q44 46 40 55"
+        stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" fill="none"
+        animate={{ d: ["M40 21 Q40 30 42 38 Q44 46 40 55", "M40 21 Q40 30 40 38 Q40 46 40 55", "M40 21 Q40 30 42 38 Q44 46 40 55"] }}
+        transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
+      />
+      <line x1="40" y1="30" x2="26" y2="40" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+      <line x1="40" y1="30" x2="54" y2="40" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+      <line x1="40" y1="55" x2="30" y2="72" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+      <line x1="40" y1="55" x2="50" y2="72" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+    </svg>
+  ),
+  postural_cifose: ({ size }) => (
+    <svg width={size} height={size} viewBox="0 0 80 80" fill="none">
+      <motion.circle
+        cx="40" cy="14" r="7"
+        stroke="currentColor" strokeWidth="2.5" fill="none"
+        animate={{ cx: [40, 42, 40] }}
+        transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
+      />
+      <motion.path
+        d="M40 21 Q46 30 44 40 Q42 48 40 55"
+        stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" fill="none"
+        animate={{ d: ["M40 21 Q46 30 44 40 Q42 48 40 55", "M40 21 Q40 30 40 40 Q40 48 40 55", "M40 21 Q46 30 44 40 Q42 48 40 55"] }}
+        transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
+      />
+      <line x1="42" y1="30" x2="28" y2="42" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+      <line x1="42" y1="30" x2="56" y2="42" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+      <line x1="40" y1="55" x2="30" y2="72" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+      <line x1="40" y1="55" x2="50" y2="72" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+    </svg>
+  ),
+  postural_ombros: ({ size }) => (
+    <svg width={size} height={size} viewBox="0 0 80 80" fill="none">
+      <circle cx="40" cy="14" r="7" stroke="currentColor" strokeWidth="2.5" fill="none" />
+      <line x1="40" y1="21" x2="40" y2="52" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+      {/* Shoulders rolling */}
+      <motion.line
+        x1="40" y1="28" x2="22" y2="34"
+        stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"
+        animate={{ y2: [34, 28, 34], x2: [22, 20, 22] }}
+        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+      />
+      <motion.line
+        x1="40" y1="28" x2="58" y2="34"
+        stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"
+        animate={{ y2: [34, 28, 34], x2: [58, 60, 58] }}
+        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+      />
+      <line x1="40" y1="52" x2="30" y2="70" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+      <line x1="40" y1="52" x2="50" y2="70" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+    </svg>
+  ),
+  postural_geral: ({ size }) => (
+    <svg width={size} height={size} viewBox="0 0 80 80" fill="none">
+      <circle cx="40" cy="14" r="7" stroke="currentColor" strokeWidth="2.5" fill="none" />
+      {/* Body with posture correction */}
+      <motion.line
+        x1="40" y1="21" x2="40" y2="52"
+        stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"
+        animate={{ x1: [40, 42, 40], x2: [40, 42, 40] }}
+        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+      />
+      <line x1="40" y1="30" x2="26" y2="42" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+      <line x1="40" y1="30" x2="54" y2="42" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+      <line x1="40" y1="52" x2="30" y2="70" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+      <line x1="40" y1="52" x2="50" y2="70" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+      {/* Posture guide line */}
+      <motion.line
+        x1="40" y1="8" x2="40" y2="74"
+        stroke="currentColor" strokeWidth="0.8" strokeDasharray="3 3"
+        opacity="0.25"
+        animate={{ opacity: [0.15, 0.35, 0.15] }}
+        transition={{ duration: 3, repeat: Infinity }}
       />
     </svg>
   ),
