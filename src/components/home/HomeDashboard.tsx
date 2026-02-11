@@ -9,6 +9,7 @@ import { AchievementBadges } from "./AchievementBadges";
 import { NextAchievementsCard } from "./NextAchievementsCard";
 import { XpMiniBar } from "./XpMiniBar";
 import { ActiveBenefitsCard } from "./ActiveBenefitsCard";
+import { CollapsibleDashboardSection } from "./CollapsibleDashboardSection";
 import { AchievementCelebration } from "@/components/conquistas/AchievementCelebration";
 import {
   differenceInDays,
@@ -78,21 +79,30 @@ export const HomeDashboard = () => {
     : null;
 
   return (
-    <div className="space-y-3">
-      <NextAppointmentCard agendamento={proximoAgendamento} />
-      <StreakSummaryCard
-        streak={streak}
-        bestStreak={bestStreak}
-        protocoloNome={protocoloNome}
-        hasActiveProtocol={!!protocoloAtivo}
-      />
-      <XpMiniBar achievements={achievements} />
-      <ActiveBenefitsCard />
-      <NextAchievementsCard achievements={achievements} />
-      <AchievementBadges
-        achievements={achievements}
-        totalUnlocked={totalUnlocked}
-      />
+    <div className="space-y-4">
+      <CollapsibleDashboardSection title="Agenda & Streak" defaultOpen={true}>
+        <NextAppointmentCard agendamento={proximoAgendamento} />
+        <StreakSummaryCard
+          streak={streak}
+          bestStreak={bestStreak}
+          protocoloNome={protocoloNome}
+          hasActiveProtocol={!!protocoloAtivo}
+        />
+      </CollapsibleDashboardSection>
+
+      <CollapsibleDashboardSection title="Nível & Benefícios" defaultOpen={true}>
+        <XpMiniBar achievements={achievements} />
+        <ActiveBenefitsCard />
+      </CollapsibleDashboardSection>
+
+      <CollapsibleDashboardSection title="Conquistas" defaultOpen={false}>
+        <NextAchievementsCard achievements={achievements} />
+        <AchievementBadges
+          achievements={achievements}
+          totalUnlocked={totalUnlocked}
+        />
+      </CollapsibleDashboardSection>
+
       <AchievementCelebration
         isOpen={!!celebration}
         achievement={celebration}
