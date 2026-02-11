@@ -39,8 +39,8 @@
     --info: 200 60% 45%;
     --info-foreground: 48 40% 98%;
 
-    /* Warning - Âmbar */
-    --warning: 38 92% 50%;
+    /* Warning - Âmbar (darkened for AA contrast) */
+    --warning: 38 92% 44%;
     --warning-foreground: 75 45% 10%;
 
     --destructive: 0 72% 51%;
@@ -98,7 +98,7 @@
     --muted: 78 18% 15%;
     --muted-foreground: 48 20% 62%;
 
-    --accent: 25 70% 55%;
+    --accent: 25 70% 50%;
     --accent-foreground: 78 30% 8%;
 
     --highlight: 140 55% 45%;
@@ -118,7 +118,7 @@
     --ring: 85 55% 48%;
 
     --gradient-primary: linear-gradient(135deg, hsl(85 55% 48%) 0%, hsl(100 50% 55%) 100%);
-    --gradient-accent: linear-gradient(135deg, hsl(25 70% 55%) 0%, hsl(35 75% 62%) 100%);
+    --gradient-accent: linear-gradient(135deg, hsl(25 70% 50%) 0%, hsl(35 75% 58%) 100%);
     --gradient-highlight: linear-gradient(135deg, hsl(140 55% 45%) 0%, hsl(160 50% 52%) 100%);
     --gradient-card: linear-gradient(145deg, hsl(78 25% 10%) 0%, hsl(78 22% 12%) 100%);
     --gradient-hero: linear-gradient(180deg, hsl(85 55% 48% / 0.15) 0%, hsl(78 30% 6%) 60%);
@@ -128,7 +128,7 @@
     --shadow-button: 0 6px 18px -3px hsl(85 55% 48% / 0.35);
     --shadow-elevated: 0 20px 40px -8px hsl(0 0% 0% / 0.6);
     --shadow-glow: 0 0 35px -5px hsl(85 55% 48% / 0.5);
-    --shadow-accent: 0 6px 18px -3px hsl(25 70% 55% / 0.35);
+    --shadow-accent: 0 6px 18px -3px hsl(25 70% 50% / 0.35);
 
     --sidebar-background: 78 25% 8%;
     --sidebar-foreground: 48 30% 96%;
