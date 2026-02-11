@@ -11,7 +11,7 @@ export const HeroSection = () => {
   return (
     <section
       id="inicio"
-      className="relative min-h-screen flex items-center justify-center overflow-hidden"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden px-2"
     >
       {/* Background blobs */}
       <div className="absolute inset-0 gradient-hero" />
@@ -21,7 +21,7 @@ export const HeroSection = () => {
       <div className="absolute top-[20%] right-[20%] w-3 h-3 bg-highlight/50 rounded-full animate-bounce-subtle" />
       <div className="absolute bottom-[30%] right-[15%] w-5 h-5 bg-primary/20 rounded-full animate-pulse-soft" />
 
-      <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-16">
+      <div className="relative z-10 max-w-6xl mx-auto px-5 sm:px-6 lg:px-8 pt-28 pb-20 sm:pt-24 sm:pb-16">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           {/* Text content */}
           <motion.div
@@ -51,7 +51,7 @@ export const HeroSection = () => {
               Cada sessão é um investimento no seu bem-estar — e no seu bolso.
             </p>
 
-            <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+            <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center lg:justify-start">
               <Button
                 size="xl"
                 onClick={() => navigate("/auth")}
@@ -101,7 +101,7 @@ export const HeroSection = () => {
             transition={{ duration: 0.8, ease: "easeOut", delay: 0.3 }}
             className="relative flex items-center justify-center"
           >
-            <div className="relative w-72 h-72 sm:w-80 sm:h-80 lg:w-96 lg:h-96">
+            <div className="relative w-56 h-56 sm:w-80 sm:h-80 lg:w-96 lg:h-96">
               {/* Outer glow ring */}
               <div className="absolute inset-0 rounded-full bg-gradient-to-br from-primary/15 to-accent/10 blur-2xl animate-pulse-soft" />
               
@@ -113,7 +113,7 @@ export const HeroSection = () => {
                 <img
                   src={simboloVerde}
                   alt="Resinkra"
-                  className="w-32 h-32 lg:w-40 lg:h-40 object-contain drop-shadow-lg animate-float"
+                  className="w-24 h-24 sm:w-32 sm:h-32 lg:w-40 lg:h-40 object-contain drop-shadow-lg animate-float"
                 />
               </div>
 
