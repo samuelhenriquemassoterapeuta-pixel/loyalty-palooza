@@ -194,69 +194,79 @@ const animacoes: Record<string, React.FC<{ size: number }>> = {
   yoga: ({ size }) => (
     <svg width={size} height={size} viewBox="0 0 80 80" fill="none">
       {/* Head */}
-      <circle cx="40" cy="12" r="7" stroke="currentColor" strokeWidth="2.5" fill="none" />
+      <motion.circle
+        cx="40" cy="12" r="7"
+        stroke="currentColor" strokeWidth="2.5" fill="none"
+        animate={{ cy: [12, 10, 12] }}
+        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+      />
       {/* Body - tree pose */}
       <line x1="40" y1="19" x2="40" y2="48" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
-      {/* Arms up in namaste */}
+      {/* Arms up - wide movement */}
       <motion.line
-        x1="40" y1="28" x2="24" y2="18"
-        stroke="currentColor" strokeWidth="2" strokeLinecap="round"
-        animate={{ x2: [24, 28, 24], y2: [18, 12, 18] }}
-        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+        x1="40" y1="28" x2="18" y2="38"
+        stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"
+        animate={{ x2: [18, 22, 18], y2: [38, 12, 38] }}
+        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
       />
       <motion.line
-        x1="40" y1="28" x2="56" y2="18"
-        stroke="currentColor" strokeWidth="2" strokeLinecap="round"
-        animate={{ x2: [56, 52, 56], y2: [18, 12, 18] }}
-        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+        x1="40" y1="28" x2="62" y2="38"
+        stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"
+        animate={{ x2: [62, 58, 62], y2: [38, 12, 38] }}
+        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
       />
       {/* Standing leg */}
       <line x1="40" y1="48" x2="40" y2="72" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
-      {/* Bent leg - tree pose */}
-      <motion.path
-        d="M40 52 L30 58 L34 48"
-        stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"
-        animate={{ d: ["M40 52 L30 58 L34 48", "M40 52 L28 56 L32 46", "M40 52 L30 58 L34 48"] }}
-        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+      {/* Bent leg - tree pose with bigger movement */}
+      <motion.line
+        x1="40" y1="52" x2="28" y2="58"
+        stroke="currentColor" strokeWidth="2" strokeLinecap="round"
+        animate={{ x2: [28, 24, 28], y2: [58, 48, 58] }}
+        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
       />
     </svg>
   ),
   pilates: ({ size }) => (
     <svg width={size} height={size} viewBox="0 0 80 80" fill="none">
-      {/* Lying position - the hundred */}
-      <circle cx="18" cy="38" r="6" stroke="currentColor" strokeWidth="2.5" fill="none" />
-      {/* Torso - curling up */}
-      <motion.path
-        d="M24 38 Q35 38 50 42"
-        stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" fill="none"
-        animate={{ d: ["M24 38 Q35 38 50 42", "M24 36 Q35 32 50 42", "M24 38 Q35 38 50 42"] }}
-        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+      {/* Head */}
+      <motion.circle
+        cx="18" cy="38" r="6"
+        stroke="currentColor" strokeWidth="2.5" fill="none"
+        animate={{ cy: [38, 30, 38] }}
+        transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
       />
-      {/* Legs raised */}
+      {/* Torso - curling up with big movement */}
       <motion.line
-        x1="50" y1="42" x2="68" y2="30"
+        x1="24" y1="38" x2="50" y2="42"
         stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"
-        animate={{ y2: [30, 24, 30] }}
-        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+        animate={{ y1: [38, 30, 38], y2: [42, 42, 42] }}
+        transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+      />
+      {/* Legs raised - big kick motion */}
+      <motion.line
+        x1="50" y1="42" x2="68" y2="36"
+        stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"
+        animate={{ y2: [36, 20, 36], x2: [68, 64, 68] }}
+        transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
       />
       <motion.line
-        x1="50" y1="42" x2="66" y2="34"
+        x1="50" y1="42" x2="66" y2="38"
         stroke="currentColor" strokeWidth="2" strokeLinecap="round"
-        animate={{ y2: [34, 28, 34] }}
-        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 0.2 }}
+        animate={{ y2: [38, 24, 38], x2: [66, 62, 66] }}
+        transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", delay: 0.15 }}
       />
-      {/* Arms pulsing */}
+      {/* Arms pulsing - bigger movement */}
       <motion.line
-        x1="30" y1="36" x2="36" y2="46"
+        x1="26" y1="36" x2="32" y2="48"
         stroke="currentColor" strokeWidth="2" strokeLinecap="round"
-        animate={{ y2: [46, 50, 46] }}
-        transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+        animate={{ y2: [48, 56, 48], x2: [32, 34, 32] }}
+        transition={{ duration: 1.2, repeat: Infinity, ease: "easeInOut" }}
       />
       <motion.line
-        x1="34" y1="35" x2="40" y2="45"
+        x1="30" y1="35" x2="36" y2="48"
         stroke="currentColor" strokeWidth="2" strokeLinecap="round"
-        animate={{ y2: [45, 49, 45] }}
-        transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+        animate={{ y2: [48, 56, 48], x2: [36, 38, 36] }}
+        transition={{ duration: 1.2, repeat: Infinity, ease: "easeInOut" }}
       />
       {/* Floor line */}
       <line x1="10" y1="44" x2="70" y2="44" stroke="currentColor" strokeWidth="1" strokeLinecap="round" opacity="0.3" />
@@ -266,30 +276,45 @@ const animacoes: Record<string, React.FC<{ size: number }>> = {
     <svg width={size} height={size} viewBox="0 0 80 80" fill="none">
       {/* Head */}
       <circle cx="40" cy="16" r="7" stroke="currentColor" strokeWidth="2.5" fill="none" />
-      {/* Body seated */}
-      <line x1="40" y1="23" x2="40" y2="48" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
-      {/* Arms on knees */}
-      <line x1="40" y1="32" x2="26" y2="52" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-      <line x1="40" y1="32" x2="54" y2="52" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+      {/* Body seated - chest expanding */}
+      <motion.line
+        x1="40" y1="23" x2="40" y2="48"
+        stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"
+        animate={{ y2: [48, 44, 48] }}
+        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+      />
+      {/* Arms rising with breath */}
+      <motion.line
+        x1="40" y1="32" x2="26" y2="52"
+        stroke="currentColor" strokeWidth="2" strokeLinecap="round"
+        animate={{ x2: [26, 20, 26], y2: [52, 38, 52] }}
+        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+      />
+      <motion.line
+        x1="40" y1="32" x2="54" y2="52"
+        stroke="currentColor" strokeWidth="2" strokeLinecap="round"
+        animate={{ x2: [54, 60, 54], y2: [52, 38, 52] }}
+        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+      />
       {/* Crossed legs */}
       <path d="M40 48 Q32 56 24 60" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" fill="none" />
       <path d="M40 48 Q48 56 56 60" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" fill="none" />
-      {/* Breathing circle - expanding/contracting */}
+      {/* Breathing circles - using scale transform instead of r */}
       <motion.circle
-        cx="40" cy="38"
-        r="10"
+        cx="40" cy="36"
+        r="12"
         stroke="currentColor" strokeWidth="1.5" fill="none"
-        opacity="0.4"
-        animate={{ r: [8, 14, 8], opacity: [0.2, 0.5, 0.2] }}
+        style={{ transformOrigin: "40px 36px" }}
+        animate={{ scale: [0.6, 1.2, 0.6], opacity: [0.15, 0.5, 0.15] }}
         transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
       />
       <motion.circle
-        cx="40" cy="38"
-        r="6"
+        cx="40" cy="36"
+        r="8"
         stroke="currentColor" strokeWidth="1" fill="none"
-        opacity="0.3"
-        animate={{ r: [5, 10, 5], opacity: [0.15, 0.4, 0.15] }}
-        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.3 }}
+        style={{ transformOrigin: "40px 36px" }}
+        animate={{ scale: [0.5, 1.3, 0.5], opacity: [0.1, 0.4, 0.1] }}
+        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
       />
     </svg>
   ),
