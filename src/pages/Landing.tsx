@@ -1,6 +1,7 @@
 import { LandingHeader } from "@/components/landing/LandingHeader";
 import { HeroSection } from "@/components/landing/HeroSection";
 import { ServicosSection } from "@/components/landing/ServicosSection";
+import { HeadSpaSection } from "@/components/landing/HeadSpaSection";
 import { PacotesSection } from "@/components/landing/PacotesSection";
 import { DepoimentosSection } from "@/components/landing/DepoimentosSection";
 import { SobreSection } from "@/components/landing/SobreSection";
@@ -13,6 +14,7 @@ const Landing = () => {
       <LandingHeader />
       <HeroSection />
       <ServicosSection />
+      <HeadSpaSection />
       <PacotesSection />
       <DepoimentosSection />
       <SobreSection />

@@ -27,6 +27,7 @@ import Conquistas from "@/pages/Conquistas";
 import GuiaClinico from "@/pages/GuiaClinico";
 import AvaliacaoPostural from "@/pages/AvaliacaoPostural";
 import ContaConfiguracoes from "@/pages/ContaConfiguracoes";
+import HeadSpa from "@/pages/HeadSpa";
 import NotFound from "@/pages/NotFound";
 
 /** Shows landing for visitors, dashboard for authenticated users */
@@ -183,6 +184,14 @@ export const AnimatedRoutes = () => {
                 <Manual />
               </PageTransition>
             </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/headspa"
+          element={
+            <PageTransition>
+              <HeadSpa />
+            </PageTransition>
           }
         />
         <Route
