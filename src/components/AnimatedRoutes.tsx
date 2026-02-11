@@ -25,6 +25,7 @@ import Protocolos from "@/pages/Protocolos";
 import Conquistas from "@/pages/Conquistas";
 import GuiaClinico from "@/pages/GuiaClinico";
 import AvaliacaoPostural from "@/pages/AvaliacaoPostural";
+import ContaConfiguracoes from "@/pages/ContaConfiguracoes";
 import NotFound from "@/pages/NotFound";
 
 /** Shows landing for visitors, dashboard for authenticated users */
@@ -237,6 +238,16 @@ export const AnimatedRoutes = () => {
             <ProtectedRoute>
               <PageTransition>
                 <AvaliacaoPostural />
+              </PageTransition>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/conta"
+          element={
+            <ProtectedRoute>
+              <PageTransition>
+                <ContaConfiguracoes />
               </PageTransition>
             </ProtectedRoute>
           }
