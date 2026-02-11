@@ -5,10 +5,10 @@ import seloCompleto from "@/assets/selo-completo.png";
 import { CollapsibleSection } from "./CollapsibleSection";
 
 const features = [
-  { icon: Heart, title: "Terapias naturais", description: "Técnicas holísticas focadas no equilíbrio do corpo e da mente." },
-  { icon: Gift, title: "Cashback em tudo", description: "Ganhe de volta uma porcentagem em cada sessão e compra na loja." },
-  { icon: TrendingUp, title: "Programa de fidelidade", description: "Suba de nível e desbloqueie multiplicadores de cashback exclusivos." },
-  { icon: Shield, title: "Indicação premiada", description: "Indique amigos e ganhe R$ 10 de crédito para cada indicação." },
+  { icon: Heart, title: "Humanização em cada detalhe", description: "Escuta, acolhimento e cuidado genuíno. Cada pessoa é única e merece uma experiência feita sob medida." },
+  { icon: Shield, title: "Equilíbrio e serenidade", description: "Um refúgio sensorial de calma e presença, pensado para inspirar equilíbrio e reconexão." },
+  { icon: Gift, title: "Bem-estar contínuo", description: "O cuidado vai além da sessão: é uma experiência de ressincronização entre corpo, mente e rotina." },
+  { icon: TrendingUp, title: "Evolução contínua", description: "Aprender, ajustar e seguir em movimento. A cada atendimento, refinamos a experiência." },
 ];
 
 export const SobreSection = () => {
@@ -25,15 +25,15 @@ export const SobreSection = () => {
         <CollapsibleSection
           id="sobre"
           title={
-            <h2 className="text-3xl lg:text-4xl font-bold text-foreground">
-              Por que escolher a{" "}
-              <span className="font-serif italic text-gradient">Resinkra</span>?
+          <h2 className="text-3xl lg:text-4xl font-bold text-foreground">
+              Equilíbrio que se sente,{" "}
+              <span className="font-serif italic text-gradient">cuidado que permanece</span>
             </h2>
           }
           subtitle={
-            <p className="text-muted-foreground">
-              Somos mais que uma clínica de terapias — somos uma comunidade que valoriza
-              seu compromisso com o bem-estar.
+          <p className="text-muted-foreground">
+              A Resinkra é um espaço de cuidado integral que une terapias, bem-estar e experiências 
+              sensoriais. Onde técnica e sensibilidade se unem para gerar bem-estar contínuo e duradouro.
             </p>
           }
         >
