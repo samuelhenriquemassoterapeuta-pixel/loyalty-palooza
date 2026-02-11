@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, Plus, FileText, Users, Shield } from "lucide-react";
+import { ArrowLeft, Plus, FileText, Users, Shield, Dumbbell } from "lucide-react";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -20,6 +20,7 @@ import { TerapeutasTab } from "@/components/admin/TerapeutasTab";
 import { AuditLogsViewer } from "@/components/admin/AuditLogsViewer";
 import { IndicacoesTab } from "@/components/admin/IndicacoesTab";
 import { ThemeToggle } from "@/components/admin/ThemeToggle";
+import { ExerciciosTab } from "@/components/admin/ExerciciosTab";
 
 const tabContentVariants = {
   hidden: { opacity: 0, y: 12 },
@@ -320,6 +321,10 @@ const Admin = () => {
                   <Users size={14} />
                   Indicações
                 </TabsTrigger>
+                <TabsTrigger value="exercicios" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
+                  <Dumbbell size={14} />
+                  Exercícios
+                </TabsTrigger>
                 <TabsTrigger value="auditoria" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
                   <FileText size={14} />
                   Auditoria
@@ -404,6 +409,10 @@ const Admin = () => {
 
               <TabsContent value="indicacoes" forceMount={activeTab === "indicacoes" ? true : undefined} className={activeTab !== "indicacoes" ? "hidden" : ""}>
                 <IndicacoesTab />
+              </TabsContent>
+
+              <TabsContent value="exercicios" forceMount={activeTab === "exercicios" ? true : undefined} className={activeTab !== "exercicios" ? "hidden" : ""}>
+                <ExerciciosTab />
               </TabsContent>
 
               <TabsContent value="auditoria" forceMount={activeTab === "auditoria" ? true : undefined} className={activeTab !== "auditoria" ? "hidden" : ""}>
