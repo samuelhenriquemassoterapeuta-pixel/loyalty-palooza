@@ -1,23 +1,53 @@
-import { motion } from "framer-motion";
-import { Clock, Percent, Leaf } from "lucide-react";
+import { useState, useMemo } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Clock, Percent, Leaf, ChevronDown, Sparkles, Hand, SmilePlus, Package, Heart } from "lucide-react";
 import { useServicos } from "@/hooks/useServicos";
 import { useParallax } from "@/hooks/useParallax";
 
 const containerVariants = {
   hidden: {},
   visible: {
-    transition: { staggerChildren: 0.1 },
+    transition: { staggerChildren: 0.08 },
   },
 };
 
 const cardVariants = {
-  hidden: { opacity: 0, y: 40, scale: 0.95 },
-  visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.6, ease: [0, 0, 0.2, 1] as const } },
+  hidden: { opacity: 0, y: 30, scale: 0.97 },
+  visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.5, ease: [0, 0, 0.2, 1] as const } },
+};
+
+const categoryConfig: Record<string, { label: string; icon: typeof Leaf; color: string }> = {
+  corporal: { label: "Corporal", icon: Sparkles, color: "text-primary" },
+  facial: { label: "Facial", icon: SmilePlus, color: "text-accent" },
+  massagem: { label: "Massagem", icon: Hand, color: "text-highlight" },
+  pacote: { label: "Pacotes", icon: Package, color: "text-info" },
+  terapia: { label: "Terapia", icon: Heart, color: "text-success" },
+  geral: { label: "Geral", icon: Leaf, color: "text-primary" },
 };
 
 export const ServicosSection = () => {
   const { servicos, loading } = useServicos();
-  const { ref, y, opacity } = useParallax({ speed: 0.15 });
+  const { ref, y } = useParallax({ speed: 0.15 });
+  const [expanded, setExpanded] = useState<Set<string>>(new Set());
+
+  const categories = useMemo(() => {
+    if (!servicos.length) return [];
+    const grouped: Record<string, typeof servicos> = {};
+    servicos.forEach((s) => {
+      const cat = s.categoria || "geral";
+      if (!grouped[cat]) grouped[cat] = [];
+      grouped[cat].push(s);
+    });
+    // Sort: categories with more items first
+    return Object.entries(grouped).sort((a, b) => b[1].length - a[1].length);
+  }, [servicos]);
+
+  const toggle = (cat: string) =>
+    setExpanded((prev) => {
+      const n = new Set(prev);
+      n.has(cat) ? n.delete(cat) : n.add(cat);
+      return n;
+    });
 
   return (
     <section id="servicos" ref={ref} className="py-14 sm:py-20 lg:py-28 bg-card/50 relative overflow-hidden">
@@ -54,58 +84,112 @@ export const ServicosSection = () => {
           </p>
         </motion.div>
 
-        {/* Services grid */}
+        {/* Categories */}
         {loading ? (
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[...Array(6)].map((_, i) => (
-              <div key={i} className="h-52 rounded-2xl bg-muted/50 animate-pulse" />
+          <div className="space-y-4">
+            {[...Array(3)].map((_, i) => (
+              <div key={i} className="h-20 rounded-2xl bg-muted/50 animate-pulse" />
             ))}
           </div>
-        ) : servicos.length > 0 ? (
+        ) : categories.length > 0 ? (
           <motion.div
-            variants={containerVariants}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-60px" }}
-            className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6"
+            variants={containerVariants}
+            className="space-y-3"
           >
-            {servicos.map((servico) => (
-              <motion.div
-                key={servico.id}
-                variants={cardVariants}
-                whileHover={{ y: -6, transition: { duration: 0.25 } }}
-                className="group card-organic p-6 cursor-default"
-              >
-                <div className="flex items-start justify-between mb-4">
-                  <div className="p-2.5 rounded-xl bg-primary/10 group-hover:bg-primary/15 transition-colors">
-                    <Leaf size={20} className="text-primary" />
-                  </div>
-                  {servico.cashback_percentual > 0 && (
-                    <span className="pill text-[11px]">
-                      <Percent size={10} />
-                      {servico.cashback_percentual}% cashback
-                    </span>
-                  )}
-                </div>
+            {categories.map(([cat, items]) => {
+              const config = categoryConfig[cat] || categoryConfig.geral;
+              const Icon = config.icon;
+              const isOpen = expanded.has(cat);
 
-                <h3 className="text-lg font-bold text-foreground mb-1">{servico.nome}</h3>
-                {servico.descricao && (
-                  <p className="text-sm text-muted-foreground line-clamp-2 mb-4">
-                    {servico.descricao}
-                  </p>
-                )}
+              return (
+                <motion.div
+                  key={cat}
+                  variants={cardVariants}
+                  className="rounded-2xl border border-border/60 bg-card overflow-hidden shadow-sm"
+                >
+                  {/* Category header — clickable */}
+                  <button
+                    onClick={() => toggle(cat)}
+                    className="w-full flex items-center gap-3 p-4 sm:p-5 text-left hover:bg-muted/30 transition-colors"
+                  >
+                    <div className={`p-2.5 rounded-xl bg-primary/10 ${config.color}`}>
+                      <Icon size={20} />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-bold text-foreground text-base sm:text-lg">
+                        {config.label}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        {items.length} {items.length === 1 ? "serviço" : "serviços"}
+                      </p>
+                    </div>
+                    <motion.div
+                      animate={{ rotate: isOpen ? 180 : 0 }}
+                      transition={{ duration: 0.25 }}
+                    >
+                      <ChevronDown size={18} className="text-muted-foreground" />
+                    </motion.div>
+                  </button>
 
-                <div className="flex items-center justify-between mt-auto pt-4 border-t border-border/50">
-                  <div className="flex items-center gap-1.5 text-muted-foreground">
-                    <Clock size={14} />
-                    <span className="text-xs">{servico.duracao} min</span>
-                  </div>
-                  <span className="text-lg font-bold text-foreground">
-                    R$ {servico.preco.toFixed(2).replace(".", ",")}
-                  </span>
-                </div>
-              </motion.div>
-            ))}
+                  {/* Expanded content */}
+                  <AnimatePresence initial={false}>
+                    {isOpen && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+                        className="overflow-hidden"
+                      >
+                        <div className="px-4 pb-4 sm:px-5 sm:pb-5 grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                          {items.map((servico) => (
+                            <motion.div
+                              key={servico.id}
+                              initial={{ opacity: 0, y: 12 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ duration: 0.3 }}
+                              whileHover={{ y: -4, transition: { duration: 0.2 } }}
+                              className="group rounded-xl border border-border/40 bg-background/60 p-4 cursor-default"
+                            >
+                              <div className="flex items-start justify-between mb-3">
+                                <h3 className="text-sm font-bold text-foreground leading-snug pr-2">
+                                  {servico.nome}
+                                </h3>
+                                {servico.cashback_percentual > 0 && (
+                                  <span className="pill text-[10px] shrink-0">
+                                    <Percent size={9} />
+                                    {servico.cashback_percentual}%
+                                  </span>
+                                )}
+                              </div>
+
+                              {servico.descricao && (
+                                <p className="text-xs text-muted-foreground line-clamp-2 mb-3">
+                                  {servico.descricao}
+                                </p>
+                              )}
+
+                              <div className="flex items-center justify-between pt-3 border-t border-border/40">
+                                <div className="flex items-center gap-1.5 text-muted-foreground">
+                                  <Clock size={12} />
+                                  <span className="text-[11px]">{servico.duracao} min</span>
+                                </div>
+                                <span className="text-sm font-bold text-foreground">
+                                  R$ {servico.preco.toFixed(2).replace(".", ",")}
+                                </span>
+                              </div>
+                            </motion.div>
+                          ))}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </motion.div>
+              );
+            })}
           </motion.div>
         ) : (
           <div className="text-center py-12">
