@@ -255,6 +255,92 @@ export type Database = {
           },
         ]
       }
+      diario_alimentar: {
+        Row: {
+          agua_ml: number | null
+          created_at: string
+          data: string
+          descricao: string
+          foto_url: string | null
+          id: string
+          observacoes: string | null
+          plano_dieta_id: string | null
+          tipo_refeicao: string
+          user_id: string
+        }
+        Insert: {
+          agua_ml?: number | null
+          created_at?: string
+          data?: string
+          descricao: string
+          foto_url?: string | null
+          id?: string
+          observacoes?: string | null
+          plano_dieta_id?: string | null
+          tipo_refeicao: string
+          user_id: string
+        }
+        Update: {
+          agua_ml?: number | null
+          created_at?: string
+          data?: string
+          descricao?: string
+          foto_url?: string | null
+          id?: string
+          observacoes?: string | null
+          plano_dieta_id?: string | null
+          tipo_refeicao?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "diario_alimentar_plano_dieta_id_fkey"
+            columns: ["plano_dieta_id"]
+            isOneToOne: false
+            referencedRelation: "planos_dieta"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      dietas_conteudo: {
+        Row: {
+          categoria: string
+          conteudo: Json
+          created_at: string
+          descricao: string | null
+          disponivel: boolean | null
+          id: string
+          imagem_url: string | null
+          ordem: number
+          protocolo_tipo: string | null
+          titulo: string
+        }
+        Insert: {
+          categoria?: string
+          conteudo?: Json
+          created_at?: string
+          descricao?: string | null
+          disponivel?: boolean | null
+          id?: string
+          imagem_url?: string | null
+          ordem?: number
+          protocolo_tipo?: string | null
+          titulo: string
+        }
+        Update: {
+          categoria?: string
+          conteudo?: Json
+          created_at?: string
+          descricao?: string | null
+          disponivel?: boolean | null
+          id?: string
+          imagem_url?: string | null
+          ordem?: number
+          protocolo_tipo?: string | null
+          titulo?: string
+        }
+        Relationships: []
+      }
       exercicios_alongamento: {
         Row: {
           categoria: string
@@ -945,6 +1031,53 @@ export type Database = {
         }
         Relationships: []
       }
+      planos_dieta: {
+        Row: {
+          created_at: string
+          descricao: string | null
+          disponivel: boolean | null
+          duracao_dias: number | null
+          fase: string
+          id: string
+          nome: string
+          orientacoes: string | null
+          protocolo_id: string | null
+          refeicoes: Json
+        }
+        Insert: {
+          created_at?: string
+          descricao?: string | null
+          disponivel?: boolean | null
+          duracao_dias?: number | null
+          fase?: string
+          id?: string
+          nome: string
+          orientacoes?: string | null
+          protocolo_id?: string | null
+          refeicoes?: Json
+        }
+        Update: {
+          created_at?: string
+          descricao?: string | null
+          disponivel?: boolean | null
+          duracao_dias?: number | null
+          fase?: string
+          id?: string
+          nome?: string
+          orientacoes?: string | null
+          protocolo_id?: string | null
+          refeicoes?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "planos_dieta_protocolo_id_fkey"
+            columns: ["protocolo_id"]
+            isOneToOne: false
+            referencedRelation: "protocolos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       produtos: {
         Row: {
           cashback_percentual: number | null
@@ -1018,6 +1151,88 @@ export type Database = {
             columns: ["indicado_por"]
             isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      protocolo_secao_checklist: {
+        Row: {
+          concluido: boolean
+          created_at: string
+          data_conclusao: string | null
+          id: string
+          item_key: string
+          secao_id: string
+          user_id: string
+        }
+        Insert: {
+          concluido?: boolean
+          created_at?: string
+          data_conclusao?: string | null
+          id?: string
+          item_key: string
+          secao_id: string
+          user_id: string
+        }
+        Update: {
+          concluido?: boolean
+          created_at?: string
+          data_conclusao?: string | null
+          id?: string
+          item_key?: string
+          secao_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "protocolo_secao_checklist_secao_id_fkey"
+            columns: ["secao_id"]
+            isOneToOne: false
+            referencedRelation: "protocolo_secoes_clinicas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      protocolo_secoes_clinicas: {
+        Row: {
+          conteudo: Json
+          cor: string | null
+          created_at: string
+          descricao: string | null
+          icone: string | null
+          id: string
+          ordem: number
+          protocolo_id: string
+          titulo: string
+        }
+        Insert: {
+          conteudo?: Json
+          cor?: string | null
+          created_at?: string
+          descricao?: string | null
+          icone?: string | null
+          id?: string
+          ordem?: number
+          protocolo_id: string
+          titulo: string
+        }
+        Update: {
+          conteudo?: Json
+          cor?: string | null
+          created_at?: string
+          descricao?: string | null
+          icone?: string | null
+          id?: string
+          ordem?: number
+          protocolo_id?: string
+          titulo?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "protocolo_secoes_clinicas_protocolo_id_fkey"
+            columns: ["protocolo_id"]
+            isOneToOne: false
+            referencedRelation: "protocolos"
             referencedColumns: ["id"]
           },
         ]
