@@ -420,6 +420,20 @@ const Agendamento = () => {
                     <motion.div variants={fadeUp}>
                       <p className="section-label px-1 mb-3">Escolha o serviço</p>
                     </motion.div>
+
+                    {/* Pre-selected service banner */}
+                    {searchParams.get("servico") && selectedServico && (
+                      <motion.div
+                        variants={fadeUp}
+                        className="flex items-center gap-2 px-4 py-3 rounded-xl bg-primary/10 border border-primary/20"
+                      >
+                        <Check size={16} className="text-primary shrink-0" />
+                        <p className="text-sm text-foreground">
+                          <span className="font-semibold">{selectedServico.nome}</span>{" "}
+                          <span className="text-muted-foreground">foi pré-selecionado. Avance ou escolha outro.</span>
+                        </p>
+                      </motion.div>
+                    )}
                     
                     {loadingServicos ? (
                       <ServicosListSkeleton />
