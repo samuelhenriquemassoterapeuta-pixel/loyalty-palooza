@@ -1,6 +1,6 @@
 import { useRef, useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Home, CalendarDays, ShoppingBag, Activity, Apple, User } from "lucide-react";
+import { Home, CalendarDays, Activity, Apple, Globe } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const navItems = [
@@ -8,7 +8,7 @@ const navItems = [
   { icon: CalendarDays, label: "Agendar", path: "/agendamento" },
   { icon: Activity, label: "Protocolos", path: "/protocolos" },
   { icon: Apple, label: "Dietas", path: "/dietas" },
-  { icon: User, label: "Perfil", path: "/profile" },
+  { icon: Globe, label: "Site", path: "/site" },
 ];
 
 export const BottomNavigation = () => {
