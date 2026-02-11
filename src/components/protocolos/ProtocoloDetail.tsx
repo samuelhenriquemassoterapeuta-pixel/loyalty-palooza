@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import { motion } from "framer-motion";
-import { ArrowLeft, Play, Pause, CheckCircle, Zap, BarChart3, Camera, ClipboardList } from "lucide-react";
+import { ArrowLeft, Play, Pause, CheckCircle, Zap, BarChart3, Camera, ClipboardList, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -11,9 +11,11 @@ import { PosturalReportButton } from "./PosturalReportButton";
 import { FichaAcompanhamento } from "./FichaAcompanhamento";
 import { GaleriaEvolucao } from "./GaleriaEvolucao";
 import { GuiaResumoProtocolo } from "./GuiaResumoProtocolo";
+import { SecoesClinicasView } from "./SecoesClinicasView";
 import { useUsuarioProtocolos, useFichas, useFotos, useMetas } from "@/hooks/useProtocolos";
 import { useProgressStats } from "@/hooks/useProgressStats";
 import { useAvaliacoesPosturais } from "@/hooks/useAvaliacaoPostural";
+import { useSecoesClinicas } from "@/hooks/useSecoesClinicas";
 import { tipoLabels } from "./protocoloConstants";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -36,6 +38,8 @@ export const ProtocoloDetail = ({ protocolo, onBack }: ProtocoloDetailProps) => 
   const [tab, setTab] = useState("progresso");
   const isPostural = protocolo.tipo === "postural";
   const chartRef = useRef<HTMLDivElement>(null);
+  const { secoes } = useSecoesClinicas(protocolo.id);
+  const hasSecoes = secoes.length > 0;
 
   const meuProtocolo = meus.find(
     (p) => p.protocolo_id === protocolo.id && (p.status === "ativo" || p.status === "pausado")
@@ -190,32 +194,36 @@ export const ProtocoloDetail = ({ protocolo, onBack }: ProtocoloDetailProps) => 
 
       {/* Tabs with compact summary badges */}
       <Tabs value={tab} onValueChange={setTab} className="w-full">
-        <TabsList className={`w-full grid ${meuProtocolo ? "grid-cols-3" : "grid-cols-1"}`}>
+        <TabsList className={`w-full grid ${
+          meuProtocolo 
+            ? hasSecoes ? "grid-cols-4" : "grid-cols-3"
+            : hasSecoes ? "grid-cols-2" : "grid-cols-1"
+        }`}>
           {meuProtocolo && (
             <>
-              <TabsTrigger value="progresso" className="text-xs gap-1.5">
+              <TabsTrigger value="progresso" className="text-xs gap-1">
                 <ClipboardList size={13} />
-                Progresso
+                <span className="hidden sm:inline">Progresso</span>
                 {stats.metasTotal > 0 && (
-                  <span className="ml-0.5 text-[9px] bg-primary/15 text-primary px-1.5 py-0.5 rounded-full">
+                  <span className="text-[9px] bg-primary/15 text-primary px-1.5 py-0.5 rounded-full">
                     {stats.metasConcluidas}/{stats.metasTotal}
                   </span>
                 )}
               </TabsTrigger>
-              <TabsTrigger value="medidas" className="text-xs gap-1.5">
+              <TabsTrigger value="medidas" className="text-xs gap-1">
                 <BarChart3 size={13} />
-                Medidas
+                <span className="hidden sm:inline">Medidas</span>
                 {stats.totalFichas > 0 && (
-                  <span className="ml-0.5 text-[9px] bg-muted text-muted-foreground px-1.5 py-0.5 rounded-full">
+                  <span className="text-[9px] bg-muted text-muted-foreground px-1.5 py-0.5 rounded-full">
                     {stats.totalFichas}
                   </span>
                 )}
               </TabsTrigger>
-              <TabsTrigger value="evolucao" className="text-xs gap-1.5">
+              <TabsTrigger value="evolucao" className="text-xs gap-1">
                 <Camera size={13} />
-                Evolução
+                <span className="hidden sm:inline">Evolução</span>
                 {stats.totalFotos > 0 && (
-                  <span className="ml-0.5 text-[9px] bg-muted text-muted-foreground px-1.5 py-0.5 rounded-full">
+                  <span className="text-[9px] bg-muted text-muted-foreground px-1.5 py-0.5 rounded-full">
                     {stats.totalFotos}
                   </span>
                 )}
@@ -225,6 +233,12 @@ export const ProtocoloDetail = ({ protocolo, onBack }: ProtocoloDetailProps) => 
           {!meuProtocolo && (
             <TabsTrigger value="guia" className="text-xs gap-1">
               📋 Guia
+            </TabsTrigger>
+          )}
+          {hasSecoes && (
+            <TabsTrigger value="clinico" className="text-xs gap-1">
+              <BookOpen size={13} />
+              <span className="hidden sm:inline">Clínico</span>
             </TabsTrigger>
           )}
         </TabsList>
@@ -273,6 +287,12 @@ export const ProtocoloDetail = ({ protocolo, onBack }: ProtocoloDetailProps) => 
         {!meuProtocolo && (
           <TabsContent value="guia" className="mt-4">
             <GuiaResumoProtocolo tipoProtocolo={protocolo.tipo} />
+          </TabsContent>
+        )}
+
+        {hasSecoes && (
+          <TabsContent value="clinico" className="mt-4">
+            <SecoesClinicasView protocoloId={protocolo.id} />
           </TabsContent>
         )}
       </Tabs>
