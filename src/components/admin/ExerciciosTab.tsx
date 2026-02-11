@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Upload, Pencil, Trash2, Video, Search, X, Film } from "lucide-react";
+import { Upload, Trash2, Video, Search, X, Film, Link, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
@@ -22,6 +22,8 @@ export const ExerciciosTab = () => {
   const [busca, setBusca] = useState("");
   const [categoriaFiltro, setCategoriaFiltro] = useState("todos");
   const [uploadingId, setUploadingId] = useState<string | null>(null);
+  const [urlInputId, setUrlInputId] = useState<string | null>(null);
+  const [videoUrl, setVideoUrl] = useState("");
 
   const { data: exercicios = [], isLoading } = useQuery({
     queryKey: ["admin-exercicios"],
@@ -99,6 +101,41 @@ export const ExerciciosTab = () => {
       toast.success("Vídeo removido");
     } catch (error: any) {
       toast.error(error.message || "Erro ao remover");
+    }
+  };
+
+  const isValidVideoUrl = (url: string) => {
+    return /^https?:\/\/.+/i.test(url) && (
+      /youtube\.com|youtu\.be/i.test(url) ||
+      /vimeo\.com/i.test(url) ||
+      /\.(mp4|webm|ogg|mov)(\?|$)/i.test(url)
+    );
+  };
+
+  const handleSaveUrl = async (exercicioId: string) => {
+    const trimmed = videoUrl.trim();
+    if (!trimmed) {
+      toast.error("Insira uma URL válida");
+      return;
+    }
+    if (!isValidVideoUrl(trimmed)) {
+      toast.error("URL inválida. Use YouTube, Vimeo ou link direto de vídeo (.mp4, .webm)");
+      return;
+    }
+
+    try {
+      const { error } = await supabase
+        .from("exercicios_alongamento")
+        .update({ video_url: trimmed })
+        .eq("id", exercicioId);
+
+      if (error) throw error;
+      queryClient.invalidateQueries({ queryKey: ["admin-exercicios"] });
+      setUrlInputId(null);
+      setVideoUrl("");
+      toast.success("URL do vídeo salva!");
+    } catch (error: any) {
+      toast.error(error.message || "Erro ao salvar URL");
     }
   };
 
@@ -210,7 +247,7 @@ export const ExerciciosTab = () => {
                     {ex.video_url ? (
                       <span className="flex items-center gap-1 text-xs text-green-600">
                         <Film size={12} />
-                        Vídeo enviado
+                        {/youtube|youtu\.be/i.test(ex.video_url) ? "YouTube" : "Vídeo enviado"}
                       </span>
                     ) : (
                       <span className="flex items-center gap-1 text-xs text-orange-500">
@@ -226,6 +263,24 @@ export const ExerciciosTab = () => {
                     checked={ex.disponivel ?? true}
                     onCheckedChange={() => toggleDisponivel(ex.id, ex.disponivel ?? true)}
                   />
+
+                  {/* YouTube URL button */}
+                  <Button
+                    size="icon"
+                    variant={urlInputId === ex.id ? "default" : "ghost"}
+                    className="h-8 w-8"
+                    onClick={() => {
+                      if (urlInputId === ex.id) {
+                        setUrlInputId(null);
+                        setVideoUrl("");
+                      } else {
+                        setUrlInputId(ex.id);
+                        setVideoUrl(ex.video_url || "");
+                      }
+                    }}
+                  >
+                    <Link size={14} />
+                  </Button>
 
                   {/* Upload video button */}
                   <label className="cursor-pointer">
@@ -262,6 +317,27 @@ export const ExerciciosTab = () => {
                   )}
                 </div>
               </div>
+
+              {/* Inline URL input */}
+              {urlInputId === ex.id && (
+                <div className="flex gap-2 mt-2 pt-2 border-t border-border">
+                  <Input
+                    placeholder="Cole a URL do YouTube ou vídeo..."
+                    value={videoUrl}
+                    onChange={(e) => setVideoUrl(e.target.value)}
+                    className="h-8 text-xs"
+                    onKeyDown={(e) => e.key === "Enter" && handleSaveUrl(ex.id)}
+                  />
+                  <Button
+                    size="sm"
+                    className="h-8 px-3 shrink-0"
+                    onClick={() => handleSaveUrl(ex.id)}
+                  >
+                    <Check size={14} className="mr-1" />
+                    Salvar
+                  </Button>
+                </div>
+              )}
             </Card>
           </motion.div>
         ))}
