@@ -250,6 +250,7 @@ export const ProtocoloDetail = ({ protocolo, onBack }: ProtocoloDetailProps) => 
                 protocoloUsuarioId={meuProtocolo.id}
                 protocolo={protocolo}
                 dataInicio={meuProtocolo.data_inicio}
+                onNavigateToPhotos={() => setTab("evolucao")}
               />
 
               {isPostural && (
