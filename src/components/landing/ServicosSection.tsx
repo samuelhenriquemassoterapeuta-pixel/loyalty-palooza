@@ -1,6 +1,7 @@
 import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Clock, Percent, Leaf, ChevronDown, Sparkles, Hand, SmilePlus, Package, Heart } from "lucide-react";
+import { Clock, Percent, Leaf, ChevronDown, Sparkles, Hand, SmilePlus, Package, Heart, Calendar } from "lucide-react";
+import { Link } from "react-router-dom";
 import { useServicos } from "@/hooks/useServicos";
 import { useParallax } from "@/hooks/useParallax";
 
@@ -181,6 +182,13 @@ export const ServicosSection = () => {
                                   R$ {servico.preco.toFixed(2).replace(".", ",")}
                                 </span>
                               </div>
+
+                              <Link to="/auth" className="mt-3 block">
+                                <button className="w-full flex items-center justify-center gap-1.5 py-2 rounded-lg bg-primary text-primary-foreground text-xs font-semibold hover:bg-primary/90 transition-colors">
+                                  <Calendar size={13} />
+                                  Agendar
+                                </button>
+                              </Link>
                             </motion.div>
                           ))}
                         </div>
