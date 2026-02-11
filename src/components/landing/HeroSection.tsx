@@ -66,18 +66,18 @@ export const HeroSection = () => {
                 className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6"
               >
                 <Sparkles size={14} className="text-primary" />
-                <span className="text-xs font-semibold text-primary">Bem-estar com recompensas</span>
+                <span className="text-xs font-semibold text-primary">Spa Terapia & Bem-estar</span>
               </motion.div>
 
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground leading-tight">
-                Cuide de você,{" "}
-                <span className="text-gradient font-serif italic">ganhe</span>{" "}
-                por isso
+                Onde o tempo{" "}
+                <span className="text-gradient font-serif italic">desacelera</span>{" "}
+                e o cuidado começa
               </h1>
 
               <p className="mt-6 text-lg text-muted-foreground max-w-lg mx-auto lg:mx-0 leading-relaxed">
-                A Resinkra oferece terapias naturais com um programa exclusivo de cashback. 
-                Cada sessão é um investimento no seu bem-estar — e no seu bolso.
+                Um cuidado que começa no corpo, atravessa os sentidos e permanece na rotina. 
+                Técnica, sensibilidade e bem-estar em perfeita sincronia.
               </p>
 
               <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center lg:justify-start">
@@ -86,7 +86,7 @@ export const HeroSection = () => {
                   onClick={() => navigate("/auth")}
                   className="group"
                 >
-                  Comece agora
+                  Agende seu horário
                   <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
                 </Button>
                 <Button
@@ -110,15 +110,15 @@ export const HeroSection = () => {
               >
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 rounded-full bg-highlight" />
-                  <span className="text-sm">Terapias naturais</span>
+                  <span className="text-sm">Equilíbrio</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 rounded-full bg-accent" />
-                  <span className="text-sm">Cashback real</span>
+                  <span className="text-sm">Pausa</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 rounded-full bg-primary" />
-                  <span className="text-sm">100% digital</span>
+                  <span className="text-sm">Essência</span>
                 </div>
               </motion.div>
             </motion.div>
