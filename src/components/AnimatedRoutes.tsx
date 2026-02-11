@@ -78,6 +78,14 @@ export const AnimatedRoutes = () => {
           }
         />
         <Route
+          path="/site"
+          element={
+            <PageTransition>
+              <Landing />
+            </PageTransition>
+          }
+        />
+        <Route
           path="/agendamento"
           element={
             <ProtectedRoute>
