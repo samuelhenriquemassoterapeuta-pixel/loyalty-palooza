@@ -105,18 +105,18 @@ export const LEVEL_REWARDS: LevelReward[] = [
 export const TAG_STYLES: Record<LevelReward["tag"], { label: string; className: string }> = {
   desconto: {
     label: "Desconto",
-    className: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400",
+    className: "bg-highlight/15 text-highlight",
   },
   cashback: {
     label: "Cashback",
-    className: "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400",
+    className: "bg-warning/15 text-warning",
   },
   exclusivo: {
     label: "Exclusivo",
-    className: "bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-400",
+    className: "bg-accent/15 text-accent",
   },
   prioridade: {
     label: "Prioridade",
-    className: "bg-sky-100 text-sky-700 dark:bg-sky-900/30 dark:text-sky-400",
+    className: "bg-info/15 text-info",
   },
 };

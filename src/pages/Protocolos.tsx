@@ -27,9 +27,9 @@ const heroMap: Record<string, string> = {
 };
 
 const gradientMap: Record<string, string> = {
-  drenagem_pos_operatorio: "from-sky-500/80 to-blue-600/80",
-  postural: "from-purple-500/80 to-violet-600/80",
-  alongamento: "from-emerald-500/80 to-teal-600/80",
+  drenagem_pos_operatorio: "from-info/80 to-info/90",
+  postural: "from-accent/80 to-accent/90",
+  alongamento: "from-highlight/80 to-highlight/90",
 };
 
 const Protocolos = () => {
@@ -203,7 +203,7 @@ const Protocolos = () => {
                             >
                               <Button
                                 onClick={() => navigate("/alongamento")}
-                                className="w-full gap-2 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white rounded-xl h-12 text-sm font-semibold shadow-md"
+                                className="w-full gap-2 bg-highlight hover:bg-highlight/90 text-highlight-foreground rounded-xl h-12 text-sm font-semibold shadow-md"
                               >
                                 <Dumbbell size={18} />
                                 Acessar Exercícios de Alongamento

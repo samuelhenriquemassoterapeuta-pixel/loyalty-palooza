@@ -12,9 +12,9 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 const nivelColors: Record<string, string> = {
-  iniciante: "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400",
-  intermediario: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400",
-  avancado: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400",
+  iniciante: "bg-highlight/15 text-highlight",
+  intermediario: "bg-warning/15 text-warning",
+  avancado: "bg-destructive/15 text-destructive",
 };
 
 export const ExerciciosTab = () => {
@@ -172,11 +172,11 @@ export const ExerciciosTab = () => {
           <p className="text-xs text-muted-foreground">Total</p>
         </Card>
         <Card className="p-3 text-center">
-          <p className="text-2xl font-bold text-green-600">{comVideo}</p>
+          <p className="text-2xl font-bold text-highlight">{comVideo}</p>
           <p className="text-xs text-muted-foreground">Com vídeo</p>
         </Card>
         <Card className="p-3 text-center">
-          <p className="text-2xl font-bold text-orange-600">{semVideo}</p>
+          <p className="text-2xl font-bold text-warning">{semVideo}</p>
           <p className="text-xs text-muted-foreground">Sem vídeo</p>
         </Card>
       </div>
@@ -245,12 +245,12 @@ export const ExerciciosTab = () => {
                   {/* Video status */}
                   <div className="flex items-center gap-2 mt-2">
                     {ex.video_url ? (
-                      <span className="flex items-center gap-1 text-xs text-green-600">
+                      <span className="flex items-center gap-1 text-xs text-highlight">
                         <Film size={12} />
                         {/youtube|youtu\.be/i.test(ex.video_url) ? "YouTube" : "Vídeo enviado"}
                       </span>
                     ) : (
-                      <span className="flex items-center gap-1 text-xs text-orange-500">
+                      <span className="flex items-center gap-1 text-xs text-warning">
                         <Video size={12} />
                         Sem vídeo (usando animação SVG)
                       </span>
