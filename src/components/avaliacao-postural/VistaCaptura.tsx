@@ -167,6 +167,7 @@ export const VistaCaptura = ({ vista, existingUrl, onCapture, isPending, avaliac
         ref={inputRef}
         type="file"
         accept="image/jpeg,image/png,image/webp"
+        capture="environment"
         className="hidden"
         onChange={handleFile}
       />
