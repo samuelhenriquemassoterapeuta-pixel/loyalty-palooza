@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import { useTheme } from "next-themes";
 import { 
   User, 
   Bell, 
@@ -16,7 +17,9 @@ import {
   Download,
   Crown,
   Scissors,
-  Link2
+  Link2,
+  Sun,
+  Moon
 } from "lucide-react";
 import { PageLoading } from "@/components/LoadingSpinner";
 import { AppLayout } from "@/components/AppLayout";
@@ -61,6 +64,8 @@ const fadeUp = {
 const Profile = () => {
   const navigate = useNavigate();
   const { user, signOut } = useAuth();
+  const { theme, setTheme } = useTheme();
+  const isDark = theme === "dark";
   const { profile, loading, updateProfile, uploadAvatar } = useProfile();
   const { isAdmin } = useAdmin();
   const { stats: transacoesStats } = useTransacoes();
@@ -266,6 +271,30 @@ const Profile = () => {
             {/* Menu Items */}
             <motion.div variants={fadeUp} className="space-y-2.5">
               <p className="section-label px-1">Configurações</p>
+
+              {/* Theme Toggle */}
+              <motion.button
+                variants={fadeUp}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => setTheme(isDark ? "light" : "dark")}
+                className="w-full flex items-center gap-4 p-4 rounded-2xl glass-card-strong hover:shadow-elevated transition-all group"
+              >
+                <div className="p-2.5 rounded-xl bg-gradient-to-br from-primary/10 to-accent/10 group-hover:from-primary/20 group-hover:to-accent/20 transition-all">
+                  {isDark ? <Sun size={20} className="text-primary" /> : <Moon size={20} className="text-primary" />}
+                </div>
+                <div className="flex-1 text-left">
+                  <p className="font-semibold text-foreground group-hover:text-primary transition-colors">
+                    {isDark ? "Modo claro" : "Modo escuro"}
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    {isDark ? "Trocar para tema claro" : "Trocar para tema escuro"}
+                  </p>
+                </div>
+                <div className={`w-11 h-6 rounded-full relative transition-colors ${isDark ? "bg-primary" : "bg-muted"}`}>
+                  <div className={`absolute top-0.5 w-5 h-5 rounded-full bg-card shadow-sm transition-transform ${isDark ? "left-[22px]" : "left-0.5"}`} />
+                </div>
+              </motion.button>
+
               <div className="space-y-2">
                 {allMenuItems.map((item) => (
                   <motion.button
