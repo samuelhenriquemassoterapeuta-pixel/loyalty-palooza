@@ -14,7 +14,7 @@ export const ExercicioDetail = ({ exercicio, onClose }: ExercicioDetailProps) =>
   const [videoPlaying, setVideoPlaying] = useState(false);
 
   const hasVideo = !!exercicio.video_url;
-
+  const isDirectVideo = hasVideo && /\.(mp4|webm|ogg|mov)(\?|$)/i.test(exercicio.video_url!);
   return (
     <AnimatePresence>
       <motion.div
@@ -33,15 +33,27 @@ export const ExercicioDetail = ({ exercicio, onClose }: ExercicioDetailProps) =>
         >
           {/* Video Section */}
           {hasVideo && (
-            <div className="relative w-full aspect-video bg-black rounded-t-3xl overflow-hidden">
+            <div className="relative w-full aspect-[9/16] max-h-[50vh] bg-black rounded-t-3xl overflow-hidden">
               {videoPlaying ? (
-                <iframe
-                  src={getEmbedUrl(exercicio.video_url!)}
-                  className="absolute inset-0 w-full h-full"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  title={exercicio.nome}
-                />
+                isDirectVideo ? (
+                  <video
+                    src={exercicio.video_url!}
+                    className="absolute inset-0 w-full h-full object-contain"
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    controls
+                  />
+                ) : (
+                  <iframe
+                    src={getEmbedUrl(exercicio.video_url!)}
+                    className="absolute inset-0 w-full h-full"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    title={exercicio.nome}
+                  />
+                )
               ) : (
                 <button
                   onClick={() => setVideoPlaying(true)}
