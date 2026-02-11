@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { AppLayout } from "@/components/AppLayout";
 import { ArrowLeft, Clock, Check, CalendarDays, X, User, Star, RefreshCw } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
 import { ptBR } from "date-fns/locale";
 import { format } from "date-fns";
@@ -54,6 +54,7 @@ const fadeUp = {
 
 const Agendamento = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { agendamentos, loading, createAgendamento, cancelAgendamento, reagendarAgendamento, getProximosAgendamentos, getHorariosOcupados } = useAgendamentos();
   const { servicos, loading: loadingServicos } = useServicos();
   const { terapeutas, loading: loadingTerapeutas } = useTerapeutas();
@@ -83,6 +84,18 @@ const Agendamento = () => {
     terapeutaId?: string;
     terapeutaNome?: string;
   } | null>(null);
+
+  // Pre-select service from URL query param
+  useEffect(() => {
+    const servicoParam = searchParams.get("servico");
+    if (servicoParam && servicos.length > 0 && !selectedServico) {
+      const match = servicos.find(s => s.nome === servicoParam);
+      if (match) {
+        setSelectedServico(match);
+        setStep(2);
+      }
+    }
+  }, [servicos, searchParams, selectedServico]);
 
   const handleDateSelect = (date: Date | undefined) => {
     setSelectedDate(date);

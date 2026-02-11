@@ -183,7 +183,7 @@ export const ServicosSection = () => {
                                 </span>
                               </div>
 
-                              <Link to="/auth" className="mt-3 block">
+                              <Link to={`/auth?redirect=${encodeURIComponent(`/agendamento?servico=${encodeURIComponent(servico.nome)}`)}`} className="mt-3 block">
                                 <button className="w-full flex items-center justify-center gap-1.5 py-2 rounded-lg bg-primary text-primary-foreground text-xs font-semibold hover:bg-primary/90 transition-colors">
                                   <Calendar size={13} />
                                   Agendar
