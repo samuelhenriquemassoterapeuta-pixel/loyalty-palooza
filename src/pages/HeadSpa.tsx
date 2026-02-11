@@ -20,12 +20,21 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useHeadSpaImagens, ETAPA_KEYS } from "@/hooks/useHeadSpaImagens";
 import heroImage from "@/assets/headspa-hero.jpg";
 import imgAnalise from "@/assets/headspa/analise-couro.jpg";
 import imgLimpeza from "@/assets/headspa/limpeza-profunda.jpg";
 import imgMassagem from "@/assets/headspa/massagem-terapeutica.jpg";
 import imgNutritivos from "@/assets/headspa/tratamentos-nutritivos.jpg";
 import imgAroma from "@/assets/headspa/aromaterapia-vapor.jpg";
+
+const FALLBACK_IMAGES: Record<string, string> = {
+  "analise-couro": imgAnalise,
+  "limpeza-profunda": imgLimpeza,
+  "massagem-terapeutica": imgMassagem,
+  "tratamentos-nutritivos": imgNutritivos,
+  "aromaterapia-vapor": imgAroma,
+};
 
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
@@ -145,6 +154,12 @@ const beneficios = [
 
 const HeadSpa = () => {
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
+  const { imagemMap } = useHeadSpaImagens();
+
+  const getEtapaImage = (index: number) => {
+    const key = ETAPA_KEYS[index];
+    return imagemMap.get(key) || FALLBACK_IMAGES[key] || etapas[index].image;
+  };
 
   const toggleEtapa = (i: number) => {
     setExpandedIndex(expandedIndex === i ? null : i);
@@ -315,7 +330,7 @@ const HeadSpa = () => {
                           {/* Image */}
                           <div className="relative h-48 sm:h-64 overflow-hidden">
                             <img
-                              src={etapa.image}
+                              src={getEtapaImage(i)}
                               alt={etapa.title}
                               className="w-full h-full object-cover"
                             />

@@ -584,6 +584,30 @@ export type Database = {
           },
         ]
       }
+      headspa_imagens: {
+        Row: {
+          created_at: string
+          etapa_key: string
+          id: string
+          imagem_url: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          etapa_key: string
+          id?: string
+          imagem_url: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          etapa_key?: string
+          id?: string
+          imagem_url?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       historico_cirurgico: {
         Row: {
           created_at: string
