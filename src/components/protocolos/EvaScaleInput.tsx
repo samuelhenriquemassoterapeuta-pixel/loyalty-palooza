@@ -3,10 +3,10 @@ import { Slider } from "@/components/ui/slider";
 import { Label } from "@/components/ui/label";
 
 const evaConfig = [
-  { min: 0, max: 0, label: "Sem dor", emoji: "😊", color: "text-green-500" },
-  { min: 1, max: 3, label: "Dor leve", emoji: "🙂", color: "text-lime-500" },
-  { min: 4, max: 6, label: "Dor moderada", emoji: "😐", color: "text-yellow-500" },
-  { min: 7, max: 8, label: "Dor intensa", emoji: "😣", color: "text-orange-500" },
+  { min: 0, max: 0, label: "Sem dor", emoji: "😊", color: "text-highlight" },
+  { min: 1, max: 3, label: "Dor leve", emoji: "🙂", color: "text-highlight" },
+  { min: 4, max: 6, label: "Dor moderada", emoji: "😐", color: "text-warning" },
+  { min: 7, max: 8, label: "Dor intensa", emoji: "😣", color: "text-accent" },
   { min: 9, max: 10, label: "Dor insuportável", emoji: "😫", color: "text-destructive" },
 ];
 

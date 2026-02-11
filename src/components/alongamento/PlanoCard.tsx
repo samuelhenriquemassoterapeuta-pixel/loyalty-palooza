@@ -6,9 +6,9 @@ import { Button } from "@/components/ui/button";
 import { PlanoAlongamento } from "@/hooks/useAlongamento";
 
 const nivelConfig: Record<string, { label: string; icon: typeof Zap; color: string }> = {
-  iniciante: { label: "Iniciante", icon: Zap, color: "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400" },
-  intermediario: { label: "Intermediário", icon: Zap, color: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400" },
-  avancado: { label: "Avançado", icon: Zap, color: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400" },
+  iniciante: { label: "Iniciante", icon: Zap, color: "bg-highlight/10 text-highlight" },
+  intermediario: { label: "Intermediário", icon: Zap, color: "bg-warning/10 text-warning" },
+  avancado: { label: "Avançado", icon: Zap, color: "bg-destructive/10 text-destructive" },
 };
 
 const objetivoEmoji: Record<string, string> = {

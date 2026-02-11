@@ -152,9 +152,9 @@ export function ComparativeSummary({ angleSeries, measurementSeries }: Comparati
       {/* Summary badges */}
       <div className="flex gap-2 flex-wrap">
         {improved.length > 0 && (
-          <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-green-500/10 border border-green-500/20">
-            <TrendingDown size={12} className="text-green-500" />
-            <span className="text-[11px] font-semibold text-green-600 dark:text-green-400">
+          <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-highlight/10 border border-highlight/20">
+            <TrendingDown size={12} className="text-highlight" />
+            <span className="text-[11px] font-semibold text-highlight">
               {improved.length} {improved.length === 1 ? "melhora" : "melhoras"}
             </span>
           </div>
@@ -168,9 +168,9 @@ export function ComparativeSummary({ angleSeries, measurementSeries }: Comparati
           </div>
         )}
         {attention.length > 0 && (
-          <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-amber-500/10 border border-amber-500/20">
-            <TrendingUp size={12} className="text-amber-500" />
-            <span className="text-[11px] font-semibold text-amber-600 dark:text-amber-400">
+          <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-warning/10 border border-warning/20">
+            <TrendingUp size={12} className="text-warning" />
+            <span className="text-[11px] font-semibold text-warning">
               {attention.length} {attention.length === 1 ? "atenção" : "atenções"}
             </span>
           </div>

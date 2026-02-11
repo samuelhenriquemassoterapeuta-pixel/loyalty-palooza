@@ -33,8 +33,8 @@ export const PosturalAssessmentLink = ({ variants }: PosturalAssessmentLinkProps
     <motion.div variants={variants}>
       <div className="p-4 rounded-2xl bg-card border border-border space-y-3">
         <div className="flex items-center gap-2">
-          <div className="p-1.5 rounded-lg bg-purple-100 dark:bg-purple-900/30">
-            <Camera size={14} className="text-purple-600 dark:text-purple-400" />
+          <div className="p-1.5 rounded-lg bg-info/10">
+            <Camera size={14} className="text-info" />
           </div>
           <h4 className="text-sm font-semibold text-foreground">Avaliação Postural</h4>
         </div>
@@ -75,7 +75,7 @@ export const PosturalAssessmentLink = ({ variants }: PosturalAssessmentLinkProps
                     {totalFotos}/4 vistas
                   </span>
                   {totalFotos === 4 && (
-                    <span className="text-[10px] text-green-600 dark:text-green-400 font-medium">
+                    <span className="text-[10px] text-highlight font-medium">
                       ✓ Completa
                     </span>
                   )}

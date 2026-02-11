@@ -6,9 +6,9 @@ import { ExercicioAlongamento } from "@/hooks/useAlongamento";
 import { ExercicioAnimado } from "./ExercicioAnimado";
 
 const nivelConfig: Record<string, { label: string; color: string }> = {
-  iniciante: { label: "Iniciante", color: "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400" },
-  intermediario: { label: "Intermediário", color: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400" },
-  avancado: { label: "Avançado", color: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400" },
+  iniciante: { label: "Iniciante", color: "bg-highlight/10 text-highlight" },
+  intermediario: { label: "Intermediário", color: "bg-warning/10 text-warning" },
+  avancado: { label: "Avançado", color: "bg-destructive/10 text-destructive" },
 };
 
 interface ExercicioCardProps {
