@@ -14,8 +14,8 @@ export const ContatoSection = () => {
   const navigate = useNavigate();
 
   return (
-    <section id="contato" className="py-20 lg:py-28 bg-card/50">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="contato" className="py-14 sm:py-20 lg:py-28 bg-card/50">
+      <div className="max-w-6xl mx-auto px-5 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           {/* CTA side */}
           <motion.div
