@@ -1674,6 +1674,16 @@ export type Database = {
           total_sessoes: number
         }[]
       }
+      get_terapeutas_publicos: {
+        Args: never
+        Returns: {
+          disponivel: boolean
+          especialidade: string
+          foto_url: string
+          id: string
+          nome: string
+        }[]
+      }
       get_user_tier: {
         Args: { p_user_id: string }
         Returns: {

@@ -24,11 +24,11 @@
        setLoading(true);
       
       // Buscar terapeutas
-      const { data: terapeutasData, error: terapeutasError } = await supabase
-         .from("terapeutas")
-         .select("*")
-         .eq("disponivel", true)
-         .order("nome", { ascending: true });
+       const { data: terapeutasData, error: terapeutasError } = await supabase
+          .from("terapeutas")
+          .select("id, nome, especialidade, foto_url, disponivel, created_at")
+          .eq("disponivel", true)
+          .order("nome", { ascending: true });
  
       if (terapeutasError) throw terapeutasError;
 
@@ -58,14 +58,16 @@
       });
 
       // Adicionar média aos terapeutas
-      const terapeutasComMedia = (terapeutasData || []).map((terapeuta) => {
-        const avaliacoes = avaliacoesPorTerapeuta[terapeuta.id];
-        return {
-          ...terapeuta,
-          media_avaliacoes: avaliacoes ? avaliacoes.soma / avaliacoes.total : undefined,
-          total_avaliacoes: avaliacoes?.total || 0,
-        };
-      });
+       const terapeutasComMedia = (terapeutasData || []).map((terapeuta) => {
+         const avaliacoes = avaliacoesPorTerapeuta[terapeuta.id];
+         return {
+           ...terapeuta,
+           email: null as string | null,
+           telefone: null as string | null,
+           media_avaliacoes: avaliacoes ? avaliacoes.soma / avaliacoes.total : undefined,
+           total_avaliacoes: avaliacoes?.total || 0,
+         };
+       });
 
       setTerapeutas(terapeutasComMedia);
      } catch (err: unknown) {
