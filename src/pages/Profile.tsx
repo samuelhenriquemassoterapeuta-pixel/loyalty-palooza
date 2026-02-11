@@ -15,7 +15,8 @@ import {
   Loader2,
   Download,
   Crown,
-  Scissors
+  Scissors,
+  Link2
 } from "lucide-react";
 import { PageLoading } from "@/components/LoadingSpinner";
 import { AppLayout } from "@/components/AppLayout";
@@ -83,6 +84,7 @@ const Profile = () => {
     { icon: Scissors, label: "Histórico cirúrgico", description: "Cirurgias e pós-operatório", action: "cirurgico" },
     { icon: Bell, label: "Notificações", description: "Gerencie seus alertas", action: "notificacoes" },
     { icon: Shield, label: "Segurança", description: "Senha e autenticação", action: "seguranca" },
+    { icon: Link2, label: "Contas vinculadas", description: "Google, Apple e mais", action: "conta" },
     { icon: Smartphone, label: "Dispositivos", description: "Gerencie seus acessos", action: "dispositivos" },
     { icon: Download, label: "Instalar App", description: "Adicione à tela inicial", action: "instalar" },
     { icon: FileText, label: "Manual do App", description: "Como usar o Resinkra", action: "manual" },
@@ -145,6 +147,9 @@ const Profile = () => {
         break;
       case "dispositivos":
         setDevicesSheetOpen(true);
+        break;
+      case "conta":
+        navigate("/conta");
         break;
       case "instalar":
         navigate("/instalar");
