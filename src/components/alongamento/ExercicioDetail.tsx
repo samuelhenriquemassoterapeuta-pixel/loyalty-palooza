@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X, Clock, Repeat, Target, Info, Play, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ExercicioAlongamento } from "@/hooks/useAlongamento";
+import { ExercicioAnimado } from "./ExercicioAnimado";
 
 interface ExercicioDetailProps {
   exercicio: ExercicioAlongamento;
@@ -61,8 +62,8 @@ export const ExercicioDetail = ({ exercicio, onClose }: ExercicioDetailProps) =>
           <div className="flex items-start justify-between p-6 pb-4">
             <div className="flex items-center gap-3">
               {!hasVideo && (
-                <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center text-2xl">
-                  {exercicio.imagem_url || "🧘"}
+                <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center overflow-hidden">
+                  <ExercicioAnimado tipo={exercicio.categoria} size={48} />
                 </div>
               )}
               <div>
