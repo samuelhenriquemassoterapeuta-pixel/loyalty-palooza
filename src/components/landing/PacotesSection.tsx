@@ -65,14 +65,14 @@ export const PacotesSection = () => {
     pacotes.length >= 3 ? 1 : pacotes.length === 2 ? 1 : 0;
 
   return (
-    <section id="pacotes" className="py-20 lg:py-28 bg-card/50">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="pacotes" className="py-14 sm:py-20 lg:py-28 bg-card/50">
+      <div className="max-w-6xl mx-auto px-5 sm:px-6 lg:px-8">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
-          className="text-center mb-14"
+          className="text-center mb-8 sm:mb-14"
         >
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-highlight/10 border border-highlight/20 mb-4">
             <Crown size={14} className="text-highlight" />
@@ -106,7 +106,7 @@ export const PacotesSection = () => {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-60px" }}
-            className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch"
+            className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 items-stretch"
           >
             {pacotes.map((pacote, i) => {
               const isBestValue = i === bestValueIndex && pacotes.length > 1;
