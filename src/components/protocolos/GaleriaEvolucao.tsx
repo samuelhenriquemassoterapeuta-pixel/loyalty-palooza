@@ -39,6 +39,7 @@ export const GaleriaEvolucao = ({ protocoloUsuarioId }: GaleriaEvolucaoProps) =>
   const [filter, setFilter] = useState<string>("todas");
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
+  const cameraRef = useRef<HTMLInputElement>(null);
 
   const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
   const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/heic"];
@@ -85,6 +86,14 @@ export const GaleriaEvolucao = ({ protocoloUsuarioId }: GaleriaEvolucaoProps) =>
             </SelectContent>
           </Select>
           <input
+            ref={cameraRef}
+            type="file"
+            accept="image/*"
+            capture="environment"
+            className="hidden"
+            onChange={handleUpload}
+          />
+          <input
             ref={fileRef}
             type="file"
             accept=".jpg,.jpeg,.png,.webp,.heic"
@@ -93,12 +102,23 @@ export const GaleriaEvolucao = ({ protocoloUsuarioId }: GaleriaEvolucaoProps) =>
           />
           <Button
             size="sm"
+            variant="default"
+            className="gap-1.5"
+            onClick={() => cameraRef.current?.click()}
+            disabled={upload.isPending}
+          >
+            <Camera size={16} />
+            {upload.isPending ? "Enviando..." : "Câmera"}
+          </Button>
+          <Button
+            size="sm"
+            variant="outline"
             className="gap-1.5"
             onClick={() => fileRef.current?.click()}
             disabled={upload.isPending}
           >
-            <Camera size={16} />
-            {upload.isPending ? "Enviando..." : "Foto"}
+            <Plus size={16} />
+            Galeria
           </Button>
         </div>
       </div>
