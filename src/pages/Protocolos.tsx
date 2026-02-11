@@ -1,42 +1,31 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { Activity, Search, Droplets, Flame, Accessibility } from "lucide-react";
+import { Activity, Search, Droplets, Accessibility, TreePine } from "lucide-react";
 import { AppLayout } from "@/components/AppLayout";
 import { Input } from "@/components/ui/input";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ProtocoloCard } from "@/components/protocolos/ProtocoloCard";
 import { useProtocolos, useUsuarioProtocolos } from "@/hooks/useProtocolos";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
-import { stagger, fadeUp } from "@/components/protocolos/protocoloConstants";
+import { stagger, fadeUp, gruposProtocolos } from "@/components/protocolos/protocoloConstants";
+
+const iconMap = {
+  Droplets,
+  Accessibility,
+  Stretch: TreePine,
+} as const;
 
 const Protocolos = () => {
   const navigate = useNavigate();
   const { protocolos, isLoading } = useProtocolos();
   const { meus } = useUsuarioProtocolos();
   const [search, setSearch] = useState("");
-  const [tipoFilter, setTipoFilter] = useState("todos");
-
-  const filtered = protocolos.filter((p) => {
-    const matchSearch =
-      p.nome.toLowerCase().includes(search.toLowerCase()) ||
-      p.descricao?.toLowerCase().includes(search.toLowerCase());
-    const matchTipo = tipoFilter === "todos" || p.tipo === tipoFilter;
-    return matchSearch && matchTipo;
-  });
 
   const activeIds = new Set(
     meus
       .filter((m) => m.status === "ativo" || m.status === "pausado")
       .map((m) => m.protocolo_id)
   );
-
-  const sorted = [...filtered].sort((a, b) => {
-    const aActive = activeIds.has(a.id) ? 0 : 1;
-    const bActive = activeIds.has(b.id) ? 0 : 1;
-    if (aActive !== bActive) return aActive - bActive;
-    return a.nome.localeCompare(b.nome);
-  });
 
   if (isLoading) {
     return (
@@ -56,7 +45,7 @@ const Protocolos = () => {
             variants={stagger}
             initial="hidden"
             animate="show"
-            className="space-y-5"
+            className="space-y-6"
           >
             {/* Header */}
             <motion.div variants={fadeUp}>
@@ -70,11 +59,11 @@ const Protocolos = () => {
                 )}
               </div>
               <p className="text-sm text-muted-foreground">
-                Emagrecimento, Drenagem & Alinhamento Postural
+                Drenagem, Alinhamento Postural & Alongamento
               </p>
             </motion.div>
 
-            {/* Search & filter */}
+            {/* Search */}
             <motion.div variants={fadeUp} className="relative">
               <Search
                 size={16}
@@ -88,46 +77,79 @@ const Protocolos = () => {
               />
             </motion.div>
 
-            <motion.div variants={fadeUp}>
-              <Tabs value={tipoFilter} onValueChange={setTipoFilter}>
-                <TabsList className="w-full grid grid-cols-4">
-                  <TabsTrigger value="todos" className="text-xs gap-1">
-                    <Activity size={13} /> Todos
-                  </TabsTrigger>
-                  <TabsTrigger value="emagrecimento" className="text-xs gap-1">
-                    <Flame size={13} /> Emagrecer
-                  </TabsTrigger>
-                  <TabsTrigger value="drenagem_pos_operatorio" className="text-xs gap-1">
-                    <Droplets size={13} /> Drenagem
-                  </TabsTrigger>
-                  <TabsTrigger value="postural" className="text-xs gap-1">
-                    <Accessibility size={13} /> Postural
-                  </TabsTrigger>
-                </TabsList>
-              </Tabs>
-            </motion.div>
+            {/* Groups */}
+            {gruposProtocolos.map((grupo) => {
+              const Icon = iconMap[grupo.icon];
+              const grupoProtocolos = protocolos
+                .filter((p) => {
+                  if (p.tipo !== grupo.tipo) return false;
+                  if (!search) return true;
+                  const s = search.toLowerCase();
+                  return (
+                    p.nome.toLowerCase().includes(s) ||
+                    p.descricao?.toLowerCase().includes(s)
+                  );
+                })
+                .sort((a, b) => {
+                  const aActive = activeIds.has(a.id) ? 0 : 1;
+                  const bActive = activeIds.has(b.id) ? 0 : 1;
+                  if (aActive !== bActive) return aActive - bActive;
+                  return a.nome.localeCompare(b.nome);
+                });
 
-            {/* Protocol grid — responsive: 1 col mobile, 2 col desktop */}
-            <motion.div
-              variants={fadeUp}
-              className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-3"
-            >
-              {sorted.map((p) => (
-                <ProtocoloCard
-                  key={p.id}
-                  protocolo={p}
-                  isAtivo={activeIds.has(p.id)}
-                  onSelect={() => navigate(`/protocolos/${p.id}`)}
-                />
-              ))}
-            </motion.div>
+              if (search && grupoProtocolos.length === 0) return null;
 
-            {sorted.length === 0 && (
-              <div className="text-center py-12 text-muted-foreground text-sm">
-                <Activity size={36} className="mx-auto mb-3 opacity-30" />
-                <p>Nenhum protocolo encontrado.</p>
-              </div>
-            )}
+              return (
+                <motion.div key={grupo.tipo} variants={fadeUp} className="space-y-3">
+                  <div className="flex items-center gap-2">
+                    <Icon size={18} className={grupo.colorClass} />
+                    <h2 className="text-base font-semibold text-foreground">
+                      {grupo.titulo}
+                    </h2>
+                    <span className="text-[10px] bg-muted text-muted-foreground px-2 py-0.5 rounded-full">
+                      {grupoProtocolos.length}
+                    </span>
+                  </div>
+                  <p className="text-xs text-muted-foreground -mt-1">
+                    {grupo.descricao}
+                  </p>
+
+                  {grupoProtocolos.length > 0 ? (
+                    <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-3">
+                      {grupoProtocolos.map((p) => (
+                        <ProtocoloCard
+                          key={p.id}
+                          protocolo={p}
+                          isAtivo={activeIds.has(p.id)}
+                          onSelect={() => navigate(`/protocolos/${p.id}`)}
+                        />
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="text-center py-6 text-muted-foreground text-sm border border-dashed rounded-xl">
+                      <p>Nenhum protocolo nesta categoria.</p>
+                    </div>
+                  )}
+                </motion.div>
+              );
+            })}
+
+            {/* Empty state when search returns nothing */}
+            {search &&
+              gruposProtocolos.every(
+                (g) =>
+                  !protocolos.some(
+                    (p) =>
+                      p.tipo === g.tipo &&
+                      (p.nome.toLowerCase().includes(search.toLowerCase()) ||
+                        p.descricao?.toLowerCase().includes(search.toLowerCase()))
+                  )
+              ) && (
+                <div className="text-center py-12 text-muted-foreground text-sm">
+                  <Activity size={36} className="mx-auto mb-3 opacity-30" />
+                  <p>Nenhum protocolo encontrado.</p>
+                </div>
+              )}
           </motion.div>
         </div>
       </div>
