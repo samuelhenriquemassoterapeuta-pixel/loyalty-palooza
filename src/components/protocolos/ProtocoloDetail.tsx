@@ -253,9 +253,9 @@ export const ProtocoloDetail = ({ protocolo, onBack }: ProtocoloDetailProps) => 
                 onNavigateToPhotos={() => setTab("evolucao")}
               />
 
-              {isPostural && (
-                <div className="space-y-3">
-                  <PosturalAssessmentLink />
+              <div className="space-y-3">
+                <PosturalAssessmentLink />
+                {isPostural && (
                   <div className="flex justify-end">
                     <PosturalReportButton
                       fichas={fichas}
@@ -265,8 +265,8 @@ export const ProtocoloDetail = ({ protocolo, onBack }: ProtocoloDetailProps) => 
                       protocoloUsuarioId={meuProtocolo.id}
                     />
                   </div>
-                </div>
-              )}
+                )}
+              </div>
 
               <MetasSemanais protocoloUsuarioId={meuProtocolo.id} />
             </TabsContent>
