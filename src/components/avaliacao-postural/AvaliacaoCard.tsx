@@ -61,7 +61,7 @@ export const AvaliacaoCard = ({ avaliacao, index, onSelect, onDelete }: Avaliaca
                 {totalFotos}/4 vistas capturadas
               </span>
               {totalFotos === 4 && (
-                <span className="text-[10px] text-green-600 dark:text-green-400 font-medium">
+                <span className="text-[10px] text-highlight font-medium">
                   ✓ Completa
                 </span>
               )}

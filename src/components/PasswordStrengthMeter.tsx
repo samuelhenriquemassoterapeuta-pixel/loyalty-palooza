@@ -80,8 +80,8 @@ export const PasswordStrengthMeter = ({ password, className }: PasswordStrengthM
           <span className={cn(
             "text-xs font-medium",
             strength <= 1 && "text-destructive",
-            strength === 2 && "text-yellow-600",
-            strength >= 3 && "text-green-600"
+            strength === 2 && "text-warning",
+            strength >= 3 && "text-highlight"
           )}>
             {label}
           </span>
@@ -106,11 +106,11 @@ export const PasswordStrengthMeter = ({ password, className }: PasswordStrengthM
             key={index}
             className={cn(
               "flex items-center gap-2 text-xs transition-colors duration-200",
-              req.passed ? "text-green-600" : "text-muted-foreground"
+              req.passed ? "text-highlight" : "text-muted-foreground"
             )}
           >
             {req.passed ? (
-              <Check className="w-3.5 h-3.5 text-green-500" />
+              <Check className="w-3.5 h-3.5 text-highlight" />
             ) : (
               <X className="w-3.5 h-3.5 text-muted-foreground/50" />
             )}

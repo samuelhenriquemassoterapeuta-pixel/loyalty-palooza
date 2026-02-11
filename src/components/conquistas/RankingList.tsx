@@ -94,10 +94,10 @@ const RankingRow = ({ entry, index }: { entry: RankingEntry; index: number }) =>
             size={22}
             className={
               entry.posicao === 1
-                ? "text-yellow-500"
+                ? "text-warning"
                 : entry.posicao === 2
-                ? "text-gray-400"
-                : "text-amber-600"
+                ? "text-muted-foreground"
+                : "text-accent"
             }
           />
         ) : (
@@ -146,10 +146,10 @@ function getPositionIcon(pos: number) {
 function getTierColor(tier: string) {
   switch (tier) {
     case "Ouro":
-      return "text-yellow-700 bg-yellow-100 dark:text-yellow-400 dark:bg-yellow-900/30";
+      return "text-warning bg-warning/10";
     case "Prata":
-      return "text-gray-600 bg-gray-100 dark:text-gray-400 dark:bg-gray-800/50";
+      return "text-muted-foreground bg-muted";
     default:
-      return "text-amber-700 bg-amber-100 dark:text-amber-400 dark:bg-amber-900/30";
+      return "text-accent bg-accent/10";
   }
 }

@@ -220,19 +220,19 @@ export const CarrinhoSheet = ({
 
                 {/* Usar Cashback */}
                 {saldoCashback > 0 && (
-                  <div className="flex items-center justify-between p-3 rounded-lg bg-green-500/10 border border-green-500/20">
+                  <div className="flex items-center justify-between p-3 rounded-lg bg-highlight/10 border border-highlight/20">
                     <div className="flex items-center gap-2">
-                      <Wallet className="text-green-600" size={18} />
+                      <Wallet className="text-highlight" size={18} />
                       <div>
-                        <p className="text-sm font-medium text-green-700">Usar cashback</p>
-                        <p className="text-xs text-green-600">
+                        <p className="text-sm font-medium text-highlight">Usar cashback</p>
+                        <p className="text-xs text-highlight/80">
                           Saldo: {formatCurrency(saldoCashback)}
                         </p>
                       </div>
                     </div>
                     <div className="flex items-center gap-3">
                       {usarCashback && (
-                        <span className="text-sm font-semibold text-green-700">
+                        <span className="text-sm font-semibold text-highlight">
                           -{formatCurrency(descontoCashback)}
                         </span>
                       )}

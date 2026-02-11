@@ -14,10 +14,10 @@ export function TrendBadge({ points }: TrendBadgeProps) {
     <span
       className={`text-[10px] font-semibold px-1.5 py-0.5 rounded-full ${
         improved
-          ? "bg-green-500/10 text-green-600 dark:text-green-400"
+          ? "bg-highlight/10 text-highlight"
           : worsened
-          ? "bg-red-500/10 text-red-600 dark:text-red-400"
-          : "bg-yellow-500/10 text-yellow-600 dark:text-yellow-400"
+          ? "bg-destructive/10 text-destructive"
+          : "bg-warning/10 text-warning"
       }`}
     >
       {diff > 0 ? "+" : ""}

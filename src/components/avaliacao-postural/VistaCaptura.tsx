@@ -112,7 +112,7 @@ export const VistaCaptura = ({ vista, existingUrl, onCapture, isPending, avaliac
               )}
               {/* Status badge */}
               <div className="absolute top-2 right-2">
-                <span className="flex items-center gap-1 text-[10px] font-medium bg-green-500/90 text-white px-2 py-0.5 rounded-full">
+                <span className="flex items-center gap-1 text-[10px] font-medium bg-highlight text-highlight-foreground px-2 py-0.5 rounded-full">
                   <Check size={10} /> Capturada
                 </span>
               </div>
