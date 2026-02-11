@@ -4,6 +4,7 @@ import { Clock, Percent, Leaf, ChevronDown, Sparkles, Hand, SmilePlus, Package, 
 import { Link } from "react-router-dom";
 import { useServicos } from "@/hooks/useServicos";
 import { useParallax } from "@/hooks/useParallax";
+import { CollapsibleSection } from "./CollapsibleSection";
 
 const containerVariants = {
   hidden: {},
@@ -39,7 +40,6 @@ export const ServicosSection = () => {
       if (!grouped[cat]) grouped[cat] = [];
       grouped[cat].push(s);
     });
-    // Sort: categories with more items first
     return Object.entries(grouped).sort((a, b) => b[1].length - a[1].length);
   }, [servicos]);
 
@@ -51,7 +51,7 @@ export const ServicosSection = () => {
     });
 
   return (
-    <section id="servicos" ref={ref} className="py-14 sm:py-20 lg:py-28 bg-card/50 relative overflow-hidden">
+    <div ref={ref} className="py-14 sm:py-20 lg:py-28 bg-card/50 relative overflow-hidden">
       {/* Parallax decorative blobs */}
       <motion.div
         style={{ y }}
@@ -63,148 +63,146 @@ export const ServicosSection = () => {
       />
 
       <div className="max-w-6xl mx-auto px-5 sm:px-6 lg:px-8 relative z-10">
-        {/* Section header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.7 }}
-          className="text-center mb-8 sm:mb-14"
+        <CollapsibleSection
+          id="servicos"
+          badge={
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20">
+              <Leaf size={14} className="text-primary" />
+              <span className="text-xs font-semibold text-primary">Nossos serviços</span>
+            </div>
+          }
+          title={
+            <h2 className="text-3xl lg:text-4xl font-bold text-foreground">
+              Terapias que{" "}
+              <span className="font-serif italic text-gradient">transformam</span>
+            </h2>
+          }
+          subtitle={
+            <p className="text-muted-foreground">
+              Descubra nossas terapias naturais e ganhe cashback em cada sessão.
+              Seu bem-estar é recompensado.
+            </p>
+          }
         >
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-4">
-            <Leaf size={14} className="text-primary" />
-            <span className="text-xs font-semibold text-primary">Nossos serviços</span>
-          </div>
-          <h2 className="text-3xl lg:text-4xl font-bold text-foreground">
-            Terapias que{" "}
-            <span className="font-serif italic text-gradient">transformam</span>
-          </h2>
-          <p className="mt-4 text-muted-foreground max-w-2xl mx-auto">
-            Descubra nossas terapias naturais e ganhe cashback em cada sessão. 
-            Seu bem-estar é recompensado.
-          </p>
-        </motion.div>
+          {/* Categories */}
+          {loading ? (
+            <div className="space-y-4">
+              {[...Array(3)].map((_, i) => (
+                <div key={i} className="h-20 rounded-2xl bg-muted/50 animate-pulse" />
+              ))}
+            </div>
+          ) : categories.length > 0 ? (
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-60px" }}
+              variants={containerVariants}
+              className="space-y-3"
+            >
+              {categories.map(([cat, items]) => {
+                const config = categoryConfig[cat] || categoryConfig.geral;
+                const Icon = config.icon;
+                const isOpen = expanded.has(cat);
 
-        {/* Categories */}
-        {loading ? (
-          <div className="space-y-4">
-            {[...Array(3)].map((_, i) => (
-              <div key={i} className="h-20 rounded-2xl bg-muted/50 animate-pulse" />
-            ))}
-          </div>
-        ) : categories.length > 0 ? (
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-60px" }}
-            variants={containerVariants}
-            className="space-y-3"
-          >
-            {categories.map(([cat, items]) => {
-              const config = categoryConfig[cat] || categoryConfig.geral;
-              const Icon = config.icon;
-              const isOpen = expanded.has(cat);
-
-              return (
-                <motion.div
-                  key={cat}
-                  variants={cardVariants}
-                  className="rounded-2xl border border-border/60 bg-card overflow-hidden shadow-sm"
-                >
-                  {/* Category header — clickable */}
-                  <button
-                    onClick={() => toggle(cat)}
-                    className="w-full flex items-center gap-3 p-4 sm:p-5 text-left hover:bg-muted/30 transition-colors"
+                return (
+                  <motion.div
+                    key={cat}
+                    variants={cardVariants}
+                    className="rounded-2xl border border-border/60 bg-card overflow-hidden shadow-sm"
                   >
-                    <div className={`p-2.5 rounded-xl bg-primary/10 ${config.color}`}>
-                      <Icon size={20} />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="font-bold text-foreground text-base sm:text-lg">
-                        {config.label}
-                      </p>
-                      <p className="text-xs text-muted-foreground">
-                        {items.length} {items.length === 1 ? "serviço" : "serviços"}
-                      </p>
-                    </div>
-                    <motion.div
-                      animate={{ rotate: isOpen ? 180 : 0 }}
-                      transition={{ duration: 0.25 }}
+                    <button
+                      onClick={() => toggle(cat)}
+                      className="w-full flex items-center gap-3 p-4 sm:p-5 text-left hover:bg-muted/30 transition-colors"
                     >
-                      <ChevronDown size={18} className="text-muted-foreground" />
-                    </motion.div>
-                  </button>
-
-                  {/* Expanded content */}
-                  <AnimatePresence initial={false}>
-                    {isOpen && (
+                      <div className={`p-2.5 rounded-xl bg-primary/10 ${config.color}`}>
+                        <Icon size={20} />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="font-bold text-foreground text-base sm:text-lg">
+                          {config.label}
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          {items.length} {items.length === 1 ? "serviço" : "serviços"}
+                        </p>
+                      </div>
                       <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
-                        className="overflow-hidden"
+                        animate={{ rotate: isOpen ? 180 : 0 }}
+                        transition={{ duration: 0.25 }}
                       >
-                        <div className="px-4 pb-4 sm:px-5 sm:pb-5 grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                          {items.map((servico) => (
-                            <motion.div
-                              key={servico.id}
-                              initial={{ opacity: 0, y: 12 }}
-                              animate={{ opacity: 1, y: 0 }}
-                              transition={{ duration: 0.3 }}
-                              whileHover={{ y: -4, transition: { duration: 0.2 } }}
-                              className="group rounded-xl border border-border/40 bg-background/60 p-4 cursor-default"
-                            >
-                              <div className="flex items-start justify-between mb-3">
-                                <h3 className="text-sm font-bold text-foreground leading-snug pr-2">
-                                  {servico.nome}
-                                </h3>
-                                {servico.cashback_percentual > 0 && (
-                                  <span className="pill text-[10px] shrink-0">
-                                    <Percent size={9} />
-                                    {servico.cashback_percentual}%
-                                  </span>
-                                )}
-                              </div>
-
-                              {servico.descricao && (
-                                <p className="text-xs text-muted-foreground line-clamp-2 mb-3">
-                                  {servico.descricao}
-                                </p>
-                              )}
-
-                              <div className="flex items-center justify-between pt-3 border-t border-border/40">
-                                <div className="flex items-center gap-1.5 text-muted-foreground">
-                                  <Clock size={12} />
-                                  <span className="text-[11px]">{servico.duracao} min</span>
-                                </div>
-                                <span className="text-sm font-bold text-foreground">
-                                  R$ {servico.preco.toFixed(2).replace(".", ",")}
-                                </span>
-                              </div>
-
-                              <Link to={`/auth?redirect=${encodeURIComponent(`/agendamento?servico=${encodeURIComponent(servico.nome)}`)}`} className="mt-3 block">
-                                <button className="w-full flex items-center justify-center gap-1.5 py-2 rounded-lg bg-primary text-primary-foreground text-xs font-semibold hover:bg-primary/90 transition-colors">
-                                  <Calendar size={13} />
-                                  Agendar
-                                </button>
-                              </Link>
-                            </motion.div>
-                          ))}
-                        </div>
+                        <ChevronDown size={18} className="text-muted-foreground" />
                       </motion.div>
-                    )}
-                  </AnimatePresence>
-                </motion.div>
-              );
-            })}
-          </motion.div>
-        ) : (
-          <div className="text-center py-12">
-            <p className="text-muted-foreground">Serviços em breve disponíveis.</p>
-          </div>
-        )}
+                    </button>
+
+                    <AnimatePresence initial={false}>
+                      {isOpen && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+                          className="overflow-hidden"
+                        >
+                          <div className="px-4 pb-4 sm:px-5 sm:pb-5 grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                            {items.map((servico) => (
+                              <motion.div
+                                key={servico.id}
+                                initial={{ opacity: 0, y: 12 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.3 }}
+                                whileHover={{ y: -4, transition: { duration: 0.2 } }}
+                                className="group rounded-xl border border-border/40 bg-background/60 p-4 cursor-default"
+                              >
+                                <div className="flex items-start justify-between mb-3">
+                                  <h3 className="text-sm font-bold text-foreground leading-snug pr-2">
+                                    {servico.nome}
+                                  </h3>
+                                  {servico.cashback_percentual > 0 && (
+                                    <span className="pill text-[10px] shrink-0">
+                                      <Percent size={9} />
+                                      {servico.cashback_percentual}%
+                                    </span>
+                                  )}
+                                </div>
+
+                                {servico.descricao && (
+                                  <p className="text-xs text-muted-foreground line-clamp-2 mb-3">
+                                    {servico.descricao}
+                                  </p>
+                                )}
+
+                                <div className="flex items-center justify-between pt-3 border-t border-border/40">
+                                  <div className="flex items-center gap-1.5 text-muted-foreground">
+                                    <Clock size={12} />
+                                    <span className="text-[11px]">{servico.duracao} min</span>
+                                  </div>
+                                  <span className="text-sm font-bold text-foreground">
+                                    R$ {servico.preco.toFixed(2).replace(".", ",")}
+                                  </span>
+                                </div>
+
+                                <Link to={`/auth?redirect=${encodeURIComponent(`/agendamento?servico=${encodeURIComponent(servico.nome)}`)}`} className="mt-3 block">
+                                  <button className="w-full flex items-center justify-center gap-1.5 py-2 rounded-lg bg-primary text-primary-foreground text-xs font-semibold hover:bg-primary/90 transition-colors">
+                                    <Calendar size={13} />
+                                    Agendar
+                                  </button>
+                                </Link>
+                              </motion.div>
+                            ))}
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </motion.div>
+                );
+              })}
+            </motion.div>
+          ) : (
+            <div className="text-center py-12">
+              <p className="text-muted-foreground">Serviços em breve disponíveis.</p>
+            </div>
+          )}
+        </CollapsibleSection>
       </div>
-    </section>
+    </div>
   );
 };
