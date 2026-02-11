@@ -418,6 +418,69 @@ export type Database = {
           },
         ]
       }
+      ficha_nutricional: {
+        Row: {
+          alergias_alimentares: string[] | null
+          alimentos_restritos: string[] | null
+          altura: number | null
+          consumo_alcool: string | null
+          created_at: string
+          doencas: string[] | null
+          fumante: boolean | null
+          historico_cirurgias: string | null
+          id: string
+          idade: number | null
+          medicamentos: string | null
+          nivel_atividade: string | null
+          objetivo: string | null
+          observacoes: string | null
+          peso: number | null
+          sexo: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          alergias_alimentares?: string[] | null
+          alimentos_restritos?: string[] | null
+          altura?: number | null
+          consumo_alcool?: string | null
+          created_at?: string
+          doencas?: string[] | null
+          fumante?: boolean | null
+          historico_cirurgias?: string | null
+          id?: string
+          idade?: number | null
+          medicamentos?: string | null
+          nivel_atividade?: string | null
+          objetivo?: string | null
+          observacoes?: string | null
+          peso?: number | null
+          sexo?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          alergias_alimentares?: string[] | null
+          alimentos_restritos?: string[] | null
+          altura?: number | null
+          consumo_alcool?: string | null
+          created_at?: string
+          doencas?: string[] | null
+          fumante?: boolean | null
+          historico_cirurgias?: string | null
+          id?: string
+          idade?: number | null
+          medicamentos?: string | null
+          nivel_atividade?: string | null
+          objetivo?: string | null
+          observacoes?: string | null
+          peso?: number | null
+          sexo?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       fichas_acompanhamento: {
         Row: {
           created_at: string
