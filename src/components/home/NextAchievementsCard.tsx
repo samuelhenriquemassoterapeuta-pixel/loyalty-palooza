@@ -8,11 +8,11 @@ interface Props {
 }
 
 const categoryColors: Record<string, string> = {
-  agendamento: "bg-blue-500/15 text-blue-600 dark:text-blue-400",
-  cashback: "bg-emerald-500/15 text-emerald-600 dark:text-emerald-400",
-  protocolo: "bg-amber-500/15 text-amber-600 dark:text-amber-400",
-  social: "bg-pink-500/15 text-pink-600 dark:text-pink-400",
-  loja: "bg-purple-500/15 text-purple-600 dark:text-purple-400",
+  agendamento: "bg-info/15 text-info",
+  cashback: "bg-highlight/15 text-highlight",
+  protocolo: "bg-warning/15 text-warning",
+  social: "bg-accent/15 text-accent",
+  loja: "bg-primary/15 text-primary",
 };
 
 const categoryLabels: Record<string, string> = {
@@ -24,11 +24,11 @@ const categoryLabels: Record<string, string> = {
 };
 
 const progressBarColors: Record<string, string> = {
-  agendamento: "bg-blue-500",
-  cashback: "bg-emerald-500",
-  protocolo: "bg-amber-500",
-  social: "bg-pink-500",
-  loja: "bg-purple-500",
+  agendamento: "bg-info",
+  cashback: "bg-highlight",
+  protocolo: "bg-warning",
+  social: "bg-accent",
+  loja: "bg-primary",
 };
 
 export const NextAchievementsCard = ({ achievements }: Props) => {

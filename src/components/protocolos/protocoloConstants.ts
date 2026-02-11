@@ -7,11 +7,11 @@ export const tipoLabels: Record<string, { label: string; class: string }> = {
   },
   postural: {
     label: "Postural",
-    class: "bg-purple-100 text-purple-700 border-purple-300 dark:bg-purple-900/30 dark:text-purple-400 dark:border-purple-700/30",
+    class: "bg-accent/15 text-accent border-accent/30",
   },
   alongamento: {
     label: "Alongamento",
-    class: "bg-emerald-100 text-emerald-700 border-emerald-300 dark:bg-emerald-900/30 dark:text-emerald-400 dark:border-emerald-700/30",
+    class: "bg-highlight/15 text-highlight border-highlight/30",
   },
 };
 
@@ -28,14 +28,14 @@ export const gruposProtocolos = [
     titulo: "Alinhamento Postural",
     descricao: "Protocolos de correção e alinhamento postural",
     icon: "Accessibility" as const,
-    colorClass: "text-purple-600 dark:text-purple-400",
+    colorClass: "text-accent",
   },
   {
     tipo: "alongamento",
     titulo: "Alongamento & Flexibilidade",
     descricao: "Protocolos de exercícios de alongamento e ganho de flexibilidade",
     icon: "Stretch" as const,
-    colorClass: "text-emerald-600 dark:text-emerald-400",
+    colorClass: "text-highlight",
   },
 ] as const;
 
