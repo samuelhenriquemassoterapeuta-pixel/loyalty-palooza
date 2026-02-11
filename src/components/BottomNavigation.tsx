@@ -1,13 +1,13 @@
 import { useRef, useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Home, CalendarDays, ShoppingBag, Activity, User } from "lucide-react";
+import { Home, CalendarDays, ShoppingBag, Activity, Apple, User } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const navItems = [
   { icon: Home, label: "Início", path: "/" },
   { icon: CalendarDays, label: "Agendar", path: "/agendamento" },
   { icon: Activity, label: "Protocolos", path: "/protocolos" },
-  { icon: ShoppingBag, label: "Loja", path: "/loja" },
+  { icon: Apple, label: "Dietas", path: "/dietas" },
   { icon: User, label: "Perfil", path: "/profile" },
 ];
 
