@@ -86,16 +86,16 @@ const Agendamento = () => {
   } | null>(null);
 
   // Pre-select service from URL query param
+  const preSelectedFromUrl = searchParams.get("servico");
   useEffect(() => {
-    const servicoParam = searchParams.get("servico");
-    if (servicoParam && servicos.length > 0 && !selectedServico) {
-      const match = servicos.find(s => s.nome === servicoParam);
+    if (preSelectedFromUrl && servicos.length > 0 && !selectedServico) {
+      const match = servicos.find(s => s.nome === preSelectedFromUrl);
       if (match) {
         setSelectedServico(match);
         setStep(2);
       }
     }
-  }, [servicos, searchParams, selectedServico]);
+  }, [servicos, preSelectedFromUrl, selectedServico]);
 
   const handleDateSelect = (date: Date | undefined) => {
     setSelectedDate(date);
@@ -397,6 +397,21 @@ const Agendamento = () => {
                 {/* Priority scheduling banner */}
                 <PriorityBanner />
 
+                {/* Pre-selected service banner */}
+                {preSelectedFromUrl && selectedServico && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="flex items-center gap-2 px-4 py-3 rounded-xl bg-primary/10 border border-primary/20"
+                  >
+                    <Check size={16} className="text-primary shrink-0" />
+                    <p className="text-sm text-foreground">
+                      <span className="font-semibold">{selectedServico.nome}</span>{" "}
+                      <span className="text-muted-foreground">pré-selecionado da landing page</span>
+                    </p>
+                  </motion.div>
+                )}
+
                 {/* Progress */}
                 <div className="flex gap-2">
                   {[1, 2, 3, 4].map((s) => (
@@ -421,19 +436,6 @@ const Agendamento = () => {
                       <p className="section-label px-1 mb-3">Escolha o serviço</p>
                     </motion.div>
 
-                    {/* Pre-selected service banner */}
-                    {searchParams.get("servico") && selectedServico && (
-                      <motion.div
-                        variants={fadeUp}
-                        className="flex items-center gap-2 px-4 py-3 rounded-xl bg-primary/10 border border-primary/20"
-                      >
-                        <Check size={16} className="text-primary shrink-0" />
-                        <p className="text-sm text-foreground">
-                          <span className="font-semibold">{selectedServico.nome}</span>{" "}
-                          <span className="text-muted-foreground">foi pré-selecionado. Avance ou escolha outro.</span>
-                        </p>
-                      </motion.div>
-                    )}
                     
                     {loadingServicos ? (
                       <ServicosListSkeleton />
