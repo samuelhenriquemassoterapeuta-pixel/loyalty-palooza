@@ -27,8 +27,8 @@ const features = [
 
 export const SobreSection = () => {
   return (
-    <section id="sobre" className="py-20 lg:py-28 bg-background">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="sobre" className="py-14 sm:py-20 lg:py-28 bg-background">
+      <div className="max-w-6xl mx-auto px-5 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           {/* Visual side */}
           <motion.div
