@@ -9,11 +9,27 @@ import { useProtocolos, useUsuarioProtocolos } from "@/hooks/useProtocolos";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { stagger, fadeUp, gruposProtocolos } from "@/components/protocolos/protocoloConstants";
 
+import drenagemHero from "@/assets/protocolos/drenagem-hero.jpg";
+import posturalHero from "@/assets/protocolos/postural-hero.jpg";
+import alongamentoHero from "@/assets/protocolos/alongamento-hero.jpg";
+
 const iconMap = {
   Droplets,
   Accessibility,
   Stretch: TreePine,
 } as const;
+
+const heroMap: Record<string, string> = {
+  drenagem_pos_operatorio: drenagemHero,
+  postural: posturalHero,
+  alongamento: alongamentoHero,
+};
+
+const gradientMap: Record<string, string> = {
+  drenagem_pos_operatorio: "from-sky-500/80 to-blue-600/80",
+  postural: "from-purple-500/80 to-violet-600/80",
+  alongamento: "from-emerald-500/80 to-teal-600/80",
+};
 
 const Protocolos = () => {
   const navigate = useNavigate();
@@ -45,7 +61,7 @@ const Protocolos = () => {
             variants={stagger}
             initial="hidden"
             animate="show"
-            className="space-y-6"
+            className="space-y-8"
           >
             {/* Header */}
             <motion.div variants={fadeUp}>
@@ -80,6 +96,9 @@ const Protocolos = () => {
             {/* Groups */}
             {gruposProtocolos.map((grupo) => {
               const Icon = iconMap[grupo.icon];
+              const heroImg = heroMap[grupo.tipo];
+              const gradient = gradientMap[grupo.tipo];
+
               const grupoProtocolos = protocolos
                 .filter((p) => {
                   if (p.tipo !== grupo.tipo) return false;
@@ -101,19 +120,34 @@ const Protocolos = () => {
 
               return (
                 <motion.div key={grupo.tipo} variants={fadeUp} className="space-y-3">
-                  <div className="flex items-center gap-2">
-                    <Icon size={18} className={grupo.colorClass} />
-                    <h2 className="text-base font-semibold text-foreground">
-                      {grupo.titulo}
-                    </h2>
-                    <span className="text-[10px] bg-muted text-muted-foreground px-2 py-0.5 rounded-full">
-                      {grupoProtocolos.length}
-                    </span>
+                  {/* Hero Banner */}
+                  <div className="relative rounded-2xl overflow-hidden h-28 lg:h-36">
+                    <img
+                      src={heroImg}
+                      alt={grupo.titulo}
+                      className="absolute inset-0 w-full h-full object-cover"
+                      loading="lazy"
+                    />
+                    <div className={`absolute inset-0 bg-gradient-to-r ${gradient}`} />
+                    <div className="relative z-10 flex items-center gap-3 h-full px-5">
+                      <div className="bg-white/20 backdrop-blur-sm rounded-xl p-2.5">
+                        <Icon size={24} className="text-white" />
+                      </div>
+                      <div>
+                        <h2 className="text-lg font-bold text-white">
+                          {grupo.titulo}
+                        </h2>
+                        <p className="text-xs text-white/80 max-w-xs">
+                          {grupo.descricao}
+                        </p>
+                        <span className="inline-block mt-1 text-[10px] bg-white/20 backdrop-blur-sm text-white px-2 py-0.5 rounded-full">
+                          {grupoProtocolos.length} protocolo{grupoProtocolos.length !== 1 ? "s" : ""}
+                        </span>
+                      </div>
+                    </div>
                   </div>
-                  <p className="text-xs text-muted-foreground -mt-1">
-                    {grupo.descricao}
-                  </p>
 
+                  {/* Cards */}
                   {grupoProtocolos.length > 0 ? (
                     <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-3">
                       {grupoProtocolos.map((p) => (
