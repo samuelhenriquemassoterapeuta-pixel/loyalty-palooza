@@ -1,6 +1,11 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { Apple } from "lucide-react";
+import { Apple, BookOpen, UtensilsCrossed, Droplets, User } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AppLayout } from "@/components/AppLayout";
+import { DietasDashboard } from "@/components/dietas/DietasDashboard";
+import { FichaNutricionalForm } from "@/components/dietas/FichaNutricionalForm";
+import { HistoricoSemanal } from "@/components/dietas/HistoricoSemanal";
 import { DietasSection } from "@/components/protocolos/DietasSection";
 
 const stagger = {
@@ -24,16 +29,31 @@ const Dietas = () => {
             animate="show"
             className="space-y-4"
           >
+            {/* Header */}
             <motion.div variants={fadeUp}>
               <div className="flex items-center gap-2 mb-1">
                 <Apple size={22} className="text-primary" />
                 <h1 className="text-xl font-bold text-foreground">Dietas</h1>
               </div>
               <p className="text-sm text-muted-foreground">
-                Conteúdo educativo, planos alimentares e diário
+                Nutrição personalizada, planos e diário alimentar
               </p>
             </motion.div>
 
+            {/* Dashboard cards */}
+            <DietasDashboard />
+
+            {/* Ficha nutricional */}
+            <motion.div variants={fadeUp}>
+              <FichaNutricionalForm />
+            </motion.div>
+
+            {/* Histórico semanal */}
+            <motion.div variants={fadeUp}>
+              <HistoricoSemanal />
+            </motion.div>
+
+            {/* Tabs: Educativo, Planos, Diário */}
             <motion.div variants={fadeUp}>
               <DietasSection />
             </motion.div>
