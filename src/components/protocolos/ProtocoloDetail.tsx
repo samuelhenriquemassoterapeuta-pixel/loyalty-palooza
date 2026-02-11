@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import { motion } from "framer-motion";
-import { ArrowLeft, Play, Pause, CheckCircle, Zap } from "lucide-react";
+import { ArrowLeft, Play, Pause, CheckCircle, Zap, BarChart3, Camera, ClipboardList } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -11,10 +11,11 @@ import { PosturalReportButton } from "./PosturalReportButton";
 import { FichaAcompanhamento } from "./FichaAcompanhamento";
 import { GaleriaEvolucao } from "./GaleriaEvolucao";
 import { GuiaResumoProtocolo } from "./GuiaResumoProtocolo";
-import { useUsuarioProtocolos } from "@/hooks/useProtocolos";
-import { useFichas } from "@/hooks/useProtocolos";
+import { useUsuarioProtocolos, useFichas, useFotos, useMetas } from "@/hooks/useProtocolos";
+import { useProgressStats } from "@/hooks/useProgressStats";
 import { useAvaliacoesPosturais } from "@/hooks/useAvaliacaoPostural";
-import { format, differenceInWeeks } from "date-fns";
+import { tipoLabels } from "./protocoloConstants";
+import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
 interface ProtocoloDetailProps {
@@ -30,12 +31,6 @@ interface ProtocoloDetailProps {
   onBack: () => void;
 }
 
-const tipoLabels: Record<string, { label: string; class: string }> = {
-  emagrecimento: { label: "Emagrecimento", class: "bg-highlight/15 text-highlight" },
-  drenagem_pos_operatorio: { label: "Drenagem Pós-Op", class: "bg-info/15 text-info" },
-  postural: { label: "Postural", class: "bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400" },
-};
-
 export const ProtocoloDetail = ({ protocolo, onBack }: ProtocoloDetailProps) => {
   const { meus, ativar, atualizarStatus } = useUsuarioProtocolos();
   const [tab, setTab] = useState("progresso");
@@ -47,19 +42,23 @@ export const ProtocoloDetail = ({ protocolo, onBack }: ProtocoloDetailProps) => 
   );
 
   const { fichas } = useFichas(meuProtocolo?.id || "");
+  const { fotos } = useFotos(meuProtocolo?.id || "");
+  const { metas } = useMetas(meuProtocolo?.id || "");
   const { avaliacoes } = useAvaliacoesPosturais();
+
+  // Use shared progress stats instead of duplicating calculation
+  const stats = useProgressStats(
+    fichas,
+    metas,
+    fotos,
+    meuProtocolo?.data_inicio || new Date().toISOString(),
+    protocolo
+  );
 
   const isAtivo = meuProtocolo?.status === "ativo";
   const isPausado = meuProtocolo?.status === "pausado";
 
-  const semanasDecorridas = meuProtocolo
-    ? differenceInWeeks(new Date(), new Date(meuProtocolo.data_inicio))
-    : 0;
-
-  const progressoSemanas = Math.min(
-    Math.round((semanasDecorridas / protocolo.duracao_semanas) * 100),
-    100
-  );
+  const tipoConfig = tipoLabels[protocolo.tipo] ?? { label: protocolo.tipo, class: "" };
 
   return (
     <motion.div
@@ -68,21 +67,46 @@ export const ProtocoloDetail = ({ protocolo, onBack }: ProtocoloDetailProps) => 
       exit={{ opacity: 0, x: -20 }}
       className="space-y-5"
     >
-      {/* Header */}
-      <div className="flex items-center gap-3">
-        <Button variant="ghost" size="icon" onClick={onBack} className="shrink-0">
-          <ArrowLeft size={20} />
-        </Button>
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 mb-1">
-            <Badge
-              variant="outline"
-              className={`text-[10px] border-0 ${tipoLabels[protocolo.tipo]?.class ?? ""}`}
-            >
-              {tipoLabels[protocolo.tipo]?.label ?? protocolo.tipo}
-            </Badge>
+      {/* Sticky header with progress */}
+      <div className="sticky top-0 z-10 bg-background/80 backdrop-blur-xl -mx-4 px-4 lg:-mx-8 lg:px-8 pb-3 pt-1 border-b border-border/50">
+        <div className="flex items-center gap-3">
+          <Button variant="ghost" size="icon" onClick={onBack} className="shrink-0">
+            <ArrowLeft size={20} />
+          </Button>
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2 mb-0.5">
+              <Badge
+                variant="outline"
+                className={`text-[10px] border-0 ${tipoConfig.class}`}
+              >
+                {tipoConfig.label}
+              </Badge>
+              {meuProtocolo && (
+                <span className="text-[10px] text-muted-foreground">
+                  Sem. {stats.semanaAtual}/{protocolo.duracao_semanas}
+                </span>
+              )}
+            </div>
+            <h2 className="text-lg font-bold text-foreground truncate">{protocolo.nome}</h2>
           </div>
-          <h2 className="text-lg font-bold text-foreground truncate">{protocolo.nome}</h2>
+          {meuProtocolo && (
+            <div className="flex items-center gap-2 shrink-0">
+              <div className="text-right">
+                <p className="text-xs font-bold text-primary">{stats.progressoTempo}%</p>
+              </div>
+              <div className="w-10 h-10 relative">
+                <svg className="w-10 h-10 -rotate-90" viewBox="0 0 36 36">
+                  <circle cx="18" cy="18" r="15" fill="none" stroke="hsl(var(--muted))" strokeWidth="3" />
+                  <circle
+                    cx="18" cy="18" r="15" fill="none"
+                    stroke="hsl(var(--primary))" strokeWidth="3"
+                    strokeLinecap="round"
+                    strokeDasharray={`${stats.progressoTempo * 0.942} 94.2`}
+                  />
+                </svg>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
@@ -102,20 +126,19 @@ export const ProtocoloDetail = ({ protocolo, onBack }: ProtocoloDetailProps) => 
           </div>
         )}
 
-        {/* Timeline progress */}
+        {/* Timeline progress (only when enrolled) */}
         {meuProtocolo && (
           <div className="space-y-2">
             <div className="flex items-center justify-between text-xs">
               <span className="text-muted-foreground">
-                Semana {Math.min(semanasDecorridas + 1, protocolo.duracao_semanas)} de{" "}
-                {protocolo.duracao_semanas}
+                Semana {stats.semanaAtual} de {protocolo.duracao_semanas}
               </span>
-              <span className="font-medium text-primary">{progressoSemanas}%</span>
+              <span className="font-medium text-primary">{stats.progressoTempo}%</span>
             </div>
             <div className="h-2 rounded-full bg-muted overflow-hidden">
               <motion.div
                 initial={{ width: 0 }}
-                animate={{ width: `${progressoSemanas}%` }}
+                animate={{ width: `${stats.progressoTempo}%` }}
                 className="h-full rounded-full gradient-primary"
               />
             </div>
@@ -140,18 +163,14 @@ export const ProtocoloDetail = ({ protocolo, onBack }: ProtocoloDetailProps) => 
             <>
               <Button
                 variant="outline"
-                onClick={() =>
-                  atualizarStatus.mutate({ id: meuProtocolo.id, status: "pausado" })
-                }
+                onClick={() => atualizarStatus.mutate({ id: meuProtocolo.id, status: "pausado" })}
                 className="flex-1 gap-1.5"
               >
                 <Pause size={16} /> Pausar
               </Button>
               <Button
                 variant="outline"
-                onClick={() =>
-                  atualizarStatus.mutate({ id: meuProtocolo.id, status: "concluido" })
-                }
+                onClick={() => atualizarStatus.mutate({ id: meuProtocolo.id, status: "concluido" })}
                 className="gap-1.5"
               >
                 <CheckCircle size={16} /> Concluir
@@ -160,9 +179,7 @@ export const ProtocoloDetail = ({ protocolo, onBack }: ProtocoloDetailProps) => 
           )}
           {isPausado && (
             <Button
-              onClick={() =>
-                atualizarStatus.mutate({ id: meuProtocolo.id, status: "ativo" })
-              }
+              onClick={() => atualizarStatus.mutate({ id: meuProtocolo.id, status: "ativo" })}
               className="flex-1 gap-1.5"
             >
               <Play size={16} /> Retomar
@@ -171,14 +188,38 @@ export const ProtocoloDetail = ({ protocolo, onBack }: ProtocoloDetailProps) => 
         </div>
       </div>
 
-      {/* Tabs — 3 tabs when enrolled, guide only when not */}
+      {/* Tabs with compact summary badges */}
       <Tabs value={tab} onValueChange={setTab} className="w-full">
         <TabsList className={`w-full grid ${meuProtocolo ? "grid-cols-3" : "grid-cols-1"}`}>
           {meuProtocolo && (
             <>
-              <TabsTrigger value="progresso" className="text-xs">Progresso</TabsTrigger>
-              <TabsTrigger value="medidas" className="text-xs">Medidas</TabsTrigger>
-              <TabsTrigger value="evolucao" className="text-xs">Evolução</TabsTrigger>
+              <TabsTrigger value="progresso" className="text-xs gap-1.5">
+                <ClipboardList size={13} />
+                Progresso
+                {stats.metasTotal > 0 && (
+                  <span className="ml-0.5 text-[9px] bg-primary/15 text-primary px-1.5 py-0.5 rounded-full">
+                    {stats.metasConcluidas}/{stats.metasTotal}
+                  </span>
+                )}
+              </TabsTrigger>
+              <TabsTrigger value="medidas" className="text-xs gap-1.5">
+                <BarChart3 size={13} />
+                Medidas
+                {stats.totalFichas > 0 && (
+                  <span className="ml-0.5 text-[9px] bg-muted text-muted-foreground px-1.5 py-0.5 rounded-full">
+                    {stats.totalFichas}
+                  </span>
+                )}
+              </TabsTrigger>
+              <TabsTrigger value="evolucao" className="text-xs gap-1.5">
+                <Camera size={13} />
+                Evolução
+                {stats.totalFotos > 0 && (
+                  <span className="ml-0.5 text-[9px] bg-muted text-muted-foreground px-1.5 py-0.5 rounded-full">
+                    {stats.totalFotos}
+                  </span>
+                )}
+              </TabsTrigger>
             </>
           )}
           {!meuProtocolo && (
@@ -190,7 +231,6 @@ export const ProtocoloDetail = ({ protocolo, onBack }: ProtocoloDetailProps) => 
 
         {meuProtocolo && (
           <>
-            {/* Tab Progresso = Dashboard + Metas + Postural items */}
             <TabsContent value="progresso" className="mt-4 space-y-6">
               <ProgressDashboard
                 protocoloUsuarioId={meuProtocolo.id}
@@ -216,7 +256,6 @@ export const ProtocoloDetail = ({ protocolo, onBack }: ProtocoloDetailProps) => 
               <MetasSemanais protocoloUsuarioId={meuProtocolo.id} />
             </TabsContent>
 
-            {/* Tab Medidas */}
             <TabsContent value="medidas" className="mt-4">
               <FichaAcompanhamento
                 protocoloUsuarioId={meuProtocolo.id}
@@ -224,7 +263,6 @@ export const ProtocoloDetail = ({ protocolo, onBack }: ProtocoloDetailProps) => 
               />
             </TabsContent>
 
-            {/* Tab Evolução = Fotos + Guia */}
             <TabsContent value="evolucao" className="mt-4 space-y-6">
               <GaleriaEvolucao protocoloUsuarioId={meuProtocolo.id} />
               <GuiaResumoProtocolo tipoProtocolo={protocolo.tipo} />
