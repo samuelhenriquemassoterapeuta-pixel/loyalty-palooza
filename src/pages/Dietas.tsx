@@ -1,11 +1,11 @@
-import { useState } from "react";
 import { motion } from "framer-motion";
-import { Apple, BookOpen, UtensilsCrossed, Droplets, User } from "lucide-react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Apple } from "lucide-react";
 import { AppLayout } from "@/components/AppLayout";
 import { DietasDashboard } from "@/components/dietas/DietasDashboard";
 import { FichaNutricionalForm } from "@/components/dietas/FichaNutricionalForm";
 import { HistoricoSemanal } from "@/components/dietas/HistoricoSemanal";
+import { ReceitasSection } from "@/components/dietas/ReceitasSection";
+import { DietasGamificacao } from "@/components/dietas/DietasGamificacao";
 import { DietasSection } from "@/components/protocolos/DietasSection";
 
 const stagger = {
@@ -43,9 +43,17 @@ const Dietas = () => {
             {/* Dashboard cards */}
             <DietasDashboard />
 
+            {/* Gamificação */}
+            <DietasGamificacao />
+
             {/* Ficha nutricional */}
             <motion.div variants={fadeUp}>
               <FichaNutricionalForm />
+            </motion.div>
+
+            {/* Receitas */}
+            <motion.div variants={fadeUp}>
+              <ReceitasSection />
             </motion.div>
 
             {/* Histórico semanal */}
