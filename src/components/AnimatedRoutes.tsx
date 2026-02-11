@@ -28,6 +28,7 @@ import GuiaClinico from "@/pages/GuiaClinico";
 import AvaliacaoPostural from "@/pages/AvaliacaoPostural";
 import ContaConfiguracoes from "@/pages/ContaConfiguracoes";
 import HeadSpa from "@/pages/HeadSpa";
+import Dietas from "@/pages/Dietas";
 import NotFound from "@/pages/NotFound";
 
 /** Shows landing for visitors, dashboard for authenticated users */
@@ -218,6 +219,16 @@ export const AnimatedRoutes = () => {
             <ProtectedRoute>
               <PageTransition>
                 <Protocolos />
+              </PageTransition>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/dietas"
+          element={
+            <ProtectedRoute>
+              <PageTransition>
+                <Dietas />
               </PageTransition>
             </ProtectedRoute>
           }
