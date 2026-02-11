@@ -22,6 +22,7 @@ import Cashback from "@/pages/Cashback";
 import Corporativo from "@/pages/Corporativo";
 import Alongamento from "@/pages/Alongamento";
 import Protocolos from "@/pages/Protocolos";
+import ProtocoloDetalhe from "@/pages/ProtocoloDetalhe";
 import Conquistas from "@/pages/Conquistas";
 import GuiaClinico from "@/pages/GuiaClinico";
 import AvaliacaoPostural from "@/pages/AvaliacaoPostural";
@@ -208,6 +209,16 @@ export const AnimatedRoutes = () => {
             <ProtectedRoute>
               <PageTransition>
                 <Protocolos />
+              </PageTransition>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/protocolos/:id"
+          element={
+            <ProtectedRoute>
+              <PageTransition>
+                <ProtocoloDetalhe />
               </PageTransition>
             </ProtectedRoute>
           }
