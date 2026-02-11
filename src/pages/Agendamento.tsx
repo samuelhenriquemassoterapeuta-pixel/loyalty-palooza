@@ -398,17 +398,25 @@ const Agendamento = () => {
                 <PriorityBanner />
 
                 {/* Pre-selected service banner */}
-                {preSelectedFromUrl && selectedServico && (
+                {preSelectedFromUrl && selectedServico && step > 1 && (
                   <motion.div
                     initial={{ opacity: 0, y: -8 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="flex items-center gap-2 px-4 py-3 rounded-xl bg-primary/10 border border-primary/20"
+                    className="flex items-center justify-between gap-2 px-4 py-3 rounded-xl bg-primary/10 border border-primary/20"
                   >
-                    <Check size={16} className="text-primary shrink-0" />
-                    <p className="text-sm text-foreground">
-                      <span className="font-semibold">{selectedServico.nome}</span>{" "}
-                      <span className="text-muted-foreground">pré-selecionado da landing page</span>
-                    </p>
+                    <div className="flex items-center gap-2 min-w-0">
+                      <Check size={16} className="text-primary shrink-0" />
+                      <p className="text-sm text-foreground truncate">
+                        <span className="font-semibold">{selectedServico.nome}</span>{" "}
+                        <span className="text-muted-foreground">pré-selecionado</span>
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => setStep(1)}
+                      className="text-xs font-semibold text-primary hover:text-primary/80 whitespace-nowrap transition-colors"
+                    >
+                      Trocar
+                    </button>
                   </motion.div>
                 )}
 
