@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { Activity, Search, Droplets, Accessibility, TreePine, ChevronDown } from "lucide-react";
+import { Activity, Search, Droplets, Accessibility, TreePine, ChevronDown, Dumbbell, ArrowRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { AppLayout } from "@/components/AppLayout";
 import { Input } from "@/components/ui/input";
 import { ProtocoloCard } from "@/components/protocolos/ProtocoloCard";
@@ -192,7 +193,25 @@ const Protocolos = () => {
                         transition={{ duration: 0.3, ease: "easeInOut" }}
                         className="overflow-hidden"
                       >
-                        <div className="pt-3">
+                        <div className="pt-3 space-y-3">
+                          {/* CTA for Alongamento section */}
+                          {grupo.tipo === "alongamento" && (
+                            <motion.div
+                              initial={{ opacity: 0, y: 8 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ duration: 0.2 }}
+                            >
+                              <Button
+                                onClick={() => navigate("/alongamento")}
+                                className="w-full gap-2 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white rounded-xl h-12 text-sm font-semibold shadow-md"
+                              >
+                                <Dumbbell size={18} />
+                                Acessar Exercícios de Alongamento
+                                <ArrowRight size={16} />
+                              </Button>
+                            </motion.div>
+                          )}
+
                           {grupoProtocolos.length > 0 ? (
                             <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-3">
                               {grupoProtocolos.map((p, i) => (

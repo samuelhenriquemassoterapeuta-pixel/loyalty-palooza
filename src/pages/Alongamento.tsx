@@ -20,6 +20,7 @@ import { ProgressoSection } from "@/components/alongamento/ProgressoSection";
 import { SessaoPlayer } from "@/components/alongamento/SessaoPlayer";
 import { DicasSeguranca } from "@/components/alongamento/DicasSeguranca";
 import { LembretesConfig } from "@/components/alongamento/LembretesConfig";
+import { NivelProgressao, getNiveisDesbloqueados } from "@/components/alongamento/NivelProgressao";
 import { ExercicioAlongamento } from "@/hooks/useAlongamento";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Card } from "@/components/ui/card";
@@ -47,6 +48,9 @@ export default function Alongamento() {
     .map((p) => p.plano_id);
 
   const categoriasUnicas = [...new Set(exercicios.map((e) => e.categoria))];
+
+  // Level-based unlock system
+  const niveisDesbloqueados = getNiveisDesbloqueados(totalSessoes);
 
   const exerciciosFiltrados = exercicios
     .filter((e) => nivelFiltro === "todos" || e.nivel === nivelFiltro)
@@ -218,14 +222,18 @@ export default function Alongamento() {
                 </div>
               ) : (
                 <div className="space-y-3">
-                  {exerciciosFiltrados.map((ex, i) => (
-                    <ExercicioCard
-                      key={ex.id}
-                      exercicio={ex}
-                      index={i}
-                      onClick={() => setExercicioSelecionado(ex)}
-                    />
-                  ))}
+                  {exerciciosFiltrados.map((ex, i) => {
+                    const bloqueado = !niveisDesbloqueados.includes(ex.nivel);
+                    return (
+                      <ExercicioCard
+                        key={ex.id}
+                        exercicio={ex}
+                        index={i}
+                        bloqueado={bloqueado}
+                        onClick={bloqueado ? undefined : () => setExercicioSelecionado(ex)}
+                      />
+                    );
+                  })}
                 </div>
               )}
             </TabsContent>
@@ -282,7 +290,10 @@ export default function Alongamento() {
             </TabsContent>
 
             {/* === PROGRESSO === */}
-            <TabsContent value="progresso" className="mt-4">
+            <TabsContent value="progresso" className="mt-4 space-y-5">
+              {/* Level Progression */}
+              <NivelProgressao totalSessoes={totalSessoes} />
+
               <ProgressoSection
                 sessoes={sessoes}
                 totalSessoes={totalSessoes}

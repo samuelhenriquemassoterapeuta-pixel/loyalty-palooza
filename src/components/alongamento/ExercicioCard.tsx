@@ -1,8 +1,9 @@
 import { motion } from "framer-motion";
-import { Clock, Repeat, ChevronRight } from "lucide-react";
+import { Clock, Repeat, ChevronRight, Lock } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ExercicioAlongamento } from "@/hooks/useAlongamento";
+import { ExercicioAnimado } from "./ExercicioAnimado";
 
 const nivelConfig: Record<string, { label: string; color: string }> = {
   iniciante: { label: "Iniciante", color: "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400" },
@@ -10,31 +11,16 @@ const nivelConfig: Record<string, { label: string; color: string }> = {
   avancado: { label: "Avançado", color: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400" },
 };
 
-const categoriaEmoji: Record<string, string> = {
-  cervical: "🦴",
-  lombar: "💆",
-  membros_superiores: "💪",
-  membros_inferiores: "🦵",
-  coluna: "🧘",
-  geral: "✨",
-  quadril: "🏃",
-  ombros: "🤸",
-  postural_escoliose: "🔄",
-  postural_lordose: "🦴",
-  postural_cifose: "🔙",
-  postural_ombros: "🎯",
-  postural_geral: "🧍",
-};
-
 interface ExercicioCardProps {
   exercicio: ExercicioAlongamento;
   index: number;
   onClick?: () => void;
+  bloqueado?: boolean;
 }
 
-export const ExercicioCard = ({ exercicio, index, onClick }: ExercicioCardProps) => {
+export const ExercicioCard = ({ exercicio, index, onClick, bloqueado = false }: ExercicioCardProps) => {
   const nivel = nivelConfig[exercicio.nivel] || nivelConfig.iniciante;
-  const emoji = categoriaEmoji[exercicio.categoria] || "✨";
+  const categoria = exercicio.categoria as any;
 
   return (
     <motion.div
@@ -43,12 +29,16 @@ export const ExercicioCard = ({ exercicio, index, onClick }: ExercicioCardProps)
       transition={{ duration: 0.3, delay: index * 0.04 }}
     >
       <Card
-        className="p-4 cursor-pointer hover-lift group"
-        onClick={onClick}
+        className={`p-4 group ${bloqueado ? "opacity-60 cursor-not-allowed" : "cursor-pointer hover-lift"}`}
+        onClick={bloqueado ? undefined : onClick}
       >
         <div className="flex items-start gap-3">
-          <div className="shrink-0 w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-xl">
-            {exercicio.imagem_url || emoji}
+          <div className="shrink-0 w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center overflow-hidden">
+            {bloqueado ? (
+              <Lock size={20} className="text-muted-foreground" />
+            ) : (
+              <ExercicioAnimado tipo={categoria} size={40} />
+            )}
           </div>
           <div className="flex-1 min-w-0">
             <h4 className="font-semibold text-foreground text-sm line-clamp-1">{exercicio.nome}</h4>
@@ -68,6 +58,11 @@ export const ExercicioCard = ({ exercicio, index, onClick }: ExercicioCardProps)
                   <Repeat size={10} />
                   {exercicio.repeticoes}x
                 </span>
+              )}
+              {bloqueado && (
+                <Badge variant="outline" className="text-[9px] border-muted-foreground/30 text-muted-foreground">
+                  🔒 Bloqueado
+                </Badge>
               )}
             </div>
           </div>
