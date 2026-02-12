@@ -9,7 +9,7 @@ import { AppLayout } from "@/components/AppLayout";
 import { HomeDashboard } from "@/components/home/HomeDashboard";
 import { useAdmin } from "@/hooks/useAdmin";
 import { useNavigate } from "react-router-dom";
-import { Settings, Gift } from "lucide-react";
+import { Settings, Gift, Building2, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 
 const stagger = {
@@ -71,6 +71,27 @@ const Index = () => {
                     <p className="section-label px-1">Seu progresso</p>
                     <HomeDashboard />
                   </motion.div>
+
+                  {/* Corporativo Highlight Banner */}
+                  <motion.button
+                    variants={fadeUp}
+                    whileTap={{ scale: 0.98 }}
+                    whileHover={{ scale: 1.01 }}
+                    onClick={() => navigate("/corporativo")}
+                    className="w-full relative overflow-hidden flex items-center gap-4 p-5 rounded-2xl bg-gradient-to-r from-primary/90 to-primary text-primary-foreground shadow-glow hover:shadow-elevated transition-all duration-300"
+                  >
+                    <div className="absolute -right-6 -top-6 w-24 h-24 bg-primary-foreground/5 rounded-full blur-xl" />
+                    <div className="p-3 rounded-xl bg-primary-foreground/15 shadow-sm">
+                      <Building2 size={24} className="drop-shadow-sm" />
+                    </div>
+                    <div className="flex-1 text-left">
+                      <p className="font-bold text-base">Corporativo</p>
+                      <p className="text-xs opacity-80">
+                        Bem-estar para sua empresa — planos sob medida
+                      </p>
+                    </div>
+                    <ArrowRight size={18} className="opacity-70" />
+                  </motion.button>
 
                   {/* Referral Banner */}
                   <motion.button
