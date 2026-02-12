@@ -1674,12 +1674,17 @@ export type Database = {
           codigo: string
           comprador_id: string
           created_at: string
+          data_entrega_agendada: string | null
           destinatario_email: string | null
           destinatario_nome: string
+          experiencia_descricao: string | null
+          experiencia_nome: string | null
           id: string
           mensagem: string | null
+          servicos_inclusos: Json | null
           status: string
           tema: string
+          tipo: string
           usado_em: string | null
           usado_por: string | null
           validade: string
@@ -1689,12 +1694,17 @@ export type Database = {
           codigo?: string
           comprador_id: string
           created_at?: string
+          data_entrega_agendada?: string | null
           destinatario_email?: string | null
           destinatario_nome: string
+          experiencia_descricao?: string | null
+          experiencia_nome?: string | null
           id?: string
           mensagem?: string | null
+          servicos_inclusos?: Json | null
           status?: string
           tema?: string
+          tipo?: string
           usado_em?: string | null
           usado_por?: string | null
           validade?: string
@@ -1704,12 +1714,17 @@ export type Database = {
           codigo?: string
           comprador_id?: string
           created_at?: string
+          data_entrega_agendada?: string | null
           destinatario_email?: string | null
           destinatario_nome?: string
+          experiencia_descricao?: string | null
+          experiencia_nome?: string | null
           id?: string
           mensagem?: string | null
+          servicos_inclusos?: Json | null
           status?: string
           tema?: string
+          tipo?: string
           usado_em?: string | null
           usado_por?: string | null
           validade?: string
@@ -1790,10 +1805,19 @@ export type Database = {
           user_id: string
         }[]
       }
+      process_expired_vales: {
+        Args: never
+        Returns: {
+          codigo: string
+          vale_id: string
+          valor: number
+        }[]
+      }
       record_login_attempt: {
         Args: { p_email: string; p_ip_address?: string; p_success?: boolean }
         Returns: undefined
       }
+      resgatar_vale_presente: { Args: { p_codigo: string }; Returns: Json }
     }
     Enums: {
       app_role: "admin" | "user"
