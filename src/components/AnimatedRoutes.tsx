@@ -30,6 +30,7 @@ import ContaConfiguracoes from "@/pages/ContaConfiguracoes";
 import HeadSpa from "@/pages/HeadSpa";
 import Dietas from "@/pages/Dietas";
 import ValePresente from "@/pages/ValePresente";
+import CupomEditor from "@/pages/CupomEditor";
 import NotFound from "@/pages/NotFound";
 
 /** Shows landing for visitors, dashboard for authenticated users */
@@ -298,6 +299,16 @@ export const AnimatedRoutes = () => {
             <ProtectedRoute>
               <PageTransition>
                 <ValePresente />
+              </PageTransition>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/cupom-editor"
+          element={
+            <ProtectedRoute requireAdmin>
+              <PageTransition>
+                <CupomEditor />
               </PageTransition>
             </ProtectedRoute>
           }
