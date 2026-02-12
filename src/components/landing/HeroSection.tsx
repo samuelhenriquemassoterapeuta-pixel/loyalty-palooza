@@ -34,6 +34,7 @@ export const HeroSection = () => {
   const botaoPrimario = config?.botao_primario || "Agende seu horário";
   const botaoSecundario = config?.botao_secundario || "Conheça nossos serviços";
   const sinais = config?.sinais || ["Equilíbrio", "Pausa", "Essência"];
+  const imagemFundo = config?.imagem_fundo || heroBg;
 
   return (
     <section
@@ -43,7 +44,7 @@ export const HeroSection = () => {
     >
       {/* Background image with overlay */}
       <div className="absolute inset-0">
-        <img src={heroBg} alt="" className="w-full h-full object-cover" />
+        <img src={imagemFundo} alt="" className="w-full h-full object-cover" />
         <div className="absolute inset-0 bg-background/80 backdrop-blur-[2px]" />
       </div>
       <div className="absolute inset-0 gradient-hero opacity-60" />
