@@ -29,6 +29,7 @@ import AvaliacaoPostural from "@/pages/AvaliacaoPostural";
 import ContaConfiguracoes from "@/pages/ContaConfiguracoes";
 import HeadSpa from "@/pages/HeadSpa";
 import Dietas from "@/pages/Dietas";
+import ValePresente from "@/pages/ValePresente";
 import NotFound from "@/pages/NotFound";
 
 /** Shows landing for visitors, dashboard for authenticated users */
@@ -287,6 +288,16 @@ export const AnimatedRoutes = () => {
             <ProtectedRoute>
               <PageTransition>
                 <ContaConfiguracoes />
+              </PageTransition>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/vale-presente"
+          element={
+            <ProtectedRoute>
+              <PageTransition>
+                <ValePresente />
               </PageTransition>
             </ProtectedRoute>
           }
