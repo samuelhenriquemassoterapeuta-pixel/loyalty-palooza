@@ -303,6 +303,10 @@ const Admin = () => {
                 <TabsTrigger value="dashboard" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap data-[state=active]:shadow-sm transition-all duration-200">
                   Dashboard
                 </TabsTrigger>
+                <TabsTrigger value="exercicios" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
+                  <Dumbbell size={14} />
+                  Exercícios
+                </TabsTrigger>
                 <TabsTrigger value="pedidos" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap data-[state=active]:shadow-sm transition-all duration-200">
                   Pedidos
                 </TabsTrigger>
@@ -321,10 +325,6 @@ const Admin = () => {
                 <TabsTrigger value="indicacoes" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
                   <Users size={14} />
                   Indicações
-                </TabsTrigger>
-                <TabsTrigger value="exercicios" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
-                  <Dumbbell size={14} />
-                  Exercícios
                 </TabsTrigger>
                 <TabsTrigger value="headspa" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
                   <Sparkles size={14} />
