@@ -1808,9 +1808,9 @@ export type Database = {
       process_expired_vales: {
         Args: never
         Returns: {
-          codigo: string
+          vale_codigo: string
           vale_id: string
-          valor: number
+          vale_valor: number
         }[]
       }
       record_login_attempt: {
