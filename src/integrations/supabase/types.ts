@@ -689,6 +689,30 @@ export type Database = {
           },
         ]
       }
+      landing_config: {
+        Row: {
+          conteudo: Json
+          created_at: string
+          id: string
+          secao: string
+          updated_at: string
+        }
+        Insert: {
+          conteudo?: Json
+          created_at?: string
+          id?: string
+          secao: string
+          updated_at?: string
+        }
+        Update: {
+          conteudo?: Json
+          created_at?: string
+          id?: string
+          secao?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       lembretes_alongamento: {
         Row: {
           ativo: boolean

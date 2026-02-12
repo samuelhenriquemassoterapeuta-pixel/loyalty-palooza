@@ -4,19 +4,13 @@ import { Star, Quote } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useParallax } from "@/hooks/useParallax";
 import { CollapsibleSection } from "./CollapsibleSection";
+import { useLandingConfig } from "@/hooks/useLandingConfig";
 
 interface Depoimento {
   nome: string;
   nota: number;
   comentario: string;
 }
-
-const depoimentosFallback: Depoimento[] = [
-  { nome: "Camila R.", nota: 5, comentario: "A Resinkra mudou minha rotina de autocuidado. As terapias são incríveis e ainda ganho cashback!" },
-  { nome: "Lucas M.", nota: 5, comentario: "Profissionais excelentes e o programa de fidelidade é um diferencial enorme. Super recomendo." },
-  { nome: "Juliana S.", nota: 5, comentario: "Ambiente acolhedor, atendimento impecável. O app facilita muito o agendamento e o acompanhamento." },
-  { nome: "Rafael T.", nota: 4, comentario: "Indiquei para três amigos e já acumulei um bom saldo de cashback. Experiência completa!" },
-];
 
 const StarRating = ({ nota }: { nota: number }) => (
   <div className="flex gap-0.5">
@@ -36,11 +30,27 @@ const cardVariants = {
   visible: { opacity: 1, y: 0, rotateX: 0, transition: { duration: 0.6, ease: [0, 0, 0.2, 1] as const } },
 };
 
-const useDepoimentos = () => {
-  const [depoimentos, setDepoimentos] = useState<Depoimento[]>(depoimentosFallback);
-  const [loading, setLoading] = useState(true);
+const defaultFallback: Depoimento[] = [
+  { nome: "Camila R.", nota: 5, comentario: "A Resinkra mudou minha rotina de autocuidado. As terapias são incríveis e ainda ganho cashback!" },
+  { nome: "Lucas M.", nota: 5, comentario: "Profissionais excelentes e o programa de fidelidade é um diferencial enorme. Super recomendo." },
+  { nome: "Juliana S.", nota: 5, comentario: "Ambiente acolhedor, atendimento impecável. O app facilita muito o agendamento e o acompanhamento." },
+  { nome: "Rafael T.", nota: 4, comentario: "Indiquei para três amigos e já acumulei um bom saldo de cashback. Experiência completa!" },
+];
+
+export const DepoimentosSection = () => {
+  const { config } = useLandingConfig("depoimentos");
+  const { ref, y } = useParallax({ speed: 0.12 });
+
+  const badgeText = config?.badge || "Depoimentos";
+  const tituloParte1 = config?.titulo_parte1 || "O que nossos clientes";
+  const tituloDestaque = config?.titulo_destaque || "dizem";
+  const subtitulo = config?.subtitulo || "Histórias reais de quem já transformou seu bem-estar com a Resinkra.";
+  const fallbackDeps: Depoimento[] = config?.depoimentos_fallback || defaultFallback;
+
+  const [depoimentos, setDepoimentos] = useState<Depoimento[]>(fallbackDeps);
 
   useEffect(() => {
+    setDepoimentos(fallbackDeps);
     const fetchAvaliacoes = async () => {
       try {
         const { data, error } = await supabase
@@ -51,7 +61,7 @@ const useDepoimentos = () => {
           .order("created_at", { ascending: false })
           .limit(8);
 
-        if (error || !data || data.length < 2) { setLoading(false); return; }
+        if (error || !data || data.length < 2) return;
 
         const realDepoimentos: Depoimento[] = data
           .filter((a) => a.comentario && a.comentario.trim().length > 10)
@@ -60,19 +70,10 @@ const useDepoimentos = () => {
         if (realDepoimentos.length >= 2) setDepoimentos(realDepoimentos.slice(0, 4));
       } catch {
         // Keep fallback
-      } finally {
-        setLoading(false);
       }
     };
     fetchAvaliacoes();
-  }, []);
-
-  return { depoimentos, loading };
-};
-
-export const DepoimentosSection = () => {
-  const { depoimentos } = useDepoimentos();
-  const { ref, y } = useParallax({ speed: 0.12 });
+  }, [config]);
 
   return (
     <div ref={ref} className="py-14 sm:py-20 lg:py-28 bg-background relative overflow-hidden">
@@ -86,20 +87,16 @@ export const DepoimentosSection = () => {
           badge={
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/10 border border-accent/20">
               <Quote size={14} className="text-accent" />
-              <span className="text-xs font-semibold text-accent">Depoimentos</span>
+              <span className="text-xs font-semibold text-accent">{badgeText}</span>
             </div>
           }
           title={
             <h2 className="text-3xl lg:text-4xl font-bold text-foreground">
-              O que nossos clientes{" "}
-              <span className="font-serif italic text-gradient">dizem</span>
+              {tituloParte1}{" "}
+              <span className="font-serif italic text-gradient">{tituloDestaque}</span>
             </h2>
           }
-          subtitle={
-            <p className="text-muted-foreground">
-              Histórias reais de quem já transformou seu bem-estar com a Resinkra.
-            </p>
-          }
+          subtitle={<p className="text-muted-foreground">{subtitulo}</p>}
         >
           <motion.div
             variants={containerVariants}

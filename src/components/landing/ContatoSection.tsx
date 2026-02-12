@@ -3,13 +3,7 @@ import { MapPin, Phone, Mail, Instagram, ArrowRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useParallax } from "@/hooks/useParallax";
-
-const contactInfo = [
-  { icon: MapPin, label: "Endereço", value: "Rua das Terapias, 123 - Centro" },
-  { icon: Phone, label: "Telefone", value: "(11) 99999-9999" },
-  { icon: Mail, label: "Email", value: "contato@resinkra.com.br" },
-  { icon: Instagram, label: "Instagram", value: "@resinkra" },
-];
+import { useLandingConfig } from "@/hooks/useLandingConfig";
 
 const contactItemVariants = {
   hidden: { opacity: 0, x: 20 },
@@ -23,10 +17,22 @@ const contactItemVariants = {
 export const ContatoSection = () => {
   const navigate = useNavigate();
   const { ref, y } = useParallax({ speed: 0.1 });
+  const { config } = useLandingConfig("contato");
+
+  const tituloParte1 = config?.titulo_parte1 || "Pronto para";
+  const tituloDestaque = config?.titulo_destaque || "começar";
+  const subtitulo = config?.subtitulo || "Crie sua conta gratuitamente e comece a acumular cashback em suas sessões de terapia. Seu bem-estar merece ser recompensado.";
+  const botao = config?.botao || "Criar minha conta";
+
+  const contactInfo = [
+    { icon: MapPin, label: "Endereço", value: config?.endereco || "Rua das Terapias, 123 - Centro" },
+    { icon: Phone, label: "Telefone", value: config?.telefone || "(11) 99999-9999" },
+    { icon: Mail, label: "Email", value: config?.email || "contato@resinkra.com.br" },
+    { icon: Instagram, label: "Instagram", value: config?.instagram || "@resinkra" },
+  ];
 
   return (
     <section id="contato" ref={ref} className="py-14 sm:py-20 lg:py-28 bg-card/50 relative overflow-hidden">
-      {/* Parallax background */}
       <motion.div
         style={{ y }}
         className="absolute bottom-0 right-[5%] w-80 h-80 bg-primary/4 rounded-full blur-3xl pointer-events-none hidden lg:block"
@@ -34,7 +40,6 @@ export const ContatoSection = () => {
 
       <div className="max-w-6xl mx-auto px-5 sm:px-6 lg:px-8 relative z-10">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
-          {/* CTA side */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -42,27 +47,21 @@ export const ContatoSection = () => {
             transition={{ duration: 0.7, ease: "easeOut" }}
           >
             <h2 className="text-3xl lg:text-4xl font-bold text-foreground">
-              Pronto para{" "}
-              <span className="font-serif italic text-gradient">começar</span>?
+              {tituloParte1}{" "}
+              <span className="font-serif italic text-gradient">{tituloDestaque}</span>?
             </h2>
             <p className="mt-4 text-muted-foreground leading-relaxed max-w-md">
-              Crie sua conta gratuitamente e comece a acumular cashback 
-              em suas sessões de terapia. Seu bem-estar merece ser recompensado.
+              {subtitulo}
             </p>
 
             <div className="mt-8 flex flex-col sm:flex-row gap-4">
-              <Button
-                size="xl"
-                onClick={() => navigate("/auth")}
-                className="group"
-              >
-                Criar minha conta
+              <Button size="xl" onClick={() => navigate("/auth")} className="group">
+                {botao}
                 <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
               </Button>
             </div>
           </motion.div>
 
-          {/* Contact info with staggered reveal */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
