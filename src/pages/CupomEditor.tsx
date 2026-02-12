@@ -90,9 +90,9 @@ const CupomEditor = () => {
         </div>
       </header>
 
-      <div className="max-w-6xl mx-auto p-4 grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="max-w-6xl mx-auto p-3 sm:p-4 grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 pb-24 lg:pb-6">
         {/* Editor Panel */}
-        <div className="space-y-4 order-2 lg:order-1">
+        <div className="space-y-3 sm:space-y-4 order-2 lg:order-1">
           <Card className="border-border/50 shadow-card">
             <CardHeader className="pb-3">
               <CardTitle className="text-base font-semibold text-foreground">Conteúdo do Cupom</CardTitle>
@@ -180,7 +180,7 @@ const CupomEditor = () => {
         </div>
 
         {/* Preview Panel */}
-        <div className="space-y-4 order-1 lg:order-2">
+        <div className="space-y-3 sm:space-y-4 order-1 lg:order-2">
           <Card className="border-border/50 shadow-card">
             <CardHeader className="pb-3">
               <CardTitle className="text-base font-semibold text-foreground">Pré-visualização</CardTitle>
@@ -200,17 +200,21 @@ const CupomEditor = () => {
               </Tabs>
 
               {/* Visual preview */}
-              <div className="flex justify-center items-center min-h-[300px] bg-muted/30 rounded-xl p-4">
-                <CupomVisual ref={cupomRef} data={cupom} formato={formato} />
+              <div className="flex justify-center items-center min-h-[250px] sm:min-h-[300px] bg-muted/30 rounded-xl p-2 sm:p-4 overflow-hidden">
+                <div className="transform scale-[0.65] sm:scale-75 lg:scale-100 origin-center">
+                  <CupomVisual ref={cupomRef} data={cupom} formato={formato} />
+                </div>
               </div>
             </CardContent>
           </Card>
 
           {/* Export button (mobile) */}
-          <Button onClick={exportAsImage} className="w-full lg:hidden gap-2 bg-primary text-primary-foreground" disabled={exporting}>
-            <Download size={18} />
-            {exporting ? "Exportando..." : `Baixar ${formatoLabels[formato].label} como PNG`}
-          </Button>
+          <div className="fixed bottom-20 left-3 right-3 lg:hidden z-20">
+            <Button onClick={exportAsImage} className="w-full gap-2 bg-primary text-primary-foreground shadow-elevated" size="lg" disabled={exporting}>
+              <Download size={18} />
+              {exporting ? "Exportando..." : `Baixar ${formatoLabels[formato].label} como PNG`}
+            </Button>
+          </div>
         </div>
       </div>
     </div>
