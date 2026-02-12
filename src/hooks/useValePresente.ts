@@ -17,6 +17,11 @@ export interface ValePresente {
   usado_em: string | null;
   usado_por: string | null;
   created_at: string;
+  tipo: string;
+  experiencia_nome: string | null;
+  experiencia_descricao: string | null;
+  servicos_inclusos: any;
+  data_entrega_agendada: string | null;
 }
 
 export const useValePresente = () => {
@@ -31,7 +36,7 @@ export const useValePresente = () => {
         .select("*")
         .order("created_at", { ascending: false });
       if (error) throw error;
-      return data as ValePresente[];
+      return data as unknown as ValePresente[];
     },
     enabled: !!user,
   });
@@ -43,6 +48,11 @@ export const useValePresente = () => {
       valor: number;
       mensagem?: string;
       tema: string;
+      tipo?: string;
+      experiencia_nome?: string;
+      experiencia_descricao?: string;
+      servicos_inclusos?: any;
+      data_entrega_agendada?: string;
     }) => {
       const { data, error } = await supabase
         .from("vale_presentes")
@@ -53,11 +63,16 @@ export const useValePresente = () => {
           valor: vale.valor,
           mensagem: vale.mensagem || null,
           tema: vale.tema,
-        })
+          tipo: vale.tipo || "monetario",
+          experiencia_nome: vale.experiencia_nome || null,
+          experiencia_descricao: vale.experiencia_descricao || null,
+          servicos_inclusos: vale.servicos_inclusos || [],
+          data_entrega_agendada: vale.data_entrega_agendada || null,
+        } as any)
         .select()
         .single();
       if (error) throw error;
-      return data as ValePresente;
+      return data as unknown as ValePresente;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["vales-presente"] });
@@ -70,42 +85,18 @@ export const useValePresente = () => {
 
   const resgatarVale = useMutation({
     mutationFn: async (codigo: string) => {
-      // First find the gift card
-      const { data: vale, error: findError } = await supabase
-        .from("vale_presentes")
-        .select("*")
-        .eq("codigo", codigo.toUpperCase().trim())
-        .eq("status", "ativo")
-        .single();
+      // Use server-side RPC to bypass RLS issues
+      const { data, error } = await supabase.rpc("resgatar_vale_presente", {
+        p_codigo: codigo,
+      });
 
-      if (findError || !vale) throw new Error("Vale presente não encontrado ou já utilizado.");
-
-      if (new Date(vale.validade) < new Date()) {
-        throw new Error("Este vale presente está expirado.");
-      }
-
-      if (vale.comprador_id === user!.id) {
-        throw new Error("Você não pode resgatar um vale que você mesmo comprou.");
-      }
-
-      // Mark as used
-      const { error: updateError } = await supabase
-        .from("vale_presentes")
-        .update({
-          status: "usado",
-          usado_em: new Date().toISOString(),
-          usado_por: user!.id,
-        })
-        .eq("id", vale.id);
-
-      if (updateError) throw updateError;
-
-      // Note: cashback credit will be handled by a database trigger
-      return vale as ValePresente;
+      if (error) throw new Error(error.message);
+      return data as any;
     },
     onSuccess: (vale) => {
       queryClient.invalidateQueries({ queryKey: ["vales-presente"] });
-      toast.success(`Vale de R$ ${Number(vale.valor).toFixed(2).replace('.', ',')} resgatado! 🎉`);
+      const valor = Number(vale.valor).toFixed(2).replace('.', ',');
+      toast.success(`Vale de R$ ${valor} resgatado! 🎉`);
     },
     onError: (err: any) => {
       toast.error(err.message || "Erro ao resgatar vale presente");

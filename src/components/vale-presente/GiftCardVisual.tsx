@@ -1,5 +1,7 @@
+import React from "react";
 import { motion } from "framer-motion";
 import { Gift, Sparkles, Heart, Leaf, Star } from "lucide-react";
+import QRCode from "react-qr-code";
 
 interface GiftCardVisualProps {
   tema: string;
@@ -8,6 +10,8 @@ interface GiftCardVisualProps {
   mensagem?: string;
   codigo?: string;
   compact?: boolean;
+  tipo?: string;
+  experienciaNome?: string;
 }
 
 const temaConfigs: Record<string, {
@@ -54,88 +58,119 @@ const temaConfigs: Record<string, {
   },
 };
 
-export const GiftCardVisual = ({ tema, valor, destinatario, mensagem, codigo, compact }: GiftCardVisualProps) => {
-  const config = temaConfigs[tema] || temaConfigs.classico;
-  const Icon = config.icon;
+export const GiftCardVisual = React.forwardRef<HTMLDivElement, GiftCardVisualProps>(
+  ({ tema, valor, destinatario, mensagem, codigo, compact, tipo, experienciaNome }, ref) => {
+    const config = temaConfigs[tema] || temaConfigs.classico;
+    const Icon = config.icon;
+    const isExperiencia = tipo === 'experiencia';
 
-  return (
-    <motion.div
-      initial={{ rotateY: -5, scale: 0.95 }}
-      animate={{ rotateY: 0, scale: 1 }}
-      transition={{ type: "spring", stiffness: 200, damping: 20 }}
-      className={`relative overflow-hidden rounded-2xl bg-gradient-to-br ${config.gradient} ${compact ? "p-4" : "p-6"} shadow-elevated`}
-      style={{ perspective: "1000px" }}
-    >
-      {/* Pattern overlay */}
-      <div
-        className="absolute inset-0 opacity-60"
-        style={{ background: config.pattern }}
-      />
-
-      {/* Decorative circles */}
-      <div className="absolute -top-8 -right-8 w-32 h-32 rounded-full border border-white/10" />
-      <div className="absolute -bottom-6 -left-6 w-24 h-24 rounded-full border border-white/10" />
-
-      {/* Shine effect */}
+    return (
       <motion.div
-        className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent"
-        animate={{ x: ["-100%", "200%"] }}
-        transition={{ duration: 3, repeat: Infinity, repeatDelay: 5, ease: "easeInOut" }}
-        style={{ width: "50%", skewX: "-15deg" }}
-      />
+        ref={ref}
+        initial={{ rotateY: -5, scale: 0.95 }}
+        animate={{ rotateY: 0, scale: 1 }}
+        transition={{ type: "spring", stiffness: 200, damping: 20 }}
+        className={`relative overflow-hidden rounded-2xl bg-gradient-to-br ${config.gradient} ${compact ? "p-4" : "p-6"} shadow-elevated`}
+        style={{ perspective: "1000px" }}
+      >
+        {/* Pattern overlay */}
+        <div
+          className="absolute inset-0 opacity-60"
+          style={{ background: config.pattern }}
+        />
 
-      <div className="relative z-10">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-white/10 backdrop-blur-sm flex items-center justify-center">
-              <Icon className={`w-4 h-4 ${config.accent}`} />
+        {/* Decorative circles */}
+        <div className="absolute -top-8 -right-8 w-32 h-32 rounded-full border border-white/10" />
+        <div className="absolute -bottom-6 -left-6 w-24 h-24 rounded-full border border-white/10" />
+
+        {/* Shine effect */}
+        <motion.div
+          className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent"
+          animate={{ x: ["-100%", "200%"] }}
+          transition={{ duration: 3, repeat: Infinity, repeatDelay: 5, ease: "easeInOut" }}
+          style={{ width: "50%", skewX: "-15deg" }}
+        />
+
+        <div className="relative z-10">
+          {/* Header */}
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-lg bg-white/10 backdrop-blur-sm flex items-center justify-center">
+                <Icon className={`w-4 h-4 ${config.accent}`} />
+              </div>
+              <div>
+                <p className="text-[10px] uppercase tracking-widest text-white/50 font-medium">
+                  {isExperiencia ? 'Vale Experiência' : 'Vale Presente'}
+                </p>
+                <p className="text-xs text-white/70 font-medium" style={{ fontFamily: "var(--font-serif)" }}>
+                  Resinkra
+                </p>
+              </div>
             </div>
-            <div>
-              <p className="text-[10px] uppercase tracking-widest text-white/50 font-medium">
-                Vale Presente
-              </p>
-              <p className="text-xs text-white/70 font-medium" style={{ fontFamily: "var(--font-serif)" }}>
-                Resinkra
-              </p>
-            </div>
+            <motion.div
+              animate={{ rotate: [0, 5, -5, 0] }}
+              transition={{ duration: 4, repeat: Infinity }}
+            >
+              <Gift className={`w-5 h-5 ${config.accent}`} />
+            </motion.div>
           </div>
-          <motion.div
-            animate={{ rotate: [0, 5, -5, 0] }}
-            transition={{ duration: 4, repeat: Infinity }}
-          >
-            <Gift className={`w-5 h-5 ${config.accent}`} />
-          </motion.div>
-        </div>
 
-        {/* Value */}
-        <div className={compact ? "mb-3" : "mb-5"}>
-          <p className="text-[10px] uppercase tracking-wider text-white/40 mb-1">Valor</p>
-          <p className={`font-bold text-white ${compact ? "text-2xl" : "text-3xl"}`} style={{ fontFamily: "var(--font-serif)" }}>
-            R$ {valor.toFixed(2).replace(".", ",")}
-          </p>
-        </div>
-
-        {/* Destinatário */}
-        <div className="flex items-end justify-between gap-2">
-          <div className="flex-1 min-w-0">
-            <p className="text-[10px] uppercase tracking-wider text-white/40 mb-0.5">Para</p>
-            <p className="text-sm font-semibold text-white truncate">{destinatario || "..."}</p>
-            {mensagem && !compact && (
-              <p className="text-xs text-white/60 mt-1 line-clamp-2 italic">"{mensagem}"</p>
+          {/* Value / Experience */}
+          <div className={compact ? "mb-3" : "mb-5"}>
+            {isExperiencia && experienciaNome ? (
+              <>
+                <p className="text-[10px] uppercase tracking-wider text-white/40 mb-1">Experiência</p>
+                <p className={`font-bold text-white ${compact ? "text-lg" : "text-xl"}`} style={{ fontFamily: "var(--font-serif)" }}>
+                  {experienciaNome}
+                </p>
+                <p className={`text-white/60 ${compact ? "text-xs" : "text-sm"} mt-0.5`}>
+                  R$ {valor.toFixed(2).replace(".", ",")}
+                </p>
+              </>
+            ) : (
+              <>
+                <p className="text-[10px] uppercase tracking-wider text-white/40 mb-1">Valor</p>
+                <p className={`font-bold text-white ${compact ? "text-2xl" : "text-3xl"}`} style={{ fontFamily: "var(--font-serif)" }}>
+                  R$ {valor.toFixed(2).replace(".", ",")}
+                </p>
+              </>
             )}
           </div>
-          {codigo && (
-            <div className="text-right shrink-0">
-              <p className="text-[10px] uppercase tracking-wider text-white/40 mb-0.5">Código</p>
-              <p className="text-sm font-mono font-bold text-white tracking-wider">{codigo}</p>
+
+          {/* Destinatário + Code/QR */}
+          <div className="flex items-end justify-between gap-2">
+            <div className="flex-1 min-w-0">
+              <p className="text-[10px] uppercase tracking-wider text-white/40 mb-0.5">Para</p>
+              <p className="text-sm font-semibold text-white truncate">{destinatario || "..."}</p>
+              {mensagem && !compact && (
+                <p className="text-xs text-white/60 mt-1 line-clamp-2 italic">"{mensagem}"</p>
+              )}
             </div>
-          )}
+            {codigo && (
+              <div className="flex items-end gap-3 shrink-0">
+                <div className="text-right">
+                  <p className="text-[10px] uppercase tracking-wider text-white/40 mb-0.5">Código</p>
+                  <p className="text-sm font-mono font-bold text-white tracking-wider">{codigo}</p>
+                </div>
+                {!compact && (
+                  <div className="bg-white rounded-lg p-1.5">
+                    <QRCode
+                      value={`${window.location.origin}/vale-presente?code=${codigo}`}
+                      size={48}
+                      level="M"
+                    />
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
         </div>
-      </div>
-    </motion.div>
-  );
-};
+      </motion.div>
+    );
+  }
+);
+
+GiftCardVisual.displayName = "GiftCardVisual";
 
 export const temaOptions = Object.entries(temaConfigs).map(([key, config]) => ({
   value: key,
