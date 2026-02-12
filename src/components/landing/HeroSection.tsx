@@ -5,6 +5,7 @@ import { useRef } from "react";
 import { Button } from "@/components/ui/button";
 import simboloVerde from "@/assets/simbolo-verde.png";
 import iconeFlor from "@/assets/icone-flor.png";
+import heroBg from "@/assets/hero-bg.jpg";
 import { useLandingConfig } from "@/hooks/useLandingConfig";
 
 export const HeroSection = () => {
@@ -40,8 +41,12 @@ export const HeroSection = () => {
       id="inicio"
       className="relative min-h-screen flex items-center justify-center overflow-hidden px-2"
     >
-      {/* Background blobs with parallax */}
-      <div className="absolute inset-0 gradient-hero" />
+      {/* Background image with overlay */}
+      <div className="absolute inset-0">
+        <img src={heroBg} alt="" className="w-full h-full object-cover" />
+        <div className="absolute inset-0 bg-background/80 backdrop-blur-[2px]" />
+      </div>
+      <div className="absolute inset-0 gradient-hero opacity-60" />
       <motion.div style={{ y: bgBlobY1 }} className="absolute top-20 right-[10%] w-72 h-72 bg-primary/8 rounded-full blur-3xl" />
       <motion.div style={{ y: bgBlobY2 }} className="absolute bottom-20 left-[5%] w-96 h-96 bg-accent/6 rounded-full blur-3xl" />
       <div className="absolute top-1/3 left-[15%] w-4 h-4 bg-accent/40 rounded-full animate-float" />
