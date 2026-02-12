@@ -77,7 +77,7 @@ export const PacotesSection = () => {
       <div className="max-w-6xl mx-auto px-5 sm:px-6 lg:px-8 relative z-10">
         <CollapsibleSection
           id="pacotes"
-          defaultOpen
+          
           badge={
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-highlight/10 border border-highlight/20">
               <Crown size={14} className="text-highlight" />
