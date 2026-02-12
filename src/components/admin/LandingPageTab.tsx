@@ -28,6 +28,9 @@ const SectionEditor = ({ secao, conteudo, onSave }: { secao: string; conteudo: a
   if (secao === "hero") {
     return (
       <div className="space-y-4">
+        <div><Label>Imagem de Fundo (URL)</Label><Input placeholder="https://... ou deixe vazio para imagem padrão" value={form.imagem_fundo || ""} onChange={e => update("imagem_fundo", e.target.value)} />
+          <p className="text-[10px] text-muted-foreground mt-1">Cole a URL de uma imagem para usar como fundo do Hero. Deixe vazio para usar a imagem padrão.</p>
+        </div>
         <div><Label>Badge</Label><Input value={form.badge || ""} onChange={e => update("badge", e.target.value)} /></div>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <div><Label>Título (parte 1)</Label><Input value={form.titulo_parte1 || ""} onChange={e => update("titulo_parte1", e.target.value)} /></div>
