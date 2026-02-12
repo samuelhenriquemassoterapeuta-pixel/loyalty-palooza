@@ -1,9 +1,10 @@
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, useMemo } from "react";
 import { motion } from "framer-motion";
-import { Home, CalendarDays, Activity, Apple, Globe } from "lucide-react";
+import { Home, CalendarDays, Activity, Apple, Globe, Ticket } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useAdmin } from "@/hooks/useAdmin";
 
-const navItems = [
+const baseNavItems = [
   { icon: Home, label: "Início", path: "/" },
   { icon: CalendarDays, label: "Agendar", path: "/agendamento" },
   { icon: Activity, label: "Protocolos", path: "/protocolos" },
@@ -11,11 +12,19 @@ const navItems = [
   { icon: Globe, label: "Site", path: "/site" },
 ];
 
+const adminNavItem = { icon: Ticket, label: "Cupom", path: "/cupom-editor" };
+
 export const BottomNavigation = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const { isAdmin } = useAdmin();
   const containerRef = useRef<HTMLDivElement>(null);
   const [pillStyle, setPillStyle] = useState({ x: 0, width: 0 });
+
+  const navItems = useMemo(
+    () => (isAdmin ? [...baseNavItems, adminNavItem] : baseNavItems),
+    [isAdmin]
+  );
 
   const activeIndex = navItems.findIndex((item) => item.path === location.pathname);
 
@@ -33,10 +42,10 @@ export const BottomNavigation = () => {
       x: btnRect.left - containerRect.left,
       width: btnRect.width,
     });
-  }, [activeIndex]);
+  }, [activeIndex, navItems.length]);
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50">
+    <nav className="fixed bottom-0 left-0 right-0 z-50 lg:hidden">
       <div className="mx-4 mb-4 safe-bottom">
         <div className="glass-strong rounded-2xl border border-border/50 shadow-elevated">
           <div
