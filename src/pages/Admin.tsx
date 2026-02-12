@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, Plus, FileText, Users, Shield, Dumbbell, Sparkles } from "lucide-react";
+import { ArrowLeft, Plus, FileText, Users, Shield, Dumbbell, Sparkles, ClipboardList, StretchHorizontal, Salad, BookOpen, Stethoscope } from "lucide-react";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -22,6 +22,11 @@ import { IndicacoesTab } from "@/components/admin/IndicacoesTab";
 import { ThemeToggle } from "@/components/admin/ThemeToggle";
 import { ExerciciosTab } from "@/components/admin/ExerciciosTab";
 import { HeadSpaImagensTab } from "@/components/admin/HeadSpaImagensTab";
+import { ProtocolosTab } from "@/components/admin/ProtocolosTab";
+import { PlanosAlongamentoTab } from "@/components/admin/PlanosAlongamentoTab";
+import { PlanosDietaTab } from "@/components/admin/PlanosDietaTab";
+import { SecoesClinicasTab } from "@/components/admin/SecoesClinicasTab";
+import { DietasConteudoTab } from "@/components/admin/DietasConteudoTab";
 
 const tabContentVariants = {
   hidden: { opacity: 0, y: 12 },
@@ -326,6 +331,26 @@ const Admin = () => {
                   <Users size={14} />
                   Indicações
                 </TabsTrigger>
+                <TabsTrigger value="protocolos" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
+                  <ClipboardList size={14} />
+                  Protocolos
+                </TabsTrigger>
+                <TabsTrigger value="planos-alongamento" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
+                  <StretchHorizontal size={14} />
+                  Planos Along.
+                </TabsTrigger>
+                <TabsTrigger value="planos-dieta" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
+                  <Salad size={14} />
+                  Planos Dieta
+                </TabsTrigger>
+                <TabsTrigger value="secoes-clinicas" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
+                  <Stethoscope size={14} />
+                  Seções Clínicas
+                </TabsTrigger>
+                <TabsTrigger value="dietas-conteudo" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
+                  <BookOpen size={14} />
+                  Conteúdo Dietas
+                </TabsTrigger>
                 <TabsTrigger value="headspa" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
                   <Sparkles size={14} />
                   Head SPA
@@ -418,6 +443,26 @@ const Admin = () => {
 
               <TabsContent value="exercicios" forceMount={activeTab === "exercicios" ? true : undefined} className={activeTab !== "exercicios" ? "hidden" : ""}>
                 <ExerciciosTab />
+              </TabsContent>
+
+              <TabsContent value="protocolos" forceMount={activeTab === "protocolos" ? true : undefined} className={activeTab !== "protocolos" ? "hidden" : ""}>
+                <ProtocolosTab />
+              </TabsContent>
+
+              <TabsContent value="planos-alongamento" forceMount={activeTab === "planos-alongamento" ? true : undefined} className={activeTab !== "planos-alongamento" ? "hidden" : ""}>
+                <PlanosAlongamentoTab />
+              </TabsContent>
+
+              <TabsContent value="planos-dieta" forceMount={activeTab === "planos-dieta" ? true : undefined} className={activeTab !== "planos-dieta" ? "hidden" : ""}>
+                <PlanosDietaTab />
+              </TabsContent>
+
+              <TabsContent value="secoes-clinicas" forceMount={activeTab === "secoes-clinicas" ? true : undefined} className={activeTab !== "secoes-clinicas" ? "hidden" : ""}>
+                <SecoesClinicasTab />
+              </TabsContent>
+
+              <TabsContent value="dietas-conteudo" forceMount={activeTab === "dietas-conteudo" ? true : undefined} className={activeTab !== "dietas-conteudo" ? "hidden" : ""}>
+                <DietasConteudoTab />
               </TabsContent>
 
               <TabsContent value="headspa" forceMount={activeTab === "headspa" ? true : undefined} className={activeTab !== "headspa" ? "hidden" : ""}>
