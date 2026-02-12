@@ -45,7 +45,7 @@ export const HeroSection = () => {
       {/* Background image with overlay */}
       <div className="absolute inset-0">
         <img src={imagemFundo} alt="" className="w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-background/60 backdrop-blur-[2px]" />
+        <div className="absolute inset-0 bg-background/40" />
       </div>
       <div className="absolute inset-0 gradient-hero opacity-60" />
       <motion.div style={{ y: bgBlobY1 }} className="absolute top-20 right-[10%] w-72 h-72 bg-primary/8 rounded-full blur-3xl" />
