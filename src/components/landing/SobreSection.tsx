@@ -3,16 +3,25 @@ import { Heart, Shield, Gift, TrendingUp } from "lucide-react";
 import { useParallax } from "@/hooks/useParallax";
 import seloCompleto from "@/assets/selo-completo.png";
 import { CollapsibleSection } from "./CollapsibleSection";
+import { useLandingConfig } from "@/hooks/useLandingConfig";
 
-const features = [
-  { icon: Heart, title: "Humanização em cada detalhe", description: "Escuta, acolhimento e cuidado genuíno. Cada pessoa é única e merece uma experiência feita sob medida." },
-  { icon: Shield, title: "Equilíbrio e serenidade", description: "Um refúgio sensorial de calma e presença, pensado para inspirar equilíbrio e reconexão." },
-  { icon: Gift, title: "Bem-estar contínuo", description: "O cuidado vai além da sessão: é uma experiência de ressincronização entre corpo, mente e rotina." },
-  { icon: TrendingUp, title: "Evolução contínua", description: "Aprender, ajustar e seguir em movimento. A cada atendimento, refinamos a experiência." },
+const defaultFeatures = [
+  { icon: Heart, titulo: "Humanização em cada detalhe", descricao: "Escuta, acolhimento e cuidado genuíno. Cada pessoa é única e merece uma experiência feita sob medida." },
+  { icon: Shield, titulo: "Equilíbrio e serenidade", descricao: "Um refúgio sensorial de calma e presença, pensado para inspirar equilíbrio e reconexão." },
+  { icon: Gift, titulo: "Bem-estar contínuo", descricao: "O cuidado vai além da sessão: é uma experiência de ressincronização entre corpo, mente e rotina." },
+  { icon: TrendingUp, titulo: "Evolução contínua", descricao: "Aprender, ajustar e seguir em movimento. A cada atendimento, refinamos a experiência." },
 ];
+
+const featureIcons = [Heart, Shield, Gift, TrendingUp];
 
 export const SobreSection = () => {
   const { ref, y } = useParallax({ speed: 0.2 });
+  const { config } = useLandingConfig("sobre");
+
+  const tituloParte1 = config?.titulo_parte1 || "Equilíbrio que se sente,";
+  const tituloDestaque = config?.titulo_destaque || "cuidado que permanece";
+  const subtitulo = config?.subtitulo || "A Resinkra é um espaço de cuidado integral que une terapias, bem-estar e experiências sensoriais. Onde técnica e sensibilidade se unem para gerar bem-estar contínuo e duradouro.";
+  const features = config?.features || defaultFeatures;
 
   return (
     <div ref={ref} className="py-14 sm:py-20 lg:py-28 bg-background relative overflow-hidden">
@@ -25,20 +34,14 @@ export const SobreSection = () => {
         <CollapsibleSection
           id="sobre"
           title={
-          <h2 className="text-3xl lg:text-4xl font-bold text-foreground">
-              Equilíbrio que se sente,{" "}
-              <span className="font-serif italic text-gradient">cuidado que permanece</span>
+            <h2 className="text-3xl lg:text-4xl font-bold text-foreground">
+              {tituloParte1}{" "}
+              <span className="font-serif italic text-gradient">{tituloDestaque}</span>
             </h2>
           }
-          subtitle={
-          <p className="text-muted-foreground">
-              A Resinkra é um espaço de cuidado integral que une terapias, bem-estar e experiências 
-              sensoriais. Onde técnica e sensibilidade se unem para gerar bem-estar contínuo e duradouro.
-            </p>
-          }
+          subtitle={<p className="text-muted-foreground">{subtitulo}</p>}
         >
           <div className="grid lg:grid-cols-2 gap-16 items-center">
-            {/* Visual side */}
             <motion.div
               initial={{ opacity: 0, x: -40 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -59,7 +62,6 @@ export const SobreSection = () => {
               </motion.div>
             </motion.div>
 
-            {/* Features */}
             <motion.div
               initial={{ opacity: 0, x: 40 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -67,27 +69,30 @@ export const SobreSection = () => {
               transition={{ duration: 0.7, ease: "easeOut" }}
             >
               <div className="grid sm:grid-cols-2 gap-5">
-                {features.map((feature, i) => (
-                  <motion.div
-                    key={feature.title}
-                    initial={{ opacity: 0, y: 20, scale: 0.95 }}
-                    whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: i * 0.12, duration: 0.5, ease: "easeOut" }}
-                    whileHover={{ x: 4, transition: { duration: 0.2 } }}
-                    className="flex gap-3 cursor-default"
-                  >
-                    <div className="shrink-0 p-2 rounded-xl bg-primary/10 h-fit">
-                      <feature.icon size={18} className="text-primary" />
-                    </div>
-                    <div>
-                      <h3 className="text-sm font-bold text-foreground">{feature.title}</h3>
-                      <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">
-                        {feature.description}
-                      </p>
-                    </div>
-                  </motion.div>
-                ))}
+                {features.map((feature: any, i: number) => {
+                  const Icon = featureIcons[i % featureIcons.length];
+                  return (
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                      whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: i * 0.12, duration: 0.5, ease: "easeOut" }}
+                      whileHover={{ x: 4, transition: { duration: 0.2 } }}
+                      className="flex gap-3 cursor-default"
+                    >
+                      <div className="shrink-0 p-2 rounded-xl bg-primary/10 h-fit">
+                        <Icon size={18} className="text-primary" />
+                      </div>
+                      <div>
+                        <h3 className="text-sm font-bold text-foreground">{feature.titulo || feature.title}</h3>
+                        <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">
+                          {feature.descricao || feature.description}
+                        </p>
+                      </div>
+                    </motion.div>
+                  );
+                })}
               </div>
             </motion.div>
           </div>

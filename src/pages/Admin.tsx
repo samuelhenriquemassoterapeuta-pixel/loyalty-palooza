@@ -1,7 +1,7 @@
 import { useState } from "react"; // v2
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, Plus, FileText, Users, Shield, Dumbbell, Sparkles, ClipboardList, StretchHorizontal, Salad, BookOpen, Stethoscope } from "lucide-react";
+import { ArrowLeft, Plus, FileText, Users, Shield, Dumbbell, Sparkles, ClipboardList, StretchHorizontal, Salad, BookOpen, Stethoscope, Globe } from "lucide-react";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -27,6 +27,7 @@ import { PlanosAlongamentoTab } from "@/components/admin/PlanosAlongamentoTab";
 import { PlanosDietaTab } from "@/components/admin/PlanosDietaTab";
 import { SecoesClinicasTab } from "@/components/admin/SecoesClinicasTab";
 import { DietasConteudoTab } from "@/components/admin/DietasConteudoTab";
+import { LandingPageTab } from "@/components/admin/LandingPageTab";
 
 const tabContentVariants = {
   hidden: { opacity: 0, y: 12 },
@@ -312,6 +313,10 @@ const Admin = () => {
                   <Dumbbell size={14} />
                   Exercícios
                 </TabsTrigger>
+                <TabsTrigger value="landing" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
+                  <Globe size={14} />
+                  Landing Page
+                </TabsTrigger>
                 <TabsTrigger value="pedidos" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap data-[state=active]:shadow-sm transition-all duration-200">
                   Pedidos
                 </TabsTrigger>
@@ -471,6 +476,10 @@ const Admin = () => {
 
               <TabsContent value="auditoria" forceMount={activeTab === "auditoria" ? true : undefined} className={activeTab !== "auditoria" ? "hidden" : ""}>
                 <AuditLogsViewer />
+              </TabsContent>
+
+              <TabsContent value="landing" forceMount={activeTab === "landing" ? true : undefined} className={activeTab !== "landing" ? "hidden" : ""}>
+                <LandingPageTab />
               </TabsContent>
             </motion.div>
           </AnimatePresence>
