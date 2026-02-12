@@ -65,7 +65,7 @@ export const ServicosSection = () => {
       <div className="max-w-6xl mx-auto px-5 sm:px-6 lg:px-8 relative z-10">
         <CollapsibleSection
           id="servicos"
-          defaultOpen
+          
           badge={
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20">
               <Leaf size={14} className="text-primary" />
