@@ -62,7 +62,11 @@ export const LandingHeader = () => {
                 <button
                   key={link.href}
                   onClick={() => handleNavClick(link)}
-                  className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+                  className={
+                    link.label === "Corporativo"
+                      ? "text-sm font-bold px-4 py-1.5 rounded-full bg-primary text-primary-foreground shadow-glow hover:opacity-90 transition-all"
+                      : "text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+                  }
                 >
                   {link.label}
                 </button>
@@ -111,7 +115,11 @@ export const LandingHeader = () => {
                 <button
                   key={link.href}
                   onClick={() => handleNavClick(link)}
-                  className="block w-full text-left py-3 px-4 rounded-xl text-sm font-medium text-foreground hover:bg-muted/50 transition-colors"
+                  className={
+                    link.label === "Corporativo"
+                      ? "block w-full text-left py-3 px-4 rounded-xl text-sm font-bold text-primary-foreground bg-primary shadow-glow transition-colors"
+                      : "block w-full text-left py-3 px-4 rounded-xl text-sm font-medium text-foreground hover:bg-muted/50 transition-colors"
+                  }
                 >
                   {link.label}
                 </button>
