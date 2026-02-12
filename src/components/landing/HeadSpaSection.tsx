@@ -16,6 +16,7 @@ export const HeadSpaSection = () => {
     <div className="py-14 sm:py-20 lg:py-28 px-5 sm:px-6 lg:px-8 bg-primary/5 relative overflow-hidden">
       <div className="max-w-6xl mx-auto">
         <CollapsibleSection
+          defaultOpen
           badge={
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20">
               <Sparkles size={14} className="text-primary" />
