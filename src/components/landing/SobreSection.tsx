@@ -33,6 +33,7 @@ export const SobreSection = () => {
       <div className="max-w-6xl mx-auto px-5 sm:px-6 lg:px-8 relative z-10">
         <CollapsibleSection
           id="sobre"
+          defaultOpen
           title={
             <h2 className="text-3xl lg:text-4xl font-bold text-foreground">
               {tituloParte1}{" "}

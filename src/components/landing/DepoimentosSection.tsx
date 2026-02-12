@@ -84,6 +84,7 @@ export const DepoimentosSection = () => {
 
       <div className="max-w-6xl mx-auto px-5 sm:px-6 lg:px-8 relative z-10">
         <CollapsibleSection
+          defaultOpen
           badge={
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/10 border border-accent/20">
               <Quote size={14} className="text-accent" />
