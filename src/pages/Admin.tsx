@@ -1,7 +1,7 @@
 import { useState } from "react"; // v2
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, Plus, FileText, Users, Shield, Dumbbell, Sparkles, ClipboardList, StretchHorizontal, Salad, BookOpen, Stethoscope, Globe, Gift } from "lucide-react";
+import { ArrowLeft, Plus, FileText, Users, Shield, Dumbbell, Sparkles, ClipboardList, StretchHorizontal, Salad, BookOpen, Stethoscope, Globe, Gift, Ticket } from "lucide-react";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -322,6 +322,10 @@ const Admin = () => {
                   <Gift size={14} />
                   Vales Presente
                 </TabsTrigger>
+                <TabsTrigger value="cupom" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
+                  <Ticket size={14} />
+                  Cupom
+                </TabsTrigger>
                 <TabsTrigger value="pedidos" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap data-[state=active]:shadow-sm transition-all duration-200">
                   Pedidos
                 </TabsTrigger>
@@ -489,6 +493,21 @@ const Admin = () => {
 
               <TabsContent value="vales" forceMount={activeTab === "vales" ? true : undefined} className={activeTab !== "vales" ? "hidden" : ""}>
                 <ValesPresenteTab />
+              </TabsContent>
+
+              <TabsContent value="cupom" forceMount={activeTab === "cupom" ? true : undefined} className={activeTab !== "cupom" ? "hidden" : ""}>
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h3 className="text-lg font-semibold text-foreground">Editor de Cupom</h3>
+                      <p className="text-sm text-muted-foreground">Crie cupons visuais para redes sociais e impressão</p>
+                    </div>
+                    <Button onClick={() => navigate("/cupom-editor")} className="gap-2 shadow-button">
+                      <Ticket className="w-4 h-4" />
+                      Abrir Editor
+                    </Button>
+                  </div>
+                </div>
               </TabsContent>
             </motion.div>
           </AnimatePresence>
