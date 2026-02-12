@@ -1669,6 +1669,54 @@ export type Database = {
           },
         ]
       }
+      vale_presentes: {
+        Row: {
+          codigo: string
+          comprador_id: string
+          created_at: string
+          destinatario_email: string | null
+          destinatario_nome: string
+          id: string
+          mensagem: string | null
+          status: string
+          tema: string
+          usado_em: string | null
+          usado_por: string | null
+          validade: string
+          valor: number
+        }
+        Insert: {
+          codigo?: string
+          comprador_id: string
+          created_at?: string
+          destinatario_email?: string | null
+          destinatario_nome: string
+          id?: string
+          mensagem?: string | null
+          status?: string
+          tema?: string
+          usado_em?: string | null
+          usado_por?: string | null
+          validade?: string
+          valor: number
+        }
+        Update: {
+          codigo?: string
+          comprador_id?: string
+          created_at?: string
+          destinatario_email?: string | null
+          destinatario_nome?: string
+          id?: string
+          mensagem?: string | null
+          status?: string
+          tema?: string
+          usado_em?: string | null
+          usado_por?: string | null
+          validade?: string
+          valor?: number
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

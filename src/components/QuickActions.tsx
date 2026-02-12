@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { Calendar, ShoppingBag, Clock, Send } from "lucide-react";
+import { Calendar, ShoppingBag, Clock, Gift } from "lucide-react";
 
 const actions = [
   {
@@ -28,12 +28,12 @@ const actions = [
     path: "/loja",
   },
   {
-    icon: Send,
-    label: "Transferir",
-    description: "Créditos",
+    icon: Gift,
+    label: "Presente",
+    description: "Vale",
     iconColor: "text-info",
     iconBg: "bg-info/15",
-    path: "/transferir",
+    path: "/vale-presente",
   },
 ];
 
