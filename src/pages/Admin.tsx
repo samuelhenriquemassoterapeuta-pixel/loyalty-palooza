@@ -41,6 +41,7 @@ import { ServicosDetalhesTab } from "@/components/admin/ServicosDetalhesTab";
 import SegmentacaoClientesTab from "@/components/admin/SegmentacaoClientesTab";
 import CampanhasMarketingTab from "@/components/admin/CampanhasMarketingTab";
 import BannersPromocionaisTab from "@/components/admin/BannersPromocionaisTab";
+import CorporativoConteudoTab from "@/components/admin/CorporativoConteudoTab";
 
 const tabContentVariants = {
   hidden: { opacity: 0, y: 12 },
@@ -397,6 +398,10 @@ const Admin = () => {
                   <Building2 size={14} />
                   Empresas
                 </TabsTrigger>
+                <TabsTrigger value="corp-conteudo" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
+                  <Globe size={14} />
+                  Pág. Corporativa
+                </TabsTrigger>
                 <TabsTrigger value="parceiros" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
                   <Handshake size={14} />
                   Parceiros
@@ -557,6 +562,10 @@ const Admin = () => {
 
               <TabsContent value="empresas" forceMount={activeTab === "empresas" ? true : undefined} className={activeTab !== "empresas" ? "hidden" : ""}>
                 <EmpresasTab />
+              </TabsContent>
+
+              <TabsContent value="corp-conteudo" forceMount={activeTab === "corp-conteudo" ? true : undefined} className={activeTab !== "corp-conteudo" ? "hidden" : ""}>
+                <CorporativoConteudoTab />
               </TabsContent>
 
               <TabsContent value="assinaturas" forceMount={activeTab === "assinaturas" ? true : undefined} className={activeTab !== "assinaturas" ? "hidden" : ""}>
