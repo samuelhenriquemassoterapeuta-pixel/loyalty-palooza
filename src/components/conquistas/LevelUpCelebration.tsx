@@ -14,12 +14,12 @@ interface LevelUpCelebrationProps {
 // Simple confetti particle
 const ConfettiParticle = ({ index }: { index: number }) => {
   const colors = [
-    "hsl(78 55% 28%)",
-    "hsl(38 92% 50%)",
-    "hsl(140 50% 38%)",
-    "hsl(25 65% 42%)",
-    "hsl(280 60% 55%)",
-    "hsl(200 70% 50%)",
+    "hsl(var(--primary))",
+    "hsl(var(--accent))",
+    "hsl(var(--highlight))",
+    "hsl(var(--warning))",
+    "hsl(var(--secondary))",
+    "hsl(var(--muted-foreground))",
   ];
   const color = colors[index % colors.length];
   const left = Math.random() * 100;
