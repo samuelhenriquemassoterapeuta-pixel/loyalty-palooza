@@ -2153,37 +2153,52 @@ export type Database = {
       }
       servicos: {
         Row: {
+          beneficios: string[] | null
           cashback_percentual: number | null
           categoria: string | null
           created_at: string
           descricao: string | null
+          descricao_detalhada: string | null
           disponivel: boolean | null
           duracao: number
           id: string
+          imagem_capa: string | null
+          imagens: string[] | null
           nome: string
           preco: number
+          video_url: string | null
         }
         Insert: {
+          beneficios?: string[] | null
           cashback_percentual?: number | null
           categoria?: string | null
           created_at?: string
           descricao?: string | null
+          descricao_detalhada?: string | null
           disponivel?: boolean | null
           duracao: number
           id?: string
+          imagem_capa?: string | null
+          imagens?: string[] | null
           nome: string
           preco: number
+          video_url?: string | null
         }
         Update: {
+          beneficios?: string[] | null
           cashback_percentual?: number | null
           categoria?: string | null
           created_at?: string
           descricao?: string | null
+          descricao_detalhada?: string | null
           disponivel?: boolean | null
           duracao?: number
           id?: string
+          imagem_capa?: string | null
+          imagens?: string[] | null
           nome?: string
           preco?: number
+          video_url?: string | null
         }
         Relationships: []
       }

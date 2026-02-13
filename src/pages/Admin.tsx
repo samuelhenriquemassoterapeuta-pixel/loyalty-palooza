@@ -37,6 +37,7 @@ import SocialPostsTab from "@/components/admin/SocialPostsTab";
 import FinanceiroTab from "@/components/admin/FinanceiroTab";
 import DesafiosTab from "@/components/admin/DesafiosTab";
 import { AgendamentosTab } from "@/components/admin/AgendamentosTab";
+import { ServicosDetalhesTab } from "@/components/admin/ServicosDetalhesTab";
 
 const tabContentVariants = {
   hidden: { opacity: 0, y: 12 },
@@ -347,6 +348,10 @@ const Admin = () => {
                 <TabsTrigger value="servicos" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap data-[state=active]:shadow-sm transition-all duration-200">
                   Serviços
                 </TabsTrigger>
+                <TabsTrigger value="servicos-detalhes" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
+                  <Sparkles size={14} />
+                  Detalhes Serviços
+                </TabsTrigger>
                 <TabsTrigger value="pacotes" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap data-[state=active]:shadow-sm transition-all duration-200">
                   Pacotes
                 </TabsTrigger>
@@ -477,6 +482,10 @@ const Admin = () => {
                   onDelete={handleDelete}
                   onToggle={toggleDisponivel}
                 />
+              </TabsContent>
+
+              <TabsContent value="servicos-detalhes" forceMount={activeTab === "servicos-detalhes" ? true : undefined} className={activeTab !== "servicos-detalhes" ? "hidden" : ""}>
+                <ServicosDetalhesTab />
               </TabsContent>
 
               <TabsContent value="pacotes" forceMount={activeTab === "pacotes" ? true : undefined} className={activeTab !== "pacotes" ? "hidden" : ""}>
