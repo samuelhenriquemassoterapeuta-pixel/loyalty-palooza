@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { ArrowRight, Building2, Users, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import corpHeroBg from "@/assets/corporativo-hero.jpg";
 
 const stats = [
   { icon: Building2, value: "150+", label: "Empresas atendidas" },
@@ -19,8 +20,12 @@ export const CorpHeroSection = () => {
 
   return (
     <section className="relative pt-24 lg:pt-32 pb-16 lg:pb-24 overflow-hidden">
-      {/* Background */}
-      <div className="absolute inset-0 gradient-hero" />
+      {/* Background image with overlay */}
+      <div className="absolute inset-0">
+        <img src={corpHeroBg} alt="" className="w-full h-full object-cover" />
+        <div className="absolute inset-0 bg-background/55" />
+      </div>
+      <div className="absolute inset-0 gradient-hero opacity-40" />
       <div className="absolute top-20 right-0 w-72 h-72 bg-primary/5 rounded-full blur-3xl" />
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-accent/5 rounded-full blur-3xl" />
 
@@ -41,7 +46,7 @@ export const CorpHeroSection = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground leading-tight"
+            className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground leading-tight [text-shadow:0_2px_8px_rgba(0,0,0,0.1)]"
           >
             Bem-estar corporativo que{" "}
             <span className="font-serif italic text-gradient">transforma resultados</span>
@@ -51,7 +56,7 @@ export const CorpHeroSection = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="mt-6 text-lg text-muted-foreground leading-relaxed max-w-2xl"
+            className="mt-6 text-lg text-foreground/90 leading-relaxed max-w-2xl [text-shadow:0_1px_3px_rgba(0,0,0,0.08)]"
           >
             Massoterapia corporativa para eventos, escritórios e programas de qualidade de vida. 
             Reduza o estresse da equipe, aumente a produtividade e promova saúde no ambiente de trabalho.
@@ -80,7 +85,7 @@ export const CorpHeroSection = () => {
           transition={{ duration: 0.6, delay: 0.5 }}
           className="mt-16 grid grid-cols-1 sm:grid-cols-3 gap-6"
         >
-          {stats.map((stat, i) => (
+          {stats.map((stat) => (
             <div
               key={stat.label}
               className="card-organic flex items-center gap-4"
