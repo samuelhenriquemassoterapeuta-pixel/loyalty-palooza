@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { Calendar, ShoppingBag, Clock, Gift, Crown, Brain, QrCode, Trophy, TrendingUp, Camera } from "lucide-react";
+import { Calendar, ShoppingBag, Clock, Gift, Crown, Brain, QrCode, Trophy, TrendingUp, Camera, Ticket } from "lucide-react";
 
 const actions = [
   {
@@ -42,6 +42,14 @@ const actions = [
     iconColor: "text-accent",
     iconBg: "bg-accent/15",
     path: "/minha-jornada",
+  },
+  {
+    icon: Ticket,
+    label: "Presente",
+    description: "Vale",
+    iconColor: "text-primary",
+    iconBg: "bg-primary/15",
+    path: "/vale-presente",
   },
   {
     icon: Crown,

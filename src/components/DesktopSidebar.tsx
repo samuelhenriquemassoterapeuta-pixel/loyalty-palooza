@@ -19,6 +19,7 @@ const navItems = [
   { icon: BookOpen, label: "Guia Clínico", path: "/guia-clinico" },
   { icon: Crown, label: "Cashback", path: "/cashback" },
   { icon: Gift, label: "Indicações", path: "/indicacoes" },
+  { icon: Ticket, label: "Vale Presente", path: "/vale-presente" },
   { icon: Wallet, label: "Transferir", path: "/transferir" },
   { icon: Handshake, label: "Parceiros", path: "/parceiro-dashboard" },
 ];
