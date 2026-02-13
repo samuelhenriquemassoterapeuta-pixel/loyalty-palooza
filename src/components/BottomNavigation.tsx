@@ -1,6 +1,6 @@
 import { useRef, useEffect, useState, useMemo } from "react";
 import { motion } from "framer-motion";
-import { Home, CalendarDays, Activity, Apple, Globe, Ticket } from "lucide-react";
+import { Home, CalendarDays, Activity, Apple, Globe, Ticket, Handshake } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAdmin } from "@/hooks/useAdmin";
 
@@ -10,6 +10,7 @@ const baseNavItems = [
   { icon: Activity, label: "Protocolos", path: "/protocolos" },
   { icon: Apple, label: "Dietas", path: "/dietas" },
   { icon: Globe, label: "Site", path: "/site" },
+  { icon: Handshake, label: "Parceiros", path: "/parceiro-dashboard" },
 ];
 
 const adminNavItem = { icon: Ticket, label: "Cupom", path: "/cupom-editor" };
