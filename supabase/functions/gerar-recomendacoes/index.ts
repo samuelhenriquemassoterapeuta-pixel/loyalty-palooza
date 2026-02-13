@@ -90,6 +90,18 @@ Seja conciso nas descrições (max 2 frases).`,
 
     if (!aiResponse.ok) {
       const errorText = await aiResponse.text();
+      if (aiResponse.status === 429) {
+        return new Response(JSON.stringify({ error: "Muitas requisições. Tente novamente em alguns minutos." }), {
+          status: 429,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+      if (aiResponse.status === 402) {
+        return new Response(JSON.stringify({ error: "Créditos de IA insuficientes. Entre em contato com o suporte." }), {
+          status: 402,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
       throw new Error(`AI gateway error: ${errorText}`);
     }
 
