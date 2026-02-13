@@ -569,6 +569,57 @@ export type Database = {
           },
         ]
       }
+      corporativo_secoes: {
+        Row: {
+          ativo: boolean | null
+          conteudo_detalhado: string | null
+          cor: string | null
+          created_at: string
+          descricao: string | null
+          galeria_urls: string[] | null
+          icone: string | null
+          id: string
+          imagem_url: string | null
+          ordem: number | null
+          subtitulo: string | null
+          titulo: string
+          updated_at: string
+          video_url: string | null
+        }
+        Insert: {
+          ativo?: boolean | null
+          conteudo_detalhado?: string | null
+          cor?: string | null
+          created_at?: string
+          descricao?: string | null
+          galeria_urls?: string[] | null
+          icone?: string | null
+          id?: string
+          imagem_url?: string | null
+          ordem?: number | null
+          subtitulo?: string | null
+          titulo: string
+          updated_at?: string
+          video_url?: string | null
+        }
+        Update: {
+          ativo?: boolean | null
+          conteudo_detalhado?: string | null
+          cor?: string | null
+          created_at?: string
+          descricao?: string | null
+          galeria_urls?: string[] | null
+          icone?: string | null
+          id?: string
+          imagem_url?: string | null
+          ordem?: number | null
+          subtitulo?: string | null
+          titulo?: string
+          updated_at?: string
+          video_url?: string | null
+        }
+        Relationships: []
+      }
       desafio_participantes: {
         Row: {
           concluido: boolean
