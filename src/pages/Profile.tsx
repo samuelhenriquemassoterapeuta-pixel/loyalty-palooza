@@ -22,7 +22,8 @@ import {
   Moon,
   UserCog,
   SlidersHorizontal,
-  LifeBuoy
+  LifeBuoy,
+  RefreshCw
 } from "lucide-react";
 import { PageLoading } from "@/components/LoadingSpinner";
 import { AppLayout } from "@/components/AppLayout";
@@ -122,6 +123,12 @@ const Profile = () => {
   const handleLogout = async () => {
     await signOut();
     toast.success("Até logo!");
+  };
+
+  const handleSwitchAccount = async () => {
+    await signOut();
+    navigate("/auth");
+    toast.info("Faça login com outra conta");
   };
 
   const handleOpenEditDialog = () => {
@@ -344,6 +351,17 @@ const Profile = () => {
                 </AppCollapsibleSection>
               </motion.div>
             ))}
+
+            {/* Switch Account Button */}
+            <motion.button
+              variants={fadeUp}
+              whileTap={{ scale: 0.98 }}
+              onClick={handleSwitchAccount}
+              className="w-full flex items-center justify-center gap-2 p-4 rounded-2xl bg-primary/10 text-primary font-semibold hover:bg-primary/20 transition-colors"
+            >
+              <RefreshCw size={20} />
+              Mudar de conta
+            </motion.button>
 
             {/* Logout Button */}
             <motion.button
