@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { motion } from "framer-motion";
 import {
   ArrowLeft,
@@ -13,6 +13,9 @@ import {
   Gift,
   Sparkles,
   Link as LinkIcon,
+  ImagePlus,
+  X,
+  Loader2,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -23,6 +26,8 @@ import { AppLayout } from "@/components/AppLayout";
 import { useSocialPosts } from "@/hooks/useSocialPosts";
 import { toast } from "sonner";
 import { ButtonLoader } from "@/components/LoadingSpinner";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 import {
   Select,
   SelectContent,
@@ -30,6 +35,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+
+const ACCEPTED_FORMATS = "image/jpeg,image/png,image/webp,image/heic";
+const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 
 const stagger = {
   hidden: { opacity: 0 },
@@ -71,12 +79,64 @@ const ResinkraMoments = () => {
   const [descricao, setDescricao] = useState("");
   const [agendamentoId, setAgendamentoId] = useState("");
   const [enviando, setEnviando] = useState(false);
+  const [screenshotFile, setScreenshotFile] = useState<File | null>(null);
+  const [screenshotPreview, setScreenshotPreview] = useState<string | null>(null);
+  const [uploading, setUploading] = useState(false);
+
+  const cameraRef = useRef<HTMLInputElement>(null);
+  const galleryRef = useRef<HTMLInputElement>(null);
+  const { user } = useAuth();
 
   const selectedConfig = config.find((c) => c.tipo_post === tipoPost);
 
+  const handleFileSelect = (file: File) => {
+    if (file.size > MAX_FILE_SIZE) {
+      toast.error("Arquivo muito grande. Máximo 5MB.");
+      return;
+    }
+    if (!ACCEPTED_FORMATS.split(",").some((f) => file.type === f || (file.type === "" && file.name.toLowerCase().endsWith(".heic")))) {
+      toast.error("Formato não suportado. Use JPEG, PNG, WebP ou HEIC.");
+      return;
+    }
+    setScreenshotFile(file);
+    const url = URL.createObjectURL(file);
+    setScreenshotPreview(url);
+  };
+
+  const clearScreenshot = () => {
+    if (screenshotPreview) URL.revokeObjectURL(screenshotPreview);
+    setScreenshotFile(null);
+    setScreenshotPreview(null);
+  };
+
+  const uploadScreenshot = async (): Promise<string | null> => {
+    if (!screenshotFile || !user) return null;
+    setUploading(true);
+    try {
+      const ext = screenshotFile.name.split(".").pop()?.toLowerCase() || "jpg";
+      const path = `${user.id}/${Date.now()}.${ext}`;
+      const { error } = await supabase.storage
+        .from("social-posts")
+        .upload(path, screenshotFile, { contentType: screenshotFile.type, upsert: false });
+      if (error) throw error;
+
+      const { data: urlData } = supabase.storage
+        .from("social-posts")
+        .getPublicUrl(path);
+
+      return urlData.publicUrl || path;
+    } catch (err: any) {
+      console.error("Upload error:", err);
+      toast.error("Erro ao enviar foto. Tente novamente.");
+      return null;
+    } finally {
+      setUploading(false);
+    }
+  };
+
   const handleSubmit = async () => {
-    if (!linkPost.trim()) {
-      toast.error("Cole o link ou URL do seu post");
+    if (!linkPost.trim() && !screenshotFile) {
+      toast.error("Cole o link do post ou envie uma foto/screenshot");
       return;
     }
     if (!agendamentoId) {
@@ -85,10 +145,16 @@ const ResinkraMoments = () => {
     }
     setEnviando(true);
     try {
+      let screenshotUrl: string | null = null;
+      if (screenshotFile) {
+        screenshotUrl = await uploadScreenshot();
+      }
+
       await submitPost.mutateAsync({
         tipo_post: tipoPost,
         plataforma,
-        link_post: linkPost.trim(),
+        link_post: linkPost.trim() || undefined,
+        screenshot_url: screenshotUrl || undefined,
         descricao: descricao.trim() || undefined,
         agendamento_id: agendamentoId,
       });
@@ -96,6 +162,7 @@ const ResinkraMoments = () => {
       setLinkPost("");
       setDescricao("");
       setAgendamentoId("");
+      clearScreenshot();
     } catch (err: any) {
       toast.error(err.message || "Erro ao enviar post");
     }
@@ -243,8 +310,70 @@ const ResinkraMoments = () => {
                       </div>
                     </div>
 
+                    {/* Screenshot / Foto */}
                     <div>
-                      <label className="text-xs text-muted-foreground mb-1 block">Link do post</label>
+                      <label className="text-xs text-muted-foreground mb-1 block">Foto ou Screenshot do post</label>
+                      
+                      {/* Hidden inputs */}
+                      <input
+                        ref={cameraRef}
+                        type="file"
+                        accept="image/jpeg,image/png,image/webp"
+                        capture="environment"
+                        className="hidden"
+                        onChange={(e) => e.target.files?.[0] && handleFileSelect(e.target.files[0])}
+                      />
+                      <input
+                        ref={galleryRef}
+                        type="file"
+                        accept={ACCEPTED_FORMATS}
+                        className="hidden"
+                        onChange={(e) => e.target.files?.[0] && handleFileSelect(e.target.files[0])}
+                      />
+
+                      {screenshotPreview ? (
+                        <div className="relative rounded-xl overflow-hidden border border-border">
+                          <img
+                            src={screenshotPreview}
+                            alt="Preview"
+                            className="w-full max-h-48 object-cover"
+                          />
+                          <button
+                            onClick={clearScreenshot}
+                            className="absolute top-2 right-2 p-1.5 rounded-full bg-background/80 backdrop-blur-sm hover:bg-destructive/20 transition-colors"
+                          >
+                            <X size={14} className="text-foreground" />
+                          </button>
+                          {uploading && (
+                            <div className="absolute inset-0 bg-background/60 flex items-center justify-center">
+                              <Loader2 size={24} className="animate-spin text-primary" />
+                            </div>
+                          )}
+                        </div>
+                      ) : (
+                        <div className="flex gap-2">
+                          <button
+                            type="button"
+                            onClick={() => cameraRef.current?.click()}
+                            className="flex-1 p-3 rounded-xl border-2 border-dashed border-primary/30 bg-primary/5 hover:bg-primary/10 transition-colors flex flex-col items-center gap-1.5"
+                          >
+                            <Camera size={20} className="text-primary" />
+                            <span className="text-xs font-medium text-primary">Câmera</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => galleryRef.current?.click()}
+                            className="flex-1 p-3 rounded-xl border-2 border-dashed border-muted-foreground/30 bg-muted/30 hover:bg-muted/50 transition-colors flex flex-col items-center gap-1.5"
+                          >
+                            <ImagePlus size={20} className="text-muted-foreground" />
+                            <span className="text-xs font-medium text-muted-foreground">Galeria</span>
+                          </button>
+                        </div>
+                      )}
+                    </div>
+
+                    <div>
+                      <label className="text-xs text-muted-foreground mb-1 block">Link do post (opcional)</label>
                       <div className="relative">
                         <LinkIcon size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
                         <Input
