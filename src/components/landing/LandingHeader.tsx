@@ -51,9 +51,8 @@ export const LandingHeader = () => {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 lg:h-20">
             {/* Logo */}
-            <button onClick={() => handleNavClick({ label: "Início", href: "#inicio" })} className="flex items-center gap-2.5">
-              <img src={simboloVerde} alt="Resinkra" className="h-9 w-9 object-contain mix-blend-multiply" />
-              <img src={logoMarrom} alt="Resinkra" className="h-4 lg:h-5 object-contain mix-blend-multiply" />
+            <button onClick={() => handleNavClick({ label: "Início", href: "#inicio" })} className="flex items-center">
+              <img src={logoMarrom} alt="Resinkra" className="h-5 lg:h-6 object-contain mix-blend-multiply" />
             </button>
 
             {/* Desktop Nav */}
