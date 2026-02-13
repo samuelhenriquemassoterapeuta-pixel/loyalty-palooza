@@ -88,11 +88,25 @@ const CampanhasMarketingTab = () => {
     }
   };
 
+  const handleSendCampaign = async (id: string) => {
+    try {
+      toast.loading("Enviando campanha...", { id: "send-campaign" });
+      const { data, error } = await supabase.functions.invoke("enviar-campanha", {
+        body: { campanha_id: id },
+      });
+      if (error) throw error;
+      toast.dismiss("send-campaign");
+      toast.success(`Campanha enviada! ${data.enviados} de ${data.destinatarios} destinatários alcançados`);
+      queryClient.invalidateQueries({ queryKey: ["admin-campanhas"] });
+    } catch (err: any) {
+      toast.dismiss("send-campaign");
+      toast.error(err.message || "Erro ao enviar campanha");
+    }
+  };
+
   const handleUpdateStatus = async (id: string, status: string) => {
     try {
-      const updates: Record<string, any> = { status };
-      if (status === "enviada") updates.enviada_em = new Date().toISOString();
-      const { error } = await supabase.from("campanhas_marketing").update(updates).eq("id", id);
+      const { error } = await supabase.from("campanhas_marketing").update({ status }).eq("id", id);
       if (error) throw error;
       toast.success(`Status atualizado para ${status}`);
       queryClient.invalidateQueries({ queryKey: ["admin-campanhas"] });
@@ -210,12 +224,26 @@ const CampanhasMarketingTab = () => {
 
                 {c.status === "rascunho" && (
                   <div className="flex gap-2 pt-1">
-                    <Button size="sm" onClick={() => handleUpdateStatus(c.id, "enviada")} className="gap-1">
-                      <Send size={12} /> Enviar
+                    <Button size="sm" onClick={() => handleSendCampaign(c.id)} className="gap-1">
+                      <Send size={12} /> Enviar Agora
                     </Button>
                     <Button size="sm" variant="destructive" onClick={() => handleUpdateStatus(c.id, "cancelada")} className="gap-1">
                       <XCircle size={12} /> Cancelar
                     </Button>
+                  </div>
+                )}
+
+                {c.status === "enviada" && (c.total_enviados != null || c.total_erros != null) && (
+                  <div className="flex items-center gap-3 text-xs">
+                    <span className="flex items-center gap-1 text-highlight">
+                      <CheckCircle2 size={12} /> {c.total_enviados || 0} enviados
+                    </span>
+                    {(c.total_erros || 0) > 0 && (
+                      <span className="flex items-center gap-1 text-destructive">
+                        <XCircle size={12} /> {c.total_erros} erros
+                      </span>
+                    )}
+                    <span className="text-muted-foreground">{c.total_destinatarios || 0} destinatários</span>
                   </div>
                 )}
               </div>
