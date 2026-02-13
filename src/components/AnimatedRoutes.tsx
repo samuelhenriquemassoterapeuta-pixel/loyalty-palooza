@@ -34,6 +34,8 @@ import CupomEditor from "@/pages/CupomEditor";
 import ClubeVip from "@/pages/ClubeVip";
 import RecomendacoesIA from "@/pages/RecomendacoesIA";
 import DashboardRH from "@/pages/DashboardRH";
+import ParceiroDashboard from "@/pages/ParceiroDashboard";
+import PerfilParceiro from "@/pages/PerfilParceiro";
 import NotFound from "@/pages/NotFound";
 
 /** Shows landing for visitors, dashboard for authenticated users */
@@ -344,6 +346,24 @@ export const AnimatedRoutes = () => {
                 <DashboardRH />
               </PageTransition>
             </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/parceiro-dashboard"
+          element={
+            <ProtectedRoute>
+              <PageTransition>
+                <ParceiroDashboard />
+              </PageTransition>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/parceiro/:slug"
+          element={
+            <PageTransition>
+              <PerfilParceiro />
+            </PageTransition>
           }
         />
         <Route
