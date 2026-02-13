@@ -1,7 +1,7 @@
 import { useState } from "react"; // v2
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, Plus, FileText, Users, Shield, Dumbbell, Sparkles, ClipboardList, StretchHorizontal, Salad, BookOpen, Stethoscope, Globe, Gift, Ticket } from "lucide-react";
+import { ArrowLeft, Plus, FileText, Users, Shield, Dumbbell, Sparkles, ClipboardList, StretchHorizontal, Salad, BookOpen, Stethoscope, Globe, Gift, Ticket, Crown, Building2, CreditCard } from "lucide-react";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -29,6 +29,9 @@ import { SecoesClinicasTab } from "@/components/admin/SecoesClinicasTab";
 import { DietasConteudoTab } from "@/components/admin/DietasConteudoTab";
 import { LandingPageTab } from "@/components/admin/LandingPageTab";
 import ValesPresenteTab from "@/components/admin/ValesPresenteTab";
+import PlanosVipTab from "@/components/admin/PlanosVipTab";
+import EmpresasTab from "@/components/admin/EmpresasTab";
+import AssinaturasTab from "@/components/admin/AssinaturasTab";
 
 const tabContentVariants = {
   hidden: { opacity: 0, y: 12 },
@@ -369,6 +372,18 @@ const Admin = () => {
                   <Sparkles size={14} />
                   Head SPA
                 </TabsTrigger>
+                <TabsTrigger value="planos-vip" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
+                  <Crown size={14} />
+                  Planos VIP
+                </TabsTrigger>
+                <TabsTrigger value="empresas" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
+                  <Building2 size={14} />
+                  Empresas
+                </TabsTrigger>
+                <TabsTrigger value="assinaturas" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
+                  <CreditCard size={14} />
+                  Assinaturas
+                </TabsTrigger>
                 <TabsTrigger value="auditoria" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
                   <FileText size={14} />
                   Auditoria
@@ -481,6 +496,18 @@ const Admin = () => {
 
               <TabsContent value="headspa" forceMount={activeTab === "headspa" ? true : undefined} className={activeTab !== "headspa" ? "hidden" : ""}>
                 <HeadSpaImagensTab />
+              </TabsContent>
+
+              <TabsContent value="planos-vip" forceMount={activeTab === "planos-vip" ? true : undefined} className={activeTab !== "planos-vip" ? "hidden" : ""}>
+                <PlanosVipTab />
+              </TabsContent>
+
+              <TabsContent value="empresas" forceMount={activeTab === "empresas" ? true : undefined} className={activeTab !== "empresas" ? "hidden" : ""}>
+                <EmpresasTab />
+              </TabsContent>
+
+              <TabsContent value="assinaturas" forceMount={activeTab === "assinaturas" ? true : undefined} className={activeTab !== "assinaturas" ? "hidden" : ""}>
+                <AssinaturasTab />
               </TabsContent>
 
               <TabsContent value="auditoria" forceMount={activeTab === "auditoria" ? true : undefined} className={activeTab !== "auditoria" ? "hidden" : ""}>
