@@ -15,7 +15,7 @@ export const FloatingContactButtons = () => {
   const instagramUrl = `https://instagram.com/${instagramUser}`;
 
   return (
-    <div className="fixed bottom-6 left-4 z-50 flex flex-col-reverse items-start gap-3 lg:bottom-6">
+    <div className="fixed bottom-24 left-4 z-50 flex flex-col-reverse items-start gap-3 lg:bottom-6">
       <AnimatePresence>
         {open && (
           <>
