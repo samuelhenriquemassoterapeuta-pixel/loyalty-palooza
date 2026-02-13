@@ -13,6 +13,7 @@ import { Switch } from "@/components/ui/switch";
 import { GiftCardVisual, temaOptions } from "@/components/vale-presente/GiftCardVisual";
 import { GiftCardExport } from "@/components/vale-presente/GiftCardExport";
 import { useValePresente } from "@/hooks/useValePresente";
+import { PaymentDialog } from "@/components/pagamento/PaymentDialog";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
 import { format } from "date-fns";
@@ -43,6 +44,7 @@ const ValePresente = () => {
   const [codigoResgate, setCodigoResgate] = useState("");
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [valeCreated, setValeCreated] = useState<any>(null);
+  const [paymentVale, setPaymentVale] = useState<{ id: string; valor: number } | null>(null);
   const [tipoVale, setTipoVale] = useState<"monetario" | "experiencia">("monetario");
   const [expSelecionada, setExpSelecionada] = useState<number | null>(null);
   const [agendarEntrega, setAgendarEntrega] = useState(false);
@@ -76,7 +78,8 @@ const ValePresente = () => {
       experiencia_descricao: expAtual?.descricao,
       data_entrega_agendada: agendarEntrega ? dataEntrega : undefined,
     });
-    setValeCreated(result);
+    // Open payment dialog before showing success
+    setPaymentVale({ id: result.id, valor: valorFinal });
   };
 
   const handleResgatar = async () => {
@@ -390,6 +393,25 @@ const ValePresente = () => {
             )}
           </TabsContent>
         </Tabs>
+
+        {paymentVale && (
+          <PaymentDialog
+            open={!!paymentVale}
+            onOpenChange={(open) => {
+              if (!open) {
+                setPaymentVale(null);
+                // Show vale created after payment dialog closes
+              }
+            }}
+            value={paymentVale.valor}
+            description="Vale Presente Resinkra"
+            tipoReferencia="vale_presente"
+            referenciaId={paymentVale.id}
+            onPaymentSuccess={() => {
+              toast.success("Pagamento realizado! Vale presente criado com sucesso! 🎁");
+            }}
+          />
+        )}
       </div>
     </div>
   );

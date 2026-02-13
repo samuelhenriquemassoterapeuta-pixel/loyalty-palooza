@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Crown, Leaf, Gem, Check, Star, Loader2, X, ArrowLeft } from "lucide-react";
 import { motion } from "framer-motion";
 import { ConfirmDialog } from "@/components/ConfirmDialog";
+import { PaymentDialog } from "@/components/pagamento/PaymentDialog";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -28,8 +29,23 @@ const ClubeVip = () => {
   const assinar = useAssinar();
   const cancelar = useCancelarAssinatura();
   const [confirmCancel, setConfirmCancel] = useState(false);
+  const [paymentPlano, setPaymentPlano] = useState<{ id: string; nome: string; preco: number } | null>(null);
+  const [pendingAssinaturaId, setPendingAssinaturaId] = useState<string | null>(null);
 
   const isSubscribed = !!minhaAssinatura;
+
+  const handleAssinar = async (plano: { id: string; nome: string; preco_mensal: number }) => {
+    // Create subscription first (pending payment), then open payment dialog
+    try {
+      const result = await assinar.mutateAsync(plano.id);
+      if (result) {
+        setPendingAssinaturaId((result as any).id);
+        setPaymentPlano({ id: plano.id, nome: plano.nome, preco: plano.preco_mensal });
+      }
+    } catch {
+      // error handled by mutation
+    }
+  };
 
   return (
     <AppLayout>
@@ -167,7 +183,7 @@ const ClubeVip = () => {
                         className="w-full"
                         variant={isCurrentPlan ? "outline" : "default"}
                         disabled={isCurrentPlan || assinar.isPending}
-                        onClick={() => assinar.mutate(plano.id)}
+                        onClick={() => handleAssinar(plano)}
                       >
                         {assinar.isPending && <Loader2 className="animate-spin mr-2" size={16} />}
                         {isCurrentPlan ? "Plano atual" : "Assinar agora"}
@@ -191,6 +207,17 @@ const ClubeVip = () => {
             if (minhaAssinatura) cancelar.mutate(minhaAssinatura.id);
           }}
         />
+
+        {paymentPlano && pendingAssinaturaId && (
+          <PaymentDialog
+            open={!!paymentPlano}
+            onOpenChange={(open) => { if (!open) setPaymentPlano(null); }}
+            value={paymentPlano.preco}
+            description={`Assinatura Clube VIP — ${paymentPlano.nome}`}
+            tipoReferencia="assinatura"
+            referenciaId={pendingAssinaturaId}
+          />
+        )}
       </div>
     </AppLayout>
   );

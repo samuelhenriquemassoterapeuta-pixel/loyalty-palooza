@@ -8,6 +8,7 @@ import { ArrowLeft, Package, Check, Clock, Sparkles, Calendar, AlertTriangle } f
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { usePacotes, useMeusPacotes, Pacote } from "@/hooks/usePacotes";
+import { PaymentDialog } from "@/components/pagamento/PaymentDialog";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { MeusPacotesListSkeleton, PacotesListSkeleton } from "@/components/skeletons";
@@ -50,6 +51,7 @@ const Pacotes = () => {
     open: boolean;
     pacote: Pacote | null;
   }>({ open: false, pacote: null });
+  const [paymentPacote, setPaymentPacote] = useState<{ id: string; nome: string; preco: number; pacoteUsuarioId: string } | null>(null);
 
   const handleOpenConfirm = (pacote: Pacote) => {
     setConfirmDialog({ open: true, pacote });
@@ -60,13 +62,18 @@ const Pacotes = () => {
     if (!pacote) return;
     setConfirmDialog({ open: false, pacote: null });
     setComprando(pacote.id);
-    const { error } = await comprarPacote(pacote.id, pacote.validade_dias || 365);
+    const { error, data } = await comprarPacote(pacote.id, pacote.validade_dias || 365);
     setComprando(null);
     if (error) {
       toast.error("Erro ao comprar pacote. Tente novamente.");
     } else {
-      toast.success("Pacote adquirido!", { description: `${pacote.nome} foi adicionado aos seus pacotes.` });
-      setActiveTab("meus");
+      // Open payment dialog
+      setPaymentPacote({
+        id: pacote.id,
+        nome: pacote.nome,
+        preco: pacote.preco,
+        pacoteUsuarioId: data?.id || pacote.id,
+      });
     }
   };
 
@@ -357,6 +364,25 @@ const Pacotes = () => {
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
+
+        {paymentPacote && (
+          <PaymentDialog
+            open={!!paymentPacote}
+            onOpenChange={(open) => {
+              if (!open) {
+                setPaymentPacote(null);
+                setActiveTab("meus");
+              }
+            }}
+            value={paymentPacote.preco}
+            description={`Pacote de sessões — ${paymentPacote.nome}`}
+            tipoReferencia="pacote"
+            referenciaId={paymentPacote.pacoteUsuarioId}
+            onPaymentSuccess={() => {
+              toast.success("Pacote adquirido!", { description: `${paymentPacote.nome} foi adicionado aos seus pacotes.` });
+            }}
+          />
+        )}
       </div>
     </AppLayout>
   );
