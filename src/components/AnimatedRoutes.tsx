@@ -36,6 +36,7 @@ import RecomendacoesIA from "@/pages/RecomendacoesIA";
 import DashboardRH from "@/pages/DashboardRH";
 import ParceiroDashboard from "@/pages/ParceiroDashboard";
 import PerfilParceiro from "@/pages/PerfilParceiro";
+import ResinkraMoments from "@/pages/ResinkraMoments";
 import NotFound from "@/pages/NotFound";
 
 /** Shows landing for visitors, dashboard for authenticated users */
@@ -364,6 +365,16 @@ export const AnimatedRoutes = () => {
             <PageTransition>
               <PerfilParceiro />
             </PageTransition>
+          }
+        />
+        <Route
+          path="/resinkra-moments"
+          element={
+            <ProtectedRoute>
+              <PageTransition>
+                <ResinkraMoments />
+              </PageTransition>
+            </ProtectedRoute>
           }
         />
         <Route
