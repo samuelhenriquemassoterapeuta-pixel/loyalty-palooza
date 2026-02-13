@@ -93,6 +93,98 @@ export type Database = {
           },
         ]
       }
+      assinaturas_planos: {
+        Row: {
+          beneficios: Json
+          cashback_bonus_percentual: number
+          cor: string
+          created_at: string
+          desconto_servicos_percentual: number
+          descricao: string | null
+          disponivel: boolean
+          icone: string
+          id: string
+          nome: string
+          ordem: number
+          preco_mensal: number
+          prioridade_agendamento: boolean
+        }
+        Insert: {
+          beneficios?: Json
+          cashback_bonus_percentual?: number
+          cor?: string
+          created_at?: string
+          desconto_servicos_percentual?: number
+          descricao?: string | null
+          disponivel?: boolean
+          icone?: string
+          id?: string
+          nome: string
+          ordem?: number
+          preco_mensal: number
+          prioridade_agendamento?: boolean
+        }
+        Update: {
+          beneficios?: Json
+          cashback_bonus_percentual?: number
+          cor?: string
+          created_at?: string
+          desconto_servicos_percentual?: number
+          descricao?: string | null
+          disponivel?: boolean
+          icone?: string
+          id?: string
+          nome?: string
+          ordem?: number
+          preco_mensal?: number
+          prioridade_agendamento?: boolean
+        }
+        Relationships: []
+      }
+      assinaturas_usuario: {
+        Row: {
+          created_at: string
+          data_fim: string | null
+          data_inicio: string
+          id: string
+          plano_id: string
+          renovacao_automatica: boolean
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          data_fim?: string | null
+          data_inicio?: string
+          id?: string
+          plano_id: string
+          renovacao_automatica?: boolean
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          data_fim?: string | null
+          data_inicio?: string
+          id?: string
+          plano_id?: string
+          renovacao_automatica?: boolean
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assinaturas_usuario_plano_id_fkey"
+            columns: ["plano_id"]
+            isOneToOne: false
+            referencedRelation: "assinaturas_planos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       audit_logs: {
         Row: {
           created_at: string
@@ -255,6 +347,44 @@ export type Database = {
           },
         ]
       }
+      colaboradores_empresa: {
+        Row: {
+          ativo: boolean
+          cargo: string | null
+          created_at: string
+          departamento: string | null
+          empresa_id: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          ativo?: boolean
+          cargo?: string | null
+          created_at?: string
+          departamento?: string | null
+          empresa_id: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          ativo?: boolean
+          cargo?: string | null
+          created_at?: string
+          departamento?: string | null
+          empresa_id?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "colaboradores_empresa_empresa_id_fkey"
+            columns: ["empresa_id"]
+            isOneToOne: false
+            referencedRelation: "empresas_corporativas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       diario_alimentar: {
         Row: {
           agua_ml: number | null
@@ -338,6 +468,51 @@ export type Database = {
           ordem?: number
           protocolo_tipo?: string | null
           titulo?: string
+        }
+        Relationships: []
+      }
+      empresas_corporativas: {
+        Row: {
+          ativa: boolean
+          cnpj: string | null
+          contato_email: string | null
+          contato_nome: string | null
+          contato_telefone: string | null
+          created_at: string
+          id: string
+          max_colaboradores: number
+          nome: string
+          plano_qvt: string
+          updated_at: string
+          valor_mensal: number
+        }
+        Insert: {
+          ativa?: boolean
+          cnpj?: string | null
+          contato_email?: string | null
+          contato_nome?: string | null
+          contato_telefone?: string | null
+          created_at?: string
+          id?: string
+          max_colaboradores?: number
+          nome: string
+          plano_qvt?: string
+          updated_at?: string
+          valor_mensal?: number
+        }
+        Update: {
+          ativa?: boolean
+          cnpj?: string | null
+          contato_email?: string | null
+          contato_nome?: string | null
+          contato_telefone?: string | null
+          created_at?: string
+          id?: string
+          max_colaboradores?: number
+          nome?: string
+          plano_qvt?: string
+          updated_at?: string
+          valor_mensal?: number
         }
         Relationships: []
       }
@@ -1387,6 +1562,42 @@ export type Database = {
         }
         Relationships: []
       }
+      recomendacoes_ia: {
+        Row: {
+          aceita: boolean | null
+          confianca: number
+          created_at: string
+          dados_base: Json
+          descricao: string
+          id: string
+          tipo: string
+          titulo: string
+          user_id: string
+        }
+        Insert: {
+          aceita?: boolean | null
+          confianca?: number
+          created_at?: string
+          dados_base?: Json
+          descricao: string
+          id?: string
+          tipo?: string
+          titulo: string
+          user_id: string
+        }
+        Update: {
+          aceita?: boolean | null
+          confianca?: number
+          created_at?: string
+          dados_base?: Json
+          descricao?: string
+          id?: string
+          tipo?: string
+          titulo?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       relatorios_enviados: {
         Row: {
           created_at: string
@@ -1761,6 +1972,7 @@ export type Database = {
           total_sessoes: number
         }[]
       }
+      get_empresa_stats: { Args: { p_empresa_id: string }; Returns: Json }
       get_terapeutas_publicos: {
         Args: never
         Returns: {

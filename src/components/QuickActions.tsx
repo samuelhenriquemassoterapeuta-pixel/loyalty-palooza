@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { Calendar, ShoppingBag, Clock, Gift } from "lucide-react";
+import { Calendar, ShoppingBag, Clock, Gift, Crown, Brain } from "lucide-react";
 
 const actions = [
   {
@@ -12,6 +12,30 @@ const actions = [
     path: "/agendamento",
   },
   {
+    icon: Crown,
+    label: "VIP",
+    description: "Clube",
+    iconColor: "text-accent",
+    iconBg: "bg-accent/15",
+    path: "/clube-vip",
+  },
+  {
+    icon: Brain,
+    label: "IA",
+    description: "Para você",
+    iconColor: "text-highlight",
+    iconBg: "bg-highlight/15",
+    path: "/recomendacoes",
+  },
+  {
+    icon: ShoppingBag,
+    label: "Loja",
+    description: "Produtos",
+    iconColor: "text-primary",
+    iconBg: "bg-primary/15",
+    path: "/loja",
+  },
+  {
     icon: Clock,
     label: "Planos",
     description: "Horas",
@@ -20,19 +44,11 @@ const actions = [
     path: "/pacotes",
   },
   {
-    icon: ShoppingBag,
-    label: "Loja",
-    description: "Produtos",
-    iconColor: "text-accent",
-    iconBg: "bg-accent/15",
-    path: "/loja",
-  },
-  {
     icon: Gift,
     label: "Presente",
     description: "Vale",
-    iconColor: "text-info",
-    iconBg: "bg-info/15",
+    iconColor: "text-accent",
+    iconBg: "bg-accent/15",
     path: "/vale-presente",
   },
 ];
@@ -63,7 +79,7 @@ export const QuickActions = () => {
       variants={container}
       initial="hidden"
       animate="show"
-      className="grid grid-cols-4 gap-2.5"
+      className="grid grid-cols-3 sm:grid-cols-6 gap-2.5"
     >
       {actions.map((action) => (
         <motion.button

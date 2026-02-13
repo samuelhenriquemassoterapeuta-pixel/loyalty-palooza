@@ -11,3 +11,9 @@ verify_jwt = false
 
 [functions.lembrete-alongamento]
 verify_jwt = false
+
+[functions.gerar-recomendacoes]
+verify_jwt = false
+
+[functions.notificacoes-inteligentes]
+verify_jwt = false
