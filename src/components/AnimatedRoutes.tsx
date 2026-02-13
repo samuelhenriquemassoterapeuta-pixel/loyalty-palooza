@@ -31,6 +31,9 @@ import HeadSpa from "@/pages/HeadSpa";
 import Dietas from "@/pages/Dietas";
 import ValePresente from "@/pages/ValePresente";
 import CupomEditor from "@/pages/CupomEditor";
+import ClubeVip from "@/pages/ClubeVip";
+import RecomendacoesIA from "@/pages/RecomendacoesIA";
+import DashboardRH from "@/pages/DashboardRH";
 import NotFound from "@/pages/NotFound";
 
 /** Shows landing for visitors, dashboard for authenticated users */
@@ -309,6 +312,36 @@ export const AnimatedRoutes = () => {
             <ProtectedRoute requireAdmin>
               <PageTransition>
                 <CupomEditor />
+              </PageTransition>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/clube-vip"
+          element={
+            <ProtectedRoute>
+              <PageTransition>
+                <ClubeVip />
+              </PageTransition>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/recomendacoes"
+          element={
+            <ProtectedRoute>
+              <PageTransition>
+                <RecomendacoesIA />
+              </PageTransition>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/dashboard-rh"
+          element={
+            <ProtectedRoute requireAdmin>
+              <PageTransition>
+                <DashboardRH />
               </PageTransition>
             </ProtectedRoute>
           }
