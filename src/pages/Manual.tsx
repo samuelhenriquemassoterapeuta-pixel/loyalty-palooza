@@ -1,539 +1,171 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { 
-  ArrowLeft, 
-  BookOpen, 
-  Calendar, 
-  ShoppingBag, 
-  Package, 
-  Send, 
-  Gift, 
-  Wallet,
-  HelpCircle,
+import {
+  ArrowLeft,
+  BookOpen,
   Download,
   ChevronRight,
-  ChevronDown,
-  Sparkles,
-  Clock,
-  CreditCard,
+  HelpCircle,
+  Calendar,
+  ShoppingBag,
+  Gift,
   Users,
-  Bell,
   Shield,
-  Smartphone,
-  Play,
-  Video
 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
-import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { BottomNavigation } from "@/components/BottomNavigation";
-import { AppLayout } from "@/components/AppLayout";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { AppLayout } from "@/components/AppLayout";
+import { useAdmin } from "@/hooks/useAdmin";
+import { useParceiro } from "@/hooks/useParceiro";
+import { manualUsuario, manualParceiro, manualAdmin, type ManualData } from "@/data/manuaisContent";
 
-interface ManualSection {
-  id: string;
-  icon: React.ElementType;
-  title: string;
-  description: string;
-  color: string;
-  videoUrl?: string;
-  videoThumbnail?: string;
-  content: {
-    title: string;
-    steps: string[];
-  }[];
-}
-
-const manualSections: ManualSection[] = [
-  {
-    id: "inicio",
-    icon: Sparkles,
-    title: "Primeiros Passos",
-    description: "Como começar a usar o Resinkra",
-    color: "from-primary/20 to-primary/5",
-    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-    videoThumbnail: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=400&h=225&fit=crop",
-    content: [
-      {
-        title: "Criando sua conta",
-        steps: [
-          "Acesse a tela de login e clique em 'Criar conta'",
-          "Preencha seu email e crie uma senha segura",
-          "Confirme seu email clicando no link enviado",
-          "Complete seu perfil com nome e telefone"
-        ]
-      },
-      {
-        title: "Navegando pelo app",
-        steps: [
-          "Use a barra inferior para navegar entre as seções",
-          "O ícone de casa leva à página inicial",
-          "Acesse seu perfil clicando no ícone de engrenagem",
-          "Veja suas notificações no ícone do sino"
-        ]
-      }
-    ]
-  },
-  {
-    id: "agendamentos",
-    icon: Calendar,
-    title: "Agendamentos",
-    description: "Como agendar suas sessões",
-    color: "from-primary/20 to-accent/10",
-    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-    videoThumbnail: "https://images.unsplash.com/photo-1506784983877-45594efa4cbe?w=400&h=225&fit=crop",
-    content: [
-      {
-        title: "Fazer um agendamento",
-        steps: [
-          "Na tela inicial, toque em 'Agendar'",
-          "Escolha o serviço desejado",
-          "Selecione a data e horário disponível",
-          "Confirme o agendamento e aguarde a confirmação"
-        ]
-      },
-      {
-        title: "Cancelar ou reagendar",
-        steps: [
-          "Vá até 'Meus Agendamentos' no menu",
-          "Encontre o agendamento que deseja alterar",
-          "Toque em 'Cancelar' ou 'Reagendar'",
-          "Cancelamentos devem ser feitos com 24h de antecedência"
-        ]
-      }
-    ]
-  },
-  {
-    id: "loja",
-    icon: ShoppingBag,
-    title: "Loja",
-    description: "Compre produtos exclusivos",
-    color: "from-accent/20 to-accent/5",
-    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-    videoThumbnail: "https://images.unsplash.com/photo-1472851294608-062f824d29cc?w=400&h=225&fit=crop",
-    content: [
-      {
-        title: "Comprando produtos",
-        steps: [
-          "Acesse a Loja pelo menu inferior",
-          "Navegue pelas categorias ou use a busca",
-          "Toque no '+' para adicionar ao carrinho",
-          "Finalize clicando em 'Reservar' no carrinho"
-        ]
-      },
-      {
-        title: "Usando cashback na compra",
-        steps: [
-          "No carrinho, ative 'Usar meu cashback'",
-          "O valor será descontado automaticamente",
-          "Você pode usar todo ou parte do cashback",
-          "O saldo restante fica disponível para futuras compras"
-        ]
-      }
-    ]
-  },
-  {
-    id: "pacotes",
-    icon: Package,
-    title: "Pacotes",
-    description: "Planos e sessões",
-    color: "from-highlight/20 to-highlight/5",
-    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-    videoThumbnail: "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=400&h=225&fit=crop",
-    content: [
-      {
-        title: "Adquirindo um pacote",
-        steps: [
-          "Acesse 'Planos' no menu principal",
-          "Veja os pacotes disponíveis e benefícios",
-          "Escolha o pacote ideal para você",
-          "Confirme a compra e receba suas sessões"
-        ]
-      },
-      {
-        title: "Usando suas sessões",
-        steps: [
-          "Ao agendar, suas sessões do pacote são usadas automaticamente",
-          "Acompanhe o saldo de sessões na tela de pacotes",
-          "Pacotes têm validade - fique atento às datas",
-          "Sessões não utilizadas não são reembolsáveis"
-        ]
-      }
-    ]
-  },
-  {
-    id: "transferencias",
-    icon: Send,
-    title: "Transferências",
-    description: "Envie créditos para amigos",
-    color: "from-info/20 to-info/5",
-    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-    videoThumbnail: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=400&h=225&fit=crop",
-    content: [
-      {
-        title: "Transferindo créditos",
-        steps: [
-          "Toque em 'Transferir' na tela inicial",
-          "Digite o email do destinatário",
-          "Informe o valor que deseja enviar",
-          "Confirme a transferência"
-        ]
-      },
-      {
-        title: "Recebendo créditos",
-        steps: [
-          "Você será notificado quando receber créditos",
-          "O valor é creditado automaticamente em seu saldo",
-          "Veja o histórico na seção de transações",
-          "Use os créditos para serviços ou produtos"
-        ]
-      }
-    ]
-  },
-  {
-    id: "indicacoes",
-    icon: Gift,
-    title: "Programa de Indicações",
-    description: "Indique amigos e ganhe",
-    color: "from-accent/20 to-highlight/10",
-    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-    videoThumbnail: "https://images.unsplash.com/photo-1521791136064-7986c2920216?w=400&h=225&fit=crop",
-    content: [
-      {
-        title: "Como indicar",
-        steps: [
-          "Acesse 'Indique e Ganhe' na tela inicial",
-          "Copie seu código de indicação exclusivo",
-          "Compartilhe com amigos via WhatsApp ou redes sociais",
-          "Ganhe R$ 10 quando seu amigo fizer a primeira compra"
-        ]
-      },
-      {
-        title: "Usando código de indicação",
-        steps: [
-          "Se você foi indicado, acesse a tela de indicações",
-          "Cole o código no campo 'Usar código'",
-          "O bônus será creditado após sua primeira compra",
-          "Você também pode indicar outros amigos"
-        ]
-      }
-    ]
-  },
-  {
-    id: "cashback",
-    icon: Wallet,
-    title: "Cashback",
-    description: "Entenda como funciona",
-    color: "from-green-500/20 to-green-500/5",
-    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-    videoThumbnail: "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=400&h=225&fit=crop",
-    content: [
-      {
-        title: "Ganhando cashback",
-        steps: [
-          "Cada compra gera um percentual de cashback",
-          "O percentual varia conforme o produto/serviço",
-          "O cashback é creditado após a confirmação do pedido",
-          "Acompanhe seu saldo na tela inicial"
-        ]
-      },
-      {
-        title: "Usando seu cashback",
-        steps: [
-          "Use em compras na loja ativando a opção no carrinho",
-          "Use para pagar agendamentos (parcial ou total)",
-          "O cashback não expira enquanto sua conta estiver ativa",
-          "Não é possível transferir cashback para outros usuários"
-        ]
-      }
-    ]
-  }
+const quickLinks = [
+  { icon: Calendar, label: "Agendar", path: "/agendamento" },
+  { icon: ShoppingBag, label: "Loja", path: "/loja" },
+  { icon: Gift, label: "Indicar", path: "/indicacoes" },
 ];
 
-const faqItems = [
-  {
-    question: "Esqueci minha senha, o que faço?",
-    answer: "Na tela de login, clique em 'Esqueci a senha'. Digite seu email e você receberá um link para criar uma nova senha."
-  },
-  {
-    question: "Posso cancelar um agendamento?",
-    answer: "Sim, você pode cancelar com até 24 horas de antecedência. Cancelamentos em cima da hora podem ter penalidades."
-  },
-  {
-    question: "Como funciona o cashback?",
-    answer: "Você recebe um percentual de volta em cada compra. Esse valor fica disponível para usar em futuras compras ou agendamentos."
-  },
-  {
-    question: "Meu pacote tem validade?",
-    answer: "Sim, cada pacote tem uma validade específica. Você pode ver a data de expiração na tela de pacotes."
-  },
-  {
-    question: "Como entro em contato com o suporte?",
-    answer: "Acesse seu perfil, vá em 'Ajuda' e você encontrará opções de contato via WhatsApp, email ou telefone."
-  },
-  {
-    question: "Posso usar o app offline?",
-    answer: "O app precisa de conexão para funcionar. Mas você pode instalá-lo como PWA para ter uma experiência melhor."
-  }
-];
-
-export default function Manual() {
-  const navigate = useNavigate();
+function ManualRenderer({ data }: { data: ManualData }) {
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
-  const [playingVideo, setPlayingVideo] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   const handleExportPDF = () => {
-    // Create printable content
-    const printContent = `
-      <html>
-        <head>
-          <title>Manual Resinkra</title>
-          <style>
-            body { font-family: Arial, sans-serif; padding: 40px; line-height: 1.6; }
-            h1 { color: #4A7C59; border-bottom: 2px solid #4A7C59; padding-bottom: 10px; }
-            h2 { color: #4A7C59; margin-top: 30px; }
-            h3 { color: #333; margin-top: 20px; }
-            ul { margin-left: 20px; }
-            li { margin-bottom: 8px; }
-            .section { page-break-inside: avoid; margin-bottom: 30px; }
-            .faq { background: #f5f5f5; padding: 15px; border-radius: 8px; margin-bottom: 15px; }
-            .faq-q { font-weight: bold; color: #4A7C59; }
-          </style>
-        </head>
-        <body>
-          <h1>📖 Manual do Usuário - Resinkra</h1>
-          <p>Bem-vindo ao Resinkra! Este manual vai te ajudar a aproveitar todas as funcionalidades do nosso aplicativo.</p>
-          
-          ${manualSections.map(section => `
-            <div class="section">
-              <h2>${section.title}</h2>
-              <p>${section.description}</p>
-              ${section.content.map(item => `
-                <h3>${item.title}</h3>
-                <ul>
-                  ${item.steps.map(step => `<li>${step}</li>`).join('')}
-                </ul>
-              `).join('')}
-            </div>
-          `).join('')}
-          
-          <h2>❓ Perguntas Frequentes</h2>
-          ${faqItems.map(item => `
-            <div class="faq">
-              <p class="faq-q">${item.question}</p>
-              <p>${item.answer}</p>
-            </div>
-          `).join('')}
-          
-          <p style="margin-top: 40px; text-align: center; color: #666;">
-            © ${new Date().getFullYear()} Resinkra - Todos os direitos reservados
-          </p>
-        </body>
-      </html>
-    `;
+    const printContent = `<html><head><title>${data.title}</title>
+      <style>
+        body{font-family:Arial,sans-serif;padding:40px;line-height:1.6}
+        h1{color:#3e4331;border-bottom:2px solid #3e4331;padding-bottom:10px}
+        h2{color:#3e4331;margin-top:30px}
+        h3{color:#333;margin-top:20px}
+        ul{margin-left:20px}
+        li{margin-bottom:8px}
+        .section{page-break-inside:avoid;margin-bottom:30px}
+        .faq{background:#f5f5f5;padding:15px;border-radius:8px;margin-bottom:15px}
+        .faq-q{font-weight:bold;color:#3e4331}
+      </style></head><body>
+      <h1>📖 ${data.title}</h1>
+      <p>${data.subtitle}</p>
+      ${data.sections.map(s => `
+        <div class="section"><h2>${s.title}</h2><p>${s.description}</p>
+        ${s.content.map(c => `<h3>${c.title}</h3><ul>${c.steps.map(st => `<li>${st.text}</li>`).join("")}</ul>`).join("")}
+        </div>`).join("")}
+      <h2>❓ Perguntas Frequentes</h2>
+      ${data.faq.map(f => `<div class="faq"><p class="faq-q">${f.question}</p><p>${f.answer}</p></div>`).join("")}
+      <p style="margin-top:40px;text-align:center;color:#666">© ${new Date().getFullYear()} Resinkra</p>
+      </body></html>`;
 
-    const printWindow = window.open('', '_blank');
-    if (printWindow) {
-      printWindow.document.write(printContent);
-      printWindow.document.close();
-      printWindow.print();
-    }
+    const w = window.open("", "_blank");
+    if (w) { w.document.write(printContent); w.document.close(); w.print(); }
   };
 
   return (
-    <AppLayout>
-    <div className="min-h-screen bg-background pb-32 lg:pb-8">
-      {/* Header */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-primary/10 via-accent/5 to-highlight/10 border-b border-border px-4 py-6 safe-top">
-        <div className="absolute -top-20 -right-20 w-40 h-40 bg-accent/20 rounded-full blur-3xl" />
-        <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-primary/20 rounded-full blur-2xl" />
-        
-        <div className="max-w-lg mx-auto relative z-10">
-          <div className="flex items-center gap-4 mb-4">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => navigate(-1)}
-              className="shrink-0"
-            >
-              <ArrowLeft size={20} />
-            </Button>
-            <div className="flex-1">
-              <h1 className="text-xl font-bold text-primary flex items-center gap-2">
-                <BookOpen size={24} />
-                Manual do Usuário
-              </h1>
-              <p className="text-sm text-muted-foreground">Aprenda a usar o Resinkra</p>
-            </div>
-          </div>
-          
-          <Button 
-            variant="outline" 
-            size="sm" 
-            onClick={handleExportPDF}
-            className="gap-2"
+    <div className="space-y-6">
+      {/* Export button */}
+      <Button variant="outline" size="sm" onClick={handleExportPDF} className="gap-2">
+        <Download size={16} />
+        Baixar PDF
+      </Button>
+
+      {/* Sections Grid */}
+      <div className="grid grid-cols-2 gap-3">
+        {data.sections.map((section, index) => (
+          <motion.button
+            key={section.id}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: index * 0.04 }}
+            onClick={() => setExpandedSection(expandedSection === section.id ? null : section.id)}
+            className={`p-4 rounded-2xl bg-gradient-to-br ${section.color} border border-border/50 text-left transition-all hover:shadow-lg ${
+              expandedSection === section.id ? "ring-2 ring-primary" : ""
+            }`}
           >
-            <Download size={16} />
-            Baixar PDF
-          </Button>
-        </div>
+            <section.icon size={28} className="text-primary mb-2" />
+            <h3 className="font-semibold text-sm">{section.title}</h3>
+            <p className="text-xs text-muted-foreground mt-1">{section.description}</p>
+          </motion.button>
+        ))}
       </div>
 
-      <div className="max-w-lg mx-auto px-4 py-6 space-y-6">
-        {/* Sections Grid */}
-        <div className="grid grid-cols-2 gap-3">
-          {manualSections.map((section, index) => (
-            <motion.button
-              key={section.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.05 }}
-              onClick={() => setExpandedSection(expandedSection === section.id ? null : section.id)}
-              className={`p-4 rounded-2xl bg-gradient-to-br ${section.color} border border-border/50 text-left transition-all hover:shadow-lg ${
-                expandedSection === section.id ? 'ring-2 ring-primary' : ''
-              }`}
-            >
-              <section.icon size={28} className="text-primary mb-2" />
-              <h3 className="font-semibold text-sm">{section.title}</h3>
-              <p className="text-xs text-muted-foreground mt-1">{section.description}</p>
-            </motion.button>
-          ))}
-        </div>
-
-        {/* Expanded Section Content */}
-        <AnimatePresence>
-          {expandedSection && (
+      {/* Expanded Content */}
+      <AnimatePresence>
+        {expandedSection && (() => {
+          const cur = data.sections.find(s => s.id === expandedSection);
+          if (!cur) return null;
+          return (
             <motion.div
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
               className="overflow-hidden"
             >
-              {(() => {
-                const currentSection = manualSections.find(s => s.id === expandedSection);
-                if (!currentSection) return null;
-                
-                return (
-                  <Card className="p-4 border-primary/20 space-y-4">
-                    {/* Video Tutorial */}
-                    {currentSection.videoUrl && (
-                      <div className="space-y-2">
-                        <h4 className="font-semibold text-primary flex items-center gap-2">
-                          <Video size={16} />
-                          Vídeo Tutorial
-                        </h4>
-                        <div className="rounded-xl overflow-hidden border border-border/50 shadow-lg">
-                          <AspectRatio ratio={16 / 9}>
-                            {playingVideo === currentSection.id ? (
-                              <iframe
-                                src={`${currentSection.videoUrl}?autoplay=1`}
-                                className="w-full h-full"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                allowFullScreen
-                                title={`Tutorial: ${currentSection.title}`}
-                              />
-                            ) : (
-                              <button
-                                onClick={() => setPlayingVideo(currentSection.id)}
-                                className="relative w-full h-full group"
-                              >
-                                <img
-                                  src={currentSection.videoThumbnail}
-                                  alt={`Thumbnail: ${currentSection.title}`}
-                                  className="w-full h-full object-cover"
-                                />
-                                <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors flex items-center justify-center">
-                                  <motion.div
-                                    whileHover={{ scale: 1.1 }}
-                                    whileTap={{ scale: 0.95 }}
-                                    className="w-16 h-16 rounded-full bg-primary/90 text-primary-foreground flex items-center justify-center shadow-xl"
-                                  >
-                                    <Play size={28} className="ml-1" />
-                                  </motion.div>
-                                </div>
-                                <div className="absolute bottom-3 left-3 bg-black/60 text-white text-xs px-2 py-1 rounded-md flex items-center gap-1">
-                                  <Video size={12} />
-                                  Assistir tutorial
-                                </div>
-                              </button>
-                            )}
-                          </AspectRatio>
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Step by Step Content */}
-                    {currentSection.content.map((item, idx) => (
-                      <div key={idx} className={idx > 0 || currentSection.videoUrl ? "pt-4 border-t border-border" : ""}>
-                        <h4 className="font-semibold text-primary mb-3 flex items-center gap-2">
-                          <ChevronRight size={16} />
-                          {item.title}
-                        </h4>
-                        <ul className="space-y-2">
-                          {item.steps.map((step, stepIdx) => (
-                            <motion.li
-                              key={stepIdx}
-                              initial={{ opacity: 0, x: -10 }}
-                              animate={{ opacity: 1, x: 0 }}
-                              transition={{ delay: stepIdx * 0.1 }}
-                              className="flex items-start gap-3 text-sm"
-                            >
-                              <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary/10 text-primary text-xs font-bold flex items-center justify-center">
-                                {stepIdx + 1}
-                              </span>
-                              <span className="text-muted-foreground">{step}</span>
-                            </motion.li>
-                          ))}
-                        </ul>
-                      </div>
-                    ))}
-                  </Card>
-                );
-              })()}
+              <Card className="p-4 border-primary/20 space-y-4">
+                {cur.content.map((item, idx) => (
+                  <div key={idx} className={idx > 0 ? "pt-4 border-t border-border" : ""}>
+                    <h4 className="font-semibold text-primary mb-3 flex items-center gap-2">
+                      <ChevronRight size={16} />
+                      {item.title}
+                    </h4>
+                    <ul className="space-y-2">
+                      {item.steps.map((step, si) => (
+                        <motion.li
+                          key={si}
+                          initial={{ opacity: 0, x: -10 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: si * 0.08 }}
+                          className="flex items-start gap-3 text-sm"
+                        >
+                          <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary/10 text-primary text-xs font-bold flex items-center justify-center">
+                            {si + 1}
+                          </span>
+                          <span className="text-muted-foreground">{step.text}</span>
+                        </motion.li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </Card>
             </motion.div>
-          )}
-        </AnimatePresence>
+          );
+        })()}
+      </AnimatePresence>
 
-        {/* FAQ Section */}
-        <section>
-          <h2 className="text-lg font-bold mb-4 flex items-center gap-2">
-            <HelpCircle size={20} className="text-primary" />
-            Perguntas Frequentes
-          </h2>
-          
-          <Accordion type="single" collapsible className="space-y-2">
-            {faqItems.map((item, index) => (
-              <AccordionItem 
-                key={index} 
-                value={`faq-${index}`}
-                className="bg-card rounded-xl border border-border px-4"
-              >
-                <AccordionTrigger className="text-sm font-medium text-left hover:no-underline">
-                  {item.question}
-                </AccordionTrigger>
-                <AccordionContent className="text-sm text-muted-foreground">
-                  {item.answer}
-                </AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
-        </section>
+      {/* FAQ */}
+      <section>
+        <h2 className="text-lg font-bold mb-4 flex items-center gap-2">
+          <HelpCircle size={20} className="text-primary" />
+          Perguntas Frequentes
+        </h2>
+        <Accordion type="single" collapsible className="space-y-2">
+          {data.faq.map((item, index) => (
+            <AccordionItem
+              key={index}
+              value={`faq-${index}`}
+              className="bg-card rounded-xl border border-border px-4"
+            >
+              <AccordionTrigger className="text-sm font-medium text-left hover:no-underline">
+                {item.question}
+              </AccordionTrigger>
+              <AccordionContent className="text-sm text-muted-foreground">
+                {item.answer}
+              </AccordionContent>
+            </AccordionItem>
+          ))}
+        </Accordion>
+      </section>
 
-        {/* Quick Links */}
+      {/* Quick Links (only for user manual) */}
+      {data.id === "usuario" && (
         <section>
           <h2 className="text-lg font-bold mb-4">Acesso Rápido</h2>
           <div className="grid grid-cols-3 gap-2">
-            {[
-              { icon: Calendar, label: "Agendar", path: "/agendamento" },
-              { icon: ShoppingBag, label: "Loja", path: "/loja" },
-              { icon: Gift, label: "Indicar", path: "/indicacoes" },
-            ].map((item) => (
+            {quickLinks.map((item) => (
               <Button
                 key={item.label}
                 variant="outline"
@@ -546,9 +178,71 @@ export default function Manual() {
             ))}
           </div>
         </section>
-      </div>
-
+      )}
     </div>
+  );
+}
+
+export default function Manual() {
+  const navigate = useNavigate();
+  const { isAdmin } = useAdmin();
+  const { parceiro } = useParceiro();
+  const [activeTab, setActiveTab] = useState("usuario");
+
+  const tabs = [
+    { value: "usuario", label: "Usuário", icon: BookOpen },
+    ...(parceiro ? [{ value: "parceiro", label: "Parceiro", icon: Users }] : []),
+    ...(isAdmin ? [{ value: "admin", label: "Admin", icon: Shield }] : []),
+  ];
+
+  const dataMap: Record<string, ManualData> = {
+    usuario: manualUsuario,
+    parceiro: manualParceiro,
+    admin: manualAdmin,
+  };
+
+  return (
+    <AppLayout>
+      <div className="min-h-screen bg-background pb-32 lg:pb-8">
+        {/* Header */}
+        <div className="relative overflow-hidden bg-gradient-to-br from-primary/10 via-accent/5 to-highlight/10 border-b border-border px-4 py-6 safe-top">
+          <div className="absolute -top-20 -right-20 w-40 h-40 bg-accent/20 rounded-full blur-3xl" />
+          <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-primary/20 rounded-full blur-2xl" />
+
+          <div className="max-w-lg mx-auto relative z-10">
+            <div className="flex items-center gap-4 mb-4">
+              <Button variant="ghost" size="icon" onClick={() => navigate(-1)} className="shrink-0">
+                <ArrowLeft size={20} />
+              </Button>
+              <div className="flex-1">
+                <h1 className="text-xl font-bold text-primary flex items-center gap-2">
+                  <BookOpen size={24} />
+                  Manuais
+                </h1>
+                <p className="text-sm text-muted-foreground">Guias completos do Resinkra</p>
+              </div>
+            </div>
+
+            {/* Tab selector */}
+            {tabs.length > 1 && (
+              <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+              <TabsList className={`grid w-full ${tabs.length === 3 ? "grid-cols-3" : tabs.length === 2 ? "grid-cols-2" : "grid-cols-1"}`}>
+                  {tabs.map((tab) => (
+                    <TabsTrigger key={tab.value} value={tab.value} className="gap-1.5 text-xs sm:text-sm">
+                      <tab.icon className="w-4 h-4" />
+                      {tab.label}
+                    </TabsTrigger>
+                  ))}
+                </TabsList>
+              </Tabs>
+            )}
+          </div>
+        </div>
+
+        <div className="max-w-lg mx-auto px-4 py-6">
+          <ManualRenderer data={dataMap[activeTab]} />
+        </div>
+      </div>
     </AppLayout>
   );
 }
