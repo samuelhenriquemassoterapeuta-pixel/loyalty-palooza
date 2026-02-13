@@ -1498,6 +1498,63 @@ export type Database = {
           },
         ]
       }
+      pagamentos_asaas: {
+        Row: {
+          asaas_customer_id: string | null
+          asaas_payment_id: string
+          bank_slip_url: string | null
+          billing_type: string
+          created_at: string
+          id: string
+          invoice_url: string | null
+          pix_copia_cola: string | null
+          pix_expiration: string | null
+          pix_qr_code: string | null
+          referencia_id: string
+          status: string
+          tipo_referencia: string
+          updated_at: string
+          user_id: string
+          valor: number
+        }
+        Insert: {
+          asaas_customer_id?: string | null
+          asaas_payment_id: string
+          bank_slip_url?: string | null
+          billing_type: string
+          created_at?: string
+          id?: string
+          invoice_url?: string | null
+          pix_copia_cola?: string | null
+          pix_expiration?: string | null
+          pix_qr_code?: string | null
+          referencia_id: string
+          status?: string
+          tipo_referencia: string
+          updated_at?: string
+          user_id: string
+          valor: number
+        }
+        Update: {
+          asaas_customer_id?: string | null
+          asaas_payment_id?: string
+          bank_slip_url?: string | null
+          billing_type?: string
+          created_at?: string
+          id?: string
+          invoice_url?: string | null
+          pix_copia_cola?: string | null
+          pix_expiration?: string | null
+          pix_qr_code?: string | null
+          referencia_id?: string
+          status?: string
+          tipo_referencia?: string
+          updated_at?: string
+          user_id?: string
+          valor?: number
+        }
+        Relationships: []
+      }
       parceiro_comissoes: {
         Row: {
           created_at: string
@@ -2100,6 +2157,7 @@ export type Database = {
       }
       profiles: {
         Row: {
+          asaas_customer_id: string | null
           avatar_url: string | null
           codigo_indicacao: string | null
           created_at: string
@@ -2110,6 +2168,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          asaas_customer_id?: string | null
           avatar_url?: string | null
           codigo_indicacao?: string | null
           created_at?: string
@@ -2120,6 +2179,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          asaas_customer_id?: string | null
           avatar_url?: string | null
           codigo_indicacao?: string | null
           created_at?: string
