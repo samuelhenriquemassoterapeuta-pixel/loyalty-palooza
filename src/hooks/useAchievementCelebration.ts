@@ -1,15 +1,30 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useAchievements, type Achievement } from "@/hooks/useAchievements";
 
 const STORAGE_KEY = "resinkra_unlocked_achievements";
+const SESSION_KEY = "resinkra_celebration_checked";
 
 export const useAchievementCelebration = () => {
   const { achievements, totalUnlocked } = useAchievements();
   const [celebration, setCelebration] = useState<Achievement | null>(null);
   const [queue, setQueue] = useState<Achievement[]>([]);
+  const hasChecked = useRef(false);
 
   useEffect(() => {
-    if (achievements.length === 0) return;
+    if (achievements.length === 0 || hasChecked.current) return;
+
+    // Only run the check once per session
+    const alreadyCheckedThisSession = sessionStorage.getItem(SESSION_KEY);
+    if (alreadyCheckedThisSession) {
+      hasChecked.current = true;
+      // Still persist current state
+      const currentUnlockedIds = achievements.filter((a) => a.unlocked).map((a) => a.id);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(currentUnlockedIds));
+      return;
+    }
+
+    hasChecked.current = true;
+    sessionStorage.setItem(SESSION_KEY, "1");
 
     const savedRaw = localStorage.getItem(STORAGE_KEY);
     const savedIds: string[] = savedRaw ? JSON.parse(savedRaw) : [];
