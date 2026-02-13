@@ -19,7 +19,10 @@ import {
   Scissors,
   Link2,
   Sun,
-  Moon
+  Moon,
+  UserCog,
+  SlidersHorizontal,
+  LifeBuoy
 } from "lucide-react";
 import { PageLoading } from "@/components/LoadingSpinner";
 import { AppLayout } from "@/components/AppLayout";
@@ -43,6 +46,7 @@ import { SecuritySheet } from "@/components/profile/SecuritySheet";
 import { DevicesSheet } from "@/components/profile/DevicesSheet";
 import { HelpSheet } from "@/components/profile/HelpSheet";
 import { HistoricoCirurgicoSheet } from "@/components/profile/HistoricoCirurgicoSheet";
+import { AppCollapsibleSection } from "@/components/AppCollapsibleSection";
 
 const stagger = {
   hidden: { opacity: 0 },
@@ -84,17 +88,35 @@ const Profile = () => {
   const [saving, setSaving] = useState(false);
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
 
-  const allMenuItems = [
-    { icon: User, label: "Dados pessoais", description: "Nome, email, telefone", action: "dados" },
-    { icon: Scissors, label: "Histórico cirúrgico", description: "Cirurgias e pós-operatório", action: "cirurgico" },
-    { icon: Bell, label: "Notificações", description: "Gerencie seus alertas", action: "notificacoes" },
-    { icon: Shield, label: "Segurança", description: "Senha e autenticação", action: "seguranca" },
-    { icon: Link2, label: "Contas vinculadas", description: "Google, Apple e mais", action: "conta" },
-    { icon: Smartphone, label: "Dispositivos", description: "Gerencie seus acessos", action: "dispositivos" },
-    { icon: Download, label: "Instalar App", description: "Adicione à tela inicial", action: "instalar" },
-    { icon: FileText, label: "Manual do App", description: "Como usar o Resinkra", action: "manual" },
-    ...(isAdmin ? [{ icon: Crown, label: "Painel Admin", description: "Gerenciar app", action: "admin" }] : []),
-    { icon: HelpCircle, label: "Ajuda", description: "FAQ e suporte", action: "ajuda" },
+  const menuGroups = [
+    {
+      title: "Conta & Dados",
+      icon: UserCog,
+      items: [
+        { icon: User, label: "Dados pessoais", description: "Nome, email, telefone", action: "dados" },
+        { icon: Scissors, label: "Histórico cirúrgico", description: "Cirurgias e pós-operatório", action: "cirurgico" },
+        { icon: Link2, label: "Contas vinculadas", description: "Google, Apple e mais", action: "conta" },
+      ],
+    },
+    {
+      title: "Preferências",
+      icon: SlidersHorizontal,
+      items: [
+        { icon: Bell, label: "Notificações", description: "Gerencie seus alertas", action: "notificacoes" },
+        { icon: Shield, label: "Segurança", description: "Senha e autenticação", action: "seguranca" },
+        { icon: Smartphone, label: "Dispositivos", description: "Gerencie seus acessos", action: "dispositivos" },
+      ],
+    },
+    {
+      title: "Suporte & Mais",
+      icon: LifeBuoy,
+      items: [
+        { icon: Download, label: "Instalar App", description: "Adicione à tela inicial", action: "instalar" },
+        { icon: FileText, label: "Manual do App", description: "Como usar o Resinkra", action: "manual" },
+        ...(isAdmin ? [{ icon: Crown, label: "Painel Admin", description: "Gerenciar app", action: "admin" }] : []),
+        { icon: HelpCircle, label: "Ajuda", description: "FAQ e suporte", action: "ajuda" },
+      ],
+    },
   ];
 
   const handleLogout = async () => {
@@ -268,13 +290,9 @@ const Profile = () => {
               </div>
             </motion.div>
 
-            {/* Menu Items */}
-            <motion.div variants={fadeUp} className="space-y-2.5">
-              <p className="section-label px-1">Configurações</p>
-
-              {/* Theme Toggle */}
+            {/* Theme Toggle */}
+            <motion.div variants={fadeUp}>
               <motion.button
-                variants={fadeUp}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => setTheme(isDark ? "light" : "dark")}
                 className="w-full flex items-center gap-4 p-4 rounded-2xl glass-card-strong hover:shadow-elevated transition-all group"
@@ -294,28 +312,38 @@ const Profile = () => {
                   <div className={`absolute top-0.5 w-5 h-5 rounded-full bg-card shadow-sm transition-transform ${isDark ? "left-[22px]" : "left-0.5"}`} />
                 </div>
               </motion.button>
-
-              <div className="space-y-2">
-                {allMenuItems.map((item) => (
-                  <motion.button
-                    key={item.label}
-                    variants={fadeUp}
-                    whileTap={{ scale: 0.98 }}
-                    onClick={() => handleMenuClick(item.action)}
-                    className="w-full flex items-center gap-4 p-4 rounded-2xl glass-card-strong hover:shadow-elevated transition-all group"
-                  >
-                    <div className="p-2.5 rounded-xl bg-gradient-to-br from-primary/10 to-accent/10 group-hover:from-primary/20 group-hover:to-accent/20 transition-all">
-                      <item.icon size={20} className="text-primary" />
-                    </div>
-                    <div className="flex-1 text-left">
-                      <p className="font-semibold text-foreground group-hover:text-primary transition-colors">{item.label}</p>
-                      <p className="text-xs text-muted-foreground">{item.description}</p>
-                    </div>
-                    <ChevronRight size={20} className="text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all" />
-                  </motion.button>
-                ))}
-              </div>
             </motion.div>
+
+            {/* Menu Groups - Collapsible */}
+            {menuGroups.map((group) => (
+              <motion.div key={group.title} variants={fadeUp}>
+                <AppCollapsibleSection
+                  title={group.title}
+                  icon={group.icon}
+                  badge={`${group.items.length}`}
+                >
+                  <div className="space-y-2">
+                    {group.items.map((item) => (
+                      <motion.button
+                        key={item.label}
+                        whileTap={{ scale: 0.98 }}
+                        onClick={() => handleMenuClick(item.action)}
+                        className="w-full flex items-center gap-4 p-3.5 rounded-xl hover:bg-muted/50 transition-all group"
+                      >
+                        <div className="p-2 rounded-lg bg-gradient-to-br from-primary/10 to-accent/10 group-hover:from-primary/20 group-hover:to-accent/20 transition-all">
+                          <item.icon size={18} className="text-primary" />
+                        </div>
+                        <div className="flex-1 text-left">
+                          <p className="font-semibold text-sm text-foreground group-hover:text-primary transition-colors">{item.label}</p>
+                          <p className="text-xs text-muted-foreground">{item.description}</p>
+                        </div>
+                        <ChevronRight size={18} className="text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all" />
+                      </motion.button>
+                    ))}
+                  </div>
+                </AppCollapsibleSection>
+              </motion.div>
+            ))}
 
             {/* Logout Button */}
             <motion.button

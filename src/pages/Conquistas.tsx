@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
-import { Trophy, TrendingUp, Filter } from "lucide-react";
+import { Trophy, TrendingUp, Filter, Star, Gift, BarChart3 } from "lucide-react";
 import { AppLayout } from "@/components/AppLayout";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAchievementCelebration } from "@/hooks/useAchievementCelebration";
@@ -14,6 +14,7 @@ import { RankingList } from "@/components/conquistas/RankingList";
 import { XpLevelCard } from "@/components/conquistas/XpLevelCard";
 import { LevelRewardsCard } from "@/components/conquistas/LevelRewardsCard";
 import { calculateXpFromAchievements, getLevelFromXp } from "@/components/conquistas/xpLevelUtils";
+import { AppCollapsibleSection } from "@/components/AppCollapsibleSection";
 
 type FilterMode = "todos" | "desbloqueados" | "em_progresso";
 
@@ -134,22 +135,29 @@ const Conquistas = () => {
 
               {/* Conquistas Tab */}
               <TabsContent value="conquistas" className="space-y-4 mt-4">
-                {/* XP Level Card */}
+                {/* XP & Level - Collapsible */}
                 <motion.div variants={fadeUp}>
-                  <XpLevelCard achievements={achievements} />
+                  <AppCollapsibleSection title="Nível & XP" icon={Star} defaultOpen>
+                    <XpLevelCard achievements={achievements} />
+                  </AppCollapsibleSection>
                 </motion.div>
 
-                {/* Level Rewards Card */}
+                {/* Level Rewards - Collapsible */}
                 <motion.div variants={fadeUp}>
-                  <LevelRewardsCard currentLevel={currentLevel} />
+                  <AppCollapsibleSection title="Recompensas por Nível" icon={Gift}>
+                    <LevelRewardsCard currentLevel={currentLevel} />
+                  </AppCollapsibleSection>
                 </motion.div>
 
+                {/* Summary - Collapsible */}
                 <motion.div variants={fadeUp}>
-                  <AchievementsSummary
-                    totalUnlocked={totalUnlocked}
-                    totalAchievements={achievements.length}
-                    categories={categories}
-                  />
+                  <AppCollapsibleSection title="Resumo das Conquistas" icon={BarChart3}>
+                    <AchievementsSummary
+                      totalUnlocked={totalUnlocked}
+                      totalAchievements={achievements.length}
+                      categories={categories}
+                    />
+                  </AppCollapsibleSection>
                 </motion.div>
 
                 {/* Filter */}
