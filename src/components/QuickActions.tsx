@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { Calendar, ShoppingBag, Clock, Gift, Crown, Brain } from "lucide-react";
+import { Calendar, ShoppingBag, Clock, Gift, Crown, Brain, QrCode, Trophy, TrendingUp, Camera } from "lucide-react";
 
 const actions = [
   {
@@ -12,44 +12,44 @@ const actions = [
     path: "/agendamento",
   },
   {
+    icon: QrCode,
+    label: "Check-in",
+    description: "Na clínica",
+    iconColor: "text-accent",
+    iconBg: "bg-accent/15",
+    path: "/checkin",
+  },
+  {
+    icon: Trophy,
+    label: "Desafios",
+    description: "Temáticos",
+    iconColor: "text-highlight",
+    iconBg: "bg-highlight/15",
+    path: "/desafios",
+  },
+  {
+    icon: Camera,
+    label: "Moments",
+    description: "Postar",
+    iconColor: "text-primary",
+    iconBg: "bg-primary/15",
+    path: "/resinkra-moments",
+  },
+  {
+    icon: TrendingUp,
+    label: "Jornada",
+    description: "Timeline",
+    iconColor: "text-accent",
+    iconBg: "bg-accent/15",
+    path: "/minha-jornada",
+  },
+  {
     icon: Crown,
     label: "VIP",
     description: "Clube",
-    iconColor: "text-accent",
-    iconBg: "bg-accent/15",
+    iconColor: "text-highlight",
+    iconBg: "bg-highlight/15",
     path: "/clube-vip",
-  },
-  {
-    icon: Brain,
-    label: "IA",
-    description: "Para você",
-    iconColor: "text-highlight",
-    iconBg: "bg-highlight/15",
-    path: "/recomendacoes",
-  },
-  {
-    icon: ShoppingBag,
-    label: "Loja",
-    description: "Produtos",
-    iconColor: "text-primary",
-    iconBg: "bg-primary/15",
-    path: "/loja",
-  },
-  {
-    icon: Clock,
-    label: "Planos",
-    description: "Horas",
-    iconColor: "text-highlight",
-    iconBg: "bg-highlight/15",
-    path: "/pacotes",
-  },
-  {
-    icon: Gift,
-    label: "Presente",
-    description: "Vale",
-    iconColor: "text-accent",
-    iconBg: "bg-accent/15",
-    path: "/vale-presente",
   },
 ];
 

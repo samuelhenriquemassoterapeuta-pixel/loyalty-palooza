@@ -1,7 +1,7 @@
 import { useState } from "react"; // v2
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, Plus, FileText, Users, Shield, Dumbbell, Sparkles, ClipboardList, StretchHorizontal, Salad, BookOpen, Stethoscope, Globe, Gift, Ticket, Crown, Building2, CreditCard, Handshake, Camera } from "lucide-react";
+import { ArrowLeft, Plus, FileText, Users, Shield, Dumbbell, Sparkles, ClipboardList, StretchHorizontal, Salad, BookOpen, Stethoscope, Globe, Gift, Ticket, Crown, Building2, CreditCard, Handshake, Camera, Trophy, DollarSign } from "lucide-react";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -34,6 +34,8 @@ import EmpresasTab from "@/components/admin/EmpresasTab";
 import AssinaturasTab from "@/components/admin/AssinaturasTab";
 import ParceirosTab from "@/components/admin/ParceirosTab";
 import SocialPostsTab from "@/components/admin/SocialPostsTab";
+import FinanceiroTab from "@/components/admin/FinanceiroTab";
+import DesafiosTab from "@/components/admin/DesafiosTab";
 
 const tabContentVariants = {
   hidden: { opacity: 0, y: 12 },
@@ -394,6 +396,14 @@ const Admin = () => {
                   <Camera size={14} />
                   Moments
                 </TabsTrigger>
+                <TabsTrigger value="financeiro" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
+                  <DollarSign size={14} />
+                  Financeiro
+                </TabsTrigger>
+                <TabsTrigger value="desafios-admin" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
+                  <Trophy size={14} />
+                  Desafios
+                </TabsTrigger>
                 <TabsTrigger value="auditoria" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
                   <FileText size={14} />
                   Auditoria
@@ -526,6 +536,14 @@ const Admin = () => {
 
               <TabsContent value="social-posts" forceMount={activeTab === "social-posts" ? true : undefined} className={activeTab !== "social-posts" ? "hidden" : ""}>
                 <SocialPostsTab />
+              </TabsContent>
+
+              <TabsContent value="financeiro" forceMount={activeTab === "financeiro" ? true : undefined} className={activeTab !== "financeiro" ? "hidden" : ""}>
+                <FinanceiroTab />
+              </TabsContent>
+
+              <TabsContent value="desafios-admin" forceMount={activeTab === "desafios-admin" ? true : undefined} className={activeTab !== "desafios-admin" ? "hidden" : ""}>
+                <DesafiosTab />
               </TabsContent>
 
               <TabsContent value="auditoria" forceMount={activeTab === "auditoria" ? true : undefined} className={activeTab !== "auditoria" ? "hidden" : ""}>
