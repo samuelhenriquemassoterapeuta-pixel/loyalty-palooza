@@ -238,7 +238,7 @@ const Protocolos = () => {
                             >
                               <Button
                                 onClick={() => navigate("/alongamento")}
-                                className="w-full gap-2 bg-highlight hover:bg-highlight/90 text-highlight-foreground rounded-xl h-12 text-sm font-semibold shadow-md"
+                                className="w-full gap-2 bg-highlight/20 hover:bg-highlight/30 text-highlight border border-highlight/30 rounded-xl h-12 text-sm font-semibold shadow-md"
                               >
                                 <Dumbbell size={18} />
                                 Acessar Exercícios de Alongamento
