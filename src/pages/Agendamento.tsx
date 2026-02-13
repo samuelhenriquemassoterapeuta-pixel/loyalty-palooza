@@ -477,9 +477,9 @@ const Agendamento = () => {
                                       e.stopPropagation();
                                       navigate(`/servico/${servico.id}`);
                                     }}
-                                    className="text-xs text-primary font-medium flex items-center gap-0.5 hover:underline"
+                                    className="text-xs text-primary font-semibold flex items-center gap-1 hover:underline underline-offset-2 active:scale-95 transition-transform px-2 py-1 rounded-lg bg-primary/10 hover:bg-primary/20"
                                   >
-                                    <Info size={12} /> Ver detalhes
+                                    <Info size={13} /> Ver detalhes
                                   </button>
                                 </div>
                               </div>
