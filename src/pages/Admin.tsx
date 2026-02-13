@@ -1,7 +1,7 @@
 import { useState } from "react"; // v2
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, Plus, FileText, Users, Shield, Dumbbell, Sparkles, ClipboardList, StretchHorizontal, Salad, BookOpen, Stethoscope, Globe, Gift, Ticket, Crown, Building2, CreditCard, Handshake, Camera, Trophy, DollarSign } from "lucide-react";
+import { ArrowLeft, Plus, FileText, Users, Shield, Dumbbell, Sparkles, ClipboardList, StretchHorizontal, Salad, BookOpen, Stethoscope, Globe, Gift, Ticket, Crown, Building2, CreditCard, Handshake, Camera, Trophy, DollarSign, CalendarDays } from "lucide-react";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -36,6 +36,7 @@ import ParceirosTab from "@/components/admin/ParceirosTab";
 import SocialPostsTab from "@/components/admin/SocialPostsTab";
 import FinanceiroTab from "@/components/admin/FinanceiroTab";
 import DesafiosTab from "@/components/admin/DesafiosTab";
+import { AgendamentosTab } from "@/components/admin/AgendamentosTab";
 
 const tabContentVariants = {
   hidden: { opacity: 0, y: 12 },
@@ -317,6 +318,10 @@ const Admin = () => {
                 <TabsTrigger value="dashboard" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap data-[state=active]:shadow-sm transition-all duration-200">
                   Dashboard
                 </TabsTrigger>
+                <TabsTrigger value="agendamentos" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
+                  <CalendarDays size={14} />
+                  Agendamentos
+                </TabsTrigger>
                 <TabsTrigger value="exercicios" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
                   <Dumbbell size={14} />
                   Exercícios
@@ -436,6 +441,10 @@ const Admin = () => {
             >
               <TabsContent value="dashboard" forceMount={activeTab === "dashboard" ? true : undefined} className={activeTab !== "dashboard" ? "hidden" : ""}>
                 <DashboardTab stats={stats} pedidos={pedidos} transacoes={transacoes} />
+              </TabsContent>
+
+              <TabsContent value="agendamentos" forceMount={activeTab === "agendamentos" ? true : undefined} className={activeTab !== "agendamentos" ? "hidden" : ""}>
+                <AgendamentosTab />
               </TabsContent>
 
               <TabsContent value="pedidos" forceMount={activeTab === "pedidos" ? true : undefined} className={activeTab !== "pedidos" ? "hidden" : ""}>
