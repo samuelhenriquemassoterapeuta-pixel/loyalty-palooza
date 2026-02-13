@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 import { DesktopSidebar } from "@/components/DesktopSidebar";
 import { BottomNavigation } from "@/components/BottomNavigation";
+import { FloatingContactButtons } from "@/components/FloatingContactButtons";
 
 interface AppLayoutProps {
   children: ReactNode;
@@ -19,6 +20,7 @@ export const AppLayout = ({ children, hideBottomNav = false }: AppLayoutProps) =
           <BottomNavigation />
         </div>
       )}
+      <FloatingContactButtons />
     </div>
   );
 };
