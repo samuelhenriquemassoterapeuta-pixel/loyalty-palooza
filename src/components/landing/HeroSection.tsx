@@ -5,7 +5,7 @@ import { useRef } from "react";
 import { Button } from "@/components/ui/button";
 import simboloVerde from "@/assets/simbolo-verde.png";
 import iconeFlor from "@/assets/icone-flor.png";
-import heroBg from "@/assets/hero-options/hero-spa-6.jpg";
+import heroBg from "@/assets/hero-options/hero-spa-resinkra.jpg";
 import { useLandingConfig } from "@/hooks/useLandingConfig";
 
 export const HeroSection = () => {
