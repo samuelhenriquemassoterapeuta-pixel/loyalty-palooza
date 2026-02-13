@@ -17,7 +17,9 @@ import { useUsuarioProtocolos, useFichas, useFotos, useMetas } from "@/hooks/use
 import { useProgressStats } from "@/hooks/useProgressStats";
 import { useAvaliacoesPosturais } from "@/hooks/useAvaliacaoPostural";
 import { useSecoesClinicas } from "@/hooks/useSecoesClinicas";
+import { useMinhaAssinatura } from "@/hooks/useAssinaturas";
 import { tipoLabels } from "./protocoloConstants";
+import { PlanRequiredBanner } from "./PlanRequiredBanner";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
@@ -36,6 +38,8 @@ interface ProtocoloDetailProps {
 
 export const ProtocoloDetail = ({ protocolo, onBack }: ProtocoloDetailProps) => {
   const { meus, ativar, atualizarStatus } = useUsuarioProtocolos();
+  const { data: assinatura } = useMinhaAssinatura();
+  const hasActivePlan = !!assinatura;
   const [tab, setTab] = useState("progresso");
   const isPostural = protocolo.tipo === "postural";
   const chartRef = useRef<HTMLDivElement>(null);
@@ -154,43 +158,48 @@ export const ProtocoloDetail = ({ protocolo, onBack }: ProtocoloDetailProps) => 
         )}
 
         {/* Action buttons */}
-        <div className="flex gap-2">
-          {!meuProtocolo && (
-            <Button
-              onClick={() => ativar.mutate(protocolo.id)}
-              disabled={ativar.isPending}
-              className="flex-1 gap-1.5"
-            >
-              <Play size={16} /> Iniciar Protocolo
-            </Button>
-          )}
-          {isAtivo && (
-            <>
+        {!meuProtocolo && !hasActivePlan && (
+          <PlanRequiredBanner />
+        )}
+        {(!meuProtocolo && hasActivePlan || meuProtocolo) && (
+          <div className="flex gap-2">
+            {!meuProtocolo && hasActivePlan && (
               <Button
-                variant="outline"
-                onClick={() => atualizarStatus.mutate({ id: meuProtocolo.id, status: "pausado" })}
+                onClick={() => ativar.mutate(protocolo.id)}
+                disabled={ativar.isPending}
                 className="flex-1 gap-1.5"
               >
-                <Pause size={16} /> Pausar
+                <Play size={16} /> Iniciar Protocolo
               </Button>
+            )}
+            {isAtivo && (
+              <>
+                <Button
+                  variant="outline"
+                  onClick={() => atualizarStatus.mutate({ id: meuProtocolo!.id, status: "pausado" })}
+                  className="flex-1 gap-1.5"
+                >
+                  <Pause size={16} /> Pausar
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => atualizarStatus.mutate({ id: meuProtocolo!.id, status: "concluido" })}
+                  className="gap-1.5"
+                >
+                  <CheckCircle size={16} /> Concluir
+                </Button>
+              </>
+            )}
+            {isPausado && (
               <Button
-                variant="outline"
-                onClick={() => atualizarStatus.mutate({ id: meuProtocolo.id, status: "concluido" })}
-                className="gap-1.5"
+                onClick={() => atualizarStatus.mutate({ id: meuProtocolo!.id, status: "ativo" })}
+                className="flex-1 gap-1.5"
               >
-                <CheckCircle size={16} /> Concluir
+                <Play size={16} /> Retomar
               </Button>
-            </>
-          )}
-          {isPausado && (
-            <Button
-              onClick={() => atualizarStatus.mutate({ id: meuProtocolo.id, status: "ativo" })}
-              className="flex-1 gap-1.5"
-            >
-              <Play size={16} /> Retomar
-            </Button>
-          )}
-        </div>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Tabs with compact summary badges */}
