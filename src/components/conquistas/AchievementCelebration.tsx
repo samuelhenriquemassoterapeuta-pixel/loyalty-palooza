@@ -17,9 +17,8 @@ const ConfettiParticle = ({ index }: { index: number }) => {
       "hsl(var(--accent))",
       "hsl(var(--highlight))",
       "hsl(var(--warning))",
-      "#FFD700",
-      "#FF6B6B",
-      "#4ECDC4",
+      "hsl(var(--secondary))",
+      "hsl(var(--muted-foreground))",
     ];
     return {
       left: `${Math.random() * 100}%`,
@@ -66,11 +65,11 @@ const ConfettiParticle = ({ index }: { index: number }) => {
 };
 
 const categoryGradients: Record<string, string> = {
-  agendamento: "from-blue-500 to-blue-700",
-  cashback: "from-emerald-500 to-emerald-700",
-  protocolo: "from-amber-500 to-amber-700",
-  social: "from-purple-500 to-purple-700",
-  loja: "from-pink-500 to-pink-700",
+  agendamento: "from-primary to-primary/80",
+  cashback: "from-accent to-accent/80",
+  protocolo: "from-highlight to-highlight/80",
+  social: "from-primary to-accent",
+  loja: "from-highlight to-primary",
 };
 
 export const AchievementCelebration = ({
