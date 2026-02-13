@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import { motion } from "framer-motion";
-import { ArrowLeft, Play, Pause, CheckCircle, Zap, BarChart3, Camera, ClipboardList, BookOpen } from "lucide-react";
+import { ArrowLeft, Play, Pause, CheckCircle, Zap, BarChart3, Camera, ClipboardList, BookOpen, FileUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -12,6 +12,7 @@ import { FichaAcompanhamento } from "./FichaAcompanhamento";
 import { GaleriaEvolucao } from "./GaleriaEvolucao";
 import { GuiaResumoProtocolo } from "./GuiaResumoProtocolo";
 import { SecoesClinicasView } from "./SecoesClinicasView";
+import { ExamesSection } from "./ExamesSection";
 import { useUsuarioProtocolos, useFichas, useFotos, useMetas } from "@/hooks/useProtocolos";
 import { useProgressStats } from "@/hooks/useProgressStats";
 import { useAvaliacoesPosturais } from "@/hooks/useAvaliacaoPostural";
@@ -196,8 +197,8 @@ export const ProtocoloDetail = ({ protocolo, onBack }: ProtocoloDetailProps) => 
       <Tabs value={tab} onValueChange={setTab} className="w-full">
         <TabsList className={`w-full grid ${
           meuProtocolo 
-            ? hasSecoes ? "grid-cols-4" : "grid-cols-3"
-            : hasSecoes ? "grid-cols-2" : "grid-cols-1"
+            ? hasSecoes ? "grid-cols-5" : "grid-cols-4"
+            : hasSecoes ? "grid-cols-3" : "grid-cols-2"
         }`}>
           {meuProtocolo && (
             <>
@@ -235,6 +236,10 @@ export const ProtocoloDetail = ({ protocolo, onBack }: ProtocoloDetailProps) => 
               📋 Guia
             </TabsTrigger>
           )}
+          <TabsTrigger value="exames" className="text-xs gap-1">
+            <FileUp size={13} />
+            <span className="hidden sm:inline">Exames</span>
+          </TabsTrigger>
           {hasSecoes && (
             <TabsTrigger value="clinico" className="text-xs gap-1">
               <BookOpen size={13} />
@@ -296,6 +301,10 @@ export const ProtocoloDetail = ({ protocolo, onBack }: ProtocoloDetailProps) => 
             <SecoesClinicasView protocoloId={protocolo.id} />
           </TabsContent>
         )}
+
+        <TabsContent value="exames" className="mt-4">
+          <ExamesSection protocoloUsuarioId={meuProtocolo?.id} />
+        </TabsContent>
       </Tabs>
     </motion.div>
   );
