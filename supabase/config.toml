@@ -26,3 +26,12 @@ verify_jwt = false
 
 [functions.enviar-campanha]
 verify_jwt = false
+
+[functions.asaas-criar-cobranca]
+verify_jwt = false
+
+[functions.asaas-webhook]
+verify_jwt = false
+
+[functions.asaas-status]
+verify_jwt = false

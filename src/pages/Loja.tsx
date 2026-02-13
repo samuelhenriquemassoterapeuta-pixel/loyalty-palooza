@@ -16,6 +16,7 @@ import { CarrinhoSheet } from "@/components/loja/CarrinhoSheet";
 import { ProdutosGridSkeleton, PedidosListSkeleton } from "@/components/skeletons";
 import { AppLayout } from "@/components/AppLayout";
 import { useLevelBenefits } from "@/hooks/useLevelBenefits";
+import { PaymentDialog } from "@/components/pagamento/PaymentDialog";
 
 interface CarrinhoItem {
   produto: Produto;
@@ -54,6 +55,8 @@ export default function Loja() {
   const [carrinhoOpen, setCarrinhoOpen] = useState(false);
   const [busca, setBusca] = useState("");
   const [usarCashback, setUsarCashback] = useState(false);
+  const [paymentOpen, setPaymentOpen] = useState(false);
+  const [pendingPedido, setPendingPedido] = useState<{ pedidoId: string; total: number; valorCashback: number; usarCashbackNoPedido: boolean } | null>(null);
 
   const produtosFiltrados = produtos
     .filter(p => categoriaAtiva === "todos" || p.categoria === categoriaAtiva)
@@ -145,15 +148,37 @@ export default function Loja() {
     }
 
     setSaving(false);
+    setCarrinhoOpen(false);
+
+    // Open payment dialog if there's a remaining total to pay
+    if (totalComDesconto > 0 && pedidoId) {
+      setPendingPedido({
+        pedidoId,
+        total: totalComDesconto,
+        valorCashback: valorCashbackUsado,
+        usarCashbackNoPedido,
+      });
+      setPaymentOpen(true);
+    } else {
+      // Free order (fully covered by cashback)
+      toast({
+        title: "Pedido reservado! ✅",
+        description: "Pedido coberto pelo cashback! Retire na clínica.",
+      });
+      setCarrinho([]);
+      setUsarCashback(false);
+      setActiveTab("pedidos");
+    }
+  };
+
+  const handlePaymentSuccess = () => {
     toast({
-      title: "Pedido reservado! ✅",
-      description: valorCashbackUsado > 0 
-        ? `Você economizou R$ ${valorCashbackUsado.toFixed(2).replace('.', ',')} com cashback!`
-        : "Retire seus produtos na clínica.",
+      title: "Pagamento enviado! ✅",
+      description: "Acompanhe o status do seu pedido.",
     });
     setCarrinho([]);
-    setCarrinhoOpen(false);
     setUsarCashback(false);
+    setPendingPedido(null);
     setActiveTab("pedidos");
   };
 
@@ -461,6 +486,21 @@ export default function Loja() {
         )}
       </div>
 
+      {/* Payment Dialog */}
+      {pendingPedido && (
+        <PaymentDialog
+          open={paymentOpen}
+          onOpenChange={(open) => {
+            setPaymentOpen(open);
+            if (!open) setPendingPedido(null);
+          }}
+          value={pendingPedido.total}
+          description={`Pedido #${pendingPedido.pedidoId.slice(0, 8)}`}
+          tipoReferencia="pedido"
+          referenciaId={pendingPedido.pedidoId}
+          onPaymentSuccess={handlePaymentSuccess}
+        />
+      )}
     </div>
     </AppLayout>
   );
