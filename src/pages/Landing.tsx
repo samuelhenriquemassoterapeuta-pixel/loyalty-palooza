@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { Building2, ArrowRight } from "lucide-react";
+import { FloatingContactButtons } from "@/components/FloatingContactButtons";
 import { LandingHeader } from "@/components/landing/LandingHeader";
 import { HeroSection } from "@/components/landing/HeroSection";
 import { ServicosSection } from "@/components/landing/ServicosSection";
@@ -67,6 +68,7 @@ const Landing = () => {
       <SobreSection />
       <ContatoSection />
       <LandingFooter />
+      <FloatingContactButtons />
     </div>
   );
 };

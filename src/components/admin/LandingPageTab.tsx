@@ -101,7 +101,8 @@ const SectionEditor = ({ secao, conteudo, onSave }: { secao: string; conteudo: a
           <div><Label>Endereço</Label><Input value={form.endereco || ""} onChange={e => update("endereco", e.target.value)} /></div>
           <div><Label>Telefone</Label><Input value={form.telefone || ""} onChange={e => update("telefone", e.target.value)} /></div>
           <div><Label>Email</Label><Input value={form.email || ""} onChange={e => update("email", e.target.value)} /></div>
-          <div><Label>Instagram</Label><Input value={form.instagram || ""} onChange={e => update("instagram", e.target.value)} /></div>
+          <div><Label>Instagram (@)</Label><Input placeholder="@resinkra" value={form.instagram || ""} onChange={e => update("instagram", e.target.value)} /></div>
+          <div className="col-span-2"><Label>WhatsApp (número com DDD e código do país)</Label><Input placeholder="5511999999999" value={form.whatsapp || ""} onChange={e => update("whatsapp", e.target.value)} /><p className="text-[10px] text-muted-foreground mt-1">Ex: 5511999999999 — usado nos botões flutuantes de contato</p></div>
         </div>
         <Button onClick={handleSave} disabled={saving} className="w-full"><Save className="w-4 h-4 mr-2" />{saving ? "Salvando..." : "Salvar Contato"}</Button>
       </div>
