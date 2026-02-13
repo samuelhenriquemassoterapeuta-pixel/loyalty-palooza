@@ -139,10 +139,6 @@ const ResinkraMoments = () => {
       toast.error("Cole o link do post ou envie uma foto/screenshot");
       return;
     }
-    if (!agendamentoId) {
-      toast.error("Selecione a visita relacionada");
-      return;
-    }
     setEnviando(true);
     try {
       let screenshotUrl: string | null = null;
@@ -156,7 +152,7 @@ const ResinkraMoments = () => {
         link_post: linkPost.trim() || undefined,
         screenshot_url: screenshotUrl || undefined,
         descricao: descricao.trim() || undefined,
-        agendamento_id: agendamentoId,
+        agendamento_id: agendamentoId || undefined,
       });
       toast.success("Post enviado para aprovação! 📸");
       setLinkPost("");
@@ -266,29 +262,24 @@ const ResinkraMoments = () => {
             <motion.div variants={fadeUp} className="space-y-2.5">
               <p className="section-label px-1">Enviar post</p>
               <div className="p-4 rounded-2xl glass-card-strong space-y-3">
-                {agendamentosDisponiveis.length === 0 ? (
-                  <div className="text-center py-4">
-                    <Sparkles className="mx-auto text-muted-foreground mb-2" size={24} />
-                    <p className="text-sm text-muted-foreground">Nenhuma visita disponível para vincular</p>
-                    <p className="text-xs text-muted-foreground mt-1">Complete um agendamento primeiro</p>
-                  </div>
-                ) : (
                   <>
-                    <div>
-                      <label className="text-xs text-muted-foreground mb-1 block">Visita relacionada</label>
-                      <Select value={agendamentoId} onValueChange={setAgendamentoId}>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Selecione a visita" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {agendamentosDisponiveis.map((a: any) => (
-                            <SelectItem key={a.id} value={a.id}>
-                              {a.servico} — {new Date(a.data_hora).toLocaleDateString("pt-BR")}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
+                    {agendamentosDisponiveis.length > 0 && (
+                      <div>
+                        <label className="text-xs text-muted-foreground mb-1 block">Visita relacionada (opcional)</label>
+                        <Select value={agendamentoId} onValueChange={setAgendamentoId}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Selecione a visita" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {agendamentosDisponiveis.map((a: any) => (
+                              <SelectItem key={a.id} value={a.id}>
+                                {a.servico} — {new Date(a.data_hora).toLocaleDateString("pt-BR")}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    )}
 
                     <div>
                       <label className="text-xs text-muted-foreground mb-1 block">Plataforma</label>
@@ -406,7 +397,6 @@ const ResinkraMoments = () => {
                       </p>
                     )}
                   </>
-                )}
               </div>
             </motion.div>
 
