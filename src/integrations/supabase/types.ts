@@ -2700,6 +2700,20 @@ export type Database = {
         }[]
       }
       get_empresa_stats: { Args: { p_empresa_id: string }; Returns: Json }
+      get_terapeuta_cartao: {
+        Args: { terapeuta_uuid: string }
+        Returns: {
+          disponivel: boolean
+          email: string
+          especialidade: string
+          foto_url: string
+          id: string
+          media_avaliacoes: number
+          nome: string
+          telefone: string
+          total_avaliacoes: number
+        }[]
+      }
       get_terapeutas_publicos: {
         Args: never
         Returns: {
