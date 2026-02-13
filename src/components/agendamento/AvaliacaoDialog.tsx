@@ -1,16 +1,17 @@
- import { useState } from "react";
- import { Star } from "lucide-react";
- import { Button } from "@/components/ui/button";
- import { Textarea } from "@/components/ui/textarea";
- import {
-   Dialog,
-   DialogContent,
-   DialogDescription,
-   DialogFooter,
-   DialogHeader,
-   DialogTitle,
- } from "@/components/ui/dialog";
- import { ButtonLoader } from "@/components/LoadingSpinner";
+import { useState } from "react";
+import { Star } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { ButtonLoader } from "@/components/LoadingSpinner";
+import { GoogleReviewPrompt } from "@/components/GoogleReviewPrompt";
  
  interface AvaliacaoDialogProps {
    open: boolean;
@@ -27,28 +28,38 @@
    terapeutaNome,
    onSubmit,
  }: AvaliacaoDialogProps) => {
-   const [nota, setNota] = useState(0);
-   const [hoveredNota, setHoveredNota] = useState(0);
-   const [comentario, setComentario] = useState("");
-   const [saving, setSaving] = useState(false);
- 
-   const handleSubmit = async () => {
-     if (nota === 0) return;
-     
-     setSaving(true);
-     await onSubmit(nota, comentario.trim() || undefined);
-     setSaving(false);
-     
-     // Reset form
-     setNota(0);
-     setComentario("");
-     onOpenChange(false);
-   };
+  const [nota, setNota] = useState(0);
+  const [hoveredNota, setHoveredNota] = useState(0);
+  const [comentario, setComentario] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [showGooglePrompt, setShowGooglePrompt] = useState(false);
+  const [submittedNota, setSubmittedNota] = useState(0);
+
+  const handleSubmit = async () => {
+    if (nota === 0) return;
+    
+    setSaving(true);
+    await onSubmit(nota, comentario.trim() || undefined);
+    setSaving(false);
+    
+    const finalNota = nota;
+    // Reset form
+    setNota(0);
+    setComentario("");
+    onOpenChange(false);
+
+    // Show Google review prompt for good ratings
+    if (finalNota >= 4) {
+      setSubmittedNota(finalNota);
+      setTimeout(() => setShowGooglePrompt(true), 400);
+    }
+  };
  
    const displayNota = hoveredNota || nota;
  
-   return (
-     <Dialog open={open} onOpenChange={onOpenChange}>
+    return (
+      <>
+      <Dialog open={open} onOpenChange={onOpenChange}>
        <DialogContent className="sm:max-w-md">
          <DialogHeader>
            <DialogTitle>Avaliar atendimento</DialogTitle>
@@ -114,7 +125,14 @@
              {saving ? <ButtonLoader /> : "Enviar avaliação"}
            </Button>
          </DialogFooter>
-       </DialogContent>
-     </Dialog>
-   );
- };
+        </DialogContent>
+      </Dialog>
+
+      <GoogleReviewPrompt
+        open={showGooglePrompt}
+        onOpenChange={setShowGooglePrompt}
+        nota={submittedNota}
+      />
+    </>
+  );
+};
