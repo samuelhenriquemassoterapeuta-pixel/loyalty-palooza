@@ -91,19 +91,56 @@
            tipo: "lembrete",
          });
  
-       if (insertError) {
-         console.error(`Erro ao criar notificação para ${agendamento.id}:`, insertError);
-       } else {
-         notificacoesEnviadas++;
-         console.log(`Lembrete enviado para agendamento ${agendamento.id}`);
-       }
-     }
- 
-     return new Response(
-       JSON.stringify({
-         success: true,
-         message: `${notificacoesEnviadas} lembretes enviados`,
-       }),
+        if (insertError) {
+          console.error(`Erro ao criar notificação para ${agendamento.id}:`, insertError);
+        } else {
+          notificacoesEnviadas++;
+          console.log(`Lembrete enviado para agendamento ${agendamento.id}`);
+
+          // Enviar também via WhatsApp se o usuário tiver telefone
+          const { data: profile } = await supabase
+            .from("profiles")
+            .select("telefone, nome")
+            .eq("id", agendamento.user_id)
+            .maybeSingle();
+
+          if (profile?.telefone) {
+            try {
+              const whatsappMsg = `Olá${profile.nome ? `, ${profile.nome.split(' ')[0]}` : ''}! 🌿\n\n` +
+                `Lembrete: sua sessão de *${agendamento.servico}* está agendada para *${dataFormatada}* às *${horaFormatada}*.\n\n` +
+                `${terapeutaNome ? `Terapeuta: ${terapeutaNome}\n\n` : ''}` +
+                `Caso precise reagendar, acesse o app ou entre em contato conosco.\n\n` +
+                `✨ Resinkra — Seu bem-estar em primeiro lugar`;
+
+              await fetch(`${supabaseUrl}/functions/v1/enviar-whatsapp`, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  "Authorization": `Bearer ${supabaseServiceKey}`,
+                },
+                body: JSON.stringify({
+                  telefone: profile.telefone,
+                  mensagem: whatsappMsg,
+                  tipo: "lembrete_agendamento",
+                  user_id: agendamento.user_id,
+                  referencia_id: agendamento.id,
+                  referencia_tipo: "agendamento",
+                }),
+              });
+
+              console.log(`WhatsApp lembrete enviado para agendamento ${agendamento.id}`);
+            } catch (whatsappError) {
+              console.error(`Erro ao enviar WhatsApp para agendamento ${agendamento.id}:`, whatsappError);
+            }
+          }
+        }
+      }
+  
+      return new Response(
+        JSON.stringify({
+          success: true,
+          message: `${notificacoesEnviadas} lembretes enviados`,
+        }),
        {
          status: 200,
          headers: { "Content-Type": "application/json", ...corsHeaders },

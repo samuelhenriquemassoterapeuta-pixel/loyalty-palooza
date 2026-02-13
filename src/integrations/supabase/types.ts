@@ -2555,6 +2555,56 @@ export type Database = {
         }
         Relationships: []
       }
+      whatsapp_logs: {
+        Row: {
+          created_at: string
+          enviado_em: string | null
+          erro: string | null
+          id: string
+          mensagem: string
+          referencia_id: string | null
+          referencia_tipo: string | null
+          status: string
+          telefone: string
+          tipo: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          enviado_em?: string | null
+          erro?: string | null
+          id?: string
+          mensagem: string
+          referencia_id?: string | null
+          referencia_tipo?: string | null
+          status?: string
+          telefone: string
+          tipo?: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          enviado_em?: string | null
+          erro?: string | null
+          id?: string
+          mensagem?: string
+          referencia_id?: string | null
+          referencia_tipo?: string | null
+          status?: string
+          telefone?: string
+          tipo?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "whatsapp_logs_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never

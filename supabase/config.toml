@@ -17,3 +17,6 @@ verify_jwt = false
 
 [functions.notificacoes-inteligentes]
 verify_jwt = false
+
+[functions.enviar-whatsapp]
+verify_jwt = false
