@@ -135,14 +135,32 @@ export const CupomExportMenu = ({ cupomRef, formato, formatoLabel, disabled, var
         });
         toast.success("Compartilhado com sucesso!");
       } else if (target === "whatsapp") {
-        // Download first, then open WhatsApp
-        downloadBlob(blob, `cupom-resinkra-${formato}.png`);
-        const text = encodeURIComponent("Confira este cupom especial da Resinkra! 🎟️✨");
-        window.open(`https://wa.me/?text=${text}`, "_blank");
-        toast.success("Imagem baixada! Cole no WhatsApp 💬");
+        // Try native share with file first (works on mobile)
+        if (navigator.share && navigator.canShare?.({ files: [file] })) {
+          await navigator.share({
+            title: "Cupom Resinkra",
+            text: "Confira este cupom especial da Resinkra! 🎟️✨",
+            files: [file],
+          });
+          toast.success("Compartilhado com sucesso!");
+        } else {
+          // Fallback: download + open WhatsApp Web
+          downloadBlob(blob, `cupom-resinkra-${formato}.png`);
+          const text = encodeURIComponent("Confira este cupom especial da Resinkra! 🎟️✨");
+          window.open(`https://wa.me/?text=${text}`, "_blank");
+          toast.success("Imagem baixada! Cole no WhatsApp 💬");
+        }
       } else if (target === "instagram") {
-        downloadBlob(blob, `cupom-resinkra-${formato}.png`);
-        toast.success("Imagem baixada! Abra o Instagram e adicione aos Stories 📸");
+        if (navigator.share && navigator.canShare?.({ files: [file] })) {
+          await navigator.share({
+            title: "Cupom Resinkra",
+            files: [file],
+          });
+          toast.success("Compartilhado com sucesso!");
+        } else {
+          downloadBlob(blob, `cupom-resinkra-${formato}.png`);
+          toast.success("Imagem baixada! Abra o Instagram e adicione aos Stories 📸");
+        }
       } else {
         // Fallback: try native share without file
         if (navigator.share) {
