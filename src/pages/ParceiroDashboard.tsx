@@ -267,8 +267,17 @@ const ParceiroDashboard = () => {
                         </Select>
                       </div>
                       <div>
-                        <Label className="text-xs">Valor</Label>
-                        <Input type="number" value={novoCupom.valor_desconto} onChange={(e) => setNovoCupom(p => ({ ...p, valor_desconto: e.target.value }))} />
+                        <Label className="text-xs">Valor {novoCupom.tipo_desconto === "percentual" ? "(máx. 30%)" : ""}</Label>
+                        <Input
+                          type="number"
+                          value={novoCupom.valor_desconto}
+                          max={novoCupom.tipo_desconto === "percentual" ? 30 : undefined}
+                          onChange={(e) => {
+                            let val = e.target.value;
+                            if (novoCupom.tipo_desconto === "percentual" && Number(val) > 30) val = "30";
+                            setNovoCupom(p => ({ ...p, valor_desconto: val }));
+                          }}
+                        />
                       </div>
                     </div>
                     <div className="grid grid-cols-2 gap-3">
@@ -281,6 +290,7 @@ const ParceiroDashboard = () => {
                         <Input type="date" value={novoCupom.valido_ate} onChange={(e) => setNovoCupom(p => ({ ...p, valido_ate: e.target.value }))} />
                       </div>
                     </div>
+                    <p className="text-[10px] text-muted-foreground">⚠️ Cupons de parceiro não são válidos para planos e pacotes.</p>
                     <Button onClick={handleCriarCupom} disabled={criarCupom.isPending} className="w-full">
                       {criarCupom.isPending ? "Criando..." : "Criar Cupom"}
                     </Button>
