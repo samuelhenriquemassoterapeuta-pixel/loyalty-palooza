@@ -7,6 +7,8 @@ interface AnimatedCounterProps {
   format?: (n: number) => string;
   /** Duration in seconds (default 1.2) */
   duration?: number;
+  /** Delay in ms before starting animation (default 0) */
+  startDelay?: number;
   /** Extra className on the <span> */
   className?: string;
 }
@@ -19,11 +21,12 @@ export const AnimatedCounter = forwardRef<HTMLSpanElement, AnimatedCounterProps>
   value,
   format,
   duration = 1.2,
+  startDelay = 0,
   className = "",
 }, forwardedRef) => {
   const internalRef = useRef<HTMLSpanElement>(null);
   const ref = (forwardedRef as React.RefObject<HTMLSpanElement>) || internalRef;
-  const isInView = useInView(ref, { once: true, margin: "-40px" });
+  const isInView = useInView(ref, { once: true, amount: 0 });
   const [displayValue, setDisplayValue] = useState(0);
   const rafRef = useRef<number | null>(null);
   const startTimeRef = useRef<number | null>(null);
@@ -50,15 +53,22 @@ export const AnimatedCounter = forwardRef<HTMLSpanElement, AnimatedCounterProps>
   }, [value, duration]);
 
   useEffect(() => {
-    if (isInView && value !== 0) {
-      startTimeRef.current = null;
-      rafRef.current = requestAnimationFrame(animate);
+    const trigger = isInView || startDelay > 0;
+    if (trigger && value !== 0) {
+      const timeout = setTimeout(() => {
+        startTimeRef.current = null;
+        rafRef.current = requestAnimationFrame(animate);
+      }, startDelay);
+      return () => {
+        clearTimeout(timeout);
+        if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      };
     }
 
     return () => {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
-  }, [isInView, value, animate]);
+  }, [isInView, value, animate, startDelay]);
 
   // If value is 0, just show it directly
   const finalValue = value === 0 ? 0 : displayValue;

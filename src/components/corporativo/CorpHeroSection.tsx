@@ -1,12 +1,14 @@
 import { motion } from "framer-motion";
 import { ArrowRight, Building2, Users, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { AnimatedCounter } from "@/components/ui/animated-counter";
 import corpHeroBg from "@/assets/corporativo-hero.jpg";
+import videoBemEstar from "@/assets/corporativo/video-bem-estar.mp4";
 
 const stats = [
-  { icon: Building2, value: "150+", label: "Empresas atendidas" },
-  { icon: Users, value: "12.000+", label: "Colaboradores beneficiados" },
-  { icon: TrendingUp, value: "34%", label: "Redução em afastamentos" },
+  { icon: Building2, value: 150, suffix: "+", label: "Empresas atendidas" },
+  { icon: Users, value: 12000, suffix: "+", label: "Colaboradores beneficiados", format: (n: number) => n.toLocaleString("pt-BR") },
+  { icon: TrendingUp, value: 34, suffix: "%", label: "Redução em afastamentos" },
 ];
 
 export const CorpHeroSection = () => {
@@ -20,10 +22,18 @@ export const CorpHeroSection = () => {
 
   return (
     <section className="relative pt-24 lg:pt-32 pb-16 lg:pb-24 overflow-hidden">
-      {/* Background image with overlay */}
+      {/* Background video with image fallback */}
       <div className="absolute inset-0">
-        <img src={corpHeroBg} alt="" className="w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-background/55" />
+        <video
+          src={videoBemEstar}
+          autoPlay
+          muted
+          loop
+          playsInline
+          poster={corpHeroBg}
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-background/60" />
       </div>
       <div className="absolute inset-0 gradient-hero opacity-40" />
       <div className="absolute top-20 right-0 w-72 h-72 bg-primary/5 rounded-full blur-3xl" />
@@ -46,7 +56,7 @@ export const CorpHeroSection = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground leading-tight [text-shadow:0_2px_8px_rgba(0,0,0,0.1)]"
+            className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground leading-tight [text-shadow:0_2px_8px_rgba(0,0,0,0.15)]"
           >
             Bem-estar corporativo que{" "}
             <span className="font-serif italic text-gradient">transforma resultados</span>
@@ -56,7 +66,7 @@ export const CorpHeroSection = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="mt-6 text-lg text-foreground/90 leading-relaxed max-w-2xl [text-shadow:0_1px_3px_rgba(0,0,0,0.08)]"
+            className="mt-6 text-lg text-foreground/90 leading-relaxed max-w-2xl [text-shadow:0_1px_3px_rgba(0,0,0,0.1)]"
           >
             Massoterapia corporativa para eventos, escritórios e programas de qualidade de vida. 
             Reduza o estresse da equipe, aumente a produtividade e promova saúde no ambiente de trabalho.
@@ -78,7 +88,7 @@ export const CorpHeroSection = () => {
           </motion.div>
         </div>
 
-        {/* Stats */}
+        {/* Animated Stats */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -94,7 +104,15 @@ export const CorpHeroSection = () => {
                 <stat.icon size={22} className="text-primary" />
               </div>
               <div>
-                <p className="text-2xl font-bold text-foreground">{stat.value}</p>
+                <p className="text-2xl font-bold text-foreground">
+                  <AnimatedCounter
+                    value={stat.value}
+                    format={stat.format}
+                    duration={1.5}
+                    startDelay={800}
+                  />
+                  {stat.suffix}
+                </p>
                 <p className="text-sm text-muted-foreground">{stat.label}</p>
               </div>
             </div>
