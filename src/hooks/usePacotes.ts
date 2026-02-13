@@ -90,24 +90,26 @@ export const useMeusPacotes = () => {
     }
   };
 
-  const comprarPacote = async (pacoteId: string, validadeDias: number) => {
+  const comprarPacote = async (pacoteId: string, validadeDias: number): Promise<{ error: Error | null; data?: any }> => {
     if (!user) return { error: new Error("Usuário não autenticado") };
 
     try {
       const dataValidade = new Date();
       dataValidade.setDate(dataValidade.getDate() + validadeDias);
 
-      const { error } = await supabase
+      const { data, error } = await supabase
         .from("pacotes_usuario")
         .insert({
           user_id: user.id,
           pacote_id: pacoteId,
           data_validade: dataValidade.toISOString(),
-        });
+        })
+        .select()
+        .single();
 
       if (error) throw error;
       await fetchMeusPacotes();
-      return { error: null };
+      return { error: null, data };
     } catch (err: unknown) {
       return { error: err as Error };
     }
