@@ -1,16 +1,15 @@
-import { useState, useRef, useCallback } from "react";
-import { ArrowLeft, Download, Image, FileText, Printer, Sparkles } from "lucide-react";
+import { useState, useRef } from "react";
+import { ArrowLeft, Image, FileText, Printer, Sparkles, Monitor, BookOpen } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CupomVisual, CupomData, estiloOptions } from "@/components/cupom/CupomVisual";
-import { toast } from "sonner";
-import html2canvas from "html2canvas";
+import { CupomExportMenu } from "@/components/cupom/CupomExportMenu";
 
 const defaultCupom: CupomData = {
   titulo: "Drenagem Linfática",
@@ -26,50 +25,22 @@ const defaultCupom: CupomData = {
 const formatoLabels = {
   stories: { label: "Stories", icon: Image, desc: "1080×1920" },
   feed: { label: "Feed", icon: FileText, desc: "1080×1080" },
-  impressao: { label: "Impressão", icon: Printer, desc: "Horizontal" },
+  impressao: { label: "Impressão", icon: Printer, desc: "600×400" },
+  banner: { label: "Banner", icon: Monitor, desc: "1200×628" },
+  flyer: { label: "Flyer A5", icon: BookOpen, desc: "A5" },
 };
 
 const CupomEditor = () => {
   const navigate = useNavigate();
   const cupomRef = useRef<HTMLDivElement>(null);
   const [cupom, setCupom] = useState<CupomData>(defaultCupom);
-  const [formato, setFormato] = useState<"stories" | "feed" | "impressao">("stories");
-  const [exporting, setExporting] = useState(false);
+  const [formato, setFormato] = useState<keyof typeof formatoLabels>("stories");
 
   const update = (field: keyof CupomData, value: string) => {
     setCupom((prev) => ({ ...prev, [field]: value }));
   };
 
-  const exportAsImage = useCallback(async () => {
-    if (!cupomRef.current || exporting) return;
-    setExporting(true);
-
-    try {
-      const el = cupomRef.current;
-      const exportWidth = parseInt(el.getAttribute("data-export-width") || "1080");
-      const exportHeight = parseInt(el.getAttribute("data-export-height") || "1920");
-      const scale = exportWidth / el.offsetWidth;
-
-      const canvas = await html2canvas(el, {
-        scale,
-        useCORS: true,
-        backgroundColor: null,
-        width: el.offsetWidth,
-        height: el.offsetHeight,
-      });
-
-      const link = document.createElement("a");
-      link.download = `cupom-resinkra-${formato}-${Date.now()}.png`;
-      link.href = canvas.toDataURL("image/png");
-      link.click();
-
-      toast.success("Cupom exportado com sucesso! 🎟️");
-    } catch {
-      toast.error("Erro ao exportar cupom");
-    } finally {
-      setExporting(false);
-    }
-  }, [formato, exporting]);
+  
 
   return (
     <div className="min-h-screen bg-background">
@@ -83,10 +54,7 @@ const CupomEditor = () => {
             <Sparkles className="w-5 h-5 text-accent" />
             Editor de Cupom
           </h1>
-          <Button onClick={exportAsImage} size="sm" className="gap-2 bg-primary text-primary-foreground" disabled={exporting}>
-            <Download size={16} />
-            {exporting ? "..." : "PNG"}
-          </Button>
+          <CupomExportMenu cupomRef={cupomRef} formato={formato} formatoLabel={formatoLabels[formato].label} variant="header" />
         </div>
       </header>
 
@@ -188,7 +156,7 @@ const CupomEditor = () => {
             <CardContent>
               {/* Format tabs */}
               <Tabs value={formato} onValueChange={(v) => setFormato(v as any)} className="mb-4">
-                <TabsList className="grid grid-cols-3 w-full">
+                <TabsList className="grid grid-cols-5 w-full">
                   {Object.entries(formatoLabels).map(([key, { label, icon: Icon, desc }]) => (
                     <TabsTrigger key={key} value={key} className="gap-1 text-xs">
                       <Icon className="w-3.5 h-3.5" />
@@ -208,13 +176,7 @@ const CupomEditor = () => {
             </CardContent>
           </Card>
 
-          {/* Export button (mobile) */}
-          <div className="fixed bottom-20 left-3 right-3 lg:hidden z-20">
-            <Button onClick={exportAsImage} className="w-full gap-2 bg-primary text-primary-foreground shadow-elevated" size="lg" disabled={exporting}>
-              <Download size={18} />
-              {exporting ? "Exportando..." : `Baixar ${formatoLabels[formato].label} como PNG`}
-            </Button>
-          </div>
+          <CupomExportMenu cupomRef={cupomRef} formato={formato} formatoLabel={formatoLabels[formato].label} variant="mobile" />
         </div>
       </div>
     </div>
