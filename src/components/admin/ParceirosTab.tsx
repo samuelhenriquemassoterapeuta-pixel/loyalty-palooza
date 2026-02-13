@@ -72,7 +72,14 @@ const ParceirosTab = () => {
       setDialogOpen(false);
       resetForm();
     },
-    onError: (err: any) => toast.error(err.message),
+    onError: (err: any) => {
+      const msg = err.message || "";
+      if (msg.includes("parceiros_user_id_key")) {
+        toast.error("Este usuário já está cadastrado como parceiro.");
+      } else {
+        toast.error(msg || "Erro ao cadastrar parceiro.");
+      }
+    },
   });
 
   const toggleVerificado = useMutation({
