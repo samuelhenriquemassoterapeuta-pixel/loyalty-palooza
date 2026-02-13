@@ -2010,6 +2010,107 @@ export type Database = {
           },
         ]
       }
+      social_posts: {
+        Row: {
+          agendamento_id: string | null
+          aprovado_em: string | null
+          aprovado_por: string | null
+          cashback_valor: number
+          created_at: string
+          descricao: string | null
+          id: string
+          link_post: string | null
+          motivo_rejeicao: string | null
+          plataforma: string
+          screenshot_url: string | null
+          status: string
+          tipo_post: string
+          updated_at: string
+          user_id: string
+          xp_valor: number
+        }
+        Insert: {
+          agendamento_id?: string | null
+          aprovado_em?: string | null
+          aprovado_por?: string | null
+          cashback_valor?: number
+          created_at?: string
+          descricao?: string | null
+          id?: string
+          link_post?: string | null
+          motivo_rejeicao?: string | null
+          plataforma?: string
+          screenshot_url?: string | null
+          status?: string
+          tipo_post?: string
+          updated_at?: string
+          user_id: string
+          xp_valor?: number
+        }
+        Update: {
+          agendamento_id?: string | null
+          aprovado_em?: string | null
+          aprovado_por?: string | null
+          cashback_valor?: number
+          created_at?: string
+          descricao?: string | null
+          id?: string
+          link_post?: string | null
+          motivo_rejeicao?: string | null
+          plataforma?: string
+          screenshot_url?: string | null
+          status?: string
+          tipo_post?: string
+          updated_at?: string
+          user_id?: string
+          xp_valor?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "social_posts_agendamento_id_fkey"
+            columns: ["agendamento_id"]
+            isOneToOne: false
+            referencedRelation: "agendamentos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      social_posts_config: {
+        Row: {
+          ativo: boolean
+          cashback_valor: number
+          created_at: string
+          descricao: string | null
+          icone: string
+          id: string
+          label: string
+          tipo_post: string
+          xp_valor: number
+        }
+        Insert: {
+          ativo?: boolean
+          cashback_valor?: number
+          created_at?: string
+          descricao?: string | null
+          icone?: string
+          id?: string
+          label: string
+          tipo_post: string
+          xp_valor?: number
+        }
+        Update: {
+          ativo?: boolean
+          cashback_valor?: number
+          created_at?: string
+          descricao?: string | null
+          icone?: string
+          id?: string
+          label?: string
+          tipo_post?: string
+          xp_valor?: number
+        }
+        Relationships: []
+      }
       terapeutas: {
         Row: {
           created_at: string
