@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Send, Building2, User, Mail, Phone, MessageSquare, CheckCircle } from "lucide-react";
+import heroBg from "@/assets/hero-options/hero-spa-resinkra.jpg";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -78,8 +79,12 @@ export const CorpCTASection = () => {
   }
 
   return (
-    <section id="orcamento-corporativo" className="py-20 lg:py-28">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="orcamento-corporativo" className="relative py-20 lg:py-28 overflow-hidden">
+      <div className="absolute inset-0">
+        <img src={heroBg} alt="" className="w-full h-full object-cover" />
+        <div className="absolute inset-0 bg-background/80" />
+      </div>
+      <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-16 items-start">
           {/* Left side - Info */}
           <motion.div
