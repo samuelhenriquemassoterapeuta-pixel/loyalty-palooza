@@ -9,7 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Loader2, Plus, Pencil, Trash2, Building2, Upload, Image, Video, GripVertical } from "lucide-react";
+import { Loader2, Plus, Pencil, Trash2, Building2, Upload, Image, Video, GripVertical, Film } from "lucide-react";
 import { toast } from "sonner";
 
 const CorporativoConteudoTab = () => {
@@ -17,7 +17,9 @@ const CorporativoConteudoTab = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editing, setEditing] = useState<CorporativoSecao | null>(null);
   const [uploading, setUploading] = useState(false);
+  const [uploadingVideo, setUploadingVideo] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const videoInputRef = useRef<HTMLInputElement>(null);
   const [form, setForm] = useState({
     titulo: "", subtitulo: "", descricao: "", conteudo_detalhado: "",
     icone: "Building2", cor: "#3E4331", imagem_url: "", video_url: "",
@@ -65,6 +67,28 @@ const CorporativoConteudoTab = () => {
       toast.error(err.message);
     }
     setUploading(false);
+  };
+
+  const handleVideoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 50 * 1024 * 1024) {
+      toast.error("Vídeo deve ter no máximo 50MB");
+      return;
+    }
+    setUploadingVideo(true);
+    try {
+      const ext = file.name.split(".").pop();
+      const path = `videos/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+      const { error } = await supabase.storage.from("corporativo-media").upload(path, file);
+      if (error) throw error;
+      const { data: urlData } = supabase.storage.from("corporativo-media").getPublicUrl(path);
+      setForm(f => ({ ...f, video_url: urlData.publicUrl }));
+      toast.success("Vídeo enviado!");
+    } catch (err: any) {
+      toast.error(err.message);
+    }
+    setUploadingVideo(false);
   };
 
   const handleSave = () => {
@@ -160,10 +184,19 @@ const CorporativoConteudoTab = () => {
               {form.imagem_url && <img src={form.imagem_url} alt="" className="mt-2 rounded-lg h-24 object-cover" />}
             </div>
 
-            {/* Video URL */}
+            {/* Video URL + Upload */}
             <div>
               <Label>URL do Vídeo</Label>
-              <Input value={form.video_url} onChange={e => setForm({...form, video_url: e.target.value})} placeholder="YouTube, Vimeo ou link direto" />
+              <div className="flex gap-2 mt-1">
+                <Input value={form.video_url} onChange={e => setForm({...form, video_url: e.target.value})} placeholder="YouTube, Vimeo ou upload direto" className="flex-1" />
+                <Button variant="outline" size="sm" onClick={() => videoInputRef.current?.click()} disabled={uploadingVideo}>
+                  {uploadingVideo ? <Loader2 size={14} className="animate-spin" /> : <Film size={14} />}
+                </Button>
+              </div>
+              {form.video_url && !form.video_url.includes("youtube") && !form.video_url.includes("youtu.be") && !form.video_url.includes("vimeo") && (
+                <video src={form.video_url} controls className="mt-2 rounded-lg h-24 w-auto" />
+              )}
+              <p className="text-[11px] text-muted-foreground mt-1">Cole um link do YouTube ou clique no ícone para enviar do celular (máx 50MB)</p>
             </div>
 
             {/* Gallery */}
@@ -199,7 +232,7 @@ const CorporativoConteudoTab = () => {
         </DialogContent>
       </Dialog>
 
-      {/* Hidden file input */}
+      {/* Hidden file input for images */}
       <input
         ref={fileInputRef}
         type="file"
@@ -209,6 +242,14 @@ const CorporativoConteudoTab = () => {
           const field = fileInputRef.current?.getAttribute("data-field") as "imagem_url" | "galeria";
           handleUpload(e, field || "imagem_url");
         }}
+      />
+      {/* Hidden file input for videos */}
+      <input
+        ref={videoInputRef}
+        type="file"
+        accept="video/*"
+        className="hidden"
+        onChange={handleVideoUpload}
       />
     </div>
   );
