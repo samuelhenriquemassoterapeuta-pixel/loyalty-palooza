@@ -70,10 +70,10 @@ export const HeroSection = () => {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-card/80 backdrop-blur-sm border border-border/50 shadow-sm mb-6"
               >
                 <Sparkles size={14} className="text-primary" />
-                <span className="text-xs font-semibold text-primary">{badge}</span>
+                <span className="text-xs font-semibold text-foreground">{badge}</span>
               </motion.div>
 
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground leading-tight">
@@ -82,7 +82,7 @@ export const HeroSection = () => {
                 {tituloParte2}
               </h1>
 
-              <p className="mt-6 text-lg text-foreground/80 max-w-lg mx-auto lg:mx-0 leading-relaxed drop-shadow-sm">
+              <p className="mt-6 text-lg text-foreground/90 max-w-lg mx-auto lg:mx-0 leading-relaxed [text-shadow:0_1px_3px_rgba(0,0,0,0.1)]">
                 {subtitulo}
               </p>
 
@@ -105,14 +105,14 @@ export const HeroSection = () => {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.6 }}
-                className="mt-10 flex items-center gap-6 justify-center lg:justify-start text-muted-foreground"
+                className="mt-10 flex items-center gap-6 justify-center lg:justify-start text-foreground/80"
               >
                 {sinais.map((sinal: string, i: number) => {
                   const colors = ["bg-highlight", "bg-accent", "bg-primary"];
                   return (
                     <div key={i} className="flex items-center gap-2">
-                      <div className={`w-2 h-2 rounded-full ${colors[i % colors.length]}`} />
-                      <span className="text-sm">{sinal}</span>
+                      <div className={`w-2.5 h-2.5 rounded-full ${colors[i % colors.length]} shadow-sm`} />
+                      <span className="text-sm font-medium [text-shadow:0_1px_2px_rgba(0,0,0,0.08)]">{sinal}</span>
                     </div>
                   );
                 })}
