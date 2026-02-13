@@ -41,6 +41,7 @@ import Checkin from "@/pages/Checkin";
 import DesafiosPage from "@/pages/Desafios";
 import MinhaJornada from "@/pages/MinhaJornada";
 import ServicoDetalhe from "@/pages/ServicoDetalhe";
+import CartaoTerapeuta from "@/pages/CartaoTerapeuta";
 import NotFound from "@/pages/NotFound";
 
 /** Shows landing for visitors, dashboard for authenticated users */
@@ -419,6 +420,14 @@ export const AnimatedRoutes = () => {
                 <MinhaJornada />
               </PageTransition>
             </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/terapeuta/:id"
+          element={
+            <PageTransition>
+              <CartaoTerapeuta />
+            </PageTransition>
           }
         />
         <Route
