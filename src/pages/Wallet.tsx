@@ -7,6 +7,8 @@ import { useTransacoes } from "@/hooks/useTransacoes";
 import { useProfile } from "@/hooks/useProfile";
 import { useNavigate } from "react-router-dom";
 import { WalletPageSkeleton } from "@/components/skeletons";
+import { formatResinks, RESINKS_SYMBOL } from "@/lib/resinks";
+import { ResinksCoin } from "@/components/ui/resinks-value";
 
 const stagger = {
   hidden: { opacity: 0 },
@@ -29,13 +31,6 @@ const Wallet = () => {
   const navigate = useNavigate();
   const { stats, loading } = useTransacoes();
   const { profile } = useProfile();
-
-  const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat("pt-BR", {
-      style: "currency",
-      currency: "BRL",
-    }).format(value);
-  };
 
   const displayName = profile?.nome || "Usuário";
 
@@ -78,9 +73,12 @@ const Wallet = () => {
               <div className="absolute -bottom-8 -left-8 w-28 h-28 rounded-full bg-highlight/20 blur-xl" />
               
               <div className="relative z-10">
-                <p className="text-sm opacity-80 mb-1">Saldo total</p>
+                <div className="flex items-center gap-2 mb-1">
+                  <ResinksCoin size={18} className="opacity-90" />
+                  <p className="text-sm opacity-80">Saldo total</p>
+                </div>
                 <h2 className="text-4xl font-bold font-serif mb-4">
-                  <AnimatedCounter value={stats.saldo} format={formatCurrency} duration={1.4} />
+                  <AnimatedCounter value={stats.saldo} format={formatResinks} duration={1.4} />
                 </h2>
                 
                 <div className="flex gap-3">
@@ -146,13 +144,13 @@ const Wallet = () => {
                 <div className="p-4 rounded-2xl glass-card-strong">
                   <p className="text-xs text-muted-foreground mb-1">Total gasto</p>
                   <p className="text-xl font-bold font-serif text-foreground">
-                    <AnimatedCounter value={stats.totalGasto} format={formatCurrency} />
+                    <AnimatedCounter value={stats.totalGasto} format={formatResinks} />
                   </p>
                 </div>
                 <div className="p-4 rounded-2xl glass-card-strong">
-                  <p className="text-xs text-muted-foreground mb-1">Cashback ganho</p>
+                  <p className="text-xs text-muted-foreground mb-1">Resinks ganhos</p>
                   <p className="text-xl font-bold font-serif text-primary">
-                    <AnimatedCounter value={stats.totalCashback} format={formatCurrency} />
+                    <AnimatedCounter value={stats.totalCashback} format={formatResinks} />
                   </p>
                 </div>
               </div>

@@ -2,9 +2,7 @@ import { motion } from "framer-motion";
 import { Crown, ChevronRight, Sparkles } from "lucide-react";
 import { CircularProgress } from "@/components/ui/circular-progress";
 import { UserTier, TIER_CONFIG, TierName } from "@/hooks/useUserTier";
-
-const formatCurrency = (value: number) =>
-  new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(value);
+import { formatResinks } from "@/lib/resinks";
 
 interface CashbackTierCardProps {
   tier: UserTier;
@@ -70,12 +68,12 @@ export const CashbackTierCard = ({ tier, showValues }: CashbackTierCardProps) =>
               </p>
               <p className="text-sm font-semibold text-foreground">
                 {showValues
-                  ? `${formatCurrency(tier.total_gasto)} / ${formatCurrency(tier.proximo_tier_limite!)}`
+                  ? `${formatResinks(tier.total_gasto)} / ${formatResinks(tier.proximo_tier_limite!)}`
                   : "••• / •••"}
               </p>
               <p className="text-[10px] text-muted-foreground mt-0.5">
                 {showValues
-                  ? `Faltam ${formatCurrency(tier.proximo_tier_limite! - tier.total_gasto)}`
+                  ? `Faltam ${formatResinks(tier.proximo_tier_limite! - tier.total_gasto)}`
                   : "••••••"}
               </p>
             </div>
@@ -86,7 +84,7 @@ export const CashbackTierCard = ({ tier, showValues }: CashbackTierCardProps) =>
           <div className="flex items-center gap-2 p-3 rounded-xl bg-warning/10 border border-warning/30">
             <Sparkles size={16} className="text-warning shrink-0" />
             <p className="text-xs font-medium text-warning">
-              Parabéns! Você atingiu o nível máximo com 2x de cashback!
+              Parabéns! Você atingiu o nível máximo com 2x de Resinks!
             </p>
           </div>
         )}

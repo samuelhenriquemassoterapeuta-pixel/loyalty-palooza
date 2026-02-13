@@ -9,19 +9,14 @@ import { useTierCelebration } from "@/hooks/useTierCelebration";
 import { TierCelebration } from "@/components/TierCelebration";
 import { BalanceCardSkeleton } from "@/components/skeletons";
 import { ErrorState } from "@/components/ErrorState";
+import { formatResinks, RESINKS_SYMBOL } from "@/lib/resinks";
+import { ResinksCoin } from "@/components/ui/resinks-value";
 
 export const BalanceCard = () => {
   const [showBalance, setShowBalance] = useState(true);
   const { stats, loading, error, refetch } = useTransacoes();
   const { tier, loading: tierLoading, celebration, dismiss } = useTierCelebration();
   const navigate = useNavigate();
-
-  const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat("pt-BR", {
-      style: "currency",
-      currency: "BRL",
-    }).format(value);
-  };
 
   if (loading) {
     return <BalanceCardSkeleton />;
@@ -79,8 +74,8 @@ export const BalanceCard = () => {
         <div className="relative z-10">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
-              <Sparkles size={16} className="opacity-80" />
-              <span className="text-sm font-medium opacity-90">Saldo disponível</span>
+              <ResinksCoin size={20} className="opacity-90" />
+              <span className="text-sm font-medium opacity-90">Saldo Resinks</span>
             </div>
             <motion.button
               whileTap={{ scale: 0.9 }}
@@ -99,9 +94,9 @@ export const BalanceCard = () => {
           >
             <h2 className="text-4xl font-bold tracking-tight font-serif">
               {showBalance ? (
-                <AnimatedCounter value={stats.saldo} format={formatCurrency} duration={1.4} />
+                <AnimatedCounter value={stats.saldo} format={formatResinks} duration={1.4} />
               ) : (
-                "R$ ••••••"
+                `${RESINKS_SYMBOL} ••••••`
               )}
             </h2>
           </motion.div>
@@ -143,12 +138,12 @@ export const BalanceCard = () => {
                 <TrendingUp size={18} className="text-accent-foreground" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-xs opacity-80">Cashback</p>
+                <p className="text-xs opacity-80">Resinks ganhos</p>
                 <p className="font-bold text-lg">
                   {showBalance ? (
-                    <AnimatedCounter value={stats.totalCashback} format={formatCurrency} duration={1} />
+                    <AnimatedCounter value={stats.totalCashback} format={formatResinks} duration={1} />
                   ) : (
-                    "R$ ••••"
+                    `${RESINKS_SYMBOL} ••••`
                   )}
                 </p>
               </div>

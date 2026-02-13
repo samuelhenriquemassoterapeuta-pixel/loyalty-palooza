@@ -5,6 +5,8 @@ import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { TransactionHistorySkeleton } from "@/components/skeletons";
 import { ErrorState } from "@/components/ErrorState";
+import { formatResinks } from "@/lib/resinks";
+import { ResinksCoin } from "@/components/ui/resinks-value";
 
 const container = {
   hidden: { opacity: 0 },
@@ -25,13 +27,6 @@ const item = {
 
 export const TransactionHistory = () => {
   const { transacoes, loading, error, refetch } = useTransacoes();
-
-  const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat("pt-BR", {
-      style: "currency",
-      currency: "BRL",
-    }).format(Math.abs(value));
-  };
 
   const getTransactionType = (tipo: string) => {
     return tipo === "cashback" ? "income" : "expense";
@@ -68,6 +63,7 @@ export const TransactionHistory = () => {
     <section>
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
+          <ResinksCoin size={16} />
           <h3 className="text-sm font-bold text-foreground">Histórico</h3>
           {transacoes.length > 0 && (
             <span className="pill text-[10px]">
@@ -120,7 +116,7 @@ export const TransactionHistory = () => {
                   }`}
                 >
                   {type === "income" ? "+" : "-"}
-                  {formatCurrency(transacao.valor)}
+                  {formatResinks(transacao.valor)}
                 </p>
               </div>
             </motion.div>

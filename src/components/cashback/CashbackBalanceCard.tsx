@@ -1,6 +1,8 @@
 import { motion } from "framer-motion";
-import { TrendingUp, TrendingDown, Sparkles } from "lucide-react";
+import { TrendingUp, TrendingDown } from "lucide-react";
 import { AnimatedCounter } from "@/components/ui/animated-counter";
+import { formatResinks, RESINKS_SYMBOL } from "@/lib/resinks";
+import { ResinksCoin } from "@/components/ui/resinks-value";
 
 interface CashbackBalanceCardProps {
   saldoDisponivel: number;
@@ -8,9 +10,6 @@ interface CashbackBalanceCardProps {
   totalUsado: number;
   showValues: boolean;
 }
-
-const formatCurrency = (value: number) =>
-  new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(value);
 
 export const CashbackBalanceCard = ({
   saldoDisponivel,
@@ -32,15 +31,15 @@ export const CashbackBalanceCard = ({
       <div className="relative z-10">
         {/* Balance */}
         <div className="flex items-center gap-2 mb-2">
-          <Sparkles size={16} className="opacity-80" />
-          <span className="text-sm font-medium opacity-90">Saldo de cashback</span>
+          <ResinksCoin size={20} className="opacity-90" />
+          <span className="text-sm font-medium opacity-90">Saldo Resinks</span>
         </div>
 
         <h2 className="text-4xl font-bold tracking-tight font-serif mb-6">
           {showValues ? (
-            <AnimatedCounter value={saldoDisponivel} format={formatCurrency} duration={1.4} />
+            <AnimatedCounter value={saldoDisponivel} format={formatResinks} duration={1.4} />
           ) : (
-            "R$ ••••••"
+            `${RESINKS_SYMBOL} ••••••`
           )}
         </h2>
 
@@ -54,7 +53,7 @@ export const CashbackBalanceCard = ({
               <p className="text-[10px] opacity-70">Total ganho</p>
               <p className="font-bold text-sm">
                 {showValues ? (
-                  <AnimatedCounter value={totalGanho} format={formatCurrency} duration={1} />
+                  <AnimatedCounter value={totalGanho} format={formatResinks} duration={1} />
                 ) : "••••"}
               </p>
             </div>
@@ -67,7 +66,7 @@ export const CashbackBalanceCard = ({
               <p className="text-[10px] opacity-70">Total usado</p>
               <p className="font-bold text-sm">
                 {showValues ? (
-                  <AnimatedCounter value={totalUsado} format={formatCurrency} duration={1} />
+                  <AnimatedCounter value={totalUsado} format={formatResinks} duration={1} />
                 ) : "••••"}
               </p>
             </div>

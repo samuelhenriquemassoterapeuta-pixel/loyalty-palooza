@@ -13,6 +13,7 @@ import {
 import { format, subDays, subMonths, startOfDay } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { Transacao } from "@/hooks/useTransacoes";
+import { RESINKS_SYMBOL } from "@/lib/resinks";
 
 type PeriodKey = "30d" | "3m" | "6m";
 
@@ -38,7 +39,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
       <p className="font-semibold text-foreground mb-1">{label}</p>
       {payload.map((entry: any, i: number) => (
         <p key={i} style={{ color: entry.color }}>
-          {entry.name}: R$ {Number(entry.value).toFixed(2).replace(".", ",")}
+          {entry.name}: {RESINKS_SYMBOL} {Number(entry.value).toFixed(2).replace(".", ",")}
         </p>
       ))}
     </div>
@@ -57,12 +58,10 @@ export const CashbackEvolutionChart = ({ transacoes }: CashbackEvolutionChartPro
     const now = new Date();
     const days = Math.ceil((now.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
 
-    // Filter cashback transactions
     const cashbackTx = transacoes.filter(
       (t) => (t.tipo === "cashback" || t.tipo === "uso_cashback") && new Date(t.created_at) >= startDate
     );
 
-    // Build daily data
     const dailyData: { date: Date; ganho: number; usado: number }[] = [];
     for (let i = days; i >= 0; i--) {
       const day = startOfDay(subDays(now, i));
@@ -81,7 +80,6 @@ export const CashbackEvolutionChart = ({ transacoes }: CashbackEvolutionChartPro
       dailyData.push({ date: day, ganho, usado });
     }
 
-    // Aggregate into buckets for readability
     const bucketSize = period === "30d" ? 1 : period === "3m" ? 7 : 14;
     const aggregated = [];
     let saldoAcumulado = 0;
@@ -159,7 +157,7 @@ export const CashbackEvolutionChart = ({ transacoes }: CashbackEvolutionChartPro
               tick={{ fontSize: 10, fill: "hsl(75, 20%, 40%)" }}
               axisLine={false}
               tickLine={false}
-              tickFormatter={(v) => `R$ ${v}`}
+              tickFormatter={(v) => `${RESINKS_SYMBOL} ${v}`}
             />
             <Tooltip content={<CustomTooltip />} />
             <Area
@@ -173,7 +171,7 @@ export const CashbackEvolutionChart = ({ transacoes }: CashbackEvolutionChartPro
             <Area
               type="monotone"
               dataKey="ganho"
-              name="Cashback ganho"
+              name="Resinks ganhos"
               stroke="hsl(140, 50%, 38%)"
               strokeWidth={1.5}
               fill="url(#gradGanho)"
