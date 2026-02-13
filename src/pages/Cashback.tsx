@@ -69,7 +69,7 @@ const Cashback = () => {
               >
                 <ArrowLeft size={22} className="text-foreground" />
               </button>
-              <h1 className="text-xl font-bold text-foreground">Meu Cashback</h1>
+              <h1 className="text-xl font-bold text-foreground">Meus Resinks</h1>
             </div>
             <button
               onClick={() => setShowValues(!showValues)}
@@ -115,9 +115,9 @@ const Cashback = () => {
                 </motion.div>
               )}
 
-              {/* How cashback works */}
+              {/* How Resinks works */}
               <motion.div variants={fadeUp} className="space-y-2.5">
-                <p className="section-label px-1">Como funciona</p>
+                <p className="section-label px-1">Como ganhar Resinks</p>
                 <div className="grid grid-cols-3 gap-2">
                   {[
                     { emoji: "🛒", label: "Compras", desc: "Ganhe na loja" },

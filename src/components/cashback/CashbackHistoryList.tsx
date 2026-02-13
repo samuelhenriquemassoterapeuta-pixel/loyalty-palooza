@@ -3,6 +3,8 @@ import { ArrowDownLeft, ArrowUpRight, ShoppingBag, CalendarDays, Gift, Repeat } 
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { Transacao } from "@/hooks/useTransacoes";
+import { formatResinks } from "@/lib/resinks";
+import { ResinksCoin } from "@/components/ui/resinks-value";
 
 const container = {
   hidden: { opacity: 0 },
@@ -18,39 +20,24 @@ const item = {
   },
 };
 
-const formatCurrency = (value: number) =>
-  new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(
-    Math.abs(value)
-  );
-
 const getIcon = (tipo: string) => {
   switch (tipo) {
-    case "cashback":
-      return ArrowDownLeft;
-    case "uso_cashback":
-      return ArrowUpRight;
-    case "indicacao":
-      return Gift;
-    case "agendamento":
-      return CalendarDays;
+    case "cashback": return ArrowDownLeft;
+    case "uso_cashback": return ArrowUpRight;
+    case "indicacao": return Gift;
+    case "agendamento": return CalendarDays;
     case "compra":
-    case "debito":
-      return ShoppingBag;
-    default:
-      return Repeat;
+    case "debito": return ShoppingBag;
+    default: return Repeat;
   }
 };
 
 const getLabel = (tipo: string) => {
   switch (tipo) {
-    case "cashback":
-      return "Cashback recebido";
-    case "uso_cashback":
-      return "Cashback utilizado";
-    case "indicacao":
-      return "Indicação";
-    default:
-      return tipo;
+    case "cashback": return "Resinks recebidos";
+    case "uso_cashback": return "Resinks utilizados";
+    case "indicacao": return "Indicação";
+    default: return tipo;
   }
 };
 
@@ -66,12 +53,12 @@ export const CashbackHistoryList = ({ transacoes }: CashbackHistoryListProps) =>
   if (cashbackTransacoes.length === 0) {
     return (
       <div className="text-center py-10">
-        <ArrowDownLeft className="w-12 h-12 text-muted-foreground mx-auto mb-3 opacity-40" />
+        <ResinksCoin size={48} className="mx-auto mb-3 opacity-40" />
         <p className="text-muted-foreground font-medium">
-          Nenhuma movimentação de cashback
+          Nenhuma movimentação de Resinks
         </p>
         <p className="text-sm text-muted-foreground mt-1">
-          Faça compras ou agende serviços para acumular cashback
+          Faça compras ou agende serviços para acumular Resinks
         </p>
       </div>
     );
@@ -124,7 +111,7 @@ export const CashbackHistoryList = ({ transacoes }: CashbackHistoryListProps) =>
                 }`}
               >
                 {isIncome ? "+" : "-"}
-                {formatCurrency(tx.valor)}
+                {formatResinks(tx.valor)}
               </span>
             </motion.div>
           );

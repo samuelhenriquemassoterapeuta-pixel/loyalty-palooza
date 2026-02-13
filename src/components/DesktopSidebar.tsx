@@ -17,7 +17,7 @@ const navItems = [
   { icon: Apple, label: "Dietas", path: "/dietas" },
   { icon: Scan, label: "Avaliação Postural", path: "/avaliacao-postural" },
   { icon: BookOpen, label: "Guia Clínico", path: "/guia-clinico" },
-  { icon: Crown, label: "Cashback", path: "/cashback" },
+  { icon: Crown, label: "Resinks", path: "/cashback" },
   { icon: Gift, label: "Indicações", path: "/indicacoes" },
   { icon: Ticket, label: "Vale Presente", path: "/vale-presente" },
   { icon: Wallet, label: "Transferir", path: "/transferir" },
