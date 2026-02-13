@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Apple } from "lucide-react";
+import { Apple, BarChart3, Trophy, ClipboardList, UtensilsCrossed, CalendarDays, BookOpen } from "lucide-react";
 import { AppLayout } from "@/components/AppLayout";
 import { DietasDashboard } from "@/components/dietas/DietasDashboard";
 import { FichaNutricionalForm } from "@/components/dietas/FichaNutricionalForm";
@@ -7,6 +7,7 @@ import { HistoricoSemanal } from "@/components/dietas/HistoricoSemanal";
 import { ReceitasSection } from "@/components/dietas/ReceitasSection";
 import { DietasGamificacao } from "@/components/dietas/DietasGamificacao";
 import { DietasSection } from "@/components/protocolos/DietasSection";
+import { AppCollapsibleSection } from "@/components/AppCollapsibleSection";
 
 const stagger = {
   hidden: {},
@@ -40,30 +41,42 @@ const Dietas = () => {
               </p>
             </motion.div>
 
-            {/* Dashboard cards */}
+            {/* Dashboard cards - always visible */}
             <DietasDashboard />
 
             {/* Gamificação */}
-            <DietasGamificacao />
+            <motion.div variants={fadeUp}>
+              <AppCollapsibleSection title="Gamificação" icon={Trophy}>
+                <DietasGamificacao />
+              </AppCollapsibleSection>
+            </motion.div>
 
             {/* Ficha nutricional */}
             <motion.div variants={fadeUp}>
-              <FichaNutricionalForm />
+              <AppCollapsibleSection title="Ficha Nutricional" icon={ClipboardList}>
+                <FichaNutricionalForm />
+              </AppCollapsibleSection>
             </motion.div>
 
             {/* Receitas */}
             <motion.div variants={fadeUp}>
-              <ReceitasSection />
+              <AppCollapsibleSection title="Receitas" icon={UtensilsCrossed}>
+                <ReceitasSection />
+              </AppCollapsibleSection>
             </motion.div>
 
             {/* Histórico semanal */}
             <motion.div variants={fadeUp}>
-              <HistoricoSemanal />
+              <AppCollapsibleSection title="Histórico Semanal" icon={CalendarDays}>
+                <HistoricoSemanal />
+              </AppCollapsibleSection>
             </motion.div>
 
-            {/* Tabs: Educativo, Planos, Diário */}
+            {/* Conteúdo educativo, Planos, Diário */}
             <motion.div variants={fadeUp}>
-              <DietasSection />
+              <AppCollapsibleSection title="Planos & Conteúdo" icon={BookOpen}>
+                <DietasSection />
+              </AppCollapsibleSection>
             </motion.div>
           </motion.div>
         </div>

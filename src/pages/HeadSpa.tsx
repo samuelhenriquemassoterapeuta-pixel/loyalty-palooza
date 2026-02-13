@@ -18,9 +18,11 @@ import {
   Star,
   ChevronDown,
   CheckCircle2,
+  Info,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useHeadSpaImagens, ETAPA_KEYS } from "@/hooks/useHeadSpaImagens";
+import { AppCollapsibleSection } from "@/components/AppCollapsibleSection";
 import heroImage from "@/assets/headspa-hero.jpg";
 import imgAnalise from "@/assets/headspa/analise-couro.jpg";
 import imgLimpeza from "@/assets/headspa/limpeza-profunda.jpg";
@@ -223,28 +225,17 @@ const HeadSpa = () => {
         </div>
       </section>
 
-      {/* O que é */}
+      {/* O que é - Collapsible */}
       <section className="py-14 sm:py-20 px-5 sm:px-8">
         <div className="max-w-4xl mx-auto">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-60px" }}
-            custom={0}
-            variants={fadeUp}
-            className="text-center mb-10"
-          >
-            <h2 className="text-2xl sm:text-3xl font-bold text-foreground mb-4">
-              O que é o{" "}
-              <span className="font-serif italic text-primary">Head SPA?</span>
-            </h2>
-            <p className="text-muted-foreground leading-relaxed max-w-2xl mx-auto">
+          <AppCollapsibleSection title="O que é o Head SPA?" icon={Info} defaultOpen>
+            <p className="text-muted-foreground leading-relaxed">
               O Head SPA Coreano é um tratamento capilar e de relaxamento que combina cuidados 
               profundos para o couro cabeludo com técnicas de massagem e bem-estar. Uma experiência 
               sensorial completa que conecta saúde capilar e mental — tratando cada sessão como 
               um momento de autocuidado holístico, não apenas estético.
             </p>
-          </motion.div>
+          </AppCollapsibleSection>
         </div>
       </section>
 
@@ -380,41 +371,27 @@ const HeadSpa = () => {
         </div>
       </section>
 
-      {/* Benefícios */}
+      {/* Benefícios - Collapsible */}
       <section className="py-14 sm:py-20 px-5 sm:px-8">
         <div className="max-w-5xl mx-auto">
-          <motion.h2
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            custom={0}
-            variants={fadeUp}
-            className="text-2xl sm:text-3xl font-bold text-foreground text-center mb-10"
-          >
-            Benefícios do <span className="font-serif italic text-primary">Head SPA</span>
-          </motion.h2>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {beneficios.map((b, i) => {
-              const Icon = b.icon;
-              return (
-                <motion.div
-                  key={i}
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: true }}
-                  custom={i}
-                  variants={fadeUp}
-                  className="flex items-center gap-3 p-4 rounded-xl border border-border/50 bg-card hover:shadow-md transition-shadow"
-                >
-                  <div className="p-2 rounded-lg bg-primary/10 text-primary">
-                    <Icon size={18} />
+          <AppCollapsibleSection title="Benefícios do Head SPA" icon={Heart} badge="6">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 pt-2">
+              {beneficios.map((b, i) => {
+                const Icon = b.icon;
+                return (
+                  <div
+                    key={i}
+                    className="flex items-center gap-3 p-4 rounded-xl border border-border/50 bg-card hover:shadow-md transition-shadow"
+                  >
+                    <div className="p-2 rounded-lg bg-primary/10 text-primary">
+                      <Icon size={18} />
+                    </div>
+                    <span className="text-sm font-medium text-foreground">{b.text}</span>
                   </div>
-                  <span className="text-sm font-medium text-foreground">{b.text}</span>
-                </motion.div>
-              );
-            })}
-          </div>
+                );
+              })}
+            </div>
+          </AppCollapsibleSection>
         </div>
       </section>
 
