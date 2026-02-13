@@ -132,7 +132,7 @@ export const HeroSection = () => {
                 <div className="absolute inset-0 rounded-full bg-gradient-to-br from-primary/15 to-accent/10 blur-2xl animate-pulse-soft" />
                 <div className="absolute inset-4 rounded-full bg-gradient-to-br from-primary/10 via-card to-accent/10 border border-primary/20 shadow-elevated" />
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <img src={simboloVerde} alt="Resinkra" className="w-24 h-24 sm:w-32 sm:h-32 lg:w-40 lg:h-40 object-contain drop-shadow-lg animate-float" />
+                  <img src={simboloVerde} alt="Resinkra" className="w-24 h-24 sm:w-32 sm:h-32 lg:w-40 lg:h-40 object-contain drop-shadow-lg animate-float mix-blend-multiply" />
                 </div>
                 <motion.div animate={{ y: [-8, 8, -8] }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }} className="absolute -top-2 right-8 p-3 rounded-2xl bg-card shadow-card border border-border/50">
                   <img src={iconeFlor} alt="" className="w-8 h-8 object-contain" />
