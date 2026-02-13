@@ -1,7 +1,8 @@
 import { motion } from "framer-motion";
 import {
   Heart, Briefcase, TrendingUp, Handshake, Award, Building2,
-  Brain, Shield, Clock, Smile, Activity, ChevronDown
+  Brain, Shield, Clock, Smile, Activity, ChevronDown,
+  Crown, GraduationCap, Trophy, Globe, PartyPopper, Sparkles
 } from "lucide-react";
 import { useCorporativoSecoes, CorporativoSecao } from "@/hooks/useCorporativoSecoes";
 import { Loader2 } from "lucide-react";
@@ -10,6 +11,7 @@ import { AppCollapsibleSection } from "@/components/AppCollapsibleSection";
 const iconMap: Record<string, any> = {
   Heart, Briefcase, TrendingUp, Handshake, Award, Building2,
   Brain, Shield, Clock, Smile, Activity,
+  Crown, GraduationCap, Trophy, Globe, PartyPopper, Sparkles,
 };
 
 const renderMarkdown = (text: string) => {
