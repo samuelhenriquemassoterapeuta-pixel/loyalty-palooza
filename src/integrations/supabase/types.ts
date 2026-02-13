@@ -314,6 +314,143 @@ export type Database = {
         }
         Relationships: []
       }
+      banners_dismissals: {
+        Row: {
+          banner_id: string
+          created_at: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          banner_id: string
+          created_at?: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          banner_id?: string
+          created_at?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "banners_dismissals_banner_id_fkey"
+            columns: ["banner_id"]
+            isOneToOne: false
+            referencedRelation: "banners_promocionais"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      banners_promocionais: {
+        Row: {
+          ativo: boolean
+          cliques: number | null
+          cor_fundo: string | null
+          created_at: string
+          data_fim: string | null
+          data_inicio: string
+          id: string
+          imagem_url: string | null
+          link_destino: string | null
+          prioridade: number | null
+          segmentos: string[] | null
+          subtitulo: string | null
+          tipo: string
+          titulo: string
+          updated_at: string
+          visualizacoes: number | null
+        }
+        Insert: {
+          ativo?: boolean
+          cliques?: number | null
+          cor_fundo?: string | null
+          created_at?: string
+          data_fim?: string | null
+          data_inicio?: string
+          id?: string
+          imagem_url?: string | null
+          link_destino?: string | null
+          prioridade?: number | null
+          segmentos?: string[] | null
+          subtitulo?: string | null
+          tipo?: string
+          titulo: string
+          updated_at?: string
+          visualizacoes?: number | null
+        }
+        Update: {
+          ativo?: boolean
+          cliques?: number | null
+          cor_fundo?: string | null
+          created_at?: string
+          data_fim?: string | null
+          data_inicio?: string
+          id?: string
+          imagem_url?: string | null
+          link_destino?: string | null
+          prioridade?: number | null
+          segmentos?: string[] | null
+          subtitulo?: string | null
+          tipo?: string
+          titulo?: string
+          updated_at?: string
+          visualizacoes?: number | null
+        }
+        Relationships: []
+      }
+      campanhas_marketing: {
+        Row: {
+          agendada_para: string | null
+          created_at: string
+          created_by: string
+          enviada_em: string | null
+          id: string
+          mensagem: string
+          segmentos: string[]
+          status: string
+          tipo: string
+          titulo: string
+          total_destinatarios: number | null
+          total_enviados: number | null
+          total_erros: number | null
+          updated_at: string
+        }
+        Insert: {
+          agendada_para?: string | null
+          created_at?: string
+          created_by: string
+          enviada_em?: string | null
+          id?: string
+          mensagem: string
+          segmentos?: string[]
+          status?: string
+          tipo?: string
+          titulo: string
+          total_destinatarios?: number | null
+          total_enviados?: number | null
+          total_erros?: number | null
+          updated_at?: string
+        }
+        Update: {
+          agendada_para?: string | null
+          created_at?: string
+          created_by?: string
+          enviada_em?: string | null
+          id?: string
+          mensagem?: string
+          segmentos?: string[]
+          status?: string
+          tipo?: string
+          titulo?: string
+          total_destinatarios?: number | null
+          total_enviados?: number | null
+          total_erros?: number | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       checkins: {
         Row: {
           agendamento_id: string | null
@@ -2700,6 +2837,24 @@ export type Database = {
         }[]
       }
       get_empresa_stats: { Args: { p_empresa_id: string }; Returns: Json }
+      get_segmentacao_clientes: {
+        Args: never
+        Returns: {
+          data_cadastro: string
+          dias_sem_visita: number
+          email: string
+          nome: string
+          segmento: string
+          telefone: string
+          ticket_medio: number
+          tier_nome: string
+          total_gasto: number
+          total_pedidos: number
+          total_sessoes: number
+          ultima_visita: string
+          user_id: string
+        }[]
+      }
       get_terapeuta_cartao: {
         Args: { terapeuta_uuid: string }
         Returns: {

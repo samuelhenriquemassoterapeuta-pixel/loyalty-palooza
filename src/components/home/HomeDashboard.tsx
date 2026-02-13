@@ -10,6 +10,7 @@ import { NextAchievementsCard } from "./NextAchievementsCard";
 import { XpMiniBar } from "./XpMiniBar";
 import { ActiveBenefitsCard } from "./ActiveBenefitsCard";
 import { CollapsibleDashboardSection } from "./CollapsibleDashboardSection";
+import { PromoBanner } from "./PromoBanner";
 import { AchievementCelebration } from "@/components/conquistas/AchievementCelebration";
 import {
   differenceInDays,
@@ -80,6 +81,7 @@ export const HomeDashboard = () => {
 
   return (
     <div className="space-y-4">
+      <PromoBanner />
       <CollapsibleDashboardSection title="Agenda & Streak" defaultOpen={true}>
         <NextAppointmentCard agendamento={proximoAgendamento} />
         <StreakSummaryCard
