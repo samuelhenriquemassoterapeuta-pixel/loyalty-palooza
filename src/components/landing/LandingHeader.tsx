@@ -52,7 +52,7 @@ export const LandingHeader = () => {
           <div className="flex items-center justify-between h-16 lg:h-20">
             {/* Logo */}
             <button onClick={() => handleNavClick({ label: "Início", href: "#inicio" })} className="flex items-center">
-              <img src={logoMarrom} alt="Resinkra" className="h-5 lg:h-6 object-contain mix-blend-multiply" />
+              <img src={logoMarrom} alt="Resinkra" className="h-6 lg:h-7 object-contain mix-blend-multiply" />
             </button>
 
             {/* Desktop Nav */}
