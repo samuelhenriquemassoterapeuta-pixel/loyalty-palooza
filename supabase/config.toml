@@ -23,3 +23,6 @@ verify_jwt = false
 
 [functions.gerar-imagem-servico]
 verify_jwt = false
+
+[functions.enviar-campanha]
+verify_jwt = false

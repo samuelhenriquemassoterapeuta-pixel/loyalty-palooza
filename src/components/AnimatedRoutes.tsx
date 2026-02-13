@@ -42,6 +42,7 @@ import DesafiosPage from "@/pages/Desafios";
 import MinhaJornada from "@/pages/MinhaJornada";
 import ServicoDetalhe from "@/pages/ServicoDetalhe";
 import CartaoTerapeuta from "@/pages/CartaoTerapeuta";
+import ConteudoSocial from "@/pages/ConteudoSocial";
 import NotFound from "@/pages/NotFound";
 
 /** Shows landing for visitors, dashboard for authenticated users */
@@ -418,6 +419,16 @@ export const AnimatedRoutes = () => {
             <ProtectedRoute>
               <PageTransition>
                 <MinhaJornada />
+              </PageTransition>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/conteudo-social"
+          element={
+            <ProtectedRoute requireAdmin>
+              <PageTransition>
+                <ConteudoSocial />
               </PageTransition>
             </ProtectedRoute>
           }
