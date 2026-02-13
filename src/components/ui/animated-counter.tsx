@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState, useCallback, forwardRef } from "react";
 import { useInView } from "framer-motion";
 
 interface AnimatedCounterProps {
@@ -15,13 +15,14 @@ interface AnimatedCounterProps {
  * Animated number counter with easing.
  * Triggers when the element enters the viewport.
  */
-export const AnimatedCounter = ({
+export const AnimatedCounter = forwardRef<HTMLSpanElement, AnimatedCounterProps>(({
   value,
   format,
   duration = 1.2,
   className = "",
-}: AnimatedCounterProps) => {
-  const ref = useRef<HTMLSpanElement>(null);
+}, forwardedRef) => {
+  const internalRef = useRef<HTMLSpanElement>(null);
+  const ref = (forwardedRef as React.RefObject<HTMLSpanElement>) || internalRef;
   const isInView = useInView(ref, { once: true, margin: "-40px" });
   const [displayValue, setDisplayValue] = useState(0);
   const rafRef = useRef<number | null>(null);
@@ -68,4 +69,6 @@ export const AnimatedCounter = ({
       {formatted}
     </span>
   );
-};
+});
+
+AnimatedCounter.displayName = "AnimatedCounter";
