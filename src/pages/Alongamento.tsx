@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { ArrowLeft, Search, X, Dumbbell, BookOpen, TrendingUp, Play, Heart } from "lucide-react";
+import { ArrowLeft, Search, X, Dumbbell, BookOpen, TrendingUp, Play, Heart, ChevronDown, Star } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AppLayout } from "@/components/AppLayout";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { useToast } from "@/hooks/use-toast";
 import {
   useExercicios,
@@ -266,27 +267,70 @@ export default function Alongamento() {
                   <BookOpen className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
                   <p className="text-muted-foreground">Nenhum plano disponível ainda</p>
                 </div>
-              ) : (
-                <div className="grid gap-4 sm:grid-cols-2">
-                  {planos.map((plano, i) => {
-                    const isAtivo = planosAtivosIds.includes(plano.id);
-                    const userPlano = meusPlanosAtivos.find(
-                      (p) => p.plano_id === plano.id && p.status === "ativo"
-                    );
-                    return (
-                      <PlanoCard
-                        key={plano.id}
-                        plano={plano}
-                        index={i}
-                        ativo={isAtivo}
-                        onAtivar={() => handleAtivarPlano(plano.id)}
-                        onPausar={userPlano ? () => handlePausarPlano(userPlano.id) : undefined}
-                        onVerExercicios={() => setPlanoExercicios(plano.id)}
-                      />
-                    );
-                  })}
-                </div>
-              )}
+              ) : (() => {
+                const planoCompleto = planos.find((p) => p.nome === "Plano Completo");
+                const planosArea = planos.filter((p) => p.nome !== "Plano Completo");
+                return (
+                  <div className="space-y-4">
+                    {/* Plano Completo em destaque */}
+                    {planoCompleto && (() => {
+                      const isAtivo = planosAtivosIds.includes(planoCompleto.id);
+                      const userPlano = meusPlanosAtivos.find(
+                        (p) => p.plano_id === planoCompleto.id && p.status === "ativo"
+                      );
+                      return (
+                        <div className="relative">
+                          <div className="absolute -top-1 -right-1 z-10">
+                            <span className="inline-flex items-center gap-1 bg-primary text-primary-foreground text-[10px] font-semibold px-2 py-0.5 rounded-full shadow-sm">
+                              <Star size={10} className="fill-current" />
+                              Recomendado
+                            </span>
+                          </div>
+                          <PlanoCard
+                            plano={planoCompleto}
+                            index={0}
+                            ativo={isAtivo}
+                            onAtivar={() => handleAtivarPlano(planoCompleto.id)}
+                            onPausar={userPlano ? () => handlePausarPlano(userPlano.id) : undefined}
+                            onVerExercicios={() => setPlanoExercicios(planoCompleto.id)}
+                          />
+                        </div>
+                      );
+                    })()}
+
+                    {/* Planos por Área - colapsável */}
+                    {planosArea.length > 0 && (
+                      <Collapsible>
+                        <CollapsibleTrigger className="flex items-center justify-between w-full py-2 px-1 group">
+                          <span className="text-sm font-semibold text-foreground">Planos por Área</span>
+                          <ChevronDown size={16} className="text-muted-foreground transition-transform group-data-[state=open]:rotate-180" />
+                        </CollapsibleTrigger>
+                        <CollapsibleContent>
+                          <div className="grid gap-4 sm:grid-cols-2 mt-2">
+                            {planosArea.map((plano, i) => {
+                              const isAtivo = planosAtivosIds.includes(plano.id);
+                              const userPlano = meusPlanosAtivos.find(
+                                (p) => p.plano_id === plano.id && p.status === "ativo"
+                              );
+                              return (
+                                <PlanoCard
+                                  key={plano.id}
+                                  plano={plano}
+                                  index={i + 1}
+                                  ativo={isAtivo}
+                                  onAtivar={() => handleAtivarPlano(plano.id)}
+                                  onPausar={userPlano ? () => handlePausarPlano(userPlano.id) : undefined}
+                                  onVerExercicios={() => setPlanoExercicios(plano.id)}
+                                />
+                              );
+                            })}
+                          </div>
+                        </CollapsibleContent>
+                      </Collapsible>
+                    )}
+                  </div>
+                );
+              })()}
             </TabsContent>
 
             {/* === PROGRESSO === */}
