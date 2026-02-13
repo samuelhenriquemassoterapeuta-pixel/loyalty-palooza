@@ -51,7 +51,7 @@ export const BottomNavigation = () => {
         <div className="glass-strong rounded-2xl border border-border/50 shadow-elevated">
           <div
             ref={containerRef}
-            className="relative flex items-center justify-around py-2 px-2 max-w-lg mx-auto"
+            className="relative flex items-center justify-evenly py-2 px-1 max-w-lg mx-auto"
           >
             {/* Sliding pill indicator */}
             {activeIndex >= 0 && (
@@ -74,7 +74,7 @@ export const BottomNavigation = () => {
                   data-nav-btn
                   onClick={() => navigate(item.path)}
                   whileTap={{ scale: 0.88 }}
-                  className="relative flex flex-col items-center gap-1 py-2 px-3 rounded-xl z-10"
+                  className="relative flex flex-col items-center gap-0.5 py-1.5 px-2 rounded-xl z-10 min-w-0"
                 >
                   <motion.div
                     animate={{
