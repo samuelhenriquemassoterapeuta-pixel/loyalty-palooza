@@ -99,6 +99,7 @@ export type Database = {
           cashback_bonus_percentual: number
           cor: string
           created_at: string
+          creditos_mensais: number
           desconto_servicos_percentual: number
           descricao: string | null
           disponivel: boolean
@@ -108,12 +109,14 @@ export type Database = {
           ordem: number
           preco_mensal: number
           prioridade_agendamento: boolean
+          tipo_credito: string
         }
         Insert: {
           beneficios?: Json
           cashback_bonus_percentual?: number
           cor?: string
           created_at?: string
+          creditos_mensais?: number
           desconto_servicos_percentual?: number
           descricao?: string | null
           disponivel?: boolean
@@ -123,12 +126,14 @@ export type Database = {
           ordem?: number
           preco_mensal: number
           prioridade_agendamento?: boolean
+          tipo_credito?: string
         }
         Update: {
           beneficios?: Json
           cashback_bonus_percentual?: number
           cor?: string
           created_at?: string
+          creditos_mensais?: number
           desconto_servicos_percentual?: number
           descricao?: string | null
           disponivel?: boolean
@@ -138,12 +143,15 @@ export type Database = {
           ordem?: number
           preco_mensal?: number
           prioridade_agendamento?: boolean
+          tipo_credito?: string
         }
         Relationships: []
       }
       assinaturas_usuario: {
         Row: {
           created_at: string
+          creditos_restantes: number
+          creditos_usados: number
           data_fim: string | null
           data_inicio: string
           id: string
@@ -155,6 +163,8 @@ export type Database = {
         }
         Insert: {
           created_at?: string
+          creditos_restantes?: number
+          creditos_usados?: number
           data_fim?: string | null
           data_inicio?: string
           id?: string
@@ -166,6 +176,8 @@ export type Database = {
         }
         Update: {
           created_at?: string
+          creditos_restantes?: number
+          creditos_usados?: number
           data_fim?: string | null
           data_inicio?: string
           id?: string
@@ -302,6 +314,41 @@ export type Database = {
         }
         Relationships: []
       }
+      checkins: {
+        Row: {
+          agendamento_id: string | null
+          created_at: string
+          id: string
+          metodo: string
+          user_id: string
+          xp_ganho: number
+        }
+        Insert: {
+          agendamento_id?: string | null
+          created_at?: string
+          id?: string
+          metodo?: string
+          user_id: string
+          xp_ganho?: number
+        }
+        Update: {
+          agendamento_id?: string | null
+          created_at?: string
+          id?: string
+          metodo?: string
+          user_id?: string
+          xp_ganho?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "checkins_agendamento_id_fkey"
+            columns: ["agendamento_id"]
+            isOneToOne: false
+            referencedRelation: "agendamentos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       checklists_avaliacao: {
         Row: {
           agendamento_id: string | null
@@ -384,6 +431,95 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      desafio_participantes: {
+        Row: {
+          concluido: boolean
+          concluido_em: string | null
+          created_at: string
+          desafio_id: string
+          id: string
+          progresso: number
+          recompensa_creditada: boolean
+          user_id: string
+        }
+        Insert: {
+          concluido?: boolean
+          concluido_em?: string | null
+          created_at?: string
+          desafio_id: string
+          id?: string
+          progresso?: number
+          recompensa_creditada?: boolean
+          user_id: string
+        }
+        Update: {
+          concluido?: boolean
+          concluido_em?: string | null
+          created_at?: string
+          desafio_id?: string
+          id?: string
+          progresso?: number
+          recompensa_creditada?: boolean
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "desafio_participantes_desafio_id_fkey"
+            columns: ["desafio_id"]
+            isOneToOne: false
+            referencedRelation: "desafios"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      desafios: {
+        Row: {
+          ativo: boolean
+          cor: string
+          created_at: string
+          data_fim: string
+          data_inicio: string
+          descricao: string | null
+          icone: string
+          id: string
+          meta_quantidade: number
+          meta_tipo: string
+          recompensa_tipo: string
+          recompensa_valor: number
+          titulo: string
+        }
+        Insert: {
+          ativo?: boolean
+          cor?: string
+          created_at?: string
+          data_fim: string
+          data_inicio: string
+          descricao?: string | null
+          icone?: string
+          id?: string
+          meta_quantidade?: number
+          meta_tipo?: string
+          recompensa_tipo?: string
+          recompensa_valor?: number
+          titulo: string
+        }
+        Update: {
+          ativo?: boolean
+          cor?: string
+          created_at?: string
+          data_fim?: string
+          data_inicio?: string
+          descricao?: string | null
+          icone?: string
+          id?: string
+          meta_quantidade?: number
+          meta_tipo?: string
+          recompensa_tipo?: string
+          recompensa_valor?: number
+          titulo?: string
+        }
+        Relationships: []
       }
       diario_alimentar: {
         Row: {
@@ -589,6 +725,41 @@ export type Database = {
             columns: ["produto_id"]
             isOneToOne: false
             referencedRelation: "produtos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      feedback_rapido: {
+        Row: {
+          agendamento_id: string
+          comentario: string | null
+          created_at: string
+          emoji: number
+          id: string
+          user_id: string
+        }
+        Insert: {
+          agendamento_id: string
+          comentario?: string | null
+          created_at?: string
+          emoji: number
+          id?: string
+          user_id: string
+        }
+        Update: {
+          agendamento_id?: string
+          comentario?: string | null
+          created_at?: string
+          emoji?: number
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "feedback_rapido_agendamento_id_fkey"
+            columns: ["agendamento_id"]
+            isOneToOne: true
+            referencedRelation: "agendamentos"
             referencedColumns: ["id"]
           },
         ]
@@ -920,6 +1091,53 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      lista_espera: {
+        Row: {
+          ativo: boolean
+          cashback_bonus: number
+          created_at: string
+          dia_preferido: number | null
+          horario_preferido: string | null
+          id: string
+          notificado_em: string | null
+          servico: string
+          terapeuta_id: string | null
+          user_id: string
+        }
+        Insert: {
+          ativo?: boolean
+          cashback_bonus?: number
+          created_at?: string
+          dia_preferido?: number | null
+          horario_preferido?: string | null
+          id?: string
+          notificado_em?: string | null
+          servico: string
+          terapeuta_id?: string | null
+          user_id: string
+        }
+        Update: {
+          ativo?: boolean
+          cashback_bonus?: number
+          created_at?: string
+          dia_preferido?: number | null
+          horario_preferido?: string | null
+          id?: string
+          notificado_em?: string | null
+          servico?: string
+          terapeuta_id?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lista_espera_terapeuta_id_fkey"
+            columns: ["terapeuta_id"]
+            isOneToOne: false
+            referencedRelation: "terapeutas"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       login_attempts: {
         Row: {

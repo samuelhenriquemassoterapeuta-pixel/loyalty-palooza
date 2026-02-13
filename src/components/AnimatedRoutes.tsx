@@ -37,6 +37,9 @@ import DashboardRH from "@/pages/DashboardRH";
 import ParceiroDashboard from "@/pages/ParceiroDashboard";
 import PerfilParceiro from "@/pages/PerfilParceiro";
 import ResinkraMoments from "@/pages/ResinkraMoments";
+import Checkin from "@/pages/Checkin";
+import DesafiosPage from "@/pages/Desafios";
+import MinhaJornada from "@/pages/MinhaJornada";
 import NotFound from "@/pages/NotFound";
 
 /** Shows landing for visitors, dashboard for authenticated users */
@@ -373,6 +376,36 @@ export const AnimatedRoutes = () => {
             <ProtectedRoute>
               <PageTransition>
                 <ResinkraMoments />
+              </PageTransition>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/checkin"
+          element={
+            <ProtectedRoute>
+              <PageTransition>
+                <Checkin />
+              </PageTransition>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/desafios"
+          element={
+            <ProtectedRoute>
+              <PageTransition>
+                <DesafiosPage />
+              </PageTransition>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/minha-jornada"
+          element={
+            <ProtectedRoute>
+              <PageTransition>
+                <MinhaJornada />
               </PageTransition>
             </ProtectedRoute>
           }
