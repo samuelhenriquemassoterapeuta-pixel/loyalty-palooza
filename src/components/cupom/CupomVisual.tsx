@@ -17,7 +17,7 @@ export interface CupomData {
 
 interface CupomVisualProps {
   data: CupomData;
-  formato: "stories" | "feed" | "impressao";
+  formato: "stories" | "feed" | "impressao" | "banner" | "flyer";
 }
 
 const estiloConfigs = {
@@ -71,6 +71,8 @@ const formatoSizes: Record<string, { width: number; height: number; className: s
   stories: { width: 1080, height: 1920, className: "w-[270px] h-[480px]" },
   feed: { width: 1080, height: 1080, className: "w-[320px] h-[320px]" },
   impressao: { width: 600, height: 400, className: "w-[360px] h-[240px]" },
+  banner: { width: 1200, height: 628, className: "w-[360px] h-[188px]" },
+  flyer: { width: 1748, height: 2480, className: "w-[250px] h-[354px]" },
 };
 
 export const CupomVisual = React.forwardRef<HTMLDivElement, CupomVisualProps>(
@@ -79,7 +81,7 @@ export const CupomVisual = React.forwardRef<HTMLDivElement, CupomVisualProps>(
     const size = formatoSizes[formato];
     const logoSrc = config.logo === "branco" ? logoBranco : logoMarrom;
 
-    if (formato === "stories") {
+    if (formato === "stories" || formato === "flyer") {
       return (
         <div
           ref={ref}
