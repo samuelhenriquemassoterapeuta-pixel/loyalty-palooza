@@ -652,6 +652,56 @@ export type Database = {
         }
         Relationships: []
       }
+      exames_usuario: {
+        Row: {
+          arquivo_tipo: string
+          arquivo_url: string
+          created_at: string
+          data_exame: string | null
+          id: string
+          nome: string
+          observacoes: string | null
+          protocolo_usuario_id: string | null
+          tamanho_bytes: number | null
+          tipo_exame: string
+          user_id: string
+        }
+        Insert: {
+          arquivo_tipo?: string
+          arquivo_url: string
+          created_at?: string
+          data_exame?: string | null
+          id?: string
+          nome: string
+          observacoes?: string | null
+          protocolo_usuario_id?: string | null
+          tamanho_bytes?: number | null
+          tipo_exame?: string
+          user_id: string
+        }
+        Update: {
+          arquivo_tipo?: string
+          arquivo_url?: string
+          created_at?: string
+          data_exame?: string | null
+          id?: string
+          nome?: string
+          observacoes?: string | null
+          protocolo_usuario_id?: string | null
+          tamanho_bytes?: number | null
+          tipo_exame?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "exames_usuario_protocolo_usuario_id_fkey"
+            columns: ["protocolo_usuario_id"]
+            isOneToOne: false
+            referencedRelation: "usuario_protocolos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       exercicios_alongamento: {
         Row: {
           categoria: string

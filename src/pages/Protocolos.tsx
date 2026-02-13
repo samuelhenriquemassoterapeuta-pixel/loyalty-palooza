@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { Activity, Search, Droplets, Accessibility, TreePine, ChevronDown, Dumbbell, ArrowRight, Apple } from "lucide-react";
+import { Activity, Search, Droplets, Accessibility, TreePine, ChevronDown, Dumbbell, ArrowRight, Apple, FileUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AppLayout } from "@/components/AppLayout";
 import { Input } from "@/components/ui/input";
@@ -9,6 +9,7 @@ import { ProtocoloCard } from "@/components/protocolos/ProtocoloCard";
 import { DietasSection } from "@/components/protocolos/DietasSection";
 import { useProtocolos, useUsuarioProtocolos } from "@/hooks/useProtocolos";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
+import { ExamesSection } from "@/components/protocolos/ExamesSection";
 import { stagger, fadeUp, gruposProtocolos } from "@/components/protocolos/protocoloConstants";
 
 import drenagemHero from "@/assets/protocolos/drenagem-hero.jpg";
@@ -293,6 +294,11 @@ const Protocolos = () => {
                   <p>Nenhum protocolo encontrado.</p>
                 </div>
               )}
+
+            {/* Seção geral de exames */}
+            <motion.div variants={fadeUp} className="mt-2">
+              <ExamesSection />
+            </motion.div>
           </motion.div>
         </div>
       </div>
