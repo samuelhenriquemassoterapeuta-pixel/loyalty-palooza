@@ -11,6 +11,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { GiftCardVisual, temaOptions } from "@/components/vale-presente/GiftCardVisual";
+import { GiftCardExport } from "@/components/vale-presente/GiftCardExport";
 import { useValePresente } from "@/hooks/useValePresente";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
@@ -416,6 +417,13 @@ const SuccessState = ({ vale, copiedId, onCopy, onShare, onReset }: any) => (
         <Share2 size={16} /> Compartilhar
       </Button>
     </div>
+
+    {/* Export section */}
+    <div className="border-t border-border/50 pt-4">
+      <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">Exportar como imagem</p>
+      <GiftCardExport vale={vale} />
+    </div>
+
     <Button variant="ghost" onClick={onReset} className="w-full">Criar outro vale</Button>
   </motion.div>
 );

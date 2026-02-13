@@ -12,6 +12,7 @@ interface GiftCardVisualProps {
   compact?: boolean;
   tipo?: string;
   experienciaNome?: string;
+  fillContainer?: boolean;
 }
 
 const temaConfigs: Record<string, {
@@ -59,7 +60,7 @@ const temaConfigs: Record<string, {
 };
 
 export const GiftCardVisual = React.forwardRef<HTMLDivElement, GiftCardVisualProps>(
-  ({ tema, valor, destinatario, mensagem, codigo, compact, tipo, experienciaNome }, ref) => {
+  ({ tema, valor, destinatario, mensagem, codigo, compact, tipo, experienciaNome, fillContainer }, ref) => {
     const config = temaConfigs[tema] || temaConfigs.classico;
     const Icon = config.icon;
     const isExperiencia = tipo === 'experiencia';
@@ -70,7 +71,7 @@ export const GiftCardVisual = React.forwardRef<HTMLDivElement, GiftCardVisualPro
         initial={{ rotateY: -5, scale: 0.95 }}
         animate={{ rotateY: 0, scale: 1 }}
         transition={{ type: "spring", stiffness: 200, damping: 20 }}
-        className={`relative overflow-hidden rounded-2xl bg-gradient-to-br ${config.gradient} ${compact ? "p-4" : "p-6"} shadow-elevated`}
+        className={`relative overflow-hidden rounded-2xl bg-gradient-to-br ${config.gradient} ${compact ? "p-4" : "p-6"} shadow-elevated ${fillContainer ? "w-full h-full" : ""}`}
         style={{ perspective: "1000px" }}
       >
         {/* Pattern overlay */}

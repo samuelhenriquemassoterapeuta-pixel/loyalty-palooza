@@ -18,7 +18,7 @@ interface CupomExportMenuProps {
   formato: string;
   formatoLabel: string;
   disabled?: boolean;
-  variant?: "header" | "mobile";
+  variant?: "header" | "mobile" | "inline";
 }
 
 type ExportFormat = "png" | "jpg" | "webp";
@@ -185,6 +185,28 @@ export const CupomExportMenu = ({ cupomRef, formato, formatoLabel, disabled, var
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
+    );
+  }
+
+  if (variant === "inline") {
+    return (
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button className="w-full gap-2 bg-primary text-primary-foreground shadow-button" disabled={exporting}>
+            <Download size={16} />
+            {exporting ? "Exportando..." : `Exportar ${formatoLabel}`}
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="center" className="w-64">
+          <ExportMenuItems
+            onExportImage={exportAsImage}
+            onExportPdf={exportAsPdf}
+            onCopy={copyToClipboard}
+            onShare={shareVia}
+            copied={copied}
+          />
+        </DropdownMenuContent>
+      </DropdownMenu>
     );
   }
 
