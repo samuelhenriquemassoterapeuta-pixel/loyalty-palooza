@@ -15,7 +15,7 @@ export const FloatingContactButtons = () => {
   const instagramUrl = `https://instagram.com/${instagramUser}`;
 
   return (
-    <div className="fixed bottom-24 left-4 z-50 flex flex-col-reverse items-start gap-3 lg:bottom-8">
+    <div className="fixed bottom-6 left-4 z-50 flex flex-col-reverse items-start gap-3 lg:bottom-6">
       <AnimatePresence>
         {open && (
           <>
@@ -59,7 +59,7 @@ export const FloatingContactButtons = () => {
       {/* Toggle button */}
       <motion.button
         onClick={() => setOpen((o) => !o)}
-        className={`w-14 h-14 rounded-full shadow-lg flex items-center justify-center transition-all active:scale-95 ${
+        className={`w-11 h-11 rounded-full shadow-md flex items-center justify-center transition-all active:scale-95 ${
           open
             ? "bg-muted text-muted-foreground"
             : "bg-[hsl(142,70%,38%)] text-white animate-[pulse_2s_cubic-bezier(0.4,0,0.6,1)_infinite]"
@@ -70,11 +70,11 @@ export const FloatingContactButtons = () => {
         <AnimatePresence mode="wait">
           {open ? (
             <motion.div key="close" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.15 }}>
-              <X className="w-6 h-6" />
+              <X className="w-5 h-5" />
             </motion.div>
           ) : (
             <motion.div key="chat" initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -90, opacity: 0 }} transition={{ duration: 0.15 }}>
-              <MessageCircle className="w-6 h-6" />
+              <MessageCircle className="w-5 h-5" />
             </motion.div>
           )}
         </AnimatePresence>
