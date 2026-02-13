@@ -1,18 +1,15 @@
  import { useState, useEffect } from "react";
  import { supabase } from "@/integrations/supabase/client";
  
- export interface Terapeuta {
-   id: string;
-   nome: string;
-   especialidade: string | null;
-   foto_url: string | null;
-   email: string | null;
-   telefone: string | null;
-   disponivel: boolean;
-   created_at: string;
+export interface Terapeuta {
+  id: string;
+  nome: string;
+  especialidade: string | null;
+  foto_url: string | null;
+  disponivel: boolean;
   media_avaliacoes?: number;
   total_avaliacoes?: number;
- }
+}
  
  export const useTerapeutas = () => {
    const [terapeutas, setTerapeutas] = useState<Terapeuta[]>([]);
@@ -23,12 +20,9 @@
      try {
        setLoading(true);
       
-      // Buscar terapeutas
-       const { data: terapeutasData, error: terapeutasError } = await supabase
-          .from("terapeutas")
-          .select("id, nome, especialidade, foto_url, disponivel, created_at")
-          .eq("disponivel", true)
-          .order("nome", { ascending: true });
+       // Buscar terapeutas via função segura (não expõe email/telefone)
+        const { data: terapeutasData, error: terapeutasError } = await supabase
+           .rpc("get_terapeutas_publicos");
  
       if (terapeutasError) throw terapeutasError;
 
@@ -61,12 +55,10 @@
        const terapeutasComMedia = (terapeutasData || []).map((terapeuta) => {
          const avaliacoes = avaliacoesPorTerapeuta[terapeuta.id];
          return {
-           ...terapeuta,
-           email: null as string | null,
-           telefone: null as string | null,
-           media_avaliacoes: avaliacoes ? avaliacoes.soma / avaliacoes.total : undefined,
-           total_avaliacoes: avaliacoes?.total || 0,
-         };
+            ...terapeuta,
+            media_avaliacoes: avaliacoes ? avaliacoes.soma / avaliacoes.total : undefined,
+            total_avaliacoes: avaliacoes?.total || 0,
+          };
        });
 
       setTerapeutas(terapeutasComMedia);
