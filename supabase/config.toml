@@ -20,3 +20,6 @@ verify_jwt = false
 
 [functions.enviar-whatsapp]
 verify_jwt = false
+
+[functions.gerar-imagem-servico]
+verify_jwt = false

@@ -4,7 +4,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { AppLayout } from "@/components/AppLayout";
-import { ArrowLeft, Clock, Check, CalendarDays, X, User, Star, RefreshCw } from "lucide-react";
+import { ArrowLeft, Clock, Check, CalendarDays, X, User, Star, RefreshCw, Info } from "lucide-react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
 import { ptBR } from "date-fns/locale";
@@ -463,14 +463,25 @@ const Agendamento = () => {
                             onClick={() => setSelectedServico(servico)}
                           >
                             <div className="flex justify-between items-center">
-                              <div>
+                              <div className="flex-1 min-w-0">
                                 <h3 className="font-medium text-foreground">{servico.nome}</h3>
                                 {servico.descricao && (
                                   <p className="text-xs text-muted-foreground mt-0.5">{servico.descricao}</p>
                                 )}
-                                <p className="text-sm text-muted-foreground flex items-center gap-1 mt-1">
-                                  <Clock size={14} /> {servico.duracao} min
-                                </p>
+                                <div className="flex items-center gap-3 mt-1">
+                                  <p className="text-sm text-muted-foreground flex items-center gap-1">
+                                    <Clock size={14} /> {servico.duracao} min
+                                  </p>
+                                  <button
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      navigate(`/servico/${servico.id}`);
+                                    }}
+                                    className="text-xs text-primary font-medium flex items-center gap-0.5 hover:underline"
+                                  >
+                                    <Info size={12} /> Ver detalhes
+                                  </button>
+                                </div>
                               </div>
                               <div className="text-right">
                                 <p className="font-semibold text-primary">

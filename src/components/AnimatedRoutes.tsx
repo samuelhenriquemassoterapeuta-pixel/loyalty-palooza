@@ -40,6 +40,7 @@ import ResinkraMoments from "@/pages/ResinkraMoments";
 import Checkin from "@/pages/Checkin";
 import DesafiosPage from "@/pages/Desafios";
 import MinhaJornada from "@/pages/MinhaJornada";
+import ServicoDetalhe from "@/pages/ServicoDetalhe";
 import NotFound from "@/pages/NotFound";
 
 /** Shows landing for visitors, dashboard for authenticated users */
@@ -94,6 +95,16 @@ export const AnimatedRoutes = () => {
             <PageTransition>
               <Landing />
             </PageTransition>
+          }
+        />
+        <Route
+          path="/servico/:id"
+          element={
+            <ProtectedRoute>
+              <PageTransition>
+                <ServicoDetalhe />
+              </PageTransition>
+            </ProtectedRoute>
           }
         />
         <Route
