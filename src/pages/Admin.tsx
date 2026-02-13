@@ -1,7 +1,7 @@
 import { useState } from "react"; // v2
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, Plus, FileText, Users, Shield, Dumbbell, Sparkles, ClipboardList, StretchHorizontal, Salad, BookOpen, Stethoscope, Globe, Gift, Ticket, Crown, Building2, CreditCard, Handshake, Camera, Trophy, DollarSign, CalendarDays } from "lucide-react";
+import { ArrowLeft, Plus, FileText, Users, Shield, Dumbbell, Sparkles, ClipboardList, StretchHorizontal, Salad, BookOpen, Stethoscope, Globe, Gift, Ticket, Crown, Building2, CreditCard, Handshake, Camera, Trophy, DollarSign, CalendarDays, Target, Megaphone, Send } from "lucide-react";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -38,6 +38,9 @@ import FinanceiroTab from "@/components/admin/FinanceiroTab";
 import DesafiosTab from "@/components/admin/DesafiosTab";
 import { AgendamentosTab } from "@/components/admin/AgendamentosTab";
 import { ServicosDetalhesTab } from "@/components/admin/ServicosDetalhesTab";
+import SegmentacaoClientesTab from "@/components/admin/SegmentacaoClientesTab";
+import CampanhasMarketingTab from "@/components/admin/CampanhasMarketingTab";
+import BannersPromocionaisTab from "@/components/admin/BannersPromocionaisTab";
 
 const tabContentVariants = {
   hidden: { opacity: 0, y: 12 },
@@ -418,6 +421,18 @@ const Admin = () => {
                   <FileText size={14} />
                   Auditoria
                 </TabsTrigger>
+                <TabsTrigger value="segmentacao" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
+                  <Target size={14} />
+                  Segmentação
+                </TabsTrigger>
+                <TabsTrigger value="campanhas" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
+                  <Send size={14} />
+                  Campanhas
+                </TabsTrigger>
+                <TabsTrigger value="banners" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
+                  <Megaphone size={14} />
+                  Banners
+                </TabsTrigger>
               </TabsList>
               <ScrollBar orientation="horizontal" className="h-1.5" />
             </ScrollArea>
@@ -589,6 +604,18 @@ const Admin = () => {
                     </Button>
                   </div>
                 </div>
+              </TabsContent>
+
+              <TabsContent value="segmentacao" forceMount={activeTab === "segmentacao" ? true : undefined} className={activeTab !== "segmentacao" ? "hidden" : ""}>
+                <SegmentacaoClientesTab />
+              </TabsContent>
+
+              <TabsContent value="campanhas" forceMount={activeTab === "campanhas" ? true : undefined} className={activeTab !== "campanhas" ? "hidden" : ""}>
+                <CampanhasMarketingTab />
+              </TabsContent>
+
+              <TabsContent value="banners" forceMount={activeTab === "banners" ? true : undefined} className={activeTab !== "banners" ? "hidden" : ""}>
+                <BannersPromocionaisTab />
               </TabsContent>
             </motion.div>
           </AnimatePresence>
