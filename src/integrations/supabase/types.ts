@@ -1093,6 +1093,299 @@ export type Database = {
           },
         ]
       }
+      parceiro_comissoes: {
+        Row: {
+          created_at: string
+          cupom_uso_id: string | null
+          id: string
+          pago_em: string | null
+          parceiro_id: string
+          percentual_comissao: number
+          status: string
+          valor_comissao: number
+          valor_venda: number
+        }
+        Insert: {
+          created_at?: string
+          cupom_uso_id?: string | null
+          id?: string
+          pago_em?: string | null
+          parceiro_id: string
+          percentual_comissao: number
+          status?: string
+          valor_comissao: number
+          valor_venda: number
+        }
+        Update: {
+          created_at?: string
+          cupom_uso_id?: string | null
+          id?: string
+          pago_em?: string | null
+          parceiro_id?: string
+          percentual_comissao?: number
+          status?: string
+          valor_comissao?: number
+          valor_venda?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "parceiro_comissoes_cupom_uso_id_fkey"
+            columns: ["cupom_uso_id"]
+            isOneToOne: false
+            referencedRelation: "parceiro_cupom_usos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "parceiro_comissoes_parceiro_id_fkey"
+            columns: ["parceiro_id"]
+            isOneToOne: false
+            referencedRelation: "parceiros"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      parceiro_cupom_usos: {
+        Row: {
+          created_at: string
+          cupom_id: string
+          id: string
+          parceiro_id: string
+          referencia_id: string | null
+          referencia_tipo: string
+          user_id: string
+          valor_compra: number
+          valor_desconto_aplicado: number
+        }
+        Insert: {
+          created_at?: string
+          cupom_id: string
+          id?: string
+          parceiro_id: string
+          referencia_id?: string | null
+          referencia_tipo?: string
+          user_id: string
+          valor_compra: number
+          valor_desconto_aplicado: number
+        }
+        Update: {
+          created_at?: string
+          cupom_id?: string
+          id?: string
+          parceiro_id?: string
+          referencia_id?: string | null
+          referencia_tipo?: string
+          user_id?: string
+          valor_compra?: number
+          valor_desconto_aplicado?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "parceiro_cupom_usos_cupom_id_fkey"
+            columns: ["cupom_id"]
+            isOneToOne: false
+            referencedRelation: "parceiro_cupons"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "parceiro_cupom_usos_parceiro_id_fkey"
+            columns: ["parceiro_id"]
+            isOneToOne: false
+            referencedRelation: "parceiros"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      parceiro_cupons: {
+        Row: {
+          ativo: boolean
+          codigo: string
+          created_at: string
+          descricao: string | null
+          id: string
+          max_usos: number | null
+          parceiro_id: string
+          servicos_aplicaveis: Json | null
+          tipo_desconto: string
+          updated_at: string
+          usos_atuais: number
+          valido_ate: string | null
+          valor_desconto: number
+          valor_minimo_compra: number | null
+        }
+        Insert: {
+          ativo?: boolean
+          codigo: string
+          created_at?: string
+          descricao?: string | null
+          id?: string
+          max_usos?: number | null
+          parceiro_id: string
+          servicos_aplicaveis?: Json | null
+          tipo_desconto?: string
+          updated_at?: string
+          usos_atuais?: number
+          valido_ate?: string | null
+          valor_desconto?: number
+          valor_minimo_compra?: number | null
+        }
+        Update: {
+          ativo?: boolean
+          codigo?: string
+          created_at?: string
+          descricao?: string | null
+          id?: string
+          max_usos?: number | null
+          parceiro_id?: string
+          servicos_aplicaveis?: Json | null
+          tipo_desconto?: string
+          updated_at?: string
+          usos_atuais?: number
+          valido_ate?: string | null
+          valor_desconto?: number
+          valor_minimo_compra?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "parceiro_cupons_parceiro_id_fkey"
+            columns: ["parceiro_id"]
+            isOneToOne: false
+            referencedRelation: "parceiros"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      parceiro_faixas_comissao: {
+        Row: {
+          beneficios: Json
+          cor: string
+          created_at: string
+          icone: string
+          id: string
+          meta_vendas_minima: number
+          nome: string
+          ordem: number
+          percentual_comissao: number
+        }
+        Insert: {
+          beneficios?: Json
+          cor?: string
+          created_at?: string
+          icone?: string
+          id?: string
+          meta_vendas_minima?: number
+          nome: string
+          ordem?: number
+          percentual_comissao?: number
+        }
+        Update: {
+          beneficios?: Json
+          cor?: string
+          created_at?: string
+          icone?: string
+          id?: string
+          meta_vendas_minima?: number
+          nome?: string
+          ordem?: number
+          percentual_comissao?: number
+        }
+        Relationships: []
+      }
+      parceiro_vales: {
+        Row: {
+          created_at: string
+          id: string
+          parceiro_id: string
+          vale_presente_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          parceiro_id: string
+          vale_presente_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          parceiro_id?: string
+          vale_presente_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "parceiro_vales_parceiro_id_fkey"
+            columns: ["parceiro_id"]
+            isOneToOne: false
+            referencedRelation: "parceiros"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "parceiro_vales_vale_presente_id_fkey"
+            columns: ["vale_presente_id"]
+            isOneToOne: false
+            referencedRelation: "vale_presentes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      parceiros: {
+        Row: {
+          ativo: boolean
+          created_at: string
+          descricao: string | null
+          email_comercial: string | null
+          faixa_comissao_atual: string
+          id: string
+          instagram: string | null
+          logo_url: string | null
+          nome_empresa: string
+          segmento: string
+          site_url: string | null
+          slug: string
+          telefone: string | null
+          total_vendas_acumulado: number
+          updated_at: string
+          user_id: string
+          verificado: boolean
+        }
+        Insert: {
+          ativo?: boolean
+          created_at?: string
+          descricao?: string | null
+          email_comercial?: string | null
+          faixa_comissao_atual?: string
+          id?: string
+          instagram?: string | null
+          logo_url?: string | null
+          nome_empresa: string
+          segmento?: string
+          site_url?: string | null
+          slug: string
+          telefone?: string | null
+          total_vendas_acumulado?: number
+          updated_at?: string
+          user_id: string
+          verificado?: boolean
+        }
+        Update: {
+          ativo?: boolean
+          created_at?: string
+          descricao?: string | null
+          email_comercial?: string | null
+          faixa_comissao_atual?: string
+          id?: string
+          instagram?: string | null
+          logo_url?: string | null
+          nome_empresa?: string
+          segmento?: string
+          site_url?: string | null
+          slug?: string
+          telefone?: string | null
+          total_vendas_acumulado?: number
+          updated_at?: string
+          user_id?: string
+          verificado?: boolean
+        }
+        Relationships: []
+      }
       pausas_posturais_config: {
         Row: {
           ativo: boolean
@@ -2001,6 +2294,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      is_parceiro: { Args: { _user_id: string }; Returns: boolean }
       notify_expiring_cashback: {
         Args: never
         Returns: {
@@ -2032,7 +2326,7 @@ export type Database = {
       resgatar_vale_presente: { Args: { p_codigo: string }; Returns: Json }
     }
     Enums: {
-      app_role: "admin" | "user"
+      app_role: "admin" | "user" | "parceiro"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -2160,7 +2454,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["admin", "user"],
+      app_role: ["admin", "user", "parceiro"],
     },
   },
 } as const

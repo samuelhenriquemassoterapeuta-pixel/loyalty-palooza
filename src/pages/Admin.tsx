@@ -1,7 +1,7 @@
 import { useState } from "react"; // v2
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, Plus, FileText, Users, Shield, Dumbbell, Sparkles, ClipboardList, StretchHorizontal, Salad, BookOpen, Stethoscope, Globe, Gift, Ticket, Crown, Building2, CreditCard } from "lucide-react";
+import { ArrowLeft, Plus, FileText, Users, Shield, Dumbbell, Sparkles, ClipboardList, StretchHorizontal, Salad, BookOpen, Stethoscope, Globe, Gift, Ticket, Crown, Building2, CreditCard, Handshake } from "lucide-react";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -32,6 +32,7 @@ import ValesPresenteTab from "@/components/admin/ValesPresenteTab";
 import PlanosVipTab from "@/components/admin/PlanosVipTab";
 import EmpresasTab from "@/components/admin/EmpresasTab";
 import AssinaturasTab from "@/components/admin/AssinaturasTab";
+import ParceirosTab from "@/components/admin/ParceirosTab";
 
 const tabContentVariants = {
   hidden: { opacity: 0, y: 12 },
@@ -380,6 +381,10 @@ const Admin = () => {
                   <Building2 size={14} />
                   Empresas
                 </TabsTrigger>
+                <TabsTrigger value="parceiros" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
+                  <Handshake size={14} />
+                  Parceiros
+                </TabsTrigger>
                 <TabsTrigger value="assinaturas" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
                   <CreditCard size={14} />
                   Assinaturas
@@ -508,6 +513,10 @@ const Admin = () => {
 
               <TabsContent value="assinaturas" forceMount={activeTab === "assinaturas" ? true : undefined} className={activeTab !== "assinaturas" ? "hidden" : ""}>
                 <AssinaturasTab />
+              </TabsContent>
+
+              <TabsContent value="parceiros" forceMount={activeTab === "parceiros" ? true : undefined} className={activeTab !== "parceiros" ? "hidden" : ""}>
+                <ParceirosTab />
               </TabsContent>
 
               <TabsContent value="auditoria" forceMount={activeTab === "auditoria" ? true : undefined} className={activeTab !== "auditoria" ? "hidden" : ""}>
