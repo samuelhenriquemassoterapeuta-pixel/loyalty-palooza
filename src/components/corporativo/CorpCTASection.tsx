@@ -56,70 +56,44 @@ export const CorpCTASection = () => {
 
   if (enviado) {
     return (
-      <section id="orcamento-corporativo" className="py-20 lg:py-28">
-        <div className="max-w-lg mx-auto px-4 text-center">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5 }}
-            className="card-organic p-10"
-          >
-            <CheckCircle size={48} className="text-primary mx-auto mb-4" />
-            <h3 className="text-2xl font-bold text-foreground mb-2">Mensagem enviada!</h3>
-            <p className="text-muted-foreground mb-6">
-              Nosso time comercial entrará em contato em até 24h úteis para elaborar uma proposta personalizada.
-            </p>
-            <Button variant="outline" onClick={() => setEnviado(false)}>
-              Enviar outra solicitação
-            </Button>
-          </motion.div>
-        </div>
-      </section>
+      <div className="max-w-lg mx-auto text-center">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5 }}
+          className="card-organic p-10"
+        >
+          <CheckCircle size={48} className="text-primary mx-auto mb-4" />
+          <h3 className="text-2xl font-bold text-foreground mb-2">Mensagem enviada!</h3>
+          <p className="text-muted-foreground mb-6">
+            Nosso time comercial entrará em contato em até 24h úteis para elaborar uma proposta personalizada.
+          </p>
+          <Button variant="outline" onClick={() => setEnviado(false)}>
+            Enviar outra solicitação
+          </Button>
+        </motion.div>
+      </div>
     );
   }
 
   return (
-    <section id="orcamento-corporativo" className="relative py-20 lg:py-28 overflow-hidden">
-      <div className="absolute inset-0">
-        <img src={heroBg} alt="" className="w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-background/80" />
-      </div>
-      <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid lg:grid-cols-2 gap-16 items-start">
-          {/* Left side - Info */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.6 }}
-          >
-            <span className="pill mb-4 inline-flex">
-              <Building2 size={14} />
-              Fale com nosso time
-            </span>
-            <h2 className="text-3xl lg:text-4xl font-bold text-foreground">
-              Solicite um{" "}
-              <span className="font-serif italic text-gradient">orçamento</span>
-            </h2>
-            <p className="mt-4 text-muted-foreground leading-relaxed max-w-md">
-              Preencha o formulário e nossa equipe comercial entrará em contato em até 24h 
-              com uma proposta personalizada para a sua empresa.
-            </p>
-
-            <div className="mt-8 space-y-4">
-              {[
-                "Proposta personalizada em 24h",
-                "Visita técnica sem compromisso",
-                "Flexibilidade nos contratos",
-                "Equipe certificada e especializada",
-              ].map((item) => (
-                <div key={item} className="flex items-center gap-3">
-                  <CheckCircle size={16} className="text-primary shrink-0" />
-                  <span className="text-sm text-foreground">{item}</span>
-                </div>
-              ))}
+    <div className="grid lg:grid-cols-2 gap-16 items-start">
+      {/* Left side - Info */}
+      <div className="space-y-4">
+        <div className="space-y-4">
+          {[
+            "Proposta personalizada em 24h",
+            "Visita técnica sem compromisso",
+            "Flexibilidade nos contratos",
+            "Equipe certificada e especializada",
+          ].map((item) => (
+            <div key={item} className="flex items-center gap-3">
+              <CheckCircle size={16} className="text-primary shrink-0" />
+              <span className="text-sm text-foreground">{item}</span>
             </div>
-          </motion.div>
+          ))}
+        </div>
+      </div>
 
           {/* Right side - Form */}
           <motion.div
@@ -260,7 +234,5 @@ export const CorpCTASection = () => {
             </form>
           </motion.div>
         </div>
-      </div>
-    </section>
   );
 };
