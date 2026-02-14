@@ -64,7 +64,7 @@ function AulaView({
         return <div key={i} className="grid grid-cols-2 gap-2 text-xs my-0.5">{cells.map((c, j) => <span key={j} className="bg-muted/50 px-2 py-1 rounded">{c}</span>)}</div>;
       }
       if (line.startsWith("❌ ")) return <p key={i} className="text-sm my-1 text-destructive">{line}</p>;
-      if (line.startsWith("✅ ")) return <p key={i} className="text-sm my-1 text-green-600">{line}</p>;
+      if (line.startsWith("✅ ")) return <p key={i} className="text-sm my-1 text-primary">{line}</p>;
       if (line.startsWith("**") && line.endsWith("**")) return <p key={i} className="text-sm font-bold my-1">{line.slice(2, -2)}</p>;
       if (line.trim() === "") return <div key={i} className="h-2" />;
       return <p key={i} className="text-sm text-muted-foreground my-1">{line}</p>;
@@ -124,9 +124,14 @@ export default function CursoVendas() {
   // Build a flat aula id list using modulo+aula indices as keys
   const getAulaKey = (mi: number, ai: number) => `${mi}-${ai}`;
 
-  // For now use local state since DB may not have content seeded
-  // We track by key, falling back to DB when seeded
-  const [localProgress, setLocalProgress] = useState<Set<string>>(new Set());
+  // Persist progress to localStorage for reliability (DB tables may not be seeded)
+  const STORAGE_KEY = "resinkra_curso_vendas_progress";
+  const [localProgress, setLocalProgress] = useState<Set<string>>(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      return saved ? new Set(JSON.parse(saved)) : new Set();
+    } catch { return new Set(); }
+  });
 
   const isComplete = (mi: number, ai: number) => localProgress.has(getAulaKey(mi, ai));
   const toggleLocal = (mi: number, ai: number) => {
@@ -134,6 +139,7 @@ export default function CursoVendas() {
       const next = new Set(prev);
       const key = getAulaKey(mi, ai);
       if (next.has(key)) next.delete(key); else next.add(key);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify([...next]));
       return next;
     });
   };
