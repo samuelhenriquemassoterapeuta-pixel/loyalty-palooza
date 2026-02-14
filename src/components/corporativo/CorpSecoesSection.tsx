@@ -174,42 +174,18 @@ export const CorpSecoesSection = () => {
   if (secoes.length === 0) return null;
 
   return (
-    <section className="py-16 lg:py-24">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="max-w-4xl mx-auto space-y-4">
+      {secoes.map((secao, index) => (
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          key={secao.id}
+          initial={{ opacity: 0, y: 15 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.6 }}
-          className="text-center max-w-2xl mx-auto mb-12"
+          viewport={{ once: true, margin: "-40px" }}
+          transition={{ duration: 0.4, delay: index * 0.08 }}
         >
-          <span className="pill mb-4 inline-flex">
-            <Building2 size={14} />
-            Conheça em detalhes
-          </span>
-          <h2 className="text-3xl lg:text-4xl font-bold text-foreground">
-            Tudo sobre{" "}
-            <span className="font-serif italic text-gradient">nossos serviços</span>
-          </h2>
-          <p className="mt-4 text-muted-foreground">
-            Clique em cada seção para expandir e conhecer em profundidade nossos programas corporativos.
-          </p>
+          <SecaoCard secao={secao} />
         </motion.div>
-
-        <div className="space-y-4">
-          {secoes.map((secao, index) => (
-            <motion.div
-              key={secao.id}
-              initial={{ opacity: 0, y: 15 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-40px" }}
-              transition={{ duration: 0.4, delay: index * 0.08 }}
-            >
-              <SecaoCard secao={secao} />
-            </motion.div>
-          ))}
-        </div>
-      </div>
-    </section>
+      ))}
+    </div>
   );
 };
