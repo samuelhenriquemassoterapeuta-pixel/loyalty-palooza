@@ -74,6 +74,8 @@ const StatsCollapsible = () => {
 };
 
 export const CorpHeroSection = () => {
+  const [heroOpen, setHeroOpen] = useState(true);
+
   const scrollToPlanos = () => {
     document.querySelector("#planos-corporativos")?.scrollIntoView({ behavior: "smooth" });
   };
@@ -114,40 +116,55 @@ export const CorpHeroSection = () => {
             </span>
           </motion.div>
 
-          <motion.h1
+          {/* Clickable title with chevron */}
+          <motion.button
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground leading-tight [text-shadow:0_2px_8px_rgba(0,0,0,0.15)]"
+            onClick={() => setHeroOpen((v) => !v)}
+            className="w-full flex items-start gap-3 text-left group"
+            aria-expanded={heroOpen}
           >
-            Bem-estar corporativo que{" "}
-            <span className="font-serif italic text-gradient">transforma resultados</span>
-          </motion.h1>
+            <h1 className="flex-1 text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground leading-tight [text-shadow:0_2px_8px_rgba(0,0,0,0.15)]">
+              Bem-estar corporativo que{" "}
+              <span className="font-serif italic text-gradient">transforma resultados</span>
+            </h1>
+            <motion.div
+              animate={{ rotate: heroOpen ? 180 : 0 }}
+              transition={{ duration: 0.2 }}
+              className="shrink-0 mt-2 p-1.5 rounded-full bg-primary/10 border border-primary/20 group-hover:bg-primary/20 transition-colors"
+            >
+              <ChevronDown size={18} className="text-primary" />
+            </motion.div>
+          </motion.button>
 
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="mt-6 text-lg text-foreground/90 leading-relaxed max-w-2xl [text-shadow:0_1px_3px_rgba(0,0,0,0.1)]"
-          >
-            Massoterapia corporativa para eventos, escritórios e programas de qualidade de vida. 
-            Reduza o estresse da equipe, aumente a produtividade e promova saúde no ambiente de trabalho.
-          </motion.p>
+          {/* Collapsible content */}
+          <AnimatePresence initial={false}>
+            {heroOpen && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: "auto", opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+                className="overflow-hidden"
+              >
+                <p className="mt-6 text-lg text-foreground/90 leading-relaxed max-w-2xl [text-shadow:0_1px_3px_rgba(0,0,0,0.1)]">
+                  Massoterapia corporativa para eventos, escritórios e programas de qualidade de vida. 
+                  Reduza o estresse da equipe, aumente a produtividade e promova saúde no ambiente de trabalho.
+                </p>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="mt-8 flex flex-col sm:flex-row gap-4"
-          >
-            <Button size="xl" onClick={scrollToContato} className="group">
-              Solicitar orçamento
-              <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
-            </Button>
-            <Button size="xl" variant="outline" onClick={scrollToPlanos}>
-              Ver planos
-            </Button>
-          </motion.div>
+                <div className="mt-8 flex flex-col sm:flex-row gap-4">
+                  <Button size="xl" onClick={scrollToContato} className="group">
+                    Solicitar orçamento
+                    <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                  </Button>
+                  <Button size="xl" variant="outline" onClick={scrollToPlanos}>
+                    Ver planos
+                  </Button>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
 
         {/* Collapsible Stats */}
