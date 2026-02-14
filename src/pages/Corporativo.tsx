@@ -22,7 +22,7 @@ const Corporativo = () => {
       <CorpTrustBadges />
       <CorpSecoesSection />
 
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4 py-8">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 py-8">
         <CollapsibleSection
           badge={
             <span className="pill inline-flex"><Heart size={14} /> Por que investir?</span>
