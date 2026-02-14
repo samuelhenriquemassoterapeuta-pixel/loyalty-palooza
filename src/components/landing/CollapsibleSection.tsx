@@ -40,12 +40,12 @@ export const CollapsibleSection = ({
       >
         {badge && <div className="mb-4 flex justify-center">{badge}</div>}
 
-        <div className="flex items-center justify-center gap-3">
-          <div>{title}</div>
+        <div className="flex items-start justify-center gap-3">
+          <div className="flex-1 min-w-0">{title}</div>
           <motion.div
             animate={{ rotate: isOpen ? 180 : 0 }}
             transition={{ duration: 0.25 }}
-            className="p-1.5 rounded-full bg-primary/10 border border-primary/20 group-hover:bg-primary/20 transition-colors"
+            className="shrink-0 mt-2 p-1.5 rounded-full bg-primary/10 border border-primary/20 group-hover:bg-primary/20 transition-colors"
           >
             <ChevronDown
               size={18}
