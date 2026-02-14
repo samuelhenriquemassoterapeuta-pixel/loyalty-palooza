@@ -75,124 +75,81 @@ const eventosReais = [
 
 export const CorpCasesSection = () => {
   return (
-    <section className="py-20 lg:py-28">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.6 }}
-          className="text-center max-w-2xl mx-auto mb-16"
-        >
-          <span className="pill mb-4 inline-flex">
-            <Building2 size={14} />
-            Cases de sucesso
-          </span>
-          <h2 className="text-3xl lg:text-4xl font-bold text-foreground">
-            Empresas que{" "}
-            <span className="font-serif italic text-gradient">investem em bem-estar</span>
-          </h2>
-          <p className="mt-4 text-muted-foreground">
-            Grandes organizações brasileiras que adotaram a massoterapia corporativa e colheram resultados reais.
-          </p>
-        </motion.div>
-
-        {/* Cases Grid */}
-        <div className="grid md:grid-cols-2 gap-6 mb-16">
-          {cases.map((caseItem, index) => (
-            <motion.div
-              key={caseItem.empresa}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-40px" }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-            >
-              <Card className="h-full p-6 hover-lift">
-                <div className="flex items-center gap-3 mb-4">
-                  <span className="text-3xl">{caseItem.logo}</span>
-                  <div>
-                    <h3 className="font-bold text-foreground">{caseItem.empresa}</h3>
-                    <span className="text-xs text-muted-foreground">{caseItem.setor}</span>
-                  </div>
+    <div>
+      <div className="grid md:grid-cols-2 gap-6 mb-16">
+        {cases.map((caseItem, index) => (
+          <motion.div
+            key={caseItem.empresa}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-40px" }}
+            transition={{ duration: 0.5, delay: index * 0.1 }}
+          >
+            <Card className="h-full p-6 hover-lift">
+              <div className="flex items-center gap-3 mb-4">
+                <span className="text-3xl">{caseItem.logo}</span>
+                <div>
+                  <h3 className="font-bold text-foreground">{caseItem.empresa}</h3>
+                  <span className="text-xs text-muted-foreground">{caseItem.setor}</span>
                 </div>
-
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  {caseItem.descricao}
-                </p>
-
-                {/* Extra detail */}
-                <p className="mt-3 text-xs text-muted-foreground/70 leading-relaxed italic border-l-2 border-primary/20 pl-3">
-                  {caseItem.detalheExtra}
-                </p>
-
-                <div className="mt-4 p-3 rounded-xl bg-primary/5 border border-primary/10">
-                  <p className="text-sm font-semibold text-primary flex items-center gap-2">
-                    <TrendingUp size={14} />
-                    {caseItem.resultado}
-                  </p>
-                </div>
-
-                <div className="mt-4 flex items-start gap-2">
-                  <Quote size={14} className="text-muted-foreground shrink-0 mt-0.5" />
-                  <p className="text-xs italic text-muted-foreground">
-                    "{caseItem.depoimento}"
-                  </p>
-                </div>
-
-                <p className="mt-3 text-[10px] text-muted-foreground/60">
-                  Fonte: {caseItem.fonte}
-                </p>
-              </Card>
-            </motion.div>
-          ))}
-        </div>
-
-        {/* Eventos reais */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-10"
-        >
-          <h3 className="text-2xl font-bold text-foreground">
-            Eventos e <span className="font-serif italic text-gradient">programas reais</span>
-          </h3>
-        </motion.div>
-
-        <div className="grid sm:grid-cols-3 gap-6">
-          {eventosReais.map((evento, index) => (
-            <motion.div
-              key={evento.evento}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-40px" }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="card-organic text-center overflow-hidden"
-            >
-              {/* Event image */}
-              <div className="relative h-32 -mx-4 -mt-4 sm:-mx-5 sm:-mt-5 mb-4 overflow-hidden">
-                <img
-                  src={evento.image}
-                  alt={evento.evento}
-                  className="w-full h-full object-cover"
-                  loading="lazy"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-card/70 to-transparent" />
               </div>
-
-              <div className="mx-auto w-12 h-12 rounded-2xl bg-accent/10 flex items-center justify-center mb-4">
-                <evento.icon size={22} className="text-accent" />
-              </div>
-              <h4 className="font-semibold text-foreground mb-2">{evento.evento}</h4>
-              <p className="text-sm text-muted-foreground leading-relaxed">{evento.descricao}</p>
-              <p className="mt-3 text-xs text-muted-foreground/70 leading-relaxed border-t border-border/30 pt-3">
-                {evento.detail}
+              <p className="text-sm text-muted-foreground leading-relaxed">{caseItem.descricao}</p>
+              <p className="mt-3 text-xs text-muted-foreground/70 leading-relaxed italic border-l-2 border-primary/20 pl-3">
+                {caseItem.detalheExtra}
               </p>
-            </motion.div>
-          ))}
-        </div>
+              <div className="mt-4 p-3 rounded-xl bg-primary/5 border border-primary/10">
+                <p className="text-sm font-semibold text-primary flex items-center gap-2">
+                  <TrendingUp size={14} />
+                  {caseItem.resultado}
+                </p>
+              </div>
+              <div className="mt-4 flex items-start gap-2">
+                <Quote size={14} className="text-muted-foreground shrink-0 mt-0.5" />
+                <p className="text-xs italic text-muted-foreground">"{caseItem.depoimento}"</p>
+              </div>
+              <p className="mt-3 text-[10px] text-muted-foreground/60">Fonte: {caseItem.fonte}</p>
+            </Card>
+          </motion.div>
+        ))}
       </div>
-    </section>
+
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-80px" }}
+        transition={{ duration: 0.6 }}
+        className="text-center mb-10"
+      >
+        <h3 className="text-2xl font-bold text-foreground">
+          Eventos e <span className="font-serif italic text-gradient">programas reais</span>
+        </h3>
+      </motion.div>
+
+      <div className="grid sm:grid-cols-3 gap-6">
+        {eventosReais.map((evento, index) => (
+          <motion.div
+            key={evento.evento}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-40px" }}
+            transition={{ duration: 0.5, delay: index * 0.1 }}
+            className="card-organic text-center overflow-hidden"
+          >
+            <div className="relative h-32 -mx-4 -mt-4 sm:-mx-5 sm:-mt-5 mb-4 overflow-hidden">
+              <img src={evento.image} alt={evento.evento} className="w-full h-full object-cover" loading="lazy" />
+              <div className="absolute inset-0 bg-gradient-to-t from-card/70 to-transparent" />
+            </div>
+            <div className="mx-auto w-12 h-12 rounded-2xl bg-accent/10 flex items-center justify-center mb-4">
+              <evento.icon size={22} className="text-accent" />
+            </div>
+            <h4 className="font-semibold text-foreground mb-2">{evento.evento}</h4>
+            <p className="text-sm text-muted-foreground leading-relaxed">{evento.descricao}</p>
+            <p className="mt-3 text-xs text-muted-foreground/70 leading-relaxed border-t border-border/30 pt-3">
+              {evento.detail}
+            </p>
+          </motion.div>
+        ))}
+      </div>
+    </div>
   );
 };

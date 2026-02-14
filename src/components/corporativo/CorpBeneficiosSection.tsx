@@ -63,69 +63,46 @@ const beneficios = [
 
 export const CorpBeneficiosSection = () => {
   return (
-    <section className="py-20 lg:py-28 bg-card/50">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {beneficios.map((item, index) => (
         <motion.div
+          key={item.title}
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.6 }}
-          className="text-center max-w-2xl mx-auto mb-16"
+          viewport={{ once: true, margin: "-40px" }}
+          transition={{ duration: 0.5, delay: index * 0.08 }}
+          className="card-organic hover-lift group overflow-hidden"
         >
-          <span className="pill mb-4 inline-flex">Por que investir?</span>
-          <h2 className="text-3xl lg:text-4xl font-bold text-foreground">
-            Benefícios{" "}
-            <span className="font-serif italic text-gradient">comprovados</span>
-          </h2>
-          <p className="mt-4 text-muted-foreground">
-            Dados reais de pesquisas sobre o impacto da massoterapia corporativa na saúde e produtividade.
+          <div className="relative h-36 -mx-4 -mt-4 sm:-mx-5 sm:-mt-5 mb-4 overflow-hidden">
+            <img
+              src={item.image}
+              alt={item.title}
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              loading="lazy"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-card/80 to-transparent" />
+            <span className="absolute bottom-2 right-3 text-xs font-bold text-primary bg-card/90 backdrop-blur-sm px-2.5 py-1 rounded-full border border-primary/20">
+              {item.stat}
+            </span>
+          </div>
+
+          <div className="flex items-start gap-3">
+            <div className="shrink-0 p-2 rounded-xl bg-primary/10 group-hover:bg-primary/15 transition-colors">
+              <item.icon size={18} className="text-primary" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <h3 className="font-semibold text-foreground text-sm">{item.title}</h3>
+              <p className="mt-1.5 text-xs text-muted-foreground leading-relaxed">
+                {item.description}
+              </p>
+            </div>
+          </div>
+
+          <p className="mt-3 text-xs text-muted-foreground/80 leading-relaxed border-t border-border/30 pt-3">
+            {item.detail}
           </p>
         </motion.div>
-
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {beneficios.map((item, index) => (
-            <motion.div
-              key={item.title}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-40px" }}
-              transition={{ duration: 0.5, delay: index * 0.08 }}
-              className="card-organic hover-lift group overflow-hidden"
-            >
-              {/* Image */}
-              <div className="relative h-36 -mx-4 -mt-4 sm:-mx-5 sm:-mt-5 mb-4 overflow-hidden">
-                <img
-                  src={item.image}
-                  alt={item.title}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  loading="lazy"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-card/80 to-transparent" />
-                <span className="absolute bottom-2 right-3 text-xs font-bold text-primary bg-card/90 backdrop-blur-sm px-2.5 py-1 rounded-full border border-primary/20">
-                  {item.stat}
-                </span>
-              </div>
-
-              <div className="flex items-start gap-3">
-                <div className="shrink-0 p-2 rounded-xl bg-primary/10 group-hover:bg-primary/15 transition-colors">
-                  <item.icon size={18} className="text-primary" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <h3 className="font-semibold text-foreground text-sm">{item.title}</h3>
-                  <p className="mt-1.5 text-xs text-muted-foreground leading-relaxed">
-                    {item.description}
-                  </p>
-                </div>
-              </div>
-
-              {/* Extended detail */}
-              <p className="mt-3 text-xs text-muted-foreground/80 leading-relaxed border-t border-border/30 pt-3">
-                {item.detail}
-              </p>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-    </section>
+      ))}
+    </div>
   );
 };
