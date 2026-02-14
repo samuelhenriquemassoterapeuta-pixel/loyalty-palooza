@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Home, CalendarDays, ShoppingBag, User, Gift, Wallet, Crown, Settings, Bell, Dumbbell, Activity, BookOpen, Scan, Apple, Globe, Ticket, Handshake } from "lucide-react";
+import { Home, CalendarDays, ShoppingBag, User, Gift, Wallet, Crown, Settings, Bell, Dumbbell, Activity, BookOpen, Scan, Apple, Globe, Ticket, Handshake, GraduationCap } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAdmin } from "@/hooks/useAdmin";
 import { useProfile } from "@/hooks/useProfile";
@@ -22,6 +22,7 @@ const navItems = [
   { icon: Ticket, label: "Vale Presente", path: "/vale-presente" },
   { icon: Wallet, label: "Transferir", path: "/transferir" },
   { icon: Handshake, label: "Parceiros", path: "/parceiro-dashboard" },
+  { icon: GraduationCap, label: "Curso de Vendas", path: "/curso-vendas" },
 ];
 
 const bottomItems = [
