@@ -63,7 +63,7 @@ export const Header = () => {
           <p className="text-[11px] text-muted-foreground leading-tight">
             <TextReveal text={`${getGreeting()} 👋`} delay={0.3} />
           </p>
-          <p className="text-sm font-bold text-foreground leading-tight flex items-center gap-1">
+          <p className="text-base font-bold text-foreground leading-tight flex items-center gap-1 font-serif">
             <TextReveal text={getDisplayName()} delay={0.5} />
             <ChevronRight size={14} className="text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
           </p>

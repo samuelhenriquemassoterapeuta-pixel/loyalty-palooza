@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import { motion } from "framer-motion";
 import { useAgendamentos } from "@/hooks/useAgendamentos";
 import { useUsuarioProtocolos, useFichas } from "@/hooks/useProtocolos";
 import { useAchievementCelebration } from "@/hooks/useAchievementCelebration";
@@ -17,6 +18,18 @@ import {
   startOfDay,
   subDays,
 } from "date-fns";
+
+const stagger = {
+  hidden: {},
+  visible: {
+    transition: { staggerChildren: 0.08 },
+  },
+};
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 16 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] as const } },
+};
 
 export const HomeDashboard = () => {
   const { getProximosAgendamentos } = useAgendamentos();
@@ -38,7 +51,6 @@ export const HomeDashboard = () => {
       fichas.map((f) => startOfDay(new Date(f.data)).getTime())
     );
 
-    // Current streak
     const lastDate = startOfDay(new Date(fichas[fichas.length - 1].data));
     const now = startOfDay(new Date());
     const isActive = differenceInDays(now, lastDate) <= 1;
@@ -52,7 +64,6 @@ export const HomeDashboard = () => {
       }
     }
 
-    // Best streak
     const sortedDates = Array.from(measurementDates).sort((a, b) => a - b);
     let tempStreak = 1;
     let best = sortedDates.length > 0 ? 1 : 0;
@@ -71,8 +82,6 @@ export const HomeDashboard = () => {
   }, [fichas]);
 
   const { achievements, totalUnlocked, celebration, dismiss } = useAchievementCelebration();
-
-  // Monitor achievement proximity and create notifications
   useAchievementProximityNotifier(achievements);
 
   const protocoloNome = protocoloAtivo?.protocolos
@@ -80,36 +89,56 @@ export const HomeDashboard = () => {
     : null;
 
   return (
-    <div className="space-y-4">
-      <PromoBanner />
-      <CollapsibleDashboardSection title="Agenda & Streak" defaultOpen={true}>
-        <NextAppointmentCard agendamento={proximoAgendamento} />
-        <StreakSummaryCard
-          streak={streak}
-          bestStreak={bestStreak}
-          protocoloNome={protocoloNome}
-          hasActiveProtocol={!!protocoloAtivo}
-        />
-      </CollapsibleDashboardSection>
+    <motion.div
+      className="space-y-6"
+      variants={stagger}
+      initial="hidden"
+      animate="visible"
+    >
+      <motion.div variants={fadeUp}>
+        <PromoBanner />
+      </motion.div>
 
-      <CollapsibleDashboardSection title="Nível & Benefícios" defaultOpen={true}>
-        <XpMiniBar achievements={achievements} />
-        <ActiveBenefitsCard />
-      </CollapsibleDashboardSection>
+      <motion.div variants={fadeUp}>
+        <CollapsibleDashboardSection title="Agenda & Streak" defaultOpen={true}>
+          <div className="space-y-3">
+            <NextAppointmentCard agendamento={proximoAgendamento} />
+            <StreakSummaryCard
+              streak={streak}
+              bestStreak={bestStreak}
+              protocoloNome={protocoloNome}
+              hasActiveProtocol={!!protocoloAtivo}
+            />
+          </div>
+        </CollapsibleDashboardSection>
+      </motion.div>
 
-      <CollapsibleDashboardSection title="Conquistas" defaultOpen={false}>
-        <NextAchievementsCard achievements={achievements} />
-        <AchievementBadges
-          achievements={achievements}
-          totalUnlocked={totalUnlocked}
-        />
-      </CollapsibleDashboardSection>
+      <motion.div variants={fadeUp}>
+        <CollapsibleDashboardSection title="Nível & Benefícios" defaultOpen={true}>
+          <div className="space-y-3">
+            <XpMiniBar achievements={achievements} />
+            <ActiveBenefitsCard />
+          </div>
+        </CollapsibleDashboardSection>
+      </motion.div>
+
+      <motion.div variants={fadeUp}>
+        <CollapsibleDashboardSection title="Conquistas" defaultOpen={false}>
+          <div className="space-y-3">
+            <NextAchievementsCard achievements={achievements} />
+            <AchievementBadges
+              achievements={achievements}
+              totalUnlocked={totalUnlocked}
+            />
+          </div>
+        </CollapsibleDashboardSection>
+      </motion.div>
 
       <AchievementCelebration
         isOpen={!!celebration}
         achievement={celebration}
         onClose={dismiss}
       />
-    </div>
+    </motion.div>
   );
 };
