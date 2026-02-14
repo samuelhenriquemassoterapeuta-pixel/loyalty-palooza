@@ -40,49 +40,21 @@ const faqs = [
 
 export const CorpFAQSection = () => {
   return (
-    <section className="py-20 lg:py-28 bg-card/50">
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-12"
+    <Accordion type="single" collapsible className="space-y-3">
+      {faqs.map((faq, index) => (
+        <AccordionItem
+          key={index}
+          value={`faq-${index}`}
+          className="card-organic border-none px-5"
         >
-          <span className="pill mb-4 inline-flex">
-            <HelpCircle size={14} />
-            Perguntas frequentes
-          </span>
-          <h2 className="text-3xl lg:text-4xl font-bold text-foreground">
-            Tire suas{" "}
-            <span className="font-serif italic text-gradient">dúvidas</span>
-          </h2>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-40px" }}
-          transition={{ duration: 0.5 }}
-        >
-          <Accordion type="single" collapsible className="space-y-3">
-            {faqs.map((faq, index) => (
-              <AccordionItem
-                key={index}
-                value={`faq-${index}`}
-                className="card-organic border-none px-5"
-              >
-                <AccordionTrigger className="text-sm font-medium text-foreground hover:text-primary hover:no-underline py-4">
-                  {faq.pergunta}
-                </AccordionTrigger>
-                <AccordionContent className="text-sm text-muted-foreground leading-relaxed pb-4">
-                  {faq.resposta}
-                </AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
-        </motion.div>
-      </div>
-    </section>
+          <AccordionTrigger className="text-sm font-medium text-foreground hover:text-primary hover:no-underline py-4">
+            {faq.pergunta}
+          </AccordionTrigger>
+          <AccordionContent className="text-sm text-muted-foreground leading-relaxed pb-4">
+            {faq.resposta}
+          </AccordionContent>
+        </AccordionItem>
+      ))}
+    </Accordion>
   );
 };

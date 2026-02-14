@@ -70,105 +70,84 @@ export const CorpPlanosSection = () => {
   };
 
   return (
-    <section id="planos-corporativos" className="py-20 lg:py-28 bg-card/50">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="grid lg:grid-cols-3 gap-6 lg:gap-8">
+      {planos.map((plano, index) => (
         <motion.div
+          key={plano.nome}
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.6 }}
-          className="text-center max-w-2xl mx-auto mb-16"
+          viewport={{ once: true, margin: "-40px" }}
+          transition={{ duration: 0.5, delay: index * 0.1 }}
+          className={`relative rounded-3xl p-6 lg:p-8 ${
+            plano.destaque
+              ? "bg-primary text-primary-foreground shadow-glow ring-2 ring-primary/20 lg:scale-105"
+              : "card-organic"
+          }`}
         >
-          <span className="pill mb-4 inline-flex">Planos & Contratos</span>
-          <h2 className="text-3xl lg:text-4xl font-bold text-foreground">
-            Escolha o plano{" "}
-            <span className="font-serif italic text-gradient">ideal</span>
-          </h2>
-          <p className="mt-4 text-muted-foreground">
-            Contratos flexíveis que se adaptam ao tamanho e necessidade da sua empresa.
-          </p>
-        </motion.div>
+          {plano.destaque && (
+            <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-accent text-accent-foreground text-xs font-bold px-4 py-1 rounded-full shadow-accent">
+              Mais popular
+            </span>
+          )}
 
-        <div className="grid lg:grid-cols-3 gap-6 lg:gap-8">
-          {planos.map((plano, index) => (
-            <motion.div
-              key={plano.nome}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-40px" }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              className={`relative rounded-3xl p-6 lg:p-8 ${
-                plano.destaque
-                  ? "bg-primary text-primary-foreground shadow-glow ring-2 ring-primary/20 lg:scale-105"
-                  : "card-organic"
-              }`}
-            >
-              {plano.destaque && (
-                <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-accent text-accent-foreground text-xs font-bold px-4 py-1 rounded-full shadow-accent">
-                  Mais popular
-                </span>
-              )}
-
-              <div className="flex items-center gap-3 mb-4">
-                <div className={`p-2.5 rounded-xl ${
-                  plano.destaque ? "bg-primary-foreground/15" : "bg-primary/10"
-                }`}>
-                  <plano.icon size={20} className={plano.destaque ? "text-primary-foreground" : "text-primary"} />
-                </div>
-                <div>
-                  <h3 className="font-bold text-lg">{plano.nome}</h3>
-                  <p className={`text-xs ${plano.destaque ? "text-primary-foreground/70" : "text-muted-foreground"}`}>
-                    {plano.subtitulo}
-                  </p>
-                </div>
-              </div>
-
-              <div className="mb-4">
-                <span className="text-2xl font-bold">{plano.preco}</span>
-                <span className={`text-sm ${plano.destaque ? "text-primary-foreground/70" : "text-muted-foreground"}`}>
-                  {plano.periodo}
-                </span>
-              </div>
-
-              <p className={`text-sm mb-6 leading-relaxed ${
-                plano.destaque ? "text-primary-foreground/80" : "text-muted-foreground"
-              }`}>
-                {plano.descricao}
+          <div className="flex items-center gap-3 mb-4">
+            <div className={`p-2.5 rounded-xl ${
+              plano.destaque ? "bg-primary-foreground/15" : "bg-primary/10"
+            }`}>
+              <plano.icon size={20} className={plano.destaque ? "text-primary-foreground" : "text-primary"} />
+            </div>
+            <div>
+              <h3 className="font-bold text-lg">{plano.nome}</h3>
+              <p className={`text-xs ${plano.destaque ? "text-primary-foreground/70" : "text-muted-foreground"}`}>
+                {plano.subtitulo}
               </p>
+            </div>
+          </div>
 
-              <ul className="space-y-3 mb-8">
-                {plano.beneficios.map((item) => (
-                  <li key={item} className="flex items-start gap-2.5 text-sm">
-                    <Check size={16} className={`shrink-0 mt-0.5 ${
-                      plano.destaque ? "text-primary-foreground" : "text-primary"
-                    }`} />
-                    <span className={plano.destaque ? "text-primary-foreground/90" : "text-foreground"}>
-                      {item}
-                    </span>
-                  </li>
-                ))}
-              </ul>
+          <div className="mb-4">
+            <span className="text-2xl font-bold">{plano.preco}</span>
+            <span className={`text-sm ${plano.destaque ? "text-primary-foreground/70" : "text-muted-foreground"}`}>
+              {plano.periodo}
+            </span>
+          </div>
 
-              <div className={`text-xs mb-6 p-3 rounded-xl ${
-                plano.destaque 
-                  ? "bg-primary-foreground/10 text-primary-foreground/70" 
-                  : "bg-muted text-muted-foreground"
-              }`}>
-                <strong>Ideal para:</strong> {plano.ideal}
-              </div>
+          <p className={`text-sm mb-6 leading-relaxed ${
+            plano.destaque ? "text-primary-foreground/80" : "text-muted-foreground"
+          }`}>
+            {plano.descricao}
+          </p>
 
-              <Button
-                onClick={scrollToContato}
-                variant={plano.destaque ? "secondary" : "default"}
-                className="w-full"
-                size="lg"
-              >
-                Solicitar orçamento
-              </Button>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-    </section>
+          <ul className="space-y-3 mb-8">
+            {plano.beneficios.map((item) => (
+              <li key={item} className="flex items-start gap-2.5 text-sm">
+                <Check size={16} className={`shrink-0 mt-0.5 ${
+                  plano.destaque ? "text-primary-foreground" : "text-primary"
+                }`} />
+                <span className={plano.destaque ? "text-primary-foreground/90" : "text-foreground"}>
+                  {item}
+                </span>
+              </li>
+            ))}
+          </ul>
+
+          <div className={`text-xs mb-6 p-3 rounded-xl ${
+            plano.destaque 
+              ? "bg-primary-foreground/10 text-primary-foreground/70" 
+              : "bg-muted text-muted-foreground"
+          }`}>
+            <strong>Ideal para:</strong> {plano.ideal}
+          </div>
+
+          <Button
+            onClick={scrollToContato}
+            variant={plano.destaque ? "secondary" : "default"}
+            className="w-full"
+            size="lg"
+          >
+            Solicitar orçamento
+          </Button>
+        </motion.div>
+      ))}
+    </div>
   );
 };
