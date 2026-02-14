@@ -43,6 +43,7 @@ import MinhaJornada from "@/pages/MinhaJornada";
 import ServicoDetalhe from "@/pages/ServicoDetalhe";
 import CartaoTerapeuta from "@/pages/CartaoTerapeuta";
 import ConteudoSocial from "@/pages/ConteudoSocial";
+import CursoVendas from "@/pages/CursoVendas";
 import NotFound from "@/pages/NotFound";
 
 /** Shows landing for visitors, dashboard for authenticated users */
@@ -439,6 +440,16 @@ export const AnimatedRoutes = () => {
             <PageTransition>
               <CartaoTerapeuta />
             </PageTransition>
+          }
+        />
+        <Route
+          path="/curso-vendas"
+          element={
+            <ProtectedRoute>
+              <PageTransition>
+                <CursoVendas />
+              </PageTransition>
+            </ProtectedRoute>
           }
         />
         <Route
