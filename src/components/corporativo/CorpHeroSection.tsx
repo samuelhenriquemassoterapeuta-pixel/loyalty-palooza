@@ -1,5 +1,6 @@
-import { motion } from "framer-motion";
-import { ArrowRight, Building2, Users, TrendingUp } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { useState } from "react";
+import { ArrowRight, Building2, Users, TrendingUp, ChevronDown, BarChart3 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AnimatedCounter } from "@/components/ui/animated-counter";
 import corpHeroBg from "@/assets/corporativo-hero.jpg";
@@ -10,6 +11,67 @@ const stats = [
   { icon: Users, value: 12000, suffix: "+", label: "Colaboradores beneficiados", format: (n: number) => n.toLocaleString("pt-BR") },
   { icon: TrendingUp, value: 34, suffix: "%", label: "Redução em afastamentos" },
 ];
+
+const StatsCollapsible = () => {
+  const [open, setOpen] = useState(true);
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, delay: 0.5 }}
+      className="mt-16"
+    >
+      <button
+        onClick={() => setOpen((v) => !v)}
+        className="w-full flex items-center gap-3 mb-4 group"
+        aria-expanded={open}
+      >
+        <div className="p-2 rounded-xl bg-primary/10">
+          <BarChart3 size={16} className="text-primary" />
+        </div>
+        <span className="text-sm font-semibold text-foreground flex-1 text-left [text-shadow:0_1px_3px_rgba(0,0,0,0.1)]">
+          Nossos números
+        </span>
+        <motion.div
+          animate={{ rotate: open ? 180 : 0 }}
+          transition={{ duration: 0.2 }}
+          className="p-1.5 rounded-full bg-primary/10 border border-primary/20 group-hover:bg-primary/20 transition-colors"
+        >
+          <ChevronDown size={14} className="text-primary" />
+        </motion.div>
+      </button>
+
+      <AnimatePresence initial={false}>
+        {open && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+            className="overflow-hidden"
+          >
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+              {stats.map((stat) => (
+                <div key={stat.label} className="card-organic flex items-center gap-4">
+                  <div className="shrink-0 p-3 rounded-2xl bg-primary/10">
+                    <stat.icon size={22} className="text-primary" />
+                  </div>
+                  <div>
+                    <p className="text-2xl font-bold text-foreground">
+                      <AnimatedCounter value={stat.value} format={stat.format} duration={1.5} startDelay={800} />
+                      {stat.suffix}
+                    </p>
+                    <p className="text-sm text-muted-foreground">{stat.label}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
+  );
+};
 
 export const CorpHeroSection = () => {
   const scrollToPlanos = () => {
@@ -88,36 +150,8 @@ export const CorpHeroSection = () => {
           </motion.div>
         </div>
 
-        {/* Animated Stats */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.5 }}
-          className="mt-16 grid grid-cols-1 sm:grid-cols-3 gap-6"
-        >
-          {stats.map((stat) => (
-            <div
-              key={stat.label}
-              className="card-organic flex items-center gap-4"
-            >
-              <div className="shrink-0 p-3 rounded-2xl bg-primary/10">
-                <stat.icon size={22} className="text-primary" />
-              </div>
-              <div>
-                <p className="text-2xl font-bold text-foreground">
-                  <AnimatedCounter
-                    value={stat.value}
-                    format={stat.format}
-                    duration={1.5}
-                    startDelay={800}
-                  />
-                  {stat.suffix}
-                </p>
-                <p className="text-sm text-muted-foreground">{stat.label}</p>
-              </div>
-            </div>
-          ))}
-        </motion.div>
+        {/* Collapsible Stats */}
+        <StatsCollapsible />
       </div>
     </section>
   );
