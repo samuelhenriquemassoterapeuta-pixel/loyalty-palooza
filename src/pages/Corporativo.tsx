@@ -12,7 +12,7 @@ import { CorpPlanosSection } from "@/components/corporativo/CorpPlanosSection";
 import { CorpFAQSection } from "@/components/corporativo/CorpFAQSection";
 import { CorpCTASection } from "@/components/corporativo/CorpCTASection";
 import { CorpWhatsAppCTA } from "@/components/corporativo/CorpWhatsAppCTA";
-import { Heart, Camera, Quote, Building2, CreditCard, HelpCircle, Send } from "lucide-react";
+import { Heart, Camera, Quote, Building2, CreditCard, HelpCircle, Send, Layers } from "lucide-react";
 
 const Corporativo = () => {
   return (
@@ -20,9 +20,25 @@ const Corporativo = () => {
       <LandingHeader />
       <CorpHeroSection />
       <CorpTrustBadges />
-      <CorpSecoesSection />
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 py-8">
+        <CollapsibleSection
+          badge={
+            <span className="pill inline-flex"><Layers size={14} /> Conheça em detalhes</span>
+          }
+          title={
+            <h2 className="text-3xl lg:text-4xl font-bold text-foreground">
+              Tudo sobre <span className="font-serif italic text-gradient">nossos serviços</span>
+            </h2>
+          }
+          subtitle={
+            <p className="text-muted-foreground">
+              Clique em cada seção para expandir e conhecer em profundidade nossos programas corporativos.
+            </p>
+          }
+        >
+          <CorpSecoesSection />
+        </CollapsibleSection>
         <CollapsibleSection
           badge={
             <span className="pill inline-flex"><Heart size={14} /> Por que investir?</span>
