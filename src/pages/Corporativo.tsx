@@ -142,9 +142,26 @@ const Corporativo = () => {
         >
           <CorpFAQSection />
         </CollapsibleSection>
-      </div>
 
-      <CorpCTASection />
+        <CollapsibleSection
+          id="orcamento-corporativo"
+          badge={
+            <span className="pill inline-flex"><Send size={14} /> Fale com nosso time</span>
+          }
+          title={
+            <h2 className="text-3xl lg:text-4xl font-bold text-foreground">
+              Solicite um <span className="font-serif italic text-gradient">orçamento</span>
+            </h2>
+          }
+          subtitle={
+            <p className="text-muted-foreground">
+              Preencha o formulário e nossa equipe comercial entrará em contato em até 24h.
+            </p>
+          }
+        >
+          <CorpCTASection />
+        </CollapsibleSection>
+      </div>
       <LandingFooter />
       <CorpWhatsAppCTA />
     </div>
