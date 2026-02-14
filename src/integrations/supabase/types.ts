@@ -620,6 +620,121 @@ export type Database = {
         }
         Relationships: []
       }
+      curso_aulas: {
+        Row: {
+          ativo: boolean
+          conteudo: string
+          created_at: string
+          descricao: string | null
+          duracao_minutos: number | null
+          id: string
+          modulo_id: string
+          ordem: number
+          titulo: string
+          video_url: string | null
+        }
+        Insert: {
+          ativo?: boolean
+          conteudo: string
+          created_at?: string
+          descricao?: string | null
+          duracao_minutos?: number | null
+          id?: string
+          modulo_id: string
+          ordem?: number
+          titulo: string
+          video_url?: string | null
+        }
+        Update: {
+          ativo?: boolean
+          conteudo?: string
+          created_at?: string
+          descricao?: string | null
+          duracao_minutos?: number | null
+          id?: string
+          modulo_id?: string
+          ordem?: number
+          titulo?: string
+          video_url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "curso_aulas_modulo_id_fkey"
+            columns: ["modulo_id"]
+            isOneToOne: false
+            referencedRelation: "curso_modulos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      curso_modulos: {
+        Row: {
+          ativo: boolean
+          cor: string | null
+          created_at: string
+          descricao: string | null
+          icone: string | null
+          id: string
+          ordem: number
+          titulo: string
+        }
+        Insert: {
+          ativo?: boolean
+          cor?: string | null
+          created_at?: string
+          descricao?: string | null
+          icone?: string | null
+          id?: string
+          ordem?: number
+          titulo: string
+        }
+        Update: {
+          ativo?: boolean
+          cor?: string | null
+          created_at?: string
+          descricao?: string | null
+          icone?: string | null
+          id?: string
+          ordem?: number
+          titulo?: string
+        }
+        Relationships: []
+      }
+      curso_progresso: {
+        Row: {
+          aula_id: string
+          concluida: boolean
+          concluida_em: string | null
+          created_at: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          aula_id: string
+          concluida?: boolean
+          concluida_em?: string | null
+          created_at?: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          aula_id?: string
+          concluida?: boolean
+          concluida_em?: string | null
+          created_at?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "curso_progresso_aula_id_fkey"
+            columns: ["aula_id"]
+            isOneToOne: false
+            referencedRelation: "curso_aulas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       desafio_participantes: {
         Row: {
           concluido: boolean
