@@ -99,19 +99,15 @@ const SecaoCard = ({ secao }: { secao: CorporativoSecao }) => {
           <p className="text-sm font-medium text-accent italic">{secao.subtitulo}</p>
         )}
         
-        {secao.descricao && (
-          <p className="text-muted-foreground leading-relaxed">{secao.descricao}</p>
-        )}
-
-        {/* Media section */}
+        {/* Hero media — full-width featured image or video */}
         {(secao.imagem_url || secao.video_url) && (
           <div className="grid sm:grid-cols-2 gap-4 my-4">
             {secao.imagem_url && (
-              <div className="rounded-2xl overflow-hidden shadow-card">
+              <div className="rounded-2xl overflow-hidden shadow-card group/img">
                 <img 
                   src={secao.imagem_url} 
                   alt={secao.titulo}
-                  className="w-full h-48 object-cover"
+                  className="w-full h-52 object-cover group-hover/img:scale-105 transition-transform duration-500"
                   loading="lazy"
                 />
               </div>
@@ -133,12 +129,21 @@ const SecaoCard = ({ secao }: { secao: CorporativoSecao }) => {
           </div>
         )}
 
+        {secao.descricao && (
+          <p className="text-muted-foreground leading-relaxed">{secao.descricao}</p>
+        )}
+
         {/* Gallery */}
         {secao.galeria_urls && secao.galeria_urls.length > 0 && (
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 my-4">
             {secao.galeria_urls.map((url, i) => (
-              <div key={i} className="rounded-xl overflow-hidden shadow-card">
-                <img src={url} alt={`${secao.titulo} ${i + 1}`} className="w-full h-32 object-cover" loading="lazy" />
+              <div key={i} className="rounded-xl overflow-hidden shadow-card group/gal">
+                <img 
+                  src={url} 
+                  alt={`${secao.titulo} ${i + 1}`} 
+                  className="w-full h-36 object-cover group-hover/gal:scale-105 transition-transform duration-500" 
+                  loading="lazy" 
+                />
               </div>
             ))}
           </div>

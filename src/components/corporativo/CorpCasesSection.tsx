@@ -2,6 +2,10 @@ import { motion } from "framer-motion";
 import { Building2, Quote, TrendingUp, Users, Award } from "lucide-react";
 import { Card } from "@/components/ui/card";
 
+import imgSipat from "@/assets/corporativo/evento-sipat.jpg";
+import imgConvencao from "@/assets/corporativo/evento-convencao.jpg";
+import imgQvt from "@/assets/corporativo/evento-qvt.jpg";
+
 const cases = [
   {
     empresa: "Google Brasil",
@@ -11,6 +15,7 @@ const cases = [
     resultado: "Eleita 'Melhor Empresa para Trabalhar' por 8 anos consecutivos, com destaque para benefícios de bem-estar.",
     depoimento: "A massoterapia corporativa é parte essencial da nossa cultura de cuidado com as pessoas.",
     fonte: "Great Place to Work / Google Careers",
+    detalheExtra: "O programa inclui salas de descompressão, sessões de mindfulness e quick massage de 15 minutos durante o expediente, disponíveis para todos os colaboradores sem necessidade de agendamento prévio.",
   },
   {
     empresa: "Magazine Luiza",
@@ -20,6 +25,7 @@ const cases = [
     resultado: "Redução de 28% nos afastamentos por doenças ocupacionais nos centros de distribuição participantes.",
     depoimento: "Investir no bem-estar dos nossos colaboradores reflete diretamente na qualidade do atendimento ao cliente.",
     fonte: "Relatório de Sustentabilidade Magalu 2023",
+    detalheExtra: "O programa atende mais de 5.000 colaboradores em 12 centros de distribuição, com sessões de 20 minutos durante pausas programadas na jornada de trabalho.",
   },
   {
     empresa: "Natura &Co",
@@ -29,6 +35,7 @@ const cases = [
     resultado: "O programa de bem-estar contribuiu para um índice de engajamento de 89% entre colaboradores.",
     depoimento: "A saúde integral está no DNA da Natura. A massoterapia promove o equilíbrio que defendemos para todos.",
     fonte: "Relatório Anual Natura &Co",
+    detalheExtra: "A Natura também oferece aromaterapia e técnicas de relaxamento com óleos essenciais da própria marca, integrando o programa de bem-estar com a identidade da empresa.",
   },
   {
     empresa: "Ambev",
@@ -38,6 +45,7 @@ const cases = [
     resultado: "Programa de bem-estar associado a melhoria de 22% na satisfação interna medida pelo eNPS.",
     depoimento: "Colaboradores saudáveis e motivados são a base da nossa produtividade.",
     fonte: "Relatório ESG Ambev",
+    detalheExtra: "O programa é complementado por avaliações ergonômicas individuais e planos de exercícios personalizados para cada função na linha de produção.",
   },
 ];
 
@@ -45,17 +53,23 @@ const eventosReais = [
   {
     evento: "SIPAT (Semanas de Prevenção)",
     descricao: "Empresas como Petrobras, Bradesco e Embraer incluem massoterapia expressa como atividade durante suas Semanas Internas de Prevenção de Acidentes do Trabalho.",
+    detail: "A SIPAT é obrigatória pela NR-5 e a inclusão de massoterapia aumenta a adesão dos colaboradores em até 60%, tornando o evento mais atrativo e eficaz.",
     icon: Award,
+    image: imgSipat,
   },
   {
     evento: "Convenções e Feiras",
     descricao: "A FEBRABAN e a FIESP oferecem espaços de massoterapia em seus eventos corporativos para melhorar a experiência dos participantes e networking.",
+    detail: "Stands com quick massage em feiras empresariais aumentam o tempo de permanência dos visitantes em 40% e melhoram a percepção da marca patrocinadora.",
     icon: Users,
+    image: imgConvencao,
   },
   {
     evento: "Programas de QVT",
     descricao: "O Banco do Brasil e os Correios mantêm contratos anuais de massoterapia como parte de seus Programas de Qualidade de Vida no Trabalho (QVT).",
+    detail: "Programas continuados de QVT com massoterapia demonstram resultados progressivos: o ROI médio aumenta de 2:1 no primeiro ano para 4:1 após o terceiro ano de implementação.",
     icon: TrendingUp,
+    image: imgQvt,
   },
 ];
 
@@ -106,6 +120,11 @@ export const CorpCasesSection = () => {
                   {caseItem.descricao}
                 </p>
 
+                {/* Extra detail */}
+                <p className="mt-3 text-xs text-muted-foreground/70 leading-relaxed italic border-l-2 border-primary/20 pl-3">
+                  {caseItem.detalheExtra}
+                </p>
+
                 <div className="mt-4 p-3 rounded-xl bg-primary/5 border border-primary/10">
                   <p className="text-sm font-semibold text-primary flex items-center gap-2">
                     <TrendingUp size={14} />
@@ -149,13 +168,27 @@ export const CorpCasesSection = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-40px" }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="card-organic text-center"
+              className="card-organic text-center overflow-hidden"
             >
+              {/* Event image */}
+              <div className="relative h-32 -mx-4 -mt-4 sm:-mx-5 sm:-mt-5 mb-4 overflow-hidden">
+                <img
+                  src={evento.image}
+                  alt={evento.evento}
+                  className="w-full h-full object-cover"
+                  loading="lazy"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-card/70 to-transparent" />
+              </div>
+
               <div className="mx-auto w-12 h-12 rounded-2xl bg-accent/10 flex items-center justify-center mb-4">
                 <evento.icon size={22} className="text-accent" />
               </div>
               <h4 className="font-semibold text-foreground mb-2">{evento.evento}</h4>
               <p className="text-sm text-muted-foreground leading-relaxed">{evento.descricao}</p>
+              <p className="mt-3 text-xs text-muted-foreground/70 leading-relaxed border-t border-border/30 pt-3">
+                {evento.detail}
+              </p>
             </motion.div>
           ))}
         </div>
