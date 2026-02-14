@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
-import { ArrowRight, Building2, Users, TrendingUp, ChevronDown, BarChart3 } from "lucide-react";
+import { ArrowRight, Building2, Users, TrendingUp, ChevronDown, BarChart3, ShieldCheck, Award, Clock, HeartHandshake } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AnimatedCounter } from "@/components/ui/animated-counter";
 import corpHeroBg from "@/assets/corporativo-hero.jpg";
@@ -10,6 +10,13 @@ const stats = [
   { icon: Building2, value: 150, suffix: "+", label: "Empresas atendidas" },
   { icon: Users, value: 12000, suffix: "+", label: "Colaboradores beneficiados", format: (n: number) => n.toLocaleString("pt-BR") },
   { icon: TrendingUp, value: 34, suffix: "%", label: "Redução em afastamentos" },
+];
+
+const trustBadges = [
+  { icon: ShieldCheck, label: "Profissionais certificados", desc: "CREFITO & ABM" },
+  { icon: Award, label: "8+ anos de experiência", desc: "Corporativo & eventos" },
+  { icon: Clock, label: "Atendimento em 24h", desc: "Resposta comercial rápida" },
+  { icon: HeartHandshake, label: "98% de satisfação", desc: "Avaliação dos clientes" },
 ];
 
 const StatsCollapsible = () => {
@@ -62,6 +69,21 @@ const StatsCollapsible = () => {
                       {stat.suffix}
                     </p>
                     <p className="text-sm text-muted-foreground">{stat.label}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Trust Badges */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-6 pt-6 border-t border-border/30">
+              {trustBadges.map((badge) => (
+                <div key={badge.label} className="flex items-center gap-3">
+                  <div className="shrink-0 p-2 rounded-xl bg-primary/10">
+                    <badge.icon size={18} className="text-primary" />
+                  </div>
+                  <div>
+                    <p className="text-xs font-semibold text-foreground">{badge.label}</p>
+                    <p className="text-[10px] text-muted-foreground">{badge.desc}</p>
                   </div>
                 </div>
               ))}
