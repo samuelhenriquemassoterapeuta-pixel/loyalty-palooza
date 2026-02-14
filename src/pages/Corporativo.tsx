@@ -2,7 +2,7 @@ import { LandingHeader } from "@/components/landing/LandingHeader";
 import { LandingFooter } from "@/components/landing/LandingFooter";
 import { CollapsibleSection } from "@/components/landing/CollapsibleSection";
 import { CorpHeroSection } from "@/components/corporativo/CorpHeroSection";
-import { CorpTrustBadges } from "@/components/corporativo/CorpTrustBadges";
+
 import { CorpSecoesSection } from "@/components/corporativo/CorpSecoesSection";
 import { CorpBeneficiosSection } from "@/components/corporativo/CorpBeneficiosSection";
 import { CorpGaleriaSection } from "@/components/corporativo/CorpGaleriaSection";
@@ -19,7 +19,6 @@ const Corporativo = () => {
     <div className="min-h-screen bg-background">
       <LandingHeader />
       <CorpHeroSection />
-      <CorpTrustBadges />
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 py-8">
         <CollapsibleSection
