@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Calendar, Clock, MapPin, ArrowRight } from "lucide-react";
+import { Calendar, Clock, ArrowRight, Sparkles } from "lucide-react";
 import { format, isToday, isTomorrow } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { useNavigate } from "react-router-dom";
@@ -47,6 +47,7 @@ export const NextAppointmentCard = ({ agendamento }: NextAppointmentCardProps) =
     : format(date, "EEEE, d MMM", { locale: ptBR });
 
   const timeLabel = format(date, "HH:mm");
+  const isNear = isToday(date) || isTomorrow(date);
 
   return (
     <motion.button
@@ -54,16 +55,36 @@ export const NextAppointmentCard = ({ agendamento }: NextAppointmentCardProps) =
       animate={{ opacity: 1, y: 0 }}
       whileTap={{ scale: 0.98 }}
       onClick={() => navigate("/agendamento")}
-      className="w-full p-4 rounded-2xl bg-gradient-to-br from-primary/15 via-primary/10 to-accent/10 border border-primary/20 text-left hover:shadow-md transition-all"
+      className={`w-full p-5 rounded-2xl text-left transition-all relative overflow-hidden ${
+        isNear
+          ? "bg-gradient-to-br from-primary/20 via-primary/10 to-accent/10 border-2 border-primary/30 shadow-md"
+          : "bg-gradient-to-br from-primary/15 via-primary/10 to-accent/10 border border-primary/20"
+      }`}
     >
+      {/* Decorative sparkle for today/tomorrow */}
+      {isNear && (
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+          className="absolute top-3 right-3 text-primary/30"
+        >
+          <Sparkles size={24} />
+        </motion.div>
+      )}
+
       <div className="flex items-center gap-1.5 mb-2">
         <Calendar className="text-primary" size={14} />
         <span className="text-xs font-semibold text-primary uppercase tracking-wide">
           Próxima Sessão
         </span>
+        {isNear && (
+          <span className="ml-auto text-[10px] font-bold uppercase tracking-wider text-primary bg-primary/10 px-2 py-0.5 rounded-full">
+            {isToday(date) ? "🔴 Hoje" : "⏰ Amanhã"}
+          </span>
+        )}
       </div>
-      <p className="font-bold text-foreground capitalize">{dayLabel}</p>
-      <div className="flex items-center gap-4 mt-1.5">
+      <p className="font-bold text-foreground capitalize text-lg font-serif">{dayLabel}</p>
+      <div className="flex items-center gap-4 mt-2">
         <div className="flex items-center gap-1.5 text-muted-foreground">
           <Clock size={13} />
           <span className="text-sm font-medium">{timeLabel}</span>
@@ -73,8 +94,8 @@ export const NextAppointmentCard = ({ agendamento }: NextAppointmentCardProps) =
         </span>
       </div>
       {agendamento.terapeutas?.nome && (
-        <p className="text-xs text-muted-foreground mt-1.5">
-          com {agendamento.terapeutas.nome}
+        <p className="text-xs text-muted-foreground mt-2">
+          com <span className="font-medium text-foreground">{agendamento.terapeutas.nome}</span>
         </p>
       )}
     </motion.button>
