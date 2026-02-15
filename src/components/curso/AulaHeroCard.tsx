@@ -16,14 +16,16 @@ export function AulaHeroCard({ image, video, title, description }: AulaHeroCardP
     <Card className="mb-4 overflow-hidden rounded-xl">
       <div className="relative aspect-video">
         <img src={image} alt={title} className="w-full h-full object-cover" />
-        <video
-          src={video}
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="absolute inset-0 w-full h-full object-cover opacity-25 mix-blend-luminosity"
-        />
+        {video && (
+          <video
+            src={video}
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="absolute inset-0 w-full h-full object-cover opacity-25 mix-blend-luminosity"
+          />
+        )}
         <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent" />
         {description && (
           <div className="absolute bottom-3 left-3 right-3">
