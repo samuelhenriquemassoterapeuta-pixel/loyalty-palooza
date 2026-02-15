@@ -50,6 +50,7 @@ const ServicoDetalhe = lazy(() => import("@/pages/ServicoDetalhe"));
 const CartaoTerapeuta = lazy(() => import("@/pages/CartaoTerapeuta"));
 const ConteudoSocial = lazy(() => import("@/pages/ConteudoSocial"));
 const CursoVendas = lazy(() => import("@/pages/CursoVendas"));
+const CursoAromaterapia = lazy(() => import("@/pages/CursoAromaterapia"));
 const Offers = lazy(() => import("@/pages/Offers"));
 const NotFound = lazy(() => import("@/pages/NotFound"));
 
@@ -114,6 +115,7 @@ export const AnimatedRoutes = () => {
         <Route path="/conteudo-social" element={<ProtectedRoute requireAdmin><LazyPage><ConteudoSocial /></LazyPage></ProtectedRoute>} />
         <Route path="/terapeuta/:id" element={<LazyPage><CartaoTerapeuta /></LazyPage>} />
         <Route path="/curso-vendas" element={<ProtectedRoute><LazyPage><CursoVendas /></LazyPage></ProtectedRoute>} />
+        <Route path="/curso-aromaterapia" element={<ProtectedRoute><LazyPage><CursoAromaterapia /></LazyPage></ProtectedRoute>} />
         <Route path="/ofertas" element={<ProtectedRoute><LazyPage><Offers /></LazyPage></ProtectedRoute>} />
         <Route path="*" element={<LazyPage><NotFound /></LazyPage>} />
       </Routes>
