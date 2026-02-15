@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, Clock, CheckCircle2, AlertTriangle, Sparkles, Hand, Heart, Leaf, SmilePlus, Calendar } from "lucide-react";
 import { Link } from "react-router-dom";
 import type { Terapia } from "@/hooks/useTerapias";
+import { terapiaImages } from "@/assets/terapias";
 
 const iconMap: Record<string, typeof Sparkles> = {
   Sparkles,
@@ -20,6 +21,7 @@ interface TerapiaCardProps {
 export const TerapiaCard = ({ terapia, defaultOpen = false }: TerapiaCardProps) => {
   const [open, setOpen] = useState(defaultOpen);
   const Icon = iconMap[terapia.icone || "Sparkles"] || Sparkles;
+  const coverImage = terapia.imagem_capa || terapiaImages[terapia.slug] || null;
 
   return (
     <motion.div
@@ -70,10 +72,10 @@ export const TerapiaCard = ({ terapia, defaultOpen = false }: TerapiaCardProps) 
           >
             <div className="px-4 pb-5 sm:px-5 sm:pb-6 space-y-5">
               {/* Cover image */}
-              {terapia.imagem_capa && (
+              {coverImage && (
                 <div className="rounded-xl overflow-hidden aspect-video">
                   <img
-                    src={terapia.imagem_capa}
+                    src={coverImage}
                     alt={terapia.nome}
                     className="w-full h-full object-cover"
                     loading="lazy"
