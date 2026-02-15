@@ -5,7 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useParallax } from "@/hooks/useParallax";
 import { CollapsibleSection } from "./CollapsibleSection";
 import { useLandingConfig } from "@/hooks/useLandingConfig";
-import depoimentosBanner from "@/assets/landing/depoimentos-banner.jpg";
+import depoimentosBannerDefault from "@/assets/landing/depoimentos-banner.jpg";
 
 interface Depoimento {
   nome: string;
@@ -53,6 +53,7 @@ export const DepoimentosSection = () => {
   const tituloDestaque = config?.titulo_destaque || "dizem";
   const subtitulo = config?.subtitulo || "Histórias reais de quem já transformou seu bem-estar com a Resinkra.";
   const fallbackDeps: Depoimento[] = config?.depoimentos_fallback || defaultFallback;
+  const depoimentosBanner = config?.banner_url || depoimentosBannerDefault;
 
   const [depoimentos, setDepoimentos] = useState<Depoimento[]>(fallbackDeps);
 

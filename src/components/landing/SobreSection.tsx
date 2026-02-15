@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { Heart, Shield, Gift, TrendingUp, CheckCircle2, Award, Clock, Leaf } from "lucide-react";
 import { useParallax } from "@/hooks/useParallax";
 import seloCompleto from "@/assets/selo-completo.png";
-import sobreBanner from "@/assets/landing/sobre-banner.jpg";
+import sobreBannerDefault from "@/assets/landing/sobre-banner.jpg";
 import { CollapsibleSection } from "./CollapsibleSection";
 import { useLandingConfig } from "@/hooks/useLandingConfig";
 
@@ -30,6 +30,18 @@ export const SobreSection = () => {
   const tituloDestaque = config?.titulo_destaque || "cuidado que permanece";
   const subtitulo = config?.subtitulo || "A Resinkra é um espaço de cuidado integral que une terapias, bem-estar e experiências sensoriais. Onde técnica e sensibilidade se unem para gerar bem-estar contínuo e duradouro.";
   const features = config?.features || defaultFeatures;
+  const sobreBanner = config?.banner_url || sobreBannerDefault;
+
+  const configStats = config?.stats?.length > 0 ? config.stats : null;
+  const dynamicStats = configStats || stats;
+
+  const configDiffs = config?.diferenciais?.length > 0 ? config.diferenciais : null;
+  const diferenciais = configDiffs || [
+    { text: "Ambiente sensorial projetado para desacelerar", detail: "Aromas, iluminação e sonoridade cuidadosamente calibrados." },
+    { text: "Protocolos exclusivos e personalizados", detail: "Cada sessão é adaptada às suas necessidades específicas." },
+    { text: "Programa de fidelidade com cashback real", detail: "Ganhe recompensas a cada sessão realizada." },
+    { text: "Equipe multidisciplinar certificada", detail: "Profissionais especializados em diversas técnicas terapêuticas." },
+  ];
 
   return (
     <div ref={ref} className="py-14 sm:py-20 lg:py-28 bg-background relative overflow-hidden">
@@ -64,7 +76,9 @@ export const SobreSection = () => {
 
           {/* Stats row */}
           <div className="mb-8 grid grid-cols-2 sm:grid-cols-4 gap-3">
-            {stats.map((stat, i) => (
+            {dynamicStats.map((stat: any, i: number) => {
+              const StatIcon = stats[i % stats.length]?.icon || Award;
+              return (
               <motion.div
                 key={i}
                 initial={{ opacity: 0, scale: 0.9 }}
@@ -73,11 +87,12 @@ export const SobreSection = () => {
                 transition={{ delay: i * 0.1, duration: 0.4 }}
                 className="text-center p-4 rounded-xl bg-primary/5 border border-primary/10"
               >
-                <stat.icon size={18} className="text-primary mx-auto mb-2" />
+                <StatIcon size={18} className="text-primary mx-auto mb-2" />
                 <p className="text-xl font-bold text-foreground">{stat.value}</p>
                 <p className="text-[11px] text-muted-foreground">{stat.label}</p>
               </motion.div>
-            ))}
+              );
+            })}
           </div>
 
           {/* Features grid */}
@@ -126,12 +141,7 @@ export const SobreSection = () => {
             >
               <h3 className="text-lg font-bold text-foreground mb-4">Nossos diferenciais</h3>
               <div className="space-y-4">
-                {[
-                  { text: "Ambiente sensorial projetado para desacelerar", detail: "Aromas, iluminação e sonoridade cuidadosamente calibrados." },
-                  { text: "Protocolos exclusivos e personalizados", detail: "Cada sessão é adaptada às suas necessidades específicas." },
-                  { text: "Programa de fidelidade com cashback real", detail: "Ganhe recompensas a cada sessão realizada." },
-                  { text: "Equipe multidisciplinar certificada", detail: "Profissionais especializados em diversas técnicas terapêuticas." },
-                ].map((item, i) => (
+                {diferenciais.map((item: any, i: number) => (
                   <div key={i} className="flex gap-3">
                     <CheckCircle2 size={16} className="text-primary shrink-0 mt-0.5" />
                     <div>
