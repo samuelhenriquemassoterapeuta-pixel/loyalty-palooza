@@ -55,6 +55,11 @@ Diferente de técnicas que focam apenas em relaxamento OU apenas em liberação 
             respostaCorreta: 1,
             explicacao: "O Método Resinkra é a integração de liberação miofascial (para eliminar a dor) com relaxamento profundo (para restaurar o equilíbrio), dentro da mesma sessão."
           }
+        ],
+        checklist: [
+          "Compreender os 4 pilares do Método Resinkra",
+          "Entender a dualidade liberação + relaxamento",
+          "Conhecer a origem prática (23 anos) do método"
         ]
       },
       {
@@ -100,6 +105,19 @@ A ergonomia do terapeuta é parte do método. Mãos que doem, postura incorreta 
           "Pressão inteligente: nem mais, nem menos do que o tecido precisa",
           "Ergonomia do terapeuta é parte do método",
           "Deslizamentos integrativos conectam as regiões trabalhadas"
+        ],
+        quiz: [
+          {
+            pergunta: "Qual é o princípio mais importante do Método Resinkra?",
+            opcoes: [
+              "Aplicar a maior pressão possível",
+              "Seguir sempre o mesmo protocolo fixo",
+              "Toda liberação deve ser seguida de transição para relaxamento",
+              "Trabalhar apenas onde o cliente indica dor"
+            ],
+            respostaCorreta: 2,
+            explicacao: "O princípio central é que toda manobra de liberação profunda deve ser seguida por movimentos de transição que levam o tecido do estado de alerta para o repouso."
+          }
         ]
       },
       {
@@ -176,6 +194,12 @@ A transição é o momento mais importante do Método Resinkra. É quando você 
             respostaCorreta: 2,
             explicacao: "A transição deve ser gradual: reduzir pressão, ampliar a área de contato (de ponto para palma) e usar movimentos longos e fluidos."
           }
+        ],
+        checklist: [
+          "Identifico a zona terapêutica vs dor prejudicial",
+          "Observo a respiração do cliente durante a manobra",
+          "Executo a transição gradual (pressão, área, velocidade)",
+          "Adapto a proporção liberação/relaxamento ao perfil do cliente"
         ]
       }
     ]
@@ -237,6 +261,11 @@ No Método Resinkra, você não precisa ser um anatomista. Mas precisa **sentir 
             respostaCorreta: 1,
             explicacao: "O trapézio, que se estende da cervical até o meio das costas, é onde a tensão emocional mais se acumula — especialmente nas fibras superiores."
           }
+        ],
+        checklist: [
+          "Localizar e palpar o trapézio, romboides e eretor da espinha",
+          "Identificar ECM, escalenos e suboccipitais na cervical",
+          "Palpar piriforme e glúteo médio nos membros inferiores"
         ]
       },
       {
@@ -350,6 +379,11 @@ No Método Resinkra, nunca tratamos um músculo isolado. O corpo funciona em **c
             respostaCorreta: 1,
             explicacao: "O piriforme, localizado profundamente no glúteo, é uma das principais causas de dor ciática. Quando está tenso, comprime o nervo ciático causando dor referida na perna."
           }
+        ],
+        checklist: [
+          "Entender o conceito de cadeias musculares",
+          "Conhecer as cadeias posterior, lateral e anterior",
+          "Aplicar o rastreamento: sintoma → cadeia → origem"
         ]
       }
     ]
@@ -419,6 +453,19 @@ Após a avaliação, crie mentalmente um **mapa de prioridades**:
           "Identifiquei zonas de temperatura alterada",
           "Localizei bandas tensas e aderências",
           "Criei mapa mental de prioridades (🔴🟡🟢)"
+        ],
+        quiz: [
+          {
+            pergunta: "Na varredura tátil Resinkra, o que indica uma zona mais quente no corpo do cliente?",
+            opcoes: [
+              "Circulação reduzida",
+              "Tensão crônica",
+              "Inflamação ativa",
+              "Aderência fascial"
+            ],
+            respostaCorreta: 2,
+            explicacao: "Uma zona mais quente detectada durante a varredura tátil indica inflamação ativa na região, sendo um achado importante para o mapa de prioridades."
+          }
         ]
       },
       {
