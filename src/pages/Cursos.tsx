@@ -1,10 +1,11 @@
 import { useSearchParams } from "react-router-dom";
-import { GraduationCap, Flower2, Sparkles, Bone, Gem, Hand } from "lucide-react";
+import { GraduationCap, Flower2, Sparkles, Bone, Gem, Hand, LucideIcon } from "lucide-react";
 import { AppLayout } from "@/components/AppLayout";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useMemo, useRef, useEffect } from "react";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { CursosHubHero } from "@/components/curso/CursosHubHero";
+import { CursoTabButton } from "@/components/curso/CursoTabButton";
+import { ContinueWatchingCard } from "@/components/curso/ContinueWatchingCard";
 import { allCourseStats } from "@/data/cursosHubStats";
 
 const CursoVendasHero = lazy(() => import("@/pages/CursoVendasHero"));
@@ -14,49 +15,120 @@ const CursoAnatomiaHero = lazy(() => import("@/pages/CursoAnatomiaHero"));
 const CursoYugenFaceSpaHero = lazy(() => import("@/pages/CursoYugenFaceSpaHero"));
 const CursoMetodoResinkraHero = lazy(() => import("@/pages/CursoMetodoResinkraHero"));
 
+interface TabDef {
+  value: string;
+  label: string;
+  icon: LucideIcon;
+  storageKey: string;
+  totalAulas: number;
+}
+
+const tabDefs: TabDef[] = [
+  { value: "metodo", label: "Método", icon: Hand, storageKey: "resinkra_curso_metodo_resinkra_progress", totalAulas: 0 },
+  { value: "vendas", label: "Vendas", icon: GraduationCap, storageKey: "resinkra_curso_vendas_progress", totalAulas: 0 },
+  { value: "aromaterapia", label: "Aroma", icon: Flower2, storageKey: "resinkra_curso_aromaterapia_progress", totalAulas: 0 },
+  { value: "headspa", label: "Head SPA", icon: Sparkles, storageKey: "resinkra_curso_headspa_progress", totalAulas: 0 },
+  { value: "anatomia", label: "Anatomia", icon: Bone, storageKey: "resinkra_curso_anatomia_progress", totalAulas: 0 },
+  { value: "facespa", label: "FaceSPA", icon: Gem, storageKey: "resinkra_curso_yugen_facespa_progress", totalAulas: 0 },
+];
+
+function getProgress(storageKey: string): number {
+  try {
+    const saved = localStorage.getItem(storageKey);
+    return saved ? (JSON.parse(saved) as string[]).length : 0;
+  } catch {
+    return 0;
+  }
+}
+
+// Map course stats totalAulas into tabDefs
+function enrichTabs(): TabDef[] {
+  const statsMap = new Map(allCourseStats.map((c) => [c.storageKey, c.totalAulas]));
+  return tabDefs.map((t) => ({ ...t, totalAulas: statsMap.get(t.storageKey) ?? 0 }));
+}
+
+const courseForContinue = allCourseStats.map((c, i) => ({
+  title: c.title,
+  storageKey: c.storageKey,
+  totalAulas: c.totalAulas,
+  tabValue: tabDefs[i]?.value ?? "",
+}));
+
 export default function Cursos() {
   const [searchParams, setSearchParams] = useSearchParams();
   const tab = searchParams.get("tab") || "metodo";
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   const handleTabChange = (value: string) => {
     setSearchParams({ tab: value }, { replace: true });
   };
 
+  const enrichedTabs = useMemo(() => enrichTabs(), []);
+
+  // Smart sort: in-progress first, then not started, then completed
+  const sortedTabs = useMemo(() => {
+    return [...enrichedTabs].sort((a, b) => {
+      const aPct = a.totalAulas > 0 ? getProgress(a.storageKey) / a.totalAulas : 0;
+      const bPct = b.totalAulas > 0 ? getProgress(b.storageKey) / b.totalAulas : 0;
+      const aStarted = getProgress(a.storageKey) > 0;
+      const bStarted = getProgress(b.storageKey) > 0;
+
+      // In progress (started but not 100%) first
+      const aInProgress = aStarted && aPct < 1;
+      const bInProgress = bStarted && bPct < 1;
+      if (aInProgress && !bInProgress) return -1;
+      if (!aInProgress && bInProgress) return 1;
+
+      // Then not started
+      if (!aStarted && bStarted) return -1;
+      if (aStarted && !bStarted) return 1;
+
+      // Then by pct descending
+      return bPct - aPct;
+    });
+  }, [enrichedTabs]);
+
+  // Scroll active tab into view
+  useEffect(() => {
+    if (!scrollRef.current) return;
+    const activeBtn = scrollRef.current.querySelector(`[data-tab="${tab}"]`);
+    if (activeBtn) {
+      activeBtn.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+    }
+  }, [tab]);
+
   return (
     <AppLayout>
       <div className="min-h-screen bg-background pb-32 lg:pb-8">
-        {/* Hero Section */}
         <CursosHubHero courses={allCourseStats} />
 
-        <div className="max-w-lg mx-auto px-4 pt-4">
-          <Tabs value={tab} onValueChange={handleTabChange}>
-            <TabsList className="w-full grid grid-cols-6 mb-4">
-              <TabsTrigger value="metodo" className="gap-1 text-xs px-1">
-                <Hand size={14} />
-                <span className="hidden sm:inline">Método</span>
-              </TabsTrigger>
-              <TabsTrigger value="vendas" className="gap-1 text-xs px-1">
-                <GraduationCap size={14} />
-                <span className="hidden sm:inline">Vendas</span>
-              </TabsTrigger>
-              <TabsTrigger value="aromaterapia" className="gap-1 text-xs px-1">
-                <Flower2 size={14} />
-                <span className="hidden sm:inline">Aroma</span>
-              </TabsTrigger>
-              <TabsTrigger value="headspa" className="gap-1 text-xs px-1">
-                <Sparkles size={14} />
-                <span className="hidden sm:inline">Head SPA</span>
-              </TabsTrigger>
-              <TabsTrigger value="anatomia" className="gap-1 text-xs px-1">
-                <Bone size={14} />
-                <span className="hidden sm:inline">Anatomia</span>
-              </TabsTrigger>
-              <TabsTrigger value="facespa" className="gap-1 text-xs px-1">
-                <Gem size={14} />
-                <span className="hidden sm:inline">FaceSPA</span>
-              </TabsTrigger>
-            </TabsList>
-          </Tabs>
+        <div className="max-w-lg mx-auto px-4 pt-4 space-y-3">
+          {/* Continue Watching */}
+          <ContinueWatchingCard courses={courseForContinue} onSelect={handleTabChange} />
+
+          {/* Horizontal scroll tabs */}
+          <div
+            ref={scrollRef}
+            className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide -mx-4 px-4"
+            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+          >
+            {sortedTabs.map((t) => {
+              const completed = getProgress(t.storageKey);
+              const pct = t.totalAulas > 0 ? Math.round((completed / t.totalAulas) * 100) : 0;
+              return (
+                <div key={t.value} data-tab={t.value}>
+                  <CursoTabButton
+                    label={t.label}
+                    icon={t.icon}
+                    value={t.value}
+                    active={tab === t.value}
+                    pct={pct}
+                    onClick={() => handleTabChange(t.value)}
+                  />
+                </div>
+              );
+            })}
+          </div>
         </div>
 
         <Suspense fallback={<div className="flex justify-center py-12"><LoadingSpinner /></div>}>
