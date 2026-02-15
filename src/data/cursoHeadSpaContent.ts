@@ -83,6 +83,12 @@ O mercado global de tratamentos capilares premium cresceu 340% desde 2020. O Hea
             respostaCorreta: 1,
             explicacao: "O Head SPA Coreano trata o couro cabeludo com o mesmo cuidado dedicado à pele facial, considerando-o a fundação para cabelos saudáveis."
           }
+        ],
+        checklist: [
+          "Entender os 5 pilares do Head SPA",
+          "Diferenciar Head SPA de SPA capilar convencional",
+          "Conhecer a origem na cultura K-beauty",
+          "Identificar os diferenciais competitivos do serviço"
         ]
       },
       {
@@ -155,6 +161,12 @@ O couro cabeludo possui 5 camadas, memorizadas pelo acrônimo SCALP:
             respostaCorreta: 2,
             explicacao: "Os 4 pontos Sishencong, localizados ao redor do ponto Baihui no topo da cabeça, são específicos para estimulação do crescimento capilar."
           }
+        ],
+        checklist: [
+          "Memorizar as 5 camadas SCALP",
+          "Localizar os 5 pontos de acupressão craniana",
+          "Entender o ciclo de crescimento capilar",
+          "Identificar os 6 tipos de couro cabeludo"
         ]
       },
       {
@@ -279,6 +291,19 @@ Antes de cada sessão, preencha:
 - Mostrar imagens comparativas de saúde ideal
 
 > Dica: Sempre mostre as imagens da microcâmera ao cliente. Isso gera confiança, demonstra profissionalismo e justifica o investimento no tratamento.`,
+        quiz: [
+          {
+            pergunta: "Por que é importante mostrar as imagens da microcâmera ao cliente?",
+            opcoes: [
+              "Para justificar o preço do tratamento",
+              "Para gerar confiança e demonstrar profissionalismo",
+              "Porque é obrigatório por lei",
+              "Para vender mais produtos"
+            ],
+            respostaCorreta: 1,
+            explicacao: "Mostrar as imagens da microcâmera gera confiança, demonstra profissionalismo e justifica o investimento no tratamento."
+          }
+        ],
         checklist: [
           "Preparar ambiente com iluminação adequada",
           "Higienizar microcâmera",
@@ -353,6 +378,19 @@ A limpeza profunda remove:
 - ❌ Não esfoliar se houver feridas abertas ou inflamação ativa
 - ✅ Ajustar concentração do esfoliante ao biotipo
 - ✅ Couro cabeludo sensível: reduzir tempo para 2 min/quadrante`,
+        quiz: [
+          {
+            pergunta: "Qual a temperatura ideal da água para a pré-lavagem no Head SPA?",
+            opcoes: [
+              "32°C",
+              "38°C",
+              "42°C",
+              "45°C"
+            ],
+            respostaCorreta: 1,
+            explicacao: "A temperatura ideal é 38°C — suficiente para amolecer resíduos sem danificar o couro cabeludo. Acima de 40°C pode causar danos."
+          }
+        ],
         checklist: [
           "Verificar temperatura da água (38°C)",
           "Umedecer completamente",
@@ -522,6 +560,19 @@ A massagem craniana é o diferencial do Head SPA. Combina técnicas coreanas de 
 2. Máscara calmante com Aloe Vera
 3. Compressa morna com camomila
 4. Toque mínimo — sem fricção`,
+        quiz: [
+          {
+            pergunta: "Qual ingrediente K-beauty é ideal para estimulação folicular e crescimento capilar?",
+            opcoes: [
+              "Ácido Hialurônico",
+              "Niacinamida",
+              "Ginseng Vermelho",
+              "Centella Asiatica"
+            ],
+            respostaCorreta: 2,
+            explicacao: "O Ginseng Vermelho (홍삼) é um antioxidante potente que estimula os folículos capilares, sendo ideal para queda capilar e afinamento dos fios."
+          }
+        ],
         checklist: [
           "Selecionar protocolo adequado ao biotipo",
           "Preparar produtos na ordem de aplicação",
@@ -591,6 +642,19 @@ Entregar ao cliente um mini-guia personalizado:
 - Alimentos benéficos para saúde capilar
 
 > O pós-atendimento é onde se constrói a fidelização. O cliente que leva orientações para casa volta com mais frequência.`,
+        quiz: [
+          {
+            pergunta: "Qual blend aromático é indicado para estimular o crescimento capilar?",
+            opcoes: [
+              "Lavanda + cedro + ylang-ylang",
+              "Alecrim + hortelã-pimenta + cedro",
+              "Tea tree + limão + hortelã-pimenta",
+              "Ylang-ylang + lavanda + camomila"
+            ],
+            respostaCorreta: 1,
+            explicacao: "O blend de alecrim + hortelã-pimenta + cedro é o indicado para crescimento, pois estimula a circulação e ativa os folículos capilares."
+          }
+        ],
         checklist: [
           "Preparar blend aromático adequado",
           "Aplicar vapor ou toalha aromática",
@@ -729,7 +793,26 @@ Na Coreia, os tratamentos capilares são ajustados conforme a estação. Isso ma
 | Outono | 15 min | 30 min | 20 min | 80 min |
 | Inverno | 15 min | 25 min | 25 min | 80 min |
 
-> Ajuste seus pacotes e preços sazonalmente. Clientes adoram sentir que o tratamento é verdadeiramente personalizado para o momento.`
+> Ajuste seus pacotes e preços sazonalmente. Clientes adoram sentir que o tratamento é verdadeiramente personalizado para o momento.`,
+        quiz: [
+          {
+            pergunta: "Em qual estação o foco do Head SPA deve ser em combater a queda sazonal?",
+            opcoes: [
+              "Primavera",
+              "Verão",
+              "Outono",
+              "Inverno"
+            ],
+            respostaCorreta: 2,
+            explicacao: "No outono, ocorre a queda sazonal natural dos fios. O protocolo foca em estimulação folicular com ginseng, peptídeos e biotina."
+          }
+        ],
+        checklist: [
+          "Conhecer os 4 protocolos sazonais",
+          "Ajustar ingredientes por estação",
+          "Adaptar duração das etapas por estação",
+          "Comunicar personalização sazonal ao cliente"
+        ]
       },
       {
         titulo: "Melhores Marcas e Onde Comprar",
@@ -984,7 +1067,27 @@ A ciência do microbioma chegou ao couro cabeludo. Assim como o gut microbiome r
 **Depois do Atendimento:**
 - Foto before/after com microcâmera
 - Mini-kit com amostras dos produtos usados
-- Cartão com QR code para home care personalizado`
+- Cartão com QR code para home care personalizado`,
+        quiz: [
+          {
+            pergunta: "Qual é o elemento mais importante para diferenciar seu Head SPA?",
+            opcoes: [
+              "Preço mais baixo",
+              "Personalização extrema da experiência",
+              "Usar apenas produtos importados",
+              "Ter o maior espaço da região"
+            ],
+            respostaCorreta: 1,
+            explicacao: "A personalização extrema é a maior tendência e diferencial competitivo — cada sessão deve ser única para cada cliente."
+          }
+        ],
+        checklist: [
+          "Criar pelo menos 1 ritual temático exclusivo",
+          "Planejar experiência multissensorial (5 sentidos)",
+          "Definir ritual de acolhimento pré-sessão",
+          "Preparar kit de amostras pós-sessão",
+          "Criar QR code para home care personalizado"
+        ]
       }
     ]
   },
@@ -1128,7 +1231,28 @@ O Head SPA é um serviço de alto valor agregado. Não concorra por preço — c
 - Ticket médio (meta: R$ 400+)
 - Taxa de conversão de análise → sessão (meta: >60%)
 - NPS — Net Promoter Score (meta: >80)
-- Crescimento mensal de clientes novos (meta: 15%)`
+- Crescimento mensal de clientes novos (meta: 15%)`,
+        quiz: [
+          {
+            pergunta: "Qual a meta ideal de taxa de retorno de clientes em um Head SPA?",
+            opcoes: [
+              "Acima de 40%",
+              "Acima de 50%",
+              "Acima de 60%",
+              "Acima de 70%"
+            ],
+            respostaCorreta: 3,
+            explicacao: "A meta ideal de taxa de retorno é acima de 70%, indicando fidelização efetiva dos clientes."
+          }
+        ],
+        checklist: [
+          "Criar perfil profissional no Instagram",
+          "Gravar 5 vídeos ASMR do processo",
+          "Fazer before/after com microcâmera",
+          "Montar funil de vendas (topo/meio/fundo)",
+          "Definir parcerias estratégicas locais",
+          "Implementar programa de fidelização"
+        ]
       },
       {
         titulo: "Montando seu Espaço de Head SPA",

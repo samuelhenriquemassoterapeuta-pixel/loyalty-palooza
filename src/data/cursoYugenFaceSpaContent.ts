@@ -98,6 +98,12 @@ O Yūgen FaceSPA é uma técnica de massagem facial desenvolvida a partir de pr�
             respostaCorreta: 1,
             explicacao: "Yūgen (幽玄) é um conceito estético japonês que descreve a 'beleza profunda e misteriosa' — aquela que se sente além do visível, essência da filosofia zen aplicada à estética."
           }
+        ],
+        checklist: [
+          "Compreender o significado de Yūgen (幽玄)",
+          "Conhecer os 5 pilares do Yūgen FaceSPA",
+          "Diferenciar abordagem oriental vs ocidental",
+          "Entender o posicionamento premium do serviço"
         ]
       },
       {
@@ -168,6 +174,12 @@ O Yūgen FaceSPA foi desenvolvido por Géssica Katayama após anos de estudo in 
             respostaCorreta: 1,
             explicacao: "O Kobido (古美道) surgiu em 1472 no Japão, sendo originalmente praticado exclusivamente para a realeza e aristocracia japonesa."
           }
+        ],
+        checklist: [
+          "Conhecer a origem do Kobido (1472, Japão)",
+          "Diferenciar as 5 tradições orientais de massagem facial",
+          "Entender como o Yūgen sintetiza todas as tradições",
+          "Memorizar a linha do tempo da massagem facial oriental"
         ]
       },
       {
@@ -457,6 +469,19 @@ Na Medicina Oriental, cada zona do rosto corresponde a um órgão interno. Alter
           "Aprender a preencher ficha de avaliação",
           "Praticar diagnóstico em 3 pessoas diferentes",
           "Anotar padrões observados"
+        ],
+        quiz: [
+          {
+            pergunta: "O que a zona da testa revela na reflexologia facial oriental?",
+            opcoes: [
+              "Desequilíbrio hepático",
+              "Problemas no intestino delgado e bexiga",
+              "Desequilíbrio hormonal",
+              "Problemas renais"
+            ],
+            respostaCorreta: 1,
+            explicacao: "Na reflexologia facial oriental, a testa corresponde ao intestino delgado e bexiga. Acne nessa zona pode indicar problemas digestivos."
+          }
         ]
       }
     ]
@@ -731,6 +756,19 @@ O óleo é essencial para permitir o deslizamento das mãos e ferramentas. Escol
           "Aplicar óleo de deslizamento",
           "Posicionar cliente confortavelmente",
           "Verificar alergias antes de iniciar"
+        ],
+        quiz: [
+          {
+            pergunta: "Qual é o último passo antes de iniciar a massagem facial?",
+            opcoes: [
+              "Aplicar protetor solar",
+              "Fazer avaliação facial",
+              "Aplicar óleo de deslizamento",
+              "Aquecer as pedras"
+            ],
+            respostaCorreta: 2,
+            explicacao: "O óleo de deslizamento é o último passo da preparação, aplicado após a limpeza e tonificação, permitindo o deslizamento correto das mãos e ferramentas."
+          }
         ]
       },
       {
@@ -921,7 +959,27 @@ Sempre perguntar antes do primeiro atendimento:
 - Beber bastante água (1,5-2L nas próximas 24h)
 - Evitar exercícios intensos por 12h
 
-> Sua responsabilidade como profissional é sempre a segurança da cliente. Na dúvida, não realize o procedimento e encaminhe para avaliação médica.`
+> Sua responsabilidade como profissional é sempre a segurança da cliente. Na dúvida, não realize o procedimento e encaminhe para avaliação médica.`,
+        quiz: [
+          {
+            pergunta: "Quanto tempo após preenchimento facial ou botox pode-se realizar o Yūgen FaceSPA?",
+            opcoes: [
+              "3 dias",
+              "7 dias",
+              "14 dias",
+              "30 dias"
+            ],
+            respostaCorreta: 2,
+            explicacao: "É necessário aguardar no mínimo 14 dias após preenchimento ou botox antes de realizar massagem facial, para que o produto se estabilize."
+          }
+        ],
+        checklist: [
+          "Conhecer as 8 contraindicações absolutas",
+          "Saber adaptar para rosácea e pele sensível",
+          "Realizar anamnese completa antes do 1º atendimento",
+          "Verificar uso de retinóides e medicações tópicas",
+          "Orientar cuidados pós-atendimento ao cliente"
+        ]
       }
     ]
   },
@@ -1348,7 +1406,28 @@ Omotenashi é o conceito japonês de hospitalidade suprema — antecipar as nece
 5. Faça follow-up para garantir satisfação
 6. Implemente melhoria baseada no feedback
 
-> "Uma cliente que reclama e é bem atendida se torna mais fiel do que uma que nunca reclamou." — A reclamação é um presente.`
+> "Uma cliente que reclama e é bem atendida se torna mais fiel do que uma que nunca reclamou." — A reclamação é um presente.`,
+        quiz: [
+          {
+            pergunta: "O que significa o conceito japonês Omotenashi (おもてなし)?",
+            opcoes: [
+              "Disciplina e rigor",
+              "Hospitalidade suprema — antecipar necessidades",
+              "Técnica de massagem",
+              "Filosofia de preços"
+            ],
+            respostaCorreta: 1,
+            explicacao: "Omotenashi é o conceito japonês de hospitalidade suprema — antecipar as necessidades do hóspede antes mesmo que ele as expresse."
+          }
+        ],
+        checklist: [
+          "Implementar ritual de acolhimento (chá + tour)",
+          "Criar sistema de registro de preferências por cliente",
+          "Montar programa de fidelidade com cartão",
+          "Definir protocolo de follow-up em 24h",
+          "Preparar kit de mini-amostras para 1ª visita",
+          "Criar protocolo de gestão de reclamações"
+        ]
       }
     ]
   }
