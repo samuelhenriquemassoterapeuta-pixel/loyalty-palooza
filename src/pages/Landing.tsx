@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { Building2, ArrowRight } from "lucide-react";
 import { FloatingContactButtons } from "@/components/FloatingContactButtons";
 import { LandingHeader } from "@/components/landing/LandingHeader";
-import { HeroSection } from "@/components/landing/HeroSection";
+import { HeroSection, HeroAuthButtons } from "@/components/landing/HeroSection";
 import { ServicosSection } from "@/components/landing/ServicosSection";
 import { HeadSpaSection } from "@/components/landing/HeadSpaSection";
 import { PacotesSection } from "@/components/landing/PacotesSection";
@@ -19,6 +19,7 @@ const Landing = () => {
     <div className="min-h-screen bg-background">
       <LandingHeader />
       <HeroSection />
+      <HeroAuthButtons />
 
       {/* Banner Corporativo - Colapsável */}
       <section className="py-6 px-4 sm:px-6 lg:px-8">
