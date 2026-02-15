@@ -16,7 +16,7 @@ export default function CursoMetodoResinkra({ embedded = false }: { embedded?: b
       courseIcon={<Hand size={24} />}
       coverImage={capaResinkra}
       coverVideo=""
-      completionMessage="Parabéns! Você concluiu o Método Resinkra. 🏆 23 anos de prática agora estão nas suas mãos."
+      completionMessage="Parabéns! Você concluiu o Método Resinkra. 🏆 Certificado desbloqueado! 23 anos de prática agora estão nas suas mãos."
     />
   );
 }
