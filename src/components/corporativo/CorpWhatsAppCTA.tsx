@@ -1,7 +1,8 @@
+import { forwardRef } from "react";
 import { motion } from "framer-motion";
 import { MessageCircle } from "lucide-react";
 
-export const CorpWhatsAppCTA = () => {
+export const CorpWhatsAppCTA = forwardRef<HTMLButtonElement>((_, ref) => {
   const handleClick = () => {
     const msg = encodeURIComponent(
       "Olá! Gostaria de saber mais sobre os programas de massoterapia corporativa da Resinkra."
@@ -11,6 +12,7 @@ export const CorpWhatsAppCTA = () => {
 
   return (
     <motion.button
+      ref={ref}
       onClick={handleClick}
       initial={{ opacity: 0, scale: 0.8 }}
       animate={{ opacity: 1, scale: 1 }}
@@ -24,4 +26,6 @@ export const CorpWhatsAppCTA = () => {
       <span className="text-sm font-medium hidden sm:inline">Falar com consultor</span>
     </motion.button>
   );
-};
+});
+
+CorpWhatsAppCTA.displayName = "CorpWhatsAppCTA";
