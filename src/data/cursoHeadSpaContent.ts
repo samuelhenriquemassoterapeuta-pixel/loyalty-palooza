@@ -728,6 +728,121 @@ Na Coreia, os tratamentos capilares são ajustados conforme a estação. Isso ma
 | Inverno | 15 min | 25 min | 25 min | 80 min |
 
 > Ajuste seus pacotes e preços sazonalmente. Clientes adoram sentir que o tratamento é verdadeiramente personalizado para o momento.`
+      },
+      {
+        titulo: "Melhores Marcas e Onde Comprar",
+        descricao: "Seleção curada das melhores marcas profissionais com links de compra",
+        duracaoMinutos: 15,
+        conteudo: `## Guia de Marcas Profissionais para Head SPA
+
+### 🏆 Marcas Premium Coreanas (Uso Profissional)
+
+**1. Nard — Scalp Care Line**
+- Especialidade: Tratamento profissional de couro cabeludo
+- Destaque: Shampoo esfoliante enzimático, tônico capilar
+- Indicação: Oleosidade, caspa, queda
+- 🛒 [Comprar na Amazon](https://www.amazon.com.br/s?k=Nard+scalp+care)
+- 🛒 [Site oficial](https://nard.co.kr)
+
+**2. Aromatica — Scalp Scaling Line**
+- Especialidade: Esfoliação e purificação natural
+- Destaque: Rosemary Scalp Scaling Shampoo, Tea Tree Tonic
+- Certificação: EWG Verified, Vegan, Cruelty-free
+- 🛒 [Comprar na Amazon](https://www.amazon.com.br/s?k=Aromatica+scalp)
+- 🛒 [Comprar na Shopee](https://shopee.com.br/search?keyword=aromatica%20scalp)
+
+**3. Dr. Groot — Anti-Hair Loss**
+- Especialidade: Prevenção de queda capilar
+- Destaque: Linha com ginseng e centella
+- Marca mais vendida de scalp care na Coreia
+- 🛒 [Comprar na Amazon](https://www.amazon.com.br/s?k=Dr+Groot+anti+hair+loss)
+- 🛒 [Comprar no Mercado Livre](https://www.mercadolivre.com.br/jm/search?as_word=dr+groot)
+
+**4. Ryo (려) — Jayangyunmo**
+- Especialidade: Herbal anti-queda com ginseng
+- Destaque: Shampoo #1 da Coreia por 10+ anos consecutivos
+- Ingrediente principal: Ginseng vermelho fermentado
+- 🛒 [Comprar na Amazon](https://www.amazon.com.br/s?k=Ryo+Jayangyunmo)
+- 🛒 [Comprar na Shopee](https://shopee.com.br/search?keyword=ryo%20shampoo%20ginseng)
+
+**5. Lador — Scalp Hair Pack**
+- Especialidade: Máscaras e tratamentos capilares profissionais
+- Destaque: Scalp Scaling Spa, Keratin Hair Pack
+- Excelente custo-benefício para salão
+- 🛒 [Comprar na Amazon](https://www.amazon.com.br/s?k=Lador+scalp+spa)
+- 🛒 [Comprar na Shopee](https://shopee.com.br/search?keyword=lador%20scalp)
+
+### 🧴 Marcas de Ativos e Ampolas
+
+**6. SOME BY MI — AHA/BHA/PHA Scalp**
+- Destaque: Escalpe com ácidos suaves para esfoliação
+- 🛒 [Amazon](https://www.amazon.com.br/s?k=some+by+mi+scalp)
+
+**7. Mise en Scène — Perfect Serum**
+- Destaque: Sérum finalizador com óleo de argan e camélia
+- Encontra em qualquer loja de cosméticos K-beauty
+- 🛒 [Amazon](https://www.amazon.com.br/s?k=mise+en+scene+perfect+serum)
+- 🛒 [Shopee](https://shopee.com.br/search?keyword=mise%20en%20scene%20serum)
+
+**8. Cosrx — Centella Line**
+- Destaque: Produtos com centella de alta concentração
+- Uso: Adaptar tônicos faciais para couro cabeludo sensível
+- 🛒 [Amazon](https://www.amazon.com.br/s?k=cosrx+centella)
+
+### 🛠️ Equipamentos Profissionais
+
+**Microcâmera Capilar**
+- Modelo recomendado: Scalp Camera 200x USB/WiFi
+- 🛒 [Amazon](https://www.amazon.com.br/s?k=microcamera+capilar+200x)
+- 🛒 [AliExpress](https://pt.aliexpress.com/w/wholesale-scalp-camera-200x.html)
+
+**Vaporizador de Ozônio Capilar**
+- Para potencializar tratamentos e abrir poros foliculares
+- 🛒 [Amazon](https://www.amazon.com.br/s?k=vaporizador+capilar+ozonio)
+- 🛒 [Mercado Livre](https://www.mercadolivre.com.br/jm/search?as_word=vaporizador+capilar+ozonio)
+
+**Capacete LED Capilar**
+- LED Vermelho 630nm + Infravermelho 830nm
+- 🛒 [Amazon](https://www.amazon.com.br/s?k=capacete+LED+capilar)
+- 🛒 [AliExpress](https://pt.aliexpress.com/w/wholesale-led-hair-growth-helmet.html)
+
+### 🌿 Óleos Essenciais para Aromaterapia
+
+**doTERRA (parceiro Resinkra)**
+- Lavanda, Alecrim, Hortelã-pimenta, Tea Tree, Cedro
+- Pureza terapêutica certificada CPTG
+- 🛒 Solicitar via app Resinkra ou com sua consultora
+
+**Laszlo**
+- Marca brasileira de óleos essenciais puros
+- 🛒 [Site oficial](https://laszlo.com.br)
+- 🛒 [Amazon](https://www.amazon.com.br/s?k=laszlo+oleo+essencial)
+
+**Phytoterápica**
+- Óleos essenciais 100% naturais com laudo
+- 🛒 [Site oficial](https://phytoterapica.com.br)
+- 🛒 [Amazon](https://www.amazon.com.br/s?k=phytoterapica+oleo+essencial)
+
+### 💡 Dicas de Compra para Profissionais
+
+- **Kit inicial estimado**: R$ 1.500-3.000 (produtos + microcâmera)
+- **Reposição mensal**: R$ 300-600 (para 20-30 atendimentos)
+- Compre em **kits profissionais** — desconto de 20-40% vs. unidade
+- Prefira sempre **tamanho profissional** (500ml-1L) ao invés de varejo
+- Importe diretamente da Coreia via **iHerb** ou **YesStyle** para economia de até 50%
+- 🛒 [iHerb K-beauty](https://www.iherb.com/c/k-beauty)
+- 🛒 [YesStyle Hair Care](https://www.yesstyle.com/en/hair-care/list.html)
+
+> Monte um kit de demonstração com mini-tamanhos de cada marca para testar antes de investir em volume profissional.`,
+        checklist: [
+          "Pesquisar marcas disponíveis no Brasil",
+          "Montar kit inicial de produtos",
+          "Adquirir microcâmera capilar",
+          "Selecionar óleos essenciais de qualidade",
+          "Calcular custo por atendimento",
+          "Organizar estoque de reposição",
+          "Testar produtos antes de usar em clientes"
+        ]
       }
     ]
   },
