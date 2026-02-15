@@ -14,7 +14,7 @@ export const CollapsibleDashboardSection = ({
   title,
   icon,
   children,
-  defaultOpen = true,
+  defaultOpen = false,
   badge,
 }: CollapsibleDashboardSectionProps) => {
   const [isOpen, setIsOpen] = useState(defaultOpen);

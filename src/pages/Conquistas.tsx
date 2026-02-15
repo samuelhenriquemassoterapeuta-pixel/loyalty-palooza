@@ -137,7 +137,7 @@ const Conquistas = () => {
               <TabsContent value="conquistas" className="space-y-4 mt-4">
                 {/* XP & Level - Collapsible */}
                 <motion.div variants={fadeUp}>
-                  <AppCollapsibleSection title="Nível & XP" icon={Star} defaultOpen>
+                  <AppCollapsibleSection title="Nível & XP" icon={Star}>
                     <XpLevelCard achievements={achievements} />
                   </AppCollapsibleSection>
                 </motion.div>

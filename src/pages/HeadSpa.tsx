@@ -228,7 +228,7 @@ const HeadSpa = () => {
       {/* O que é - Collapsible */}
       <section className="py-14 sm:py-20 px-5 sm:px-8">
         <div className="max-w-4xl mx-auto">
-          <AppCollapsibleSection title="O que é o Head SPA?" icon={Info} defaultOpen>
+          <AppCollapsibleSection title="O que é o Head SPA?" icon={Info}>
             <p className="text-muted-foreground leading-relaxed">
               O Head SPA Coreano é um tratamento capilar e de relaxamento que combina cuidados 
               profundos para o couro cabeludo com técnicas de massagem e bem-estar. Uma experiência 
