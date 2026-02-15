@@ -3102,6 +3102,69 @@ export type Database = {
         }
         Relationships: []
       }
+      terapias_conteudo: {
+        Row: {
+          ativo: boolean | null
+          beneficios: string[] | null
+          como_funciona: string | null
+          contraindicacoes: string[] | null
+          created_at: string
+          descricao: string | null
+          duracao_media: string | null
+          galeria_urls: string[] | null
+          icone: string | null
+          id: string
+          imagem_capa: string | null
+          indicacoes: string[] | null
+          nome: string
+          ordem: number | null
+          slug: string
+          subtitulo: string | null
+          updated_at: string
+          video_urls: string[] | null
+        }
+        Insert: {
+          ativo?: boolean | null
+          beneficios?: string[] | null
+          como_funciona?: string | null
+          contraindicacoes?: string[] | null
+          created_at?: string
+          descricao?: string | null
+          duracao_media?: string | null
+          galeria_urls?: string[] | null
+          icone?: string | null
+          id?: string
+          imagem_capa?: string | null
+          indicacoes?: string[] | null
+          nome: string
+          ordem?: number | null
+          slug: string
+          subtitulo?: string | null
+          updated_at?: string
+          video_urls?: string[] | null
+        }
+        Update: {
+          ativo?: boolean | null
+          beneficios?: string[] | null
+          como_funciona?: string | null
+          contraindicacoes?: string[] | null
+          created_at?: string
+          descricao?: string | null
+          duracao_media?: string | null
+          galeria_urls?: string[] | null
+          icone?: string | null
+          id?: string
+          imagem_capa?: string | null
+          indicacoes?: string[] | null
+          nome?: string
+          ordem?: number | null
+          slug?: string
+          subtitulo?: string | null
+          updated_at?: string
+          video_urls?: string[] | null
+        }
+        Relationships: []
+      }
       transacoes: {
         Row: {
           created_at: string
