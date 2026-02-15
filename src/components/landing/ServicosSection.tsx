@@ -1,10 +1,12 @@
 import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Clock, Percent, Leaf, ChevronDown, Sparkles, Hand, SmilePlus, Package, Heart, Calendar } from "lucide-react";
+import { Clock, Percent, Leaf, ChevronDown, Sparkles, Hand, SmilePlus, Package, Heart, Calendar, CheckCircle2, ArrowRight, Users } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useServicos } from "@/hooks/useServicos";
 import { useParallax } from "@/hooks/useParallax";
 import { CollapsibleSection } from "./CollapsibleSection";
+import { Button } from "@/components/ui/button";
+import servicosBanner from "@/assets/landing/servicos-banner.jpg";
 
 const containerVariants = {
   hidden: {},
@@ -18,14 +20,21 @@ const cardVariants = {
   visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.5, ease: [0, 0, 0.2, 1] as const } },
 };
 
-const categoryConfig: Record<string, { label: string; icon: typeof Leaf; color: string }> = {
-  corporal: { label: "Corporal", icon: Sparkles, color: "text-primary" },
-  facial: { label: "Facial", icon: SmilePlus, color: "text-accent" },
-  massagem: { label: "Massagem", icon: Hand, color: "text-highlight" },
-  pacote: { label: "Pacotes", icon: Package, color: "text-info" },
-  terapia: { label: "Terapia", icon: Heart, color: "text-success" },
-  geral: { label: "Geral", icon: Leaf, color: "text-primary" },
+const categoryConfig: Record<string, { label: string; icon: typeof Leaf; color: string; description: string }> = {
+  corporal: { label: "Corporal", icon: Sparkles, color: "text-primary", description: "Tratamentos especializados para o corpo, alinhando técnica e sensibilidade." },
+  facial: { label: "Facial", icon: SmilePlus, color: "text-accent", description: "Cuidados faciais com protocolos avançados e produtos premium." },
+  massagem: { label: "Massagem", icon: Hand, color: "text-highlight", description: "Técnicas terapêuticas que promovem relaxamento profundo e alívio de tensões." },
+  pacote: { label: "Pacotes", icon: Package, color: "text-info", description: "Combinações especiais para uma experiência completa de bem-estar." },
+  terapia: { label: "Terapia", icon: Heart, color: "text-success", description: "Terapias holísticas que cuidam do corpo, mente e espírito." },
+  geral: { label: "Geral", icon: Leaf, color: "text-primary", description: "Serviços variados para o seu bem-estar." },
 };
+
+const highlights = [
+  { icon: CheckCircle2, text: "Profissionais certificados e especializados" },
+  { icon: CheckCircle2, text: "Cashback em todas as sessões" },
+  { icon: CheckCircle2, text: "Ambiente sensorial exclusivo" },
+  { icon: CheckCircle2, text: "Protocolos personalizados por terapia" },
+];
 
 export const ServicosSection = () => {
   const { servicos, loading } = useServicos();
@@ -50,9 +59,10 @@ export const ServicosSection = () => {
       return n;
     });
 
+  const totalServicos = servicos.length;
+
   return (
     <div ref={ref} className="py-14 sm:py-20 lg:py-28 bg-card/50 relative overflow-hidden">
-      {/* Parallax decorative blobs */}
       <motion.div
         style={{ y }}
         className="absolute -top-20 -right-20 w-80 h-80 bg-primary/5 rounded-full blur-3xl pointer-events-none hidden lg:block"
@@ -65,7 +75,6 @@ export const ServicosSection = () => {
       <div className="max-w-6xl mx-auto px-5 sm:px-6 lg:px-8 relative z-10">
         <CollapsibleSection
           id="servicos"
-          
           badge={
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20">
               <Leaf size={14} className="text-primary" />
@@ -85,6 +94,41 @@ export const ServicosSection = () => {
             </p>
           }
         >
+          {/* Rich banner */}
+          <div className="mb-8 rounded-2xl overflow-hidden relative aspect-[21/9]">
+            <img src={servicosBanner} alt="Sala de terapia" className="w-full h-full object-cover" loading="lazy" />
+            <div className="absolute inset-0 bg-gradient-to-r from-background/80 via-background/40 to-transparent" />
+            <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-6">
+              <div className="flex flex-wrap items-center gap-4">
+                <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-card/80 backdrop-blur-sm border border-border/50">
+                  <Users size={14} className="text-primary" />
+                  <span className="text-xs font-semibold text-foreground">+500 clientes atendidos</span>
+                </div>
+                <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-card/80 backdrop-blur-sm border border-border/50">
+                  <Sparkles size={14} className="text-accent" />
+                  <span className="text-xs font-semibold text-foreground">{totalServicos} serviços disponíveis</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Highlights grid */}
+          <div className="mb-8 grid grid-cols-2 sm:grid-cols-4 gap-3">
+            {highlights.map((h, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.08, duration: 0.4 }}
+                className="flex items-start gap-2 p-3 rounded-xl bg-primary/5 border border-primary/10"
+              >
+                <h.icon size={14} className="text-primary shrink-0 mt-0.5" />
+                <span className="text-[11px] font-medium text-foreground leading-tight">{h.text}</span>
+              </motion.div>
+            ))}
+          </div>
+
           {/* Categories */}
           {loading ? (
             <div className="space-y-4">
@@ -123,9 +167,12 @@ export const ServicosSection = () => {
                           {config.label}
                         </p>
                         <p className="text-xs text-muted-foreground">
-                          {items.length} {items.length === 1 ? "serviço" : "serviços"}
+                          {config.description}
                         </p>
                       </div>
+                      <span className="hidden sm:inline text-xs text-muted-foreground shrink-0">
+                        {items.length} {items.length === 1 ? "serviço" : "serviços"}
+                      </span>
                       <motion.div
                         animate={{ rotate: isOpen ? 180 : 0 }}
                         transition={{ duration: 0.25 }}
@@ -202,6 +249,16 @@ export const ServicosSection = () => {
               <p className="text-muted-foreground">Serviços em breve disponíveis.</p>
             </div>
           )}
+
+          {/* CTA to full catalog */}
+          <div className="mt-8 text-center">
+            <Link to="/terapias">
+              <Button variant="outline" className="gap-2 group">
+                Ver catálogo completo de terapias
+                <ArrowRight size={15} className="group-hover:translate-x-1 transition-transform" />
+              </Button>
+            </Link>
+          </div>
         </CollapsibleSection>
       </div>
     </div>

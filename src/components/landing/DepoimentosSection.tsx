@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Star, Quote } from "lucide-react";
+import { Star, Quote, Heart, Users, Award } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useParallax } from "@/hooks/useParallax";
 import { CollapsibleSection } from "./CollapsibleSection";
 import { useLandingConfig } from "@/hooks/useLandingConfig";
+import depoimentosBanner from "@/assets/landing/depoimentos-banner.jpg";
 
 interface Depoimento {
   nome: string;
@@ -35,6 +36,12 @@ const defaultFallback: Depoimento[] = [
   { nome: "Lucas M.", nota: 5, comentario: "Profissionais excelentes e o programa de fidelidade é um diferencial enorme. Super recomendo." },
   { nome: "Juliana S.", nota: 5, comentario: "Ambiente acolhedor, atendimento impecável. O app facilita muito o agendamento e o acompanhamento." },
   { nome: "Rafael T.", nota: 4, comentario: "Indiquei para três amigos e já acumulei um bom saldo de cashback. Experiência completa!" },
+];
+
+const socialProof = [
+  { icon: Star, value: "4.9", label: "Nota média" },
+  { icon: Users, value: "+500", label: "Clientes" },
+  { icon: Award, value: "98%", label: "Recomendam" },
 ];
 
 export const DepoimentosSection = () => {
@@ -84,7 +91,6 @@ export const DepoimentosSection = () => {
 
       <div className="max-w-6xl mx-auto px-5 sm:px-6 lg:px-8 relative z-10">
         <CollapsibleSection
-          
           badge={
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/10 border border-accent/20">
               <Quote size={14} className="text-accent" />
@@ -99,6 +105,29 @@ export const DepoimentosSection = () => {
           }
           subtitle={<p className="text-muted-foreground">{subtitulo}</p>}
         >
+          {/* Banner */}
+          <div className="mb-8 rounded-2xl overflow-hidden relative aspect-[21/9]">
+            <img src={depoimentosBanner} alt="Comunidade Resinkra" className="w-full h-full object-cover" loading="lazy" />
+            <div className="absolute inset-0 bg-gradient-to-r from-background/70 to-background/30" />
+            <div className="absolute inset-0 flex items-center justify-center gap-6 sm:gap-10">
+              {socialProof.map((item, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.15, duration: 0.5 }}
+                  className="text-center"
+                >
+                  <item.icon size={20} className="text-primary mx-auto mb-1" />
+                  <p className="text-xl sm:text-2xl font-bold text-foreground">{item.value}</p>
+                  <p className="text-[10px] sm:text-xs text-muted-foreground">{item.label}</p>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+
+          {/* Testimonials */}
           <motion.div
             variants={containerVariants}
             initial="hidden"
