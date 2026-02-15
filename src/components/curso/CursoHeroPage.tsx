@@ -285,10 +285,13 @@ export function CursoHeroPage({
                           )}
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="text-sm font-semibold truncate">{modulo.titulo}</p>
+                          <p className="text-sm font-semibold leading-snug">{modulo.titulo}</p>
                           <p className="text-[11px] text-muted-foreground">
                             {total} aulas · {modMinutos}min · {done}/{total} concluídas
                           </p>
+                          {done > 0 && done < total && (
+                            <Progress value={(done / total) * 100} className="h-1 mt-1.5" />
+                          )}
                         </div>
                       </div>
                     </AccordionTrigger>
@@ -300,25 +303,25 @@ export function CursoHeroPage({
                           return (
                             <div
                               key={ai}
-                              className="flex items-center gap-2 text-sm"
+                              className="flex items-start gap-2 text-sm"
                             >
                               {aulaComplete ? (
-                                <div className="w-5 h-5 rounded-full bg-primary/20 flex items-center justify-center shrink-0">
+                                <div className="w-5 h-5 rounded-full bg-primary/20 flex items-center justify-center shrink-0 mt-0.5">
                                   <span className="text-[10px] text-primary">✓</span>
                                 </div>
                               ) : (
-                                <div className="w-5 h-5 rounded-full border border-border flex items-center justify-center shrink-0">
+                                <div className="w-5 h-5 rounded-full border border-border flex items-center justify-center shrink-0 mt-0.5">
                                   <span className="text-[10px] text-muted-foreground">{ai + 1}</span>
                                 </div>
                               )}
-                              <span className={`flex-1 truncate ${aulaComplete ? "text-muted-foreground" : "text-foreground"}`}>
+                              <span className={`flex-1 min-w-0 leading-snug ${aulaComplete ? "text-muted-foreground" : "text-foreground"}`}>
                                 {aula.titulo}
                               </span>
-                              <div className="flex items-center gap-1 shrink-0">
+                              <div className="flex items-center gap-1 shrink-0 mt-0.5">
                                 {aula.quiz && <HelpCircle size={10} className="text-primary" />}
                                 {aula.checklist && <ClipboardCheck size={10} className="text-accent-foreground" />}
                               </div>
-                              <span className="text-[10px] text-muted-foreground shrink-0">
+                              <span className="text-[10px] text-muted-foreground shrink-0 mt-0.5">
                                 {aula.duracaoMinutos}min
                               </span>
                             </div>
