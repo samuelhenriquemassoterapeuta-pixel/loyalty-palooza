@@ -119,7 +119,7 @@ function AulaView({
   );
 }
 
-export default function CursoVendas() {
+export default function CursoVendas({ embedded = false }: { embedded?: boolean }) {
   const navigate = useNavigate();
   const { loading, toggleAula, isAulaConcluida, aulasFeitas, totalAulas: _totalAulas, percentual } = useCursoVendas();
   const [selectedModulo, setSelectedModulo] = useState<number | null>(null);
@@ -158,11 +158,13 @@ export default function CursoVendas() {
     return m.aulas.filter((_, ai) => isComplete(mi, ai)).length;
   };
 
+  const Wrapper = embedded ? ({ children }: { children: React.ReactNode }) => <>{children}</> : AppLayout;
+
   if (selectedModulo !== null && selectedAula !== null) {
     const modulo = cursoVendasData[selectedModulo];
     return (
-      <AppLayout>
-        <div className="min-h-screen bg-background pb-32 lg:pb-8">
+      <Wrapper>
+        <div className={`min-h-screen bg-background ${embedded ? '' : 'pb-32 lg:pb-8'}`}>
           <div className="max-w-lg mx-auto px-4 py-6">
             <AulaView
               modulo={modulo}
@@ -187,7 +189,7 @@ export default function CursoVendas() {
             </div>
           </div>
         </div>
-      </AppLayout>
+      </Wrapper>
     );
   }
 
@@ -195,8 +197,8 @@ export default function CursoVendas() {
     const modulo = cursoVendasData[selectedModulo];
     const Icon = iconMap[modulo.icone] || BookOpen;
     return (
-      <AppLayout>
-        <div className="min-h-screen bg-background pb-32 lg:pb-8">
+      <Wrapper>
+        <div className={`min-h-screen bg-background ${embedded ? '' : 'pb-32 lg:pb-8'}`}>
           <div className="relative overflow-hidden bg-gradient-to-br from-primary/10 via-accent/5 to-highlight/10 border-b border-border px-4 py-6 safe-top">
             <div className="max-w-lg mx-auto">
               <div className="flex items-center gap-3 mb-3">
@@ -244,31 +246,33 @@ export default function CursoVendas() {
             })}
           </div>
         </div>
-      </AppLayout>
+      </Wrapper>
     );
   }
 
   return (
-    <AppLayout>
-      <div className="min-h-screen bg-background pb-32 lg:pb-8">
+    <Wrapper>
+      <div className={`min-h-screen bg-background ${embedded ? '' : 'pb-32 lg:pb-8'}`}>
         {/* Header */}
         <div className="relative overflow-hidden bg-gradient-to-br from-primary/10 via-accent/5 to-highlight/10 border-b border-border px-4 py-6 safe-top">
           <div className="absolute -top-20 -right-20 w-40 h-40 bg-accent/20 rounded-full blur-3xl" />
           <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-primary/20 rounded-full blur-2xl" />
 
           <div className="max-w-lg mx-auto relative z-10">
-            <div className="flex items-center gap-4 mb-4">
-              <Button variant="ghost" size="icon" onClick={() => navigate(-1)}>
-                <ArrowLeft size={20} />
-              </Button>
-              <div className="flex-1">
-                <h1 className="text-xl font-bold text-primary flex items-center gap-2">
-                  <GraduationCap size={24} />
-                  Curso de Vendas
-                </h1>
-                <p className="text-sm text-muted-foreground">Vendas consultivas em massoterapia</p>
+            {!embedded && (
+              <div className="flex items-center gap-4 mb-4">
+                <Button variant="ghost" size="icon" onClick={() => navigate(-1)}>
+                  <ArrowLeft size={20} />
+                </Button>
+                <div className="flex-1">
+                  <h1 className="text-xl font-bold text-primary flex items-center gap-2">
+                    <GraduationCap size={24} />
+                    Curso de Vendas
+                  </h1>
+                  <p className="text-sm text-muted-foreground">Vendas consultivas em massoterapia</p>
+                </div>
               </div>
-            </div>
+            )}
 
             {/* Progress card */}
             <Card className="p-4 bg-card/80 backdrop-blur">
@@ -338,6 +342,6 @@ export default function CursoVendas() {
           )}
         </div>
       </div>
-    </AppLayout>
+    </Wrapper>
   );
 }
