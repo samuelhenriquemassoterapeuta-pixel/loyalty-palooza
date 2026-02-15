@@ -4,6 +4,8 @@ import { AppLayout } from "@/components/AppLayout";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { lazy, Suspense } from "react";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
+import { CursosHubHero } from "@/components/curso/CursosHubHero";
+import { allCourseStats } from "@/data/cursosHubStats";
 
 const CursoVendasHero = lazy(() => import("@/pages/CursoVendasHero"));
 const CursoAromaterapiaHero = lazy(() => import("@/pages/CursoAromaterapiaHero"));
@@ -23,7 +25,10 @@ export default function Cursos() {
   return (
     <AppLayout>
       <div className="min-h-screen bg-background pb-32 lg:pb-8">
-        <div className="max-w-lg mx-auto px-4 pt-6">
+        {/* Hero Section */}
+        <CursosHubHero courses={allCourseStats} />
+
+        <div className="max-w-lg mx-auto px-4 pt-4">
           <Tabs value={tab} onValueChange={handleTabChange}>
             <TabsList className="w-full grid grid-cols-6 mb-4">
               <TabsTrigger value="metodo" className="gap-1 text-xs px-1">
