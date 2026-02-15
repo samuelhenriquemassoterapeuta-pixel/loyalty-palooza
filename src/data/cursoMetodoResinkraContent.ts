@@ -1572,7 +1572,13 @@ O Método Resinkra não é "tamanho único". A técnica se adapta ao perfil do c
           "Adaptei a pressão ao perfil (atleta vs idoso vs gestante)",
           "Escolhi as ferramentas adequadas ao perfil",
           "Ajustei a proporção liberação/relaxamento",
-          "Comuniquei as adaptações ao cliente quando relevante"
+          "Comuniquei as adaptações ao cliente quando relevante",
+          "Registrei o caso clínico: nome/iniciais do cliente",
+          "Registrei o caso clínico: queixa principal e mapa de tensões",
+          "Registrei o caso clínico: protocolo aplicado e ferramentas usadas",
+          "Registrei o caso clínico: resposta do cliente durante a sessão",
+          "Registrei o caso clínico: resultado pós-sessão e evolução",
+          "Registrei o caso clínico: plano de sessões futuras e frequência"
         ]
       }
     ]
