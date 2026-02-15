@@ -1,0 +1,22 @@
+import { Gem } from "lucide-react";
+import capaFacespa from "@/assets/cursos/capa-facespa.jpg";
+import videoFacespa from "@/assets/cursos/video-facespa.mp4";
+import { CursoHeroPage } from "@/components/curso/CursoHeroPage";
+import { cursoYugenFaceSpaData } from "@/data/cursoYugenFaceSpaContent";
+
+export default function CursoYugenFaceSpaHero() {
+  return (
+    <CursoHeroPage
+      storageKey="resinkra_curso_yugen_facespa_progress"
+      modulos={cursoYugenFaceSpaData}
+      courseTitle="Yūgen FaceSPA"
+      courseSubtitle="Curso profissional completo · 幽玄フェイススパ"
+      courseIcon={<Gem size={28} />}
+      coverImage={capaFacespa}
+      coverVideo={videoFacespa}
+      courseRoute="/curso-yugen-facespa"
+      level="Profissional"
+      description="Formação em filosofia oriental (Qi/Tsubos), anatomia facial, técnica Kobido, uso de Gua Sha e estratégias de fidelização baseadas em Omotenashi."
+    />
+  );
+}
