@@ -25,6 +25,7 @@ import { Progress } from "@/components/ui/progress";
 import { AppLayout } from "@/components/AppLayout";
 import { cursoAnatomiaData } from "@/data/cursoAnatomiaContent";
 import { NarracaoPlayer } from "@/components/curso/NarracaoPlayer";
+import { anatomiaAulaAssets } from "@/data/cursoAnatomiaAssets";
 import type { ModuloContent } from "@/data/cursoVendasContent";
 
 const iconMap: Record<string, React.ElementType> = {
@@ -38,18 +39,21 @@ const iconMap: Record<string, React.ElementType> = {
 
 function AulaView({
   modulo,
+  moduloIndex,
   aulaIndex,
   onBack,
   isComplete,
   onToggle,
 }: {
   modulo: ModuloContent;
+  moduloIndex: number;
   aulaIndex: number;
   onBack: () => void;
   isComplete: boolean;
   onToggle: () => void;
 }) {
   const aula = modulo.aulas[aulaIndex];
+  const assets = anatomiaAulaAssets[`${moduloIndex}-${aulaIndex}`];
 
   const renderContent = (text: string) => {
     return text.split("\n").map((line, i) => {
@@ -82,6 +86,13 @@ function AulaView({
         </div>
         <span className="text-xs text-muted-foreground shrink-0">{aula.duracaoMinutos} min</span>
       </div>
+
+      {assets && (
+        <Card className="mb-4 overflow-hidden relative">
+          <img src={assets.image} alt={aula.titulo} className="w-full h-40 object-cover" />
+          <video src={assets.video} autoPlay loop muted playsInline className="absolute inset-0 w-full h-full object-cover opacity-25 mix-blend-luminosity" />
+        </Card>
+      )}
 
       <div className="mb-4">
         <NarracaoPlayer texto={aula.conteudo} titulo={aula.titulo} />
@@ -139,6 +150,7 @@ export default function CursoAnatomia({ embedded = false }: { embedded?: boolean
           <div className="max-w-lg mx-auto px-4 py-6">
             <AulaView
               modulo={modulo}
+              moduloIndex={selectedModulo}
               aulaIndex={selectedAula}
               onBack={() => setSelectedAula(null)}
               isComplete={isComplete(selectedModulo, selectedAula)}
