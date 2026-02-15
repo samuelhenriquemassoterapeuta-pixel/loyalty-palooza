@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import capaHeadspa from "@/assets/cursos/capa-headspa.jpg";
+import videoHeadspa from "@/assets/cursos/video-headspa.mp4";
 import {
   ArrowLeft,
   BookOpen,
@@ -340,9 +342,14 @@ export default function CursoHeadSpa({ embedded = false }: { embedded?: boolean 
   return (
     <Wrapper>
       <div className={`min-h-screen bg-background ${embedded ? "" : "pb-32 lg:pb-8"}`}>
-        <div className="relative overflow-hidden bg-gradient-to-br from-primary/10 via-accent/5 to-highlight/10 border-b border-border px-4 py-6 safe-top">
-          <div className="absolute -top-20 -right-20 w-40 h-40 bg-accent/20 rounded-full blur-3xl" />
-          <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-primary/20 rounded-full blur-2xl" />
+        {/* Cover Image & Video */}
+        <div className="relative w-full h-48 overflow-hidden">
+          <img src={capaHeadspa} alt="Head SPA Coreano" className="w-full h-full object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
+          <video src={videoHeadspa} autoPlay loop muted playsInline className="absolute inset-0 w-full h-full object-cover opacity-30 mix-blend-luminosity" />
+        </div>
+
+        <div className="relative overflow-hidden bg-gradient-to-br from-primary/10 via-accent/5 to-highlight/10 border-b border-border px-4 py-6 -mt-12 safe-top">
           <div className="max-w-lg mx-auto relative z-10">
             {!embedded && (
               <div className="flex items-center gap-4 mb-4">
