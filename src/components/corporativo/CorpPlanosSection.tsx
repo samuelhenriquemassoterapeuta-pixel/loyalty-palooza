@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Check, Star, Zap, Crown } from "lucide-react";
+import { Check, Star, Zap, Crown, Clock, Users, FileText, Headphones } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const planos = [
@@ -20,6 +20,12 @@ const planos = [
       "Personalização por tipo de evento",
     ],
     ideal: "SIPATs, feiras, lançamentos, festas corporativas",
+    inclusos: [
+      { icon: Clock, label: "Sessões de 15-20 min" },
+      { icon: Users, label: "1-5 profissionais" },
+      { icon: FileText, label: "Relatório pós-evento" },
+    ],
+    comoFunciona: "Agende com até 7 dias de antecedência. Nossa equipe chega 30 minutos antes para montagem. Ao final, você recebe um relatório com número de atendimentos e feedback dos participantes.",
   },
   {
     nome: "Trimestral",
@@ -40,6 +46,12 @@ const planos = [
       "Renovação trimestral flexível",
     ],
     ideal: "Escritórios com 50-200 colaboradores",
+    inclusos: [
+      { icon: Clock, label: "4 visitas/mês" },
+      { icon: Users, label: "Profissional dedicado" },
+      { icon: Headphones, label: "Suporte prioritário" },
+    ],
+    comoFunciona: "Após assinatura, designamos um profissional exclusivo para sua empresa. Os colaboradores agendam pelo link personalizado. Todo mês você recebe um dashboard com adesão, satisfação e recomendações.",
   },
   {
     nome: "Anual",
@@ -61,6 +73,12 @@ const planos = [
       "Contrato com SLA garantido",
     ],
     ideal: "Empresas com 200+ colaboradores",
+    inclusos: [
+      { icon: Clock, label: "8 visitas/mês" },
+      { icon: Users, label: "Equipe 2+ profissionais" },
+      { icon: FileText, label: "Dashboard + avaliação postural" },
+    ],
+    comoFunciona: "Iniciamos com uma avaliação ergonômica do ambiente de trabalho. Criamos um programa personalizado com cronograma semestral, metas de adesão e indicadores de saúde. Reuniões trimestrais de alinhamento com o RH.",
   },
 ];
 
@@ -111,13 +129,27 @@ export const CorpPlanosSection = () => {
             </span>
           </div>
 
-          <p className={`text-sm mb-6 leading-relaxed ${
+          <p className={`text-sm mb-4 leading-relaxed ${
             plano.destaque ? "text-primary-foreground/80" : "text-muted-foreground"
           }`}>
             {plano.descricao}
           </p>
 
-          <ul className="space-y-3 mb-8">
+          {/* Inclusos visual */}
+          <div className={`grid grid-cols-3 gap-2 mb-4 p-3 rounded-xl ${
+            plano.destaque ? "bg-primary-foreground/10" : "bg-muted/50"
+          }`}>
+            {plano.inclusos.map((item) => (
+              <div key={item.label} className="text-center">
+                <item.icon size={14} className={`mx-auto mb-1 ${plano.destaque ? "text-primary-foreground/80" : "text-primary"}`} />
+                <p className={`text-[10px] leading-tight ${plano.destaque ? "text-primary-foreground/70" : "text-muted-foreground"}`}>
+                  {item.label}
+                </p>
+              </div>
+            ))}
+          </div>
+
+          <ul className="space-y-2.5 mb-4">
             {plano.beneficios.map((item) => (
               <li key={item} className="flex items-start gap-2.5 text-sm">
                 <Check size={16} className={`shrink-0 mt-0.5 ${
@@ -129,6 +161,16 @@ export const CorpPlanosSection = () => {
               </li>
             ))}
           </ul>
+
+          {/* Como funciona */}
+          <div className={`text-xs mb-4 p-3 rounded-xl ${
+            plano.destaque 
+              ? "bg-primary-foreground/10 text-primary-foreground/70" 
+              : "bg-muted text-muted-foreground"
+          }`}>
+            <strong className={plano.destaque ? "text-primary-foreground/90" : "text-foreground"}>Como funciona:</strong>
+            <p className="mt-1 leading-relaxed">{plano.comoFunciona}</p>
+          </div>
 
           <div className={`text-xs mb-6 p-3 rounded-xl ${
             plano.destaque 
