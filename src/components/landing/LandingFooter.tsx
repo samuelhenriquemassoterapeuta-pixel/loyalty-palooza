@@ -1,15 +1,16 @@
+import { forwardRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import logoMarrom from "@/assets/logo-marrom.png";
 import simboloVerde from "@/assets/simbolo-verde.png";
 import heroBg from "@/assets/hero-options/hero-spa-resinkra.jpg";
 
-export const LandingFooter = () => {
+export const LandingFooter = forwardRef<HTMLElement>((_, ref) => {
   const year = new Date().getFullYear();
   const navigate = useNavigate();
 
   return (
-    <footer className="relative py-20 lg:py-32 border-t border-border overflow-hidden">
+    <footer ref={ref} className="relative py-20 lg:py-32 border-t border-border overflow-hidden">
       <div className="absolute inset-0">
         <img src={heroBg} alt="" className="w-full h-full object-cover" />
         <div className="absolute inset-0 bg-background/75" />
@@ -44,4 +45,6 @@ export const LandingFooter = () => {
       </div>
     </footer>
   );
-};
+});
+
+LandingFooter.displayName = "LandingFooter";
