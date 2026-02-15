@@ -24,6 +24,7 @@ import { AppLayout } from "@/components/AppLayout";
 import { cursoVendasData, type ModuloContent } from "@/data/cursoVendasContent";
 import { useCursoVendas } from "@/hooks/useCursoVendas";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
+import { NarracaoPlayer } from "@/components/curso/NarracaoPlayer";
 
 const iconMap: Record<string, React.ElementType> = {
   Lightbulb,
@@ -80,6 +81,11 @@ function AulaView({
           <h2 className="text-base font-bold truncate">{aula.titulo}</h2>
         </div>
         <span className="text-xs text-muted-foreground shrink-0">{aula.duracaoMinutos} min</span>
+      </div>
+
+      {/* Narração por IA */}
+      <div className="mb-4">
+        <NarracaoPlayer texto={aula.conteudo} titulo={aula.titulo} />
       </div>
 
       {aula.videoUrl && (

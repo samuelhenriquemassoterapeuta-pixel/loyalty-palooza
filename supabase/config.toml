@@ -35,3 +35,6 @@ verify_jwt = false
 
 [functions.asaas-status]
 verify_jwt = false
+
+[functions.curso-tts]
+verify_jwt = false
