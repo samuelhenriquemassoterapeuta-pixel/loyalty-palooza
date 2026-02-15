@@ -4,7 +4,7 @@ import videoFacespa from "@/assets/cursos/video-facespa.mp4";
 import { CursoHeroPage } from "@/components/curso/CursoHeroPage";
 import { cursoYugenFaceSpaData } from "@/data/cursoYugenFaceSpaContent";
 
-export default function CursoYugenFaceSpaHero() {
+export default function CursoYugenFaceSpaHero({ embedded }: { embedded?: boolean }) {
   return (
     <CursoHeroPage
       storageKey="resinkra_curso_yugen_facespa_progress"
@@ -17,6 +17,7 @@ export default function CursoYugenFaceSpaHero() {
       courseRoute="/curso-yugen-facespa"
       level="Profissional"
       description="Formação em filosofia oriental (Qi/Tsubos), anatomia facial, técnica Kobido, uso de Gua Sha e estratégias de fidelização baseadas em Omotenashi."
+      embedded={embedded}
     />
   );
 }

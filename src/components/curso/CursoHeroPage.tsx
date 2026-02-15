@@ -51,9 +51,10 @@ interface CursoHeroPageProps {
   courseIcon: React.ReactNode;
   coverImage: string;
   coverVideo: string;
-  courseRoute: string; // route to the actual course content e.g. "/curso-headspa"
+  courseRoute: string;
   level?: string;
   description?: string;
+  embedded?: boolean;
 }
 
 export function CursoHeroPage({
@@ -67,6 +68,7 @@ export function CursoHeroPage({
   courseRoute,
   level = "Todos os níveis",
   description,
+  embedded = false,
 }: CursoHeroPageProps) {
   const navigate = useNavigate();
 
@@ -108,9 +110,11 @@ export function CursoHeroPage({
     ? `${totalHoras}h${minutosRestantes > 0 ? `${minutosRestantes}min` : ""}`
     : `${minutosRestantes}min`;
 
+  const Wrapper = embedded ? ({ children }: { children: React.ReactNode }) => <>{children}</> : AppLayout;
+
   return (
-    <AppLayout>
-      <div className="min-h-screen bg-background pb-32 lg:pb-8">
+    <Wrapper>
+      <div className={`min-h-screen bg-background ${embedded ? "pb-8" : "pb-32 lg:pb-8"}`}>
         {/* Hero Cover */}
         <div className="relative w-full h-64 overflow-hidden">
           <img
@@ -333,6 +337,6 @@ export function CursoHeroPage({
           </motion.div>
         </div>
       </div>
-    </AppLayout>
+    </Wrapper>
   );
 }

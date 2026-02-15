@@ -4,7 +4,7 @@ import videoAnatomia from "@/assets/cursos/video-anatomia.mp4";
 import { CursoHeroPage } from "@/components/curso/CursoHeroPage";
 import { cursoAnatomiaData } from "@/data/cursoAnatomiaContent";
 
-export default function CursoAnatomiaHero() {
+export default function CursoAnatomiaHero({ embedded }: { embedded?: boolean }) {
   return (
     <CursoHeroPage
       storageKey="resinkra_curso_anatomia_progress"
@@ -17,6 +17,7 @@ export default function CursoAnatomiaHero() {
       courseRoute="/curso-anatomia"
       level="Iniciante"
       description="Estudo dos sistemas esquelético, muscular e nervoso com aplicação prática em avaliação postural e técnicas de palpação."
+      embedded={embedded}
     />
   );
 }

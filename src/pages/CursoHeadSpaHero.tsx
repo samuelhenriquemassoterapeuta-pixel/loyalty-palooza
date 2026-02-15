@@ -4,7 +4,7 @@ import videoHeadspa from "@/assets/cursos/video-headspa.mp4";
 import { CursoHeroPage } from "@/components/curso/CursoHeroPage";
 import { cursoHeadSpaData } from "@/data/cursoHeadSpaContent";
 
-export default function CursoHeadSpaHero() {
+export default function CursoHeadSpaHero({ embedded }: { embedded?: boolean }) {
   return (
     <CursoHeroPage
       storageKey="resinkra_curso_headspa_progress"
@@ -17,6 +17,7 @@ export default function CursoHeadSpaHero() {
       courseRoute="/curso-headspa"
       level="Profissional"
       description="Formação completa em Head SPA Coreano com técnicas de massagem craniana, ingredientes K-Beauty e certificação profissional."
+      embedded={embedded}
     />
   );
 }
