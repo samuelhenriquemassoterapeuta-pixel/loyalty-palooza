@@ -6,7 +6,7 @@ export const LandingFooter = () => {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="relative py-20 lg:py-28 border-t border-border overflow-hidden">
+    <footer className="relative py-32 lg:py-44 border-t border-border overflow-hidden">
       <div className="absolute inset-0">
         <img src={heroBg} alt="" className="w-full h-full object-cover" />
         <div className="absolute inset-0 bg-background/75" />
