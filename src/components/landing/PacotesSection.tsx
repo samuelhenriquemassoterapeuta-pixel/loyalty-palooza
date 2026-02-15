@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Check, Crown, Sparkles, ArrowRight } from "lucide-react";
+import { Check, Crown, Sparkles, ArrowRight, Gift, Shield, TrendingUp } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useParallax } from "@/hooks/useParallax";
 import { CollapsibleSection } from "./CollapsibleSection";
+import pacotesBanner from "@/assets/landing/pacotes-banner.jpg";
 
 interface Pacote {
   id: string;
@@ -56,6 +57,12 @@ const usePacotesPublic = () => {
   return { pacotes, loading };
 };
 
+const benefits = [
+  { icon: Gift, title: "Cashback garantido", desc: "Ganhe de volta em todas as sessões" },
+  { icon: Shield, title: "Validade flexível", desc: "Use no seu ritmo, sem pressa" },
+  { icon: TrendingUp, title: "Economia real", desc: "Até 30% de desconto vs. avulso" },
+];
+
 export const PacotesSection = () => {
   const navigate = useNavigate();
   const { pacotes, loading } = usePacotesPublic();
@@ -68,7 +75,6 @@ export const PacotesSection = () => {
 
   return (
     <div ref={ref} className="py-14 sm:py-20 lg:py-28 bg-card/50 relative overflow-hidden">
-      {/* Parallax decorative blob */}
       <motion.div
         style={{ y }}
         className="absolute -top-16 left-[8%] w-72 h-72 bg-highlight/4 rounded-full blur-3xl pointer-events-none hidden lg:block"
@@ -77,7 +83,6 @@ export const PacotesSection = () => {
       <div className="max-w-6xl mx-auto px-5 sm:px-6 lg:px-8 relative z-10">
         <CollapsibleSection
           id="pacotes"
-          
           badge={
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-highlight/10 border border-highlight/20">
               <Crown size={14} className="text-highlight" />
@@ -97,6 +102,34 @@ export const PacotesSection = () => {
             </p>
           }
         >
+          {/* Banner */}
+          <div className="mb-8 rounded-2xl overflow-hidden relative aspect-[21/9]">
+            <img src={pacotesBanner} alt="Pacotes de bem-estar" className="w-full h-full object-cover" loading="lazy" />
+            <div className="absolute inset-0 bg-gradient-to-r from-background/70 via-background/30 to-transparent" />
+            <div className="absolute bottom-0 left-0 p-5 sm:p-6">
+              <p className="text-lg font-bold text-foreground drop-shadow-sm">Invista no seu bem-estar</p>
+              <p className="text-xs text-foreground/80 drop-shadow-sm mt-1">Pacotes com economia real e cashback em cada sessão</p>
+            </div>
+          </div>
+
+          {/* Benefits row */}
+          <div className="mb-8 grid grid-cols-3 gap-3">
+            {benefits.map((b, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1, duration: 0.4 }}
+                className="text-center p-3 sm:p-4 rounded-xl bg-highlight/5 border border-highlight/10"
+              >
+                <b.icon size={18} className="text-highlight mx-auto mb-2" />
+                <p className="text-xs font-bold text-foreground">{b.title}</p>
+                <p className="text-[10px] text-muted-foreground mt-0.5 hidden sm:block">{b.desc}</p>
+              </motion.div>
+            ))}
+          </div>
+
           {loading ? (
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {[...Array(3)].map((_, i) => (
