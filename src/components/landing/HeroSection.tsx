@@ -1,7 +1,7 @@
-import { motion, useScroll, useTransform } from "framer-motion";
-import { ArrowRight, Leaf, Sparkles } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ArrowRight, Leaf, Sparkles, ChevronDown } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { useRef } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import simboloVerde from "@/assets/simbolo-verde.png";
 import iconeFlor from "@/assets/icone-flor.png";
@@ -10,20 +10,8 @@ import { useLandingConfig } from "@/hooks/useLandingConfig";
 
 export const HeroSection = () => {
   const navigate = useNavigate();
-  const ref = useRef<HTMLDivElement>(null);
+  const [heroOpen, setHeroOpen] = useState(true);
   const { config } = useLandingConfig("hero");
-
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start start", "end start"],
-  });
-
-  const bgBlobY1 = useTransform(scrollYProgress, [0, 1], [0, 150]);
-  const bgBlobY2 = useTransform(scrollYProgress, [0, 1], [0, 100]);
-  const textY = useTransform(scrollYProgress, [0, 1], [0, 60]);
-  const imageY = useTransform(scrollYProgress, [0, 1], [0, 90]);
-  const heroOpacity = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
-  const heroScale = useTransform(scrollYProgress, [0, 0.6], [1, 0.96]);
 
   // Dynamic content with fallbacks
   const badge = config?.badge || "Spa Terapia & Bem-estar";
@@ -37,118 +25,102 @@ export const HeroSection = () => {
   const imagemFundo = config?.imagem_fundo || heroBg;
 
   return (
-    <section
-      ref={ref}
-      id="inicio"
-      className="relative min-h-screen flex items-center justify-center overflow-hidden px-2"
-    >
-      {/* Background image with overlay */}
-      <div className="absolute inset-0">
-        <img src={imagemFundo} alt="" className="w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-background/55" />
+    <section id="inicio">
+      {/* Background image — visual only */}
+      <div className="relative pt-16 h-[50vh] sm:h-[55vh] lg:h-[60vh] overflow-hidden">
+        <img src={imagemFundo} alt="" className="absolute inset-0 w-full h-full object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-b from-background/30 via-transparent to-background/70" />
       </div>
-      <div className="absolute inset-0 gradient-hero opacity-40" />
-      <motion.div style={{ y: bgBlobY1 }} className="absolute top-20 right-[10%] w-72 h-72 bg-primary/8 rounded-full blur-3xl" />
-      <motion.div style={{ y: bgBlobY2 }} className="absolute bottom-20 left-[5%] w-96 h-96 bg-accent/6 rounded-full blur-3xl" />
-      <div className="absolute top-1/3 left-[15%] w-4 h-4 bg-accent/40 rounded-full animate-float" />
-      <div className="absolute top-[20%] right-[20%] w-3 h-3 bg-highlight/50 rounded-full animate-bounce-subtle" />
-      <div className="absolute bottom-[30%] right-[15%] w-5 h-5 bg-primary/20 rounded-full animate-pulse-soft" />
 
-      <motion.div
-        style={{ opacity: heroOpacity, scale: heroScale }}
-        className="relative z-10 max-w-6xl mx-auto px-5 sm:px-6 lg:px-8 pt-28 pb-20 sm:pt-24 sm:pb-16"
-      >
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-          <motion.div style={{ y: textY }} className="will-change-transform">
+      {/* Text content — below the image */}
+      <div className="bg-background">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-14">
+          <div className="max-w-3xl">
             <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, ease: "easeOut" }}
-              className="text-center lg:text-left"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
             >
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-card/80 backdrop-blur-sm border border-border/50 shadow-sm mb-6"
-              >
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-card/80 backdrop-blur-sm border border-border/50 shadow-sm mb-6">
                 <Sparkles size={14} className="text-primary" />
                 <span className="text-xs font-semibold text-foreground">{badge}</span>
-              </motion.div>
+              </div>
+            </motion.div>
 
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground leading-tight">
+            {/* Clickable title with chevron */}
+            <motion.button
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              onClick={() => setHeroOpen((v) => !v)}
+              className="w-full flex items-start gap-3 text-left group"
+              aria-expanded={heroOpen}
+            >
+              <h1 className="flex-1 text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground leading-tight">
                 {tituloParte1}{" "}
                 <span className="text-gradient font-serif italic">{tituloDestaque}</span>{" "}
                 {tituloParte2}
               </h1>
-
-              <p className="mt-6 text-lg text-foreground/90 max-w-lg mx-auto lg:mx-0 leading-relaxed [text-shadow:0_1px_3px_rgba(0,0,0,0.1)]">
-                {subtitulo}
-              </p>
-
-              <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center lg:justify-start">
-                <Button size="xl" onClick={() => navigate("/auth")} className="group">
-                  {botaoPrimario}
-                  <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
-                </Button>
-                <Button
-                  size="xl"
-                  variant="outline"
-                  onClick={() => { document.querySelector("#servicos")?.scrollIntoView({ behavior: "smooth" }); }}
-                >
-                  <Leaf size={18} />
-                  {botaoSecundario}
-                </Button>
-              </div>
-
               <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.6 }}
-                className="mt-10 flex items-center gap-6 justify-center lg:justify-start text-foreground/80"
+                animate={{ rotate: heroOpen ? 180 : 0 }}
+                transition={{ duration: 0.2 }}
+                className="shrink-0 mt-2 p-1.5 rounded-full bg-primary/10 border border-primary/20 group-hover:bg-primary/20 transition-colors"
               >
-                {sinais.map((sinal: string, i: number) => {
-                  const colors = ["bg-highlight", "bg-accent", "bg-primary"];
-                  return (
-                    <div key={i} className="flex items-center gap-2">
-                      <div className={`w-2.5 h-2.5 rounded-full ${colors[i % colors.length]} shadow-sm`} />
-                      <span className="text-sm font-medium [text-shadow:0_1px_2px_rgba(0,0,0,0.08)]">{sinal}</span>
-                    </div>
-                  );
-                })}
+                <ChevronDown size={18} className="text-primary" />
               </motion.div>
-            </motion.div>
-          </motion.div>
+            </motion.button>
 
-          {/* Visual element with parallax */}
-          <motion.div style={{ y: imageY }} className="will-change-transform">
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, ease: "easeOut", delay: 0.3 }}
-              className="relative flex items-center justify-center"
-            >
-              <div className="relative w-56 h-56 sm:w-80 sm:h-80 lg:w-96 lg:h-96">
-                <div className="absolute inset-0 rounded-full bg-gradient-to-br from-primary/15 to-accent/10 blur-2xl animate-pulse-soft" />
-                <div className="absolute inset-4 rounded-full bg-gradient-to-br from-primary/10 via-card to-accent/10 border border-primary/20 shadow-elevated" />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <img src={simboloVerde} alt="Resinkra" className="w-24 h-24 sm:w-32 sm:h-32 lg:w-40 lg:h-40 object-contain drop-shadow-lg animate-float mix-blend-multiply" />
-                </div>
-                <motion.div animate={{ y: [-8, 8, -8] }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }} className="absolute -top-2 right-8 p-3 rounded-2xl bg-card shadow-card border border-border/50">
-                  <img src={iconeFlor} alt="" className="w-8 h-8 object-contain" />
+            {/* Collapsible content */}
+            <AnimatePresence initial={false}>
+              {heroOpen && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: "auto", opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+                  className="overflow-hidden"
+                >
+                  <p className="mt-6 text-lg text-muted-foreground leading-relaxed max-w-2xl">
+                    {subtitulo}
+                  </p>
+
+                  <div className="mt-8 flex flex-col sm:flex-row gap-4">
+                    <Button size="xl" onClick={() => navigate("/auth")} className="group">
+                      {botaoPrimario}
+                      <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                    </Button>
+                    <Button
+                      size="xl"
+                      variant="outline"
+                      onClick={() => { document.querySelector("#servicos")?.scrollIntoView({ behavior: "smooth" }); }}
+                    >
+                      <Leaf size={18} />
+                      {botaoSecundario}
+                    </Button>
+                  </div>
+
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.3 }}
+                    className="mt-10 flex items-center gap-6 text-foreground/80"
+                  >
+                    {sinais.map((sinal: string, i: number) => {
+                      const colors = ["bg-highlight", "bg-accent", "bg-primary"];
+                      return (
+                        <div key={i} className="flex items-center gap-2">
+                          <div className={`w-2.5 h-2.5 rounded-full ${colors[i % colors.length]} shadow-sm`} />
+                          <span className="text-sm font-medium">{sinal}</span>
+                        </div>
+                      );
+                    })}
+                  </motion.div>
                 </motion.div>
-                <motion.div animate={{ y: [6, -6, 6] }} transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }} className="absolute bottom-4 -left-4 px-4 py-2 rounded-2xl bg-card shadow-card border border-border/50">
-                  <span className="text-sm font-bold text-highlight">+5% cashback</span>
-                </motion.div>
-                <motion.div animate={{ y: [-5, 5, -5] }} transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }} className="absolute top-1/2 -right-6 px-3 py-2 rounded-xl bg-card shadow-card border border-border/50">
-                  <span className="text-xs font-semibold text-accent">⭐ 4.9</span>
-                </motion.div>
-              </div>
-            </motion.div>
-          </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
         </div>
-      </motion.div>
-
+      </div>
     </section>
   );
 };
@@ -156,7 +128,7 @@ export const HeroSection = () => {
 export const HeroAuthButtons = () => {
   const navigate = useNavigate();
   return (
-    <section className="relative z-20 -mt-24 px-5 sm:px-6 pb-10">
+    <section className="relative z-20 px-5 sm:px-6 pb-10">
       <div className="max-w-md mx-auto flex flex-col gap-3">
         <Button
           size="xl"
