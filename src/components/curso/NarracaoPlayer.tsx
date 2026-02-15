@@ -4,6 +4,7 @@ import { Volume2, VolumeX, Loader2, Pause, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import avatarInstrutora from "@/assets/avatar-instrutora.png";
 import { toast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 interface NarracaoPlayerProps {
   texto: string;
@@ -63,6 +64,12 @@ export function NarracaoPlayer({ texto, titulo }: NarracaoPlayerProps) {
       // Prepend a natural intro
       const fullText = `${titulo}. ${cleanText}`;
 
+      const { data: { session } } = await supabase.auth.getSession();
+      const accessToken = session?.access_token;
+      if (!accessToken) {
+        throw new Error("Você precisa estar logado para ouvir a narração.");
+      }
+
       const response = await fetch(
         `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/curso-tts`,
         {
@@ -70,7 +77,7 @@ export function NarracaoPlayer({ texto, titulo }: NarracaoPlayerProps) {
           headers: {
             "Content-Type": "application/json",
             apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
-            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+            Authorization: `Bearer ${accessToken}`,
           },
           body: JSON.stringify({ text: fullText }),
         }
