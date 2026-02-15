@@ -1,5 +1,5 @@
 import { useSearchParams } from "react-router-dom";
-import { GraduationCap, Flower2, Sparkles, Bone } from "lucide-react";
+import { GraduationCap, Flower2, Sparkles, Bone, Gem } from "lucide-react";
 import { AppLayout } from "@/components/AppLayout";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { lazy, Suspense } from "react";
@@ -9,6 +9,7 @@ const CursoVendas = lazy(() => import("@/pages/CursoVendas"));
 const CursoAromaterapia = lazy(() => import("@/pages/CursoAromaterapia"));
 const CursoHeadSpa = lazy(() => import("@/pages/CursoHeadSpa"));
 const CursoAnatomia = lazy(() => import("@/pages/CursoAnatomia"));
+const CursoYugenFaceSpa = lazy(() => import("@/pages/CursoYugenFaceSpa"));
 
 export default function Cursos() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -23,7 +24,7 @@ export default function Cursos() {
       <div className="min-h-screen bg-background pb-32 lg:pb-8">
         <div className="max-w-lg mx-auto px-4 pt-6">
           <Tabs value={tab} onValueChange={handleTabChange}>
-            <TabsList className="w-full grid grid-cols-4 mb-4">
+            <TabsList className="w-full grid grid-cols-5 mb-4">
               <TabsTrigger value="vendas" className="gap-1 text-xs px-1">
                 <GraduationCap size={14} />
                 <span className="hidden sm:inline">Vendas</span>
@@ -40,6 +41,10 @@ export default function Cursos() {
                 <Bone size={14} />
                 <span className="hidden sm:inline">Anatomia</span>
               </TabsTrigger>
+              <TabsTrigger value="facespa" className="gap-1 text-xs px-1">
+                <Gem size={14} />
+                <span className="hidden sm:inline">FaceSPA</span>
+              </TabsTrigger>
             </TabsList>
           </Tabs>
         </div>
@@ -49,6 +54,7 @@ export default function Cursos() {
           {tab === "aromaterapia" && <CursoAromaterapia embedded />}
           {tab === "headspa" && <CursoHeadSpa embedded />}
           {tab === "anatomia" && <CursoAnatomia embedded />}
+          {tab === "facespa" && <CursoYugenFaceSpa embedded />}
         </Suspense>
       </div>
     </AppLayout>
