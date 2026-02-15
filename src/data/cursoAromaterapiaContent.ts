@@ -46,7 +46,27 @@ A doTERRA utiliza o protocolo **CPTG (Certified Pure Tested Grade)** que garante
 - Pureza sem aditivos, pesticidas ou contaminantes
 - Potência terapêutica testada em laboratório
 - Rastreabilidade da fazenda ao frasco
-- Testes de terceiros independentes`
+- Testes de terceiros independentes`,
+        quiz: [
+          {
+            pergunta: "Em quanto tempo os óleos essenciais penetram a epiderme?",
+            opcoes: ["5 a 10 minutos", "20 a 30 segundos", "1 a 2 horas", "Não penetram a pele"],
+            respostaCorreta: 1,
+            explicacao: "Óleos essenciais penetram a epiderme em 20 a 30 segundos e alcançam a corrente sanguínea em 2 a 5 minutos."
+          },
+          {
+            pergunta: "Qual método de extração é usado para óleos cítricos?",
+            opcoes: ["Destilação a vapor", "Prensagem a frio", "Extração por CO₂", "Maceração em álcool"],
+            respostaCorreta: 1,
+            explicacao: "Óleos cítricos (Limão, Laranja, Grapefruit) são extraídos por prensagem a frio da casca."
+          }
+        ],
+        checklist: [
+          "Compreendi os 3 métodos de extração de óleos essenciais",
+          "Entendi como os OE atuam no sistema límbico",
+          "Sei explicar a diferença entre OE puros e sintéticos",
+          "Conheço o protocolo CPTG da doTERRA"
+        ]
       },
       {
         titulo: "Por que doTERRA? O padrão CPTG",
@@ -92,7 +112,21 @@ A doTERRA obtém seus óleos de **mais de 40 países**, priorizando:
 | Melaleuca | Austrália | Habitat nativo da planta |
 | Ylang Ylang | Madagascar | Colheita manual na hora certa |
 
-> **Na clínica:** Quando o cliente pergunta sobre a qualidade, explique o CPTG de forma simples: "Usamos óleos doTERRA porque cada frasco passa por 8 testes de pureza. Você está recebendo o que há de mais puro no mundo."`
+> **Na clínica:** Quando o cliente pergunta sobre a qualidade, explique o CPTG de forma simples: "Usamos óleos doTERRA porque cada frasco passa por 8 testes de pureza. Você está recebendo o que há de mais puro no mundo."`,
+        quiz: [
+          {
+            pergunta: "Quantos testes de pureza o protocolo CPTG da doTERRA realiza?",
+            opcoes: ["3 testes", "5 testes", "8 testes", "12 testes"],
+            respostaCorreta: 2,
+            explicacao: "O CPTG submete cada lote a 8 testes rigorosos, incluindo espectrometria de massa, contaminantes e microbiologia."
+          }
+        ],
+        checklist: [
+          "Memorize os 8 testes do protocolo CPTG",
+          "Sei explicar Co-Impact Sourcing ao cliente",
+          "Pratiquei a frase: 'Cada frasco passa por 8 testes de pureza'",
+          "Conheço a origem dos 5 óleos mais populares"
+        ]
       },
       {
         titulo: "Segurança e contraindicações",
@@ -156,7 +190,27 @@ Antes de usar um óleo novo em um cliente:
 - [ ] Sempre perguntar sobre alergias antes da sessão
 - [ ] Verificar medicamentos em uso (interações)
 - [ ] Documentar óleos utilizados na ficha do cliente
-- [ ] Manter fichas atualizadas com reações observadas`
+- [ ] Manter fichas atualizadas com reações observadas`,
+        quiz: [
+          {
+            pergunta: "Qual a diluição recomendada de OE para adultos em massagem corporal?",
+            opcoes: ["0,5-1%", "2-3% (4-6 gotas por 10ml)", "5-10%", "Usar puro sem diluição"],
+            respostaCorreta: 1,
+            explicacao: "Para adultos em massagem corporal, a diluição recomendada é 2-3%, ou 4-6 gotas por 10ml de óleo carreador."
+          },
+          {
+            pergunta: "Por quanto tempo evitar sol após aplicar óleo fotossensível?",
+            opcoes: ["2 horas", "6 horas", "12 horas", "24 horas"],
+            respostaCorreta: 2,
+            explicacao: "Óleos cítricos fotossensíveis exigem 12 horas sem exposição solar após aplicação tópica."
+          }
+        ],
+        checklist: [
+          "Imprimi a tabela de diluição para consulta rápida",
+          "Memorizei os 5 óleos fotossensíveis",
+          "Sei as contraindicações para gestantes",
+          "Inclui checklist de alergias na ficha do cliente"
+        ]
       }
     ]
   },
@@ -236,7 +290,27 @@ Antes de usar um óleo novo em um cliente:
 - **Tópica:** Diluído, para sensação tonificante
 - **Interna:** 1-2 gotas em água (uso interno aprovado pela doTERRA)
 
-> ⚠️ **Fotossensível!** Não aplicar na pele antes de exposição solar.`
+> ⚠️ **Fotossensível!** Não aplicar na pele antes de exposição solar.`,
+        quiz: [
+          {
+            pergunta: "Qual composto principal da Lavanda a torna calmante?",
+            opcoes: ["Mentol", "Limoneno", "Linalol e Acetato de Linalila", "Carvacrol"],
+            respostaCorreta: 2,
+            explicacao: "Os compostos Linalol e Acetato de Linalila são os responsáveis pelas propriedades calmantes da Lavanda."
+          },
+          {
+            pergunta: "A 1 gota de hortelã-pimenta equivale a quantas xícaras de chá de menta?",
+            opcoes: ["5 xícaras", "12 xícaras", "28 xícaras", "50 xícaras"],
+            respostaCorreta: 2,
+            explicacao: "Uma gota de hortelã-pimenta equivale a 28 xícaras de chá de menta, mostrando o quão concentrados são os óleos."
+          }
+        ],
+        checklist: [
+          "Sei as propriedades e usos de Lavanda, Hortelã e Limão",
+          "Pratiquei a técnica de inalação de Lavanda nas mãos",
+          "Conheço as precauções de cada óleo da tríade",
+          "Usei a tríade em pelo menos 1 sessão real"
+        ]
       },
       {
         titulo: "Melaleuca, Frankincense e Oregano — Imunidade e Proteção",
@@ -299,7 +373,21 @@ Antes de usar um óleo novo em um cliente:
 - Apoio a infecções (uso interno em cápsulas)
 - Limpeza profunda do organismo
 
-> ⚠️ **MUITO POTENTE!** Sempre diluir. Pode causar irritação na pele. Não usar em crianças. Uso tópico mínimo e sempre diluído a 1%.`
+> ⚠️ **MUITO POTENTE!** Sempre diluir. Pode causar irritação na pele. Não usar em crianças. Uso tópico mínimo e sempre diluído a 1%.`,
+        quiz: [
+          {
+            pergunta: "Por que o Frankincense é chamado de 'rei dos óleos essenciais'?",
+            opcoes: ["Por ser o mais barato", "Por suas propriedades regeneradoras, anti-inflamatórias e meditativas", "Por ter o aroma mais forte", "Por ser o mais vendido"],
+            respostaCorreta: 1,
+            explicacao: "Frankincense possui propriedades regeneradoras celulares, anti-inflamatórias e meditativas únicas, usado há milênios."
+          }
+        ],
+        checklist: [
+          "Sei diferenciar Melaleuca, Frankincense e Oregano",
+          "Conheço o nível de diluição do Oregano (máx 1%)",
+          "Pratiquei aplicação de Frankincense em sessão VIP",
+          "Criei spray de Melaleuca para higienização"
+        ]
       },
       {
         titulo: "Óleos para Relaxamento e Equilíbrio Emocional",
@@ -356,7 +444,21 @@ Antes de usar um óleo novo em um cliente:
 - 1 gota de Cedarwood
 - 15ml de óleo de coco fracionado
 
-> Este blend é ideal para sessões de final de dia quando o cliente chega estressado do trabalho.`
+> Este blend é ideal para sessões de final de dia quando o cliente chega estressado do trabalho.`,
+        quiz: [
+          {
+            pergunta: "Qual óleo é ideal para 'aterramento imediato' na planta dos pés?",
+            opcoes: ["Lavanda", "Limão", "Vetiver", "Hortelã-pimenta"],
+            respostaCorreta: 2,
+            explicacao: "Vetiver tem propriedades de aterramento profundo. 1 gota na planta dos pés traz calma e foco imediatos."
+          }
+        ],
+        checklist: [
+          "Conheço as propriedades de Ylang Ylang, Vetiver, Bergamota, Cedarwood e Patchouli",
+          "Preparei o Blend Relaxamento Profundo para uso na clínica",
+          "Identifiquei qual óleo emocional é mais útil para meus clientes",
+          "Lembro que Bergamota é fotossensível"
+        ]
       },
       {
         titulo: "Óleos para Dor e Inflamação",
@@ -408,7 +510,21 @@ Antes de usar um óleo novo em um cliente:
 2. Realize massagem profunda por 5-10 minutos
 3. Finalize com 1 gota de Lavanda para suavizar
 
-> **Upsell natural:** "Este blend que estou usando se chama Deep Blue da doTERRA. Muitos clientes compram para usar em casa entre as sessões. Posso te mostrar depois?"`
+> **Upsell natural:** "Este blend que estou usando se chama Deep Blue da doTERRA. Muitos clientes compram para usar em casa entre as sessões. Posso te mostrar depois?"`,
+        quiz: [
+          {
+            pergunta: "O que torna a Copaíba um anti-inflamatório natural tão potente?",
+            opcoes: ["Alto teor de Mentol", "Alto teor de Beta-cariofileno (receptor CB2)", "Contém aspirina natural", "Alto teor de Limoneno"],
+            respostaCorreta: 1,
+            explicacao: "A Copaíba tem o maior teor natural de Beta-cariofileno, que interage com receptores canabinoides CB2 — anti-inflamatório sem efeitos psicoativos."
+          }
+        ],
+        checklist: [
+          "Sei diferenciar uso de Wintergreen, Copaíba, Eucalipto e Deep Blue",
+          "Conheço as contraindicações do Wintergreen (anticoagulantes, aspirina)",
+          "Pratiquei o Protocolo Deep Blue em 1 sessão",
+          "Ofereci Deep Blue para uso domiciliar a 1 cliente"
+        ]
       }
     ]
   },
@@ -473,7 +589,21 @@ A técnica AromaTouch é um protocolo exclusivo doTERRA que utiliza 8 óleos apl
 7. **Wild Orange** — Energia e alegria
 8. **Hortelã-pimenta** — Revitalização
 
-> **Certificação:** Busque a certificação AromaTouch para oferecer esse protocolo premium. É um diferencial competitivo significativo.`
+> **Certificação:** Busque a certificação AromaTouch para oferecer esse protocolo premium. É um diferencial competitivo significativo.`,
+        quiz: [
+          {
+            pergunta: "Qual a sequência de respiração guiada no protocolo anti-estresse?",
+            opcoes: ["4-4-4 (box breathing)", "4-7-8 (inspira-segura-expira)", "2-2-2 (rápida)", "10-10-10 (lenta)"],
+            respostaCorreta: 1,
+            explicacao: "A respiração 4-7-8 (4 segundos inspira, 7 segura, 8 expira) ativa o sistema parassimpático eficazmente."
+          }
+        ],
+        checklist: [
+          "Preparei o Blend Anti-Estresse Resinkra",
+          "Pratiquei o protocolo completo de 4 fases",
+          "Conheço a sequência dos 8 óleos da técnica AromaTouch",
+          "Apliquei respiração guiada 4-7-8 com 1 cliente"
+        ]
       },
       {
         titulo: "Protocolo para Dores Musculares e Articulares",
@@ -529,7 +659,21 @@ A técnica AromaTouch é um protocolo exclusivo doTERRA que utiliza 8 óleos apl
 | Cervicalgia | Hortelã-pimenta + Lavanda | Deslizamento suave |
 | Ciática | Wintergreen + Copaíba | Ao longo do nervo |
 | Ombro congelado | Deep Blue + Eucalipto | Mobilização + OE |
-| Fibromialgia | Copaíba + Lavanda + Frankincense | Pressão leve |`
+| Fibromialgia | Copaíba + Lavanda + Frankincense | Pressão leve |`,
+        quiz: [
+          {
+            pergunta: "Para dor aguda (< 72h), deve-se usar compressa quente ou fria?",
+            opcoes: ["Compressa quente por 10 min", "Gelo por 10 min + blend suave", "Sem compressa, apenas óleo", "Alternância quente-frio"],
+            respostaCorreta: 1,
+            explicacao: "Em dor aguda, aplica-se gelo primeiro (vasoconstrição), seguido do blend com movimentos suaves — sem pressão profunda."
+          }
+        ],
+        checklist: [
+          "Preparei os 3 blends (Alívio Imediato, Tratamento Profundo, Articulações)",
+          "Imprimi o quadro resumo para consulta rápida",
+          "Apliquei o protocolo de dor em pelo menos 1 cliente",
+          "Orientei 1 cliente sobre reaplicação domiciliar"
+        ]
       },
       {
         titulo: "Protocolo Sono e Insônia",
@@ -578,7 +722,21 @@ Ensine o cliente a criar um "ritual do sono" com óleos:
 O blend pronto da doTERRA para sono:
 - Lavanda, Cedarwood, Ho Wood, Ylang Ylang, Marjoram, Camomila Romana, Vetiver, Sândalo, Baunilha
 
-> **Oportunidade de venda:** "Este blend que uso na sessão se chama Serenity. É perfeito para usar em casa antes de dormir. Muitos clientes relatam que melhoram o sono já na primeira noite."`
+> **Oportunidade de venda:** "Este blend que uso na sessão se chama Serenity. É perfeito para usar em casa antes de dormir. Muitos clientes relatam que melhoram o sono já na primeira noite."`,
+        quiz: [
+          {
+            pergunta: "Quais óleos devem ser EVITADOS à noite por serem estimulantes?",
+            opcoes: ["Lavanda e Vetiver", "Hortelã-pimenta e cítricos", "Cedarwood e Camomila", "Frankincense e Copaíba"],
+            respostaCorreta: 1,
+            explicacao: "Hortelã-pimenta é energizante e cítricos são estimulantes. À noite, prefira Lavanda, Vetiver e Cedarwood."
+          }
+        ],
+        checklist: [
+          "Preparei o Blend Sono Profundo para difusor e tópico",
+          "Ensinei o ritual do sono a 1 cliente com insônia",
+          "Usei música 432Hz na última sessão do dia",
+          "Ofereci Serenity para uso domiciliar"
+        ]
       },
       {
         titulo: "Protocolo Digestão e Detox",
@@ -638,7 +796,21 @@ O blend pronto da doTERRA para sono:
 - 1 gota de Limão em água por 3 dias
 - Evitar álcool e alimentos processados por 48h
 
-> **Cross-sell natural:** Combine o protocolo de drenagem com o plano alimentar da clínica para resultados exponenciais.`
+> **Cross-sell natural:** Combine o protocolo de drenagem com o plano alimentar da clínica para resultados exponenciais.`,
+        quiz: [
+          {
+            pergunta: "Em qual sentido deve-se massagear o abdômen no protocolo digestivo?",
+            opcoes: ["Anti-horário", "De baixo para cima", "Sentido horário (trajeto do cólon)", "Qualquer direção"],
+            respostaCorreta: 2,
+            explicacao: "A massagem abdominal segue o sentido horário, acompanhando o trajeto natural do cólon: ascendente → transverso → descendente."
+          }
+        ],
+        checklist: [
+          "Preparei Blend Digestivo e Blend Detox",
+          "Pratiquei massagem abdominal no sentido horário",
+          "Apliquei protocolo detox em 1 sessão de drenagem",
+          "Orientei hidratação e cuidados pós-sessão"
+        ]
       }
     ]
   },
@@ -713,7 +885,21 @@ O blend pronto da doTERRA para sono:
 |-------|----------|-----------|
 | On Guard | Proteção | Difusor / Spray |
 | Breathe | Congestionamento | Peito / Inalação |
-| DigestZen | Desconforto digestivo | Abdômen / Oral |`
+| DigestZen | Desconforto digestivo | Abdômen / Oral |`,
+        quiz: [
+          {
+            pergunta: "Qual blend doTERRA é ideal para purificar o ar entre atendimentos?",
+            opcoes: ["Deep Blue", "On Guard", "Serenity", "AromaTouch"],
+            respostaCorreta: 1,
+            explicacao: "On Guard é o blend protetor: antiviral e antibacteriano. Ideal para difundir entre atendimentos na clínica."
+          }
+        ],
+        checklist: [
+          "Conheço composição e uso de On Guard, Breathe e DigestZen",
+          "Criei spray de On Guard para higienização",
+          "Difundi On Guard entre atendimentos por 1 semana",
+          "Ofereci DigestZen a 1 cliente com queixa digestiva"
+        ]
       },
       {
         titulo: "Deep Blue, AromaTouch e Balance",
@@ -788,7 +974,21 @@ Se você vai começar com óleos doTERRA, estes são os 6 essenciais:
 3. AromaTouch
 4. Balance
 5. Hortelã-pimenta
-6. Frankincense`
+6. Frankincense`,
+        quiz: [
+          {
+            pergunta: "Qual blend deve ser aplicado no INÍCIO de toda sessão?",
+            opcoes: ["Deep Blue", "AromaTouch", "Balance (1 gota na planta dos pés)", "On Guard"],
+            respostaCorreta: 2,
+            explicacao: "Balance é o blend de aterramento. 1 gota na planta de cada pé no início da sessão cria um 'reset emocional'."
+          }
+        ],
+        checklist: [
+          "Conheço Deep Blue, AromaTouch e Balance em detalhes",
+          "Apliquei Balance no início de todas as sessões por 1 semana",
+          "Testei Protocolo Quick Relief com Deep Blue",
+          "Listei o Kit de 6 óleos essenciais para minha clínica"
+        ]
       },
       {
         titulo: "Serenity, Elevation e Adaptiv",
@@ -855,7 +1055,21 @@ Se você vai começar com óleos doTERRA, estes são os 6 essenciais:
 | Gerenciar estresse | Adaptiv | Qualquer hora |
 | Aliviar dor | Deep Blue | Durante tratamento |
 | Relaxar músculos | AromaTouch | Massagem relaxante |
-| Aterramento | Balance | Início da sessão |`
+| Aterramento | Balance | Início da sessão |`,
+        quiz: [
+          {
+            pergunta: "Qual blend é ideal para clientes executivos sob alta pressão?",
+            opcoes: ["Serenity", "Elevation", "Adaptiv", "Balance"],
+            respostaCorreta: 2,
+            explicacao: "Adaptiv é o blend adaptogênico: ajuda na adaptação ao estresse, clareza mental e equilíbrio em situações de pressão."
+          }
+        ],
+        checklist: [
+          "Conheço Serenity, Elevation e Adaptiv",
+          "Sei qual blend usar para cada situação emocional",
+          "Ofereci Serenity para 1 cliente com insônia",
+          "Usei Elevation no difusor pela manhã por 1 semana"
+        ]
       }
     ]
   },
@@ -928,7 +1142,21 @@ Crie uma "estação de aromaterapia" visível para o cliente:
 - [ ] Verificar níveis dos óleos semanalmente
 - [ ] Pedir reposição quando restam 20% do frasco
 - [ ] Manter registro de uso por cliente (ficha)
-- [ ] Calcular custo por sessão (média: R$3-5)`
+- [ ] Calcular custo por sessão (média: R$3-5)`,
+        quiz: [
+          {
+            pergunta: "Qual o custo médio de óleos essenciais por sessão na clínica?",
+            opcoes: ["R$0,50-1", "R$3-5", "R$15-20", "R$30-50"],
+            respostaCorreta: 1,
+            explicacao: "O custo médio é de R$3-5 por sessão com blend básico, podendo cobrar R$20-50 a mais do cliente."
+          }
+        ],
+        checklist: [
+          "Escolhi meu nível de kit (Iniciante, Intermediário ou Completo)",
+          "Montei estação de aromaterapia visível na clínica",
+          "Criei rotina diária de difusor (manhã, entre sessões, final)",
+          "Implementei controle de estoque semanal"
+        ]
       },
       {
         titulo: "Integrando óleos na sessão de massagem",
@@ -990,7 +1218,21 @@ Crie uma "estação de aromaterapia" visível para o cliente:
 - [ ] Óleos utilizados: _______________
 - [ ] Reação do cliente: _______________
 - [ ] Óleos recomendados para casa: _______________
-- [ ] Próxima sessão — blend sugerido: _______________`
+- [ ] Próxima sessão — blend sugerido: _______________`,
+        quiz: [
+          {
+            pergunta: "O que revela a preferência olfativa do cliente no 'Cardápio Olfativo'?",
+            opcoes: ["Apenas gosto pessoal", "O que o corpo precisa naquele momento", "Nada relevante clinicamente", "Se o cliente é visual ou auditivo"],
+            respostaCorreta: 1,
+            explicacao: "A preferência olfativa indica necessidades do corpo. Quem escolhe Lavanda precisa de calma; quem escolhe Hortelã precisa de energia."
+          }
+        ],
+        checklist: [
+          "Apliquei o fluxo completo de 6 fases em 1 sessão",
+          "Usei a técnica do Cardápio Olfativo com 3 clientes",
+          "Preenchi a Ficha de Aromaterapia após cada sessão",
+          "Ofereci óleos para uso domiciliar ao final da sessão"
+        ]
       },
       {
         titulo: "Aromaterapia no Head Spa",
@@ -1053,7 +1295,21 @@ O Head Spa já é uma experiência premium. Com óleos essenciais, torna-se INES
 | Sensível | Lavanda + Camomila | Calmante e suave |
 | Queda | Alecrim + Cedarwood | Estimulação folicular |
 
-> **Upsell:** "Para manter os benefícios do Head Spa entre as sessões, recomendo aplicar 2 gotas de Alecrim + 2 de Cedarwood em óleo de coco na raiz, 2x por semana."`
+> **Upsell:** "Para manter os benefícios do Head Spa entre as sessões, recomendo aplicar 2 gotas de Alecrim + 2 de Cedarwood em óleo de coco na raiz, 2x por semana."`,
+        quiz: [
+          {
+            pergunta: "Quais óleos são recomendados para couro cabeludo com queda?",
+            opcoes: ["Melaleuca + Limão", "Lavanda + Camomila", "Alecrim + Cedarwood", "Hortelã-pimenta + Eucalipto"],
+            respostaCorreta: 2,
+            explicacao: "Alecrim promove crescimento capilar e Cedarwood estimula circulação nos folículos — a combinação ideal para queda."
+          }
+        ],
+        checklist: [
+          "Preparei o Blend Head Spa Resinkra",
+          "Apliquei o protocolo completo de 6 etapas em 1 Head Spa",
+          "Identifiquei o tipo de couro cabeludo de 3 clientes",
+          "Ofereci receita de manutenção domiciliar (Alecrim + Cedarwood)"
+        ]
       }
     ]
   },
@@ -1115,7 +1371,21 @@ Ao final de TODA sessão com óleos:
 
 > "Os óleos que usei hoje foram Lavanda para relaxamento e Deep Blue para a tensão no ombro. Muitos clientes gostam de continuar o tratamento em casa. Posso te mostrar esses óleos?"
 
-**Regra:** Não force. Ofereça de forma natural. O resultado da sessão vende sozinho.`
+**Regra:** Não force. Ofereça de forma natural. O resultado da sessão vende sozinho.`,
+        quiz: [
+          {
+            pergunta: "Quanto de receita extra semanal pode gerar a aromaterapia na clínica?",
+            opcoes: ["R$50-100", "R$100-200", "R$300-900 (com 20 sessões/semana)", "Mais de R$2.000"],
+            respostaCorreta: 2,
+            explicacao: "Cobrando R$20-50 extra por sessão com aromaterapia, em 20 sessões semanais gera R$300-900 extras."
+          }
+        ],
+        checklist: [
+          "Defini minha estratégia (usar na clínica, revender, ou ambos)",
+          "Calculei custo por sessão e margem de lucro",
+          "Criei tabela de preços com e sem aromaterapia",
+          "Pratiquei o script de oferta natural após 3 sessões"
+        ]
       },
       {
         titulo: "Script de venda e objeções comuns",
@@ -1164,7 +1434,21 @@ O cliente acabou de vivenciar o benefício na própria pele. Sua "venda" é simp
 
 ### Regra de Ouro
 
-> **Nunca pressione.** Plante a semente, deixe o aroma falar. O cliente que experimentou e gostou voltará pedindo.`
+> **Nunca pressione.** Plante a semente, deixe o aroma falar. O cliente que experimentou e gostou voltará pedindo.`,
+        quiz: [
+          {
+            pergunta: "Qual a melhor analogia para explicar a diferença entre OE doTERRA e de mercado?",
+            opcoes: ["Carro popular vs importado", "Suco de laranja natural vs Tang", "Roupa de marca vs genérica", "Celular novo vs usado"],
+            respostaCorreta: 1,
+            explicacao: "A analogia 'suco natural vs Tang' é clara: óleos de mercado são como Tang — parecem, mas não têm os mesmos benefícios."
+          }
+        ],
+        checklist: [
+          "Pratiquei os 3 scripts de venda (relaxante, dor, insônia)",
+          "Memorizei respostas para as 5 objeções comuns",
+          "Vendi ou ofereci 1 produto doTERRA esta semana",
+          "Nunca pressionei — plantei a semente naturalmente"
+        ]
       },
       {
         titulo: "Quiz e certificação do módulo",
@@ -1240,7 +1524,253 @@ Agora você pode:
 - Oferecer uma experiência premium diferenciada
 - Rentabilizar com vendas de produtos
 
-> **Próximo passo:** Monte seu Kit Iniciante e comece a aplicar os protocolos já na próxima sessão!`
+> **Próximo passo:** Monte seu Kit Iniciante e comece a aplicar os protocolos já na próxima sessão!`,
+        quiz: [
+          {
+            pergunta: "Quais são os 6 óleos do Kit Iniciante para clínica?",
+            opcoes: [
+              "Vetiver, Ylang Ylang, Patchouli, Bergamota, Cedarwood, Copaíba",
+              "Lavanda, Hortelã-pimenta, Deep Blue, Frankincense, Melaleuca, Limão",
+              "On Guard, Breathe, DigestZen, Balance, AromaTouch, Serenity",
+              "Eucalipto, Oregano, Gengibre, Wintergreen, Cipreste, Funcho"
+            ],
+            respostaCorreta: 1,
+            explicacao: "O Kit Iniciante ideal é: Lavanda, Hortelã-pimenta, Deep Blue, Frankincense, Melaleuca e Limão — cobrindo as necessidades mais comuns."
+          }
+        ],
+        checklist: [
+          "Respondi todas as 10 perguntas do quiz de revisão",
+          "Acertei pelo menos 8 de 10 perguntas",
+          "Montei meu Kit Iniciante de 6 óleos",
+          "Estou pronto para aplicar protocolos nas próximas sessões"
+        ]
+      }
+    ]
+  },
+  {
+    titulo: "Aromaterapia para Gestantes e Públicos Especiais",
+    descricao: "Protocolos seguros para gestantes, idosos, crianças e clientes com condições específicas",
+    icone: "GraduationCap",
+    cor: "from-pink-50 to-rose-50",
+    aulas: [
+      {
+        titulo: "Aromaterapia segura na gestação",
+        descricao: "Óleos permitidos, contraindicados e protocolos trimestrais",
+        duracaoMinutos: 12,
+        conteudo: `# Aromaterapia Segura na Gestação
+
+## Cuidados Essenciais
+
+A gestação é um período de sensibilidade aumentada. Óleos essenciais podem ser aliados poderosos quando usados corretamente.
+
+### Regra de Ouro
+
+> **Diluição máxima: 0,5-1%** (1-2 gotas por 10ml de carreador). Sempre consultar o obstetra antes.
+
+### Óleos SEGUROS na Gestação
+
+| Óleo | Benefício | Trimestre |
+|------|-----------|-----------|
+| Lavanda | Relaxamento, sono, ansiedade | 2º e 3º |
+| Limão | Náusea matinal, energia | Todos |
+| Hortelã-pimenta | Náusea (inalação apenas) | 2º e 3º |
+| Ylang Ylang | Relaxamento, pressão | 2º e 3º |
+| Frankincense | Equilíbrio emocional | 2º e 3º |
+| Laranja Selvagem | Humor, energia | Todos |
+
+### Óleos PROIBIDOS na Gestação
+
+⛔ Alecrim (estimulante uterino)
+⛔ Salvia (emmenagogo)
+⛔ Cedro (pode causar contrações)
+⛔ Cipreste (efeito estrogênico)
+⛔ Wintergreen (salicilato — risco sangramento)
+⛔ Oregano (muito potente)
+⛔ Canela (estimulante uterino)
+
+### Protocolo por Trimestre
+
+**1º Trimestre (cautela máxima):**
+- Apenas difusão com Limão ou Laranja (náusea)
+- Evitar aplicação tópica
+- Difusor a 2 metros de distância
+
+**2º Trimestre (liberação gradual):**
+- Massagem leve com Lavanda diluída a 0,5%
+- Pernas e pés com Citrinos para circulação
+- Difusor com blends relaxantes
+
+**3º Trimestre (preparação para o parto):**
+- Massagem relaxante com Lavanda + Ylang Ylang
+- Compressa lombar com Lavanda
+- Preparação emocional com Frankincense
+
+### Script para Gestantes
+
+> "Durante a gestação, usamos apenas óleos cientificamente seguros, em diluição mínima. Vou adaptar todo o protocolo para você e seu bebê."`,
+        quiz: [
+          {
+            pergunta: "Qual a diluição máxima de óleos essenciais para gestantes?",
+            opcoes: ["2-3% (padrão adulto)", "0,5-1% (1-2 gotas por 10ml)", "5% para efeito terapêutico", "Não usar óleos na gestação"],
+            respostaCorreta: 1,
+            explicacao: "Para gestantes, a diluição máxima é 0,5-1%, sempre com óleos seguros e após consulta ao obstetra."
+          }
+        ],
+        checklist: [
+          "Memorizei óleos seguros e proibidos na gestação",
+          "Conheço o protocolo por trimestre",
+          "Adaptei minha ficha de cliente para incluir status gestacional",
+          "Pratiquei o script para gestantes"
+        ]
+      },
+      {
+        titulo: "Protocolos para idosos e crianças",
+        descricao: "Adaptações de diluição, óleos seguros e cuidados especiais",
+        duracaoMinutos: 10,
+        conteudo: `# Protocolos para Idosos e Crianças
+
+## Idosos — Pele Sensível e Metabolismo Lento
+
+### Considerações Especiais
+
+- Pele mais fina e delicada → diluição reduzida (1-2%)
+- Metabolismo mais lento → óleos demoram mais para ser eliminados
+- Interação com medicamentos → sempre verificar
+- Olfato pode estar diminuído → usar doses maiores no difusor
+
+### Óleos Ideais para Idosos
+
+| Necessidade | Óleo | Diluição |
+|-------------|------|----------|
+| Dor articular | Copaíba + Frankincense | 1-2% |
+| Insônia | Lavanda + Cedarwood | 1% |
+| Circulação | Cipreste + Gengibre | 1-2% |
+| Memória/foco | Alecrim + Hortelã-pimenta | 1% (difusor) |
+| Humor | Bergamota + Elevation | 1% |
+
+### Cuidados com Medicamentos
+
+⚠️ **Anticoagulantes:** Evitar Wintergreen, Cravo, Canela
+⚠️ **Anti-hipertensivos:** Cuidado com Alecrim (pode elevar pressão)
+⚠️ **Diabetes:** Alguns óleos podem afetar glicemia
+
+## Crianças — Segurança em Primeiro Lugar
+
+### Diluição por Idade
+
+| Idade | Diluição | Gotas por 10ml |
+|-------|----------|----------------|
+| 0-6 meses | Não usar (apenas difusor suave) | 0 |
+| 6-24 meses | 0,25% | 0,5 gota |
+| 2-6 anos | 0,5% | 1 gota |
+| 6-12 anos | 1% | 2 gotas |
+| 12+ anos | 1-2% | 2-4 gotas |
+
+### Óleos SEGUROS para Crianças
+
+✅ Lavanda (calmante, sono, picadas)
+✅ Camomila Romana (cólica, agitação)
+✅ Laranja Selvagem (humor, energia suave)
+✅ Melaleuca (piolho, fungos — diluído)
+✅ Frankincense (suporte imunológico)
+
+### Óleos a EVITAR em Crianças
+
+⛔ Hortelã-pimenta (< 6 anos — mentol pode causar espasmo respiratório)
+⛔ Eucalipto (< 6 anos — mesmo motivo)
+⛔ Wintergreen (crianças de qualquer idade)
+⛔ Oregano (muito potente)
+
+> **Dica:** Para crianças, sempre prefira a via aromática (difusor) à tópica. É mais segura e igualmente eficaz.`,
+        quiz: [
+          {
+            pergunta: "Por que evitar Hortelã-pimenta em crianças menores de 6 anos?",
+            opcoes: ["O sabor é muito forte", "O mentol pode causar espasmo respiratório", "Causa alergia em crianças", "Não tem efeito em crianças"],
+            respostaCorreta: 1,
+            explicacao: "O mentol presente na Hortelã-pimenta pode causar espasmo respiratório em crianças menores de 6 anos."
+          }
+        ],
+        checklist: [
+          "Conheço as diluições específicas para idosos e crianças",
+          "Verifico interações medicamentosas com idosos",
+          "Sei quais óleos evitar em crianças por faixa etária",
+          "Adaptei meus protocolos para públicos especiais"
+        ]
+      },
+      {
+        titulo: "Aromaterapia em condições clínicas específicas",
+        descricao: "Fibromialgia, ansiedade generalizada, enxaqueca e oncologia",
+        duracaoMinutos: 10,
+        conteudo: `# Aromaterapia em Condições Clínicas
+
+## Protocolos Especializados
+
+### Fibromialgia
+
+**Desafio:** Dor generalizada, pontos sensíveis, fadiga crônica, sono ruim.
+
+**Blend Fibromialgia:**
+- 3 gotas de Copaíba (anti-inflamatório CB2)
+- 2 gotas de Lavanda (analgésico suave)
+- 2 gotas de Frankincense (regeneração)
+- 1 gota de Marjoram (relaxamento muscular)
+- 15ml de carreador
+
+**Protocolo:** Pressão LEVE a MODERADA. Nunca profunda. Movimentos lentos e rítmicos. Foco em conforto, não em resultado imediato.
+
+### Ansiedade Generalizada (TAG)
+
+**Blend Ansiedade:**
+- 3 gotas de Lavanda (calmante)
+- 2 gotas de Vetiver (aterramento)
+- 2 gotas de Bergamota (ansiolítico)
+- 1 gota de Frankincense (paz interior)
+- 15ml de carreador
+
+**Protocolo:** Ambiente ultra-calmo. Respiração guiada 4-7-8. Difusor com blend. Massagem com ritmo previsível (sem mudanças bruscas).
+
+### Enxaqueca
+
+**Blend Enxaqueca:**
+- 2 gotas de Hortelã-pimenta (nas têmporas — DILUÍDO)
+- 2 gotas de Lavanda (calmante)
+- 1 gota de Frankincense (anti-inflamatório)
+- 10ml de carreador
+
+**Protocolo:** Ambiente escuro, sem música alta. Compressa fria na testa com Hortelã-pimenta. Massagem cervical suave. Evitar estímulos fortes.
+
+### Oncologia (Suporte)
+
+**Importante:** Aromaterapia em oncologia é COMPLEMENTAR, nunca substitutiva.
+
+**Óleos seguros no suporte oncológico:**
+- Lavanda (ansiedade, sono, conforto)
+- Gengibre (náusea pós-quimioterapia)
+- Frankincense (equilíbrio emocional)
+- Hortelã-pimenta (náusea — inalação)
+
+**Cuidados:**
+- NUNCA aplicar sobre áreas irradiadas
+- Evitar óleos estrogênicos em câncer hormonal
+- Diluição mínima (0,5-1%)
+- Priorizar difusão sobre aplicação tópica
+- Sempre com aval da equipe médica
+
+> **Importante:** Documentar tudo. Manter comunicação com a equipe médica do paciente. Aromaterapia é um suporte valioso para qualidade de vida.`,
+        quiz: [
+          {
+            pergunta: "Qual nível de pressão é adequado em massagem com aromaterapia para fibromialgia?",
+            opcoes: ["Pressão profunda para liberar tensão", "Leve a moderada, com movimentos lentos", "Alternância entre leve e profunda", "Sem massagem, apenas difusão"],
+            respostaCorreta: 1,
+            explicacao: "Na fibromialgia, use pressão LEVE a MODERADA com movimentos lentos e rítmicos. Pressão profunda pode agravar a dor."
+          }
+        ],
+        checklist: [
+          "Conheço os protocolos para fibromialgia, TAG, enxaqueca e oncologia",
+          "Sei adaptar pressão e ritmo para cada condição",
+          "Entendo os limites da aromaterapia complementar",
+          "Documento todos os óleos usados em clientes com condições especiais"
+        ]
       }
     ]
   }

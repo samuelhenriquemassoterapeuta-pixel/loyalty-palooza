@@ -1,9 +1,13 @@
+import type { QuizQuestion } from "@/components/curso/QuizSection";
+
 export interface AulaContent {
   titulo: string;
   descricao: string;
   conteudo: string;
   videoUrl?: string;
   duracaoMinutos: number;
+  quiz?: QuizQuestion[];
+  checklist?: string[];
 }
 
 export interface ModuloContent {
@@ -56,7 +60,37 @@ Massoterapia envolve saúde, bem-estar e toque terapêutico. Você não vende se
 ❌ "Quer comprar um pacote?"
 ✅ "Pelo que avaliei, você precisa de pelo menos 6 sessões para tratar essa contratura. Temos um pacote de 6 horas por R$900 que já garante o tratamento completo. Faz sentido para você?"
 
-**Ponto-chave:** Você não está vendendo — está prescrevendo um plano de tratamento.`
+**Ponto-chave:** Você não está vendendo — está prescrevendo um plano de tratamento.`,
+        quiz: [
+          {
+            pergunta: "Qual é a mentalidade correta do terapeuta-consultor?",
+            opcoes: [
+              "Focar em vender o pacote mais caro possível",
+              "Prescrever o tratamento adequado como um profissional de saúde",
+              "Deixar o cliente decidir sozinho sem interferir",
+              "Oferecer desconto para fechar rápido"
+            ],
+            respostaCorreta: 1,
+            explicacao: "O terapeuta-consultor age como um profissional de saúde: avalia, diagnostica e prescreve o tratamento adequado — sem empurrar e sem omitir."
+          },
+          {
+            pergunta: "Por que a omissão NÃO é ética na massoterapia?",
+            opcoes: [
+              "Porque a clínica perde receita",
+              "Porque o cliente pode reclamar depois",
+              "Porque deixar de oferecer um tratamento necessário é negar cuidado",
+              "Porque é obrigação legal oferecer todos os serviços"
+            ],
+            respostaCorreta: 2,
+            explicacao: "Se você identifica que o cliente precisa de um tratamento continuado mas não oferece, está sendo omisso com a saúde dele."
+          }
+        ],
+        checklist: [
+          "Refleti sobre minha resistência pessoal a vendas",
+          "Mudei meu vocabulário de 'vender' para 'prescrever'",
+          "Identifiquei 3 clientes que poderiam ter se beneficiado de pacotes",
+          "Pratiquei o script de prescrição profissional"
+        ]
       },
       {
         titulo: "Ética profissional em vendas terapêuticas",
@@ -94,7 +128,37 @@ Existe uma diferença crucial entre:
 
 ### Regra de Ouro
 
-> **Recomende apenas o que você indicaria para um familiar.** Se seu irmão tivesse essa dor, qual seria seu conselho honesto?`
+> **Recomende apenas o que você indicaria para um familiar.** Se seu irmão tivesse essa dor, qual seria seu conselho honesto?`,
+        quiz: [
+          {
+            pergunta: "Quando NÃO devemos insistir na venda de um pacote?",
+            opcoes: [
+              "Quando o cliente pede desconto",
+              "Quando o cliente disse 'não' 2 vezes de formas diferentes",
+              "Quando o cliente quer pensar por 5 minutos",
+              "Quando o cliente pergunta sobre parcelamento"
+            ],
+            respostaCorreta: 1,
+            explicacao: "Após 2 negativas genuínas, respeite a decisão. Plante a semente para o futuro sem pressão."
+          },
+          {
+            pergunta: "Qual é a Regra de Ouro da ética em vendas?",
+            opcoes: [
+              "Sempre oferecer o pacote mais rentável",
+              "Recomendar apenas o que indicaria para um familiar",
+              "Nunca falar de preço antes da segunda sessão",
+              "Dar desconto para todos os clientes novos"
+            ],
+            respostaCorreta: 1,
+            explicacao: "Se seu irmão tivesse essa dor, qual seria seu conselho honesto? Essa é a bússola ética."
+          }
+        ],
+        checklist: [
+          "Memorizei os 4 princípios inegociáveis",
+          "Pratiquei respostas para clientes com expectativas inadequadas",
+          "Identifiquei situações onde NÃO devo vender",
+          "Apliquei a Regra de Ouro em pelo menos 1 atendimento"
+        ]
       },
       {
         titulo: "Perfil do cliente de massoterapia",
@@ -133,7 +197,37 @@ Existe uma diferença crucial entre:
 Para cada cliente que atendeu esta semana:
 1. Em qual perfil ele se encaixa?
 2. Você usou a abordagem correta?
-3. Qual pacote deveria ter oferecido?`
+3. Qual pacote deveria ter oferecido?`,
+        quiz: [
+          {
+            pergunta: "Qual pacote é ideal para um Cliente Experimental (primeiro contato)?",
+            opcoes: [
+              "VIP 48hrs — máxima economia",
+              "9hrs — tratamento completo",
+              "3hrs (R$480) — porta de entrada",
+              "Sessão avulsa sem compromisso"
+            ],
+            respostaCorreta: 2,
+            explicacao: "O pacote de 3hrs é a porta de entrada ideal: baixo compromisso, permite ao cliente experimentar o serviço."
+          },
+          {
+            pergunta: "O Cliente de Prevenção se caracteriza por:",
+            opcoes: [
+              "Dor aguda e urgência de resolução",
+              "Curiosidade e primeiro contato",
+              "Já sentiu dor antes e quer evitar recorrência",
+              "Busca relaxamento e autocuidado"
+            ],
+            respostaCorreta: 2,
+            explicacao: "O cliente de prevenção já teve experiência com dor e quer evitar que volte. Pensa a longo prazo."
+          }
+        ],
+        checklist: [
+          "Classifiquei meus 5 últimos clientes nos 4 perfis",
+          "Preparei scripts personalizados para cada perfil",
+          "Identifiquei qual perfil é mais comum na minha agenda",
+          "Adaptei minha abordagem para pelo menos 1 cliente esta semana"
+        ]
       }
     ]
   },
@@ -200,7 +294,37 @@ Após ouvir, repita com suas palavras:
 
 > "Deixa eu ver se entendi: você sente dor nas costas há 3 meses, piora quando fica sentada, e isso está atrapalhando seu sono. Correto?"
 
-**Isso demonstra:** atenção, empatia e profissionalismo — e posiciona você para recomendar o pacote certo.`
+**Isso demonstra:** atenção, empatia e profissionalismo — e posiciona você para recomendar o pacote certo.`,
+        quiz: [
+          {
+            pergunta: "Na Regra 80/20 da escuta ativa, qual a proporção ideal?",
+            opcoes: [
+              "Terapeuta fala 80%, cliente 20%",
+              "Cliente fala 80%, terapeuta 20%",
+              "Ambos falam 50% cada",
+              "Depende do perfil do cliente"
+            ],
+            respostaCorreta: 1,
+            explicacao: "O cliente deve falar 80% do tempo. Seus 20% são perguntas estratégicas (70%), validações (20%) e recomendações (10%)."
+          },
+          {
+            pergunta: "Qual frase de abertura é mais profissional?",
+            opcoes: [
+              "Boa tarde, pode sentar ali que já chamo",
+              "O que você precisa hoje?",
+              "Boa tarde, Maria! Que bom te ver. Preparei tudo para você hoje",
+              "Olá! Já vou te atender"
+            ],
+            respostaCorreta: 2,
+            explicacao: "Personalizar a recepção com o nome do cliente e demonstrar preparação cria conexão imediata."
+          }
+        ],
+        checklist: [
+          "Revisei o checklist de recepção do ambiente",
+          "Pratiquei frases de abertura personalizadas",
+          "Apliquei a Regra 80/20 em pelo menos 1 atendimento",
+          "Usei a técnica de validação (repetir com minhas palavras)"
+        ]
       },
       {
         titulo: "Construindo autoridade sem arrogância",
@@ -239,7 +363,26 @@ Use termos técnicos, mas SEMPRE traduza:
 2. **Explique** a causa de forma simples
 3. **Apresente** o plano de tratamento com pacote adequado
 4. **Comprove** com dados ou casos similares
-5. **Facilite** a decisão (opções de pacote, parcelamento)`
+5. **Facilite** a decisão (opções de pacote, parcelamento)`,
+        quiz: [
+          {
+            pergunta: "Qual a melhor forma de demonstrar autoridade profissional?",
+            opcoes: [
+              "Declarar seus títulos e certificações",
+              "Explicar o problema do cliente com linguagem acessível",
+              "Mostrar seu diploma na parede",
+              "Usar termos técnicos complexos"
+            ],
+            respostaCorreta: 1,
+            explicacao: "Autoridade se demonstra, não se declara. Explique o problema e a solução de forma clara."
+          }
+        ],
+        checklist: [
+          "Pratiquei explicar 3 condições comuns em linguagem acessível",
+          "Preparei 2 casos de sucesso para usar como prova social",
+          "Apliquei o Framework de Apresentação em 1 atendimento",
+          "Traduzi termos técnicos sem perder credibilidade"
+        ]
       },
       {
         titulo: "Comunicação empática e linguagem corporal",
@@ -279,7 +422,26 @@ Na massoterapia, seu tom de voz é parte do tratamento:
 
 ### A Regra de Ouro da Empatia
 
-> Antes de recomendar qualquer pacote, o cliente precisa sentir que você entendeu genuinamente a dor dele — literal e emocional. Sem isso, qualquer oferta vai soar como "vendas".`
+> Antes de recomendar qualquer pacote, o cliente precisa sentir que você entendeu genuinamente a dor dele — literal e emocional. Sem isso, qualquer oferta vai soar como "vendas".`,
+        quiz: [
+          {
+            pergunta: "Como adaptar sua comunicação com um cliente ansioso?",
+            opcoes: [
+              "Ser objetivo e direto para não perder tempo",
+              "Falar devagar e explicar cada etapa",
+              "Fazer muitas perguntas rapidamente",
+              "Deixar ele em silêncio total"
+            ],
+            respostaCorreta: 1,
+            explicacao: "Clientes ansiosos precisam de calma. Fale devagar, explique cada etapa e transmita segurança."
+          }
+        ],
+        checklist: [
+          "Identifiquei o perfil comportamental de 3 clientes",
+          "Pratiquei espelhamento de linguagem corporal",
+          "Ajustei meu tom de voz em diferentes momentos do atendimento",
+          "Eliminei 1 hábito de linguagem corporal negativa"
+        ]
       }
     ]
   },
@@ -336,7 +498,37 @@ Isso derruba a objeção #1: "E se eu não conseguir vir?"
 ### VIP 48hrs (R$5.232) — Alto Padrão
 - **Para quem:** Executivos, famílias, autocuidado constante
 - **Objetivo:** Máxima economia + ticket alto
-- **Script:** "Para quem faz do autocuidado prioridade, o VIP 48 horas é imbatível: R$109 por hora, quase R$2.000 de economia. E as horas nunca expiram."`
+- **Script:** "Para quem faz do autocuidado prioridade, o VIP 48 horas é imbatível: R$109 por hora, quase R$2.000 de economia. E as horas nunca expiram."`,
+        quiz: [
+          {
+            pergunta: "Qual o grande diferencial dos pacotes da clínica?",
+            opcoes: [
+              "Desconto progressivo de 50%",
+              "As horas NUNCA expiram",
+              "Inclui produtos de aromaterapia",
+              "Atendimento 24 horas"
+            ],
+            respostaCorreta: 1,
+            explicacao: "O maior diferencial é que as horas nunca expiram. Isso elimina o medo de desperdiçar o investimento."
+          },
+          {
+            pergunta: "Qual pacote é ideal como 'porta de entrada' para clientes novos?",
+            opcoes: [
+              "VIP 48hrs — melhor custo-benefício",
+              "6hrs — tratamento pontual",
+              "3hrs (R$480) — sem compromisso de longo prazo",
+              "Sessão avulsa para testar"
+            ],
+            respostaCorreta: 2,
+            explicacao: "O pacote de 3hrs é a porta de entrada ideal: baixo compromisso, permite experimentar o serviço."
+          }
+        ],
+        checklist: [
+          "Decorei valores e economia de cada pacote",
+          "Sei qual pacote recomendar para cada perfil de cliente",
+          "Pratiquei o script de apresentação de cada pacote",
+          "Memorizei que as horas nunca expiram (diferencial-chave)"
+        ]
       },
       {
         titulo: "Técnica de ancoragem — sempre 3 opções",
@@ -394,7 +586,26 @@ Sempre mencione as opções de pagamento:
 
 > "Você pode parcelar no cartão. O pacote de 9 horas fica em 3x de R$420 — menos que uma sessão avulsa por mês."
 
-> "No PIX à vista, temos condição especial."`
+> "No PIX à vista, temos condição especial."`,
+        quiz: [
+          {
+            pergunta: "Na técnica de ancoragem com 3 opções, qual o cliente tende a escolher?",
+            opcoes: [
+              "Sempre a mais barata",
+              "A do meio ou a maior",
+              "Sempre a mais cara",
+              "Nenhuma — pede desconto"
+            ],
+            respostaCorreta: 1,
+            explicacao: "Psicologicamente, ao apresentar 3 opções, as pessoas raramente escolhem a mais barata. Tendem para o meio."
+          }
+        ],
+        checklist: [
+          "Pratiquei apresentar 3 opções para cada perfil de cliente",
+          "Treinei cálculo mental de economia para o cliente",
+          "Nunca apresentei preço antes de demonstrar valor",
+          "Mencionei opções de parcelamento em todas as ofertas"
+        ]
       },
       {
         titulo: "Upsell e cross-sell inteligente",
@@ -444,7 +655,26 @@ Cada passo é um "upgrade natural" baseado na experiência e nos resultados.
 
 **Meta: 100% dos clientes avulsos recebem oferta de pacote.**
 
-Não é pressão — é prescrição profissional. Se você atende 10 clientes e oferece pacote a todos, com 40% de conversão são 4 vendas. Se só oferece a 5, são apenas 2 vendas. A diferença está em OFERECER.`
+Não é pressão — é prescrição profissional. Se você atende 10 clientes e oferece pacote a todos, com 40% de conversão são 4 vendas. Se só oferece a 5, são apenas 2 vendas. A diferença está em OFERECER.`,
+        quiz: [
+          {
+            pergunta: "Qual o momento ideal para oferecer upsell de avulso para pacote?",
+            opcoes: [
+              "Na recepção, antes da primeira sessão",
+              "Final da 1ª ou 2ª sessão, quando o cliente já sentiu o benefício",
+              "Pelo WhatsApp 1 semana depois",
+              "Apenas quando o cliente pedir"
+            ],
+            respostaCorreta: 1,
+            explicacao: "O melhor momento é após a sessão, quando o cliente já vivenciou o benefício e está receptivo."
+          }
+        ],
+        checklist: [
+          "Identifiquei oportunidades de upsell em 3 clientes atuais",
+          "Mapeei cross-sells naturais para cada serviço",
+          "Ofereci pacote a 100% dos clientes avulsos esta semana",
+          "Usei o cashback como argumento de venda"
+        ]
       }
     ]
   },
@@ -511,7 +741,37 @@ Depois rebata especificamente:
 
 Se o cliente disse não 2 vezes de formas diferentes, respeite. Plante a semente para o futuro:
 
-> "Sem problema! Fico feliz que veio hoje. Quando sentir necessidade, é só me chamar — as condições dos pacotes estarão aqui para você."`
+> "Sem problema! Fico feliz que veio hoje. Quando sentir necessidade, é só me chamar — as condições dos pacotes estarão aqui para você."`,
+        quiz: [
+          {
+            pergunta: "Quando o cliente diz 'É muito caro', o significado real é:",
+            opcoes: [
+              "Ele realmente não pode pagar",
+              "Não entendeu o valor do serviço",
+              "Quer desconto",
+              "Está comparando com outra clínica"
+            ],
+            respostaCorreta: 1,
+            explicacao: "'É muito caro' geralmente significa que o cliente não percebeu o valor. A solução é demonstrar economia e benefícios."
+          },
+          {
+            pergunta: "Como responder à objeção 'E se eu não usar tudo?'",
+            opcoes: [
+              "Oferecer um pacote menor",
+              "Dar desconto para compensar",
+              "Explicar que as horas NUNCA expiram",
+              "Dizer que é raro não usar"
+            ],
+            respostaCorreta: 2,
+            explicacao: "O diferencial da clínica é que as horas nunca expiram. Isso elimina completamente o medo de desperdício."
+          }
+        ],
+        checklist: [
+          "Decorei as 7 objeções e seus significados reais",
+          "Pratiquei os scripts de resposta em voz alta",
+          "Identifiquei as 3 objeções mais frequentes nos meus atendimentos",
+          "Respondi a pelo menos 1 objeção real esta semana sem hesitar"
+        ]
       },
       {
         titulo: "Técnicas de fechamento sem pressão",
@@ -566,7 +826,37 @@ O MELHOR momento para oferecer pacote é:
 - Está relaxado e receptivo
 - Você já construiu rapport e confiança
 
-**EVITAR:** Oferecer na recepção antes da 1ª sessão (cliente ainda não vivenciou nada).`
+**EVITAR:** Oferecer na recepção antes da 1ª sessão (cliente ainda não vivenciou nada).`,
+        quiz: [
+          {
+            pergunta: "No Fechamento por Alternativa, qual a pergunta correta?",
+            opcoes: [
+              "Quer fechar o pacote?",
+              "Você prefere o pacote de 6 ou de 9 horas?",
+              "Posso fazer o pacote pra você?",
+              "O que acha de levar?"
+            ],
+            respostaCorreta: 1,
+            explicacao: "Nunca pergunte 'sim ou não'. Dê opções: 'Prefere 6 ou 9 horas?' O cliente escolhe entre as alternativas."
+          },
+          {
+            pergunta: "O que diz a Regra do Silêncio?",
+            opcoes: [
+              "Nunca falar sobre preço",
+              "Após fazer a proposta, fique em silêncio e espere",
+              "Falar baixo durante a negociação",
+              "Não mencionar concorrentes"
+            ],
+            respostaCorreta: 1,
+            explicacao: "Após apresentar a proposta, quem fala primeiro perde poder. Fique em silêncio e deixe o cliente processar."
+          }
+        ],
+        checklist: [
+          "Pratiquei as 5 técnicas de fechamento em role-play",
+          "Apliquei a Regra do Silêncio em pelo menos 1 negociação",
+          "Usei Fechamento por Alternativa no lugar de perguntas sim/não",
+          "Identifiquei qual técnica funciona melhor para meu perfil"
+        ]
       },
       {
         titulo: "Follow-up e vendas pelo WhatsApp",
@@ -619,7 +909,26 @@ O MELHOR momento para oferecer pacote é:
 2. **Emojis:** Use com moderação (2-3 por mensagem)
 3. **Horário:** Respeite 8h-20h
 4. **Insistência:** Máximo 2 follow-ups sem resposta
-5. **Preço:** Nunca mande preço SEM fazer perguntas antes`
+5. **Preço:** Nunca mande preço SEM fazer perguntas antes`,
+        quiz: [
+          {
+            pergunta: "Qual o tempo ideal de resposta no WhatsApp para máxima conversão?",
+            opcoes: [
+              "Até 1 hora",
+              "Até 30 minutos",
+              "Menos de 5 minutos (78% de conversão)",
+              "No mesmo dia"
+            ],
+            respostaCorreta: 2,
+            explicacao: "Respostas em menos de 5 minutos têm 78% de taxa de conversão. Após 1 hora, cai para apenas 14%."
+          }
+        ],
+        checklist: [
+          "Configurei meu WhatsApp profissionalmente (foto, nome, status)",
+          "Salvei os templates de mensagens como respostas rápidas",
+          "Enviei follow-up pós-sessão para todos os clientes do dia",
+          "Respondi a todas as mensagens em menos de 15 minutos"
+        ]
       }
     ]
   },
@@ -675,7 +984,26 @@ Para cada cliente com pacote ativo, monitore:
 - Pacote atual
 - Horas consumidas / Total
 - % consumido
-- Próxima ação (check-in, abordagem, oferta)`
+- Próxima ação (check-in, abordagem, oferta)`,
+        quiz: [
+          {
+            pergunta: "Em qual percentual de consumo do pacote devemos iniciar a conversa de renovação?",
+            opcoes: [
+              "Quando acabar 100%",
+              "Em 80% consumido",
+              "Em 50% consumido (check-in de satisfação)",
+              "Logo após a compra"
+            ],
+            respostaCorreta: 1,
+            explicacao: "Em 80% consumido já devemos abordar a renovação. O check-in de 50% planta a semente, e em 100% é a oferta especial."
+          }
+        ],
+        checklist: [
+          "Montei uma planilha de controle de saldos dos clientes",
+          "Configurei alertas para 50%, 80% e 100% de consumo",
+          "Fiz check-in com pelo menos 1 cliente em 50%",
+          "Abordei renovação com 1 cliente em 80%+"
+        ]
       },
       {
         titulo: "Estratégia de upgrade progressivo",
@@ -719,7 +1047,26 @@ Antes de abordar a renovação, verifique:
 - Frequência real de uso (1x/semana? 2x/mês?)
 - Quanto tempo levou para consumir o pacote
 - Padrão: se consume rápido = potencial para pacote maior
-- Satisfação relatada nas sessões`
+- Satisfação relatada nas sessões`,
+        quiz: [
+          {
+            pergunta: "Qual é a escada ideal de fidelização do cliente?",
+            opcoes: [
+              "Avulso → VIP 48hrs direto",
+              "3hrs → 6hrs → 9hrs → VIP 24hrs → VIP 48hrs",
+              "Sempre oferecer o VIP 24hrs",
+              "Deixar o cliente decidir sozinho"
+            ],
+            respostaCorreta: 1,
+            explicacao: "O upgrade é progressivo e natural. Cada passo é baseado em resultados e frequência de uso."
+          }
+        ],
+        checklist: [
+          "Mapeei a jornada de upgrade de cada cliente ativo",
+          "Pratiquei scripts de upgrade para cada transição",
+          "Identifiquei 3 clientes prontos para upgrade",
+          "Abordei 1 cliente sobre upgrade esta semana"
+        ]
       },
       {
         titulo: "Metas de conversão e acompanhamento",
@@ -788,7 +1135,26 @@ Em 1 ano = **+R$30.000 em receita** só com melhoria de conversão!
 **OU Meta coletiva:**
 - Bateu 50% conversão no mês = bônus de R$300 dividido
 - Bateu 60% = R$500 dividido
-- Bateu 70% = R$800 dividido`
+- Bateu 70% = R$800 dividido`,
+        quiz: [
+          {
+            pergunta: "Qual a meta de taxa de oferta de pacotes?",
+            opcoes: [
+              "50% dos clientes",
+              "Apenas clientes recorrentes",
+              "100% — todo cliente recebe oferta",
+              "Só quando o cliente pergunta"
+            ],
+            respostaCorreta: 2,
+            explicacao: "100% dos clientes devem receber oferta de pacote. Se oferece para 50%, perde metade das oportunidades."
+          }
+        ],
+        checklist: [
+          "Criei uma planilha semanal de acompanhamento",
+          "Defini minha meta de conversão para os próximos 30 dias",
+          "Calculei o impacto financeiro da melhoria de conversão",
+          "Agendei reunião semanal de 15 min para análise"
+        ]
       }
     ]
   },
@@ -843,7 +1209,26 @@ Em 1 ano = **+R$30.000 em receita** só com melhoria de conversão!
 ### 8. NPS (Satisfação do Cliente)
 **Escala:** 0 a 10
 **Meta:** > 8.5
-**Ação se baixo:** Pesquisa qualitativa + melhorias na experiência`
+**Ação se baixo:** Pesquisa qualitativa + melhorias na experiência`,
+        quiz: [
+          {
+            pergunta: "Qual KPI deve estar SEMPRE em 100%?",
+            opcoes: [
+              "Taxa de Conversão",
+              "Taxa de Renovação",
+              "Taxa de Oferta — todo cliente recebe oferta de pacote",
+              "NPS de satisfação"
+            ],
+            respostaCorreta: 2,
+            explicacao: "A taxa de oferta deve ser 100%. Todo cliente atendido deve receber a recomendação de pacote."
+          }
+        ],
+        checklist: [
+          "Listei os 8 KPIs e suas fórmulas",
+          "Calculei meus números da última semana",
+          "Identifiquei os 2 KPIs com maior oportunidade de melhoria",
+          "Defini ações específicas para cada KPI abaixo da meta"
+        ]
       },
       {
         titulo: "Plano de ação semanal",
@@ -902,7 +1287,239 @@ Em 1 ano = **+R$30.000 em receita** só com melhoria de conversão!
 
 Ao completar todas as aulas e aplicar o plano por 12 semanas, você estará apto a receber o certificado de **Especialista em Vendas Consultivas — Massoterapia**.
 
-*Parabéns por investir no seu desenvolvimento! Seus clientes e seus resultados agradecem. 💚*`
+*Parabéns por investir no seu desenvolvimento! Seus clientes e seus resultados agradecem. 💚*`,
+        quiz: [
+          {
+            pergunta: "Qual pacote indicar para um cliente com dor lombar crônica, 1x/semana?",
+            opcoes: [
+              "3hrs — porta de entrada",
+              "6hrs — tratamento pontual",
+              "9hrs — ciclo completo de 8 semanas",
+              "VIP 48hrs — máxima economia"
+            ],
+            respostaCorreta: 2,
+            explicacao: "Dor crônica 1x/semana por 8 semanas = 9hrs. É o ciclo completo de tratamento."
+          }
+        ],
+        checklist: [
+          "Imprimi e colei a Árvore de Decisão no consultório",
+          "Segui a rotina semanal por pelo menos 1 semana completa",
+          "Registrei meus resultados na planilha de acompanhamento",
+          "Defini minha meta de 12 semanas"
+        ]
+      }
+    ]
+  },
+  {
+    titulo: "Marketing Digital para Terapeutas",
+    descricao: "Redes sociais, conteúdo e presença digital para atrair e fidelizar clientes",
+    icone: "GraduationCap",
+    cor: "from-cyan-50 to-sky-50",
+    aulas: [
+      {
+        titulo: "Presença digital profissional",
+        descricao: "Perfil no Instagram, Google Meu Negócio e bio estratégica",
+        duracaoMinutos: 10,
+        conteudo: `# Presença Digital Profissional
+
+## Onde Seus Clientes Te Encontram
+
+### Instagram — Sua Vitrine Digital
+
+**Bio estratégica (modelo):**
+> 💆 Massoterapeuta | Resinkra
+> ✅ Terapêutica · Relaxante · Head SPA
+> 📍 [Cidade]
+> 🔗 Agende pelo app ↓
+
+**Destaques obrigatórios:**
+- 🏥 Sobre mim / A clínica
+- 💆 Serviços e valores
+- ⭐ Depoimentos
+- 📸 Antes e depois
+- ❓ Dúvidas frequentes
+
+### Google Meu Negócio
+
+Muitos clientes buscam "massoterapia perto de mim". Se você não está no Google:
+
+1. Cadastre-se em business.google.com
+2. Complete 100% do perfil (fotos, horário, serviços)
+3. Peça avaliações a cada cliente satisfeito
+4. Responda TODAS as avaliações (positivas e negativas)
+
+**Meta:** 50+ avaliações com nota > 4.8
+
+### WhatsApp Business
+
+- Catálogo com todos os serviços e pacotes
+- Mensagem de ausência configurada
+- Etiquetas para organizar clientes (novo, pacote ativo, reativar)
+
+### Consistência Visual
+
+Use as mesmas cores, fontes e tom de voz em todas as plataformas. Isso cria reconhecimento de marca.`,
+        quiz: [
+          {
+            pergunta: "Qual plataforma é essencial para clientes que buscam 'massoterapia perto de mim'?",
+            opcoes: [
+              "TikTok",
+              "Google Meu Negócio",
+              "LinkedIn",
+              "YouTube"
+            ],
+            respostaCorreta: 1,
+            explicacao: "Google Meu Negócio aparece nas buscas locais. Muitos clientes encontram serviços assim."
+          }
+        ],
+        checklist: [
+          "Otimizei minha bio no Instagram com o modelo sugerido",
+          "Criei os 5 destaques obrigatórios",
+          "Cadastrei no Google Meu Negócio (ou completei 100%)",
+          "Configurei o WhatsApp Business com catálogo"
+        ]
+      },
+      {
+        titulo: "Conteúdo que atrai clientes",
+        descricao: "O que postar, quando postar e como converter seguidores em clientes",
+        duracaoMinutos: 10,
+        conteudo: `# Conteúdo que Atrai Clientes
+
+## Os 4 Pilares de Conteúdo
+
+### 1. Educativo (40% dos posts)
+Mostre que você é especialista:
+- "5 sinais de que você precisa de massagem"
+- "Por que sua dor nas costas volta toda semana"
+- "Diferença entre massagem relaxante e terapêutica"
+- Dicas posturais para quem trabalha sentado
+
+### 2. Bastidores (25% dos posts)
+Humanize seu trabalho:
+- Preparação do ambiente (velas, óleos, música)
+- Seu dia a dia profissional
+- Equipamentos e produtos que usa
+- Momentos com a equipe
+
+### 3. Prova Social (25% dos posts)
+Depoimentos vendem mais que qualquer propaganda:
+- Screenshots de mensagens de clientes (com autorização)
+- Vídeos curtos de depoimentos
+- Antes e depois (postural, edema, etc.)
+- Avaliações do Google
+
+### 4. Chamada para Ação (10% dos posts)
+Convide para agendar:
+- "Última vaga da semana!"
+- "Pacote especial para novos clientes"
+- "Agende pelo link na bio"
+
+### Calendário Semanal
+
+| Dia | Tipo | Exemplo |
+|-----|------|---------|
+| Segunda | Educativo | Dica de postura |
+| Terça | Bastidores | Preparo do ambiente |
+| Quarta | Prova Social | Depoimento de cliente |
+| Quinta | Educativo | Benefício da massagem |
+| Sexta | CTA | "Agende para a semana!" |
+
+### Horários que Funcionam
+
+- **Manhã:** 7h-9h (profissionais antes do trabalho)
+- **Almoço:** 12h-13h (pausa do trabalho)
+- **Noite:** 19h-21h (relaxamento pós-trabalho)
+
+### Formatos que Engajam
+
+1. **Reels curtos** (15-30s) — maior alcance
+2. **Carrosséis** — mais salvamentos
+3. **Stories** — conexão diária
+4. **Lives** — autoridade`,
+        quiz: [
+          {
+            pergunta: "Qual a distribuição ideal de conteúdo nas redes sociais?",
+            opcoes: [
+              "100% promoções e ofertas",
+              "40% educativo, 25% bastidores, 25% prova social, 10% CTA",
+              "50% antes e depois, 50% preços",
+              "Postar apenas quando tiver promoção"
+            ],
+            respostaCorreta: 1,
+            explicacao: "A maioria do conteúdo deve educar e mostrar bastidores. Apenas 10% deve ser chamada para ação direta."
+          }
+        ],
+        checklist: [
+          "Planejei meu calendário de conteúdo da semana",
+          "Criei pelo menos 1 post educativo",
+          "Coletei 1 depoimento de cliente para postar",
+          "Publiquei nos melhores horários (7-9h, 12-13h ou 19-21h)"
+        ]
+      },
+      {
+        titulo: "Estratégias de indicação e parcerias",
+        descricao: "Como transformar clientes satisfeitos em embaixadores da marca",
+        duracaoMinutos: 8,
+        conteudo: `# Estratégias de Indicação e Parcerias
+
+## Seus Clientes São Seu Melhor Marketing
+
+### Programa de Indicação
+
+O sistema de indicação já está no app! Use-o ativamente:
+
+> "Sabia que você ganha cashback ao indicar amigos? É só compartilhar seu código pelo app. Quando seu amigo fizer a primeira compra, vocês dois ganham crédito!"
+
+### Como Pedir Indicações (sem ser chato)
+
+**Momento ideal:** Logo após o cliente expressar satisfação
+
+✅ "Que bom que gostou! Se tiver alguém que também precisa, lembra de mim? Pelo app você compartilha seu código e ainda ganha cashback."
+
+❌ "Você tem algum amigo para indicar?" (parece desesperado)
+
+### Parcerias Estratégicas
+
+Negócios complementares que podem indicar clientes:
+
+| Parceiro | Público | Proposta |
+|----------|---------|----------|
+| Academias | Atletas, lesões | Desconto mútuo |
+| Fisioterapeutas | Pós-tratamento | Encaminhamento |
+| Nutricionistas | Bem-estar | Programa conjunto |
+| Empresas | Funcionários | Pacote corporativo |
+| Salões de beleza | Autocuidado | Cross-indicação |
+
+### Script para Propor Parceria
+
+> "Olá, sou [nome] da Resinkra Massoterapia. Notei que atendemos públicos complementares. Que tal criarmos uma parceria onde indicamos clientes um para o outro? Podemos oferecer descontos exclusivos para os clientes de vocês."
+
+### Métricas de Indicação
+
+Acompanhe mensalmente:
+- Quantas indicações recebidas
+- Taxa de conversão de indicados
+- Valor médio do cliente indicado
+- ROI do programa de indicação`,
+        quiz: [
+          {
+            pergunta: "Qual o melhor momento para pedir uma indicação ao cliente?",
+            opcoes: [
+              "Logo que ele chega para a sessão",
+              "Quando ele expressa satisfação com o resultado",
+              "Pelo WhatsApp 1 semana depois",
+              "Nunca — espere ele indicar sozinho"
+            ],
+            respostaCorreta: 1,
+            explicacao: "O momento ideal é logo após o cliente expressar satisfação. Ele está no pico de experiência positiva."
+          }
+        ],
+        checklist: [
+          "Apresentei o programa de indicação a 3 clientes satisfeitos",
+          "Mapeei 5 parceiros potenciais na região",
+          "Contatei 1 parceiro com proposta de cross-indicação",
+          "Acompanhei métricas de indicação do mês"
+        ]
       }
     ]
   }
