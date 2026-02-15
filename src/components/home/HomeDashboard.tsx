@@ -100,7 +100,7 @@ export const HomeDashboard = () => {
       </motion.div>
 
       <motion.div variants={fadeUp}>
-        <CollapsibleDashboardSection title="Agenda & Streak" defaultOpen={true}>
+        <CollapsibleDashboardSection title="Agenda & Streak" defaultOpen={false}>
           <div className="space-y-3">
             <NextAppointmentCard agendamento={proximoAgendamento} />
             <StreakSummaryCard
@@ -114,7 +114,7 @@ export const HomeDashboard = () => {
       </motion.div>
 
       <motion.div variants={fadeUp}>
-        <CollapsibleDashboardSection title="Nível & Benefícios" defaultOpen={true}>
+        <CollapsibleDashboardSection title="Nível & Benefícios" defaultOpen={false}>
           <div className="space-y-3">
             <XpMiniBar achievements={achievements} />
             <ActiveBenefitsCard />
