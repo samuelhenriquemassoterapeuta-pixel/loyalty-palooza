@@ -1,3 +1,4 @@
+import DOMPurify from "dompurify";
 import { motion } from "framer-motion";
 import {
   Heart, Briefcase, TrendingUp, Handshake, Award, Building2,
@@ -66,17 +67,19 @@ const renderMarkdown = (text: string) => {
       elements.push(<h4 key={i} className="text-lg font-semibold text-foreground mt-5 mb-2">{line.replace("### ", "")}</h4>);
     } else if (line.startsWith("- ")) {
       const content = line.replace("- ", "").replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+      const sanitized = DOMPurify.sanitize(content, { ALLOWED_TAGS: ['strong', 'em', 'b', 'i'] });
       elements.push(
         <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground ml-2 mb-1.5">
           <span className="text-primary mt-1.5 shrink-0">•</span>
-          <span dangerouslySetInnerHTML={{ __html: content }} />
+          <span dangerouslySetInnerHTML={{ __html: sanitized }} />
         </li>
       );
     } else if (line.startsWith("---")) {
       elements.push(<hr key={i} className="my-6 border-border/50" />);
     } else if (line.trim()) {
       const content = line.replace(/\*\*(.*?)\*\*/g, '<strong class="text-foreground">$1</strong>');
-      elements.push(<p key={i} className="text-sm text-muted-foreground leading-relaxed mb-2" dangerouslySetInnerHTML={{ __html: content }} />);
+      const sanitized = DOMPurify.sanitize(content, { ALLOWED_TAGS: ['strong', 'em', 'b', 'i'], ALLOWED_ATTR: ['class'] });
+      elements.push(<p key={i} className="text-sm text-muted-foreground leading-relaxed mb-2" dangerouslySetInnerHTML={{ __html: sanitized }} />);
     }
   });
 
