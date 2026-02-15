@@ -27,6 +27,7 @@ import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { AppLayout } from "@/components/AppLayout";
 import { cursoYugenFaceSpaData, type YugenFaceSpaModulo, type YugenFaceSpaAula } from "@/data/cursoYugenFaceSpaContent";
+import { faceSpaAulaAssets } from "@/data/cursoYugenFaceSpaAssets";
 import { NarracaoPlayer } from "@/components/curso/NarracaoPlayer";
 
 const iconMap: Record<string, React.ElementType> = {
@@ -136,11 +137,12 @@ function ChecklistSection({ items }: { items: string[] }) {
 }
 
 function AulaView({
-  modulo, aulaIndex, onBack, isComplete, onToggle,
+  modulo, aulaIndex, moduloIndex, onBack, isComplete, onToggle,
 }: {
-  modulo: YugenFaceSpaModulo; aulaIndex: number; onBack: () => void; isComplete: boolean; onToggle: () => void;
+  modulo: YugenFaceSpaModulo; aulaIndex: number; moduloIndex: number; onBack: () => void; isComplete: boolean; onToggle: () => void;
 }) {
   const aula = modulo.aulas[aulaIndex];
+  const assets = faceSpaAulaAssets[`${moduloIndex}-${aulaIndex}`];
   const renderContent = (text: string) => {
     return text.split("\n").map((line, i) => {
       if (line.startsWith("## ")) return <h2 key={i} className="text-lg font-bold mt-5 mb-2">{line.slice(3)}</h2>;
@@ -180,17 +182,29 @@ function AulaView({
         </div>
         <span className="text-xs text-muted-foreground shrink-0">{aula.duracaoMinutos} min</span>
       </div>
-      <div className="mb-4">
-        <NarracaoPlayer texto={aula.conteudo} titulo={aula.titulo} />
-      </div>
-      {aula.videoUrl && (
+      {assets && (
         <Card className="mb-4 overflow-hidden">
-          <div className="aspect-video bg-muted flex items-center justify-center">
-            <Play size={48} className="text-muted-foreground" />
-            <span className="ml-2 text-sm text-muted-foreground">Vídeo em breve</span>
+          <div className="relative aspect-video">
+            <img src={assets.image} alt={aula.titulo} className="w-full h-full object-cover" />
+            <video
+              src={assets.video}
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="absolute inset-0 w-full h-full object-cover opacity-25 mix-blend-luminosity"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent" />
+            <div className="absolute bottom-3 left-3 right-3">
+              <p className="text-xs font-medium text-foreground/90 drop-shadow-sm">{aula.descricao}</p>
+            </div>
           </div>
         </Card>
       )}
+
+      <div className="mb-4">
+        <NarracaoPlayer texto={aula.conteudo} titulo={aula.titulo} />
+      </div>
       <Card className="p-4 mb-4">{renderContent(aula.conteudo)}</Card>
       {aula.checklist && <div className="mb-4"><ChecklistSection items={aula.checklist} /></div>}
       {aula.quiz && <div className="mb-4"><QuizSection quiz={aula.quiz} onComplete={() => {}} /></div>}
@@ -239,7 +253,7 @@ export default function CursoYugenFaceSpa({ embedded = false }: { embedded?: boo
       <Wrapper>
         <div className={`min-h-screen bg-background ${embedded ? "" : "pb-32 lg:pb-8"}`}>
           <div className="max-w-lg mx-auto px-4 py-6">
-            <AulaView modulo={modulo} aulaIndex={selectedAula} onBack={() => setSelectedAula(null)}
+            <AulaView modulo={modulo} aulaIndex={selectedAula} moduloIndex={selectedModulo} onBack={() => setSelectedAula(null)}
               isComplete={isComplete(selectedModulo, selectedAula)} onToggle={() => toggleLocal(selectedModulo, selectedAula)} />
             <div className="flex gap-2 mt-4">
               {selectedAula > 0 && <Button variant="outline" size="sm" onClick={() => setSelectedAula(selectedAula - 1)} className="flex-1">← Anterior</Button>}
