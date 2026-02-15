@@ -53,6 +53,7 @@ const CursoVendas = lazy(() => import("@/pages/CursoVendas"));
 const CursoAromaterapia = lazy(() => import("@/pages/CursoAromaterapia"));
 const Cursos = lazy(() => import("@/pages/Cursos"));
 const CursoHeadSpa = lazy(() => import("@/pages/CursoHeadSpa"));
+const CursoAnatomia = lazy(() => import("@/pages/CursoAnatomia"));
 const Offers = lazy(() => import("@/pages/Offers"));
 const NotFound = lazy(() => import("@/pages/NotFound"));
 
@@ -120,6 +121,7 @@ export const AnimatedRoutes = () => {
         <Route path="/curso-vendas" element={<ProtectedRoute><LazyPage><CursoVendas /></LazyPage></ProtectedRoute>} />
         <Route path="/curso-aromaterapia" element={<ProtectedRoute><LazyPage><CursoAromaterapia /></LazyPage></ProtectedRoute>} />
         <Route path="/curso-headspa" element={<ProtectedRoute><LazyPage><CursoHeadSpa /></LazyPage></ProtectedRoute>} />
+        <Route path="/curso-anatomia" element={<ProtectedRoute><LazyPage><CursoAnatomia /></LazyPage></ProtectedRoute>} />
         <Route path="/ofertas" element={<ProtectedRoute><LazyPage><Offers /></LazyPage></ProtectedRoute>} />
         <Route path="*" element={<LazyPage><NotFound /></LazyPage>} />
       </Routes>
