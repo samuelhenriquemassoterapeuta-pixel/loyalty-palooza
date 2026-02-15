@@ -6,7 +6,8 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useParallax } from "@/hooks/useParallax";
 import { CollapsibleSection } from "./CollapsibleSection";
-import pacotesBanner from "@/assets/landing/pacotes-banner.jpg";
+import { useLandingConfig } from "@/hooks/useLandingConfig";
+import pacotesBannerDefault from "@/assets/landing/pacotes-banner.jpg";
 
 interface Pacote {
   id: string;
@@ -67,6 +68,8 @@ export const PacotesSection = () => {
   const navigate = useNavigate();
   const { pacotes, loading } = usePacotesPublic();
   const { ref, y } = useParallax({ speed: 0.15 });
+  const { config } = useLandingConfig("pacotes");
+  const pacotesBanner = config?.banner_url || pacotesBannerDefault;
 
   if (!loading && pacotes.length === 0) return null;
 

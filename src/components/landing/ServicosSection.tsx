@@ -6,7 +6,8 @@ import { useServicos } from "@/hooks/useServicos";
 import { useParallax } from "@/hooks/useParallax";
 import { CollapsibleSection } from "./CollapsibleSection";
 import { Button } from "@/components/ui/button";
-import servicosBanner from "@/assets/landing/servicos-banner.jpg";
+import { useLandingConfig } from "@/hooks/useLandingConfig";
+import servicosBannerDefault from "@/assets/landing/servicos-banner.jpg";
 
 const containerVariants = {
   hidden: {},
@@ -29,7 +30,7 @@ const categoryConfig: Record<string, { label: string; icon: typeof Leaf; color: 
   geral: { label: "Geral", icon: Leaf, color: "text-primary", description: "Serviços variados para o seu bem-estar." },
 };
 
-const highlights = [
+const defaultHighlights = [
   { icon: CheckCircle2, text: "Profissionais certificados e especializados" },
   { icon: CheckCircle2, text: "Cashback em todas as sessões" },
   { icon: CheckCircle2, text: "Ambiente sensorial exclusivo" },
@@ -40,6 +41,13 @@ export const ServicosSection = () => {
   const { servicos, loading } = useServicos();
   const { ref, y } = useParallax({ speed: 0.15 });
   const [expanded, setExpanded] = useState<Set<string>>(new Set());
+  const { config } = useLandingConfig("servicos");
+
+  const servicosBanner = config?.banner_url || servicosBannerDefault;
+  const badgeClientes = config?.badge_clientes || "+500 clientes atendidos";
+  const highlights = config?.highlights?.length > 0
+    ? config.highlights.map((h: any) => ({ icon: CheckCircle2, text: h.text }))
+    : defaultHighlights;
 
   const categories = useMemo(() => {
     if (!servicos.length) return [];
@@ -102,7 +110,7 @@ export const ServicosSection = () => {
               <div className="flex flex-wrap items-center gap-4">
                 <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-card/80 backdrop-blur-sm border border-border/50">
                   <Users size={14} className="text-primary" />
-                  <span className="text-xs font-semibold text-foreground">+500 clientes atendidos</span>
+                  <span className="text-xs font-semibold text-foreground">{badgeClientes}</span>
                 </div>
                 <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-card/80 backdrop-blur-sm border border-border/50">
                   <Sparkles size={14} className="text-accent" />
