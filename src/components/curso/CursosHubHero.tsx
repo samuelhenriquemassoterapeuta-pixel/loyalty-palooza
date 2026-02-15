@@ -5,12 +5,10 @@ import {
   Clock,
   PlayCircle,
   Layers,
-  Trophy,
   ChevronDown,
   BookOpen,
   Award,
 } from "lucide-react";
-import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import capaCursosHub from "@/assets/cursos/capa-cursos-hub.jpg";
 
@@ -29,13 +27,11 @@ interface CursosHubHeroProps {
 export function CursosHubHero({ courses }: CursosHubHeroProps) {
   const [expanded, setExpanded] = useState(false);
 
-  // Aggregate stats
   const totalCursos = courses.length;
   const totalAulas = courses.reduce((a, c) => a + c.totalAulas, 0);
   const totalMinutos = courses.reduce((a, c) => a + c.totalMinutos, 0);
   const totalHoras = Math.floor(totalMinutos / 60);
 
-  // Aggregate progress from localStorage
   const completedTotal = courses.reduce((acc, course) => {
     try {
       const saved = localStorage.getItem(course.storageKey);
@@ -49,43 +45,68 @@ export function CursosHubHero({ courses }: CursosHubHeroProps) {
   const started = completedTotal > 0;
 
   return (
-    <div className="relative">
-      {/* Banner */}
-      <div className="relative w-full h-48 overflow-hidden">
+    <div className="relative w-full">
+      {/* Fullwidth banner with overlay content */}
+      <div className="relative w-full min-h-[220px] overflow-hidden">
         <img
           src={capaCursosHub}
           alt="Academia Resinkra"
-          className="w-full h-full object-cover object-center"
+          className="absolute inset-0 w-full h-full object-cover object-center scale-105"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
-      </div>
+        {/* Dark gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/55 to-background" />
 
-      {/* Collapsible content area */}
-      <div className="max-w-lg mx-auto px-4 -mt-12 relative z-10">
-        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
-          {/* Title trigger */}
-          <Card
-            className="p-4 bg-card/95 backdrop-blur-md border-border/50 cursor-pointer"
-            onClick={() => setExpanded((v) => !v)}
+        {/* Content over image */}
+        <div className="relative z-10 max-w-lg mx-auto px-5 pt-8 pb-5">
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
           >
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center shrink-0 text-primary">
-                <GraduationCap size={22} />
+            {/* Title row - tap to expand */}
+            <button
+              onClick={() => setExpanded((v) => !v)}
+              className="w-full flex items-center gap-3 text-left"
+            >
+              <div className="w-11 h-11 rounded-2xl bg-white/15 backdrop-blur-sm flex items-center justify-center shrink-0 border border-white/20">
+                <GraduationCap size={22} className="text-white" />
               </div>
               <div className="flex-1 min-w-0">
-                <h1 className="text-lg font-bold text-foreground">Academia Resinkra</h1>
-                <p className="text-xs text-muted-foreground">
+                <h1 className="text-xl font-bold text-white tracking-tight">
+                  Academia Resinkra
+                </h1>
+                <p className="text-[11px] text-white/70 mt-0.5">
                   Formação completa em bem-estar e massoterapia
                 </p>
               </div>
               <motion.div
                 animate={{ rotate: expanded ? 180 : 0 }}
                 transition={{ duration: 0.2 }}
+                className="p-1.5 rounded-full bg-white/10"
               >
-                <ChevronDown size={18} className="text-muted-foreground" />
+                <ChevronDown size={16} className="text-white/80" />
               </motion.div>
+            </button>
+
+            {/* Inline stat pills - always visible */}
+            <div className="flex items-center gap-2 mt-3 flex-wrap">
+              <span className="inline-flex items-center gap-1 text-[10px] font-semibold bg-white/15 backdrop-blur-sm text-white px-2.5 py-1 rounded-full border border-white/10">
+                <BookOpen size={11} /> {totalCursos} Cursos
+              </span>
+              <span className="inline-flex items-center gap-1 text-[10px] font-semibold bg-white/15 backdrop-blur-sm text-white px-2.5 py-1 rounded-full border border-white/10">
+                <PlayCircle size={11} /> {totalAulas} Aulas
+              </span>
+              <span className="inline-flex items-center gap-1 text-[10px] font-semibold bg-white/15 backdrop-blur-sm text-white px-2.5 py-1 rounded-full border border-white/10">
+                <Clock size={11} /> {totalHoras}h+
+              </span>
+              {started && (
+                <span className="inline-flex items-center gap-1 text-[10px] font-bold bg-primary/80 text-primary-foreground px-2.5 py-1 rounded-full">
+                  {overallPct}%{overallPct === 100 && " 🏆"}
+                </span>
+              )}
             </div>
 
+            {/* Expandable details */}
             <AnimatePresence>
               {expanded && (
                 <motion.div
@@ -95,59 +116,54 @@ export function CursosHubHero({ courses }: CursosHubHeroProps) {
                   transition={{ duration: 0.25 }}
                   className="overflow-hidden"
                 >
-                  {/* Badges */}
-                  <div className="flex flex-wrap gap-2 mt-3 mb-4">
-                    <span className="inline-flex items-center gap-1 text-[11px] font-medium bg-primary/10 text-primary px-2 py-1 rounded-full">
-                      <BookOpen size={12} /> {totalCursos} Cursos
-                    </span>
-                    <span className="inline-flex items-center gap-1 text-[11px] font-medium bg-accent/50 text-accent-foreground px-2 py-1 rounded-full">
-                      <PlayCircle size={12} /> {totalAulas} Aulas
-                    </span>
-                    <span className="inline-flex items-center gap-1 text-[11px] font-medium bg-muted text-muted-foreground px-2 py-1 rounded-full">
-                      <Award size={12} /> Certificados
-                    </span>
-                  </div>
-
-                  {/* Metrics */}
-                  <div className="grid grid-cols-3 gap-2 mb-3">
-                    <div className="text-center p-2 rounded-lg bg-muted/50">
-                      <Clock size={16} className="mx-auto mb-0.5 text-primary" />
-                      <p className="text-sm font-bold text-foreground">{totalHoras}h+</p>
-                      <p className="text-[10px] text-muted-foreground">Conteúdo</p>
-                    </div>
-                    <div className="text-center p-2 rounded-lg bg-muted/50">
-                      <PlayCircle size={16} className="mx-auto mb-0.5 text-primary" />
-                      <p className="text-sm font-bold text-foreground">{totalAulas}</p>
-                      <p className="text-[10px] text-muted-foreground">Aulas</p>
-                    </div>
-                    <div className="text-center p-2 rounded-lg bg-muted/50">
-                      <Layers size={16} className="mx-auto mb-0.5 text-primary" />
-                      <p className="text-sm font-bold text-foreground">{totalCursos}</p>
-                      <p className="text-[10px] text-muted-foreground">Cursos</p>
-                    </div>
-                  </div>
-
-                  {/* Progress */}
-                  {started && (
-                    <div className="p-3 rounded-lg border border-primary/20 bg-primary/5">
-                      <div className="flex items-center justify-between mb-1.5">
-                        <span className="text-xs font-medium">Progresso Geral</span>
-                        <span className="text-xs font-bold text-primary">
-                          {overallPct}%
-                          {overallPct === 100 && " 🏆"}
-                        </span>
+                  <div className="mt-4 space-y-3">
+                    {/* Metrics grid */}
+                    <div className="grid grid-cols-3 gap-2">
+                      <div className="text-center p-2.5 rounded-xl bg-white/10 backdrop-blur-sm border border-white/10">
+                        <Clock size={16} className="mx-auto mb-1 text-white/90" />
+                        <p className="text-sm font-bold text-white">{totalHoras}h+</p>
+                        <p className="text-[10px] text-white/60">Conteúdo</p>
                       </div>
-                      <Progress value={overallPct} className="h-2" />
-                      <p className="text-[10px] text-muted-foreground mt-1">
-                        {completedTotal} de {totalAulas} aulas concluídas
-                      </p>
+                      <div className="text-center p-2.5 rounded-xl bg-white/10 backdrop-blur-sm border border-white/10">
+                        <PlayCircle size={16} className="mx-auto mb-1 text-white/90" />
+                        <p className="text-sm font-bold text-white">{totalAulas}</p>
+                        <p className="text-[10px] text-white/60">Aulas</p>
+                      </div>
+                      <div className="text-center p-2.5 rounded-xl bg-white/10 backdrop-blur-sm border border-white/10">
+                        <Layers size={16} className="mx-auto mb-1 text-white/90" />
+                        <p className="text-sm font-bold text-white">{totalCursos}</p>
+                        <p className="text-[10px] text-white/60">Cursos</p>
+                      </div>
                     </div>
-                  )}
+
+                    {/* Badges */}
+                    <div className="flex items-center gap-2">
+                      <span className="inline-flex items-center gap-1 text-[10px] font-medium bg-white/10 text-white/80 px-2 py-1 rounded-full">
+                        <Award size={11} /> Certificados inclusos
+                      </span>
+                    </div>
+
+                    {/* Progress bar */}
+                    {started && (
+                      <div className="p-3 rounded-xl bg-white/10 backdrop-blur-sm border border-white/10">
+                        <div className="flex items-center justify-between mb-1.5">
+                          <span className="text-[11px] font-medium text-white/80">Progresso Geral</span>
+                          <span className="text-[11px] font-bold text-white">
+                            {overallPct}%{overallPct === 100 && " 🏆"}
+                          </span>
+                        </div>
+                        <Progress value={overallPct} className="h-1.5" />
+                        <p className="text-[10px] text-white/50 mt-1">
+                          {completedTotal} de {totalAulas} aulas concluídas
+                        </p>
+                      </div>
+                    )}
+                  </div>
                 </motion.div>
               )}
             </AnimatePresence>
-          </Card>
-        </motion.div>
+          </motion.div>
+        </div>
       </div>
     </div>
   );
