@@ -5,12 +5,12 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { lazy, Suspense } from "react";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 
-const CursoVendas = lazy(() => import("@/pages/CursoVendas"));
-const CursoAromaterapia = lazy(() => import("@/pages/CursoAromaterapia"));
-const CursoHeadSpa = lazy(() => import("@/pages/CursoHeadSpa"));
-const CursoAnatomia = lazy(() => import("@/pages/CursoAnatomia"));
-const CursoYugenFaceSpa = lazy(() => import("@/pages/CursoYugenFaceSpa"));
-const CursoMetodoResinkra = lazy(() => import("@/pages/CursoMetodoResinkra"));
+const CursoVendasHero = lazy(() => import("@/pages/CursoVendasHero"));
+const CursoAromaterapiaHero = lazy(() => import("@/pages/CursoAromaterapiaHero"));
+const CursoHeadSpaHero = lazy(() => import("@/pages/CursoHeadSpaHero"));
+const CursoAnatomiaHero = lazy(() => import("@/pages/CursoAnatomiaHero"));
+const CursoYugenFaceSpaHero = lazy(() => import("@/pages/CursoYugenFaceSpaHero"));
+const CursoMetodoResinkraHero = lazy(() => import("@/pages/CursoMetodoResinkraHero"));
 
 export default function Cursos() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -55,12 +55,12 @@ export default function Cursos() {
         </div>
 
         <Suspense fallback={<div className="flex justify-center py-12"><LoadingSpinner /></div>}>
-          {tab === "metodo" && <CursoMetodoResinkra embedded />}
-          {tab === "vendas" && <CursoVendas embedded />}
-          {tab === "aromaterapia" && <CursoAromaterapia embedded />}
-          {tab === "headspa" && <CursoHeadSpa embedded />}
-          {tab === "anatomia" && <CursoAnatomia embedded />}
-          {tab === "facespa" && <CursoYugenFaceSpa embedded />}
+          {tab === "metodo" && <CursoMetodoResinkraHero embedded />}
+          {tab === "vendas" && <CursoVendasHero embedded />}
+          {tab === "aromaterapia" && <CursoAromaterapiaHero embedded />}
+          {tab === "headspa" && <CursoHeadSpaHero embedded />}
+          {tab === "anatomia" && <CursoAnatomiaHero embedded />}
+          {tab === "facespa" && <CursoYugenFaceSpaHero embedded />}
         </Suspense>
       </div>
     </AppLayout>

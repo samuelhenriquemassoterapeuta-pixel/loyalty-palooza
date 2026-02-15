@@ -4,7 +4,7 @@ import videoAromaterapia from "@/assets/cursos/video-aromaterapia.mp4";
 import { CursoHeroPage } from "@/components/curso/CursoHeroPage";
 import { cursoAromaterapiaData } from "@/data/cursoAromaterapiaContent";
 
-export default function CursoAromaterapiaHero() {
+export default function CursoAromaterapiaHero({ embedded }: { embedded?: boolean }) {
   return (
     <CursoHeroPage
       storageKey="resinkra_curso_aromaterapia_progress"
@@ -17,6 +17,7 @@ export default function CursoAromaterapiaHero() {
       courseRoute="/curso-aromaterapia"
       level="Iniciante"
       description="Aprenda a utilizar óleos essenciais CPTG doTERRA em protocolos terapêuticos. Desde os fundamentos até a integração clínica profissional."
+      embedded={embedded}
     />
   );
 }

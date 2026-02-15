@@ -4,7 +4,7 @@ import videoVendas from "@/assets/cursos/video-vendas.mp4";
 import { CursoHeroPage } from "@/components/curso/CursoHeroPage";
 import { cursoVendasData } from "@/data/cursoVendasContent";
 
-export default function CursoVendasHero() {
+export default function CursoVendasHero({ embedded }: { embedded?: boolean }) {
   return (
     <CursoHeroPage
       storageKey="resinkra_curso_vendas_progress"
@@ -17,6 +17,7 @@ export default function CursoVendasHero() {
       courseRoute="/curso-vendas"
       level="Intermediário"
       description="Domine as técnicas de vendas consultivas para massoterapia. Aprenda a precificar pacotes, contornar objeções e fidelizar clientes com estratégias comprovadas."
+      embedded={embedded}
     />
   );
 }
