@@ -4,6 +4,7 @@ import { cursoAromaterapiaData } from "@/data/cursoAromaterapiaContent";
 import { cursoHeadSpaData } from "@/data/cursoHeadSpaContent";
 import { cursoAnatomiaData } from "@/data/cursoAnatomiaContent";
 import { cursoYugenFaceSpaData } from "@/data/cursoYugenFaceSpaContent";
+import { cursoPerfumariaNaturalData } from "@/data/cursoPerfumariaNaturalContent";
 
 function computeStats(title: string, storageKey: string, modulos: { aulas: { duracaoMinutos: number }[] }[]) {
   const totalAulas = modulos.reduce((a, m) => a + m.aulas.length, 0);
@@ -19,4 +20,5 @@ export const allCourseStats = [
   computeStats("Head SPA", "resinkra_curso_headspa_progress", cursoHeadSpaData),
   computeStats("Anatomia", "resinkra_curso_anatomia_progress", cursoAnatomiaData),
   computeStats("Yūgen FaceSPA", "resinkra_curso_yugen_facespa_progress", cursoYugenFaceSpaData),
+  computeStats("Perfumaria Natural", "resinkra_curso_perfumaria_natural_progress", cursoPerfumariaNaturalData),
 ];
