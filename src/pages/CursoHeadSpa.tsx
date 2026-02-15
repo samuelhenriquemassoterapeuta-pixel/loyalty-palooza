@@ -27,6 +27,7 @@ import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { AppLayout } from "@/components/AppLayout";
 import { cursoHeadSpaData, type HeadSpaModulo, type HeadSpaAula } from "@/data/cursoHeadSpaContent";
+import { headSpaAulaAssets } from "@/data/cursoHeadSpaAssets";
 import { NarracaoPlayer } from "@/components/curso/NarracaoPlayer";
 
 const iconMap: Record<string, React.ElementType> = {
@@ -150,11 +151,12 @@ function ChecklistSection({ items }: { items: string[] }) {
 
 // Lesson view
 function AulaView({
-  modulo, aulaIndex, onBack, isComplete, onToggle,
+  modulo, aulaIndex, moduloIndex, onBack, isComplete, onToggle,
 }: {
-  modulo: HeadSpaModulo; aulaIndex: number; onBack: () => void; isComplete: boolean; onToggle: () => void;
+  modulo: HeadSpaModulo; aulaIndex: number; moduloIndex: number; onBack: () => void; isComplete: boolean; onToggle: () => void;
 }) {
   const aula = modulo.aulas[aulaIndex];
+  const assets = headSpaAulaAssets[`${moduloIndex}-${aulaIndex}`];
   const renderContent = (text: string) => {
     return text.split("\n").map((line, i) => {
       if (line.startsWith("## ")) return <h2 key={i} className="text-lg font-bold mt-5 mb-2">{line.slice(3)}</h2>;
@@ -194,18 +196,30 @@ function AulaView({
         <span className="text-xs text-muted-foreground shrink-0">{aula.duracaoMinutos} min</span>
       </div>
 
-      <div className="mb-4">
-        <NarracaoPlayer texto={aula.conteudo} titulo={aula.titulo} />
-      </div>
-
-      {aula.videoUrl && (
+      {/* Lesson hero image + ambient video */}
+      {assets && (
         <Card className="mb-4 overflow-hidden">
-          <div className="aspect-video bg-muted flex items-center justify-center">
-            <Play size={48} className="text-muted-foreground" />
-            <span className="ml-2 text-sm text-muted-foreground">Vídeo em breve</span>
+          <div className="relative aspect-video">
+            <img src={assets.image} alt={aula.titulo} className="w-full h-full object-cover" />
+            <video
+              src={assets.video}
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="absolute inset-0 w-full h-full object-cover opacity-25 mix-blend-luminosity"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent" />
+            <div className="absolute bottom-3 left-3 right-3">
+              <p className="text-xs font-medium text-foreground/90 drop-shadow-sm">{aula.descricao}</p>
+            </div>
           </div>
         </Card>
       )}
+
+      <div className="mb-4">
+        <NarracaoPlayer texto={aula.conteudo} titulo={aula.titulo} />
+      </div>
 
       <Card className="p-4 mb-4">{renderContent(aula.conteudo)}</Card>
 
@@ -271,6 +285,7 @@ export default function CursoHeadSpa({ embedded = false }: { embedded?: boolean 
             <AulaView
               modulo={modulo}
               aulaIndex={selectedAula}
+              moduloIndex={selectedModulo}
               onBack={() => setSelectedAula(null)}
               isComplete={isComplete(selectedModulo, selectedAula)}
               onToggle={() => toggleLocal(selectedModulo, selectedAula)}

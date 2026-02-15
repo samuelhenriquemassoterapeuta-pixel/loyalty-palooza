@@ -4,6 +4,8 @@ export interface HeadSpaAula {
   duracaoMinutos: number;
   conteudo: string;
   videoUrl?: string;
+  imagemUrl?: string;
+  videoAmbientUrl?: string;
   quiz?: {
     pergunta: string;
     opcoes: string[];
