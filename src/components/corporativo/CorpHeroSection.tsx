@@ -20,7 +20,7 @@ const trustBadges = [
 ];
 
 const StatsCollapsible = () => {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   return (
     <motion.div
       initial={{ opacity: 0, y: 30 }}
@@ -96,7 +96,7 @@ const StatsCollapsible = () => {
 };
 
 export const CorpHeroSection = () => {
-  const [heroOpen, setHeroOpen] = useState(true);
+  const [heroOpen, setHeroOpen] = useState(false);
 
   const scrollToPlanos = () => {
     document.querySelector("#planos-corporativos")?.scrollIntoView({ behavior: "smooth" });
