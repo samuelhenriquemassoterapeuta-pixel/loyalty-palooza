@@ -1,14 +1,13 @@
-import { useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { GraduationCap, Flower2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { useSearchParams } from "react-router-dom";
+import { GraduationCap, Flower2, Sparkles } from "lucide-react";
 import { AppLayout } from "@/components/AppLayout";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { lazy, Suspense } from "react";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 
 const CursoVendas = lazy(() => import("@/pages/CursoVendas"));
 const CursoAromaterapia = lazy(() => import("@/pages/CursoAromaterapia"));
+const CursoHeadSpa = lazy(() => import("@/pages/CursoHeadSpa"));
 
 export default function Cursos() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -23,33 +22,29 @@ export default function Cursos() {
       <div className="min-h-screen bg-background pb-32 lg:pb-8">
         <div className="max-w-lg mx-auto px-4 pt-6">
           <Tabs value={tab} onValueChange={handleTabChange}>
-            <TabsList className="w-full grid grid-cols-2 mb-4">
-              <TabsTrigger value="vendas" className="gap-2">
-                <GraduationCap size={16} />
+            <TabsList className="w-full grid grid-cols-3 mb-4">
+              <TabsTrigger value="vendas" className="gap-1.5 text-xs">
+                <GraduationCap size={14} />
                 Vendas
               </TabsTrigger>
-              <TabsTrigger value="aromaterapia" className="gap-2">
-                <Flower2 size={16} />
+              <TabsTrigger value="aromaterapia" className="gap-1.5 text-xs">
+                <Flower2 size={14} />
                 Aromaterapia
+              </TabsTrigger>
+              <TabsTrigger value="headspa" className="gap-1.5 text-xs">
+                <Sparkles size={14} />
+                Head SPA
               </TabsTrigger>
             </TabsList>
           </Tabs>
         </div>
 
         <Suspense fallback={<div className="flex justify-center py-12"><LoadingSpinner /></div>}>
-          {tab === "vendas" ? <CursoVendasContent /> : <CursoAromaterapiaContent />}
+          {tab === "vendas" && <CursoVendas embedded />}
+          {tab === "aromaterapia" && <CursoAromaterapia embedded />}
+          {tab === "headspa" && <CursoHeadSpa embedded />}
         </Suspense>
       </div>
     </AppLayout>
   );
-}
-
-// Inline wrappers that render course content without their own AppLayout
-// We need to modify the child pages to support embedded mode
-function CursoVendasContent() {
-  return <CursoVendas embedded />;
-}
-
-function CursoAromaterapiaContent() {
-  return <CursoAromaterapia embedded />;
 }
