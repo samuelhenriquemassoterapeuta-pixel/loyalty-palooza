@@ -12,6 +12,21 @@ Deno.serve(async (req) => {
   }
 
   try {
+    // Validate webhook access token
+    const webhookToken = Deno.env.get("ASAAS_WEBHOOK_TOKEN");
+    if (webhookToken) {
+      const providedToken = req.headers.get("asaas-access-token");
+      if (providedToken !== webhookToken) {
+        console.error("Webhook auth failed: invalid or missing access token");
+        return new Response(JSON.stringify({ error: "Unauthorized" }), {
+          status: 401,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+    } else {
+      console.warn("ASAAS_WEBHOOK_TOKEN not configured — webhook authentication disabled");
+    }
+
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
