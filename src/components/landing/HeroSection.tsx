@@ -125,27 +125,4 @@ export const HeroSection = () => {
   );
 };
 
-export const HeroAuthButtons = () => {
-  const navigate = useNavigate();
-  return (
-    <section className="relative z-20 px-5 sm:px-6 pb-10">
-      <div className="max-w-md mx-auto flex flex-col gap-3">
-        <Button
-          size="xl"
-          variant="outline"
-          onClick={() => navigate("/auth")}
-          className="w-full border-2 border-foreground/70 bg-transparent text-foreground hover:bg-foreground/10 hover:text-foreground rounded-2xl text-lg shadow-lg backdrop-blur-sm"
-        >
-          Entrar
-        </Button>
-        <Button
-          size="xl"
-          onClick={() => navigate("/auth?tab=register")}
-          className="w-full rounded-2xl text-lg shadow-lg"
-        >
-          Criar conta
-        </Button>
-      </div>
-    </section>
-  );
-};
+export const HeroAuthButtons = () => null;
