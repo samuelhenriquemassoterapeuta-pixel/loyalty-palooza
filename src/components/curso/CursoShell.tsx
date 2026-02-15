@@ -4,8 +4,6 @@ import { motion } from "framer-motion";
 import {
   ArrowLeft,
   BookOpen,
-  CheckCircle2,
-  Circle,
   ChevronRight,
   Trophy,
   Lightbulb,
@@ -15,19 +13,16 @@ import {
   MessageCircle,
   BarChart3,
   GraduationCap,
-  HelpCircle,
-  ClipboardCheck,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { AppLayout } from "@/components/AppLayout";
-import { NarracaoPlayer } from "@/components/curso/NarracaoPlayer";
-import { AulaHeroCard } from "@/components/curso/AulaHeroCard";
-import { QuizSection, type QuizQuestion } from "@/components/curso/QuizSection";
-import { ChecklistSection } from "@/components/curso/ChecklistSection";
-import { renderCursoContent } from "@/components/curso/CursoContentRenderer";
+import { LazyVideo } from "@/components/curso/LazyVideo";
+import { CursoModuleView } from "@/components/curso/CursoModuleView";
+import { CursoLessonView } from "@/components/curso/CursoLessonView";
 import { useCursoProgress } from "@/hooks/useCursoProgress";
+import type { QuizQuestion } from "@/components/curso/QuizSection";
 
 const iconMap: Record<string, React.ElementType> = {
   Lightbulb,
@@ -78,8 +73,8 @@ interface CursoShellProps {
 /**
  * Unified course shell that handles 3-level navigation:
  * 1. Main view (module list with progress)
- * 2. Module view (lesson list)
- * 3. Lesson view (content, narration, quiz, checklist)
+ * 2. Module view (lesson list) — CursoModuleView
+ * 3. Lesson view (content, narration, quiz, checklist) — CursoLessonView
  */
 export function CursoShell({
   embedded = false,
@@ -110,101 +105,22 @@ export function CursoShell({
   // ─── Lesson View ───
   if (selectedModulo !== null && selectedAula !== null) {
     const modulo = modulos[selectedModulo];
-    const aula = modulo.aulas[selectedAula];
     const assetPair = assets[`${selectedModulo}-${selectedAula}`];
 
     return (
       <Wrapper>
         <div className={`min-h-screen bg-background ${embedded ? "" : "pb-32 lg:pb-8"}`}>
-          <div className="max-w-lg mx-auto px-4 py-6">
-            <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}>
-              {/* Header */}
-              <div className="flex items-center gap-3 mb-4">
-                <Button variant="ghost" size="icon" onClick={() => setSelectedAula(null)}>
-                  <ArrowLeft size={20} />
-                </Button>
-                <div className="flex-1 min-w-0">
-                  <p className="text-xs text-muted-foreground">{modulo.titulo}</p>
-                  <h2 className="text-base font-bold truncate">{aula.titulo}</h2>
-                </div>
-                <span className="text-xs text-muted-foreground shrink-0">
-                  {aula.duracaoMinutos} min
-                </span>
-              </div>
-
-              {/* Hero Card */}
-              {assetPair && (
-                <AulaHeroCard
-                  image={assetPair.image}
-                  video={assetPair.video}
-                  title={aula.titulo}
-                  description={aula.descricao}
-                />
-              )}
-
-              {/* Narration */}
-              <div className="mb-4">
-                <NarracaoPlayer texto={aula.conteudo} titulo={aula.titulo} />
-              </div>
-
-              {/* Content */}
-              <Card className="p-4 mb-4">{renderCursoContent(aula.conteudo)}</Card>
-
-              {/* Checklist */}
-              {aula.checklist && (
-                <div className="mb-4">
-                  <ChecklistSection items={aula.checklist} />
-                </div>
-              )}
-
-              {/* Quiz */}
-              {aula.quiz && (
-                <div className="mb-4">
-                  <QuizSection quiz={aula.quiz} />
-                </div>
-              )}
-
-              {/* Complete button */}
-              <Button
-                onClick={() => toggle(selectedModulo, selectedAula)}
-                variant={isComplete(selectedModulo, selectedAula) ? "default" : "outline"}
-                className="w-full gap-2"
-              >
-                {isComplete(selectedModulo, selectedAula) ? (
-                  <CheckCircle2 size={18} />
-                ) : (
-                  <Circle size={18} />
-                )}
-                {isComplete(selectedModulo, selectedAula)
-                  ? "Aula concluída ✓"
-                  : "Marcar como concluída"}
-              </Button>
-            </motion.div>
-
-            {/* Prev/Next navigation */}
-            <div className="flex gap-2 mt-4">
-              {selectedAula > 0 && (
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setSelectedAula(selectedAula - 1)}
-                  className="flex-1"
-                >
-                  ← Anterior
-                </Button>
-              )}
-              {selectedAula < modulo.aulas.length - 1 && (
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setSelectedAula(selectedAula + 1)}
-                  className="flex-1"
-                >
-                  Próxima →
-                </Button>
-              )}
-            </div>
-          </div>
+          <CursoLessonView
+            modulo={modulo}
+            moduloIndex={selectedModulo}
+            aulaIndex={selectedAula}
+            assetPair={assetPair}
+            isComplete={isComplete}
+            toggle={toggle}
+            storageKey={storageKey}
+            onBack={() => setSelectedAula(null)}
+            onNavigate={setSelectedAula}
+          />
         </div>
       </Wrapper>
     );
@@ -212,75 +128,17 @@ export function CursoShell({
 
   // ─── Module View (lesson list) ───
   if (selectedModulo !== null) {
-    const modulo = modulos[selectedModulo];
-    const Icon = iconMap[modulo.icone] || BookOpen;
-    const done = moduloAulasCompleted(selectedModulo, modulo.aulas.length);
-
     return (
       <Wrapper>
         <div className={`min-h-screen bg-background ${embedded ? "" : "pb-32 lg:pb-8"}`}>
-          <div className="relative overflow-hidden bg-gradient-to-br from-primary/10 via-accent/5 to-highlight/10 border-b border-border px-4 py-6 safe-top">
-            <div className="max-w-lg mx-auto">
-              <div className="flex items-center gap-3 mb-3">
-                <Button variant="ghost" size="icon" onClick={() => setSelectedModulo(null)}>
-                  <ArrowLeft size={20} />
-                </Button>
-                <Icon size={24} className="text-primary" />
-                <div className="flex-1">
-                  <h1 className="text-lg font-bold">{modulo.titulo}</h1>
-                  <p className="text-xs text-muted-foreground">
-                    {modulo.aulas.length} aulas · {done}/{modulo.aulas.length} concluídas
-                  </p>
-                </div>
-              </div>
-              <Progress
-                value={(done / modulo.aulas.length) * 100}
-                className="h-2"
-              />
-            </div>
-          </div>
-          <div className="max-w-lg mx-auto px-4 py-4 space-y-3">
-            {modulo.aulas.map((aula, ai) => {
-              const aulaComplete = isComplete(selectedModulo, ai);
-              return (
-                <motion.div
-                  key={ai}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: ai * 0.05 }}
-                >
-                  <Card
-                    className={`p-4 cursor-pointer transition-all hover:shadow-md ${
-                      aulaComplete ? "border-primary/30 bg-primary/5" : ""
-                    }`}
-                    onClick={() => setSelectedAula(ai)}
-                  >
-                    <div className="flex items-center gap-3">
-                      {aulaComplete ? (
-                        <CheckCircle2 size={20} className="text-primary shrink-0" />
-                      ) : (
-                        <Circle size={20} className="text-muted-foreground shrink-0" />
-                      )}
-                      <div className="flex-1 min-w-0">
-                        <h3 className="text-sm font-semibold">{aula.titulo}</h3>
-                        <p className="text-xs text-muted-foreground truncate">{aula.descricao}</p>
-                      </div>
-                      <div className="flex items-center gap-1 shrink-0">
-                        {aula.quiz && <HelpCircle size={12} className="text-primary" />}
-                        {aula.checklist && (
-                          <ClipboardCheck size={12} className="text-accent-foreground" />
-                        )}
-                      </div>
-                      <span className="text-xs text-muted-foreground shrink-0">
-                        {aula.duracaoMinutos}min
-                      </span>
-                      <ChevronRight size={16} className="text-muted-foreground shrink-0" />
-                    </div>
-                  </Card>
-                </motion.div>
-              );
-            })}
-          </div>
+          <CursoModuleView
+            modulo={modulos[selectedModulo]}
+            moduloIndex={selectedModulo}
+            isComplete={isComplete}
+            moduloAulasCompleted={moduloAulasCompleted}
+            onBack={() => setSelectedModulo(null)}
+            onSelectAula={setSelectedAula}
+          />
         </div>
       </Wrapper>
     );
@@ -294,13 +152,9 @@ export function CursoShell({
         <div className="relative w-full h-48 overflow-hidden">
           <img src={coverImage} alt={courseTitle} className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
-          <video
+          <LazyVideo
             src={coverVideo}
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="absolute inset-0 w-full h-full object-cover opacity-30 mix-blend-luminosity"
+            className="absolute inset-0 w-full h-full opacity-30 mix-blend-luminosity"
           />
         </div>
 

@@ -1,19 +1,35 @@
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { CheckCircle2, Circle, ClipboardCheck } from "lucide-react";
 import { Card } from "@/components/ui/card";
 
 interface ChecklistSectionProps {
   items: string[];
+  persistKey?: string;
 }
 
-export function ChecklistSection({ items }: ChecklistSectionProps) {
-  const [checked, setChecked] = useState<Set<number>>(new Set());
-  const toggle = (i: number) =>
+export function ChecklistSection({ items, persistKey }: ChecklistSectionProps) {
+  const [checked, setChecked] = useState<Set<number>>(() => {
+    if (!persistKey) return new Set();
+    try {
+      const saved = localStorage.getItem(persistKey);
+      return saved ? new Set(JSON.parse(saved)) : new Set();
+    } catch {
+      return new Set();
+    }
+  });
+
+  useEffect(() => {
+    if (persistKey) {
+      localStorage.setItem(persistKey, JSON.stringify([...checked]));
+    }
+  }, [checked, persistKey]);
+
+  const toggle = useCallback((i: number) =>
     setChecked((prev) => {
       const next = new Set(prev);
       next.has(i) ? next.delete(i) : next.add(i);
       return next;
-    });
+    }), []);
 
   return (
     <Card className="p-4 border-accent/20">

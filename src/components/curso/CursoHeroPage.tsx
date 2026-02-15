@@ -24,6 +24,7 @@ import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { AppLayout } from "@/components/AppLayout";
 import { AppCollapsibleSection } from "@/components/AppCollapsibleSection";
+import { LazyVideo } from "@/components/curso/LazyVideo";
 import {
   Accordion,
   AccordionContent,
@@ -89,18 +90,15 @@ export function CursoHeroPage({
     0
   );
 
-  const { completedCount, pct, moduloAulasCompleted } = useCursoProgress(storageKey, totalAulas);
+  const { completedCount, pct, moduloAulasCompleted, isComplete } = useCursoProgress(storageKey, totalAulas);
   const started = completedCount > 0;
 
-  // Find next incomplete lesson
+  // Find next incomplete lesson using the hook instead of re-parsing localStorage
   let nextLesson: { modulo: number; aula: number; titulo: string } | null = null;
   if (started && pct < 100) {
     for (let mi = 0; mi < modulos.length && !nextLesson; mi++) {
       for (let ai = 0; ai < modulos[mi].aulas.length && !nextLesson; ai++) {
-        const key = `${mi}-${ai}`;
-        const saved = localStorage.getItem(storageKey);
-        const progress = saved ? new Set(JSON.parse(saved)) : new Set();
-        if (!progress.has(key)) {
+        if (!isComplete(mi, ai)) {
           nextLesson = { modulo: mi, aula: ai, titulo: modulos[mi].aulas[ai].titulo };
         }
       }
@@ -268,7 +266,7 @@ export function CursoHeroPage({
             transition={{ delay: 0.25 }}
           >
             <AppCollapsibleSection title="Grade Curricular" icon={BookOpen} badge={`${totalModulos} módulos`}>
-            <Accordion type="multiple" className="space-y-2">
+          <Accordion type="multiple" className="space-y-2">
               {modulos.map((modulo, mi) => {
                 const Icon = iconMap[modulo.icone] || BookOpen;
                 const done = moduloAulasCompleted(mi, modulo.aulas.length);
@@ -297,10 +295,7 @@ export function CursoHeroPage({
                     <AccordionContent className="px-4 pb-3">
                       <div className="space-y-2">
                         {modulo.aulas.map((aula, ai) => {
-                          const key = `${mi}-${ai}`;
-                          const saved = localStorage.getItem(storageKey);
-                          const progress = saved ? new Set(JSON.parse(saved)) : new Set();
-                          const aulaComplete = progress.has(key);
+                          const aulaComplete = isComplete(mi, ai);
 
                           return (
                             <div
