@@ -10,7 +10,7 @@ import { useLandingConfig } from "@/hooks/useLandingConfig";
 
 export const HeroSection = () => {
   const navigate = useNavigate();
-  const [heroOpen, setHeroOpen] = useState(true);
+  const [heroOpen, setHeroOpen] = useState(false);
   const { config } = useLandingConfig("hero");
 
   // Dynamic content with fallbacks
