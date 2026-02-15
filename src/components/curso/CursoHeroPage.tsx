@@ -23,6 +23,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { AppLayout } from "@/components/AppLayout";
+import { AppCollapsibleSection } from "@/components/AppCollapsibleSection";
 import {
   Accordion,
   AccordionContent,
@@ -266,7 +267,7 @@ export function CursoHeroPage({
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.25 }}
           >
-            <h2 className="text-base font-bold mb-3">Grade Curricular</h2>
+            <AppCollapsibleSection title="Grade Curricular" icon={BookOpen} badge={`${totalModulos} módulos`}>
             <Accordion type="multiple" className="space-y-2">
               {modulos.map((modulo, mi) => {
                 const Icon = iconMap[modulo.icone] || BookOpen;
@@ -334,6 +335,7 @@ export function CursoHeroPage({
                 );
               })}
             </Accordion>
+            </AppCollapsibleSection>
           </motion.div>
         </div>
       </div>
