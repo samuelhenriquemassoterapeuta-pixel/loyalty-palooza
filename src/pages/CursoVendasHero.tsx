@@ -1,0 +1,22 @@
+import { GraduationCap } from "lucide-react";
+import capaVendas from "@/assets/cursos/capa-vendas.jpg";
+import videoVendas from "@/assets/cursos/video-vendas.mp4";
+import { CursoHeroPage } from "@/components/curso/CursoHeroPage";
+import { cursoVendasData } from "@/data/cursoVendasContent";
+
+export default function CursoVendasHero() {
+  return (
+    <CursoHeroPage
+      storageKey="resinkra_curso_vendas_progress"
+      modulos={cursoVendasData}
+      courseTitle="Curso de Vendas"
+      courseSubtitle="Vendas consultivas em massoterapia"
+      courseIcon={<GraduationCap size={28} />}
+      coverImage={capaVendas}
+      coverVideo={videoVendas}
+      courseRoute="/curso-vendas"
+      level="Intermediário"
+      description="Domine as técnicas de vendas consultivas para massoterapia. Aprenda a precificar pacotes, contornar objeções e fidelizar clientes com estratégias comprovadas."
+    />
+  );
+}

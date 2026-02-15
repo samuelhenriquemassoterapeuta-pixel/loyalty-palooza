@@ -55,6 +55,11 @@ const Cursos = lazy(() => import("@/pages/Cursos"));
 const CursoHeadSpa = lazy(() => import("@/pages/CursoHeadSpa"));
 const CursoAnatomia = lazy(() => import("@/pages/CursoAnatomia"));
 const CursoYugenFaceSpa = lazy(() => import("@/pages/CursoYugenFaceSpa"));
+const CursoVendasHero = lazy(() => import("@/pages/CursoVendasHero"));
+const CursoAromaterapiaHero = lazy(() => import("@/pages/CursoAromaterapiaHero"));
+const CursoHeadSpaHero = lazy(() => import("@/pages/CursoHeadSpaHero"));
+const CursoAnatomiaHero = lazy(() => import("@/pages/CursoAnatomiaHero"));
+const CursoYugenFaceSpaHero = lazy(() => import("@/pages/CursoYugenFaceSpaHero"));
 const Offers = lazy(() => import("@/pages/Offers"));
 const NotFound = lazy(() => import("@/pages/NotFound"));
 
@@ -124,6 +129,11 @@ export const AnimatedRoutes = () => {
         <Route path="/curso-headspa" element={<ProtectedRoute><LazyPage><CursoHeadSpa /></LazyPage></ProtectedRoute>} />
         <Route path="/curso-anatomia" element={<ProtectedRoute><LazyPage><CursoAnatomia /></LazyPage></ProtectedRoute>} />
         <Route path="/curso-yugen-facespa" element={<ProtectedRoute><LazyPage><CursoYugenFaceSpa /></LazyPage></ProtectedRoute>} />
+        <Route path="/curso/vendas" element={<ProtectedRoute><LazyPage><CursoVendasHero /></LazyPage></ProtectedRoute>} />
+        <Route path="/curso/aromaterapia" element={<ProtectedRoute><LazyPage><CursoAromaterapiaHero /></LazyPage></ProtectedRoute>} />
+        <Route path="/curso/headspa" element={<ProtectedRoute><LazyPage><CursoHeadSpaHero /></LazyPage></ProtectedRoute>} />
+        <Route path="/curso/anatomia" element={<ProtectedRoute><LazyPage><CursoAnatomiaHero /></LazyPage></ProtectedRoute>} />
+        <Route path="/curso/facespa" element={<ProtectedRoute><LazyPage><CursoYugenFaceSpaHero /></LazyPage></ProtectedRoute>} />
         <Route path="/ofertas" element={<ProtectedRoute><LazyPage><Offers /></LazyPage></ProtectedRoute>} />
         <Route path="*" element={<LazyPage><NotFound /></LazyPage>} />
       </Routes>
