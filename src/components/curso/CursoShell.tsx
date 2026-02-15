@@ -101,6 +101,9 @@ export function CursoShell({
   const [selectedAula, setSelectedAula] = useState<number | null>(null);
 
   const totalAulas = modulos.reduce((acc, m) => acc + m.aulas.length, 0);
+  const totalMinutos = modulos.reduce((acc, m) => acc + m.aulas.reduce((a, aula) => a + aula.duracaoMinutos, 0), 0);
+  const totalHoras = Math.floor(totalMinutos / 60);
+  const minutosRestantes = totalMinutos % 60;
   const { isComplete, toggle, completedCount, pct, moduloAulasCompleted } =
     useCursoProgress(storageKey, totalAulas);
 
@@ -325,7 +328,7 @@ export function CursoShell({
               </div>
               <Progress value={pct} className="h-2.5 mb-2" />
               <p className="text-xs text-muted-foreground">
-                {completedCount} de {totalAulas} aulas concluídas
+                {completedCount} de {totalAulas} aulas concluídas · {totalHoras > 0 ? `${totalHoras}h` : ""}{minutosRestantes > 0 ? `${minutosRestantes}min` : ""} de conteúdo
                 {pct === 100 && " 🏆 Parabéns!"}
               </p>
             </Card>
