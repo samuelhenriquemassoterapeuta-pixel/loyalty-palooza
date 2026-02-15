@@ -17,7 +17,7 @@ export default function CursoAromaterapia({ embedded = false }: { embedded?: boo
       courseIcon={<Flower2 size={24} />}
       coverImage={capaAromaterapia}
       coverVideo={videoAromaterapia}
-      completionMessage="Parabéns! Você concluiu o curso de Aromaterapia doTERRA para Massoterapeutas."
+      completionMessage="Parabéns! Você concluiu o curso de Aromaterapia doTERRA para Massoterapeutas. 🏆 Certificado desbloqueado!"
     />
   );
 }

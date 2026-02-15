@@ -17,7 +17,7 @@ export default function CursoVendas({ embedded = false }: { embedded?: boolean }
       courseIcon={<GraduationCap size={24} />}
       coverImage={capaVendas}
       coverVideo={videoVendas}
-      completionMessage="Parabéns! Você concluiu todas as aulas do curso de Vendas Consultivas em Massoterapia."
+      completionMessage="Parabéns! Você concluiu o curso de Vendas Consultivas em Massoterapia. 🏆 Certificado desbloqueado!"
     />
   );
 }

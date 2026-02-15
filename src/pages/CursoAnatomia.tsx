@@ -17,7 +17,7 @@ export default function CursoAnatomia({ embedded = false }: { embedded?: boolean
       courseIcon={<Bone size={24} />}
       coverImage={capaAnatomia}
       coverVideo={videoAnatomia}
-      completionMessage="Parabéns! Você concluiu o curso de Anatomia Humana Aplicada à Massoterapia."
+      completionMessage="Parabéns! Você concluiu o curso de Anatomia Humana Aplicada à Massoterapia. 🏆 Certificado desbloqueado!"
     />
   );
 }
