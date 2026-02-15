@@ -27,6 +27,7 @@ import { cursoVendasData, type ModuloContent } from "@/data/cursoVendasContent";
 import { useCursoVendas } from "@/hooks/useCursoVendas";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { NarracaoPlayer } from "@/components/curso/NarracaoPlayer";
+import { vendasAulaAssets } from "@/data/cursoVendasAssets";
 
 const iconMap: Record<string, React.ElementType> = {
   Lightbulb,
@@ -39,18 +40,22 @@ const iconMap: Record<string, React.ElementType> = {
 
 function AulaView({
   modulo,
+  moduloIndex,
   aulaIndex,
   onBack,
   isComplete,
   onToggle,
 }: {
   modulo: ModuloContent;
+  moduloIndex: number;
   aulaIndex: number;
   onBack: () => void;
   isComplete: boolean;
   onToggle: () => void;
 }) {
   const aula = modulo.aulas[aulaIndex];
+  const assetKey = `${moduloIndex}-${aulaIndex}`;
+  const assets = vendasAulaAssets[assetKey];
 
   // Simple markdown-like renderer
   const renderContent = (text: string) => {
@@ -85,19 +90,18 @@ function AulaView({
         <span className="text-xs text-muted-foreground shrink-0">{aula.duracaoMinutos} min</span>
       </div>
 
+      {assets && (
+        <Card className="mb-4 overflow-hidden rounded-xl relative h-40">
+          <img src={assets.image} alt={aula.titulo} className="w-full h-full object-cover" />
+          <video src={assets.video} autoPlay loop muted playsInline className="absolute inset-0 w-full h-full object-cover opacity-25 mix-blend-luminosity" />
+          <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent" />
+        </Card>
+      )}
+
       {/* Narração por IA */}
       <div className="mb-4">
         <NarracaoPlayer texto={aula.conteudo} titulo={aula.titulo} />
       </div>
-
-      {aula.videoUrl && (
-        <Card className="mb-4 overflow-hidden">
-          <div className="aspect-video bg-muted flex items-center justify-center">
-            <Play size={48} className="text-muted-foreground" />
-            <span className="ml-2 text-sm text-muted-foreground">Vídeo em breve</span>
-          </div>
-        </Card>
-      )}
 
       <Card className="p-4 mb-4">{renderContent(aula.conteudo)}</Card>
 
@@ -170,6 +174,7 @@ export default function CursoVendas({ embedded = false }: { embedded?: boolean }
           <div className="max-w-lg mx-auto px-4 py-6">
             <AulaView
               modulo={modulo}
+              moduloIndex={selectedModulo}
               aulaIndex={selectedAula}
               onBack={() => setSelectedAula(null)}
               isComplete={isComplete(selectedModulo, selectedAula)}
