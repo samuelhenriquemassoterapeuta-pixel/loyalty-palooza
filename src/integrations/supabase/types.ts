@@ -569,6 +569,318 @@ export type Database = {
           },
         ]
       }
+      corporativo_beneficios: {
+        Row: {
+          ativo: boolean
+          created_at: string
+          descricao: string
+          detalhe: string | null
+          estatistica: string | null
+          icone: string
+          id: string
+          imagem_url: string | null
+          ordem: number
+          titulo: string
+          updated_at: string
+        }
+        Insert: {
+          ativo?: boolean
+          created_at?: string
+          descricao: string
+          detalhe?: string | null
+          estatistica?: string | null
+          icone?: string
+          id?: string
+          imagem_url?: string | null
+          ordem?: number
+          titulo: string
+          updated_at?: string
+        }
+        Update: {
+          ativo?: boolean
+          created_at?: string
+          descricao?: string
+          detalhe?: string | null
+          estatistica?: string | null
+          icone?: string
+          id?: string
+          imagem_url?: string | null
+          ordem?: number
+          titulo?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      corporativo_cases: {
+        Row: {
+          ativo: boolean
+          created_at: string
+          depoimento: string | null
+          descricao: string
+          detalhe_extra: string | null
+          empresa: string
+          fonte: string | null
+          id: string
+          imagem_url: string | null
+          logo_emoji: string | null
+          ordem: number
+          resultado: string
+          setor: string
+        }
+        Insert: {
+          ativo?: boolean
+          created_at?: string
+          depoimento?: string | null
+          descricao: string
+          detalhe_extra?: string | null
+          empresa: string
+          fonte?: string | null
+          id?: string
+          imagem_url?: string | null
+          logo_emoji?: string | null
+          ordem?: number
+          resultado: string
+          setor: string
+        }
+        Update: {
+          ativo?: boolean
+          created_at?: string
+          depoimento?: string | null
+          descricao?: string
+          detalhe_extra?: string | null
+          empresa?: string
+          fonte?: string | null
+          id?: string
+          imagem_url?: string | null
+          logo_emoji?: string | null
+          ordem?: number
+          resultado?: string
+          setor?: string
+        }
+        Relationships: []
+      }
+      corporativo_depoimentos: {
+        Row: {
+          ativo: boolean
+          cargo: string
+          created_at: string
+          depoimento: string
+          detalhes: string | null
+          empresa: string
+          estrelas: number
+          foto_url: string | null
+          id: string
+          metricas: Json | null
+          nome: string
+          ordem: number
+        }
+        Insert: {
+          ativo?: boolean
+          cargo: string
+          created_at?: string
+          depoimento: string
+          detalhes?: string | null
+          empresa: string
+          estrelas?: number
+          foto_url?: string | null
+          id?: string
+          metricas?: Json | null
+          nome: string
+          ordem?: number
+        }
+        Update: {
+          ativo?: boolean
+          cargo?: string
+          created_at?: string
+          depoimento?: string
+          detalhes?: string | null
+          empresa?: string
+          estrelas?: number
+          foto_url?: string | null
+          id?: string
+          metricas?: Json | null
+          nome?: string
+          ordem?: number
+        }
+        Relationships: []
+      }
+      corporativo_eventos: {
+        Row: {
+          ativo: boolean
+          created_at: string
+          descricao: string
+          detalhe: string | null
+          icone: string
+          id: string
+          imagem_url: string | null
+          ordem: number
+          titulo: string
+        }
+        Insert: {
+          ativo?: boolean
+          created_at?: string
+          descricao: string
+          detalhe?: string | null
+          icone?: string
+          id?: string
+          imagem_url?: string | null
+          ordem?: number
+          titulo: string
+        }
+        Update: {
+          ativo?: boolean
+          created_at?: string
+          descricao?: string
+          detalhe?: string | null
+          icone?: string
+          id?: string
+          imagem_url?: string | null
+          ordem?: number
+          titulo?: string
+        }
+        Relationships: []
+      }
+      corporativo_faq: {
+        Row: {
+          ativo: boolean
+          created_at: string
+          detalhes: Json | null
+          id: string
+          ordem: number
+          pergunta: string
+          resposta: string
+        }
+        Insert: {
+          ativo?: boolean
+          created_at?: string
+          detalhes?: Json | null
+          id?: string
+          ordem?: number
+          pergunta: string
+          resposta: string
+        }
+        Update: {
+          ativo?: boolean
+          created_at?: string
+          detalhes?: Json | null
+          id?: string
+          ordem?: number
+          pergunta?: string
+          resposta?: string
+        }
+        Relationships: []
+      }
+      corporativo_galeria: {
+        Row: {
+          ativo: boolean
+          created_at: string
+          descricao: string | null
+          id: string
+          ordem: number
+          tipo: string
+          titulo: string
+          url: string
+        }
+        Insert: {
+          ativo?: boolean
+          created_at?: string
+          descricao?: string | null
+          id?: string
+          ordem?: number
+          tipo?: string
+          titulo: string
+          url: string
+        }
+        Update: {
+          ativo?: boolean
+          created_at?: string
+          descricao?: string | null
+          id?: string
+          ordem?: number
+          tipo?: string
+          titulo?: string
+          url?: string
+        }
+        Relationships: []
+      }
+      corporativo_logos: {
+        Row: {
+          ativo: boolean
+          created_at: string
+          id: string
+          logo_url: string | null
+          nome: string
+          ordem: number
+        }
+        Insert: {
+          ativo?: boolean
+          created_at?: string
+          id?: string
+          logo_url?: string | null
+          nome: string
+          ordem?: number
+        }
+        Update: {
+          ativo?: boolean
+          created_at?: string
+          id?: string
+          logo_url?: string | null
+          nome?: string
+          ordem?: number
+        }
+        Relationships: []
+      }
+      corporativo_planos: {
+        Row: {
+          ativo: boolean
+          beneficios: Json | null
+          como_funciona: string | null
+          created_at: string
+          descricao: string | null
+          destaque: boolean
+          icone: string
+          id: string
+          ideal_para: string | null
+          nome: string
+          ordem: number
+          periodo: string | null
+          preco: string
+          subtitulo: string | null
+        }
+        Insert: {
+          ativo?: boolean
+          beneficios?: Json | null
+          como_funciona?: string | null
+          created_at?: string
+          descricao?: string | null
+          destaque?: boolean
+          icone?: string
+          id?: string
+          ideal_para?: string | null
+          nome: string
+          ordem?: number
+          periodo?: string | null
+          preco: string
+          subtitulo?: string | null
+        }
+        Update: {
+          ativo?: boolean
+          beneficios?: Json | null
+          como_funciona?: string | null
+          created_at?: string
+          descricao?: string | null
+          destaque?: boolean
+          icone?: string
+          id?: string
+          ideal_para?: string | null
+          nome?: string
+          ordem?: number
+          periodo?: string | null
+          preco?: string
+          subtitulo?: string | null
+        }
+        Relationships: []
+      }
       corporativo_secoes: {
         Row: {
           ativo: boolean | null
