@@ -1,5 +1,5 @@
 import { useSearchParams } from "react-router-dom";
-import { GraduationCap, Flower2, Sparkles, Bone, Gem, Hand, Droplets, LucideIcon } from "lucide-react";
+import { GraduationCap, Flower2, Sparkles, Bone, Gem, Hand, Droplets, Flame, LucideIcon } from "lucide-react";
 import { AppLayout } from "@/components/AppLayout";
 import { lazy, Suspense, useMemo, useRef, useEffect } from "react";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
@@ -15,6 +15,7 @@ const CursoAnatomiaHero = lazy(() => import("@/pages/CursoAnatomiaHero"));
 const CursoYugenFaceSpaHero = lazy(() => import("@/pages/CursoYugenFaceSpaHero"));
 const CursoMetodoResinkraHero = lazy(() => import("@/pages/CursoMetodoResinkraHero"));
 const CursoPerfumariaNaturalHero = lazy(() => import("@/pages/CursoPerfumariaNaturalHero"));
+const CursoVelasAromaticasHero = lazy(() => import("@/pages/CursoVelasAromaticasHero"));
 
 interface TabDef {
   value: string;
@@ -32,6 +33,7 @@ const tabDefs: TabDef[] = [
   { value: "anatomia", label: "Anatomia", icon: Bone, storageKey: "resinkra_curso_anatomia_progress", totalAulas: 0 },
   { value: "facespa", label: "FaceSPA", icon: Gem, storageKey: "resinkra_curso_yugen_facespa_progress", totalAulas: 0 },
   { value: "perfumaria", label: "Perfumaria", icon: Droplets, storageKey: "resinkra_curso_perfumaria_natural_progress", totalAulas: 0 },
+  { value: "velas", label: "Velas", icon: Flame, storageKey: "resinkra_curso_velas_aromaticas_progress", totalAulas: 0 },
 ];
 
 function getProgress(storageKey: string): number {
@@ -141,6 +143,7 @@ export default function Cursos() {
           {tab === "anatomia" && <CursoAnatomiaHero embedded />}
           {tab === "facespa" && <CursoYugenFaceSpaHero embedded />}
           {tab === "perfumaria" && <CursoPerfumariaNaturalHero embedded />}
+          {tab === "velas" && <CursoVelasAromaticasHero embedded />}
         </Suspense>
       </div>
     </AppLayout>
