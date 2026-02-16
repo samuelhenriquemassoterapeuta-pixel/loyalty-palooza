@@ -1522,5 +1522,611 @@ Acompanhe mensalmente:
         ]
       }
     ]
+  },
+  {
+    titulo: "Automação, CRM e LGPD",
+    descricao: "Ferramentas, fluxos automatizados e conformidade para escalar com segurança",
+    icone: "Target",
+    cor: "from-teal-50 to-emerald-50",
+    aulas: [
+      {
+        titulo: "CRM simples para terapeutas",
+        descricao: "Organize seus clientes, histórico e oportunidades de venda",
+        duracaoMinutos: 10,
+        conteudo: `# CRM Simples para Terapeutas
+
+## Por que Organizar seus Clientes?
+
+Sem um sistema organizado, você perde oportunidades todos os dias:
+
+> **Um CRM não precisa ser complicado. Precisa ser usado.**
+
+### O que é CRM na Prática
+
+CRM = **Gestão de Relacionamento com o Cliente**. Para terapeutas, significa:
+
+- Saber quem é cada cliente (histórico, preferências, dores)
+- Acompanhar pacotes ativos e saldos
+- Identificar quem precisa de follow-up
+- Mapear oportunidades de renovação e upgrade
+
+### Opções de CRM para Clínicas
+
+| Ferramenta | Custo | Ideal para |
+|-----------|-------|------------|
+| Planilha Google | Grátis | Até 50 clientes |
+| App Resinkra | Incluído | Gestão completa |
+| Trello/Notion | Grátis/Baixo | Organização visual |
+| HubSpot Free | Grátis | +100 clientes |
+
+### Dados Essenciais por Cliente
+
+Para cada cliente, registre:
+
+1. **Dados básicos:** Nome, telefone, e-mail, data de nascimento
+2. **Histórico:** Queixa principal, sessões realizadas, evolução
+3. **Pacote atual:** Tipo, saldo, % consumido
+4. **Preferências:** Terapeuta preferido, horário, pressão
+5. **Próxima ação:** Follow-up, renovação, reativação
+
+### Pipeline de Vendas Visual
+
+Organize seus clientes em etapas:
+
+**Lead → Primeiro contato → Sessão experimental → Pacote ativo → Renovação → VIP**
+
+Cada etapa tem ações específicas:
+- **Lead:** Responder em < 5 min, agendar avaliação
+- **Primeiro contato:** Impressionar, aplicar escuta ativa
+- **Sessão experimental:** Apresentar 3 opções de pacote
+- **Pacote ativo:** Monitorar saldo, check-ins de satisfação
+- **Renovação:** Abordar em 80% de consumo
+- **VIP:** Tratamento premium, indicações
+
+### Relatórios Semanais
+
+Todo sábado, revise:
+- Quantos leads entraram
+- Quantos converteram
+- Quantos pacotes estão acabando
+- Quem está inativo há 30+ dias`,
+        quiz: [
+          {
+            pergunta: "Qual o dado MAIS importante para registrar de cada cliente?",
+            opcoes: [
+              "Apenas nome e telefone",
+              "Histórico completo + pacote atual + próxima ação",
+              "Somente o valor pago",
+              "Data de nascimento para enviar felicitações"
+            ],
+            respostaCorreta: 1,
+            explicacao: "O CRM deve ter histórico, pacote e próxima ação. Isso permite atendimento personalizado e vendas estratégicas."
+          },
+          {
+            pergunta: "Qual a ordem correta do pipeline de vendas?",
+            opcoes: [
+              "Pacote → Lead → VIP → Renovação",
+              "Lead → Primeiro contato → Experimental → Pacote → Renovação → VIP",
+              "VIP → Pacote → Lead",
+              "Experimental → VIP direto"
+            ],
+            respostaCorreta: 1,
+            explicacao: "O pipeline segue a jornada natural: atração, conversão, fidelização e upgrade progressivo."
+          }
+        ],
+        checklist: [
+          "Escolhi uma ferramenta de CRM para usar",
+          "Cadastrei meus 10 principais clientes com dados completos",
+          "Organizei clientes por etapa do pipeline",
+          "Agendei revisão semanal de relatórios"
+        ]
+      },
+      {
+        titulo: "Automação de mensagens e fluxos",
+        descricao: "Configure sequências automáticas sem perder a personalização",
+        duracaoMinutos: 10,
+        conteudo: `# Automação de Mensagens e Fluxos
+
+## Automatize o Repetitivo, Personalize o Importante
+
+### O que Automatizar
+
+✅ **Automatize:**
+- Confirmação de agendamento
+- Lembrete 24h antes da sessão
+- Follow-up pós-sessão (mesmo dia)
+- Alerta de saldo baixo (80% consumido)
+- Mensagem de aniversário
+- Reativação após 30 dias sem visita
+
+❌ **NÃO automatize:**
+- Apresentação de pacotes (requer conversa personalizada)
+- Resposta a objeções (precisa de empatia humana)
+- Feedbacks negativos (requer atenção especial)
+
+### Fluxo de Automação Completo
+
+**Novo cliente agenda:**
+1. ⏱️ Imediato → Confirmação automática
+2. ⏱️ 24h antes → Lembrete com orientações
+3. ⏱️ 2h após sessão → "Como você está se sentindo?"
+4. ⏱️ 48h após → "Sentiu melhora? Posso te ajudar com mais alguma dúvida?"
+5. ⏱️ 7 dias → "Que tal agendar a próxima sessão?"
+
+**Cliente com pacote ativo:**
+1. ⏱️ 50% consumido → Check-in de satisfação
+2. ⏱️ 80% consumido → Lembrete de renovação
+3. ⏱️ 100% consumido → Oferta especial de renovação
+4. ⏱️ 15 dias sem uso → "Sentimos sua falta!"
+
+### Ferramentas de Automação
+
+| Ferramenta | Custo | Canal |
+|-----------|-------|-------|
+| WhatsApp Business API | A partir de R$100/mês | WhatsApp |
+| ManyChat | Grátis até 1.000 contatos | Instagram + WhatsApp |
+| RD Station | A partir de R$50/mês | E-mail + WhatsApp |
+| Zapier | A partir de $20/mês | Múltiplos canais |
+
+### Templates de Automação
+
+**Confirmação de agendamento:**
+> "✅ Agendamento confirmado!
+> 📅 [Data] às [Hora]
+> 💆 [Serviço]
+> 📍 Resinkra Massoterapia
+> 
+> Dicas: chegue 5 min antes, use roupa confortável, beba água.
+> Para reagendar, responda esta mensagem."
+
+**Lembrete 24h:**
+> "Oi [Nome]! Lembrete: amanhã às [hora] temos sua sessão de [serviço]. Estamos preparando tudo para você! 🌿"
+
+**Aniversário:**
+> "Feliz aniversário, [Nome]! 🎂 Preparamos um presente especial: 15% OFF na sua próxima sessão. Válido por 30 dias. Agende pelo app! 💚"
+
+### Métricas de Automação
+
+Acompanhe mensalmente:
+- Taxa de abertura de mensagens (meta: > 80%)
+- Taxa de resposta (meta: > 30%)
+- Agendamentos via automação
+- Reativações automáticas bem-sucedidas`,
+        quiz: [
+          {
+            pergunta: "O que NÃO deve ser automatizado?",
+            opcoes: [
+              "Confirmação de agendamento",
+              "Apresentação de pacotes e resposta a objeções",
+              "Lembrete de sessão",
+              "Mensagem de aniversário"
+            ],
+            respostaCorreta: 1,
+            explicacao: "Pacotes e objeções exigem conversa personalizada e empatia humana. Automatize o repetitivo, personalize o importante."
+          }
+        ],
+        checklist: [
+          "Mapeei os 6 pontos de automação do meu fluxo",
+          "Configurei pelo menos 2 mensagens automáticas",
+          "Criei templates personalizados com o nome da clínica",
+          "Defini métricas para acompanhar a eficácia da automação"
+        ]
+      },
+      {
+        titulo: "LGPD e conformidade na clínica",
+        descricao: "Proteja os dados dos seus clientes e evite multas",
+        duracaoMinutos: 8,
+        conteudo: `# LGPD e Conformidade na Clínica
+
+## Por que a LGPD Importa para Terapeutas?
+
+A Lei Geral de Proteção de Dados (Lei 13.709/2018) protege dados pessoais dos seus clientes. Multas podem chegar a **2% do faturamento** ou R$50 milhões.
+
+> **Não é só sobre evitar multas — é sobre respeitar e proteger seus clientes.**
+
+### Dados que Você Coleta
+
+Na massoterapia, você lida com dados sensíveis:
+
+- **Dados pessoais:** Nome, CPF, telefone, e-mail, endereço
+- **Dados de saúde:** Queixas, dores, histórico médico, medicamentos
+- **Dados financeiros:** Forma de pagamento, histórico de compras
+- **Dados de imagem:** Fotos (avaliação postural, evolução)
+
+### Os 5 Passos da Conformidade
+
+### 1. Termo de Consentimento
+Crie um termo simples que o cliente assina na 1ª visita:
+
+> "Autorizo a coleta e uso dos meus dados pessoais e de saúde pela Resinkra Massoterapia para fins de tratamento, agendamento e comunicação. Posso solicitar exclusão a qualquer momento."
+
+### 2. Armazenamento Seguro
+- Dados digitais: Use sistemas com criptografia (como o app Resinkra)
+- Fichas em papel: Guarde em local trancado
+- Backups: Mantenha cópia segura na nuvem
+
+### 3. Acesso Restrito
+- Somente profissionais que atendem o cliente acessam seus dados
+- Não compartilhe fichas por WhatsApp sem criptografia
+- Use senhas fortes em todos os sistemas
+
+### 4. Direitos do Cliente
+O cliente pode solicitar a qualquer momento:
+- Ver todos os dados que você tem sobre ele
+- Corrigir dados incorretos
+- Excluir seus dados (com exceções legais)
+- Saber com quem seus dados foram compartilhados
+
+### 5. WhatsApp e Marketing
+- **Opt-in obrigatório:** Só envie mensagens para quem autorizou
+- **Opt-out fácil:** Sempre inclua opção de sair da lista
+- **Dados de menores:** Precisa de autorização dos pais
+
+### Checklist de Conformidade Rápida
+
+| Item | Status |
+|------|--------|
+| Termo de consentimento | ☐ |
+| Política de privacidade | ☐ |
+| Armazenamento seguro | ☐ |
+| Acesso restrito a dados | ☐ |
+| Opt-in para marketing | ☐ |
+| Processo de exclusão de dados | ☐ |
+
+### Modelo de Política de Privacidade (Resumida)
+
+> "A Resinkra Massoterapia coleta dados pessoais e de saúde exclusivamente para prestação de serviços terapêuticos. Não vendemos nem compartilhamos seus dados. Você pode solicitar acesso, correção ou exclusão a qualquer momento pelo e-mail [email] ou presencialmente."`,
+        quiz: [
+          {
+            pergunta: "Qual dado coletado na massoterapia é considerado SENSÍVEL pela LGPD?",
+            opcoes: [
+              "Nome e telefone",
+              "Dados de saúde (queixas, dores, histórico médico)",
+              "E-mail",
+              "Forma de pagamento"
+            ],
+            respostaCorreta: 1,
+            explicacao: "Dados de saúde são dados sensíveis pela LGPD e exigem cuidado redobrado no tratamento e armazenamento."
+          },
+          {
+            pergunta: "O que é obrigatório antes de enviar mensagens de marketing ao cliente?",
+            opcoes: [
+              "Ter o número de telefone",
+              "Opt-in (autorização explícita do cliente)",
+              "Ser amigo no WhatsApp",
+              "Ter feito pelo menos 3 sessões"
+            ],
+            respostaCorreta: 1,
+            explicacao: "A LGPD exige opt-in (consentimento) antes de enviar mensagens de marketing. Sempre inclua opção de sair da lista."
+          }
+        ],
+        checklist: [
+          "Criei um termo de consentimento para novos clientes",
+          "Revisei onde e como armazeno dados de clientes",
+          "Restringi acesso a dados apenas aos profissionais necessários",
+          "Configurei opt-in para mensagens de marketing"
+        ]
+      }
+    ]
+  },
+  {
+    titulo: "Estratégias de Escala",
+    descricao: "Recrutamento, treinamento e planejamento para crescimento sustentável",
+    icone: "GraduationCap",
+    cor: "from-orange-50 to-amber-50",
+    aulas: [
+      {
+        titulo: "Recrutamento e treinamento de equipe",
+        descricao: "Como contratar, integrar e desenvolver terapeutas vendedores",
+        duracaoMinutos: 12,
+        conteudo: `# Recrutamento e Treinamento de Equipe
+
+## Contratando Terapeutas que Também Vendem
+
+### O Perfil Ideal
+
+Nem todo bom terapeuta é um bom vendedor. Procure:
+
+✅ **Habilidades técnicas:** Formação sólida, experiência clínica
+✅ **Habilidades relacionais:** Empatia, comunicação clara, escuta ativa
+✅ **Mentalidade de cuidado:** Entende que recomendar é cuidar
+✅ **Proatividade:** Oferece soluções sem esperar que o cliente peça
+
+❌ **Evite:**
+- Quem vê vendas como algo negativo
+- Quem não gosta de interagir com pessoas
+- Quem resiste a seguir processos
+
+### Processo de Seleção (4 Etapas)
+
+**1. Triagem técnica**
+- Certificações e experiência
+- Especializações relevantes
+
+**2. Entrevista comportamental**
+Perguntas-chave:
+- "Como você se sente ao recomendar pacotes de tratamento?"
+- "Conte uma situação em que convenceu alguém de algo."
+- "O que você faz quando um cliente diz que está caro?"
+
+**3. Sessão prática**
+- Avaliar técnica de massagem
+- Observar comunicação com o "cliente" (simulação)
+
+**4. Role-play de vendas**
+- Simular apresentação de pacotes
+- Avaliar postura ao lidar com objeções
+
+### Programa de Integração (2 Semanas)
+
+**Semana 1: Cultura e Técnica**
+- Dia 1-2: Missão, valores e diferenciais Resinkra
+- Dia 3-4: Pacotes, preços e sistema de cashback
+- Dia 5: Acompanhar 3 atendimentos de terapeutas seniores
+
+**Semana 2: Vendas Consultivas**
+- Dia 1: Módulos 1-2 deste curso (Mindset + Comunicação)
+- Dia 2: Módulos 3-4 (Pacotes + Objeções)
+- Dia 3: Role-play com feedback
+- Dia 4: Primeiro atendimento supervisionado
+- Dia 5: Avaliação + plano de desenvolvimento
+
+### Desenvolvimento Contínuo
+
+| Frequência | Atividade |
+|-----------|-----------|
+| Semanal | Reunião de 15 min (resultados + objeções) |
+| Quinzenal | Role-play de vendas em dupla |
+| Mensal | Revisão de KPIs individuais |
+| Trimestral | Reciclagem de 1 módulo do curso |
+
+### Comissão e Incentivos
+
+Sugestão de estrutura:
+- **Salário fixo** + comissão por pacote vendido
+- **Bônus de equipe** quando meta coletiva é batida
+- **Reconhecimento:** "Terapeuta do mês" com premiação
+- **Desenvolvimento:** Cursos e certificações como benefício`,
+        quiz: [
+          {
+            pergunta: "Qual pergunta é essencial na entrevista comportamental?",
+            opcoes: [
+              "Quanto quer ganhar?",
+              "Como você se sente ao recomendar pacotes de tratamento?",
+              "Tem experiência com massagem sueca?",
+              "Pode trabalhar nos fins de semana?"
+            ],
+            respostaCorreta: 1,
+            explicacao: "Essa pergunta revela a mentalidade do candidato sobre vendas. Quem vê como cuidado terá boa performance."
+          }
+        ],
+        checklist: [
+          "Defini o perfil ideal de terapeuta para minha clínica",
+          "Criei as 4 etapas do processo de seleção",
+          "Montei o programa de integração de 2 semanas",
+          "Estabeleci estrutura de comissão e incentivos"
+        ]
+      },
+      {
+        titulo: "Planejamento estratégico de 12 meses",
+        descricao: "Metas, marcos e roadmap para crescimento sustentável",
+        duracaoMinutos: 10,
+        conteudo: `# Planejamento Estratégico de 12 Meses
+
+## Seu Roadmap de Crescimento
+
+### Diagnóstico Atual
+
+Antes de planejar, responda:
+- Quantos clientes ativos você tem?
+- Qual seu faturamento mensal?
+- Qual sua taxa de conversão atual?
+- Quantos terapeutas na equipe?
+- Qual sua capacidade máxima de atendimento?
+
+### Metas SMART por Trimestre
+
+**Q1 (Meses 1-3): Fundação**
+| Meta | Indicador | Alvo |
+|------|-----------|------|
+| Conversão | Avulso → Pacote | 50% |
+| Oferta | Taxa de oferta | 100% |
+| Follow-up | Resposta < 15 min | 90% |
+| Treinamento | Equipe capacitada | 100% |
+
+**Q2 (Meses 4-6): Crescimento**
+| Meta | Indicador | Alvo |
+|------|-----------|------|
+| Conversão | Avulso → Pacote | 60% |
+| Renovação | Pacotes renovados | 75% |
+| Upgrade | Renovação para maior | 30% |
+| Ticket médio | Valor médio pacote | +15% |
+
+**Q3 (Meses 7-9): Escala**
+| Meta | Indicador | Alvo |
+|------|-----------|------|
+| Novos clientes | Via indicação | +20% |
+| Automação | Fluxos ativos | 5+ |
+| Parcerias | Ativas e gerando | 3+ |
+| Equipe | Novo terapeuta integrado | 1 |
+
+**Q4 (Meses 10-12): Excelência**
+| Meta | Indicador | Alvo |
+|------|-----------|------|
+| Conversão | Consolidada | 65-70% |
+| NPS | Satisfação | > 9.0 |
+| Faturamento | Crescimento anual | +40% |
+| Corporativo | Empresas atendidas | 2+ |
+
+### Ações Mensais Detalhadas
+
+**Mês 1:** Implementar CRM + treinar equipe nos módulos 1-3
+**Mês 2:** Dominar objeções + configurar automações básicas
+**Mês 3:** Sistema de alertas de saldo rodando + primeira revisão de KPIs
+**Mês 4:** Programa de indicação ativo + parcerias mapeadas
+**Mês 5:** Conteúdo digital regular (3 posts/semana) + Google Meu Negócio otimizado
+**Mês 6:** Análise de meio de ano + ajustes estratégicos
+**Mês 7:** Iniciar prospecção corporativa + 1ª parceria ativa
+**Mês 8:** Processo de recrutamento definido + vaga aberta
+**Mês 9:** Novo terapeuta em integração + automações avançadas
+**Mês 10:** LGPD 100% conforme + processos documentados
+**Mês 11:** Planejamento do próximo ano + metas ambiciosas
+**Mês 12:** Celebração de resultados + certificação da equipe
+
+### Investimentos Necessários
+
+| Item | Custo estimado | Retorno esperado |
+|------|---------------|-----------------|
+| Automação WhatsApp | R$100-200/mês | +15% reativações |
+| Marketing digital | R$300-500/mês | +20% novos leads |
+| Treinamento contínuo | R$0 (curso interno) | +20% conversão |
+| CRM | R$0-100/mês | -30% clientes perdidos |
+
+### ROI Projetado
+
+Se hoje você fatura R$15.000/mês:
+- +20% conversão = +R$3.000/mês
+- +15% renovação = +R$2.250/mês
+- +20% novos via indicação = +R$3.000/mês
+- **Total projetado:** R$23.250/mês (+55%)
+- **Anual:** +R$99.000 em receita adicional`,
+        quiz: [
+          {
+            pergunta: "Qual deve ser a meta de conversão no Q1 (primeiros 3 meses)?",
+            opcoes: [
+              "70% imediatamente",
+              "50% — fundação sólida antes de escalar",
+              "30% — começar devagar",
+              "Não definir meta, apenas observar"
+            ],
+            respostaCorreta: 1,
+            explicacao: "No Q1 focamos em fundação: 50% de conversão é alcançável e prepara a base para crescer nos trimestres seguintes."
+          }
+        ],
+        checklist: [
+          "Fiz o diagnóstico atual da clínica (clientes, faturamento, conversão)",
+          "Defini metas SMART para cada trimestre",
+          "Criei o cronograma mensal de ações",
+          "Calculei o ROI projetado do plano de crescimento"
+        ]
+      },
+      {
+        titulo: "Liderança e gestão de performance",
+        descricao: "Como liderar uma equipe de vendas consultivas em saúde e bem-estar",
+        duracaoMinutos: 10,
+        conteudo: `# Liderança e Gestão de Performance
+
+## De Terapeuta a Líder de Equipe
+
+### A Transição
+
+Muitos terapeutas excelentes se tornam gestores medianos porque:
+- Continuam fazendo tudo sozinhos
+- Não delegam por medo de perder qualidade
+- Não sabem dar feedback sobre vendas
+
+> **Seu papel como líder: criar um ambiente onde cada terapeuta se sinta seguro para recomendar tratamentos.**
+
+### Os 4 Pilares da Liderança em Vendas
+
+### 1. Exemplo
+Você precisa ser o melhor vendedor da equipe:
+- Pratique os scripts
+- Compartilhe seus resultados
+- Mostre vulnerabilidade ("Eu também tinha medo de vender")
+
+### 2. Treinamento Contínuo
+- Reunião semanal de 15 minutos (obrigatória)
+- Role-play quinzenal
+- Reciclagem trimestral dos módulos do curso
+- Mentoria individual mensal
+
+### 3. Feedback Construtivo
+
+**Modelo SBI (Situação, Comportamento, Impacto):**
+
+✅ "Na sessão com a Maria (Situação), vi que você explicou muito bem a dor dela mas não ofereceu pacote (Comportamento). Ela pode ter ido embora sem saber que existe uma opção melhor (Impacto). Que tal praticarmos juntos?"
+
+❌ "Você precisa vender mais."
+
+### 4. Reconhecimento
+- Celebre cada venda em grupo
+- "Terapeuta do mês" com critérios claros
+- Compartilhe cases de sucesso entre a equipe
+- Bônus por metas batidas
+
+### Dashboard de Performance da Equipe
+
+| Terapeuta | Atendimentos | Ofertas | Fechamentos | Conversão | Ticket Médio |
+|-----------|-------------|---------|------------|-----------|-------------|
+| Maria | 20 | 20 | 12 | 60% | R$1.050 |
+| João | 18 | 15 | 8 | 53% | R$780 |
+| Ana | 22 | 22 | 15 | 68% | R$1.200 |
+
+### Ações por Performance
+
+**Alta performance (>60% conversão):**
+- Reconhecimento público
+- Compartilhar técnicas com a equipe
+- Bônus/premiação
+- Desafio de upgrade para VIP
+
+**Performance média (40-60%):**
+- Identificar gargalo (timing? scripts? confiança?)
+- Role-play focado na fraqueza
+- Acompanhar 2 atendimentos do líder
+- Meta incremental (+5% por mês)
+
+**Baixa performance (<40%):**
+- Conversa individual (entender barreiras)
+- Plano de desenvolvimento de 30 dias
+- Mentoria intensiva (2x/semana)
+- Reavaliação ao final do período
+
+### Reunião Semanal — Pauta Modelo
+
+1. **Celebração** (2 min): Melhor venda da semana
+2. **Números** (3 min): KPIs da equipe
+3. **Desafio** (5 min): Objeção difícil — como resolver?
+4. **Role-play** (3 min): Prática rápida de 1 cenário
+5. **Meta** (2 min): Foco da semana
+
+### Certificado Final 🏆
+
+Ao completar todos os 9 módulos e aplicar o plano por 12 semanas, você estará apto a receber o certificado de **Especialista em Vendas Consultivas e Gestão — Massoterapia**.
+
+> *Parabéns por investir no seu desenvolvimento e no crescimento da sua equipe! Seus clientes, sua equipe e seus resultados agradecem. 💚*`,
+        quiz: [
+          {
+            pergunta: "Qual modelo de feedback é mais eficaz para a equipe?",
+            opcoes: [
+              "Apenas dizer 'venda mais'",
+              "Modelo SBI: Situação, Comportamento, Impacto",
+              "Comparar com outros terapeutas",
+              "Só dar feedback quando o resultado for ruim"
+            ],
+            respostaCorreta: 1,
+            explicacao: "O modelo SBI é específico e construtivo: descreve a situação, o comportamento observado e o impacto, sem julgamento pessoal."
+          },
+          {
+            pergunta: "O que fazer com um terapeuta com conversão abaixo de 40%?",
+            opcoes: [
+              "Demitir imediatamente",
+              "Ignorar e esperar melhorar",
+              "Conversa individual + plano de 30 dias + mentoria intensiva",
+              "Tirar a responsabilidade de vendas"
+            ],
+            respostaCorreta: 2,
+            explicacao: "Baixa performance merece atenção, não abandono. Plano de 30 dias com mentoria intensiva pode transformar o profissional."
+          }
+        ],
+        checklist: [
+          "Implementei o modelo SBI de feedback na equipe",
+          "Criei o dashboard de performance da equipe",
+          "Realizei pelo menos 2 reuniões semanais com a pauta modelo",
+          "Defini ações específicas por nível de performance"
+        ]
+      }
+    ]
   }
 ];
