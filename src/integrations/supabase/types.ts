@@ -1755,6 +1755,60 @@ export type Database = {
           },
         ]
       }
+      google_ads_metrics: {
+        Row: {
+          average_cpc: number
+          campaign_id: string
+          campaign_name: string
+          clicks: number
+          conversion_value: number
+          conversions: number
+          cost_micros: number
+          created_at: string
+          ctr: number
+          customer_id: string
+          date_range: string
+          id: string
+          impressions: number
+          roas: number
+          snapshot_date: string
+        }
+        Insert: {
+          average_cpc?: number
+          campaign_id: string
+          campaign_name: string
+          clicks?: number
+          conversion_value?: number
+          conversions?: number
+          cost_micros?: number
+          created_at?: string
+          ctr?: number
+          customer_id: string
+          date_range?: string
+          id?: string
+          impressions?: number
+          roas?: number
+          snapshot_date?: string
+        }
+        Update: {
+          average_cpc?: number
+          campaign_id?: string
+          campaign_name?: string
+          clicks?: number
+          conversion_value?: number
+          conversions?: number
+          cost_micros?: number
+          created_at?: string
+          ctr?: number
+          customer_id?: string
+          date_range?: string
+          id?: string
+          impressions?: number
+          roas?: number
+          snapshot_date?: string
+        }
+        Relationships: []
+      }
       headspa_imagens: {
         Row: {
           created_at: string

@@ -69,6 +69,9 @@ const Terapias = lazy(() => import("@/pages/Terapias"));
 const Offers = lazy(() => import("@/pages/Offers"));
 const NotFound = lazy(() => import("@/pages/NotFound"));
 
+// Admin Pages
+const GoogleAdsDashboard = lazy(() => import("@/pages/admin/GoogleAdsDashboard"));
+
 // Resinkra AI Pages
 const ResinkraAIDashboard = lazy(() => import("@/pages/resinkra-ai/ResinkraAIDashboard"));
 const ResinkraAIOnboarding = lazy(() => import("@/pages/resinkra-ai/ResinkraAIOnboarding"));
@@ -116,6 +119,7 @@ export const AnimatedRoutes = () => {
         <Route path="/notificacoes" element={<ProtectedRoute><LazyPage><Notificacoes /></LazyPage></ProtectedRoute>} />
         <Route path="/transferir" element={<ProtectedRoute><LazyPage><Transferir /></LazyPage></ProtectedRoute>} />
         <Route path="/admin" element={<ProtectedRoute requireAdmin><LazyPage><Admin /></LazyPage></ProtectedRoute>} />
+        <Route path="/admin/google-ads" element={<ProtectedRoute requireAdmin><LazyPage><GoogleAdsDashboard /></LazyPage></ProtectedRoute>} />
         <Route path="/indicacoes" element={<ProtectedRoute><LazyPage><Indicacoes /></LazyPage></ProtectedRoute>} />
         <Route path="/cashback" element={<ProtectedRoute><LazyPage><Cashback /></LazyPage></ProtectedRoute>} />
         <Route path="/manual" element={<ProtectedRoute><LazyPage><Manual /></LazyPage></ProtectedRoute>} />
