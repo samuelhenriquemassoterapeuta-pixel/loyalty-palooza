@@ -2,6 +2,7 @@ import { lazy, Suspense } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
+import { AdminRoute } from "@/components/AdminRoute";
 import { PageTransition } from "@/components/PageTransition";
 import { useAuth } from "@/contexts/AuthContext";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
@@ -159,18 +160,18 @@ export const AnimatedRoutes = () => {
         <Route path="/terapias" element={<LazyPage><Terapias /></LazyPage>} />
         <Route path="/ofertas" element={<ProtectedRoute><LazyPage><Offers /></LazyPage></ProtectedRoute>} />
 
-        {/* Resinkra AI Routes */}
-        <Route path="/resinkra-ai" element={<ProtectedRoute><LazyPage><ResinkraAIDashboard /></LazyPage></ProtectedRoute>} />
-        <Route path="/resinkra-ai/onboarding" element={<ProtectedRoute><LazyPage><ResinkraAIOnboarding /></LazyPage></ProtectedRoute>} />
-        <Route path="/resinkra-ai/create" element={<ProtectedRoute><LazyPage><ResinkraAICreate /></LazyPage></ProtectedRoute>} />
-        <Route path="/resinkra-ai/script/:id" element={<ProtectedRoute><LazyPage><ResinkraAIScriptResult /></LazyPage></ProtectedRoute>} />
-        <Route path="/resinkra-ai/history" element={<ProtectedRoute><LazyPage><ResinkraAIHistory /></LazyPage></ProtectedRoute>} />
-        <Route path="/resinkra-ai/hooks" element={<ProtectedRoute><LazyPage><ResinkraAIHooks /></LazyPage></ProtectedRoute>} />
-        <Route path="/resinkra-ai/calendar" element={<ProtectedRoute><LazyPage><ResinkraAICalendar /></LazyPage></ProtectedRoute>} />
-        <Route path="/resinkra-ai/viral-analysis" element={<ProtectedRoute><LazyPage><ResinkraAIViralAnalysis /></LazyPage></ProtectedRoute>} />
-        <Route path="/resinkra-ai/ideas" element={<ProtectedRoute><LazyPage><ResinkraAIIdeas /></LazyPage></ProtectedRoute>} />
-        <Route path="/resinkra-ai/templates" element={<ProtectedRoute><LazyPage><ResinkraAITemplates /></LazyPage></ProtectedRoute>} />
-        <Route path="/resinkra-ai/settings" element={<ProtectedRoute><LazyPage><ResinkraAISettings /></LazyPage></ProtectedRoute>} />
+        {/* Resinkra AI Routes — Admin Only */}
+        <Route path="/resinkra-ai" element={<AdminRoute><LazyPage><ResinkraAIDashboard /></LazyPage></AdminRoute>} />
+        <Route path="/resinkra-ai/onboarding" element={<AdminRoute><LazyPage><ResinkraAIOnboarding /></LazyPage></AdminRoute>} />
+        <Route path="/resinkra-ai/create" element={<AdminRoute><LazyPage><ResinkraAICreate /></LazyPage></AdminRoute>} />
+        <Route path="/resinkra-ai/script/:id" element={<AdminRoute><LazyPage><ResinkraAIScriptResult /></LazyPage></AdminRoute>} />
+        <Route path="/resinkra-ai/history" element={<AdminRoute><LazyPage><ResinkraAIHistory /></LazyPage></AdminRoute>} />
+        <Route path="/resinkra-ai/hooks" element={<AdminRoute><LazyPage><ResinkraAIHooks /></LazyPage></AdminRoute>} />
+        <Route path="/resinkra-ai/calendar" element={<AdminRoute><LazyPage><ResinkraAICalendar /></LazyPage></AdminRoute>} />
+        <Route path="/resinkra-ai/viral-analysis" element={<AdminRoute><LazyPage><ResinkraAIViralAnalysis /></LazyPage></AdminRoute>} />
+        <Route path="/resinkra-ai/ideas" element={<AdminRoute><LazyPage><ResinkraAIIdeas /></LazyPage></AdminRoute>} />
+        <Route path="/resinkra-ai/templates" element={<AdminRoute><LazyPage><ResinkraAITemplates /></LazyPage></AdminRoute>} />
+        <Route path="/resinkra-ai/settings" element={<AdminRoute><LazyPage><ResinkraAISettings /></LazyPage></AdminRoute>} />
 
         <Route path="*" element={<LazyPage><NotFound /></LazyPage>} />
       </Routes>
