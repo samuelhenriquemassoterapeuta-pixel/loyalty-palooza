@@ -1,6 +1,6 @@
 import { useRef, useEffect, useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Home, CalendarDays, ShoppingBag, Wallet, MoreHorizontal, X, Activity, Apple, Globe, Handshake, GraduationCap, Ticket, Trophy, Heart, Star, Leaf, Zap, BarChart3 } from "lucide-react";
+import { Home, CalendarDays, ShoppingBag, Wallet, MoreHorizontal, X, Activity, Apple, Globe, Handshake, GraduationCap, Ticket, Trophy, Heart, Star, Leaf, Zap, BarChart3, MessageCircle } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAdmin } from "@/hooks/useAdmin";
 
@@ -12,6 +12,7 @@ const primaryNavItems = [
 ];
 
 const moreNavItems = [
+  { icon: MessageCircle, label: "Chat IA", path: "/chat" },
   { icon: Activity, label: "Protocolos", path: "/protocolos" },
   { icon: Apple, label: "Dietas", path: "/dietas" },
   { icon: Trophy, label: "Conquistas", path: "/conquistas" },

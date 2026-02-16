@@ -67,6 +67,7 @@ const CursoPerfumariaNatural = lazy(() => import("@/pages/CursoPerfumariaNatural
 const CursoPerfumariaNaturalHero = lazy(() => import("@/pages/CursoPerfumariaNaturalHero"));
 const Terapias = lazy(() => import("@/pages/Terapias"));
 const Offers = lazy(() => import("@/pages/Offers"));
+const ChatAssistente = lazy(() => import("@/pages/ChatAssistente"));
 const NotFound = lazy(() => import("@/pages/NotFound"));
 
 // Admin Pages
@@ -163,6 +164,7 @@ export const AnimatedRoutes = () => {
         <Route path="/curso/perfumaria-natural" element={<ProtectedRoute><LazyPage><CursoPerfumariaNaturalHero /></LazyPage></ProtectedRoute>} />
         <Route path="/terapias" element={<LazyPage><Terapias /></LazyPage>} />
         <Route path="/ofertas" element={<ProtectedRoute><LazyPage><Offers /></LazyPage></ProtectedRoute>} />
+        <Route path="/chat" element={<ProtectedRoute><LazyPage><ChatAssistente /></LazyPage></ProtectedRoute>} />
 
         {/* Resinkra AI Routes — Admin Only */}
         <Route path="/resinkra-ai" element={<AdminRoute><LazyPage><ResinkraAIDashboard /></LazyPage></AdminRoute>} />
