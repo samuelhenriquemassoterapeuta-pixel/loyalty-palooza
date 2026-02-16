@@ -16,6 +16,15 @@ import aulaUpgrade from "@/assets/cursos/vendas/aula-upgrade.jpg";
 import aulaMetasConversao from "@/assets/cursos/vendas/aula-metas-conversao.jpg";
 import aulaKpis from "@/assets/cursos/vendas/aula-kpis.jpg";
 import aulaPlanoAcao from "@/assets/cursos/vendas/aula-plano-acao.jpg";
+import aulaPresencaDigital from "@/assets/cursos/vendas/aula-presenca-digital.jpg";
+import aulaConteudoAtrai from "@/assets/cursos/vendas/aula-conteudo-atrai.jpg";
+import aulaIndicacoes from "@/assets/cursos/vendas/aula-indicacoes-parcerias.jpg";
+import aulaCrm from "@/assets/cursos/vendas/aula-crm-terapeutas.jpg";
+import aulaAutomacao from "@/assets/cursos/vendas/aula-automacao-mensagens.jpg";
+import aulaLgpd from "@/assets/cursos/vendas/aula-lgpd-conformidade.jpg";
+import aulaRecrutamento from "@/assets/cursos/vendas/aula-recrutamento-equipe.jpg";
+import aulaPlanejamento from "@/assets/cursos/vendas/aula-planejamento-estrategico.jpg";
+import aulaLideranca from "@/assets/cursos/vendas/aula-lideranca-gestao.jpg";
 
 // Videos for each lesson
 import videoVenderCuidar from "@/assets/cursos/vendas/video-vender-cuidar.mp4";
@@ -35,6 +44,15 @@ import videoUpgrade from "@/assets/cursos/vendas/video-upgrade.mp4";
 import videoMetas from "@/assets/cursos/vendas/video-metas.mp4";
 import videoKpis from "@/assets/cursos/vendas/video-kpis.mp4";
 import videoPlanoAcao from "@/assets/cursos/vendas/video-plano-acao.mp4";
+import videoPresencaDigital from "@/assets/cursos/vendas/video-presenca-digital.mp4";
+import videoConteudoAtrai from "@/assets/cursos/vendas/video-conteudo.mp4";
+import videoIndicacoes from "@/assets/cursos/vendas/video-indicacoes.mp4";
+import videoCrm from "@/assets/cursos/vendas/video-crm.mp4";
+import videoAutomacao from "@/assets/cursos/vendas/video-automacao.mp4";
+import videoLgpd from "@/assets/cursos/vendas/video-lgpd.mp4";
+import videoRecrutamento from "@/assets/cursos/vendas/video-recrutamento.mp4";
+import videoPlanejamento from "@/assets/cursos/vendas/video-planejamento.mp4";
+import videoLideranca from "@/assets/cursos/vendas/video-lideranca.mp4";
 
 // Map: [moduleIndex]-[lessonIndex] => { image, video }
 export const vendasAulaAssets: Record<string, { image: string; video: string }> = {
@@ -58,7 +76,19 @@ export const vendasAulaAssets: Record<string, { image: string; video: string }> 
   "4-0": { image: aulaAlerta, video: videoAlerta },
   "4-1": { image: aulaUpgrade, video: videoUpgrade },
   "4-2": { image: aulaMetasConversao, video: videoMetas },
-  // Module 5: Indicadores e Melhoria Contínua
+// Module 5: Indicadores e Melhoria Contínua
   "5-0": { image: aulaKpis, video: videoKpis },
   "5-1": { image: aulaPlanoAcao, video: videoPlanoAcao },
+  // Module 6: Marketing Digital para Terapeutas (assets reuse existing pattern)
+  "6-0": { image: aulaPresencaDigital, video: videoPresencaDigital },
+  "6-1": { image: aulaConteudoAtrai, video: videoConteudoAtrai },
+  "6-2": { image: aulaIndicacoes, video: videoIndicacoes },
+  // Module 7: Automação, CRM e LGPD
+  "7-0": { image: aulaCrm, video: videoCrm },
+  "7-1": { image: aulaAutomacao, video: videoAutomacao },
+  "7-2": { image: aulaLgpd, video: videoLgpd },
+  // Module 8: Estratégias de Escala
+  "8-0": { image: aulaRecrutamento, video: videoRecrutamento },
+  "8-1": { image: aulaPlanejamento, video: videoPlanejamento },
+  "8-2": { image: aulaLideranca, video: videoLideranca },
 };

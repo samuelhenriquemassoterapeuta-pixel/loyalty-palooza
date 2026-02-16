@@ -16,7 +16,7 @@ export default function CursoVendasHero({ embedded }: { embedded?: boolean }) {
       coverVideo={videoVendas}
       courseRoute="/curso-vendas"
       level="Intermediário"
-      description="Domine as técnicas de vendas consultivas para massoterapia. Aprenda a precificar pacotes, contornar objeções e fidelizar clientes com estratégias comprovadas."
+      description="Domine as técnicas de vendas consultivas para massoterapia. Aprenda a precificar pacotes, contornar objeções, fidelizar clientes, automatizar processos e escalar sua clínica com estratégias comprovadas."
       embedded={embedded}
     />
   );
