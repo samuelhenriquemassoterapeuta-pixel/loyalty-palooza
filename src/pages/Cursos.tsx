@@ -1,5 +1,5 @@
 import { useSearchParams } from "react-router-dom";
-import { GraduationCap, Flower2, Sparkles, Bone, Gem, Hand, Droplets, Flame, Bath, Wind, LucideIcon } from "lucide-react";
+import { GraduationCap, Flower2, Sparkles, Bone, Gem, Hand, Droplets, Flame, Bath, Wind, Leaf, LucideIcon } from "lucide-react";
 import { AppLayout } from "@/components/AppLayout";
 import { lazy, Suspense, useMemo, useRef, useEffect } from "react";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
@@ -18,6 +18,7 @@ const CursoPerfumariaNaturalHero = lazy(() => import("@/pages/CursoPerfumariaNat
 const CursoVelasAromaticasHero = lazy(() => import("@/pages/CursoVelasAromaticasHero"));
 const CursoSaboariaArtesanalHero = lazy(() => import("@/pages/CursoSaboariaArtesanalHero"));
 const CursoDifusorAmbientesHero = lazy(() => import("@/pages/CursoDifusorAmbientesHero"));
+const CursoFitoterapiaHero = lazy(() => import("@/pages/CursoFitoterapiaHero"));
 
 interface TabDef {
   value: string;
@@ -38,6 +39,7 @@ const tabDefs: TabDef[] = [
   { value: "velas", label: "Velas", icon: Flame, storageKey: "resinkra_curso_velas_aromaticas_progress", totalAulas: 0 },
   { value: "saboaria", label: "Saboaria", icon: Bath, storageKey: "resinkra_curso_saboaria_artesanal_progress", totalAulas: 0 },
   { value: "difusor", label: "Difusor", icon: Wind, storageKey: "resinkra_curso_difusor_ambientes_progress", totalAulas: 0 },
+  { value: "fitoterapia", label: "Fitoterapia", icon: Leaf, storageKey: "resinkra_curso_fitoterapia_progress", totalAulas: 0 },
 ];
 
 function getProgress(storageKey: string): number {
@@ -150,6 +152,7 @@ export default function Cursos() {
           {tab === "velas" && <CursoVelasAromaticasHero embedded />}
           {tab === "saboaria" && <CursoSaboariaArtesanalHero embedded />}
           {tab === "difusor" && <CursoDifusorAmbientesHero embedded />}
+          {tab === "fitoterapia" && <CursoFitoterapiaHero embedded />}
         </Suspense>
       </div>
     </AppLayout>
