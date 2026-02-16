@@ -68,6 +68,19 @@ const Terapias = lazy(() => import("@/pages/Terapias"));
 const Offers = lazy(() => import("@/pages/Offers"));
 const NotFound = lazy(() => import("@/pages/NotFound"));
 
+// Resinkra AI Pages
+const ResinkraAIDashboard = lazy(() => import("@/pages/resinkra-ai/ResinkraAIDashboard"));
+const ResinkraAIOnboarding = lazy(() => import("@/pages/resinkra-ai/ResinkraAIOnboarding"));
+const ResinkraAICreate = lazy(() => import("@/pages/resinkra-ai/ResinkraAICreate"));
+const ResinkraAIScriptResult = lazy(() => import("@/pages/resinkra-ai/ResinkraAIScriptResult"));
+const ResinkraAIHistory = lazy(() => import("@/pages/resinkra-ai/ResinkraAIHistory"));
+const ResinkraAIHooks = lazy(() => import("@/pages/resinkra-ai/ResinkraAIHooks"));
+const ResinkraAICalendar = lazy(() => import("@/pages/resinkra-ai/ResinkraAICalendar"));
+const ResinkraAIViralAnalysis = lazy(() => import("@/pages/resinkra-ai/ResinkraAIViralAnalysis"));
+const ResinkraAIIdeas = lazy(() => import("@/pages/resinkra-ai/ResinkraAIIdeas"));
+const ResinkraAITemplates = lazy(() => import("@/pages/resinkra-ai/ResinkraAITemplates"));
+const ResinkraAISettings = lazy(() => import("@/pages/resinkra-ai/ResinkraAISettings"));
+
 const LazyPage = ({ children }: { children: React.ReactNode }) => (
   <Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-background"><LoadingSpinner /></div>}>
     <PageTransition>{children}</PageTransition>
@@ -145,6 +158,20 @@ export const AnimatedRoutes = () => {
         <Route path="/curso/perfumaria-natural" element={<ProtectedRoute><LazyPage><CursoPerfumariaNaturalHero /></LazyPage></ProtectedRoute>} />
         <Route path="/terapias" element={<LazyPage><Terapias /></LazyPage>} />
         <Route path="/ofertas" element={<ProtectedRoute><LazyPage><Offers /></LazyPage></ProtectedRoute>} />
+
+        {/* Resinkra AI Routes */}
+        <Route path="/resinkra-ai" element={<ProtectedRoute><LazyPage><ResinkraAIDashboard /></LazyPage></ProtectedRoute>} />
+        <Route path="/resinkra-ai/onboarding" element={<ProtectedRoute><LazyPage><ResinkraAIOnboarding /></LazyPage></ProtectedRoute>} />
+        <Route path="/resinkra-ai/create" element={<ProtectedRoute><LazyPage><ResinkraAICreate /></LazyPage></ProtectedRoute>} />
+        <Route path="/resinkra-ai/script/:id" element={<ProtectedRoute><LazyPage><ResinkraAIScriptResult /></LazyPage></ProtectedRoute>} />
+        <Route path="/resinkra-ai/history" element={<ProtectedRoute><LazyPage><ResinkraAIHistory /></LazyPage></ProtectedRoute>} />
+        <Route path="/resinkra-ai/hooks" element={<ProtectedRoute><LazyPage><ResinkraAIHooks /></LazyPage></ProtectedRoute>} />
+        <Route path="/resinkra-ai/calendar" element={<ProtectedRoute><LazyPage><ResinkraAICalendar /></LazyPage></ProtectedRoute>} />
+        <Route path="/resinkra-ai/viral-analysis" element={<ProtectedRoute><LazyPage><ResinkraAIViralAnalysis /></LazyPage></ProtectedRoute>} />
+        <Route path="/resinkra-ai/ideas" element={<ProtectedRoute><LazyPage><ResinkraAIIdeas /></LazyPage></ProtectedRoute>} />
+        <Route path="/resinkra-ai/templates" element={<ProtectedRoute><LazyPage><ResinkraAITemplates /></LazyPage></ProtectedRoute>} />
+        <Route path="/resinkra-ai/settings" element={<ProtectedRoute><LazyPage><ResinkraAISettings /></LazyPage></ProtectedRoute>} />
+
         <Route path="*" element={<LazyPage><NotFound /></LazyPage>} />
       </Routes>
     </AnimatePresence>
