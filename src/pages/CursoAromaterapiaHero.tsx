@@ -15,8 +15,8 @@ export default function CursoAromaterapiaHero({ embedded }: { embedded?: boolean
       coverImage={capaAromaterapia}
       coverVideo={videoAromaterapia}
       courseRoute="/curso-aromaterapia"
-      level="Iniciante"
-      description="Aprenda a utilizar óleos essenciais CPTG doTERRA em protocolos terapêuticos. Desde os fundamentos até a integração clínica profissional."
+      level="Iniciante ao Avançado"
+      description="Formação completa em aromaterapia doTERRA: dos fundamentos à Técnica AromaTouch®, classificação química, evidências científicas, DIY artesanal, aromaterapia para animais e empreendedorismo."
       embedded={embedded}
     />
   );

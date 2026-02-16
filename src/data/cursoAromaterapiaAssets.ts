@@ -19,6 +19,15 @@ import aulaHeadspaAromaterapia from "@/assets/cursos/aromaterapia/aula-headspa-a
 import aulaNegocioDoterra from "@/assets/cursos/aromaterapia/aula-negocio-doterra.jpg";
 import aulaVendasScript from "@/assets/cursos/aromaterapia/aula-vendas-script.jpg";
 import aulaQuizCertificacao from "@/assets/cursos/aromaterapia/aula-quiz-certificacao.jpg";
+import aulaAromatouchCiencia from "@/assets/cursos/aromaterapia/aula-aromatouch-ciencia.jpg";
+import aulaAromatouchPasso from "@/assets/cursos/aromaterapia/aula-aromatouch-passo.jpg";
+import aulaAromatouchPratica from "@/assets/cursos/aromaterapia/aula-aromatouch-pratica.jpg";
+import aulaQuimicaAvancada from "@/assets/cursos/aromaterapia/aula-quimica-avancada.jpg";
+import aulaPiramideBemEstar from "@/assets/cursos/aromaterapia/aula-piramide-bem-estar.jpg";
+import aulaEstudosCasos from "@/assets/cursos/aromaterapia/aula-estudos-casos.jpg";
+import aulaDiyArtesanal from "@/assets/cursos/aromaterapia/aula-diy-artesanal.jpg";
+import aulaAnimais from "@/assets/cursos/aromaterapia/aula-animais.jpg";
+import aulaEmpreendedorismo from "@/assets/cursos/aromaterapia/aula-empreendedorismo.jpg";
 
 // Videos for each lesson
 import videoOleosEssenciais from "@/assets/cursos/aromaterapia/video-oleos-essenciais.mp4";
@@ -41,6 +50,15 @@ import videoHeadspa from "@/assets/cursos/aromaterapia/video-headspa.mp4";
 import videoNegocio from "@/assets/cursos/aromaterapia/video-negocio.mp4";
 import videoVendas from "@/assets/cursos/aromaterapia/video-vendas.mp4";
 import videoCertificacao from "@/assets/cursos/aromaterapia/video-certificacao.mp4";
+import videoAromatouchCiencia from "@/assets/cursos/aromaterapia/video-aromatouch-ciencia.mp4";
+import videoAromatouchPasso from "@/assets/cursos/aromaterapia/video-aromatouch-passo.mp4";
+import videoAromatouchPratica from "@/assets/cursos/aromaterapia/video-aromatouch-pratica.mp4";
+import videoQuimicaAvancada from "@/assets/cursos/aromaterapia/video-quimica-avancada.mp4";
+import videoPiramideBemEstar from "@/assets/cursos/aromaterapia/video-piramide-bem-estar.mp4";
+import videoEstudosCasos from "@/assets/cursos/aromaterapia/video-estudos-casos.mp4";
+import videoDiyArtesanal from "@/assets/cursos/aromaterapia/video-diy-artesanal.mp4";
+import videoAnimais from "@/assets/cursos/aromaterapia/video-animais.mp4";
+import videoEmpreendedorismo from "@/assets/cursos/aromaterapia/video-empreendedorismo.mp4";
 
 // Map: [moduleIndex]-[lessonIndex] => { image, video }
 export const aromaterapiaAulaAssets: Record<string, { image: string; video: string }> = {
@@ -70,4 +88,20 @@ export const aromaterapiaAulaAssets: Record<string, { image: string; video: stri
   "5-0": { image: aulaNegocioDoterra, video: videoNegocio },
   "5-1": { image: aulaVendasScript, video: videoVendas },
   "5-2": { image: aulaQuizCertificacao, video: videoCertificacao },
+  // Module 6: Aromaterapia para Gestantes e Públicos Especiais (was module 6)
+  "6-0": { image: aulaOleosEssenciais, video: videoOleosEssenciais },
+  "6-1": { image: aulaSeguranca, video: videoSeguranca },
+  "6-2": { image: aulaImunidade, video: videoImunidade },
+  // Module 7: Técnica AromaTouch® Completa
+  "7-0": { image: aulaAromatouchCiencia, video: videoAromatouchCiencia },
+  "7-1": { image: aulaAromatouchPasso, video: videoAromatouchPasso },
+  "7-2": { image: aulaAromatouchPratica, video: videoAromatouchPratica },
+  // Module 8: Ciência, Evidências e Bem-Estar
+  "8-0": { image: aulaQuimicaAvancada, video: videoQuimicaAvancada },
+  "8-1": { image: aulaPiramideBemEstar, video: videoPiramideBemEstar },
+  "8-2": { image: aulaEstudosCasos, video: videoEstudosCasos },
+  // Module 9: Criação Artesanal, Animais e Empreendedorismo
+  "9-0": { image: aulaDiyArtesanal, video: videoDiyArtesanal },
+  "9-1": { image: aulaAnimais, video: videoAnimais },
+  "9-2": { image: aulaEmpreendedorismo, video: videoEmpreendedorismo },
 };
