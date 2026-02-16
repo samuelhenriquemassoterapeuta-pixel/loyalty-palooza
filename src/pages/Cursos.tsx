@@ -1,5 +1,5 @@
 import { useSearchParams } from "react-router-dom";
-import { GraduationCap, Flower2, Sparkles, Bone, Gem, Hand, Droplets, Flame, Bath, Wind, Leaf, FlaskConical, LucideIcon } from "lucide-react";
+import { GraduationCap, Flower2, Sparkles, Bone, Gem, Hand, Droplets, Flame, Bath, Wind, Leaf, FlaskConical, Fingerprint, LucideIcon } from "lucide-react";
 import { AppLayout } from "@/components/AppLayout";
 import { lazy, Suspense, useMemo, useRef, useEffect } from "react";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
@@ -20,6 +20,7 @@ const CursoSaboariaArtesanalHero = lazy(() => import("@/pages/CursoSaboariaArtes
 const CursoDifusorAmbientesHero = lazy(() => import("@/pages/CursoDifusorAmbientesHero"));
 const CursoFitoterapiaHero = lazy(() => import("@/pages/CursoFitoterapiaHero"));
 const CursoOleosEssenciaisHero = lazy(() => import("@/pages/CursoOleosEssenciaisHero"));
+const CursoMassagemModeladoraHero = lazy(() => import("@/pages/CursoMassagemModeladoraHero"));
 
 interface TabDef {
   value: string;
@@ -42,6 +43,7 @@ const tabDefs: TabDef[] = [
   { value: "difusor", label: "Difusor", icon: Wind, storageKey: "resinkra_curso_difusor_ambientes_progress", totalAulas: 0 },
   { value: "fitoterapia", label: "Fitoterapia", icon: Leaf, storageKey: "resinkra_curso_fitoterapia_progress", totalAulas: 0 },
   { value: "oleos", label: "Óleos", icon: FlaskConical, storageKey: "resinkra_curso_oleos_essenciais_progress", totalAulas: 0 },
+  { value: "modeladora", label: "Modeladora", icon: Fingerprint, storageKey: "resinkra_curso_massagem_modeladora_progress", totalAulas: 0 },
 ];
 
 function getProgress(storageKey: string): number {
@@ -156,6 +158,7 @@ export default function Cursos() {
           {tab === "difusor" && <CursoDifusorAmbientesHero embedded />}
           {tab === "fitoterapia" && <CursoFitoterapiaHero embedded />}
           {tab === "oleos" && <CursoOleosEssenciaisHero embedded />}
+          {tab === "modeladora" && <CursoMassagemModeladoraHero embedded />}
         </Suspense>
       </div>
     </AppLayout>
