@@ -37,7 +37,8 @@ const ResinkraAIOnboarding = () => {
     brand_name: "",
     niche: "",
     website: "",
-    target_audience_age: "25-34",
+    target_audience_age_min: "25",
+    target_audience_age_max: "45",
     target_audience_gender: "todos",
     target_audience_pain: "",
     target_audience_desire: "",
@@ -67,7 +68,7 @@ const ResinkraAIOnboarding = () => {
         brand_name: form.brand_name,
         niche: form.niche,
         website: form.website || null,
-        target_audience_age: form.target_audience_age,
+        target_audience_age: `${form.target_audience_age_min}-${form.target_audience_age_max}`,
         target_audience_gender: form.target_audience_gender,
         target_audience_pain: form.target_audience_pain || null,
         target_audience_desire: form.target_audience_desire || null,
@@ -136,16 +137,28 @@ const ResinkraAIOnboarding = () => {
       <div className="grid grid-cols-2 gap-3">
         <div>
           <Label className="text-muted-foreground text-sm">Faixa etária</Label>
-          <Select value={form.target_audience_age} onValueChange={v => setForm(p => ({ ...p, target_audience_age: v }))}>
-            <SelectTrigger className="bg-card border-border text-foreground mt-1">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent className="bg-card border-border">
-              {["18-24", "25-34", "35-44", "45-54", "55+"].map(a => (
-                <SelectItem key={a} value={a} className="text-foreground focus:bg-primary/10 focus:text-primary">{a}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <div className="flex items-center gap-2 mt-1">
+            <Input
+              type="number"
+              min={13}
+              max={99}
+              value={form.target_audience_age_min}
+              onChange={e => setForm(p => ({ ...p, target_audience_age_min: e.target.value }))}
+              placeholder="De"
+              className="bg-card border-border text-foreground placeholder:text-muted-foreground w-20 text-center"
+            />
+            <span className="text-muted-foreground text-sm">a</span>
+            <Input
+              type="number"
+              min={13}
+              max={99}
+              value={form.target_audience_age_max}
+              onChange={e => setForm(p => ({ ...p, target_audience_age_max: e.target.value }))}
+              placeholder="Até"
+              className="bg-card border-border text-foreground placeholder:text-muted-foreground w-20 text-center"
+            />
+            <span className="text-muted-foreground text-sm">anos</span>
+          </div>
         </div>
         <div>
           <Label className="text-muted-foreground text-sm">Gênero</Label>
