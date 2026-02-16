@@ -1,6 +1,6 @@
 import { useRef, useEffect, useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Home, CalendarDays, ShoppingBag, Wallet, MoreHorizontal, X, Activity, Apple, Globe, Handshake, GraduationCap, Ticket, Trophy, Heart, Star, Leaf } from "lucide-react";
+import { Home, CalendarDays, ShoppingBag, Wallet, MoreHorizontal, X, Activity, Apple, Globe, Handshake, GraduationCap, Ticket, Trophy, Heart, Star, Leaf, Zap } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAdmin } from "@/hooks/useAdmin";
 
@@ -21,6 +21,7 @@ const moreNavItems = [
   { icon: Handshake, label: "Parceiros", path: "/parceiro-dashboard" },
   { icon: GraduationCap, label: "Cursos", path: "/cursos" },
   { icon: Leaf, label: "Terapias", path: "/terapias" },
+  { icon: Zap, label: "Resinkra AI", path: "/resinkra-ai" },
 ];
 
 const adminMoreItem = { icon: Ticket, label: "Cupom", path: "/cupom-editor" };

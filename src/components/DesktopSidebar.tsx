@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Home, CalendarDays, ShoppingBag, User, Gift, Wallet, Crown, Settings, Bell, Dumbbell, Activity, BookOpen, Scan, Apple, Globe, Ticket, Handshake, GraduationCap, Leaf } from "lucide-react";
+import { Home, CalendarDays, ShoppingBag, User, Gift, Wallet, Crown, Settings, Bell, Dumbbell, Activity, BookOpen, Scan, Apple, Globe, Ticket, Handshake, GraduationCap, Leaf, Zap } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAdmin } from "@/hooks/useAdmin";
 import { useProfile } from "@/hooks/useProfile";
@@ -24,6 +24,7 @@ const navItems = [
   { icon: Handshake, label: "Parceiros", path: "/parceiro-dashboard" },
   { icon: GraduationCap, label: "Cursos", path: "/cursos" },
   { icon: Leaf, label: "Terapias", path: "/terapias" },
+  { icon: Zap, label: "Resinkra AI", path: "/resinkra-ai" },
 ];
 
 const bottomItems = [
