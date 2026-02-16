@@ -12,13 +12,13 @@ const StatCard = ({ icon: Icon, label, value, color }: { icon: any; label: strin
   <motion.div
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
-    className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm p-5 hover:border-white/20 transition-all"
+    className="rounded-2xl border border-border bg-card backdrop-blur-sm p-5 hover:border-primary/30 transition-all shadow-card"
   >
     <div className={`w-10 h-10 rounded-xl ${color} flex items-center justify-center mb-3`}>
-      <Icon className="w-5 h-5 text-white" />
+      <Icon className="w-5 h-5 text-primary-foreground" />
     </div>
-    <p className="text-2xl font-bold text-white">{value}</p>
-    <p className="text-sm text-gray-400">{label}</p>
+    <p className="text-2xl font-bold text-foreground">{value}</p>
+    <p className="text-sm text-muted-foreground">{label}</p>
   </motion.div>
 );
 
@@ -60,12 +60,12 @@ const ResinkraAIDashboard = () => {
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-white">Dashboard</h1>
-            <p className="text-gray-400 text-sm mt-1">Visão geral dos seus roteiros</p>
+            <h1 className="text-2xl sm:text-3xl font-bold text-foreground font-serif">Dashboard</h1>
+            <p className="text-muted-foreground text-sm mt-1">Visão geral dos seus roteiros</p>
           </div>
           <Link
             to="/resinkra-ai/create"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-violet-600 to-blue-600 text-white font-semibold text-sm hover:shadow-lg hover:shadow-violet-500/25 transition-all"
+            className="btn-premium inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm"
           >
             <Plus className="w-4 h-4" /> Novo Roteiro
           </Link>
@@ -73,16 +73,16 @@ const ResinkraAIDashboard = () => {
 
         {/* Stats */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <StatCard icon={FileText} label="Total de roteiros" value={stats?.total || 0} color="bg-violet-600" />
-          <StatCard icon={PenTool} label="Esta semana" value={stats?.week || 0} color="bg-blue-600" />
-          <StatCard icon={TrendingUp} label="Score médio" value={stats?.avgScore || 0} color="bg-emerald-600" />
+          <StatCard icon={FileText} label="Total de roteiros" value={stats?.total || 0} color="gradient-primary" />
+          <StatCard icon={PenTool} label="Esta semana" value={stats?.week || 0} color="gradient-accent" />
+          <StatCard icon={TrendingUp} label="Score médio" value={stats?.avgScore || 0} color="bg-highlight" />
         </div>
 
         {/* Trends */}
         <div>
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-white flex items-center gap-2">
-              <Sparkles className="w-5 h-5 text-violet-400" /> Trends da Semana
+            <h2 className="text-lg font-semibold text-foreground flex items-center gap-2">
+              <Sparkles className="w-5 h-5 text-accent" /> Trends da Semana
             </h2>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -92,20 +92,20 @@ const ResinkraAIDashboard = () => {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.05 }}
-                className="rounded-xl border border-white/10 bg-white/5 p-4 hover:border-violet-500/30 transition-all cursor-pointer group"
+                className="rounded-xl border border-border bg-card p-4 hover:border-primary/30 transition-all cursor-pointer group shadow-card"
               >
                 <div className="flex items-start justify-between">
                   <div>
-                    <p className="font-semibold text-white text-sm">{trend.title}</p>
-                    <p className="text-xs text-gray-400 mt-1">{trend.description}</p>
+                    <p className="font-semibold text-foreground text-sm">{trend.title}</p>
+                    <p className="text-xs text-muted-foreground mt-1">{trend.description}</p>
                   </div>
-                  <ArrowRight className="w-4 h-4 text-gray-500 group-hover:text-violet-400 transition-colors" />
+                  <ArrowRight className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
                 </div>
                 <div className="flex gap-2 mt-3">
-                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-violet-500/20 text-violet-300">
+                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-primary/10 text-primary">
                     {trend.trend_type}
                   </span>
-                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-300">
+                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-accent/10 text-accent">
                     Score: {trend.relevance_score}/10
                   </span>
                 </div>
@@ -117,18 +117,18 @@ const ResinkraAIDashboard = () => {
         {/* Quick Actions */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           {[
-            { label: "Criar Roteiro", icon: PenTool, path: "/resinkra-ai/create", color: "from-violet-600 to-violet-800" },
-            { label: "Gerar Ganchos", icon: Sparkles, path: "/resinkra-ai/hooks", color: "from-blue-600 to-blue-800" },
-            { label: "Análise Viral", icon: TrendingUp, path: "/resinkra-ai/viral-analysis", color: "from-emerald-600 to-emerald-800" },
-            { label: "Banco de Ideias", icon: FileText, path: "/resinkra-ai/ideas", color: "from-amber-600 to-amber-800" },
+            { label: "Criar Roteiro", icon: PenTool, path: "/resinkra-ai/create", color: "gradient-primary" },
+            { label: "Gerar Ganchos", icon: Sparkles, path: "/resinkra-ai/hooks", color: "gradient-accent" },
+            { label: "Análise Viral", icon: TrendingUp, path: "/resinkra-ai/viral-analysis", color: "bg-highlight" },
+            { label: "Banco de Ideias", icon: FileText, path: "/resinkra-ai/ideas", color: "bg-accent" },
           ].map((action) => (
             <Link
               key={action.path}
               to={action.path}
-              className={`rounded-xl bg-gradient-to-br ${action.color} p-4 hover:scale-[1.02] transition-transform`}
+              className={`rounded-xl ${action.color} p-4 hover:scale-[1.02] transition-transform shadow-card`}
             >
-              <action.icon className="w-6 h-6 text-white mb-2" />
-              <p className="text-sm font-semibold text-white">{action.label}</p>
+              <action.icon className="w-6 h-6 text-primary-foreground mb-2" />
+              <p className="text-sm font-semibold text-primary-foreground">{action.label}</p>
             </Link>
           ))}
         </div>

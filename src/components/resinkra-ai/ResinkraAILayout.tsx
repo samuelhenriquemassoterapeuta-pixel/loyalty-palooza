@@ -39,19 +39,19 @@ export const ResinkraAILayout = ({ children, title }: ResinkraAILayoutProps) => 
   };
 
   return (
-    <div className="resinkra-ai-theme min-h-screen bg-[#0a0a1a] text-gray-100 flex">
+    <div className="min-h-screen bg-background text-foreground flex">
       {/* Desktop Sidebar */}
-      <aside className="hidden lg:flex flex-col w-64 border-r border-white/10 bg-[#0d0d24]/80 backdrop-blur-xl fixed inset-y-0 left-0 z-40">
+      <aside className="hidden lg:flex flex-col w-64 border-r border-border bg-card/80 backdrop-blur-xl fixed inset-y-0 left-0 z-40">
         <div className="p-6">
           <Link to="/resinkra-ai" className="flex items-center gap-2">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-violet-500 to-blue-500 flex items-center justify-center">
-              <Zap className="w-5 h-5 text-white" />
+            <div className="w-9 h-9 rounded-xl gradient-primary flex items-center justify-center">
+              <Zap className="w-5 h-5 text-primary-foreground" />
             </div>
             <div>
-              <h1 className="text-lg font-bold bg-gradient-to-r from-violet-400 to-blue-400 bg-clip-text text-transparent">
+              <h1 className="text-lg font-bold text-primary font-serif">
                 Resinkra AI
               </h1>
-              <p className="text-[10px] text-gray-500 -mt-0.5">Instagram Scripts</p>
+              <p className="text-[10px] text-muted-foreground -mt-0.5">Instagram Scripts</p>
             </div>
           </Link>
         </div>
@@ -64,8 +64,8 @@ export const ResinkraAILayout = ({ children, title }: ResinkraAILayoutProps) => 
               className={cn(
                 "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all",
                 isActive(item.path)
-                  ? "bg-gradient-to-r from-violet-500/20 to-blue-500/10 text-violet-300 shadow-lg shadow-violet-500/5"
-                  : "text-gray-400 hover:text-gray-200 hover:bg-white/5"
+                  ? "bg-primary/10 text-primary shadow-sm"
+                  : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
               )}
             >
               <item.icon className="w-4 h-4" />
@@ -75,10 +75,10 @@ export const ResinkraAILayout = ({ children, title }: ResinkraAILayoutProps) => 
           ))}
         </nav>
 
-        <div className="p-4 border-t border-white/10">
+        <div className="p-4 border-t border-border">
           <Button
             variant="ghost"
-            className="w-full justify-start gap-2 text-gray-400 hover:text-gray-200 hover:bg-white/5"
+            className="w-full justify-start gap-2 text-muted-foreground hover:text-foreground hover:bg-muted/50"
             onClick={() => { signOut(); navigate("/"); }}
           >
             <LogOut className="w-4 h-4" /> Sair
@@ -87,17 +87,17 @@ export const ResinkraAILayout = ({ children, title }: ResinkraAILayoutProps) => 
       </aside>
 
       {/* Mobile Header */}
-      <div className="lg:hidden fixed top-0 left-0 right-0 z-50 bg-[#0a0a1a]/90 backdrop-blur-xl border-b border-white/10">
+      <div className="lg:hidden fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-xl border-b border-border">
         <div className="flex items-center justify-between px-4 py-3">
           <Link to="/resinkra-ai" className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-500 to-blue-500 flex items-center justify-center">
-              <Zap className="w-4 h-4 text-white" />
+            <div className="w-8 h-8 rounded-lg gradient-primary flex items-center justify-center">
+              <Zap className="w-4 h-4 text-primary-foreground" />
             </div>
-            <span className="font-bold text-sm bg-gradient-to-r from-violet-400 to-blue-400 bg-clip-text text-transparent">
+            <span className="font-bold text-sm text-primary font-serif">
               Resinkra AI
             </span>
           </Link>
-          <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="p-2 rounded-lg hover:bg-white/10">
+          <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="p-2 rounded-lg hover:bg-muted">
             {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
         </div>
@@ -110,7 +110,7 @@ export const ResinkraAILayout = ({ children, title }: ResinkraAILayoutProps) => 
             initial={{ opacity: 0, x: -300 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -300 }}
-            className="lg:hidden fixed inset-0 z-40 bg-[#0a0a1a]/95 backdrop-blur-xl pt-16"
+            className="lg:hidden fixed inset-0 z-40 bg-background/95 backdrop-blur-xl pt-16"
           >
             <nav className="p-4 space-y-1">
               {navItems.map((item) => (
@@ -121,8 +121,8 @@ export const ResinkraAILayout = ({ children, title }: ResinkraAILayoutProps) => 
                   className={cn(
                     "flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all",
                     isActive(item.path)
-                      ? "bg-gradient-to-r from-violet-500/20 to-blue-500/10 text-violet-300"
-                      : "text-gray-400 hover:text-gray-200 hover:bg-white/5"
+                      ? "bg-primary/10 text-primary"
+                      : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
                   )}
                 >
                   <item.icon className="w-5 h-5" />

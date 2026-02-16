@@ -107,14 +107,14 @@ const ResinkraAICreate = () => {
     <ResinkraAILayout>
       <div className="max-w-3xl mx-auto space-y-6">
         <div>
-          <h1 className="text-2xl font-bold text-white">Criar Roteiro</h1>
-          <p className="text-gray-400 text-sm mt-1">Preencha as informações e deixe a IA trabalhar</p>
+          <h1 className="text-2xl font-bold text-foreground font-serif">Criar Roteiro</h1>
+          <p className="text-muted-foreground text-sm mt-1">Preencha as informações e deixe a IA trabalhar</p>
         </div>
 
-        <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm p-6 space-y-6">
+        <div className="rounded-2xl border border-border bg-card backdrop-blur-sm p-6 space-y-6 shadow-card">
           {/* Content Type */}
           <div>
-            <Label className="text-gray-300 text-sm mb-3 block">Tipo de conteúdo</Label>
+            <Label className="text-muted-foreground text-sm mb-3 block">Tipo de conteúdo</Label>
             <div className="grid grid-cols-5 gap-2">
               {contentTypes.map(ct => (
                 <button
@@ -123,8 +123,8 @@ const ResinkraAICreate = () => {
                   className={cn(
                     "flex flex-col items-center gap-1.5 p-3 rounded-xl border-2 text-xs font-medium transition-all",
                     form.content_type === ct.value
-                      ? "border-violet-500 bg-violet-500/10 text-violet-300"
-                      : "border-white/10 text-gray-400 hover:border-white/20"
+                      ? "border-primary bg-primary/10 text-primary"
+                      : "border-border text-muted-foreground hover:border-primary/30"
                   )}
                 >
                   <ct.icon className="w-5 h-5" />
@@ -136,18 +136,18 @@ const ResinkraAICreate = () => {
 
           {/* Topic */}
           <div>
-            <Label className="text-gray-300 text-sm">Tema/Assunto *</Label>
+            <Label className="text-muted-foreground text-sm">Tema/Assunto *</Label>
             <Input
               value={form.topic}
               onChange={e => setForm(p => ({ ...p, topic: e.target.value }))}
               placeholder="Ex: Como ganhar seguidores orgânicos no Instagram"
-              className="bg-white/5 border-white/10 text-white placeholder:text-gray-500 mt-1"
+              className="bg-card border-border text-foreground placeholder:text-muted-foreground mt-1"
             />
           </div>
 
           {/* Objective */}
           <div>
-            <Label className="text-gray-300 text-sm mb-3 block">Objetivo</Label>
+            <Label className="text-muted-foreground text-sm mb-3 block">Objetivo</Label>
             <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
               {objectives.map(obj => (
                 <button
@@ -156,8 +156,8 @@ const ResinkraAICreate = () => {
                   className={cn(
                     "p-2 rounded-xl border-2 text-xs font-medium transition-all text-center",
                     form.objective === obj.value
-                      ? "border-violet-500 bg-violet-500/10 text-violet-300"
-                      : "border-white/10 text-gray-400 hover:border-white/20"
+                      ? "border-primary bg-primary/10 text-primary"
+                      : "border-border text-muted-foreground hover:border-primary/30"
                   )}
                 >
                   {obj.label}
@@ -169,7 +169,7 @@ const ResinkraAICreate = () => {
           {/* Duration (only for Reels) */}
           {form.content_type === "reels" && (
             <div>
-              <Label className="text-gray-300 text-sm mb-3 block">Duração</Label>
+              <Label className="text-muted-foreground text-sm mb-3 block">Duração</Label>
               <div className="flex gap-2">
                 {durations.map(d => (
                   <button
@@ -178,8 +178,8 @@ const ResinkraAICreate = () => {
                     className={cn(
                       "px-4 py-2 rounded-xl border-2 text-sm font-medium transition-all",
                       form.duration === d
-                        ? "border-violet-500 bg-violet-500/10 text-violet-300"
-                        : "border-white/10 text-gray-400 hover:border-white/20"
+                        ? "border-primary bg-primary/10 text-primary"
+                        : "border-border text-muted-foreground hover:border-primary/30"
                     )}
                   >
                     {d}
@@ -191,7 +191,7 @@ const ResinkraAICreate = () => {
 
           {/* Style */}
           <div>
-            <Label className="text-gray-300 text-sm mb-3 block">Estilo</Label>
+            <Label className="text-muted-foreground text-sm mb-3 block">Estilo</Label>
             <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
               {styles.map(s => (
                 <button
@@ -200,8 +200,8 @@ const ResinkraAICreate = () => {
                   className={cn(
                     "p-2.5 rounded-xl border-2 text-xs font-medium transition-all text-center",
                     form.style === s.value
-                      ? "border-violet-500 bg-violet-500/10 text-violet-300"
-                      : "border-white/10 text-gray-400 hover:border-white/20"
+                      ? "border-primary bg-primary/10 text-primary"
+                      : "border-border text-muted-foreground hover:border-primary/30"
                   )}
                 >
                   {s.label}
@@ -213,8 +213,8 @@ const ResinkraAICreate = () => {
           {/* Depth */}
           <div>
             <div className="flex justify-between items-center mb-3">
-              <Label className="text-gray-300 text-sm">Profundidade</Label>
-              <span className="text-xs text-violet-400 font-mono">{form.depth_level}/10</span>
+              <Label className="text-muted-foreground text-sm">Profundidade</Label>
+              <span className="text-xs text-primary font-mono">{form.depth_level}/10</span>
             </div>
             <Slider
               value={[form.depth_level]}
@@ -222,9 +222,9 @@ const ResinkraAICreate = () => {
               min={1}
               max={10}
               step={1}
-              className="[&_[role=slider]]:bg-violet-500 [&_[role=slider]]:border-violet-500"
+              className="[&_[role=slider]]:bg-primary [&_[role=slider]]:border-primary"
             />
-            <div className="flex justify-between text-[10px] text-gray-500 mt-1">
+            <div className="flex justify-between text-[10px] text-muted-foreground mt-1">
               <span>Superficial</span>
               <span>Profundo</span>
             </div>
@@ -232,12 +232,12 @@ const ResinkraAICreate = () => {
 
           {/* Additional Info */}
           <div>
-            <Label className="text-gray-300 text-sm">Informações adicionais (opcional)</Label>
+            <Label className="text-muted-foreground text-sm">Informações adicionais (opcional)</Label>
             <Textarea
               value={form.additional_info}
               onChange={e => setForm(p => ({ ...p, additional_info: e.target.value }))}
               placeholder="Contexto extra, dados específicos, referências..."
-              className="bg-white/5 border-white/10 text-white placeholder:text-gray-500 mt-1 min-h-[80px]"
+              className="bg-card border-border text-foreground placeholder:text-muted-foreground mt-1 min-h-[80px]"
             />
           </div>
         </div>
@@ -247,7 +247,7 @@ const ResinkraAICreate = () => {
           <Button
             onClick={() => generate.mutate(1)}
             disabled={!form.topic || generate.isPending}
-            className="flex-1 bg-gradient-to-r from-violet-600 to-blue-600 text-white font-semibold py-6 text-base hover:shadow-lg hover:shadow-violet-500/25"
+            className="flex-1 btn-premium py-6 text-base"
           >
             {generate.isPending ? (
               <Loader2 className="w-5 h-5 animate-spin mr-2" />
@@ -260,7 +260,7 @@ const ResinkraAICreate = () => {
             onClick={() => generate.mutate(3)}
             disabled={!form.topic || generate.isPending}
             variant="outline"
-            className="flex-1 border-white/10 text-gray-300 hover:bg-white/5 py-6 text-base"
+            className="flex-1 border-border text-muted-foreground hover:bg-muted/50 py-6 text-base"
           >
             <Wand2 className="w-5 h-5 mr-2" /> Gerar 3 Variações
           </Button>

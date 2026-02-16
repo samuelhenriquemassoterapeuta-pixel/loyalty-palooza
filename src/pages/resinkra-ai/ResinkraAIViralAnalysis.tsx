@@ -42,25 +42,25 @@ const ResinkraAIViralAnalysis = () => {
   return (
     <ResinkraAILayout>
       <div className="max-w-3xl mx-auto space-y-6">
-        <h1 className="text-2xl font-bold text-white flex items-center gap-2">
-          <TrendingUp className="w-6 h-6 text-violet-400" /> Análise Viral
+        <h1 className="text-2xl font-bold text-foreground font-serif flex items-center gap-2">
+          <TrendingUp className="w-6 h-6 text-primary" /> Análise Viral
         </h1>
-        <p className="text-gray-400 text-sm">Cole o texto de um conteúdo viral e descubra por que funcionou.</p>
+        <p className="text-muted-foreground text-sm">Cole o texto de um conteúdo viral e descubra por que funcionou.</p>
 
-        <div className="rounded-2xl border border-white/10 bg-white/5 p-6 space-y-4">
+        <div className="rounded-2xl border border-border bg-card p-6 space-y-4 shadow-card">
           <div>
-            <Label className="text-gray-300 text-sm">Conteúdo para analisar *</Label>
+            <Label className="text-muted-foreground text-sm">Conteúdo para analisar *</Label>
             <Textarea
               value={content}
               onChange={e => setContent(e.target.value)}
               placeholder="Cole aqui o texto/roteiro de um conteúdo viral..."
-              className="bg-white/5 border-white/10 text-white placeholder:text-gray-500 mt-1 min-h-[150px]"
+              className="bg-card border-border text-foreground placeholder:text-muted-foreground mt-1 min-h-[150px]"
             />
           </div>
           <Button
             onClick={() => analyze.mutate()}
             disabled={!content.trim() || analyze.isPending}
-            className="w-full bg-gradient-to-r from-violet-600 to-blue-600 text-white py-5"
+            className="w-full btn-premium py-5"
           >
             {analyze.isPending ? <Loader2 className="w-5 h-5 animate-spin mr-2" /> : <Sparkles className="w-5 h-5 mr-2" />}
             Analisar Conteúdo
@@ -70,23 +70,23 @@ const ResinkraAIViralAnalysis = () => {
         {result && (
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-4">
             {/* Score */}
-            <div className="rounded-xl border border-white/10 bg-white/5 p-5 text-center">
-              <p className="text-4xl font-bold bg-gradient-to-r from-violet-400 to-blue-400 bg-clip-text text-transparent">
+            <div className="rounded-xl border border-border bg-card p-5 text-center shadow-card">
+              <p className="text-4xl font-bold text-primary font-serif">
                 {result.overall_score}/100
               </p>
-              <p className="text-sm text-gray-400 mt-1">Score de viralidade</p>
+              <p className="text-sm text-muted-foreground mt-1">Score de viralidade</p>
             </div>
 
             {/* Takeaways */}
             {result.key_takeaways?.length > 0 && (
-              <div className="rounded-xl border border-white/10 bg-white/5 p-5">
-                <h3 className="text-sm font-semibold text-gray-300 mb-3 flex items-center gap-2">
-                  <Zap className="w-4 h-4 text-amber-400" /> Takeaways
+              <div className="rounded-xl border border-border bg-card p-5 shadow-card">
+                <h3 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
+                  <Zap className="w-4 h-4 text-accent" /> Takeaways
                 </h3>
                 <ul className="space-y-2">
                   {result.key_takeaways.map((t: string, i: number) => (
-                    <li key={i} className="text-sm text-gray-300 flex items-start gap-2">
-                      <span className="text-violet-400 mt-0.5">•</span> {t}
+                    <li key={i} className="text-sm text-muted-foreground flex items-start gap-2">
+                      <span className="text-primary mt-0.5">•</span> {t}
                     </li>
                   ))}
                 </ul>
@@ -95,13 +95,13 @@ const ResinkraAIViralAnalysis = () => {
 
             {/* Emotional triggers */}
             {result.emotional_triggers?.length > 0 && (
-              <div className="rounded-xl border border-white/10 bg-white/5 p-5">
-                <h3 className="text-sm font-semibold text-gray-300 mb-3 flex items-center gap-2">
-                  <Target className="w-4 h-4 text-emerald-400" /> Gatilhos Emocionais
+              <div className="rounded-xl border border-border bg-card p-5 shadow-card">
+                <h3 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
+                  <Target className="w-4 h-4 text-highlight" /> Gatilhos Emocionais
                 </h3>
                 <div className="flex flex-wrap gap-2">
                   {result.emotional_triggers.map((t: string, i: number) => (
-                    <span key={i} className="text-xs px-2.5 py-1 rounded-lg bg-emerald-500/10 text-emerald-300">{t}</span>
+                    <span key={i} className="text-xs px-2.5 py-1 rounded-lg bg-highlight/10 text-highlight">{t}</span>
                   ))}
                 </div>
               </div>

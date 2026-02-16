@@ -96,26 +96,26 @@ const ResinkraAISettings = () => {
   return (
     <ResinkraAILayout>
       <div className="max-w-2xl mx-auto space-y-6">
-        <h1 className="text-2xl font-bold text-white flex items-center gap-2">
-          <Settings className="w-6 h-6 text-violet-400" /> Configurações
+        <h1 className="text-2xl font-bold text-foreground font-serif flex items-center gap-2">
+          <Settings className="w-6 h-6 text-primary" /> Configurações
         </h1>
 
-        <div className="rounded-2xl border border-white/10 bg-white/5 p-6 space-y-5">
+        <div className="rounded-2xl border border-border bg-card p-6 space-y-5 shadow-card">
           <div>
-            <Label className="text-gray-300 text-sm">Nome da marca</Label>
-            <Input value={form.brand_name || ""} onChange={e => setForm((p: any) => ({ ...p, brand_name: e.target.value }))} className="bg-white/5 border-white/10 text-white mt-1" />
+            <Label className="text-muted-foreground text-sm">Nome da marca</Label>
+            <Input value={form.brand_name || ""} onChange={e => setForm((p: any) => ({ ...p, brand_name: e.target.value }))} className="bg-card border-border text-foreground mt-1" />
           </div>
           <div>
-            <Label className="text-gray-300 text-sm">Nicho</Label>
-            <Input value={form.niche || ""} onChange={e => setForm((p: any) => ({ ...p, niche: e.target.value }))} className="bg-white/5 border-white/10 text-white mt-1" />
+            <Label className="text-muted-foreground text-sm">Nicho</Label>
+            <Input value={form.niche || ""} onChange={e => setForm((p: any) => ({ ...p, niche: e.target.value }))} className="bg-card border-border text-foreground mt-1" />
           </div>
           <div>
-            <Label className="text-gray-300 text-sm">Website</Label>
-            <Input value={form.website || ""} onChange={e => setForm((p: any) => ({ ...p, website: e.target.value }))} className="bg-white/5 border-white/10 text-white mt-1" />
+            <Label className="text-muted-foreground text-sm">Website</Label>
+            <Input value={form.website || ""} onChange={e => setForm((p: any) => ({ ...p, website: e.target.value }))} className="bg-card border-border text-foreground mt-1" />
           </div>
 
           <div>
-            <Label className="text-gray-300 text-sm mb-3 block">Tom de voz</Label>
+            <Label className="text-muted-foreground text-sm mb-3 block">Tom de voz</Label>
             <div className="grid grid-cols-2 gap-2">
               {toneOptions.map(t => (
                 <button
@@ -124,8 +124,8 @@ const ResinkraAISettings = () => {
                   className={cn(
                     "p-2.5 rounded-xl border-2 text-xs font-medium transition-all",
                     form.tone_of_voice?.includes(t.value)
-                      ? "border-violet-500 bg-violet-500/10 text-violet-300"
-                      : "border-white/10 text-gray-400 hover:border-white/20"
+                      ? "border-primary bg-primary/10 text-primary"
+                      : "border-border text-muted-foreground hover:border-primary/30"
                   )}
                 >
                   {t.label}
@@ -135,19 +135,19 @@ const ResinkraAISettings = () => {
           </div>
 
           <div>
-            <Label className="text-gray-300 text-sm">Palavras-chave (vírgula)</Label>
-            <Textarea value={form.keywords || ""} onChange={e => setForm((p: any) => ({ ...p, keywords: e.target.value }))} className="bg-white/5 border-white/10 text-white mt-1 min-h-[60px]" />
+            <Label className="text-muted-foreground text-sm">Palavras-chave (vírgula)</Label>
+            <Textarea value={form.keywords || ""} onChange={e => setForm((p: any) => ({ ...p, keywords: e.target.value }))} className="bg-card border-border text-foreground mt-1 min-h-[60px]" />
           </div>
 
           <div>
-            <Label className="text-gray-300 text-sm">Palavras proibidas (vírgula)</Label>
-            <Textarea value={form.forbidden_words || ""} onChange={e => setForm((p: any) => ({ ...p, forbidden_words: e.target.value }))} className="bg-white/5 border-white/10 text-white mt-1 min-h-[60px]" />
+            <Label className="text-muted-foreground text-sm">Palavras proibidas (vírgula)</Label>
+            <Textarea value={form.forbidden_words || ""} onChange={e => setForm((p: any) => ({ ...p, forbidden_words: e.target.value }))} className="bg-card border-border text-foreground mt-1 min-h-[60px]" />
           </div>
 
           <Button
             onClick={() => save.mutate()}
             disabled={save.isPending}
-            className="w-full bg-gradient-to-r from-violet-600 to-blue-600 text-white"
+            className="w-full btn-premium"
           >
             {save.isPending ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Save className="w-4 h-4 mr-2" />}
             Salvar Configurações

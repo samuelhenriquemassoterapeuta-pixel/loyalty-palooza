@@ -99,34 +99,34 @@ const ResinkraAIOnboarding = () => {
     // Step 0 - Brand Info
     <div className="space-y-4" key="step0">
       <div>
-        <Label className="text-gray-300 text-sm">Nome da marca *</Label>
+        <Label className="text-muted-foreground text-sm">Nome da marca *</Label>
         <Input
           value={form.brand_name}
           onChange={e => setForm(p => ({ ...p, brand_name: e.target.value }))}
           placeholder="Ex: Resinkra"
-          className="bg-white/5 border-white/10 text-white placeholder:text-gray-500 mt-1"
+          className="bg-card border-border text-foreground placeholder:text-muted-foreground mt-1"
         />
       </div>
       <div>
-        <Label className="text-gray-300 text-sm">Nicho *</Label>
+        <Label className="text-muted-foreground text-sm">Nicho *</Label>
         <Select value={form.niche} onValueChange={v => setForm(p => ({ ...p, niche: v }))}>
-          <SelectTrigger className="bg-white/5 border-white/10 text-white mt-1">
+          <SelectTrigger className="bg-card border-border text-foreground mt-1">
             <SelectValue placeholder="Selecione seu nicho" />
           </SelectTrigger>
-          <SelectContent className="bg-[#1a1a2e] border-white/10">
+          <SelectContent className="bg-card border-border">
             {nicheOptions.map(n => (
-              <SelectItem key={n} value={n} className="text-gray-300 focus:bg-violet-500/20 focus:text-white">{n}</SelectItem>
+              <SelectItem key={n} value={n} className="text-foreground focus:bg-primary/10 focus:text-primary">{n}</SelectItem>
             ))}
           </SelectContent>
         </Select>
       </div>
       <div>
-        <Label className="text-gray-300 text-sm">Website (opcional)</Label>
+        <Label className="text-muted-foreground text-sm">Website (opcional)</Label>
         <Input
           value={form.website}
           onChange={e => setForm(p => ({ ...p, website: e.target.value }))}
           placeholder="https://seusite.com"
-          className="bg-white/5 border-white/10 text-white placeholder:text-gray-500 mt-1"
+          className="bg-card border-border text-foreground placeholder:text-muted-foreground mt-1"
         />
       </div>
     </div>,
@@ -135,55 +135,55 @@ const ResinkraAIOnboarding = () => {
     <div className="space-y-4" key="step1">
       <div className="grid grid-cols-2 gap-3">
         <div>
-          <Label className="text-gray-300 text-sm">Faixa etária</Label>
+          <Label className="text-muted-foreground text-sm">Faixa etária</Label>
           <Select value={form.target_audience_age} onValueChange={v => setForm(p => ({ ...p, target_audience_age: v }))}>
-            <SelectTrigger className="bg-white/5 border-white/10 text-white mt-1">
+            <SelectTrigger className="bg-card border-border text-foreground mt-1">
               <SelectValue />
             </SelectTrigger>
-            <SelectContent className="bg-[#1a1a2e] border-white/10">
+            <SelectContent className="bg-card border-border">
               {["18-24", "25-34", "35-44", "45-54", "55+"].map(a => (
-                <SelectItem key={a} value={a} className="text-gray-300 focus:bg-violet-500/20 focus:text-white">{a}</SelectItem>
+                <SelectItem key={a} value={a} className="text-foreground focus:bg-primary/10 focus:text-primary">{a}</SelectItem>
               ))}
             </SelectContent>
           </Select>
         </div>
         <div>
-          <Label className="text-gray-300 text-sm">Gênero</Label>
+          <Label className="text-muted-foreground text-sm">Gênero</Label>
           <Select value={form.target_audience_gender} onValueChange={v => setForm(p => ({ ...p, target_audience_gender: v }))}>
-            <SelectTrigger className="bg-white/5 border-white/10 text-white mt-1">
+            <SelectTrigger className="bg-card border-border text-foreground mt-1">
               <SelectValue />
             </SelectTrigger>
-            <SelectContent className="bg-[#1a1a2e] border-white/10">
+            <SelectContent className="bg-card border-border">
               {[["todos", "Todos"], ["masculino", "Masculino"], ["feminino", "Feminino"]].map(([v, l]) => (
-                <SelectItem key={v} value={v} className="text-gray-300 focus:bg-violet-500/20 focus:text-white">{l}</SelectItem>
+                <SelectItem key={v} value={v} className="text-foreground focus:bg-primary/10 focus:text-primary">{l}</SelectItem>
               ))}
             </SelectContent>
           </Select>
         </div>
       </div>
       <div>
-        <Label className="text-gray-300 text-sm">Principal DOR do público</Label>
+        <Label className="text-muted-foreground text-sm">Principal DOR do público</Label>
         <Textarea
           value={form.target_audience_pain}
           onChange={e => setForm(p => ({ ...p, target_audience_pain: e.target.value }))}
           placeholder="Ex: Não consegue criar conteúdo consistente"
-          className="bg-white/5 border-white/10 text-white placeholder:text-gray-500 mt-1 min-h-[70px]"
+          className="bg-card border-border text-foreground placeholder:text-muted-foreground mt-1 min-h-[70px]"
         />
       </div>
       <div>
-        <Label className="text-gray-300 text-sm">Principal DESEJO</Label>
+        <Label className="text-muted-foreground text-sm">Principal DESEJO</Label>
         <Textarea
           value={form.target_audience_desire}
           onChange={e => setForm(p => ({ ...p, target_audience_desire: e.target.value }))}
           placeholder="Ex: Crescer no Instagram e monetizar"
-          className="bg-white/5 border-white/10 text-white placeholder:text-gray-500 mt-1 min-h-[70px]"
+          className="bg-card border-border text-foreground placeholder:text-muted-foreground mt-1 min-h-[70px]"
         />
       </div>
     </div>,
 
     // Step 2 - Tone of Voice
     <div className="space-y-4" key="step2">
-      <Label className="text-gray-300 text-sm">Tom de voz (selecione 1 ou mais) *</Label>
+      <Label className="text-muted-foreground text-sm">Tom de voz (selecione 1 ou mais) *</Label>
       <div className="grid grid-cols-2 gap-2">
         {toneOptions.map(t => (
           <button
@@ -192,8 +192,8 @@ const ResinkraAIOnboarding = () => {
             className={cn(
               "p-3 rounded-xl border-2 text-left text-sm font-medium transition-all",
               form.tone_of_voice.includes(t.value)
-                ? "border-violet-500 bg-violet-500/10 text-violet-300"
-                : "border-white/10 text-gray-400 hover:border-white/20"
+                ? "border-primary bg-primary/10 text-primary"
+                : "border-border text-muted-foreground hover:border-primary/30"
             )}
           >
             {t.label}
@@ -205,7 +205,7 @@ const ResinkraAIOnboarding = () => {
           onClick={() => setForm(p => ({ ...p, use_slangs: !p.use_slangs }))}
           className={cn(
             "flex-1 p-3 rounded-xl border-2 text-sm font-medium transition-all",
-            form.use_slangs ? "border-violet-500 bg-violet-500/10 text-violet-300" : "border-white/10 text-gray-400"
+            form.use_slangs ? "border-primary bg-primary/10 text-primary" : "border-border text-muted-foreground"
           )}
         >
           🗣️ Usar gírias
@@ -214,7 +214,7 @@ const ResinkraAIOnboarding = () => {
           onClick={() => setForm(p => ({ ...p, use_emojis: !p.use_emojis }))}
           className={cn(
             "flex-1 p-3 rounded-xl border-2 text-sm font-medium transition-all",
-            form.use_emojis ? "border-violet-500 bg-violet-500/10 text-violet-300" : "border-white/10 text-gray-400"
+            form.use_emojis ? "border-primary bg-primary/10 text-primary" : "border-border text-muted-foreground"
           )}
         >
           😊 Usar emojis
@@ -225,30 +225,30 @@ const ResinkraAIOnboarding = () => {
     // Step 3 - Keywords
     <div className="space-y-4" key="step3">
       <div>
-        <Label className="text-gray-300 text-sm">Palavras-chave da marca (separadas por vírgula)</Label>
+        <Label className="text-muted-foreground text-sm">Palavras-chave da marca (separadas por vírgula)</Label>
         <Textarea
           value={form.keywords}
           onChange={e => setForm(p => ({ ...p, keywords: e.target.value }))}
           placeholder="Ex: produtividade, crescimento, resultado"
-          className="bg-white/5 border-white/10 text-white placeholder:text-gray-500 mt-1 min-h-[70px]"
+          className="bg-card border-border text-foreground placeholder:text-muted-foreground mt-1 min-h-[70px]"
         />
       </div>
       <div>
-        <Label className="text-gray-300 text-sm">Palavras proibidas (separadas por vírgula)</Label>
+        <Label className="text-muted-foreground text-sm">Palavras proibidas (separadas por vírgula)</Label>
         <Textarea
           value={form.forbidden_words}
           onChange={e => setForm(p => ({ ...p, forbidden_words: e.target.value }))}
           placeholder="Ex: barato, grátis, fácil"
-          className="bg-white/5 border-white/10 text-white placeholder:text-gray-500 mt-1 min-h-[70px]"
+          className="bg-card border-border text-foreground placeholder:text-muted-foreground mt-1 min-h-[70px]"
         />
       </div>
       <div>
-        <Label className="text-gray-300 text-sm">Perfis de referência (separados por vírgula)</Label>
+        <Label className="text-muted-foreground text-sm">Perfis de referência (separados por vírgula)</Label>
         <Input
           value={form.reference_profiles}
           onChange={e => setForm(p => ({ ...p, reference_profiles: e.target.value }))}
           placeholder="@perfil1, @perfil2"
-          className="bg-white/5 border-white/10 text-white placeholder:text-gray-500 mt-1"
+          className="bg-card border-border text-foreground placeholder:text-muted-foreground mt-1"
         />
       </div>
     </div>,
@@ -257,28 +257,28 @@ const ResinkraAIOnboarding = () => {
   const stepTitles = ["Sua Marca", "Seu Público", "Tom de Voz", "Referências"];
 
   return (
-    <div className="min-h-screen bg-[#0a0a1a] flex items-center justify-center p-4">
+    <div className="min-h-screen bg-background flex items-center justify-center p-4">
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         className="w-full max-w-lg"
       >
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-violet-500 to-blue-500 mb-4">
-            <Zap className="w-7 h-7 text-white" />
+          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl gradient-primary mb-4">
+            <Zap className="w-7 h-7 text-primary-foreground" />
           </div>
-          <h1 className="text-2xl font-bold text-white">Configure sua marca</h1>
-          <p className="text-gray-400 text-sm mt-1">Passo {step + 1} de 4 — {stepTitles[step]}</p>
+          <h1 className="text-2xl font-bold text-foreground font-serif">Configure sua marca</h1>
+          <p className="text-muted-foreground text-sm mt-1">Passo {step + 1} de 4 — {stepTitles[step]}</p>
         </div>
 
         {/* Progress */}
         <div className="flex gap-2 mb-8">
           {[0, 1, 2, 3].map(i => (
-            <div key={i} className={cn("flex-1 h-1 rounded-full transition-all", i <= step ? "bg-violet-500" : "bg-white/10")} />
+            <div key={i} className={cn("flex-1 h-1 rounded-full transition-all", i <= step ? "bg-primary" : "bg-border")} />
           ))}
         </div>
 
-        <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm p-6">
+        <div className="rounded-2xl border border-border bg-card backdrop-blur-sm p-6 shadow-card">
           <AnimatePresence mode="wait">
             <motion.div
               key={step}
@@ -297,7 +297,7 @@ const ResinkraAIOnboarding = () => {
             variant="ghost"
             onClick={() => setStep(s => s - 1)}
             disabled={step === 0}
-            className="text-gray-400 hover:text-white hover:bg-white/5"
+            className="text-muted-foreground hover:text-foreground hover:bg-muted/50"
           >
             <ArrowLeft className="w-4 h-4 mr-1" /> Voltar
           </Button>
@@ -306,7 +306,7 @@ const ResinkraAIOnboarding = () => {
             <Button
               onClick={() => setStep(s => s + 1)}
               disabled={!canNext()}
-              className="bg-gradient-to-r from-violet-600 to-blue-600 text-white hover:shadow-lg hover:shadow-violet-500/25"
+              className="btn-premium"
             >
               Próximo <ArrowRight className="w-4 h-4 ml-1" />
             </Button>
@@ -314,7 +314,7 @@ const ResinkraAIOnboarding = () => {
             <Button
               onClick={handleSave}
               disabled={saving}
-              className="bg-gradient-to-r from-violet-600 to-blue-600 text-white hover:shadow-lg hover:shadow-violet-500/25"
+              className="btn-premium"
             >
               {saving ? "Salvando..." : "Concluir"} <Check className="w-4 h-4 ml-1" />
             </Button>
