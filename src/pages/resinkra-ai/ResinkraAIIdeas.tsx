@@ -11,9 +11,9 @@ import { motion } from "framer-motion";
 
 const funnelStages = [
   { value: "all", label: "Todos", color: "" },
-  { value: "topo", label: "🔝 Topo", color: "bg-blue-500/20 text-blue-300" },
-  { value: "meio", label: "🔄 Meio", color: "bg-violet-500/20 text-violet-300" },
-  { value: "fundo", label: "💰 Fundo", color: "bg-emerald-500/20 text-emerald-300" },
+  { value: "topo", label: "🔝 Topo", color: "bg-info/10 text-info" },
+  { value: "meio", label: "🔄 Meio", color: "bg-primary/10 text-primary" },
+  { value: "fundo", label: "💰 Fundo", color: "bg-highlight/10 text-highlight" },
 ];
 
 const ResinkraAIIdeas = () => {
@@ -71,13 +71,13 @@ const ResinkraAIIdeas = () => {
     <ResinkraAILayout>
       <div className="space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <h1 className="text-2xl font-bold text-white flex items-center gap-2">
-            <Lightbulb className="w-6 h-6 text-violet-400" /> Banco de Ideias
+          <h1 className="text-2xl font-bold text-foreground font-serif flex items-center gap-2">
+            <Lightbulb className="w-6 h-6 text-primary" /> Banco de Ideias
           </h1>
           <Button
             onClick={() => generate.mutate()}
             disabled={generate.isPending}
-            className="bg-gradient-to-r from-violet-600 to-blue-600 text-white"
+            className="btn-premium"
           >
             {generate.isPending ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Sparkles className="w-4 h-4 mr-2" />}
             Gerar Ideias
@@ -92,7 +92,7 @@ const ResinkraAIIdeas = () => {
               onClick={() => setFilter(s.value)}
               className={cn(
                 "px-3 py-1.5 rounded-lg text-xs font-medium transition-all",
-                filter === s.value ? "bg-violet-500/20 text-violet-300" : "bg-white/5 text-gray-400 hover:text-gray-200"
+                filter === s.value ? "bg-primary/10 text-primary" : "bg-muted text-muted-foreground hover:text-foreground"
               )}
             >
               {s.label}
@@ -109,19 +109,19 @@ const ResinkraAIIdeas = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.03 }}
               className={cn(
-                "rounded-xl border border-white/10 bg-white/5 p-4",
+                "rounded-xl border border-border bg-card p-4 shadow-card",
                 idea.is_used && "opacity-50"
               )}
             >
               <div className="flex items-start justify-between">
                 <div className="flex-1">
-                  <p className="text-sm font-semibold text-white">{idea.title}</p>
-                  {idea.description && <p className="text-xs text-gray-400 mt-1">{idea.description}</p>}
+                  <p className="text-sm font-semibold text-foreground">{idea.title}</p>
+                  {idea.description && <p className="text-xs text-muted-foreground mt-1">{idea.description}</p>}
                 </div>
                 {!idea.is_used && (
                   <button
                     onClick={() => markUsed.mutate(idea.id)}
-                    className="p-1.5 rounded-lg hover:bg-white/10 text-gray-500 hover:text-emerald-400 transition-colors"
+                    className="p-1.5 rounded-lg hover:bg-muted text-muted-foreground hover:text-highlight transition-colors"
                   >
                     <Check className="w-4 h-4" />
                   </button>
@@ -134,7 +134,7 @@ const ResinkraAIIdeas = () => {
                   </span>
                 )}
                 {idea.content_type && (
-                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-white/10 text-gray-400">{idea.content_type}</span>
+                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-muted text-muted-foreground">{idea.content_type}</span>
                 )}
               </div>
             </motion.div>
@@ -143,8 +143,8 @@ const ResinkraAIIdeas = () => {
 
         {filtered.length === 0 && (
           <div className="text-center py-16">
-            <Lightbulb className="w-12 h-12 text-gray-600 mx-auto mb-3" />
-            <p className="text-gray-400">Nenhuma ideia ainda. Clique em "Gerar Ideias" para começar!</p>
+            <Lightbulb className="w-12 h-12 text-muted-foreground/50 mx-auto mb-3" />
+            <p className="text-muted-foreground">Nenhuma ideia ainda. Clique em "Gerar Ideias" para começar!</p>
           </div>
         )}
       </div>

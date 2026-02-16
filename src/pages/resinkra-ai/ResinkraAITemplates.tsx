@@ -28,16 +28,16 @@ const ResinkraAITemplates = () => {
   return (
     <ResinkraAILayout>
       <div className="space-y-6">
-        <h1 className="text-2xl font-bold text-white flex items-center gap-2">
-          <FileText className="w-6 h-6 text-violet-400" /> Templates
+        <h1 className="text-2xl font-bold text-foreground font-serif flex items-center gap-2">
+          <FileText className="w-6 h-6 text-primary" /> Templates
         </h1>
-        <p className="text-gray-400 text-sm">Roteiros salvos como template para reutilizar.</p>
+        <p className="text-muted-foreground text-sm">Roteiros salvos como template para reutilizar.</p>
 
         {templates.length === 0 ? (
           <div className="text-center py-16">
-            <FileText className="w-12 h-12 text-gray-600 mx-auto mb-3" />
-            <p className="text-gray-400">Nenhum template salvo ainda.</p>
-            <p className="text-gray-500 text-sm mt-1">
+            <FileText className="w-12 h-12 text-muted-foreground/50 mx-auto mb-3" />
+            <p className="text-muted-foreground">Nenhum template salvo ainda.</p>
+            <p className="text-muted-foreground/70 text-sm mt-1">
               Gere um roteiro e salve como template para reutilizar.
             </p>
           </div>
@@ -54,15 +54,15 @@ const ResinkraAITemplates = () => {
                 >
                   <Link
                     to={`/resinkra-ai/script/${tpl.id}`}
-                    className="block p-4 rounded-xl border border-white/10 bg-white/5 hover:border-violet-500/30 transition-all"
+                    className="block p-4 rounded-xl border border-border bg-card hover:border-primary/30 transition-all shadow-card"
                   >
                     <div className="flex items-start gap-3">
-                      <div className="w-10 h-10 rounded-lg bg-violet-500/10 flex items-center justify-center shrink-0">
-                        <Icon className="w-5 h-5 text-violet-400" />
+                      <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+                        <Icon className="w-5 h-5 text-primary" />
                       </div>
                       <div>
-                        <p className="font-semibold text-white text-sm">{tpl.template_name || tpl.topic}</p>
-                        <p className="text-xs text-gray-500 mt-0.5">{tpl.content_type} · Score: {tpl.score_total}</p>
+                        <p className="font-semibold text-foreground text-sm">{tpl.template_name || tpl.topic}</p>
+                        <p className="text-xs text-muted-foreground mt-0.5">{tpl.content_type} · Score: {tpl.score_total}</p>
                       </div>
                     </div>
                   </Link>

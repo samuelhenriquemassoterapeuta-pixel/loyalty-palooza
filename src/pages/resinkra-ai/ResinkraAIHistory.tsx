@@ -44,17 +44,17 @@ const ResinkraAIHistory = () => {
   return (
     <ResinkraAILayout>
       <div className="space-y-6">
-        <h1 className="text-2xl font-bold text-white">Histórico</h1>
+        <h1 className="text-2xl font-bold text-foreground font-serif">Histórico</h1>
 
         {/* Filters */}
         <div className="space-y-3">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <Input
               value={search}
               onChange={e => setSearch(e.target.value)}
               placeholder="Buscar por tema..."
-              className="pl-10 bg-white/5 border-white/10 text-white placeholder:text-gray-500"
+              className="pl-10 bg-card border-border text-foreground placeholder:text-muted-foreground"
             />
           </div>
           <div className="flex gap-2 flex-wrap">
@@ -64,7 +64,7 @@ const ResinkraAIHistory = () => {
                 onClick={() => setTypeFilter(t)}
                 className={cn(
                   "px-3 py-1.5 rounded-lg text-xs font-medium transition-all",
-                  typeFilter === t ? "bg-violet-500/20 text-violet-300" : "bg-white/5 text-gray-400 hover:text-gray-200"
+                  typeFilter === t ? "bg-primary/10 text-primary" : "bg-muted text-muted-foreground hover:text-foreground"
                 )}
               >
                 {t === "all" ? "Todos" : typeLabels[t]}
@@ -74,7 +74,7 @@ const ResinkraAIHistory = () => {
               onClick={() => setFavOnly(!favOnly)}
               className={cn(
                 "px-3 py-1.5 rounded-lg text-xs font-medium transition-all flex items-center gap-1",
-                favOnly ? "bg-amber-500/20 text-amber-300" : "bg-white/5 text-gray-400 hover:text-gray-200"
+                favOnly ? "bg-accent/10 text-accent" : "bg-muted text-muted-foreground hover:text-foreground"
               )}
             >
               <Heart className="w-3 h-3" /> Favoritos
@@ -95,22 +95,22 @@ const ResinkraAIHistory = () => {
               >
                 <Link
                   to={`/resinkra-ai/script/${script.id}`}
-                  className="flex items-center gap-4 p-4 rounded-xl border border-white/10 bg-white/5 hover:border-violet-500/30 transition-all group"
+                  className="flex items-center gap-4 p-4 rounded-xl border border-border bg-card hover:border-primary/30 transition-all group shadow-card"
                 >
-                  <div className="w-10 h-10 rounded-lg bg-violet-500/10 flex items-center justify-center shrink-0">
-                    <Icon className="w-5 h-5 text-violet-400" />
+                  <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+                    <Icon className="w-5 h-5 text-primary" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-semibold text-white truncate">{script.topic}</p>
-                    <p className="text-xs text-gray-500">
+                    <p className="text-sm font-semibold text-foreground truncate">{script.topic}</p>
+                    <p className="text-xs text-muted-foreground">
                       {typeLabels[script.content_type]} · {format(new Date(script.created_at), "dd MMM yyyy", { locale: ptBR })}
                     </p>
                   </div>
                   <div className="flex items-center gap-3 shrink-0">
-                    {script.is_favorite && <Heart className="w-4 h-4 text-amber-400 fill-amber-400" />}
+                    {script.is_favorite && <Heart className="w-4 h-4 text-accent fill-accent" />}
                     <div className="text-right">
-                      <span className="text-lg font-bold text-violet-400">{script.score_total}</span>
-                      <p className="text-[10px] text-gray-500">score</p>
+                      <span className="text-lg font-bold text-primary">{script.score_total}</span>
+                      <p className="text-[10px] text-muted-foreground">score</p>
                     </div>
                   </div>
                 </Link>
@@ -119,9 +119,9 @@ const ResinkraAIHistory = () => {
           })}
           {!isLoading && filtered.length === 0 && (
             <div className="text-center py-16">
-              <FileText className="w-12 h-12 text-gray-600 mx-auto mb-3" />
-              <p className="text-gray-400">Nenhum roteiro encontrado</p>
-              <Link to="/resinkra-ai/create" className="text-violet-400 text-sm mt-2 inline-block hover:underline">
+              <FileText className="w-12 h-12 text-muted-foreground/50 mx-auto mb-3" />
+              <p className="text-muted-foreground">Nenhum roteiro encontrado</p>
+              <Link to="/resinkra-ai/create" className="text-primary text-sm mt-2 inline-block hover:underline">
                 Criar primeiro roteiro →
               </Link>
             </div>
