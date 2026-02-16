@@ -6,6 +6,7 @@ export const cursoAromaterapiaData: ModuloContent[] = [
     descricao: "O que são óleos essenciais, como funcionam e por que doTERRA",
     icone: "Lightbulb",
     cor: "from-violet-50 to-purple-50",
+    nivel: "iniciante",
     aulas: [
       {
         titulo: "O que são óleos essenciais?",
@@ -219,6 +220,7 @@ Antes de usar um óleo novo em um cliente:
     descricao: "Propriedades, usos e aplicações dos óleos mais utilizados da doTERRA",
     icone: "Heart",
     cor: "from-emerald-50 to-green-50",
+    nivel: "iniciante",
     aulas: [
       {
         titulo: "Lavanda, Hortelã-pimenta e Limão — A Tríade Essencial",
@@ -533,6 +535,7 @@ Antes de usar um óleo novo em um cliente:
     descricao: "Blends e protocolos para as queixas mais comuns na clínica",
     icone: "Target",
     cor: "from-blue-50 to-cyan-50",
+    nivel: "iniciante",
     aulas: [
       {
         titulo: "Protocolo Anti-Estresse e Ansiedade",
@@ -819,6 +822,7 @@ O blend pronto da doTERRA para sono:
     descricao: "Os principais blends proprietários da doTERRA e como usá-los",
     icone: "Package",
     cor: "from-amber-50 to-yellow-50",
+    nivel: "intermediario",
     aulas: [
       {
         titulo: "On Guard, Breathe e DigestZen",
@@ -1078,6 +1082,7 @@ Se você vai começar com óleos doTERRA, estes são os 6 essenciais:
     descricao: "Integrando óleos essenciais nas sessões da clínica",
     icone: "MessageCircle",
     cor: "from-teal-50 to-emerald-50",
+    nivel: "intermediario",
     aulas: [
       {
         titulo: "Montando o kit de óleos da clínica",
@@ -1318,6 +1323,7 @@ O Head Spa já é uma experiência premium. Com óleos essenciais, torna-se INES
     descricao: "Como rentabilizar a aromaterapia na clínica e oferecer produtos aos clientes",
     icone: "BarChart3",
     cor: "from-rose-50 to-pink-50",
+    nivel: "intermediario",
     aulas: [
       {
         titulo: "Modelo de negócio com doTERRA",
@@ -1552,6 +1558,7 @@ Agora você pode:
     descricao: "Protocolos seguros para gestantes, idosos, crianças e clientes com condições específicas",
     icone: "GraduationCap",
     cor: "from-pink-50 to-rose-50",
+    nivel: "intermediario",
     aulas: [
       {
         titulo: "Aromaterapia segura na gestação",
@@ -1779,6 +1786,7 @@ A gestação é um período de sensibilidade aumentada. Óleos essenciais podem 
     descricao: "Protocolo exclusivo doTERRA com 8 óleos aplicados na coluna e pés",
     icone: "Heart",
     cor: "from-indigo-50 to-violet-50",
+    nivel: "avancado",
     aulas: [
       {
         titulo: "A ciência do toque e do aroma",
@@ -2145,6 +2153,7 @@ Para experiência VIP:
     descricao: "Classificação química, pirâmide do bem-estar e estudos científicos",
     icone: "Lightbulb",
     cor: "from-cyan-50 to-blue-50",
+    nivel: "avancado",
     aulas: [
       {
         titulo: "Classificação química dos óleos essenciais",
@@ -2497,6 +2506,7 @@ Inclua citações como:
     descricao: "DIY com óleos, aromaterapia para pets e como construir seu negócio",
     icone: "Target",
     cor: "from-orange-50 to-amber-50",
+    nivel: "avancado",
     aulas: [
       {
         titulo: "DIY: Produtos artesanais com óleos essenciais",

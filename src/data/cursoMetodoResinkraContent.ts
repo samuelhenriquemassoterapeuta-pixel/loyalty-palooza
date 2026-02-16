@@ -9,6 +9,7 @@ export const cursoMetodoResinkraData: CursoModuloData[] = [
     descricao: "Origem, princípios e a visão por trás do Método Resinkra",
     icone: "Lightbulb",
     cor: "from-primary/5 to-accent/5",
+    nivel: "iniciante",
     aulas: [
       {
         titulo: "A Origem do Método Resinkra",
@@ -213,6 +214,7 @@ A transição é o momento mais importante do Método Resinkra. É quando você 
     descricao: "Sistema musculoesquelético com foco prático no Método Resinkra",
     icone: "BookOpen",
     cor: "from-accent/5 to-primary/5",
+    nivel: "iniciante",
     aulas: [
       {
         titulo: "Sistema Musculoesquelético Essencial",
@@ -397,6 +399,7 @@ No Método Resinkra, nunca tratamos um músculo isolado. O corpo funciona em **c
     descricao: "Avaliar antes de tocar — o diagnóstico tátil e visual",
     icone: "Target",
     cor: "from-highlight/10 to-primary/5",
+    nivel: "iniciante",
     aulas: [
       {
         titulo: "Avaliação Visual e Palpatória",
@@ -595,6 +598,7 @@ Uma técnica simples e eficaz para encontrar a raiz:
     descricao: "Polegares, cotovelos, antebraço — quando e como usar cada um",
     icone: "Heart",
     cor: "from-primary/5 to-highlight/10",
+    nivel: "intermediario",
     aulas: [
       {
         titulo: "Polegares e Dedos",
@@ -771,6 +775,7 @@ No Método Resinkra, a saúde do terapeuta é prioridade. Um terapeuta com dor n
     descricao: "A velocidade e intensidade que definem o Método Resinkra",
     icone: "BarChart3",
     cor: "from-accent/5 to-highlight/10",
+    nivel: "intermediario",
     aulas: [
       {
         titulo: "Velocidade do Deslizamento",
@@ -974,6 +979,7 @@ Quando a transição é bem executada, acontece o **efeito cascata**:
     descricao: "Sequências detalhadas de manobras para cada região do corpo",
     icone: "Package",
     cor: "from-highlight/10 to-accent/5",
+    nivel: "intermediario",
     aulas: [
       {
         titulo: "Costas e Coluna",
@@ -1166,6 +1172,7 @@ Após o protocolo cervical bem executado:
     descricao: "Respiração, presença e intuição como parte do tratamento",
     icone: "MessageCircle",
     cor: "from-primary/5 to-accent/5",
+    nivel: "avancado",
     aulas: [
       {
         titulo: "Respiração Sincronizada",
@@ -1353,6 +1360,7 @@ A intuição no Método Resinkra não é misteriosa. É o resultado de:
     descricao: "Sessões completas, casos clínicos e adaptações por perfil",
     icone: "GraduationCap",
     cor: "from-accent/5 to-primary/5",
+    nivel: "avancado",
     aulas: [
       {
         titulo: "Sessão Completa Guiada — 60 minutos",

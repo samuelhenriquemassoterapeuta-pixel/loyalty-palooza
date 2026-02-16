@@ -6,6 +6,7 @@ export const cursoAnatomiaData: ModuloContent[] = [
     descricao: "Conceitos fundamentais, planos anatômicos e terminologia",
     icone: "Lightbulb",
     cor: "from-rose-50 to-pink-50",
+    nivel: "iniciante",
     aulas: [
       {
         titulo: "Posição Anatômica e Planos de Referência",
@@ -193,6 +194,7 @@ export const cursoAnatomiaData: ModuloContent[] = [
     descricao: "Ossos, articulações e referências ósseas para massoterapeutas",
     icone: "Target",
     cor: "from-slate-50 to-gray-50",
+    nivel: "iniciante",
     aulas: [
       {
         titulo: "Ossos do Esqueleto Axial",
@@ -352,6 +354,7 @@ export const cursoAnatomiaData: ModuloContent[] = [
     descricao: "Músculos esqueléticos, origem, inserção e função para prática manual",
     icone: "Heart",
     cor: "from-red-50 to-orange-50",
+    nivel: "intermediario",
     aulas: [
       {
         titulo: "Fisiologia Muscular Básica",
@@ -561,6 +564,7 @@ export const cursoAnatomiaData: ModuloContent[] = [
     descricao: "Neuroanatomia aplicada à massoterapia, dermátomos e reflexos",
     icone: "BarChart3",
     cor: "from-purple-50 to-violet-50",
+    nivel: "intermediario",
     aulas: [
       {
         titulo: "Sistema Nervoso Central e Periférico",
@@ -675,6 +679,7 @@ export const cursoAnatomiaData: ModuloContent[] = [
     descricao: "Vasos sanguíneos, circulação, sistema linfático e drenagem",
     icone: "Package",
     cor: "from-blue-50 to-indigo-50",
+    nivel: "intermediario",
     aulas: [
       {
         titulo: "Sistema Cardiovascular Aplicado",
@@ -769,6 +774,7 @@ export const cursoAnatomiaData: ModuloContent[] = [
     descricao: "Avaliação postural, palpação, patologias comuns e protocolos",
     icone: "MessageCircle",
     cor: "from-emerald-50 to-teal-50",
+    nivel: "avancado",
     aulas: [
       {
         titulo: "Avaliação Postural e Palpação",
@@ -920,6 +926,7 @@ export const cursoAnatomiaData: ModuloContent[] = [
     descricao: "Sistema fascial, cadeias miofasciais e biomecânica aplicada à massoterapia",
     icone: "Sparkles",
     cor: "from-teal-50 to-cyan-50",
+    nivel: "avancado",
     aulas: [
       {
         titulo: "O Sistema Fascial",

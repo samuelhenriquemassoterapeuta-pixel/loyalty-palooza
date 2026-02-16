@@ -18,6 +18,7 @@ export interface YugenFaceSpaModulo {
   descricao: string;
   icone: string;
   cor: string;
+  nivel?: "iniciante" | "intermediario" | "avancado";
   aulas: YugenFaceSpaAula[];
 }
 
@@ -27,6 +28,7 @@ export const cursoYugenFaceSpaData: YugenFaceSpaModulo[] = [
     descricao: "Filosofia oriental, história e princípios do Yūgen FaceSPA",
     icone: "BookOpen",
     cor: "from-rose-50 to-pink-50",
+    nivel: "iniciante",
     aulas: [
       {
         titulo: "O que é o Yūgen FaceSPA?",
@@ -286,6 +288,7 @@ Os Tsubos são pontos específicos nos meridianos onde a energia pode ser estimu
     descricao: "Músculos, nervos e zonas reflexas do rosto",
     icone: "Target",
     cor: "from-violet-50 to-purple-50",
+    nivel: "iniciante",
     aulas: [
       {
         titulo: "Músculos Faciais e Suas Funções",
@@ -491,6 +494,7 @@ Na Medicina Oriental, cada zona do rosto corresponde a um órgão interno. Alter
     descricao: "Equipamentos, óleos e produtos para potencializar o ritual",
     icone: "Heart",
     cor: "from-amber-50 to-orange-50",
+    nivel: "intermediario",
     aulas: [
       {
         titulo: "Ferramentas do Yūgen FaceSPA",
@@ -686,6 +690,7 @@ O óleo é essencial para permitir o deslizamento das mãos e ferramentas. Escol
     descricao: "Protocolo completo da técnica ancestral de massagem facial",
     icone: "Lightbulb",
     cor: "from-emerald-50 to-teal-50",
+    nivel: "intermediario",
     aulas: [
       {
         titulo: "Preparação e Limpeza Facial",
@@ -988,6 +993,7 @@ Sempre perguntar antes do primeiro atendimento:
     descricao: "O protocolo exclusivo que combina todas as técnicas",
     icone: "BarChart3",
     cor: "from-sky-50 to-blue-50",
+    nivel: "avancado",
     aulas: [
       {
         titulo: "Protocolo Yūgen Completo",
@@ -1177,6 +1183,7 @@ Para clientes com pouco tempo ou sessão de manutenção:
     descricao: "Precificação, vendas, marketing digital e fidelização",
     icone: "GraduationCap",
     cor: "from-indigo-50 to-blue-50",
+    nivel: "avancado",
     aulas: [
       {
         titulo: "Precificação e Pacotes",

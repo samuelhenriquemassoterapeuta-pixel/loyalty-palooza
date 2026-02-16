@@ -13,6 +13,7 @@ import {
   MessageCircle,
   BarChart3,
   GraduationCap,
+  Lock,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -44,11 +45,14 @@ export interface CursoAulaData {
   checklist?: string[];
 }
 
+export type CursoNivel = "iniciante" | "intermediario" | "avancado";
+
 export interface CursoModuloData {
   titulo: string;
   descricao: string;
   icone: string;
   cor: string;
+  nivel?: CursoNivel;
   aulas: CursoAulaData[];
 }
 
@@ -101,6 +105,24 @@ export function CursoShell({
   const minutosRestantes = totalMinutos % 60;
   const { isComplete, toggle, completedCount, pct, moduloAulasCompleted } =
     useCursoProgress(storageKey, totalAulas);
+
+  // ─── Level unlock logic ───
+  const nivelOrder: Record<string, number> = { iniciante: 0, intermediario: 1, avancado: 2 };
+  const isLevelUnlocked = (nivel?: string): boolean => {
+    if (!nivel || nivel === "iniciante") return true;
+    const prevLevel = nivel === "avancado" ? "intermediario" : "iniciante";
+    // All modules of the previous level must be 100%
+    return modulos.every((m, mi) => {
+      if ((m.nivel ?? "iniciante") !== prevLevel) return true;
+      return moduloAulasCompleted(mi, m.aulas.length) === m.aulas.length;
+    });
+  };
+
+  const nivelLabel: Record<string, string> = {
+    iniciante: "🟢 Iniciante",
+    intermediario: "🟡 Intermediário",
+    avancado: "🔴 Avançado",
+  };
 
   // ─── Lesson View ───
   if (selectedModulo !== null && selectedAula !== null) {
@@ -189,49 +211,80 @@ export function CursoShell({
           </div>
         </div>
 
-        {/* Module cards */}
-        <div className="max-w-lg mx-auto px-4 py-6 space-y-3">
-          {modulos.map((modulo, mi) => {
-            const Icon = iconMap[modulo.icone] || BookOpen;
-            const done = moduloAulasCompleted(mi, modulo.aulas.length);
-            const total = modulo.aulas.length;
-            const modPct = Math.round((done / total) * 100);
+        {/* Module cards grouped by level */}
+        <div className="max-w-lg mx-auto px-4 py-6 space-y-6">
+          {(["iniciante", "intermediario", "avancado"] as const).map((nivel) => {
+            const levelModulos = modulos
+              .map((m, mi) => ({ ...m, originalIndex: mi }))
+              .filter((m) => (m.nivel ?? "iniciante") === nivel);
+            if (levelModulos.length === 0) return null;
+            const unlocked = isLevelUnlocked(nivel);
 
             return (
-              <motion.div
-                key={mi}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: mi * 0.06 }}
-              >
-                <Card
-                  className={`p-4 cursor-pointer transition-all hover:shadow-lg bg-gradient-to-br ${modulo.cor} border-border/50`}
-                  onClick={() => setSelectedModulo(mi)}
-                >
-                  <div className="flex items-start gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-background/80 flex items-center justify-center shrink-0">
-                      {modPct === 100 ? (
-                        <Trophy size={20} className="text-primary" />
-                      ) : (
-                        <Icon size={20} className="text-primary" />
-                      )}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between">
-                        <h3 className="text-sm font-bold">{modulo.titulo}</h3>
-                        <ChevronRight size={16} className="text-muted-foreground shrink-0" />
-                      </div>
-                      <p className="text-xs text-muted-foreground mt-0.5">{modulo.descricao}</p>
-                      <div className="flex items-center gap-2 mt-2">
-                        <Progress value={modPct} className="h-1.5 flex-1" />
-                        <span className="text-[10px] text-muted-foreground">
-                          {done}/{total}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </Card>
-              </motion.div>
+              <div key={nivel}>
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-sm font-bold">{nivelLabel[nivel]}</span>
+                  {!unlocked && <Lock size={14} className="text-muted-foreground" />}
+                </div>
+                <div className="space-y-3">
+                  {levelModulos.map((modulo) => {
+                    const mi = modulo.originalIndex;
+                    const Icon = iconMap[modulo.icone] || BookOpen;
+                    const done = moduloAulasCompleted(mi, modulo.aulas.length);
+                    const total = modulo.aulas.length;
+                    const modPct = Math.round((done / total) * 100);
+
+                    return (
+                      <motion.div
+                        key={mi}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: mi * 0.06 }}
+                      >
+                        <Card
+                          className={`p-4 transition-all border-border/50 ${
+                            unlocked
+                              ? "cursor-pointer hover:shadow-lg bg-gradient-to-br " + modulo.cor
+                              : "opacity-50 grayscale cursor-not-allowed bg-muted/30"
+                          }`}
+                          onClick={() => unlocked && setSelectedModulo(mi)}
+                        >
+                          <div className="flex items-start gap-3">
+                            <div className="w-10 h-10 rounded-xl bg-background/80 flex items-center justify-center shrink-0">
+                              {!unlocked ? (
+                                <Lock size={20} className="text-muted-foreground" />
+                              ) : modPct === 100 ? (
+                                <Trophy size={20} className="text-primary" />
+                              ) : (
+                                <Icon size={20} className="text-primary" />
+                              )}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center justify-between">
+                                <h3 className="text-sm font-bold">{modulo.titulo}</h3>
+                                {unlocked ? (
+                                  <ChevronRight size={16} className="text-muted-foreground shrink-0" />
+                                ) : (
+                                  <span className="text-[10px] text-muted-foreground">Bloqueado</span>
+                                )}
+                              </div>
+                              <p className="text-xs text-muted-foreground mt-0.5">{modulo.descricao}</p>
+                              {unlocked && (
+                                <div className="flex items-center gap-2 mt-2">
+                                  <Progress value={modPct} className="h-1.5 flex-1" />
+                                  <span className="text-[10px] text-muted-foreground">
+                                    {done}/{total}
+                                  </span>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </Card>
+                      </motion.div>
+                    );
+                  })}
+                </div>
+              </div>
             );
           })}
 
