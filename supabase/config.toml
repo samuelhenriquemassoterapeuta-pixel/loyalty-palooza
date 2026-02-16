@@ -53,3 +53,6 @@ verify_jwt = false
 
 [functions.fetch-google-ads]
 verify_jwt = false
+
+[functions.whatsapp-webhook]
+verify_jwt = false

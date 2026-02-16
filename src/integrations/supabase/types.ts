@@ -3946,6 +3946,45 @@ export type Database = {
           },
         ]
       }
+      whatsapp_conversas: {
+        Row: {
+          created_at: string
+          email: string | null
+          id: string
+          mensagens: Json
+          metadata: Json | null
+          necessidade: string | null
+          nome: string | null
+          status: string
+          telefone: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          id?: string
+          mensagens?: Json
+          metadata?: Json | null
+          necessidade?: string | null
+          nome?: string | null
+          status?: string
+          telefone: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          id?: string
+          mensagens?: Json
+          metadata?: Json | null
+          necessidade?: string | null
+          nome?: string | null
+          status?: string
+          telefone?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       whatsapp_logs: {
         Row: {
           created_at: string
