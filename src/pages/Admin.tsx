@@ -1,7 +1,7 @@
 import { useState } from "react"; // v2
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, Plus, FileText, Users, Shield, Dumbbell, Sparkles, ClipboardList, StretchHorizontal, Salad, BookOpen, Stethoscope, Globe, Gift, Ticket, Crown, Building2, CreditCard, Handshake, Camera, Trophy, DollarSign, CalendarDays, Target, Megaphone, Send } from "lucide-react";
+import { ArrowLeft, Plus, FileText, Users, Shield, Dumbbell, Sparkles, ClipboardList, StretchHorizontal, Salad, BookOpen, Stethoscope, Globe, Gift, Ticket, Crown, Building2, CreditCard, Handshake, Camera, Trophy, DollarSign, CalendarDays, Target, Megaphone, Send, BarChart3 } from "lucide-react";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -438,6 +438,10 @@ const Admin = () => {
                   <Megaphone size={14} />
                   Banners
                 </TabsTrigger>
+                <TabsTrigger value="google-ads" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
+                  <BarChart3 size={14} />
+                  Google Ads
+                </TabsTrigger>
               </TabsList>
               <ScrollBar orientation="horizontal" className="h-1.5" />
             </ScrollArea>
@@ -625,6 +629,21 @@ const Admin = () => {
 
               <TabsContent value="banners" forceMount={activeTab === "banners" ? true : undefined} className={activeTab !== "banners" ? "hidden" : ""}>
                 <BannersPromocionaisTab />
+              </TabsContent>
+
+              <TabsContent value="google-ads" forceMount={activeTab === "google-ads" ? true : undefined} className={activeTab !== "google-ads" ? "hidden" : ""}>
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h3 className="text-lg font-semibold text-foreground">Google Ads Dashboard</h3>
+                      <p className="text-sm text-muted-foreground">Métricas e performance das campanhas Google Ads</p>
+                    </div>
+                    <Button onClick={() => navigate("/admin/google-ads")} className="gap-2 shadow-button">
+                      <BarChart3 className="w-4 h-4" />
+                      Abrir Dashboard
+                    </Button>
+                  </div>
+                </div>
               </TabsContent>
             </motion.div>
           </AnimatePresence>
