@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Home, CalendarDays, ShoppingBag, User, Gift, Wallet, Crown, Settings, Bell, Dumbbell, Activity, BookOpen, Scan, Apple, Globe, Ticket, Handshake, GraduationCap, Leaf, Zap } from "lucide-react";
+import { Home, CalendarDays, ShoppingBag, User, Gift, Wallet, Crown, Settings, Bell, Dumbbell, Activity, BookOpen, Scan, Apple, Globe, Ticket, Handshake, GraduationCap, Leaf, Zap, BarChart3 } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAdmin } from "@/hooks/useAdmin";
 import { useProfile } from "@/hooks/useProfile";
@@ -128,6 +128,17 @@ export const DesktopSidebar = () => {
               <span className="ml-auto text-[10px] px-2 py-0.5 rounded-full bg-primary/20 text-primary font-bold">
                 Admin
               </span>
+            </button>
+            <button
+              onClick={() => navigate("/admin/google-ads")}
+              className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 ${
+                location.pathname === "/admin/google-ads"
+                  ? "bg-primary/10 text-primary shadow-sm"
+                  : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
+              }`}
+            >
+              <BarChart3 size={20} strokeWidth={location.pathname === "/admin/google-ads" ? 2.5 : 2} />
+              <span>Google Ads</span>
             </button>
           </>
         )}

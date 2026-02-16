@@ -50,3 +50,6 @@ verify_jwt = false
 
 [functions.generate-ideas]
 verify_jwt = false
+
+[functions.fetch-google-ads]
+verify_jwt = false
