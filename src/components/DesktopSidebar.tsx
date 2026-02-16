@@ -24,7 +24,6 @@ const navItems = [
   { icon: Handshake, label: "Parceiros", path: "/parceiro-dashboard" },
   { icon: GraduationCap, label: "Cursos", path: "/cursos" },
   { icon: Leaf, label: "Terapias", path: "/terapias" },
-  { icon: Zap, label: "Resinkra AI", path: "/resinkra-ai" },
 ];
 
 const bottomItems = [
@@ -87,6 +86,24 @@ export const DesktopSidebar = () => {
         {isAdmin && (
           <>
             <div className="my-3 border-t border-border" />
+            <button
+              onClick={() => navigate("/resinkra-ai")}
+              className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 ${
+                location.pathname.startsWith("/resinkra-ai")
+                  ? "bg-primary/10 text-primary shadow-sm"
+                  : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
+              }`}
+            >
+              <Zap size={20} strokeWidth={location.pathname.startsWith("/resinkra-ai") ? 2.5 : 2} />
+              <span>Resinkra AI</span>
+              {location.pathname.startsWith("/resinkra-ai") && (
+                <motion.div
+                  layoutId="desktopActiveIndicator"
+                  className="ml-auto w-1.5 h-5 rounded-full bg-primary"
+                  transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                />
+              )}
+            </button>
             <button
               onClick={() => navigate("/cupom-editor")}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 ${

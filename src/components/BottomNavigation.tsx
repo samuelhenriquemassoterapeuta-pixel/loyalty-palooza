@@ -21,6 +21,9 @@ const moreNavItems = [
   { icon: Handshake, label: "Parceiros", path: "/parceiro-dashboard" },
   { icon: GraduationCap, label: "Cursos", path: "/cursos" },
   { icon: Leaf, label: "Terapias", path: "/terapias" },
+];
+
+const adminMoreItems = [
   { icon: Zap, label: "Resinkra AI", path: "/resinkra-ai" },
 ];
 
@@ -35,7 +38,7 @@ export const BottomNavigation = () => {
   const [moreOpen, setMoreOpen] = useState(false);
 
   const allMoreItems = useMemo(
-    () => (isAdmin ? [...moreNavItems, adminMoreItem] : moreNavItems),
+    () => (isAdmin ? [...moreNavItems, ...adminMoreItems, adminMoreItem] : moreNavItems),
     [isAdmin]
   );
 
