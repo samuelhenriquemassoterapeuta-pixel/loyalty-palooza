@@ -15,8 +15,8 @@ export default function CursoHeadSpaHero({ embedded }: { embedded?: boolean }) {
       coverImage={capaHeadspa}
       coverVideo={videoHeadspa}
       courseRoute="/curso-headspa"
-      level="Profissional"
-      description="Formação completa em Head SPA Coreano com técnicas de massagem craniana, ingredientes K-Beauty e certificação profissional."
+      level="Iniciante ao Avançado"
+      description="Formação completa em Head SPA Coreano: das escolas japonesa e coreana aos protocolos avançados, evidências científicas, biossegurança e certificação profissional."
       embedded={embedded}
     />
   );
