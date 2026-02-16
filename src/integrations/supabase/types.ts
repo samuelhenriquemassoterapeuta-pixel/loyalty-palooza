@@ -400,6 +400,119 @@ export type Database = {
         }
         Relationships: []
       }
+      brand_profiles: {
+        Row: {
+          brand_name: string
+          created_at: string | null
+          forbidden_words: string[] | null
+          id: string
+          keywords: string[] | null
+          niche: string
+          reference_profiles: string[] | null
+          target_audience_age: string | null
+          target_audience_desire: string | null
+          target_audience_gender: string | null
+          target_audience_pain: string | null
+          tone_of_voice: string[] | null
+          updated_at: string | null
+          use_emojis: boolean | null
+          use_slangs: boolean | null
+          user_id: string
+          website: string | null
+        }
+        Insert: {
+          brand_name: string
+          created_at?: string | null
+          forbidden_words?: string[] | null
+          id?: string
+          keywords?: string[] | null
+          niche: string
+          reference_profiles?: string[] | null
+          target_audience_age?: string | null
+          target_audience_desire?: string | null
+          target_audience_gender?: string | null
+          target_audience_pain?: string | null
+          tone_of_voice?: string[] | null
+          updated_at?: string | null
+          use_emojis?: boolean | null
+          use_slangs?: boolean | null
+          user_id: string
+          website?: string | null
+        }
+        Update: {
+          brand_name?: string
+          created_at?: string | null
+          forbidden_words?: string[] | null
+          id?: string
+          keywords?: string[] | null
+          niche?: string
+          reference_profiles?: string[] | null
+          target_audience_age?: string | null
+          target_audience_desire?: string | null
+          target_audience_gender?: string | null
+          target_audience_pain?: string | null
+          tone_of_voice?: string[] | null
+          updated_at?: string | null
+          use_emojis?: boolean | null
+          use_slangs?: boolean | null
+          user_id?: string
+          website?: string | null
+        }
+        Relationships: []
+      }
+      calendar_events: {
+        Row: {
+          color: string | null
+          content_type: string | null
+          created_at: string | null
+          description: string | null
+          id: string
+          scheduled_date: string
+          scheduled_time: string | null
+          script_id: string | null
+          status: string | null
+          title: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          color?: string | null
+          content_type?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          scheduled_date: string
+          scheduled_time?: string | null
+          script_id?: string | null
+          status?: string | null
+          title: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          color?: string | null
+          content_type?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          scheduled_date?: string
+          scheduled_time?: string | null
+          script_id?: string | null
+          status?: string | null
+          title?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "calendar_events_script_id_fkey"
+            columns: ["script_id"]
+            isOneToOne: false
+            referencedRelation: "scripts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       campanhas_marketing: {
         Row: {
           agendada_para: string | null
@@ -565,6 +678,53 @@ export type Database = {
             columns: ["empresa_id"]
             isOneToOne: false
             referencedRelation: "empresas_corporativas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      content_ideas: {
+        Row: {
+          brand_id: string | null
+          content_type: string | null
+          created_at: string | null
+          description: string | null
+          funnel_stage: string | null
+          id: string
+          is_used: boolean | null
+          niche: string | null
+          title: string
+          user_id: string
+        }
+        Insert: {
+          brand_id?: string | null
+          content_type?: string | null
+          created_at?: string | null
+          description?: string | null
+          funnel_stage?: string | null
+          id?: string
+          is_used?: boolean | null
+          niche?: string | null
+          title: string
+          user_id: string
+        }
+        Update: {
+          brand_id?: string | null
+          content_type?: string | null
+          created_at?: string | null
+          description?: string | null
+          funnel_stage?: string | null
+          id?: string
+          is_used?: boolean | null
+          niche?: string | null
+          title?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "content_ideas_brand_id_fkey"
+            columns: ["brand_id"]
+            isOneToOne: false
+            referencedRelation: "brand_profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -1654,6 +1814,59 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      hooks: {
+        Row: {
+          best_for: string | null
+          brand_id: string | null
+          category: string | null
+          completion_suggestion: string | null
+          created_at: string | null
+          emotion_triggered: string | null
+          hook_text: string
+          id: string
+          is_favorite: boolean | null
+          power_level: number | null
+          topic: string
+          user_id: string
+        }
+        Insert: {
+          best_for?: string | null
+          brand_id?: string | null
+          category?: string | null
+          completion_suggestion?: string | null
+          created_at?: string | null
+          emotion_triggered?: string | null
+          hook_text: string
+          id?: string
+          is_favorite?: boolean | null
+          power_level?: number | null
+          topic: string
+          user_id: string
+        }
+        Update: {
+          best_for?: string | null
+          brand_id?: string | null
+          category?: string | null
+          completion_suggestion?: string | null
+          created_at?: string | null
+          emotion_triggered?: string | null
+          hook_text?: string
+          id?: string
+          is_favorite?: boolean | null
+          power_level?: number | null
+          topic?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hooks_brand_id_fkey"
+            columns: ["brand_id"]
+            isOneToOne: false
+            referencedRelation: "brand_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       indicacoes: {
         Row: {
@@ -2876,6 +3089,185 @@ export type Database = {
           },
         ]
       }
+      resinkra_user_settings: {
+        Row: {
+          created_at: string | null
+          default_brand_id: string | null
+          id: string
+          language: string | null
+          max_scripts_per_month: number | null
+          notifications_enabled: boolean | null
+          scripts_generated_this_month: number | null
+          subscription_plan: string | null
+          subscription_status: string | null
+          theme: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          default_brand_id?: string | null
+          id?: string
+          language?: string | null
+          max_scripts_per_month?: number | null
+          notifications_enabled?: boolean | null
+          scripts_generated_this_month?: number | null
+          subscription_plan?: string | null
+          subscription_status?: string | null
+          theme?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          default_brand_id?: string | null
+          id?: string
+          language?: string | null
+          max_scripts_per_month?: number | null
+          notifications_enabled?: boolean | null
+          scripts_generated_this_month?: number | null
+          subscription_plan?: string | null
+          subscription_status?: string | null
+          theme?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "resinkra_user_settings_default_brand_id_fkey"
+            columns: ["default_brand_id"]
+            isOneToOne: false
+            referencedRelation: "brand_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      scripts: {
+        Row: {
+          additional_info: string | null
+          audio_suggestion: string | null
+          body: Json | null
+          brand_id: string | null
+          caption: string | null
+          climax: string | null
+          content_type: string
+          created_at: string | null
+          cta: string | null
+          depth_level: number | null
+          duration: string | null
+          engagement_tips: string[] | null
+          estimated_duration_seconds: number | null
+          hashtags: string[] | null
+          hook: string | null
+          hook_visual_direction: string | null
+          id: string
+          is_favorite: boolean | null
+          is_template: boolean | null
+          objective: string | null
+          raw_ai_response: Json | null
+          score_clarity: number | null
+          score_cta: number | null
+          score_emotion: number | null
+          score_hook: number | null
+          score_total: number | null
+          score_virality: number | null
+          status: string | null
+          style: string | null
+          template_name: string | null
+          topic: string
+          updated_at: string | null
+          user_id: string
+          variation_of: string | null
+        }
+        Insert: {
+          additional_info?: string | null
+          audio_suggestion?: string | null
+          body?: Json | null
+          brand_id?: string | null
+          caption?: string | null
+          climax?: string | null
+          content_type: string
+          created_at?: string | null
+          cta?: string | null
+          depth_level?: number | null
+          duration?: string | null
+          engagement_tips?: string[] | null
+          estimated_duration_seconds?: number | null
+          hashtags?: string[] | null
+          hook?: string | null
+          hook_visual_direction?: string | null
+          id?: string
+          is_favorite?: boolean | null
+          is_template?: boolean | null
+          objective?: string | null
+          raw_ai_response?: Json | null
+          score_clarity?: number | null
+          score_cta?: number | null
+          score_emotion?: number | null
+          score_hook?: number | null
+          score_total?: number | null
+          score_virality?: number | null
+          status?: string | null
+          style?: string | null
+          template_name?: string | null
+          topic: string
+          updated_at?: string | null
+          user_id: string
+          variation_of?: string | null
+        }
+        Update: {
+          additional_info?: string | null
+          audio_suggestion?: string | null
+          body?: Json | null
+          brand_id?: string | null
+          caption?: string | null
+          climax?: string | null
+          content_type?: string
+          created_at?: string | null
+          cta?: string | null
+          depth_level?: number | null
+          duration?: string | null
+          engagement_tips?: string[] | null
+          estimated_duration_seconds?: number | null
+          hashtags?: string[] | null
+          hook?: string | null
+          hook_visual_direction?: string | null
+          id?: string
+          is_favorite?: boolean | null
+          is_template?: boolean | null
+          objective?: string | null
+          raw_ai_response?: Json | null
+          score_clarity?: number | null
+          score_cta?: number | null
+          score_emotion?: number | null
+          score_hook?: number | null
+          score_total?: number | null
+          score_virality?: number | null
+          status?: string | null
+          style?: string | null
+          template_name?: string | null
+          topic?: string
+          updated_at?: string | null
+          user_id?: string
+          variation_of?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "scripts_brand_id_fkey"
+            columns: ["brand_id"]
+            isOneToOne: false
+            referencedRelation: "brand_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "scripts_variation_of_fkey"
+            columns: ["variation_of"]
+            isOneToOne: false
+            referencedRelation: "scripts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       servicos: {
         Row: {
           beneficios: string[] | null
@@ -3069,6 +3461,47 @@ export type Database = {
         }
         Relationships: []
       }
+      team_members: {
+        Row: {
+          brand_id: string | null
+          created_at: string | null
+          id: string
+          invited_email: string | null
+          member_id: string
+          owner_id: string
+          role: string | null
+          status: string | null
+        }
+        Insert: {
+          brand_id?: string | null
+          created_at?: string | null
+          id?: string
+          invited_email?: string | null
+          member_id: string
+          owner_id: string
+          role?: string | null
+          status?: string | null
+        }
+        Update: {
+          brand_id?: string | null
+          created_at?: string | null
+          id?: string
+          invited_email?: string | null
+          member_id?: string
+          owner_id?: string
+          role?: string | null
+          status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "team_members_brand_id_fkey"
+            columns: ["brand_id"]
+            isOneToOne: false
+            referencedRelation: "brand_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       terapeutas: {
         Row: {
           created_at: string
@@ -3195,6 +3628,45 @@ export type Database = {
           tipo?: string
           user_id?: string
           valor?: number
+        }
+        Relationships: []
+      }
+      trends: {
+        Row: {
+          category: string | null
+          created_at: string | null
+          description: string | null
+          expires_at: string | null
+          id: string
+          is_active: boolean | null
+          niche: string | null
+          relevance_score: number | null
+          title: string
+          trend_type: string | null
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string | null
+          description?: string | null
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          niche?: string | null
+          relevance_score?: number | null
+          title: string
+          trend_type?: string | null
+        }
+        Update: {
+          category?: string | null
+          created_at?: string | null
+          description?: string | null
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          niche?: string | null
+          relevance_score?: number | null
+          title?: string
+          trend_type?: string | null
         }
         Relationships: []
       }
@@ -3357,6 +3829,68 @@ export type Database = {
           valor?: number
         }
         Relationships: []
+      }
+      viral_analyses: {
+        Row: {
+          adapted_script: Json | null
+          brand_id: string | null
+          content_type: string | null
+          created_at: string | null
+          emotional_triggers: string[] | null
+          hook_effectiveness: number | null
+          hook_type: string | null
+          id: string
+          key_takeaways: string[] | null
+          narrative_structure: string | null
+          original_content: string
+          overall_score: number | null
+          retention_techniques: string[] | null
+          user_id: string
+          virality_elements: string[] | null
+        }
+        Insert: {
+          adapted_script?: Json | null
+          brand_id?: string | null
+          content_type?: string | null
+          created_at?: string | null
+          emotional_triggers?: string[] | null
+          hook_effectiveness?: number | null
+          hook_type?: string | null
+          id?: string
+          key_takeaways?: string[] | null
+          narrative_structure?: string | null
+          original_content: string
+          overall_score?: number | null
+          retention_techniques?: string[] | null
+          user_id: string
+          virality_elements?: string[] | null
+        }
+        Update: {
+          adapted_script?: Json | null
+          brand_id?: string | null
+          content_type?: string | null
+          created_at?: string | null
+          emotional_triggers?: string[] | null
+          hook_effectiveness?: number | null
+          hook_type?: string | null
+          id?: string
+          key_takeaways?: string[] | null
+          narrative_structure?: string | null
+          original_content?: string
+          overall_score?: number | null
+          retention_techniques?: string[] | null
+          user_id?: string
+          virality_elements?: string[] | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "viral_analyses_brand_id_fkey"
+            columns: ["brand_id"]
+            isOneToOne: false
+            referencedRelation: "brand_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       whatsapp_logs: {
         Row: {
