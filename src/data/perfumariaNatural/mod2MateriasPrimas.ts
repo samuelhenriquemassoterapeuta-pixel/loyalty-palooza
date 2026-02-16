@@ -5,6 +5,7 @@ export const mod2MateriasPrimas: ModuloContent = {
   descricao: "50 ingredientes detalhados: cítricos, florais, amadeirados",
   icone: "Heart",
   cor: "from-green-50 to-emerald-50",
+  nivel: "iniciante",
   aulas: [
     {
       titulo: "Cítricos: Bergamota, Limão e Laranja",

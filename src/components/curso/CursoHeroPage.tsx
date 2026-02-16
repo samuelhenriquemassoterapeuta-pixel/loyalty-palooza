@@ -18,6 +18,7 @@ import {
   MessageCircle,
   BarChart3,
   GraduationCap,
+  Lock,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -266,19 +267,51 @@ export function CursoHeroPage({
             transition={{ delay: 0.25 }}
           >
             <AppCollapsibleSection title="Grade Curricular" icon={BookOpen} badge={`${totalModulos} módulos`}>
-          <Accordion type="multiple" className="space-y-2">
-              {modulos.map((modulo, mi) => {
+          <Accordion type="multiple" className="space-y-4">
+              {(["iniciante", "intermediario", "avancado"] as const).map((nivel) => {
+                const levelModulos = modulos
+                  .map((m, mi) => ({ ...m, originalIndex: mi }))
+                  .filter((m) => (m.nivel ?? "iniciante") === nivel);
+                if (levelModulos.length === 0) return null;
+
+                const nivelLabels: Record<string, string> = {
+                  iniciante: "🟢 Iniciante",
+                  intermediario: "🟡 Intermediário",
+                  avancado: "🔴 Avançado",
+                };
+
+                // Check if level is unlocked
+                const isLevelUnlocked = (): boolean => {
+                  if (nivel === "iniciante") return true;
+                  const prevLevel = nivel === "avancado" ? "intermediario" : "iniciante";
+                  return modulos.every((m, mi) => {
+                    if ((m.nivel ?? "iniciante") !== prevLevel) return true;
+                    return moduloAulasCompleted(mi, m.aulas.length) === m.aulas.length;
+                  });
+                };
+                const unlocked = isLevelUnlocked();
+
+                return (
+                  <div key={nivel} className="space-y-2">
+                    <div className="flex items-center gap-2 px-1">
+                      <span className="text-xs font-bold">{nivelLabels[nivel]}</span>
+                      {!unlocked && <Lock size={12} className="text-muted-foreground" />}
+                    </div>
+                    {levelModulos.map((modulo) => {
+                      const mi = modulo.originalIndex;
                 const Icon = iconMap[modulo.icone] || BookOpen;
                 const done = moduloAulasCompleted(mi, modulo.aulas.length);
                 const total = modulo.aulas.length;
                 const modMinutos = modulo.aulas.reduce((a, l) => a + l.duracaoMinutos, 0);
 
                 return (
-                  <AccordionItem key={mi} value={`modulo-${mi}`} className="border rounded-lg overflow-hidden">
+                      <AccordionItem key={mi} value={`modulo-${mi}`} className={`border rounded-lg overflow-hidden ${!unlocked ? "opacity-50 grayscale" : ""}`} disabled={!unlocked}>
                     <AccordionTrigger className="px-4 py-3 hover:no-underline">
                       <div className="flex items-center gap-3 text-left flex-1">
                         <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
-                          {done === total ? (
+                              {!unlocked ? (
+                                <Lock size={16} className="text-muted-foreground" />
+                              ) : done === total ? (
                             <Trophy size={16} className="text-primary" />
                           ) : (
                             <Icon size={16} className="text-primary" />
@@ -287,14 +320,15 @@ export function CursoHeroPage({
                         <div className="flex-1 min-w-0">
                           <p className="text-sm font-semibold leading-snug">{modulo.titulo}</p>
                           <p className="text-[11px] text-muted-foreground">
-                            {total} aulas · {modMinutos}min · {done}/{total} concluídas
+                                {total} aulas · {modMinutos}min{unlocked ? ` · ${done}/${total} concluídas` : " · Bloqueado"}
                           </p>
-                          {done > 0 && done < total && (
+                              {unlocked && done > 0 && done < total && (
                             <Progress value={(done / total) * 100} className="h-1 mt-1.5" />
                           )}
                         </div>
                       </div>
                     </AccordionTrigger>
+                        {unlocked && (
                     <AccordionContent className="px-4 pb-3">
                       <div className="space-y-2">
                         {modulo.aulas.map((aula, ai) => {
@@ -329,7 +363,11 @@ export function CursoHeroPage({
                         })}
                       </div>
                     </AccordionContent>
+                        )}
                   </AccordionItem>
+                );
+              })}
+                  </div>
                 );
               })}
             </Accordion>

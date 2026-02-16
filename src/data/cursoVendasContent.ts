@@ -15,6 +15,7 @@ export interface ModuloContent {
   descricao: string;
   icone: string;
   cor: string;
+  nivel?: "iniciante" | "intermediario" | "avancado";
   aulas: AulaContent[];
 }
 
@@ -24,6 +25,7 @@ export const cursoVendasData: ModuloContent[] = [
     descricao: "A diferença entre vender produto e vender transformação",
     icone: "Lightbulb",
     cor: "from-amber-50 to-orange-50",
+    nivel: "iniciante",
     aulas: [
       {
         titulo: "Vender é cuidar — não é empurrar",
@@ -236,6 +238,7 @@ Para cada cliente que atendeu esta semana:
     descricao: "Escuta ativa, perguntas estratégicas e construção de confiança",
     icone: "Heart",
     cor: "from-rose-50 to-pink-50",
+    nivel: "iniciante",
     aulas: [
       {
         titulo: "Primeiros 30 segundos e escuta ativa",
@@ -450,6 +453,7 @@ Na massoterapia, seu tom de voz é parte do tratamento:
     descricao: "Apresentação estratégica dos 5 pacotes com preços reais e técnica de ancoragem",
     icone: "Package",
     cor: "from-emerald-50 to-green-50",
+    nivel: "iniciante",
     aulas: [
       {
         titulo: "Nossos 5 pacotes — conheça cada um",
@@ -683,6 +687,7 @@ Não é pressão — é prescrição profissional. Se você atende 10 clientes e
     descricao: "Scripts prontos para as 7 objeções reais e técnicas de fechamento sem pressão",
     icone: "Target",
     cor: "from-blue-50 to-indigo-50",
+    nivel: "intermediario",
     aulas: [
       {
         titulo: "As 7 objeções mais comuns — com nossos valores",
@@ -937,6 +942,7 @@ O MELHOR momento para oferecer pacote é:
     descricao: "Sistema de gatilhos de consumo, upgrade progressivo e fidelização",
     icone: "MessageCircle",
     cor: "from-green-50 to-teal-50",
+    nivel: "intermediario",
     aulas: [
       {
         titulo: "Sistema de alerta de saldo",
@@ -1163,6 +1169,7 @@ Em 1 ano = **+R$30.000 em receita** só com melhoria de conversão!
     descricao: "KPIs essenciais e plano de ação semanal para alta performance",
     icone: "BarChart3",
     cor: "from-purple-50 to-violet-50",
+    nivel: "intermediario",
     aulas: [
       {
         titulo: "KPIs essenciais de vendas",
@@ -1315,6 +1322,7 @@ Ao completar todas as aulas e aplicar o plano por 12 semanas, você estará apto
     descricao: "Redes sociais, conteúdo e presença digital para atrair e fidelizar clientes",
     icone: "GraduationCap",
     cor: "from-cyan-50 to-sky-50",
+    nivel: "avancado",
     aulas: [
       {
         titulo: "Presença digital profissional",
@@ -1528,6 +1536,7 @@ Acompanhe mensalmente:
     descricao: "Ferramentas, fluxos automatizados e conformidade para escalar com segurança",
     icone: "Target",
     cor: "from-teal-50 to-emerald-50",
+    nivel: "avancado",
     aulas: [
       {
         titulo: "CRM simples para terapeutas",
@@ -1814,6 +1823,7 @@ O cliente pode solicitar a qualquer momento:
     descricao: "Recrutamento, treinamento e planejamento para crescimento sustentável",
     icone: "GraduationCap",
     cor: "from-orange-50 to-amber-50",
+    nivel: "avancado",
     aulas: [
       {
         titulo: "Recrutamento e treinamento de equipe",

@@ -15,6 +15,7 @@ export interface ModuloContent {
   descricao: string;
   icone: string;
   cor: string;
+  nivel?: "iniciante" | "intermediario" | "avancado";
   aulas: AulaContent[];
 }
 
@@ -23,6 +24,7 @@ export const mod1Fundamentos: ModuloContent = {
   descricao: "História, anatomia olfativa, famílias e segurança",
   icone: "BookOpen",
   cor: "from-amber-50 to-yellow-50",
+  nivel: "iniciante",
   aulas: [
     {
       titulo: "A História dos Aromas",

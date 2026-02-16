@@ -20,6 +20,7 @@ export interface HeadSpaModulo {
   descricao: string;
   icone: string;
   cor: string;
+  nivel?: "iniciante" | "intermediario" | "avancado";
   aulas: HeadSpaAula[];
 }
 
@@ -29,6 +30,7 @@ export const cursoHeadSpaData: HeadSpaModulo[] = [
     descricao: "Origem, filosofia e ciência por trás do ritual coreano",
     icone: "BookOpen",
     cor: "from-sky-50 to-blue-50",
+    nivel: "iniciante",
     aulas: [
       {
         titulo: "O que é Head SPA Coreano?",
@@ -247,6 +249,7 @@ Antes de cada sessão, preencha:
     descricao: "Passo a passo completo das 5 etapas do ritual",
     icone: "Target",
     cor: "from-emerald-50 to-teal-50",
+    nivel: "iniciante",
     aulas: [
       {
         titulo: "Etapa 1: Análise e Diagnóstico",
@@ -673,6 +676,7 @@ Entregar ao cliente um mini-guia personalizado:
     descricao: "Ingredientes coreanos de alta performance para couro cabeludo",
     icone: "Heart",
     cor: "from-pink-50 to-rose-50",
+    nivel: "iniciante",
     aulas: [
       {
         titulo: "Ingredientes Ativos Coreanos",
@@ -936,6 +940,7 @@ Na Coreia, os tratamentos capilares são ajustados conforme a estação. Isso ma
     descricao: "O que há de mais atual no mercado de Head SPA global",
     icone: "Lightbulb",
     cor: "from-amber-50 to-yellow-50",
+    nivel: "intermediario",
     aulas: [
       {
         titulo: "Tendências Head SPA 2025-2026",
@@ -1096,6 +1101,7 @@ A ciência do microbioma chegou ao couro cabeludo. Assim como o gut microbiome r
     descricao: "Como precificar, vender e escalar seu Head SPA",
     icone: "BarChart3",
     cor: "from-violet-50 to-purple-50",
+    nivel: "intermediario",
     aulas: [
       {
         titulo: "Precificação e Pacotes",
@@ -1338,6 +1344,7 @@ Para encontrar fornecedores K-beauty profissionais:
     descricao: "Exercícios práticos, avaliação final e certificado",
     icone: "GraduationCap",
     cor: "from-orange-50 to-red-50",
+    nivel: "intermediario",
     aulas: [
       {
         titulo: "Revisão Prática Integrada",
@@ -1511,6 +1518,7 @@ Conteúdo: Técnicas, Ingredientes, Negócios e Tendências
     descricao: "Comparativo detalhado das duas abordagens de Head SPA",
     icone: "GitCompare",
     cor: "from-indigo-50 to-blue-50",
+    nivel: "avancado",
     aulas: [
       {
         titulo: "Head SPA Japonês: Origens e Filosofia",
@@ -1761,6 +1769,7 @@ Isso posiciona seu serviço como exclusivo e educado, gerando confiança e justi
     descricao: "Tratamentos para condições específicas e públicos especiais",
     icone: "Shield",
     cor: "from-red-50 to-orange-50",
+    nivel: "avancado",
     aulas: [
       {
         titulo: "Tratamento Avançado para Queda Capilar",
@@ -2040,6 +2049,7 @@ Uma das técnicas mais icônicas e instagramáveis do Head SPA coreano moderno.
     descricao: "Base científica, normas de higiene e ética profissional",
     icone: "BookCheck",
     cor: "from-teal-50 to-cyan-50",
+    nivel: "avancado",
     aulas: [
       {
         titulo: "Evidências Científicas da Massagem Craniana",
