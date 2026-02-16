@@ -7,6 +7,7 @@ import { cursoYugenFaceSpaData } from "@/data/cursoYugenFaceSpaContent";
 import { cursoPerfumariaNaturalData } from "@/data/cursoPerfumariaNaturalContent";
 import { cursoVelasAromaticasData } from "@/data/cursoVelasAromaticasContent";
 import { cursoSaboariaArtesanalData } from "@/data/cursoSaboariaArtesanalContent";
+import { cursoDifusorAmbientesData } from "@/data/cursoDifusorAmbientesContent";
 
 function computeStats(title: string, storageKey: string, modulos: { aulas: { duracaoMinutos: number }[] }[]) {
   const totalAulas = modulos.reduce((a, m) => a + m.aulas.length, 0);
@@ -25,4 +26,5 @@ export const allCourseStats = [
   computeStats("Perfumaria Natural", "resinkra_curso_perfumaria_natural_progress", cursoPerfumariaNaturalData),
   computeStats("Velas Aromáticas", "resinkra_curso_velas_aromaticas_progress", cursoVelasAromaticasData),
   computeStats("Saboaria Artesanal", "resinkra_curso_saboaria_artesanal_progress", cursoSaboariaArtesanalData),
+  computeStats("Difusor de Ambientes", "resinkra_curso_difusor_ambientes_progress", cursoDifusorAmbientesData),
 ];
