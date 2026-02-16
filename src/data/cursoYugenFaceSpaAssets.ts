@@ -34,25 +34,30 @@ import videoFidelizacao from "@/assets/cursos/facespa/video-fidelizacao.mp4";
 
 // Map: [moduleIndex]-[lessonIndex] => { image, video }
 export const faceSpaAulaAssets: Record<string, { image: string; video: string }> = {
-  // Module 0: Fundamentos da Massagem Facial Asiática
+  // Module 0: Fundação & Filosofia Oriental (4 aulas)
   "0-0": { image: aulaYugenIntro, video: videoYugenIntro },
   "0-1": { image: aulaHistoria, video: videoHistoria },
   "0-2": { image: aulaQiMeridianos, video: videoQiMeridianos },
-  // Module 1: Anatomia Facial Energética
+  "0-3": { image: aulaFerramentas, video: videoFerramentas },
+  // Module 1: Anatomia Facial Energética (3 aulas)
   "1-0": { image: aulaMusculosFaciais, video: videoMusculos },
   "1-1": { image: aulaZonasReflexas, video: videoZonasReflexas },
-  // Module 2: Ferramentas e Produtos
-  "2-0": { image: aulaFerramentas, video: videoFerramentas },
-  "2-1": { image: aulaOleosProdutos, video: videoOleos },
-  // Module 3: Massagem Facial Japonesa (Kobido)
-  "3-0": { image: aulaPreparacaoLimpeza, video: videoPreparacao },
-  "3-1": { image: aulaKobidoProtocolo, video: videoKobido },
-  "3-2": { image: aulaContraindicacoes, video: videoContraindicacoes },
-  // Module 4: Técnica Yūgen Japan Exclusiva
-  "4-0": { image: aulaProtocoloYugen, video: videoProtocoloYugen },
-  "4-1": { image: aulaProtocolosPele, video: videoProtocolosPele },
-  // Module 5: Negócios e Marketing
-  "5-0": { image: aulaPrecificacao, video: videoPrecificacao },
-  "5-1": { image: aulaMarketingDigital, video: videoMarketing },
-  "5-2": { image: aulaFidelizacao, video: videoFidelizacao },
+  "1-2": { image: aulaContraindicacoes, video: videoContraindicacoes },
+  // Module 2: Kobido — Massagem Facial Japonesa (3 aulas)
+  "2-0": { image: aulaPreparacaoLimpeza, video: videoPreparacao },
+  "2-1": { image: aulaKobidoProtocolo, video: videoKobido },
+  "2-2": { image: aulaProtocolosPele, video: videoProtocolosPele },
+  // Module 3: Técnica Yūgen Japan + Gua Sha (4 aulas)
+  "3-0": { image: aulaProtocoloYugen, video: videoProtocoloYugen },
+  "3-1": { image: aulaYugenIntro, video: videoYugenIntro },
+  "3-2": { image: aulaOleosProdutos, video: videoOleos },
+  "3-3": { image: aulaProtocolosPele, video: videoProtocolosPele },
+  // Module 4: Produtos, Ferramentas & Óleos (3 aulas)
+  "4-0": { image: aulaOleosProdutos, video: videoOleos },
+  "4-1": { image: aulaFerramentas, video: videoFerramentas },
+  "4-2": { image: aulaPrecificacao, video: videoPrecificacao },
+  // Module 5: Omotenashi, Negócios & Certificação (3 aulas)
+  "5-0": { image: aulaFidelizacao, video: videoFidelizacao },
+  "5-1": { image: aulaPrecificacao, video: videoPrecificacao },
+  "5-2": { image: aulaMarketingDigital, video: videoMarketing },
 };
