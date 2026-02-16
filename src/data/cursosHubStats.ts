@@ -9,6 +9,7 @@ import { cursoVelasAromaticasData } from "@/data/cursoVelasAromaticasContent";
 import { cursoSaboariaArtesanalData } from "@/data/cursoSaboariaArtesanalContent";
 import { cursoDifusorAmbientesData } from "@/data/cursoDifusorAmbientesContent";
 import { cursoFitoterapiaData } from "@/data/cursoFitoterapiaContent";
+import { cursoOleosEssenciaisData } from "@/data/cursoOleosEssenciaisContent";
 
 function computeStats(title: string, storageKey: string, modulos: { aulas: { duracaoMinutos: number }[] }[]) {
   const totalAulas = modulos.reduce((a, m) => a + m.aulas.length, 0);
@@ -29,4 +30,5 @@ export const allCourseStats = [
   computeStats("Saboaria Artesanal", "resinkra_curso_saboaria_artesanal_progress", cursoSaboariaArtesanalData),
   computeStats("Difusor de Ambientes", "resinkra_curso_difusor_ambientes_progress", cursoDifusorAmbientesData),
   computeStats("Fitoterapia", "resinkra_curso_fitoterapia_progress", cursoFitoterapiaData),
+  computeStats("Óleos Essenciais", "resinkra_curso_oleos_essenciais_progress", cursoOleosEssenciaisData),
 ];
