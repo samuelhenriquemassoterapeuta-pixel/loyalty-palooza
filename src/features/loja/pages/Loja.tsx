@@ -17,6 +17,9 @@ import { ProdutosGridSkeleton, PedidosListSkeleton } from "@/components/skeleton
 import { AppLayout } from "@/components/AppLayout";
 import { useLevelBenefits } from "@/features/cashback/hooks/useLevelBenefits";
 import { PaymentDialog } from "@/features/pagamento/components/PaymentDialog";
+import { useLandingConfig } from "@/features/landing/hooks/useLandingConfig";
+import { CollapsibleDashboardSection } from "@/components/home/CollapsibleDashboardSection";
+import homeBgFallback from "@/assets/home-bg.jpg";
 
 interface CarrinhoItem {
   produto: Produto;
@@ -42,6 +45,9 @@ const fadeUp = {
 
 export default function Loja() {
   const navigate = useNavigate();
+  const { config: lojaBg } = useLandingConfig("loja_bg");
+  const bgUrl = lojaBg?.imagem_url || homeBgFallback;
+  const bgSpeed = lojaBg?.velocidade || 30;
   const { toast } = useToast();
   const { produtos, loading: loadingProdutos } = useProdutos();
   const { pedidos, loading: loadingPedidos, createPedido, cancelPedido } = usePedidos();
@@ -204,9 +210,30 @@ export default function Loja() {
 
   return (
     <AppLayout>
-    <div className="min-h-screen bg-background gradient-hero pb-32 lg:pb-8">
+    <div className="min-h-screen bg-background gradient-hero pb-32 lg:pb-8 relative overflow-hidden">
+      {/* Animated background image */}
+      {bgUrl && (
+        <motion.div
+          className="absolute inset-0 pointer-events-none z-0"
+          initial={{ scale: 1.15, opacity: 0 }}
+          animate={{
+            scale: [1.15, 1.25, 1.15],
+            opacity: [0.22, 0.32, 0.22],
+          }}
+          transition={{
+            duration: bgSpeed,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+          style={{
+            backgroundImage: `url(${bgUrl})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        />
+      )}
       {/* Header */}
-      <div className="relative overflow-hidden px-4 py-4 safe-top">
+      <div className="relative overflow-hidden px-4 py-4 safe-top z-10">
         <div className="max-w-lg lg:max-w-4xl mx-auto flex items-center gap-4 relative z-10">
           <button
             onClick={() => navigate(-1)}
@@ -237,7 +264,7 @@ export default function Loja() {
         </div>
       </div>
 
-      <div className="max-w-lg lg:max-w-4xl mx-auto px-4 lg:px-8 space-y-5">
+      <div className="max-w-lg lg:max-w-4xl mx-auto px-4 lg:px-8 space-y-5 relative z-10">
         <motion.div variants={stagger} initial="hidden" animate="show" className="space-y-5">
           {/* Level benefits banner */}
           {storeDiscountPercent > 0 && (
@@ -402,50 +429,54 @@ export default function Loja() {
                   )}
                 </motion.div>
 
-                {/* Filtros de Categoria */}
-                <motion.div variants={fadeUp} className="flex gap-2 overflow-x-auto pb-1 scrollbar-none">
-                  {(() => {
-                    const categoriasUnicas = Array.from(
-                      new Set(produtos.map(p => p.categoria).filter(Boolean))
-                    ) as string[];
-                    
-                    const categoriasConfig: Record<string, { icon: typeof Sparkles; label: string }> = {
-                      spa: { icon: Sparkles, label: "Home SPA" },
-                      gastronomia: { icon: Leaf, label: "Gastronomia" },
-                      emagrecimento: { icon: Apple, label: "Emagrecimento" },
-                      alongamento: { icon: Dumbbell, label: "Alongamento" },
-                    };
+                {/* Filtros de Categoria - Colapsável */}
+                <motion.div variants={fadeUp}>
+                  <CollapsibleDashboardSection title="Filtrar por categoria" defaultOpen={false}>
+                    <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none">
+                      {(() => {
+                        const categoriasUnicas = Array.from(
+                          new Set(produtos.map(p => p.categoria).filter(Boolean))
+                        ) as string[];
+                        
+                        const categoriasConfig: Record<string, { icon: typeof Sparkles; label: string }> = {
+                          spa: { icon: Sparkles, label: "Home SPA" },
+                          gastronomia: { icon: Leaf, label: "Gastronomia" },
+                          emagrecimento: { icon: Apple, label: "Emagrecimento" },
+                          alongamento: { icon: Dumbbell, label: "Alongamento" },
+                        };
 
-                    return (
-                      <>
-                        <Button
-                          variant={categoriaAtiva === "todos" ? "default" : "outline"}
-                          size="sm"
-                          onClick={() => setCategoriaAtiva("todos")}
-                          className="shrink-0 rounded-xl"
-                        >
-                          <ShoppingBag size={14} />
-                          Todos
-                        </Button>
-                        {categoriasUnicas.map((cat) => {
-                          const config = categoriasConfig[cat] || { icon: Package, label: cat.charAt(0).toUpperCase() + cat.slice(1) };
-                          const Icon = config.icon;
-                          return (
+                        return (
+                          <>
                             <Button
-                              key={cat}
-                              variant={categoriaAtiva === cat ? "default" : "outline"}
+                              variant={categoriaAtiva === "todos" ? "default" : "outline"}
                               size="sm"
-                              onClick={() => setCategoriaAtiva(cat)}
-                              className="shrink-0 gap-1 rounded-xl"
+                              onClick={() => setCategoriaAtiva("todos")}
+                              className="shrink-0 rounded-xl"
                             >
-                              <Icon size={14} />
-                              {config.label}
+                              <ShoppingBag size={14} />
+                              Todos
                             </Button>
-                          );
-                        })}
-                      </>
-                    );
-                  })()}
+                            {categoriasUnicas.map((cat) => {
+                              const config = categoriasConfig[cat] || { icon: Package, label: cat.charAt(0).toUpperCase() + cat.slice(1) };
+                              const Icon = config.icon;
+                              return (
+                                <Button
+                                  key={cat}
+                                  variant={categoriaAtiva === cat ? "default" : "outline"}
+                                  size="sm"
+                                  onClick={() => setCategoriaAtiva(cat)}
+                                  className="shrink-0 gap-1 rounded-xl"
+                                >
+                                  <Icon size={14} />
+                                  {config.label}
+                                </Button>
+                              );
+                            })}
+                          </>
+                        );
+                      })()}
+                    </div>
+                  </CollapsibleDashboardSection>
                 </motion.div>
 
                 {loadingProdutos ? (
