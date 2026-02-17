@@ -170,41 +170,41 @@ export const AnimatedRoutes = () => {
         <Route path="/minha-jornada" element={<ProtectedRoute><LazyPage><MinhaJornada /></LazyPage></ProtectedRoute>} />
         <Route path="/conteudo-social" element={<ProtectedRoute requireAdmin><LazyPage><ConteudoSocial /></LazyPage></ProtectedRoute>} />
         <Route path="/terapeuta/:id" element={<LazyPage><CartaoTerapeuta /></LazyPage>} />
-        <Route path="/cursos" element={<ProtectedRoute><LazyPage><Cursos /></LazyPage></ProtectedRoute>} />
-        <Route path="/curso-vendas" element={<ProtectedRoute><LazyPage><CursoVendas /></LazyPage></ProtectedRoute>} />
-        <Route path="/curso-aromaterapia" element={<ProtectedRoute><LazyPage><CursoAromaterapia /></LazyPage></ProtectedRoute>} />
-        <Route path="/curso-headspa" element={<ProtectedRoute><LazyPage><CursoHeadSpa /></LazyPage></ProtectedRoute>} />
-        <Route path="/curso-anatomia" element={<ProtectedRoute><LazyPage><CursoAnatomia /></LazyPage></ProtectedRoute>} />
-        <Route path="/curso-yugen-facespa" element={<ProtectedRoute><LazyPage><CursoYugenFaceSpa /></LazyPage></ProtectedRoute>} />
-        <Route path="/curso/vendas" element={<ProtectedRoute><LazyPage><CursoVendasHero /></LazyPage></ProtectedRoute>} />
-        <Route path="/curso/aromaterapia" element={<ProtectedRoute><LazyPage><CursoAromaterapiaHero /></LazyPage></ProtectedRoute>} />
-        <Route path="/curso/headspa" element={<ProtectedRoute><LazyPage><CursoHeadSpaHero /></LazyPage></ProtectedRoute>} />
-        <Route path="/curso/anatomia" element={<ProtectedRoute><LazyPage><CursoAnatomiaHero /></LazyPage></ProtectedRoute>} />
-        <Route path="/curso/facespa" element={<ProtectedRoute><LazyPage><CursoYugenFaceSpaHero /></LazyPage></ProtectedRoute>} />
-        <Route path="/curso-metodo-resinkra" element={<ProtectedRoute><LazyPage><CursoMetodoResinkra /></LazyPage></ProtectedRoute>} />
-        <Route path="/curso/metodo-resinkra" element={<ProtectedRoute><LazyPage><CursoMetodoResinkraHero /></LazyPage></ProtectedRoute>} />
-        <Route path="/curso-perfumaria-natural" element={<ProtectedRoute><LazyPage><CursoPerfumariaNatural /></LazyPage></ProtectedRoute>} />
-        <Route path="/curso/perfumaria-natural" element={<ProtectedRoute><LazyPage><CursoPerfumariaNaturalHero /></LazyPage></ProtectedRoute>} />
-        <Route path="/curso-velas-aromaticas" element={<ProtectedRoute><LazyPage><CursoVelasAromaticas /></LazyPage></ProtectedRoute>} />
-        <Route path="/curso/velas-aromaticas" element={<ProtectedRoute><LazyPage><CursoVelasAromaticasHero /></LazyPage></ProtectedRoute>} />
-        <Route path="/curso-saboaria-artesanal" element={<ProtectedRoute><LazyPage><CursoSaboariaArtesanal /></LazyPage></ProtectedRoute>} />
-        <Route path="/curso/saboaria-artesanal" element={<ProtectedRoute><LazyPage><CursoSaboariaArtesanalHero /></LazyPage></ProtectedRoute>} />
-        <Route path="/curso-difusor-ambientes" element={<ProtectedRoute><LazyPage><CursoDifusorAmbientes /></LazyPage></ProtectedRoute>} />
-        <Route path="/curso/difusor-ambientes" element={<ProtectedRoute><LazyPage><CursoDifusorAmbientesHero /></LazyPage></ProtectedRoute>} />
-        <Route path="/curso-fitoterapia" element={<ProtectedRoute><LazyPage><CursoFitoterapia /></LazyPage></ProtectedRoute>} />
-        <Route path="/curso/fitoterapia" element={<ProtectedRoute><LazyPage><CursoFitoterapiaHero /></LazyPage></ProtectedRoute>} />
-        <Route path="/curso-oleos-essenciais" element={<ProtectedRoute><LazyPage><CursoOleosEssenciais /></LazyPage></ProtectedRoute>} />
-        <Route path="/curso/oleos-essenciais" element={<ProtectedRoute><LazyPage><CursoOleosEssenciaisHero /></LazyPage></ProtectedRoute>} />
-        <Route path="/curso-massagem-modeladora" element={<ProtectedRoute><LazyPage><CursoMassagemModeladora /></LazyPage></ProtectedRoute>} />
-        <Route path="/curso/massagem-modeladora" element={<ProtectedRoute><LazyPage><CursoMassagemModeladoraHero /></LazyPage></ProtectedRoute>} />
-        <Route path="/curso-drenagem-linfatica" element={<ProtectedRoute><LazyPage><CursoDrenagemLinfatica /></LazyPage></ProtectedRoute>} />
-        <Route path="/curso/drenagem-linfatica" element={<ProtectedRoute><LazyPage><CursoDrenagemLinfaticaHero /></LazyPage></ProtectedRoute>} />
-        <Route path="/curso-gastronomia-saudavel" element={<ProtectedRoute><LazyPage><CursoGastronomiaSaudavel /></LazyPage></ProtectedRoute>} />
-        <Route path="/curso/gastronomia-saudavel" element={<ProtectedRoute><LazyPage><CursoGastronomiaSaudavelHero /></LazyPage></ProtectedRoute>} />
-        <Route path="/curso-seitai" element={<ProtectedRoute><LazyPage><CursoSeitai /></LazyPage></ProtectedRoute>} />
-        <Route path="/curso/seitai" element={<ProtectedRoute><LazyPage><CursoSeitaiHero /></LazyPage></ProtectedRoute>} />
-        <Route path="/curso-bandagem-elastica" element={<ProtectedRoute><LazyPage><CursoBandagemElastica /></LazyPage></ProtectedRoute>} />
-        <Route path="/curso/bandagem-elastica" element={<ProtectedRoute><LazyPage><CursoBandagemElasticaHero /></LazyPage></ProtectedRoute>} />
+        <Route path="/cursos" element={<ProtectedRoute allowRoles={["admin", "terapeuta"]}><LazyPage><Cursos /></LazyPage></ProtectedRoute>} />
+        <Route path="/curso-vendas" element={<ProtectedRoute allowRoles={["admin", "terapeuta"]}><LazyPage><CursoVendas /></LazyPage></ProtectedRoute>} />
+        <Route path="/curso-aromaterapia" element={<ProtectedRoute allowRoles={["admin", "terapeuta"]}><LazyPage><CursoAromaterapia /></LazyPage></ProtectedRoute>} />
+        <Route path="/curso-headspa" element={<ProtectedRoute allowRoles={["admin", "terapeuta"]}><LazyPage><CursoHeadSpa /></LazyPage></ProtectedRoute>} />
+        <Route path="/curso-anatomia" element={<ProtectedRoute allowRoles={["admin", "terapeuta"]}><LazyPage><CursoAnatomia /></LazyPage></ProtectedRoute>} />
+        <Route path="/curso-yugen-facespa" element={<ProtectedRoute allowRoles={["admin", "terapeuta"]}><LazyPage><CursoYugenFaceSpa /></LazyPage></ProtectedRoute>} />
+        <Route path="/curso/vendas" element={<ProtectedRoute allowRoles={["admin", "terapeuta"]}><LazyPage><CursoVendasHero /></LazyPage></ProtectedRoute>} />
+        <Route path="/curso/aromaterapia" element={<ProtectedRoute allowRoles={["admin", "terapeuta"]}><LazyPage><CursoAromaterapiaHero /></LazyPage></ProtectedRoute>} />
+        <Route path="/curso/headspa" element={<ProtectedRoute allowRoles={["admin", "terapeuta"]}><LazyPage><CursoHeadSpaHero /></LazyPage></ProtectedRoute>} />
+        <Route path="/curso/anatomia" element={<ProtectedRoute allowRoles={["admin", "terapeuta"]}><LazyPage><CursoAnatomiaHero /></LazyPage></ProtectedRoute>} />
+        <Route path="/curso/facespa" element={<ProtectedRoute allowRoles={["admin", "terapeuta"]}><LazyPage><CursoYugenFaceSpaHero /></LazyPage></ProtectedRoute>} />
+        <Route path="/curso-metodo-resinkra" element={<ProtectedRoute allowRoles={["admin", "terapeuta"]}><LazyPage><CursoMetodoResinkra /></LazyPage></ProtectedRoute>} />
+        <Route path="/curso/metodo-resinkra" element={<ProtectedRoute allowRoles={["admin", "terapeuta"]}><LazyPage><CursoMetodoResinkraHero /></LazyPage></ProtectedRoute>} />
+        <Route path="/curso-perfumaria-natural" element={<ProtectedRoute allowRoles={["admin", "terapeuta"]}><LazyPage><CursoPerfumariaNatural /></LazyPage></ProtectedRoute>} />
+        <Route path="/curso/perfumaria-natural" element={<ProtectedRoute allowRoles={["admin", "terapeuta"]}><LazyPage><CursoPerfumariaNaturalHero /></LazyPage></ProtectedRoute>} />
+        <Route path="/curso-velas-aromaticas" element={<ProtectedRoute allowRoles={["admin", "terapeuta"]}><LazyPage><CursoVelasAromaticas /></LazyPage></ProtectedRoute>} />
+        <Route path="/curso/velas-aromaticas" element={<ProtectedRoute allowRoles={["admin", "terapeuta"]}><LazyPage><CursoVelasAromaticasHero /></LazyPage></ProtectedRoute>} />
+        <Route path="/curso-saboaria-artesanal" element={<ProtectedRoute allowRoles={["admin", "terapeuta"]}><LazyPage><CursoSaboariaArtesanal /></LazyPage></ProtectedRoute>} />
+        <Route path="/curso/saboaria-artesanal" element={<ProtectedRoute allowRoles={["admin", "terapeuta"]}><LazyPage><CursoSaboariaArtesanalHero /></LazyPage></ProtectedRoute>} />
+        <Route path="/curso-difusor-ambientes" element={<ProtectedRoute allowRoles={["admin", "terapeuta"]}><LazyPage><CursoDifusorAmbientes /></LazyPage></ProtectedRoute>} />
+        <Route path="/curso/difusor-ambientes" element={<ProtectedRoute allowRoles={["admin", "terapeuta"]}><LazyPage><CursoDifusorAmbientesHero /></LazyPage></ProtectedRoute>} />
+        <Route path="/curso-fitoterapia" element={<ProtectedRoute allowRoles={["admin", "terapeuta"]}><LazyPage><CursoFitoterapia /></LazyPage></ProtectedRoute>} />
+        <Route path="/curso/fitoterapia" element={<ProtectedRoute allowRoles={["admin", "terapeuta"]}><LazyPage><CursoFitoterapiaHero /></LazyPage></ProtectedRoute>} />
+        <Route path="/curso-oleos-essenciais" element={<ProtectedRoute allowRoles={["admin", "terapeuta"]}><LazyPage><CursoOleosEssenciais /></LazyPage></ProtectedRoute>} />
+        <Route path="/curso/oleos-essenciais" element={<ProtectedRoute allowRoles={["admin", "terapeuta"]}><LazyPage><CursoOleosEssenciaisHero /></LazyPage></ProtectedRoute>} />
+        <Route path="/curso-massagem-modeladora" element={<ProtectedRoute allowRoles={["admin", "terapeuta"]}><LazyPage><CursoMassagemModeladora /></LazyPage></ProtectedRoute>} />
+        <Route path="/curso/massagem-modeladora" element={<ProtectedRoute allowRoles={["admin", "terapeuta"]}><LazyPage><CursoMassagemModeladoraHero /></LazyPage></ProtectedRoute>} />
+        <Route path="/curso-drenagem-linfatica" element={<ProtectedRoute allowRoles={["admin", "terapeuta"]}><LazyPage><CursoDrenagemLinfatica /></LazyPage></ProtectedRoute>} />
+        <Route path="/curso/drenagem-linfatica" element={<ProtectedRoute allowRoles={["admin", "terapeuta"]}><LazyPage><CursoDrenagemLinfaticaHero /></LazyPage></ProtectedRoute>} />
+        <Route path="/curso-gastronomia-saudavel" element={<ProtectedRoute allowRoles={["admin", "terapeuta"]}><LazyPage><CursoGastronomiaSaudavel /></LazyPage></ProtectedRoute>} />
+        <Route path="/curso/gastronomia-saudavel" element={<ProtectedRoute allowRoles={["admin", "terapeuta"]}><LazyPage><CursoGastronomiaSaudavelHero /></LazyPage></ProtectedRoute>} />
+        <Route path="/curso-seitai" element={<ProtectedRoute allowRoles={["admin", "terapeuta"]}><LazyPage><CursoSeitai /></LazyPage></ProtectedRoute>} />
+        <Route path="/curso/seitai" element={<ProtectedRoute allowRoles={["admin", "terapeuta"]}><LazyPage><CursoSeitaiHero /></LazyPage></ProtectedRoute>} />
+        <Route path="/curso-bandagem-elastica" element={<ProtectedRoute allowRoles={["admin", "terapeuta"]}><LazyPage><CursoBandagemElastica /></LazyPage></ProtectedRoute>} />
+        <Route path="/curso/bandagem-elastica" element={<ProtectedRoute allowRoles={["admin", "terapeuta"]}><LazyPage><CursoBandagemElasticaHero /></LazyPage></ProtectedRoute>} />
         <Route path="/terapias" element={<LazyPage><Terapias /></LazyPage>} />
         <Route path="/ofertas" element={<ProtectedRoute><LazyPage><Offers /></LazyPage></ProtectedRoute>} />
         <Route path="/chat" element={<ProtectedRoute><LazyPage><ChatAssistente /></LazyPage></ProtectedRoute>} />
