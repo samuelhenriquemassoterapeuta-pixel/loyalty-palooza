@@ -42,6 +42,7 @@ import SegmentacaoClientesTab from "@/components/admin/SegmentacaoClientesTab";
 import CampanhasMarketingTab from "@/components/admin/CampanhasMarketingTab";
 import BannersPromocionaisTab from "@/components/admin/BannersPromocionaisTab";
 import CorporativoConteudoTab from "@/components/admin/CorporativoConteudoTab";
+import RelatorioTecnicoTab from "@/components/admin/RelatorioTecnicoTab";
 
 const tabContentVariants = {
   hidden: { opacity: 0, y: 12 },
@@ -442,6 +443,10 @@ const Admin = () => {
                   <BarChart3 size={14} />
                   Google Ads
                 </TabsTrigger>
+                <TabsTrigger value="relatorio-tecnico" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
+                  <FileText size={14} />
+                  Relatório Técnico
+                </TabsTrigger>
               </TabsList>
               <ScrollBar orientation="horizontal" className="h-1.5" />
             </ScrollArea>
@@ -644,6 +649,10 @@ const Admin = () => {
                     </Button>
                   </div>
                 </div>
+              </TabsContent>
+
+              <TabsContent value="relatorio-tecnico" forceMount={activeTab === "relatorio-tecnico" ? true : undefined} className={activeTab !== "relatorio-tecnico" ? "hidden" : ""}>
+                <RelatorioTecnicoTab />
               </TabsContent>
             </motion.div>
           </AnimatePresence>
