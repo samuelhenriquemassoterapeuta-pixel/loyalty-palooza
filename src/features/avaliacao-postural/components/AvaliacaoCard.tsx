@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { Calendar, Image, ChevronRight, Trash2 } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { AvaliacaoPostural } from "@/hooks/useAvaliacaoPostural";
+import { AvaliacaoPostural } from "@/features/avaliacao-postural/hooks/useAvaliacaoPostural";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 

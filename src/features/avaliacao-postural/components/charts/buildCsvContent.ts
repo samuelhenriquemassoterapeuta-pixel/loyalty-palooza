@@ -1,4 +1,4 @@
-import type { AngleSeries } from "@/hooks/useAngleHistory";
+import type { AngleSeries } from "@/features/avaliacao-postural/hooks/useAngleHistory";
 import type { MeasurementDataPoint } from "@/features/protocolos/hooks/useMeasurementHistory";
 import type { ClinicalCsvData } from "@/features/protocolos/hooks/useClinicalCsvData";
 

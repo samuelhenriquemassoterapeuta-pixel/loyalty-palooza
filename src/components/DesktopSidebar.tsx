@@ -1,8 +1,8 @@
 import { motion } from "framer-motion";
 import { Home, CalendarDays, ShoppingBag, User, Gift, Wallet, Crown, Settings, Bell, Dumbbell, Activity, BookOpen, Scan, Apple, Globe, Ticket, Handshake, GraduationCap, Leaf, Zap, BarChart3, Stethoscope } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useAdmin } from "@/hooks/useAdmin";
-import { useProfile } from "@/hooks/useProfile";
+import { useAdmin } from "@/features/admin/hooks/useAdmin";
+import { useProfile } from "@/features/profile/hooks/useProfile";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNotificacoes } from "@/hooks/useNotificacoes";
 import logoMarrom from "@/assets/logo-marrom.png";

@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import { Navigate } from "react-router-dom";
-import { useAdmin } from "@/hooks/useAdmin";
+import { useAdmin } from "@/features/admin/hooks/useAdmin";
 import { useAuth } from "@/contexts/AuthContext";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 

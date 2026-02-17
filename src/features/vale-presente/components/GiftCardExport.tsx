@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react";
 import { Image, FileText, Printer, Monitor, BookOpen } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { GiftCardVisual } from "./GiftCardVisual";
-import { CupomExportMenu } from "@/components/cupom/CupomExportMenu";
+import { CupomExportMenu } from "@/features/cupom/components/CupomExportMenu";
 
 interface GiftCardExportProps {
   vale: {

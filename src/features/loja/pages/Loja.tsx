@@ -16,7 +16,7 @@ import { CarrinhoSheet } from "@/features/loja/components/CarrinhoSheet";
 import { ProdutosGridSkeleton, PedidosListSkeleton } from "@/components/skeletons";
 import { AppLayout } from "@/components/AppLayout";
 import { useLevelBenefits } from "@/features/cashback/hooks/useLevelBenefits";
-import { PaymentDialog } from "@/components/pagamento/PaymentDialog";
+import { PaymentDialog } from "@/features/pagamento/components/PaymentDialog";
 
 interface CarrinhoItem {
   produto: Produto;

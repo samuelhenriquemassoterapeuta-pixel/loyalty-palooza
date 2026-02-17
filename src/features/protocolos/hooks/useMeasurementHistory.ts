@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import type { VistaPostural } from "@/hooks/useAvaliacaoPostural";
+import type { VistaPostural } from "@/features/avaliacao-postural/hooks/useAvaliacaoPostural";
 import type { ReferenceLine } from "@/features/avaliacao-postural/components/measurements/types";
 import { calcLineAngle } from "@/features/avaliacao-postural/components/measurements/types";
 

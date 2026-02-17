@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Sparkles, Clock, Check, Loader2, Percent } from "lucide-react";
-import { Servico } from "@/hooks/useServicos";
+import { Servico } from "@/features/terapias/hooks/useServicos";
 
 interface ServicoSelectorProps {
   servicos: Servico[];

@@ -24,7 +24,7 @@ import { CursoModuleView } from "@/features/cursos/components/CursoModuleView";
 import { CursoLessonView } from "@/features/cursos/components/CursoLessonView";
 import { CertificadoCurso } from "@/features/cursos/components/CertificadoCurso";
 import { useCursoProgress } from "@/features/cursos/hooks/useCursoProgress";
-import { useAdmin } from "@/hooks/useAdmin";
+import { useAdmin } from "@/features/admin/hooks/useAdmin";
 import type { QuizQuestion } from "@/features/cursos/components/QuizSection";
 
 const iconMap: Record<string, React.ElementType> = {

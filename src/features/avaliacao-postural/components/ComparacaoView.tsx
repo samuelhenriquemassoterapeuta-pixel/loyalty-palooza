@@ -2,7 +2,7 @@ import { useState, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeftRight, Grid3X3, X, ChevronLeft, ChevronRight, Layers, Columns2, Camera, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { AvaliacaoPostural, VistaPostural } from "@/hooks/useAvaliacaoPostural";
+import { AvaliacaoPostural, VistaPostural } from "@/features/avaliacao-postural/hooks/useAvaliacaoPostural";
 import { ImageSliderCompare } from "./ImageSliderCompare";
 import { ExportPosturalPdfButton } from "./ExportPosturalPdfButton";
 import { ZoomableImage } from "./ZoomableImage";

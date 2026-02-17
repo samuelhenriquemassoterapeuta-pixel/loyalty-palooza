@@ -8,7 +8,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 
 // Eagerly loaded (critical path)
-import Landing from "@/pages/Landing";
+import Landing from "@/features/landing/pages/Landing";
 import Index from "@/pages/Index";
 import Auth from "@/pages/Auth";
 
@@ -17,12 +17,12 @@ const Agendamento = lazy(() => import("@/features/agendamentos/pages/Agendamento
 const Pacotes = lazy(() => import("@/pages/Pacotes"));
 const Loja = lazy(() => import("@/features/loja/pages/Loja"));
 const Wallet = lazy(() => import("@/features/cashback/pages/Wallet"));
-const Profile = lazy(() => import("@/pages/Profile"));
+const Profile = lazy(() => import("@/features/profile/pages/Profile"));
 const Notificacoes = lazy(() => import("@/pages/Notificacoes"));
 const Instalar = lazy(() => import("@/pages/Instalar"));
 const QRCodePrint = lazy(() => import("@/pages/QRCodePrint"));
 const Transferir = lazy(() => import("@/pages/Transferir"));
-const Admin = lazy(() => import("@/pages/Admin"));
+const Admin = lazy(() => import("@/features/admin/pages/Admin"));
 const Indicacoes = lazy(() => import("@/pages/Indicacoes"));
 const Manual = lazy(() => import("@/pages/Manual"));
 const Cashback = lazy(() => import("@/features/cashback/pages/Cashback"));
@@ -31,13 +31,13 @@ const Alongamento = lazy(() => import("@/features/alongamento/pages/Alongamento"
 const Protocolos = lazy(() => import("@/features/protocolos/pages/Protocolos"));
 const ProtocoloDetalhe = lazy(() => import("@/features/protocolos/pages/ProtocoloDetalhe"));
 const Conquistas = lazy(() => import("@/features/conquistas/pages/Conquistas"));
-const GuiaClinico = lazy(() => import("@/pages/GuiaClinico"));
-const AvaliacaoPostural = lazy(() => import("@/pages/AvaliacaoPostural"));
+const GuiaClinico = lazy(() => import("@/features/guia-clinico/pages/GuiaClinico"));
+const AvaliacaoPostural = lazy(() => import("@/features/avaliacao-postural/pages/AvaliacaoPostural"));
 const ContaConfiguracoes = lazy(() => import("@/pages/ContaConfiguracoes"));
 const HeadSpa = lazy(() => import("@/pages/HeadSpa"));
 const Dietas = lazy(() => import("@/features/dietas/pages/Dietas"));
 const ValePresente = lazy(() => import("@/features/vale-presente/pages/ValePresente"));
-const CupomEditor = lazy(() => import("@/pages/CupomEditor"));
+const CupomEditor = lazy(() => import("@/features/cupom/pages/CupomEditor"));
 const ClubeVip = lazy(() => import("@/pages/ClubeVip"));
 const RecomendacoesIA = lazy(() => import("@/pages/RecomendacoesIA"));
 const DashboardRH = lazy(() => import("@/features/corporativo/pages/DashboardRH"));
@@ -47,8 +47,8 @@ const ResinkraMoments = lazy(() => import("@/features/social/pages/ResinkraMomen
 const Checkin = lazy(() => import("@/features/agendamentos/pages/Checkin"));
 const DesafiosPage = lazy(() => import("@/pages/Desafios"));
 const MinhaJornada = lazy(() => import("@/pages/MinhaJornada"));
-const ServicoDetalhe = lazy(() => import("@/pages/ServicoDetalhe"));
-const CartaoTerapeuta = lazy(() => import("@/pages/CartaoTerapeuta"));
+const ServicoDetalhe = lazy(() => import("@/features/terapias/pages/ServicoDetalhe"));
+const CartaoTerapeuta = lazy(() => import("@/features/terapeuta/pages/CartaoTerapeuta"));
 const ConteudoSocial = lazy(() => import("@/features/social/pages/ConteudoSocial"));
 const CursoVendas = lazy(() => import("@/features/cursos/pages/CursoVendas"));
 const CursoAromaterapia = lazy(() => import("@/features/cursos/pages/CursoAromaterapia"));
@@ -85,28 +85,28 @@ const CursoSeitai = lazy(() => import("@/features/cursos/pages/CursoSeitai"));
 const CursoSeitaiHero = lazy(() => import("@/features/cursos/pages/CursoSeitaiHero"));
 const CursoBandagemElastica = lazy(() => import("@/features/cursos/pages/CursoBandagemElastica"));
 const CursoBandagemElasticaHero = lazy(() => import("@/features/cursos/pages/CursoBandagemElasticaHero"));
-const TerapeutaDashboard = lazy(() => import("@/pages/TerapeutaDashboard"));
-const Terapias = lazy(() => import("@/pages/Terapias"));
+const TerapeutaDashboard = lazy(() => import("@/features/terapeuta/pages/TerapeutaDashboard"));
+const Terapias = lazy(() => import("@/features/terapias/pages/Terapias"));
 const Offers = lazy(() => import("@/pages/Offers"));
 const ChatAssistente = lazy(() => import("@/pages/ChatAssistente"));
 const ChatWhatsApp = lazy(() => import("@/pages/ChatWhatsApp"));
 const NotFound = lazy(() => import("@/pages/NotFound"));
 
 // Admin Pages
-const GoogleAdsDashboard = lazy(() => import("@/pages/admin/GoogleAdsDashboard"));
+const GoogleAdsDashboard = lazy(() => import("@/features/admin/pages/GoogleAdsDashboard"));
 
 // Resinkra AI Pages
-const ResinkraAIDashboard = lazy(() => import("@/pages/resinkra-ai/ResinkraAIDashboard"));
-const ResinkraAIOnboarding = lazy(() => import("@/pages/resinkra-ai/ResinkraAIOnboarding"));
-const ResinkraAICreate = lazy(() => import("@/pages/resinkra-ai/ResinkraAICreate"));
-const ResinkraAIScriptResult = lazy(() => import("@/pages/resinkra-ai/ResinkraAIScriptResult"));
-const ResinkraAIHistory = lazy(() => import("@/pages/resinkra-ai/ResinkraAIHistory"));
-const ResinkraAIHooks = lazy(() => import("@/pages/resinkra-ai/ResinkraAIHooks"));
-const ResinkraAICalendar = lazy(() => import("@/pages/resinkra-ai/ResinkraAICalendar"));
-const ResinkraAIViralAnalysis = lazy(() => import("@/pages/resinkra-ai/ResinkraAIViralAnalysis"));
-const ResinkraAIIdeas = lazy(() => import("@/pages/resinkra-ai/ResinkraAIIdeas"));
-const ResinkraAITemplates = lazy(() => import("@/pages/resinkra-ai/ResinkraAITemplates"));
-const ResinkraAISettings = lazy(() => import("@/pages/resinkra-ai/ResinkraAISettings"));
+const ResinkraAIDashboard = lazy(() => import("@/features/resinkra-ai/pages/ResinkraAIDashboard"));
+const ResinkraAIOnboarding = lazy(() => import("@/features/resinkra-ai/pages/ResinkraAIOnboarding"));
+const ResinkraAICreate = lazy(() => import("@/features/resinkra-ai/pages/ResinkraAICreate"));
+const ResinkraAIScriptResult = lazy(() => import("@/features/resinkra-ai/pages/ResinkraAIScriptResult"));
+const ResinkraAIHistory = lazy(() => import("@/features/resinkra-ai/pages/ResinkraAIHistory"));
+const ResinkraAIHooks = lazy(() => import("@/features/resinkra-ai/pages/ResinkraAIHooks"));
+const ResinkraAICalendar = lazy(() => import("@/features/resinkra-ai/pages/ResinkraAICalendar"));
+const ResinkraAIViralAnalysis = lazy(() => import("@/features/resinkra-ai/pages/ResinkraAIViralAnalysis"));
+const ResinkraAIIdeas = lazy(() => import("@/features/resinkra-ai/pages/ResinkraAIIdeas"));
+const ResinkraAITemplates = lazy(() => import("@/features/resinkra-ai/pages/ResinkraAITemplates"));
+const ResinkraAISettings = lazy(() => import("@/features/resinkra-ai/pages/ResinkraAISettings"));
 
 const LazyPage = ({ children }: { children: React.ReactNode }) => (
   <Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-background"><LoadingSpinner /></div>}>

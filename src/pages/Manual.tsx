@@ -23,9 +23,9 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { AppLayout } from "@/components/AppLayout";
-import { useAdmin } from "@/hooks/useAdmin";
+import { useAdmin } from "@/features/admin/hooks/useAdmin";
 import { useParceiro } from "@/hooks/useParceiro";
-import { useTerapeuta } from "@/hooks/useTerapeuta";
+import { useTerapeuta } from "@/features/terapeuta/hooks/useTerapeuta";
 import { manualUsuario, manualParceiro, manualTerapeuta, manualAdmin, type ManualData } from "@/data/manuaisContent";
 
 const quickLinks = [

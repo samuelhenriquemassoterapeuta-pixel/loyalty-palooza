@@ -17,7 +17,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Progress } from "@/components/ui/progress";
 import { useParceiro } from "@/hooks/useParceiro";
-import { useAdmin } from "@/hooks/useAdmin";
+import { useAdmin } from "@/features/admin/hooks/useAdmin";
 import { PageLoading } from "@/components/LoadingSpinner";
 import { toast } from "sonner";
 import { format } from "date-fns";

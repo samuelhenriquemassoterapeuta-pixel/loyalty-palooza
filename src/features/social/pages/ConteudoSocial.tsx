@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { CupomExportMenu } from "@/components/cupom/CupomExportMenu";
+import { CupomExportMenu } from "@/features/cupom/components/CupomExportMenu";
 import { SocialPostVisual, SocialPostData, templateOptions } from "@/features/social/components/SocialPostVisual";
 
 const defaultPost: SocialPostData = {

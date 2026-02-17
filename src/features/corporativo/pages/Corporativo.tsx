@@ -1,6 +1,6 @@
-import { LandingHeader } from "@/components/landing/LandingHeader";
-import { LandingFooter } from "@/components/landing/LandingFooter";
-import { CollapsibleSection } from "@/components/landing/CollapsibleSection";
+import { LandingHeader } from "@/features/landing/components/LandingHeader";
+import { LandingFooter } from "@/features/landing/components/LandingFooter";
+import { CollapsibleSection } from "@/features/landing/components/CollapsibleSection";
 import { CorpHeroSection } from "@/features/corporativo/components/CorpHeroSection";
 
 import { CorpSecoesSection } from "@/features/corporativo/components/CorpSecoesSection";

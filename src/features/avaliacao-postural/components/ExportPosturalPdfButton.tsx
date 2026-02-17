@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
 import { format } from "date-fns";
-import { AvaliacaoPostural } from "@/hooks/useAvaliacaoPostural";
+import { AvaliacaoPostural } from "@/features/avaliacao-postural/hooks/useAvaliacaoPostural";
 import { generatePosturalPdf } from "./posturalPdfGenerator";
 
 interface ExportPosturalPdfButtonProps {

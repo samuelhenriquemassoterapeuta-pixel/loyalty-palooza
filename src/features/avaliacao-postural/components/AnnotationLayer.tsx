@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { VistaPostural } from "@/hooks/useAvaliacaoPostural";
-import { useAnotacoesPosturais } from "@/hooks/useAnotacoesPosturais";
+import { VistaPostural } from "@/features/avaliacao-postural/hooks/useAvaliacaoPostural";
+import { useAnotacoesPosturais } from "@/features/avaliacao-postural/hooks/useAnotacoesPosturais";
 import { AnnotationCanvas } from "./annotations/AnnotationCanvas";
 import type { Annotation } from "./annotations/types";
 import { renderAnnotation } from "./annotations/svgRenderers";

@@ -10,7 +10,7 @@ import {
   ReferenceLine,
 } from "recharts";
 import { TrendBadge } from "./TrendBadge";
-import type { AngleSeries } from "@/hooks/useAngleHistory";
+import type { AngleSeries } from "@/features/avaliacao-postural/hooks/useAngleHistory";
 
 interface AngleChartProps {
   series: AngleSeries;
