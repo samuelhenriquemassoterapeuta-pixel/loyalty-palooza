@@ -125,7 +125,7 @@ export default function Cursos() {
 
   return (
     <AppLayout>
-      <div className="min-h-screen bg-background pb-32 lg:pb-8 relative overflow-hidden">
+      <div className="min-h-screen bg-background pb-32 lg:pb-8 relative">
         <AnimatedPageBackground />
         <CursosHubHero courses={allCourseStats} />
 
