@@ -1,7 +1,7 @@
 import { useState } from "react"; // v2
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, Plus, FileText, Users, Shield, Dumbbell, Sparkles, ClipboardList, StretchHorizontal, Salad, BookOpen, Stethoscope, Globe, Gift, Ticket, Crown, Building2, CreditCard, Handshake, Camera, Trophy, DollarSign, CalendarDays, Target, Megaphone, Send, BarChart3, Rocket, GraduationCap, Bell, UserCog, Settings2 } from "lucide-react";
+import { ArrowLeft, Plus, FileText, Users, Shield, Dumbbell, Sparkles, ClipboardList, StretchHorizontal, Salad, BookOpen, Stethoscope, Globe, Gift, Ticket, Crown, Building2, CreditCard, Handshake, Camera, Trophy, DollarSign, CalendarDays, Target, Megaphone, Send, BarChart3, Rocket, GraduationCap, Bell, UserCog, Settings2, Code2 } from "lucide-react";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -48,6 +48,7 @@ import { CursosAdminTab } from "@/components/admin/CursosAdminTab";
 import { SocialPostsConfigTab } from "@/components/admin/SocialPostsConfigTab";
 import { NotificacoesAdminTab } from "@/components/admin/NotificacoesAdminTab";
 import { UsuariosAdminTab } from "@/components/admin/UsuariosAdminTab";
+import { CodigoPlataformaTab } from "@/components/admin/CodigoPlataformaTab";
 
 const tabContentVariants = {
   hidden: { opacity: 0, y: 12 },
@@ -472,6 +473,10 @@ const Admin = () => {
                   <Rocket size={14} />
                   Apresentação
                 </TabsTrigger>
+                <TabsTrigger value="codigo" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
+                  <Code2 size={14} />
+                  Código
+                </TabsTrigger>
               </TabsList>
               <ScrollBar orientation="horizontal" className="h-1.5" />
             </ScrollArea>
@@ -698,6 +703,10 @@ const Admin = () => {
 
               <TabsContent value="usuarios" forceMount={activeTab === "usuarios" ? true : undefined} className={activeTab !== "usuarios" ? "hidden" : ""}>
                 <UsuariosAdminTab />
+              </TabsContent>
+
+              <TabsContent value="codigo" forceMount={activeTab === "codigo" ? true : undefined} className={activeTab !== "codigo" ? "hidden" : ""}>
+                <CodigoPlataformaTab />
               </TabsContent>
             </motion.div>
           </AnimatePresence>
