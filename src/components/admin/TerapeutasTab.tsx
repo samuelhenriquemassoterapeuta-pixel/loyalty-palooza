@@ -1,4 +1,5 @@
  import { useState } from "react";
+import { AdminImageUpload } from "@/components/admin/AdminImageUpload";
 import { motion } from "framer-motion";
 import { User, Plus, Pencil, Trash2, Check, X, Loader2, Mail, Phone } from "lucide-react";
  import { Card } from "@/components/ui/card";
@@ -285,17 +286,7 @@ interface Terapeuta {
                />
              </div>
  
-            <div className="space-y-2">
-                <Label htmlFor="foto_url">URL da Foto</Label>
-                <Input
-                  id="foto_url"
-                  value={formData.foto_url}
-                  onChange={(e) =>
-                    setFormData({ ...formData, foto_url: e.target.value })
-                  }
-                  placeholder="https://..."
-                />
-              </div>
+            <AdminImageUpload label="Foto" value={formData.foto_url} onChange={v => setFormData({ ...formData, foto_url: v })} />
 
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-2">

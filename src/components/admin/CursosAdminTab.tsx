@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { AdminImageUpload } from "@/components/admin/AdminImageUpload";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -225,7 +226,7 @@ export const CursosAdminTab = () => {
             <div><Label>Título</Label><Input value={aulaForm.titulo || ""} onChange={e => setAulaForm({ ...aulaForm, titulo: e.target.value })} /></div>
             <div><Label>Descrição</Label><Textarea value={aulaForm.descricao || ""} onChange={e => setAulaForm({ ...aulaForm, descricao: e.target.value })} rows={2} /></div>
             <div><Label>Conteúdo (HTML)</Label><Textarea value={aulaForm.conteudo || ""} onChange={e => setAulaForm({ ...aulaForm, conteudo: e.target.value })} rows={6} /></div>
-            <div><Label>URL do Vídeo</Label><Input value={aulaForm.video_url || ""} onChange={e => setAulaForm({ ...aulaForm, video_url: e.target.value })} /></div>
+            <AdminImageUpload label="Vídeo da Aula" value={aulaForm.video_url || ""} onChange={v => setAulaForm({ ...aulaForm, video_url: v })} accept="video/mp4,video/webm,video/*" hint="Upload de vídeo ou cole uma URL" />
             <div className="grid grid-cols-2 gap-3">
               <div><Label>Duração (min)</Label><Input type="number" value={aulaForm.duracao_minutos || ""} onChange={e => setAulaForm({ ...aulaForm, duracao_minutos: e.target.value })} /></div>
               <div><Label>Ordem</Label><Input type="number" value={aulaForm.ordem || ""} onChange={e => setAulaForm({ ...aulaForm, ordem: e.target.value })} /></div>

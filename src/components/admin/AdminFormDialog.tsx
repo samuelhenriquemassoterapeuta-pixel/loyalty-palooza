@@ -1,3 +1,4 @@
+import { AdminImageUpload } from "@/components/admin/AdminImageUpload";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -145,16 +146,7 @@ export const AdminFormDialog = ({
 
           {activeTab === "produtos" && (
             <>
-              <div className="space-y-2">
-                <Label>URL da imagem</Label>
-                <Input
-                  value={formData.imagem_url || ""}
-                  onChange={(e) =>
-                    setFormData({ ...formData, imagem_url: e.target.value })
-                  }
-                  placeholder="https://..."
-                />
-              </div>
+              <AdminImageUpload label="Imagem do Produto" value={formData.imagem_url || ""} onChange={v => setFormData({ ...formData, imagem_url: v })} />
               <div className="space-y-2">
                 <Label>Cashback (%)</Label>
                 <Input
