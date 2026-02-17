@@ -258,6 +258,44 @@ const ferramentasIA: FerramentaItem[] = [
   ]},
 ];
 
+const faturamentoItems: FerramentaItem[] = [
+  { icon: "🔄", title: "+40% Recorrência", desc: "Cashback mantém clientes voltando", details: [
+    "Sistema de cashback automático em cada agendamento e compra",
+    "Créditos acumulados incentivam retorno frequente",
+    "Clube VIP com benefícios exclusivos para assinantes",
+    "Lembretes inteligentes de retorno baseados no protocolo",
+    "Taxa de retenção média 40% superior ao mercado",
+  ]},
+  { icon: "📈", title: "+25% Ticket Médio", desc: "Upsell inteligente de pacotes e produtos", details: [
+    "Sugestão automática de pacotes complementares no checkout",
+    "E-commerce integrado com produtos e combos exclusivos",
+    "Recomendações personalizadas baseadas no histórico do cliente",
+    "Descontos progressivos em pacotes de múltiplas sessões",
+    "Cross-sell entre serviços, cursos e produtos",
+  ]},
+  { icon: "🤝", title: "+60% Indicações", desc: "Programa de indicação com recompensas", details: [
+    "Cashback automático para quem indica e para o indicado",
+    "Link de indicação único por usuário com rastreamento",
+    "Recompensas creditadas automaticamente após primeira sessão",
+    "Dashboard de indicações com métricas de conversão",
+    "Programa de parceiros com comissões multinível",
+  ]},
+  { icon: "🆕", title: "+35% Novos Clientes", desc: "Bot WhatsApp prospecta automaticamente", details: [
+    "WhatsApp Bot com prospecção regional automática",
+    "Qualificação de leads com perguntas inteligentes",
+    "Agendamento direto pelo WhatsApp sem intervenção humana",
+    "Campanhas de marketing segmentadas por perfil",
+    "Banners dinâmicos com A/B testing para conversão",
+  ]},
+  { icon: "🏆", title: "3x Engajamento", desc: "Gamificação com XP e desafios", details: [
+    "Sistema de XP com níveis e progressão visual",
+    "Desafios semanais e mensais com recompensas reais",
+    "Ranking motivacional entre participantes",
+    "Conquistas e badges desbloqueáveis por atividade",
+    "Notificações push personalizadas para manter engajamento",
+  ]},
+];
+
 /* ─── Collapsible Tool Item ─── */
 const FerramentaCollapsibleItem = ({ item }: { item: FerramentaItem }) => {
   const [open, setOpen] = useState(false);
@@ -575,28 +613,8 @@ const slides = [
   {
     id: "faturamento",
     title: "Aumento de Faturamento",
-    subtitle: "Impacto direto nos resultados da clínica",
-    content: (
-      <div className="space-y-3">
-        {[
-          { metric: "+40%", label: "Recorrência", desc: "Cashback mantém clientes voltando", color: "bg-primary/10 text-primary" },
-          { metric: "+25%", label: "Ticket Médio", desc: "Upsell inteligente de pacotes e produtos", color: "bg-accent/10 text-accent" },
-          { metric: "+60%", label: "Indicações", desc: "Programa de indicação com recompensas", color: "bg-primary/10 text-primary" },
-          { metric: "+35%", label: "Novos Clientes", desc: "Bot WhatsApp prospecta automaticamente", color: "bg-accent/10 text-accent" },
-          { metric: "3x", label: "Engajamento", desc: "Gamificação com XP e desafios", color: "bg-primary/10 text-primary" },
-        ].map(item => (
-          <div key={item.label} className="flex items-center gap-3 bg-card border rounded-xl p-3">
-            <div className={`rounded-xl px-3 py-2 ${item.color} font-bold text-lg min-w-[60px] text-center`}>
-              {item.metric}
-            </div>
-            <div>
-              <p className="text-xs font-semibold text-foreground">{item.label}</p>
-              <p className="text-[10px] text-muted-foreground">{item.desc}</p>
-            </div>
-          </div>
-        ))}
-      </div>
-    ),
+    subtitle: "Toque em cada métrica para ver detalhes",
+    content: <FerramentasCollapsible items={faturamentoItems} />,
     icon: TrendingUp,
     color: "accent",
   },
