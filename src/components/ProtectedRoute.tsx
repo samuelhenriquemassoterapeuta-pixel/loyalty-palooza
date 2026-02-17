@@ -1,6 +1,6 @@
 import { useAuth } from "@/contexts/AuthContext";
-import { useAdmin } from "@/hooks/useAdmin";
-import { useTerapeuta } from "@/hooks/useTerapeuta";
+import { useAdmin } from "@/features/admin/hooks/useAdmin";
+import { useTerapeuta } from "@/features/terapeuta/hooks/useTerapeuta";
 import { Navigate } from "react-router-dom";
 import { Leaf } from "lucide-react";
 

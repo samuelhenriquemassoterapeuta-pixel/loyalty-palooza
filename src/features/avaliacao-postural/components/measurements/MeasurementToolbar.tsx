@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import type { MeasurementPreset, ReferenceLine } from "./types";
 import { MEASUREMENT_PRESETS } from "./types";
-import type { VistaPostural } from "@/hooks/useAvaliacaoPostural";
+import type { VistaPostural } from "@/features/avaliacao-postural/hooks/useAvaliacaoPostural";
 
 interface MeasurementToolbarProps {
   vista: VistaPostural;

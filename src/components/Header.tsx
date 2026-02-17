@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { Bell, ChevronRight } from "lucide-react";
 import { TextReveal } from "@/components/ui/text-reveal";
 import { useNavigate } from "react-router-dom";
-import { useProfile } from "@/hooks/useProfile";
+import { useProfile } from "@/features/profile/hooks/useProfile";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNotificacoes } from "@/hooks/useNotificacoes";
 import simboloVerde from "@/assets/simbolo-verde.png";

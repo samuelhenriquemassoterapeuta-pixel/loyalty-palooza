@@ -1,7 +1,7 @@
 import { motion, type Variants } from "framer-motion";
 import { Camera, ChevronRight, Image, CalendarDays, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useAvaliacoesPosturais } from "@/hooks/useAvaliacaoPostural";
+import { useAvaliacoesPosturais } from "@/features/avaliacao-postural/hooks/useAvaliacaoPostural";
 import { useNavigate } from "react-router-dom";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";

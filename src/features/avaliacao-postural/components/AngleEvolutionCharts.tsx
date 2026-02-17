@@ -2,7 +2,7 @@ import { useCallback } from "react";
 import { motion } from "framer-motion";
 import { TrendingUp, BarChart3, Download, Ruler } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useAngleHistory, AngleSeries } from "@/hooks/useAngleHistory";
+import { useAngleHistory, AngleSeries } from "@/features/avaliacao-postural/hooks/useAngleHistory";
 import { useMeasurementHistory } from "@/features/protocolos/hooks/useMeasurementHistory";
 import { useClinicalCsvData } from "@/features/protocolos/hooks/useClinicalCsvData";
 import { toast } from "sonner";

@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { User, Check, Loader2, Star } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Terapeuta } from "@/hooks/useTerapeutas";
+import { Terapeuta } from "@/features/terapeuta/hooks/useTerapeutas";
 
 interface TerapeutaSelectorProps {
   terapeutas: Terapeuta[];

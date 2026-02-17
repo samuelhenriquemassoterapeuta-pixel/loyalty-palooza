@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Crown, Leaf, Gem, Check, Star, Loader2, X, ArrowLeft } from "lucide-react";
 import { motion } from "framer-motion";
 import { ConfirmDialog } from "@/components/ConfirmDialog";
-import { PaymentDialog } from "@/components/pagamento/PaymentDialog";
+import { PaymentDialog } from "@/features/pagamento/components/PaymentDialog";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 

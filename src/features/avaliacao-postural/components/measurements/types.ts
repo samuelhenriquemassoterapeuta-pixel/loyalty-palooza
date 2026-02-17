@@ -1,4 +1,4 @@
-import type { VistaPostural } from "@/hooks/useAvaliacaoPostural";
+import type { VistaPostural } from "@/features/avaliacao-postural/hooks/useAvaliacaoPostural";
 
 export interface MeasurePoint {
   x: number; // 0–1 relative

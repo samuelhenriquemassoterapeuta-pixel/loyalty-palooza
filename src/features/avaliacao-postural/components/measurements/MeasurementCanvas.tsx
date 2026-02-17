@@ -4,7 +4,7 @@ import type { ReferenceLine, MeasurementPreset, MeasurePoint } from "./types";
 import { calcLineAngle, calcAngleBetweenLines } from "./types";
 import { MeasurementToolbar } from "./MeasurementToolbar";
 import { renderReferenceLine } from "./ReferenceLineRenderer";
-import type { VistaPostural } from "@/hooks/useAvaliacaoPostural";
+import type { VistaPostural } from "@/features/avaliacao-postural/hooks/useAvaliacaoPostural";
 
 interface MeasurementCanvasProps {
   imageUrl: string;

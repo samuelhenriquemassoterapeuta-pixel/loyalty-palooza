@@ -10,7 +10,7 @@ import {
   GitCompareArrows,
   Calendar,
 } from "lucide-react";
-import type { AngleSeries } from "@/hooks/useAngleHistory";
+import type { AngleSeries } from "@/features/avaliacao-postural/hooks/useAngleHistory";
 import type { MeasurementSeries } from "./measurementSeriesUtils";
 
 interface ComparisonItem {

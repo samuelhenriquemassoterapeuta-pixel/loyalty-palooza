@@ -8,7 +8,7 @@ import { ArrowLeft, Package, Check, Clock, Sparkles, Calendar, AlertTriangle } f
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { usePacotes, useMeusPacotes, Pacote } from "@/hooks/usePacotes";
-import { PaymentDialog } from "@/components/pagamento/PaymentDialog";
+import { PaymentDialog } from "@/features/pagamento/components/PaymentDialog";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { MeusPacotesListSkeleton, PacotesListSkeleton } from "@/components/skeletons";

@@ -15,7 +15,7 @@ import { SecoesClinicasView } from "./SecoesClinicasView";
 import { ExamesSection } from "./ExamesSection";
 import { useUsuarioProtocolos, useFichas, useFotos, useMetas } from "@/features/protocolos/hooks/useProtocolos";
 import { useProgressStats } from "@/features/protocolos/hooks/useProgressStats";
-import { useAvaliacoesPosturais } from "@/hooks/useAvaliacaoPostural";
+import { useAvaliacoesPosturais } from "@/features/avaliacao-postural/hooks/useAvaliacaoPostural";
 import { useSecoesClinicas } from "@/features/protocolos/hooks/useSecoesClinicas";
 import { useMinhaAssinatura } from "@/hooks/useAssinaturas";
 import { tipoLabels } from "./protocoloConstants";

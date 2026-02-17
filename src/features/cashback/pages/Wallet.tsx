@@ -4,7 +4,7 @@ import { AppLayout } from "@/components/AppLayout";
 import { Button } from "@/components/ui/button";
 import { AnimatedCounter } from "@/components/ui/animated-counter";
 import { useTransacoes } from "@/features/cashback/hooks/useTransacoes";
-import { useProfile } from "@/hooks/useProfile";
+import { useProfile } from "@/features/profile/hooks/useProfile";
 import { useNavigate } from "react-router-dom";
 import { WalletPageSkeleton } from "@/components/skeletons";
 import { formatResinks, RESINKS_SYMBOL } from "@/lib/resinks";

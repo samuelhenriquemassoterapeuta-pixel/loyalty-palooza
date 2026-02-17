@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { MessageCircle, Instagram, X } from "lucide-react";
-import { useLandingConfig } from "@/hooks/useLandingConfig";
+import { useLandingConfig } from "@/features/landing/hooks/useLandingConfig";
 
 export const FloatingContactButtons = () => {
   const [open, setOpen] = useState(false);

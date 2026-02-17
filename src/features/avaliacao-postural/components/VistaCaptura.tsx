@@ -2,7 +2,7 @@ import { useRef, useState, useCallback } from "react";
 import { motion } from "framer-motion";
 import { Camera, Check, RotateCcw, Grid3X3 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { VistaPostural } from "@/hooks/useAvaliacaoPostural";
+import { VistaPostural } from "@/features/avaliacao-postural/hooks/useAvaliacaoPostural";
 import { ZoomableImage } from "./ZoomableImage";
 import { AnnotationLayer } from "./AnnotationLayer";
 import { MeasurementLayer } from "./MeasurementLayer";

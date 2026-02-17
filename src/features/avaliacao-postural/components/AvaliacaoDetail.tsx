@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { ArrowLeft, Save, MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { AvaliacaoPostural, VistaPostural, useAvaliacoesPosturais } from "@/hooks/useAvaliacaoPostural";
+import { AvaliacaoPostural, VistaPostural, useAvaliacoesPosturais } from "@/features/avaliacao-postural/hooks/useAvaliacaoPostural";
 import { VistaCaptura } from "./VistaCaptura";
 
 const vistas: VistaPostural[] = ["anterior", "posterior", "lateral_direita", "lateral_esquerda"];

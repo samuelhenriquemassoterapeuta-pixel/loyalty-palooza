@@ -7,7 +7,7 @@ import { ShareQRCode } from "@/components/ShareQRCode";
 import { OnboardingTour, useOnboarding } from "@/components/OnboardingTour";
 import { AppLayout } from "@/components/AppLayout";
 import { HomeDashboard } from "@/components/home/HomeDashboard";
-import { useAdmin } from "@/hooks/useAdmin";
+import { useAdmin } from "@/features/admin/hooks/useAdmin";
 import { useNavigate } from "react-router-dom";
 import { Settings, Gift, Building2, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";

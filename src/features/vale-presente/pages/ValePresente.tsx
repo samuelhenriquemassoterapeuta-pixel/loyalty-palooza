@@ -13,7 +13,7 @@ import { Switch } from "@/components/ui/switch";
 import { GiftCardVisual, temaOptions } from "@/features/vale-presente/components/GiftCardVisual";
 import { GiftCardExport } from "@/features/vale-presente/components/GiftCardExport";
 import { useValePresente } from "@/features/vale-presente/hooks/useValePresente";
-import { PaymentDialog } from "@/components/pagamento/PaymentDialog";
+import { PaymentDialog } from "@/features/pagamento/components/PaymentDialog";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
 import { format } from "date-fns";

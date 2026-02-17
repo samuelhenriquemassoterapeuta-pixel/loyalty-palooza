@@ -12,7 +12,7 @@ import { toast } from "sonner";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { SendToTherapistDialog } from "./SendToTherapistDialog";
-import { AvaliacaoPostural, VistaPostural } from "@/hooks/useAvaliacaoPostural";
+import { AvaliacaoPostural, VistaPostural } from "@/features/avaliacao-postural/hooks/useAvaliacaoPostural";
 
 interface FichaRow {
   id: string;
