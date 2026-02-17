@@ -12,6 +12,7 @@ import { cursoFitoterapiaData } from "@/data/cursoFitoterapiaContent";
 import { cursoOleosEssenciaisData } from "@/data/cursoOleosEssenciaisContent";
 import { cursoMassagemModeladoraData } from "@/data/cursoMassagemModeladoraContent";
 import { cursoDrenagemLinfaticaData } from "@/data/cursoDrenagemLinfaticaContent";
+import { cursoGastronomiaSaudavelData } from "@/data/cursoGastronomiaSaudavelContent";
 
 function computeStats(title: string, storageKey: string, modulos: { aulas: { duracaoMinutos: number }[] }[]) {
   const totalAulas = modulos.reduce((a, m) => a + m.aulas.length, 0);
@@ -35,4 +36,5 @@ export const allCourseStats = [
   computeStats("Óleos Essenciais", "resinkra_curso_oleos_essenciais_progress", cursoOleosEssenciaisData),
   computeStats("Massagem Modeladora", "resinkra_curso_massagem_modeladora_progress", cursoMassagemModeladoraData),
   computeStats("Drenagem Linfática", "resinkra_curso_drenagem_linfatica_progress", cursoDrenagemLinfaticaData),
+  computeStats("Gastronomia Saudável", "resinkra_curso_gastronomia_saudavel_progress", cursoGastronomiaSaudavelData),
 ];
