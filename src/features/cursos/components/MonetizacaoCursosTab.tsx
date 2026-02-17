@@ -17,9 +17,10 @@ const monetizacaoItems: FerramentaItem[] = [
     "Drenagem Linfática (116h) — R$ 1.097 (Intermediário)",
     "Saboaria Artesanal (99h) — R$ 897 (Intermediário)",
     "Head SPA Coreano (65h) — R$ 797 (Intermediário)",
+    "Alta Perfumaria Natural (70h) — R$ 797 (Intermediário)",
     "Aromaterapia dōTERRA (58h) — R$ 597 (Essencial)",
     "Método Resinkra (24h) — R$ 497 (Essencial)",
-    "Valor total do catálogo: R$ 18.370 · Ticket médio: R$ 1.080",
+    "Valor total do catálogo: R$ 19.167 · Ticket médio: R$ 1.010",
   ]},
   { icon: "📊", title: "Projeção de Faturamento", desc: "De R$ 3.985 a R$ 54.850/mês", details: [
     "Conservador: 5 alunos/mês · Ticket R$ 797 → R$ 3.985/mês (R$ 47.820/ano)",
