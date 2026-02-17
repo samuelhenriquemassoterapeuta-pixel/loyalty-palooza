@@ -1,7 +1,7 @@
 import { useState } from "react"; // v2
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, Plus, FileText, Users, Shield, Dumbbell, Sparkles, ClipboardList, StretchHorizontal, Salad, BookOpen, Stethoscope, Globe, Gift, Ticket, Crown, Building2, CreditCard, Handshake, Camera, Trophy, DollarSign, CalendarDays, Target, Megaphone, Send, BarChart3 } from "lucide-react";
+import { ArrowLeft, Plus, FileText, Users, Shield, Dumbbell, Sparkles, ClipboardList, StretchHorizontal, Salad, BookOpen, Stethoscope, Globe, Gift, Ticket, Crown, Building2, CreditCard, Handshake, Camera, Trophy, DollarSign, CalendarDays, Target, Megaphone, Send, BarChart3, Rocket } from "lucide-react";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -43,6 +43,7 @@ import CampanhasMarketingTab from "@/components/admin/CampanhasMarketingTab";
 import BannersPromocionaisTab from "@/components/admin/BannersPromocionaisTab";
 import CorporativoConteudoTab from "@/components/admin/CorporativoConteudoTab";
 import RelatorioTecnicoTab from "@/components/admin/RelatorioTecnicoTab";
+import ApresentacaoPlataformaTab from "@/components/admin/ApresentacaoPlataformaTab";
 
 const tabContentVariants = {
   hidden: { opacity: 0, y: 12 },
@@ -447,6 +448,10 @@ const Admin = () => {
                   <FileText size={14} />
                   Relatório Técnico
                 </TabsTrigger>
+                <TabsTrigger value="apresentacao" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
+                  <Rocket size={14} />
+                  Apresentação
+                </TabsTrigger>
               </TabsList>
               <ScrollBar orientation="horizontal" className="h-1.5" />
             </ScrollArea>
@@ -653,6 +658,10 @@ const Admin = () => {
 
               <TabsContent value="relatorio-tecnico" forceMount={activeTab === "relatorio-tecnico" ? true : undefined} className={activeTab !== "relatorio-tecnico" ? "hidden" : ""}>
                 <RelatorioTecnicoTab />
+              </TabsContent>
+
+              <TabsContent value="apresentacao" forceMount={activeTab === "apresentacao" ? true : undefined} className={activeTab !== "apresentacao" ? "hidden" : ""}>
+                <ApresentacaoPlataformaTab />
               </TabsContent>
             </motion.div>
           </AnimatePresence>
