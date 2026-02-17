@@ -36,7 +36,13 @@ async function streamChat({
   if (!resp.ok) {
     const data = await resp.json().catch(() => null);
     const errorMsg = data?.error || `Erro ${resp.status}`;
-    onError(errorMsg);
+    if (resp.status === 402) {
+      onError("⚠️ Créditos de IA esgotados. Aguarde a renovação mensal ou adicione créditos em Settings → Workspace → Usage.");
+    } else if (resp.status === 429) {
+      onError("⏳ Muitas requisições. Aguarde alguns segundos e tente novamente.");
+    } else {
+      onError(errorMsg);
+    }
     return;
   }
 
