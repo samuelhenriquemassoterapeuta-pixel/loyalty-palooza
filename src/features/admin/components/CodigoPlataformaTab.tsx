@@ -15,6 +15,7 @@ import {
   Layers,
   Terminal,
   BookOpen,
+  KeyRound,
 } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -100,43 +101,73 @@ const CollapsibleSection = ({
 // === PROJECT STRUCTURE ===
 const ProjectStructureSection = () => (
   <div className="space-y-3">
-    <CollapsibleSection title="Estrutura do Projeto" icon={FolderTree} badge="React + Vite" defaultOpen>
+    <CollapsibleSection title="Estrutura do Projeto (Feature Folders)" icon={FolderTree} badge="React + Vite" defaultOpen>
       <CodeBlock
         language="text"
-        title="Árvore de diretórios"
+        title="Árvore de diretórios — src/"
         code={`src/
-├── assets/                    # Imagens e mídia
+├── assets/                        # Imagens e mídia
 ├── components/
-│   ├── admin/                 # 39 componentes admin (CRUD, dashboards)
-│   ├── agendamento/           # Fluxo de agendamento
-│   ├── alongamento/           # Exercícios e pausas posturais
-│   ├── cashback/              # Sistema de cashback/wallet
-│   ├── corporativo/           # Página B2B corporativa
-│   ├── curso/                 # Conteúdo educacional (17 cursos)
-│   ├── dietas/                # Planos nutricionais
-│   ├── home/                  # Dashboard do usuário
-│   ├── landing/               # Landing page pública
-│   ├── loja/                  # E-commerce de produtos
-│   ├── protocolos/            # Protocolos terapêuticos
-│   ├── resinkra-ai/           # IA para criação de conteúdo
-│   ├── social/                # Resinkra Moments (social proof)
-│   ├── ui/                    # Shadcn/UI components
-│   └── vale-presente/         # Sistema de vales presente
+│   ├── ui/                        # Shadcn/UI components
+│   ├── home/                      # Dashboard do usuário
+│   ├── AnimatedRoutes.tsx          # Lazy loading de rotas
+│   ├── ProtectedRoute.tsx          # RBAC frontend
+│   ├── BottomNavigation.tsx        # Nav mobile
+│   └── DesktopSidebar.tsx          # Nav desktop
 ├── contexts/
-│   └── AuthContext.tsx         # Autenticação global
-├── hooks/                     # Custom hooks (useAdmin, useAuditLogs...)
-├── integrations/supabase/     # Cliente e tipos do banco
-├── pages/                     # ~90 páginas/rotas
-└── App.tsx                    # Router principal
+│   └── AuthContext.tsx             # Autenticação global
+├── features/                      # ⭐ FEATURE FOLDERS (domínios)
+│   ├── admin/                     # Painel administrativo
+│   │   ├── components/            # 39+ componentes (CRUD, tabs)
+│   │   ├── hooks/                 # useAdmin, useAuditLogs
+│   │   └── pages/                 # Admin.tsx
+│   ├── agendamentos/              # Fluxo de agendamento
+│   │   ├── components/            # ServicoSelector, TerapeutaSelector...
+│   │   ├── hooks/                 # useAgendamentos, useListaEspera...
+│   │   └── pages/                 # Agendamento.tsx, Checkin.tsx
+│   ├── alongamento/               # Exercícios e pausas posturais
+│   │   ├── components/            # ExercicioCard, SessaoPlayer...
+│   │   ├── hooks/                 # useAlongamento, usePausasPosturais...
+│   │   └── pages/                 # Alongamento.tsx
+│   ├── avaliacao-postural/        # Avaliação postural
+│   │   ├── components/            # AngleCharts, MeasurementLayer...
+│   │   ├── hooks/                 # useAvaliacaoPostural, useAngleHistory...
+│   │   └── pages/                 # AvaliacaoPostural.tsx
+│   ├── cashback/                  # Sistema de cashback/wallet
+│   │   ├── components/            # BalanceCard, TierCelebration...
+│   │   ├── hooks/                 # useTransacoes, useUserTier...
+│   │   └── pages/                 # Cashback.tsx, Wallet.tsx
+│   ├── conquistas/                # Gamificação e ranking
+│   │   ├── components/            # AchievementCard, RankingList...
+│   │   ├── hooks/                 # useAchievements, useRanking...
+│   │   └── pages/                 # Conquistas.tsx
+│   ├── corporativo/               # Página B2B corporativa
+│   ├── cupom/                     # Editor de cupons
+│   ├── cursos/                    # Conteúdo educacional (17 cursos)
+│   ├── dietas/                    # Planos nutricionais
+│   ├── guia-clinico/              # Guia clínico
+│   ├── landing/                   # Landing page pública
+│   ├── loja/                      # E-commerce de produtos
+│   ├── pagamento/                 # Integração Asaas
+│   ├── profile/                   # Perfil do usuário
+│   ├── protocolos/                # Protocolos terapêuticos
+│   ├── resinkra-ai/               # IA para criação de conteúdo
+│   ├── social/                    # Resinkra Moments (social proof)
+│   ├── terapeuta/                 # Dashboard terapeuta
+│   ├── terapias/                  # Catálogo de terapias
+│   └── vale-presente/             # Sistema de vales presente
+├── integrations/supabase/         # Cliente e tipos (auto-gerado)
+├── pages/                         # Páginas restantes (Index, etc.)
+└── App.tsx                        # Router principal
 
 supabase/
-├── functions/                 # 24 Edge Functions (Deno)
-│   ├── asaas-*/               # Integração pagamentos Asaas
-│   ├── enviar-whatsapp/       # API Z-API WhatsApp
-│   ├── fetch-google-ads/      # Google Ads metrics
-│   ├── generate-*/            # IA (scripts, hooks, ideias)
-│   └── chat-assistente/       # Assistente IA
-└── migrations/                # Migrações SQL`}
+├── functions/                     # 24 Edge Functions (Deno)
+│   ├── asaas-*/                   # Integração pagamentos Asaas
+│   ├── enviar-whatsapp/           # API Z-API WhatsApp
+│   ├── fetch-google-ads/          # Google Ads metrics
+│   ├── generate-*/                # IA (scripts, hooks, ideias)
+│   └── chat-assistente/           # Assistente IA
+└── migrations/                    # Migrações SQL`}
       />
     </CollapsibleSection>
 
@@ -178,14 +209,12 @@ const AuthProvider = ({ children }) => {
   const [session, setSession] = useState(null);
 
   useEffect(() => {
-    // Listener de estado de auth
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
         setSession(session);
         setUser(session?.user ?? null);
       }
     );
-    // Sessão existente
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setUser(session?.user ?? null);
@@ -206,7 +235,7 @@ const AuthProvider = ({ children }) => {
 
     <CollapsibleSection title="Controle de Acesso (RBAC)" icon={Shield}>
       <CodeBlock
-        title="src/hooks/useAdmin.ts"
+        title="src/features/admin/hooks/useAdmin.ts"
         code={`// Hook para verificar se o usuário é admin
 export const useAdmin = () => {
   const { user } = useAuth();
@@ -298,10 +327,11 @@ const mutation = useMutation({
 // === DATABASE / SQL ===
 const DatabaseSection = () => (
   <div className="space-y-3">
-    <CollapsibleSection title="Tabelas Principais" icon={Database} badge="92+ tabelas" defaultOpen>
+    <CollapsibleSection title="Tabelas Principais" icon={Database} badge="95+ tabelas" defaultOpen>
       <div className="grid grid-cols-1 gap-2 text-xs">
         {[
-          { group: "Usuários", tables: "profiles, user_roles, login_attempts" },
+          { group: "Usuários & Auth", tables: "profiles, user_roles, roles, login_attempts, audit_logs" },
+          { group: "Permissões (RBAC)", tables: "permissions, role_permissions, user_permissions_mv (cache)" },
           { group: "Serviços", tables: "servicos, servicos_detalhes, agendamentos, terapeutas" },
           { group: "Produtos", tables: "produtos, pedidos, pedido_itens, pacotes, pacotes_usuario" },
           { group: "Financeiro", tables: "transacoes, indicacoes, vale_presentes, pagamentos_asaas, cupons" },
@@ -312,7 +342,7 @@ const DatabaseSection = () => (
           { group: "Social", tables: "social_posts, social_posts_config, notificacoes, banners_promocionais" },
           { group: "Corporativo", tables: "empresas_corporativas, colaboradores_empresa, corporativo_*" },
           { group: "Marketing", tables: "campanhas_marketing, google_ads_metrics, landing_config" },
-          { group: "Auditoria", tables: "audit_logs" },
+          { group: "Parceiros", tables: "parceiros, parceiro_cupons, parceiro_comissoes, parceiro_faixas_comissao" },
         ].map((g) => (
           <div key={g.group} className="p-2 rounded-md bg-muted/30">
             <span className="font-semibold text-primary">{g.group}:</span>{" "}
@@ -322,7 +352,54 @@ const DatabaseSection = () => (
       </div>
     </CollapsibleSection>
 
-    <CollapsibleSection title="Funções SQL (Triggers & RPC)" icon={Terminal} badge="25+ funções">
+    <CollapsibleSection title="Sistema de Permissões Granular" icon={KeyRound} badge="Novo">
+      <CodeBlock
+        title="Estrutura de Permissões (roles → permissions)"
+        language="sql"
+        code={`-- Tabela de roles (mapeia enum app_role)
+-- roles: admin, user, terapeuta, parceiro
+
+-- Tabela de permissões (30 permissões)
+-- Ex: (resource: 'appointments', action: 'create')
+-- Ex: (resource: 'admin', action: 'access')
+
+-- Relação N:N: role_permissions
+-- Admin: 30 permissões (todas)
+-- User: 21 permissões (básicas)
+-- Terapeuta: 13 permissões (clínicas + cursos)
+-- Parceiro: 4 permissões (loja + cashback)
+
+-- Cache via Materialized View: user_permissions_mv
+-- Auto-refresh via triggers em user_roles e role_permissions
+
+-- Funções helper:
+SELECT * FROM get_user_permissions('user-uuid');
+SELECT has_permission('user-uuid', 'admin', 'access');
+SELECT has_role('user-uuid', 'admin');`}
+      />
+      <div className="grid grid-cols-2 gap-2 text-xs">
+        {[
+          { module: "admin", perms: 1 },
+          { module: "appointments", perms: 4 },
+          { module: "exercises", perms: 3 },
+          { module: "cashback", perms: 3 },
+          { module: "courses", perms: 4 },
+          { module: "diets", perms: 2 },
+          { module: "store", perms: 2 },
+          { module: "protocols", perms: 2 },
+          { module: "ai", perms: 2 },
+          { module: "social", perms: 4 },
+          { module: "gift_card", perms: 3 },
+        ].map((m) => (
+          <div key={m.module} className="flex items-center justify-between p-2 rounded-md bg-muted/30">
+            <span className="font-mono text-foreground">{m.module}</span>
+            <Badge variant="secondary" className="text-[10px]">{m.perms} ações</Badge>
+          </div>
+        ))}
+      </div>
+    </CollapsibleSection>
+
+    <CollapsibleSection title="Funções SQL (Triggers & RPC)" icon={Terminal} badge="27+ funções">
       <CodeBlock
         title="Trigger: Cashback automático em pedidos"
         language="sql"
@@ -333,7 +410,6 @@ DECLARE
   item RECORD;
   v_multiplier NUMERIC := 1.0;
 BEGIN
-  -- Multiplicador do tier do usuário (Bronze/Prata/Ouro)
   SELECT gt.tier_multiplier INTO v_multiplier
   FROM get_user_tier(NEW.user_id) gt;
 
@@ -361,9 +437,10 @@ END; $$;`}
       />
 
       <CodeBlock
-        title="Função: Verificação de papel (RBAC)"
+        title="Funções de RBAC e Permissões"
         language="sql"
-        code={`CREATE OR REPLACE FUNCTION has_role(_user_id uuid, _role app_role)
+        code={`-- Verificar papel do usuário
+CREATE OR REPLACE FUNCTION has_role(_user_id uuid, _role app_role)
 RETURNS boolean LANGUAGE sql STABLE SECURITY DEFINER
 SET search_path = public AS $$
   SELECT EXISTS (
@@ -372,10 +449,24 @@ SET search_path = public AS $$
   )
 $$;
 
--- Uso em RLS policies:
-CREATE POLICY "Admins can manage all"
-ON public.servicos FOR ALL TO authenticated
-USING (has_role(auth.uid(), 'admin'));`}
+-- Verificar permissão granular
+CREATE OR REPLACE FUNCTION has_permission(
+  p_user_id UUID, p_resource TEXT, p_action TEXT
+) RETURNS BOOLEAN LANGUAGE sql STABLE SECURITY DEFINER AS $$
+  SELECT EXISTS (
+    SELECT 1 FROM user_permissions_mv
+    WHERE user_id = p_user_id
+      AND resource = p_resource AND action = p_action
+  )
+$$;
+
+-- Listar permissões do usuário
+CREATE OR REPLACE FUNCTION get_user_permissions(p_user_id UUID)
+RETURNS TABLE(resource TEXT, action TEXT) AS $$
+  SELECT upm.resource, upm.action
+  FROM user_permissions_mv upm
+  WHERE upm.user_id = p_user_id;
+$$;`}
       />
 
       <CodeBlock
@@ -429,7 +520,15 @@ USING (
   auth.uid() = user_id 
   OR has_role(auth.uid(), 'admin')
   OR is_terapeuta(auth.uid())
-);`}
+);
+
+-- Tabelas de permissões: admins gerenciam, todos leem
+CREATE POLICY "Admins manage permissions"
+ON permissions FOR ALL TO authenticated
+USING (has_role(auth.uid(), 'admin'));
+
+CREATE POLICY "Authenticated read permissions"
+ON permissions FOR SELECT TO authenticated USING (true);`}
       />
     </CollapsibleSection>
   </div>
@@ -494,10 +593,7 @@ serve(async (req) => {
     {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        phone: telefone,
-        message: mensagem
-      })
+      body: JSON.stringify({ phone: telefone, message: mensagem })
     }
   );
 
@@ -572,7 +668,15 @@ const { error } = await supabase
 
 // RPC (chamar função SQL)
 const { data } = await supabase
-  .rpc('get_user_tier', { p_user_id: userId });`}
+  .rpc('get_user_tier', { p_user_id: userId });
+
+// Verificar permissão granular
+const { data } = await supabase
+  .rpc('has_permission', { 
+    p_user_id: userId, 
+    p_resource: 'admin', 
+    p_action: 'access' 
+  });`}
       />
     </CollapsibleSection>
 
@@ -618,14 +722,17 @@ const { data: { publicUrl } } = supabase.storage
   .getPublicUrl(filePath);
 
 // Buckets disponíveis:
-// avatars          — Fotos de perfil (público)
-// fotos-evolucao   — Fotos de tratamento (privado, URLs assinadas)
-// avaliacoes-posturais — Fotos posturais (privado)
-// exercise-videos  — Vídeos de exercícios (público)
-// social-posts     — Posts Resinkra Moments (privado)
-// admin-uploads    — Uploads administrativos (público)
-// corporativo-media — Mídia corporativa (público)
-// landing-media    — Mídia da landing page (público)`}
+// avatars               — Fotos de perfil (público)
+// fotos-evolucao        — Fotos de tratamento (privado, URLs assinadas)
+// avaliacoes-posturais  — Fotos posturais (privado)
+// exercise-videos       — Vídeos de exercícios (público)
+// social-posts          — Posts Resinkra Moments (privado)
+// exames-arquivos       — Exames do paciente (privado)
+// admin-uploads         — Uploads administrativos (público)
+// corporativo-media     — Mídia corporativa (público)
+// landing-media         — Mídia da landing page (público)
+// headspa-imagens       — Imagens head spa (público)
+// servico-imagens       — Imagens de serviços (público)`}
       />
     </CollapsibleSection>
 
@@ -644,14 +751,12 @@ const channel = supabase
       filter: \`user_id=eq.\${userId}\`
     },
     (payload) => {
-      // Nova notificação recebida!
       toast.info(payload.new.titulo);
       queryClient.invalidateQueries({ queryKey: ['notificacoes'] });
     }
   )
   .subscribe();
 
-// Cleanup
 return () => { supabase.removeChannel(channel); };`}
       />
     </CollapsibleSection>
@@ -684,18 +789,18 @@ const TechnicalReportSection = () => (
     <CollapsibleSection title="Métricas da Plataforma" icon={BookOpen} defaultOpen>
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
         {[
-          { label: "Páginas/Rotas", value: "~91" },
+          { label: "Feature Folders", value: "21" },
           { label: "Componentes", value: "~200+" },
-          { label: "Tabelas DB", value: "92+" },
+          { label: "Tabelas DB", value: "95+" },
           { label: "Políticas RLS", value: "262+" },
           { label: "Edge Functions", value: "24" },
-          { label: "Funções SQL", value: "25+" },
-          { label: "Cursos", value: "17" },
-          { label: "Módulos Educação", value: "154" },
+          { label: "Funções SQL", value: "27+" },
+          { label: "Permissões", value: "30" },
+          { label: "Roles", value: "4" },
           { label: "Horas Conteúdo", value: "~1.388h" },
           { label: "Storage Buckets", value: "11" },
           { label: "Secrets", value: "7" },
-          { label: "Triggers DB", value: "15+" },
+          { label: "Triggers DB", value: "17+" },
         ].map((m) => (
           <Card key={m.label} className="p-3 text-center">
             <div className="text-lg font-bold text-primary">{m.value}</div>
@@ -714,9 +819,11 @@ const TechnicalReportSection = () => (
    → Rate limiting (5 tentativas / 15 min)
    → Proteção HIBP (senhas vazadas)
 
-2. AUTORIZAÇÃO (RBAC)
+2. AUTORIZAÇÃO (RBAC + Permissões Granulares)
    → Tabela user_roles separada (anti-escalação)
    → Função has_role() SECURITY DEFINER
+   → Sistema de permissões: roles → permissions → user_permissions_mv
+   → has_permission(user, resource, action) para controle fino
    → ProtectedRoute com allowRoles no frontend
    → AdminRoute para páginas administrativas
 
@@ -725,6 +832,7 @@ const TechnicalReportSection = () => (
    → Políticas RESTRICTIVE para bloquear anon
    → Usuários só acessam próprios dados
    → Admins têm acesso total via has_role()
+   → Tabelas de permissões: admin gerencia, todos leem
 
 4. PROTEÇÃO DE DADOS
    → Fotos sensíveis via URLs assinadas (1h)
@@ -776,7 +884,7 @@ export const CodigoPlataformaTab = () => {
           Código da Plataforma
         </h3>
         <p className="text-sm text-muted-foreground">
-          Documentação técnica, código-fonte, SQL e snippets de integração
+          Documentação técnica, código-fonte, SQL, permissões e snippets de integração
         </p>
       </div>
 
