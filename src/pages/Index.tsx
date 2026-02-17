@@ -12,6 +12,7 @@ import { useAdmin } from "@/features/admin/hooks/useAdmin";
 import { useNavigate } from "react-router-dom";
 import { Settings, Gift, Building2, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
+import { useLandingConfig } from "@/features/landing/hooks/useLandingConfig";
 
 const stagger = {
   hidden: { opacity: 0 },
@@ -34,13 +35,38 @@ const Index = () => {
   const { isAdmin } = useAdmin();
   const navigate = useNavigate();
   const { showOnboarding, completeOnboarding } = useOnboarding();
+  const { config: homeBg } = useLandingConfig("home_bg");
+
+  const bgUrl = homeBg?.imagem_url;
+  const bgSpeed = homeBg?.velocidade || 30;
 
   return (
     <>
       <OnboardingTour isOpen={showOnboarding} onComplete={completeOnboarding} />
       <AppLayout>
-        <div className="min-h-screen bg-background gradient-hero pb-24 lg:pb-8">
-          <div className="max-w-lg lg:max-w-5xl xl:max-w-6xl mx-auto px-4 lg:px-8 safe-top">
+        <div className="min-h-screen bg-background gradient-hero pb-24 lg:pb-8 relative overflow-hidden">
+          {/* Animated background image */}
+          {bgUrl && (
+            <motion.div
+              className="absolute inset-0 pointer-events-none z-0"
+              initial={{ scale: 1.15, opacity: 0 }}
+              animate={{
+                scale: [1.15, 1.25, 1.15],
+                opacity: [0.06, 0.1, 0.06],
+              }}
+              transition={{
+                duration: bgSpeed,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+              style={{
+                backgroundImage: `url(${bgUrl})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+              }}
+            />
+          )}
+          <div className="max-w-lg lg:max-w-5xl xl:max-w-6xl mx-auto px-4 lg:px-8 safe-top relative z-10">
             <Header />
 
             <motion.main
