@@ -2,6 +2,7 @@ import { handleCors } from "../_shared/cors.ts";
 import { createServiceClient } from "../_shared/supabase-client.ts";
 import { requireAuth } from "../_shared/auth.ts";
 import { jsonResponse, errorResponse } from "../_shared/response.ts";
+import { transferirSchema, validate } from "../_shared/validation.ts";
 
 Deno.serve(async (req) => {
   const corsRes = handleCors(req);
@@ -11,11 +12,8 @@ Deno.serve(async (req) => {
     const { userId: remetenteId } = await requireAuth(req);
     const supabaseAdmin = createServiceClient();
 
-    const { destinatarioId, valor, destinatarioNome } = await req.json();
-
-    if (!destinatarioId || !valor || valor <= 0) {
-      return errorResponse("Dados inválidos");
-    }
+    const body = await req.json();
+    const { destinatarioId, valor, destinatarioNome } = validate(transferirSchema, body);
 
     if (remetenteId === destinatarioId) {
       return errorResponse("Não é possível transferir para si mesmo");
@@ -77,7 +75,8 @@ Deno.serve(async (req) => {
     return jsonResponse({ success: true, message: "Transferência realizada com sucesso" });
   } catch (error) {
     if (error instanceof Response) return error;
-    console.error("Erro na transferência:", error);
-    return errorResponse("Erro ao realizar transferência", 500);
+    const msg = error instanceof Error ? error.message : "Erro ao realizar transferência";
+    console.error("Erro na transferência:", msg);
+    return errorResponse(msg, msg.includes("inválido") || msg.includes("positivo") ? 400 : 500);
   }
 });

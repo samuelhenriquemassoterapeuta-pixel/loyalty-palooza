@@ -2,23 +2,18 @@ import { handleCors } from "../_shared/cors.ts";
 import { createServiceClient } from "../_shared/supabase-client.ts";
 import { requireAuth } from "../_shared/auth.ts";
 import { jsonResponse, errorResponse } from "../_shared/response.ts";
+import { buscarUsuarioSchema, validate } from "../_shared/validation.ts";
 
 Deno.serve(async (req) => {
   const corsRes = handleCors(req);
   if (corsRes) return corsRes;
 
   try {
-    // Validate auth
     await requireAuth(req);
-
-    // Use admin client for user lookup
     const supabaseAdmin = createServiceClient();
 
-    const { email } = await req.json();
-
-    if (!email) {
-      return errorResponse("Email é obrigatório");
-    }
+    const body = await req.json();
+    const { email } = validate(buscarUsuarioSchema, body);
 
     // Buscar usuário pelo email no auth.users
     const { data: authData, error: authError } = await supabaseAdmin.auth.admin.listUsers();
@@ -48,7 +43,8 @@ Deno.serve(async (req) => {
     });
   } catch (error) {
     if (error instanceof Response) return error;
-    console.error("Erro ao buscar usuário:", error);
-    return errorResponse("Erro interno do servidor", 500);
+    const msg = error instanceof Error ? error.message : "Erro interno do servidor";
+    console.error("Erro ao buscar usuário:", msg);
+    return errorResponse(msg, msg.includes("inválido") ? 400 : 500);
   }
 });
