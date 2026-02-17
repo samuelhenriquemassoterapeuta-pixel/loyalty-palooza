@@ -347,6 +347,34 @@ const SectionEditor = ({ secao, conteudo, onSave }: { secao: string; conteudo: a
     );
   }
 
+  /* ── AGENDAMENTO BG ── */
+  if (secao === "agendamento_bg") {
+    return (
+      <div className="space-y-4">
+        <ImageUploadField
+          label="Imagem de fundo do Agendamento"
+          value={form.imagem_url || ""}
+          onChange={v => update("imagem_url", v)}
+          hint="Imagem decorativa que aparece em movimento atrás da tela de agendamento. Recomendado: imagem clara/suave."
+        />
+        <div>
+          <Label>Velocidade da animação (segundos)</Label>
+          <Input
+            type="number"
+            min={10}
+            max={120}
+            value={form.velocidade || 30}
+            onChange={e => update("velocidade", parseInt(e.target.value) || 30)}
+          />
+          <p className="text-[10px] text-muted-foreground mt-1">Quanto maior o valor, mais lenta a animação. Padrão: 30s</p>
+        </div>
+        <Button onClick={handleSave} disabled={saving} className="w-full">
+          <Save className="w-4 h-4 mr-2" />{saving ? "Salvando..." : "Salvar Fundo Agendamento"}
+        </Button>
+      </div>
+    );
+  }
+
   // Fallback: raw JSON editor
   return (
     <div className="space-y-4">
@@ -364,9 +392,10 @@ const secaoMeta: Record<string, { label: string; icon: any }> = {
   depoimentos: { label: "Depoimentos", icon: MessageSquareQuote },
   contato: { label: "Contato", icon: Phone },
   home_bg: { label: "Fundo Home", icon: Image },
+  agendamento_bg: { label: "Fundo Agendamento", icon: Image },
 };
 
-const secaoOrder = ["hero", "servicos", "sobre", "pacotes", "depoimentos", "contato", "home_bg"];
+const secaoOrder = ["hero", "servicos", "sobre", "pacotes", "depoimentos", "contato", "home_bg", "agendamento_bg"];
 
 export const LandingPageTab = () => {
   const { configs, isLoading } = useAllLandingConfig();

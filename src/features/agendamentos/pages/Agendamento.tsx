@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import { useLandingConfig } from "@/features/landing/hooks/useLandingConfig";
+import agendamentoBgFallback from "@/assets/agendamento-bg.jpg";
 import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -61,7 +63,10 @@ const Agendamento = () => {
   const { servicos, loading: loadingServicos } = useServicos();
   const { terapeutas, loading: loadingTerapeutas } = useTerapeutas();
   const { createAvaliacao, getAvaliacaoByAgendamento } = useAvaliacoes();
-  
+  const { config: agendBg } = useLandingConfig("agendamento_bg");
+  const agendBgUrl = agendBg?.imagem_url || agendamentoBgFallback;
+  const agendBgSpeed = agendBg?.velocidade || 30;
+
   const [activeTab, setActiveTab] = useState("novo");
   const [step, setStep] = useState(1);
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
@@ -221,9 +226,29 @@ const Agendamento = () => {
 
   return (
     <AppLayout>
-    <div className="min-h-screen bg-background gradient-hero pb-24 lg:pb-8">
-      <div className="max-w-lg lg:max-w-4xl mx-auto px-4 lg:px-8 safe-top pt-4">
-        {/* Header */}
+    <div className="min-h-screen bg-background gradient-hero pb-24 lg:pb-8 relative overflow-hidden">
+      {/* Animated background image */}
+      {agendBgUrl && (
+        <motion.div
+          className="absolute inset-0 pointer-events-none z-0"
+          initial={{ scale: 1.15, opacity: 0 }}
+          animate={{
+            scale: [1.15, 1.25, 1.15],
+            opacity: [0.06, 0.1, 0.06],
+          }}
+          transition={{
+            duration: agendBgSpeed,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+          style={{
+            backgroundImage: `url(${agendBgUrl})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        />
+      )}
+      <div className="max-w-lg lg:max-w-4xl mx-auto px-4 lg:px-8 safe-top pt-4 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
