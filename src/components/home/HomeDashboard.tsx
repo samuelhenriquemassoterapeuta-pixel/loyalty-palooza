@@ -1,9 +1,9 @@
 import { useMemo } from "react";
 import { motion } from "framer-motion";
-import { useAgendamentos } from "@/hooks/useAgendamentos";
-import { useUsuarioProtocolos, useFichas } from "@/hooks/useProtocolos";
-import { useAchievementCelebration } from "@/hooks/useAchievementCelebration";
-import { useAchievementProximityNotifier } from "@/hooks/useAchievementProximityNotifier";
+import { useAgendamentos } from "@/features/agendamentos/hooks/useAgendamentos";
+import { useUsuarioProtocolos, useFichas } from "@/features/protocolos/hooks/useProtocolos";
+import { useAchievementCelebration } from "@/features/conquistas/hooks/useAchievementCelebration";
+import { useAchievementProximityNotifier } from "@/features/conquistas/hooks/useAchievementProximityNotifier";
 import { NextAppointmentCard } from "./NextAppointmentCard";
 import { StreakSummaryCard } from "./StreakSummaryCard";
 import { AchievementBadges } from "./AchievementBadges";
@@ -12,7 +12,7 @@ import { XpMiniBar } from "./XpMiniBar";
 import { ActiveBenefitsCard } from "./ActiveBenefitsCard";
 import { CollapsibleDashboardSection } from "./CollapsibleDashboardSection";
 import { PromoBanner } from "./PromoBanner";
-import { AchievementCelebration } from "@/components/conquistas/AchievementCelebration";
+import { AchievementCelebration } from "@/features/conquistas/components/AchievementCelebration";
 import {
   differenceInDays,
   startOfDay,

@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ChevronRight, Target } from "lucide-react";
-import { Achievement } from "@/hooks/useAchievements";
+import { Achievement } from "@/features/conquistas/hooks/useAchievements";
 
 interface Props {
   achievements: Achievement[];

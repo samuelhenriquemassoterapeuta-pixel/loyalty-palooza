@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Tag, Percent, CalendarCheck, Sparkles, Crown } from "lucide-react";
-import { useLevelBenefits } from "@/hooks/useLevelBenefits";
+import { useLevelBenefits } from "@/features/cashback/hooks/useLevelBenefits";
 import { useNavigate } from "react-router-dom";
 
 const fadeUp = {

@@ -6,10 +6,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { AppLayout } from "@/components/AppLayout";
 import { useNavigate } from "react-router-dom";
-import { useAgendamentos } from "@/hooks/useAgendamentos";
-import { useAchievements } from "@/hooks/useAchievements";
-import { useUsuarioProtocolos, useFichas, useFotos } from "@/hooks/useProtocolos";
-import { useSocialPosts, SocialPost } from "@/hooks/useSocialPosts";
+import { useAgendamentos } from "@/features/agendamentos/hooks/useAgendamentos";
+import { useAchievements } from "@/features/conquistas/hooks/useAchievements";
+import { useUsuarioProtocolos, useFichas, useFotos } from "@/features/protocolos/hooks/useProtocolos";
+import { useSocialPosts, SocialPost } from "@/features/social/hooks/useSocialPosts";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 

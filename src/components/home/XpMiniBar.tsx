@@ -1,8 +1,8 @@
 import { motion } from "framer-motion";
 import { Zap, ChevronRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import type { Achievement } from "@/hooks/useAchievements";
-import { calculateXpFromAchievements, getLevelFromXp } from "@/components/conquistas/xpLevelUtils";
+import type { Achievement } from "@/features/conquistas/hooks/useAchievements";
+import { calculateXpFromAchievements, getLevelFromXp } from "@/features/conquistas/components/xpLevelUtils";
 
 interface XpMiniBarProps {
   achievements: Achievement[];

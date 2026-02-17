@@ -1,7 +1,7 @@
 import { Header } from "@/components/Header";
-import { BalanceCard } from "@/components/BalanceCard";
+import { BalanceCard } from "@/features/cashback/components/BalanceCard";
 import { QuickActions } from "@/components/QuickActions";
-import { TransactionHistory } from "@/components/TransactionHistory";
+import { TransactionHistory } from "@/features/cashback/components/TransactionHistory";
 import { InstallBanner } from "@/components/InstallBanner";
 import { ShareQRCode } from "@/components/ShareQRCode";
 import { OnboardingTour, useOnboarding } from "@/components/OnboardingTour";

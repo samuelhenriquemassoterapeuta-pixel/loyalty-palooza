@@ -3,7 +3,7 @@ import { Calendar, Clock, ArrowRight, Sparkles } from "lucide-react";
 import { format, isToday, isTomorrow } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { useNavigate } from "react-router-dom";
-import type { Agendamento } from "@/hooks/useAgendamentos";
+import type { Agendamento } from "@/features/agendamentos/hooks/useAgendamentos";
 
 interface NextAppointmentCardProps {
   agendamento: Agendamento | null;
