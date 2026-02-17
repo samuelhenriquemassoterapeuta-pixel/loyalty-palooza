@@ -1,5 +1,5 @@
 import { useSearchParams } from "react-router-dom";
-import { GraduationCap, Flower2, Sparkles, Bone, Gem, Hand, Droplets, Flame, Bath, Wind, Leaf, FlaskConical, Fingerprint, Waves, ChefHat, Bandage, LucideIcon } from "lucide-react";
+import { GraduationCap, Flower2, Sparkles, Bone, Gem, Hand, Droplets, Flame, Bath, Wind, Leaf, FlaskConical, Fingerprint, Waves, ChefHat, Bandage, DollarSign, LucideIcon } from "lucide-react";
 import { AppLayout } from "@/components/AppLayout";
 import { lazy, Suspense, useMemo, useRef, useEffect } from "react";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
@@ -7,6 +7,8 @@ import { CursosHubHero } from "@/features/cursos/components/CursosHubHero";
 import { CursoTabButton } from "@/features/cursos/components/CursoTabButton";
 import { ContinueWatchingCard } from "@/features/cursos/components/ContinueWatchingCard";
 import { allCourseStats } from "@/features/cursos/data/cursosHubStats";
+import { useAdmin } from "@/features/admin/hooks/useAdmin";
+import { MonetizacaoCursosTab } from "@/features/cursos/components/MonetizacaoCursosTab";
 
 const CursoVendasHero = lazy(() => import("@/features/cursos/pages/CursoVendasHero"));
 const CursoAromaterapiaHero = lazy(() => import("@/features/cursos/pages/CursoAromaterapiaHero"));
@@ -80,6 +82,7 @@ export default function Cursos() {
   const [searchParams, setSearchParams] = useSearchParams();
   const tab = searchParams.get("tab") || "metodo";
   const scrollRef = useRef<HTMLDivElement>(null);
+  const { isAdmin } = useAdmin();
 
   const handleTabChange = (value: string) => {
     setSearchParams({ tab: value }, { replace: true });
@@ -150,27 +153,45 @@ export default function Cursos() {
                 </div>
               );
             })}
+            {isAdmin && (
+              <div data-tab="monetizacao">
+                <CursoTabButton
+                  label="Monetização"
+                  icon={DollarSign}
+                  value="monetizacao"
+                  active={tab === "monetizacao"}
+                  pct={0}
+                  onClick={() => handleTabChange("monetizacao")}
+                />
+              </div>
+            )}
           </div>
         </div>
 
         <Suspense fallback={<div className="flex justify-center py-12"><LoadingSpinner /></div>}>
-          {tab === "metodo" && <CursoMetodoResinkraHero embedded />}
-          {tab === "vendas" && <CursoVendasHero embedded />}
-          {tab === "aromaterapia" && <CursoAromaterapiaHero embedded />}
-          {tab === "headspa" && <CursoHeadSpaHero embedded />}
-          {tab === "anatomia" && <CursoAnatomiaHero embedded />}
-          {tab === "facespa" && <CursoYugenFaceSpaHero embedded />}
-          {tab === "perfumaria" && <CursoPerfumariaNaturalHero embedded />}
-          {tab === "velas" && <CursoVelasAromaticasHero embedded />}
-          {tab === "saboaria" && <CursoSaboariaArtesanalHero embedded />}
-          {tab === "difusor" && <CursoDifusorAmbientesHero embedded />}
-          {tab === "fitoterapia" && <CursoFitoterapiaHero embedded />}
-          {tab === "oleos" && <CursoOleosEssenciaisHero embedded />}
-          {tab === "modeladora" && <CursoMassagemModeladoraHero embedded />}
-          {tab === "drenagem" && <CursoDrenagemLinfaticaHero embedded />}
-          {tab === "gastronomia" && <CursoGastronomiaSaudavelHero embedded />}
-          {tab === "seitai" && <CursoSeitaiHero embedded />}
-          {tab === "bandagem" && <CursoBandagemElasticaHero embedded />}
+          {tab === "monetizacao" && isAdmin ? (
+            <MonetizacaoCursosTab />
+          ) : (
+            <>
+              {tab === "metodo" && <CursoMetodoResinkraHero embedded />}
+              {tab === "vendas" && <CursoVendasHero embedded />}
+              {tab === "aromaterapia" && <CursoAromaterapiaHero embedded />}
+              {tab === "headspa" && <CursoHeadSpaHero embedded />}
+              {tab === "anatomia" && <CursoAnatomiaHero embedded />}
+              {tab === "facespa" && <CursoYugenFaceSpaHero embedded />}
+              {tab === "perfumaria" && <CursoPerfumariaNaturalHero embedded />}
+              {tab === "velas" && <CursoVelasAromaticasHero embedded />}
+              {tab === "saboaria" && <CursoSaboariaArtesanalHero embedded />}
+              {tab === "difusor" && <CursoDifusorAmbientesHero embedded />}
+              {tab === "fitoterapia" && <CursoFitoterapiaHero embedded />}
+              {tab === "oleos" && <CursoOleosEssenciaisHero embedded />}
+              {tab === "modeladora" && <CursoMassagemModeladoraHero embedded />}
+              {tab === "drenagem" && <CursoDrenagemLinfaticaHero embedded />}
+              {tab === "gastronomia" && <CursoGastronomiaSaudavelHero embedded />}
+              {tab === "seitai" && <CursoSeitaiHero embedded />}
+              {tab === "bandagem" && <CursoBandagemElasticaHero embedded />}
+            </>
+          )}
         </Suspense>
       </div>
     </AppLayout>
