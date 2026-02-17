@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Code2,
   Database,
@@ -9,830 +9,582 @@ import {
   Copy,
   Check,
   ChevronDown,
-  ChevronRight,
   Server,
   Shield,
   Layers,
   Terminal,
   BookOpen,
   KeyRound,
+  Cpu,
+  HardDrive,
+  Globe,
+  Zap,
+  Users,
+  Lock,
+  CreditCard,
+  Bot,
+  MessageSquare,
+  BarChart3,
+  Bell,
+  Image,
 } from "lucide-react";
-import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
+import { Card } from "@/components/ui/card";
 import { toast } from "sonner";
+
+// ── Reusable Components ──
 
 const CodeBlock = ({ code, language = "typescript", title }: { code: string; language?: string; title?: string }) => {
   const [copied, setCopied] = useState(false);
-
   const handleCopy = () => {
     navigator.clipboard.writeText(code);
     setCopied(true);
     toast.success("Código copiado!");
     setTimeout(() => setCopied(false), 2000);
   };
-
   return (
     <div className="rounded-lg border border-border overflow-hidden">
       {title && (
-        <div className="flex items-center justify-between px-4 py-2 bg-muted/50 border-b border-border">
-          <span className="text-xs font-medium text-muted-foreground flex items-center gap-1.5">
-            <FileCode size={14} />
+        <div className="flex items-center justify-between px-3 py-1.5 bg-muted/50 border-b border-border">
+          <span className="text-[10px] font-medium text-muted-foreground flex items-center gap-1.5">
+            <FileCode size={12} />
             {title}
           </span>
-          <Badge variant="secondary" className="text-[10px]">{language}</Badge>
+          <Badge variant="secondary" className="text-[9px]">{language}</Badge>
         </div>
       )}
       <div className="relative">
-        <pre className="p-4 text-xs overflow-x-auto bg-card text-foreground leading-relaxed">
+        <pre className="p-3 text-[11px] overflow-x-auto bg-card text-foreground leading-relaxed">
           <code>{code}</code>
         </pre>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="absolute top-2 right-2 h-7 w-7"
-          onClick={handleCopy}
-        >
-          {copied ? <Check size={14} className="text-green-500" /> : <Copy size={14} />}
+        <Button variant="ghost" size="icon" className="absolute top-1 right-1 h-6 w-6" onClick={handleCopy}>
+          {copied ? <Check size={12} className="text-green-500" /> : <Copy size={12} />}
         </Button>
       </div>
     </div>
   );
 };
 
-const CollapsibleSection = ({
+const SectionCollapsible = ({
   title,
+  subtitle,
   icon: Icon,
   badge,
   children,
   defaultOpen = false,
 }: {
   title: string;
+  subtitle?: string;
   icon: React.ElementType;
   badge?: string;
   children: React.ReactNode;
   defaultOpen?: boolean;
 }) => {
   const [open, setOpen] = useState(defaultOpen);
-
   return (
-    <Collapsible open={open} onOpenChange={setOpen}>
-      <CollapsibleTrigger asChild>
-        <button className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-muted/50 transition-colors text-left">
-          <Icon size={18} className="text-primary shrink-0" />
-          <span className="font-medium text-sm flex-1">{title}</span>
-          {badge && <Badge variant="secondary" className="text-[10px]">{badge}</Badge>}
-          {open ? <ChevronDown size={16} className="text-muted-foreground" /> : <ChevronRight size={16} className="text-muted-foreground" />}
-        </button>
-      </CollapsibleTrigger>
-      <CollapsibleContent>
-        <div className="pl-9 pr-3 pb-3 space-y-3">{children}</div>
-      </CollapsibleContent>
-    </Collapsible>
+    <div className="rounded-2xl border border-border/60 bg-card/50 overflow-hidden">
+      <button
+        onClick={() => setOpen(!open)}
+        className="w-full flex items-center gap-3 px-4 py-3.5 hover:bg-muted/30 transition-colors"
+      >
+        <div className="p-2.5 rounded-xl bg-primary/10">
+          <Icon size={20} className="text-primary" />
+        </div>
+        <div className="flex-1 text-left min-w-0">
+          <span className="text-sm font-semibold text-foreground block">{title}</span>
+          {subtitle && <span className="text-[11px] text-muted-foreground">{subtitle}</span>}
+        </div>
+        {badge && (
+          <Badge variant="secondary" className="text-[10px] shrink-0">{badge}</Badge>
+        )}
+        <motion.div
+          animate={{ rotate: open ? 180 : 0 }}
+          transition={{ duration: 0.2 }}
+          className="p-1.5 rounded-full bg-primary/10 shrink-0"
+        >
+          <ChevronDown size={14} className="text-primary" />
+        </motion.div>
+      </button>
+      <AnimatePresence initial={false}>
+        {open && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.25, ease: "easeInOut" }}
+            className="overflow-hidden"
+          >
+            <div className="px-4 pb-4 pt-1 space-y-3">{children}</div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
   );
 };
 
-// === PROJECT STRUCTURE ===
-const ProjectStructureSection = () => (
-  <div className="space-y-3">
-    <CollapsibleSection title="Estrutura do Projeto (Feature Folders)" icon={FolderTree} badge="React + Vite" defaultOpen>
-      <CodeBlock
-        language="text"
-        title="Árvore de diretórios — src/"
-        code={`src/
-├── assets/                        # Imagens e mídia
-├── components/
-│   ├── ui/                        # Shadcn/UI components
-│   ├── home/                      # Dashboard do usuário
-│   ├── AnimatedRoutes.tsx          # Lazy loading de rotas
-│   ├── ProtectedRoute.tsx          # RBAC frontend
-│   ├── BottomNavigation.tsx        # Nav mobile
-│   └── DesktopSidebar.tsx          # Nav desktop
-├── contexts/
-│   └── AuthContext.tsx             # Autenticação global
-├── features/                      # ⭐ FEATURE FOLDERS (domínios)
-│   ├── admin/                     # Painel administrativo
-│   │   ├── components/            # 39+ componentes (CRUD, tabs)
-│   │   ├── hooks/                 # useAdmin, useAuditLogs
-│   │   └── pages/                 # Admin.tsx
-│   ├── agendamentos/              # Fluxo de agendamento
-│   │   ├── components/            # ServicoSelector, TerapeutaSelector...
-│   │   ├── hooks/                 # useAgendamentos, useListaEspera...
-│   │   └── pages/                 # Agendamento.tsx, Checkin.tsx
-│   ├── alongamento/               # Exercícios e pausas posturais
-│   │   ├── components/            # ExercicioCard, SessaoPlayer...
-│   │   ├── hooks/                 # useAlongamento, usePausasPosturais...
-│   │   └── pages/                 # Alongamento.tsx
-│   ├── avaliacao-postural/        # Avaliação postural
-│   │   ├── components/            # AngleCharts, MeasurementLayer...
-│   │   ├── hooks/                 # useAvaliacaoPostural, useAngleHistory...
-│   │   └── pages/                 # AvaliacaoPostural.tsx
-│   ├── cashback/                  # Sistema de cashback/wallet
-│   │   ├── components/            # BalanceCard, TierCelebration...
-│   │   ├── hooks/                 # useTransacoes, useUserTier...
-│   │   └── pages/                 # Cashback.tsx, Wallet.tsx
-│   ├── conquistas/                # Gamificação e ranking
-│   │   ├── components/            # AchievementCard, RankingList...
-│   │   ├── hooks/                 # useAchievements, useRanking...
-│   │   └── pages/                 # Conquistas.tsx
-│   ├── corporativo/               # Página B2B corporativa
-│   ├── cupom/                     # Editor de cupons
-│   ├── cursos/                    # Conteúdo educacional (17 cursos)
-│   ├── dietas/                    # Planos nutricionais
-│   ├── guia-clinico/              # Guia clínico
-│   ├── landing/                   # Landing page pública
-│   ├── loja/                      # E-commerce de produtos
-│   ├── pagamento/                 # Integração Asaas
-│   ├── profile/                   # Perfil do usuário
-│   ├── protocolos/                # Protocolos terapêuticos
-│   ├── resinkra-ai/               # IA para criação de conteúdo
-│   ├── social/                    # Resinkra Moments (social proof)
-│   ├── terapeuta/                 # Dashboard terapeuta
-│   ├── terapias/                  # Catálogo de terapias
-│   └── vale-presente/             # Sistema de vales presente
-├── integrations/supabase/         # Cliente e tipos (auto-gerado)
-├── pages/                         # Páginas restantes (Index, etc.)
-└── App.tsx                        # Router principal
-
-supabase/
-├── functions/                     # 24 Edge Functions (Deno)
-│   ├── asaas-*/                   # Integração pagamentos Asaas
-│   ├── enviar-whatsapp/           # API Z-API WhatsApp
-│   ├── fetch-google-ads/          # Google Ads metrics
-│   ├── generate-*/                # IA (scripts, hooks, ideias)
-│   └── chat-assistente/           # Assistente IA
-└── migrations/                    # Migrações SQL`}
-      />
-    </CollapsibleSection>
-
-    <CollapsibleSection title="Stack Tecnológica" icon={Layers} badge="12 libs core">
-      <div className="grid grid-cols-2 gap-2">
-        {[
-          { name: "React 18", desc: "UI Framework" },
-          { name: "TypeScript", desc: "Type Safety" },
-          { name: "Vite", desc: "Build Tool" },
-          { name: "Tailwind CSS", desc: "Styling" },
-          { name: "Shadcn/UI", desc: "Components" },
-          { name: "Framer Motion", desc: "Animations" },
-          { name: "TanStack Query", desc: "Data Fetching" },
-          { name: "React Router", desc: "Routing" },
-          { name: "React Hook Form", desc: "Forms" },
-          { name: "Zod", desc: "Validation" },
-          { name: "Recharts", desc: "Charts" },
-          { name: "Capacitor", desc: "Mobile (Android/iOS)" },
-        ].map((tech) => (
-          <div key={tech.name} className="p-2 rounded-md bg-muted/50 text-xs">
-            <span className="font-medium text-foreground">{tech.name}</span>
-            <span className="text-muted-foreground ml-1">— {tech.desc}</span>
-          </div>
-        ))}
-      </div>
-    </CollapsibleSection>
+const InfoCard = ({ icon: Icon, title, desc }: { icon: React.ElementType; title: string; desc: string }) => (
+  <div className="flex items-start gap-2.5 p-2.5 rounded-lg bg-muted/30 border border-border/40">
+    <Icon size={14} className="text-primary mt-0.5 shrink-0" />
+    <div className="min-w-0">
+      <span className="text-xs font-semibold text-foreground block">{title}</span>
+      <span className="text-[10px] text-muted-foreground leading-tight">{desc}</span>
+    </div>
   </div>
 );
 
-// === SOURCE CODE SNIPPETS ===
-const SourceCodeSection = () => (
-  <div className="space-y-3">
-    <CollapsibleSection title="Autenticação (AuthContext)" icon={Shield} defaultOpen>
-      <CodeBlock
-        title="src/contexts/AuthContext.tsx"
-        code={`// Context de autenticação global
-const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [session, setSession] = useState(null);
+const FeatureGrid = ({ items }: { items: { icon: React.ElementType; title: string; desc: string }[] }) => (
+  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+    {items.map((item) => (
+      <InfoCard key={item.title} {...item} />
+    ))}
+  </div>
+);
 
-  useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        setSession(session);
-        setUser(session?.user ?? null);
-      }
-    );
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-    });
-    return () => subscription.unsubscribe();
-  }, []);
+// ── Main Component ──
 
-  const signUp = async (email, password, nome) => {
-    const { error } = await supabase.auth.signUp({
-      email, password,
-      options: { data: { nome } }
-    });
-    return { error };
-  };
-};`}
-      />
-    </CollapsibleSection>
+export const CodigoPlataformaTab = () => {
+  return (
+    <div className="space-y-3">
+      {/* Header */}
+      <div className="text-center py-2">
+        <div className="inline-flex items-center justify-center p-3 rounded-2xl bg-primary/10 mb-2">
+          <Code2 size={28} className="text-primary" />
+        </div>
+        <h3 className="text-lg font-bold text-foreground">Código da Plataforma</h3>
+        <p className="text-xs text-muted-foreground">Arquitetura, banco de dados, backend e integrações</p>
+      </div>
 
-    <CollapsibleSection title="Controle de Acesso (RBAC)" icon={Shield}>
-      <CodeBlock
-        title="src/features/admin/hooks/useAdmin.ts"
-        code={`// Hook para verificar se o usuário é admin
-export const useAdmin = () => {
-  const { user } = useAuth();
-  const [isAdmin, setIsAdmin] = useState(false);
+      {/* Métricas resumo */}
+      <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
+        {[
+          { label: "Tabelas DB", value: "95+" },
+          { label: "Políticas RLS", value: "262+" },
+          { label: "Edge Functions", value: "24" },
+          { label: "Permissões", value: "30" },
+          { label: "Componentes", value: "200+" },
+          { label: "Funções SQL", value: "27+" },
+          { label: "Storage", value: "11" },
+          { label: "Triggers", value: "17+" },
+        ].map((m) => (
+          <Card key={m.label} className="p-2.5 text-center">
+            <div className="text-base font-bold text-primary">{m.value}</div>
+            <div className="text-[9px] text-muted-foreground">{m.label}</div>
+          </Card>
+        ))}
+      </div>
 
-  useEffect(() => {
-    const checkAdmin = async () => {
-      if (!user) { setIsAdmin(false); return; }
-      const { data } = await supabase
-        .from("user_roles")
-        .select("role")
-        .eq("user_id", user.id)
-        .eq("role", "admin")
-        .maybeSingle();
-      setIsAdmin(!!data);
-    };
-    checkAdmin();
-  }, [user]);
+      {/* 1. Estrutura do Projeto */}
+      <SectionCollapsible
+        title="Estrutura do Projeto"
+        subtitle="Feature Folders com 21 domínios isolados"
+        icon={FolderTree}
+        badge="React + Vite"
+      >
+        <FeatureGrid items={[
+          { icon: Layers, title: "React 18 + TypeScript", desc: "UI reativa com tipagem estática completa" },
+          { icon: Zap, title: "Vite + Tailwind CSS", desc: "Build ultrarrápido com utility-first styling" },
+          { icon: Cpu, title: "Shadcn/UI + Framer Motion", desc: "Componentes acessíveis com animações fluidas" },
+          { icon: Globe, title: "Capacitor (Android/iOS)", desc: "PWA nativo com push notifications" },
+          { icon: Database, title: "TanStack Query", desc: "Cache, invalidação e fetching declarativo" },
+          { icon: Shield, title: "Zod + React Hook Form", desc: "Validação server/client-side type-safe" },
+        ]} />
+        <CodeBlock
+          language="text"
+          title="src/features/ — 21 Feature Folders"
+          code={`admin/          → Painel administrativo (39+ componentes)
+agendamentos/   → Fluxo de agendamento com check-in QR
+alongamento/    → Exercícios e pausas posturais
+avaliacao-postural/ → Fotos, ângulos e anotações
+cashback/       → Wallet, tiers, transações
+conquistas/     → Gamificação, XP, ranking
+corporativo/    → Portal B2B para empresas
+cupom/          → Editor de cupons de desconto
+cursos/         → 17 cursos com módulos e progresso
+dietas/         → Planos nutricionais personalizados
+guia-clinico/   → Guia clínico interativo
+landing/        → Landing page com parallax
+loja/           → E-commerce interno (produtos + pacotes)
+pagamento/      → Integração Asaas (PIX, boleto)
+profile/        → Perfil do usuário + ficha nutricional
+protocolos/     → Protocolos terapêuticos completos
+resinkra-ai/    → IA para criação de conteúdo social
+social/         → Resinkra Moments (social proof)
+terapeuta/      → Dashboard do terapeuta
+terapias/       → Catálogo de terapias
+vale-presente/  → Sistema de vales digitais`}
+        />
+      </SectionCollapsible>
 
-  return { isAdmin };
-};`}
-      />
-      <CodeBlock
-        title="src/components/ProtectedRoute.tsx"
-        code={`// Rota protegida com controle de papéis
+      {/* 2. Autenticação e RBAC */}
+      <SectionCollapsible
+        title="Autenticação & Permissões"
+        subtitle="RBAC granular com 4 roles e 30 permissões"
+        icon={KeyRound}
+        badge="RBAC"
+      >
+        <FeatureGrid items={[
+          { icon: Lock, title: "Email/Senha + Verificação", desc: "Rate limiting (5 tentativas/15min) + check HIBP" },
+          { icon: Users, title: "4 Roles: Admin, User, Terapeuta, Parceiro", desc: "Tabela user_roles separada com anti-escalação" },
+          { icon: Shield, title: "30 Permissões Granulares", desc: "Mapeadas em role_permissions com cache MV" },
+          { icon: Cpu, title: "Materialized View Cache", desc: "user_permissions_mv auto-refresh via triggers" },
+        ]} />
+        <div className="space-y-2">
+          <p className="text-[11px] font-semibold text-foreground">Distribuição por Role:</p>
+          <div className="grid grid-cols-2 gap-2">
+            {[
+              { role: "Admin", perms: "30/30", desc: "Acesso total" },
+              { role: "User", perms: "21/30", desc: "Básico + social" },
+              { role: "Terapeuta", perms: "13/30", desc: "Clínico + cursos" },
+              { role: "Parceiro", perms: "4/30", desc: "Loja + cashback" },
+            ].map((r) => (
+              <div key={r.role} className="p-2 rounded-lg bg-muted/30 border border-border/40">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold text-foreground">{r.role}</span>
+                  <Badge variant="secondary" className="text-[9px]">{r.perms}</Badge>
+                </div>
+                <span className="text-[10px] text-muted-foreground">{r.desc}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+        <CodeBlock
+          title="Funções SQL de Permissão"
+          language="sql"
+          code={`-- Verificar papel
+SELECT has_role('user-uuid', 'admin');        -- boolean
+
+-- Verificar permissão granular
+SELECT has_permission('user-uuid', 'admin', 'access');
+
+-- Listar permissões do usuário
+SELECT * FROM get_user_permissions('user-uuid');
+
+-- Frontend: ProtectedRoute
 <ProtectedRoute allowRoles={['admin']}>
   <Admin />
-</ProtectedRoute>
-
-<ProtectedRoute allowRoles={['admin', 'terapeuta']}>
-  <Cursos />
 </ProtectedRoute>`}
-      />
-    </CollapsibleSection>
-
-    <CollapsibleSection title="Cashback & Gamificação" icon={Code2}>
-      <CodeBlock
-        title="Sistema de Tiers (Bronze → Prata → Ouro)"
-        code={`// Função SQL: get_user_tier(user_id)
-// Calcula tier baseado no gasto total do usuário
-// Bronze: < R$ 200 (1x multiplicador)
-// Prata:  R$ 200+ (1.5x multiplicador)
-// Ouro:   R$ 500+ (2x multiplicador)
-
-// Triggers automáticos:
-// → credit_cashback_on_order()     — cashback em pedidos
-// → credit_cashback_on_agendamento() — cashback em sessões
-// → process_referral_on_first_purchase() — indicações
-// → credit_desafio_reward()        — desafios concluídos
-// → credit_social_post_reward()    — posts aprovados`}
-      />
-    </CollapsibleSection>
-
-    <CollapsibleSection title="Hooks Personalizados" icon={Code2}>
-      <CodeBlock
-        title="Exemplos de hooks utilizados"
-        code={`// Data fetching com TanStack Query
-const { data, isLoading } = useQuery({
-  queryKey: ['produtos'],
-  queryFn: async () => {
-    const { data, error } = await supabase
-      .from('produtos')
-      .select('*')
-      .eq('disponivel', true)
-      .order('nome');
-    if (error) throw error;
-    return data;
-  }
-});
-
-// Mutations com invalidação automática
-const mutation = useMutation({
-  mutationFn: async (newItem) => {
-    const { error } = await supabase
-      .from('produtos')
-      .insert(newItem);
-    if (error) throw error;
-  },
-  onSuccess: () => {
-    queryClient.invalidateQueries({ queryKey: ['produtos'] });
-    toast.success('Produto criado!');
-  }
-});`}
-      />
-    </CollapsibleSection>
-  </div>
-);
-
-// === DATABASE / SQL ===
-const DatabaseSection = () => (
-  <div className="space-y-3">
-    <CollapsibleSection title="Tabelas Principais" icon={Database} badge="95+ tabelas" defaultOpen>
-      <div className="grid grid-cols-1 gap-2 text-xs">
-        {[
-          { group: "Usuários & Auth", tables: "profiles, user_roles, roles, login_attempts, audit_logs" },
-          { group: "Permissões (RBAC)", tables: "permissions, role_permissions, user_permissions_mv (cache)" },
-          { group: "Serviços", tables: "servicos, servicos_detalhes, agendamentos, terapeutas" },
-          { group: "Produtos", tables: "produtos, pedidos, pedido_itens, pacotes, pacotes_usuario" },
-          { group: "Financeiro", tables: "transacoes, indicacoes, vale_presentes, pagamentos_asaas, cupons" },
-          { group: "Gamificação", tables: "desafios, desafio_participantes, checkins, conquistas" },
-          { group: "Saúde", tables: "protocolos, usuario_protocolos, fichas_acompanhamento, avaliacoes_posturais" },
-          { group: "Nutrição", tables: "planos_dieta, diario_alimentar, ficha_nutricional, dietas_conteudo" },
-          { group: "Educação", tables: "curso_modulos, curso_aulas, curso_progresso" },
-          { group: "Social", tables: "social_posts, social_posts_config, notificacoes, banners_promocionais" },
-          { group: "Corporativo", tables: "empresas_corporativas, colaboradores_empresa, corporativo_*" },
-          { group: "Marketing", tables: "campanhas_marketing, google_ads_metrics, landing_config" },
-          { group: "Parceiros", tables: "parceiros, parceiro_cupons, parceiro_comissoes, parceiro_faixas_comissao" },
-        ].map((g) => (
-          <div key={g.group} className="p-2 rounded-md bg-muted/30">
-            <span className="font-semibold text-primary">{g.group}:</span>{" "}
-            <span className="text-muted-foreground">{g.tables}</span>
+        />
+        <div className="space-y-1.5">
+          <p className="text-[11px] font-semibold text-foreground">Módulos de Permissão (11):</p>
+          <div className="grid grid-cols-3 gap-1.5">
+            {[
+              { mod: "admin", n: 1 }, { mod: "appointments", n: 4 }, { mod: "exercises", n: 3 },
+              { mod: "cashback", n: 3 }, { mod: "courses", n: 4 }, { mod: "diets", n: 2 },
+              { mod: "store", n: 2 }, { mod: "protocols", n: 2 }, { mod: "ai", n: 2 },
+              { mod: "social", n: 4 }, { mod: "gift_card", n: 3 },
+            ].map((m) => (
+              <div key={m.mod} className="text-center p-1.5 rounded bg-muted/30 text-[10px]">
+                <span className="font-mono font-bold text-foreground">{m.mod}</span>
+                <span className="text-muted-foreground block">{m.n} ações</span>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
-    </CollapsibleSection>
+        </div>
+      </SectionCollapsible>
 
-    <CollapsibleSection title="Sistema de Permissões Granular" icon={KeyRound} badge="Novo">
-      <CodeBlock
-        title="Estrutura de Permissões (roles → permissions)"
-        language="sql"
-        code={`-- Tabela de roles (mapeia enum app_role)
--- roles: admin, user, terapeuta, parceiro
+      {/* 3. Banco de Dados */}
+      <SectionCollapsible
+        title="Banco de Dados"
+        subtitle="95+ tabelas com RLS em todas, 262+ políticas"
+        icon={Database}
+        badge="95+ tabelas"
+      >
+        <div className="space-y-2">
+          {[
+            { group: "👤 Usuários & Auth", tables: "profiles, user_roles, roles, login_attempts, audit_logs", count: 5 },
+            { group: "🔑 Permissões", tables: "permissions, role_permissions, user_permissions_mv", count: 3 },
+            { group: "📅 Serviços", tables: "servicos, servicos_detalhes, agendamentos, terapeutas", count: 4 },
+            { group: "🛒 Produtos", tables: "produtos, pedidos, pedido_itens, pacotes, pacotes_usuario", count: 5 },
+            { group: "💰 Financeiro", tables: "transacoes, indicacoes, vale_presentes, pagamentos_asaas, cupons", count: 5 },
+            { group: "🏆 Gamificação", tables: "desafios, desafio_participantes, checkins, conquistas", count: 4 },
+            { group: "🩺 Saúde", tables: "protocolos, usuario_protocolos, fichas_acompanhamento, avaliacoes_posturais", count: 4 },
+            { group: "🥗 Nutrição", tables: "planos_dieta, diario_alimentar, ficha_nutricional, dietas_conteudo", count: 4 },
+            { group: "📚 Educação", tables: "curso_modulos, curso_aulas, curso_progresso", count: 3 },
+            { group: "📱 Social", tables: "social_posts, social_posts_config, notificacoes, banners_promocionais", count: 4 },
+            { group: "🏢 Corporativo", tables: "empresas_corporativas, colaboradores_empresa, corporativo_*", count: "8+" },
+            { group: "📣 Marketing", tables: "campanhas_marketing, google_ads_metrics, landing_config", count: 3 },
+            { group: "🤝 Parceiros", tables: "parceiros, parceiro_cupons, parceiro_comissoes, parceiro_faixas_comissao", count: 4 },
+          ].map((g) => (
+            <div key={g.group} className="p-2.5 rounded-lg bg-muted/30 border border-border/40">
+              <div className="flex items-center justify-between mb-0.5">
+                <span className="text-xs font-semibold text-foreground">{g.group}</span>
+                <Badge variant="outline" className="text-[9px]">{g.count}</Badge>
+              </div>
+              <p className="text-[10px] text-muted-foreground font-mono leading-relaxed">{g.tables}</p>
+            </div>
+          ))}
+        </div>
+        <CodeBlock
+          title="Exemplos de Políticas RLS"
+          language="sql"
+          code={`-- Usuários só veem seus dados
+CREATE POLICY "Users see own data"
+ON profiles FOR SELECT USING (auth.uid() = id);
 
--- Tabela de permissões (30 permissões)
--- Ex: (resource: 'appointments', action: 'create')
--- Ex: (resource: 'admin', action: 'access')
+-- Admins gerenciam tudo
+CREATE POLICY "Admins manage servicos"
+ON servicos FOR ALL USING (has_role(auth.uid(), 'admin'));
 
--- Relação N:N: role_permissions
--- Admin: 30 permissões (todas)
--- User: 21 permissões (básicas)
--- Terapeuta: 13 permissões (clínicas + cursos)
--- Parceiro: 4 permissões (loja + cashback)
+-- Terapeutas veem agendamentos atribuídos
+CREATE POLICY "Terapeutas see appointments"
+ON agendamentos FOR SELECT
+USING (auth.uid() = user_id OR is_terapeuta(auth.uid()));`}
+        />
+      </SectionCollapsible>
 
--- Cache via Materialized View: user_permissions_mv
--- Auto-refresh via triggers em user_roles e role_permissions
-
--- Funções helper:
-SELECT * FROM get_user_permissions('user-uuid');
-SELECT has_permission('user-uuid', 'admin', 'access');
-SELECT has_role('user-uuid', 'admin');`}
-      />
-      <div className="grid grid-cols-2 gap-2 text-xs">
-        {[
-          { module: "admin", perms: 1 },
-          { module: "appointments", perms: 4 },
-          { module: "exercises", perms: 3 },
-          { module: "cashback", perms: 3 },
-          { module: "courses", perms: 4 },
-          { module: "diets", perms: 2 },
-          { module: "store", perms: 2 },
-          { module: "protocols", perms: 2 },
-          { module: "ai", perms: 2 },
-          { module: "social", perms: 4 },
-          { module: "gift_card", perms: 3 },
-        ].map((m) => (
-          <div key={m.module} className="flex items-center justify-between p-2 rounded-md bg-muted/30">
-            <span className="font-mono text-foreground">{m.module}</span>
-            <Badge variant="secondary" className="text-[10px]">{m.perms} ações</Badge>
-          </div>
-        ))}
-      </div>
-    </CollapsibleSection>
-
-    <CollapsibleSection title="Funções SQL (Triggers & RPC)" icon={Terminal} badge="27+ funções">
-      <CodeBlock
-        title="Trigger: Cashback automático em pedidos"
-        language="sql"
-        code={`CREATE OR REPLACE FUNCTION credit_cashback_on_order()
+      {/* 4. Funções SQL & Triggers */}
+      <SectionCollapsible
+        title="Funções SQL & Triggers"
+        subtitle="27+ funções e 17+ triggers automáticos"
+        icon={Terminal}
+        badge="27+ funções"
+      >
+        <FeatureGrid items={[
+          { icon: CreditCard, title: "credit_cashback_on_order()", desc: "Cashback automático em pedidos com multiplicador de tier" },
+          { icon: CreditCard, title: "credit_cashback_on_agendamento()", desc: "Cashback em sessões terapêuticas" },
+          { icon: Users, title: "process_referral_on_first_purchase()", desc: "R$10 indicador + R$5 indicado na 1ª compra" },
+          { icon: Zap, title: "credit_desafio_reward()", desc: "Creditação automática ao concluir desafios" },
+          { icon: MessageSquare, title: "credit_social_post_reward()", desc: "Recompensa por posts aprovados" },
+          { icon: Shield, title: "validate_transaction_insert()", desc: "Validação server-side de transações" },
+          { icon: Lock, title: "protect_referral_code()", desc: "Impede alteração de código de indicação" },
+          { icon: Bell, title: "notificar_novo_agendamento()", desc: "Notificação automática ao agendar" },
+        ]} />
+        <CodeBlock
+          title="Trigger: Cashback automático"
+          language="sql"
+          code={`CREATE OR REPLACE FUNCTION credit_cashback_on_order()
 RETURNS trigger LANGUAGE plpgsql SECURITY DEFINER AS $$
 DECLARE
   total_cashback NUMERIC := 0;
-  item RECORD;
   v_multiplier NUMERIC := 1.0;
 BEGIN
   SELECT gt.tier_multiplier INTO v_multiplier
   FROM get_user_tier(NEW.user_id) gt;
 
-  FOR item IN 
-    SELECT pi.quantidade, pi.preco_unitario,
-           COALESCE(p.cashback_percentual, 0) as cashback_pct
-    FROM pedido_itens pi
-    JOIN produtos p ON p.id = pi.produto_id
-    WHERE pi.pedido_id = NEW.id
-  LOOP
-    total_cashback := total_cashback + 
-      (item.preco_unitario * item.quantidade * item.cashback_pct / 100);
-  END LOOP;
-
-  total_cashback := ROUND(total_cashback * v_multiplier, 2);
-
-  IF total_cashback > 0 THEN
-    INSERT INTO transacoes (user_id, tipo, valor, descricao, expira_em)
-    VALUES (NEW.user_id, 'cashback', total_cashback,
-      'Cashback do pedido #' || LEFT(NEW.id::text, 8),
-      now() + INTERVAL '90 days');
-  END IF;
+  -- Calcula cashback por item com % do produto
+  -- Multiplica pelo tier (Bronze 1x, Prata 1.5x, Ouro 2x)
+  -- Insere em transacoes com expiração de 90 dias
   RETURN NEW;
 END; $$;`}
-      />
+        />
+      </SectionCollapsible>
 
-      <CodeBlock
-        title="Funções de RBAC e Permissões"
-        language="sql"
-        code={`-- Verificar papel do usuário
-CREATE OR REPLACE FUNCTION has_role(_user_id uuid, _role app_role)
-RETURNS boolean LANGUAGE sql STABLE SECURITY DEFINER
-SET search_path = public AS $$
-  SELECT EXISTS (
-    SELECT 1 FROM user_roles
-    WHERE user_id = _user_id AND role = _role
-  )
-$$;
+      {/* 5. Edge Functions */}
+      <SectionCollapsible
+        title="Edge Functions (Backend)"
+        subtitle="24 funções serverless em Deno/TypeScript"
+        icon={Server}
+        badge="24 funções"
+      >
+        <div className="space-y-2">
+          <p className="text-[11px] font-semibold text-foreground">💳 Pagamentos (Asaas)</p>
+          <FeatureGrid items={[
+            { icon: CreditCard, title: "asaas-criar-cobranca", desc: "Cria cobranças PIX/boleto via Asaas" },
+            { icon: CreditCard, title: "asaas-webhook", desc: "Recebe callbacks de pagamento confirmado" },
+            { icon: CreditCard, title: "asaas-status", desc: "Consulta status de pagamentos" },
+          ]} />
 
--- Verificar permissão granular
-CREATE OR REPLACE FUNCTION has_permission(
-  p_user_id UUID, p_resource TEXT, p_action TEXT
-) RETURNS BOOLEAN LANGUAGE sql STABLE SECURITY DEFINER AS $$
-  SELECT EXISTS (
-    SELECT 1 FROM user_permissions_mv
-    WHERE user_id = p_user_id
-      AND resource = p_resource AND action = p_action
-  )
-$$;
+          <p className="text-[11px] font-semibold text-foreground">💬 Comunicação</p>
+          <FeatureGrid items={[
+            { icon: MessageSquare, title: "enviar-whatsapp", desc: "Envia mensagens via Z-API" },
+            { icon: MessageSquare, title: "whatsapp-webhook", desc: "Recebe mensagens WhatsApp" },
+            { icon: Bell, title: "enviar-campanha", desc: "Dispara campanhas de marketing" },
+            { icon: Bell, title: "enviar-lembretes", desc: "Lembretes de agendamento" },
+            { icon: Bell, title: "lembrete-alongamento", desc: "Notifica pausas posturais" },
+            { icon: Bell, title: "notificacoes-inteligentes", desc: "Notificações contextuais IA" },
+          ]} />
 
--- Listar permissões do usuário
-CREATE OR REPLACE FUNCTION get_user_permissions(p_user_id UUID)
-RETURNS TABLE(resource TEXT, action TEXT) AS $$
-  SELECT upm.resource, upm.action
-  FROM user_permissions_mv upm
-  WHERE upm.user_id = p_user_id;
-$$;`}
-      />
+          <p className="text-[11px] font-semibold text-foreground">🤖 Inteligência Artificial</p>
+          <FeatureGrid items={[
+            { icon: Bot, title: "chat-assistente", desc: "Assistente IA conversacional 24/7" },
+            { icon: Bot, title: "generate-script", desc: "Gera roteiros para Reels/Stories" },
+            { icon: Bot, title: "generate-hooks", desc: "Ganchos virais com score de poder" },
+            { icon: Bot, title: "generate-ideas", desc: "10 ideias por nicho e funil" },
+            { icon: Bot, title: "analyze-viral", desc: "Análise de potencial viral" },
+            { icon: Bot, title: "gerar-recomendacoes", desc: "Recomendações personalizadas" },
+          ]} />
 
-      <CodeBlock
-        title="Trigger: Proteção de dados sensíveis"
-        language="sql"
-        code={`-- Valida que clientes só podem debitar cashback
-CREATE OR REPLACE FUNCTION validate_transaction_insert()
-RETURNS trigger LANGUAGE plpgsql SECURITY DEFINER AS $$
-BEGIN
-  IF auth.uid() IS NULL THEN RETURN NEW; END IF;
-  IF NEW.tipo = 'uso_cashback' AND NEW.valor < 0 THEN RETURN NEW; END IF;
-  RAISE EXCEPTION 'Operação não permitida';
-END; $$;
+          <p className="text-[11px] font-semibold text-foreground">⚙️ Infraestrutura</p>
+          <FeatureGrid items={[
+            { icon: BarChart3, title: "fetch-google-ads", desc: "Coleta métricas Google Ads" },
+            { icon: Image, title: "gerar-imagem-servico", desc: "Gera imagens com IA" },
+            { icon: Cpu, title: "curso-tts", desc: "Text-to-Speech para cursos" },
+            { icon: Zap, title: "processar-expiracoes", desc: "Expira cashback vencido" },
+            { icon: Zap, title: "processar-vales-expirados", desc: "Expira vales presente" },
+            { icon: Users, title: "transferir-creditos", desc: "Transferência entre usuários" },
+            { icon: Shield, title: "check-rate-limit", desc: "Rate limiting de login" },
+            { icon: Users, title: "buscar-usuario", desc: "Busca por email/telefone" },
+          ]} />
+        </div>
+      </SectionCollapsible>
 
--- Proteção de código de indicação
-CREATE OR REPLACE FUNCTION protect_referral_code()
-RETURNS trigger LANGUAGE plpgsql SECURITY DEFINER AS $$
-BEGIN
-  IF OLD.codigo_indicacao IS NOT NULL 
-     AND NEW.codigo_indicacao IS DISTINCT FROM OLD.codigo_indicacao THEN
-    NEW.codigo_indicacao := OLD.codigo_indicacao;
-  END IF;
-  RETURN NEW;
-END; $$;`}
-      />
-    </CollapsibleSection>
-
-    <CollapsibleSection title="Políticas RLS (Row Level Security)" icon={Shield} badge="262+ políticas">
-      <CodeBlock
-        title="Exemplos de políticas de segurança"
-        language="sql"
-        code={`-- Usuários só veem seus próprios dados
-CREATE POLICY "Users see own data"
-ON profiles FOR SELECT TO authenticated
-USING (auth.uid() = id);
-
--- Bloquear acesso anônimo a dados sensíveis
-CREATE POLICY "Block anon access"
-ON profiles FOR ALL TO anon
-USING (false) WITH CHECK (false);
-
--- Admins podem gerenciar tudo
-CREATE POLICY "Admins manage servicos"
-ON servicos FOR ALL TO authenticated
-USING (has_role(auth.uid(), 'admin'));
-
--- Terapeutas veem apenas seus agendamentos
-CREATE POLICY "Terapeutas see own appointments"
-ON agendamentos FOR SELECT TO authenticated
-USING (
-  auth.uid() = user_id 
-  OR has_role(auth.uid(), 'admin')
-  OR is_terapeuta(auth.uid())
-);
-
--- Tabelas de permissões: admins gerenciam, todos leem
-CREATE POLICY "Admins manage permissions"
-ON permissions FOR ALL TO authenticated
-USING (has_role(auth.uid(), 'admin'));
-
-CREATE POLICY "Authenticated read permissions"
-ON permissions FOR SELECT TO authenticated USING (true);`}
-      />
-    </CollapsibleSection>
-  </div>
-);
-
-// === EDGE FUNCTIONS ===
-const EdgeFunctionsSection = () => (
-  <div className="space-y-3">
-    <CollapsibleSection title="Edge Functions (Backend)" icon={Server} badge="24 funções" defaultOpen>
-      <div className="grid grid-cols-1 gap-2 text-xs">
-        {[
-          { name: "asaas-criar-cobranca", desc: "Cria cobranças PIX/boleto via Asaas" },
-          { name: "asaas-webhook", desc: "Recebe callbacks de pagamento" },
-          { name: "asaas-status", desc: "Consulta status de pagamentos" },
-          { name: "enviar-whatsapp", desc: "Envia mensagens via Z-API" },
-          { name: "whatsapp-webhook", desc: "Recebe mensagens WhatsApp" },
-          { name: "fetch-google-ads", desc: "Coleta métricas Google Ads" },
-          { name: "chat-assistente", desc: "Assistente IA conversacional" },
-          { name: "generate-script", desc: "Gera roteiros com IA" },
-          { name: "generate-hooks", desc: "Gera ganchos virais com IA" },
-          { name: "generate-ideas", desc: "Gera ideias de conteúdo" },
-          { name: "analyze-viral", desc: "Analisa potencial viral" },
-          { name: "gerar-recomendacoes", desc: "Recomendações personalizadas IA" },
-          { name: "gerar-imagem-servico", desc: "Gera imagens com IA" },
-          { name: "curso-tts", desc: "Text-to-Speech para cursos" },
-          { name: "enviar-campanha", desc: "Dispara campanhas marketing" },
-          { name: "enviar-lembretes", desc: "Lembretes de agendamento" },
-          { name: "lembrete-alongamento", desc: "Notifica pausas posturais" },
-          { name: "lembrete-medidas", desc: "Lembrete de medições" },
-          { name: "notificacoes-inteligentes", desc: "Notificações contextuais" },
-          { name: "processar-expiracoes", desc: "Expira cashback vencido" },
-          { name: "processar-vales-expirados", desc: "Expira vales presente" },
-          { name: "transferir-creditos", desc: "Transferência entre usuários" },
-          { name: "check-rate-limit", desc: "Rate limiting de login" },
-          { name: "buscar-usuario", desc: "Busca usuário por email/telefone" },
-        ].map((fn) => (
-          <div key={fn.name} className="flex items-start gap-2 p-2 rounded-md bg-muted/30">
-            <Terminal size={14} className="text-primary mt-0.5 shrink-0" />
-            <div>
-              <span className="font-mono font-semibold text-foreground">{fn.name}</span>
-              <span className="text-muted-foreground ml-1.5">— {fn.desc}</span>
+      {/* 6. Storage */}
+      <SectionCollapsible
+        title="Storage (Buckets)"
+        subtitle="11 buckets para arquivos e mídia"
+        icon={HardDrive}
+        badge="11 buckets"
+      >
+        <div className="grid grid-cols-1 gap-1.5">
+          {[
+            { name: "avatars", desc: "Fotos de perfil", access: "público" },
+            { name: "fotos-evolucao", desc: "Fotos de tratamento", access: "privado (URLs assinadas)" },
+            { name: "avaliacoes-posturais", desc: "Fotos posturais", access: "privado" },
+            { name: "exercise-videos", desc: "Vídeos de exercícios", access: "público" },
+            { name: "social-posts", desc: "Posts Resinkra Moments", access: "privado" },
+            { name: "exames-arquivos", desc: "Exames do paciente", access: "privado" },
+            { name: "admin-uploads", desc: "Uploads administrativos", access: "público" },
+            { name: "corporativo-media", desc: "Mídia corporativa", access: "público" },
+            { name: "landing-media", desc: "Mídia da landing page", access: "público" },
+            { name: "headspa-imagens", desc: "Imagens head spa", access: "público" },
+            { name: "servico-imagens", desc: "Imagens de serviços", access: "público" },
+          ].map((b) => (
+            <div key={b.name} className="flex items-center gap-2 p-2 rounded-lg bg-muted/30 border border-border/40">
+              <HardDrive size={12} className="text-primary shrink-0" />
+              <span className="text-[11px] font-mono font-bold text-foreground flex-1">{b.name}</span>
+              <span className="text-[10px] text-muted-foreground hidden sm:inline">{b.desc}</span>
+              <Badge variant={b.access.includes("privado") ? "destructive" : "secondary"} className="text-[8px]">
+                {b.access.includes("privado") ? "🔒" : "🌐"} {b.access.split(" ")[0]}
+              </Badge>
             </div>
+          ))}
+        </div>
+      </SectionCollapsible>
+
+      {/* 7. Integrações & APIs */}
+      <SectionCollapsible
+        title="Integrações & APIs"
+        subtitle="Pagamentos, WhatsApp, Google Ads e IA"
+        icon={Plug}
+        badge="7 secrets"
+      >
+        <FeatureGrid items={[
+          { icon: CreditCard, title: "Asaas (Pagamentos)", desc: "PIX, boleto, cartão. Webhook para confirmação automática" },
+          { icon: MessageSquare, title: "Z-API (WhatsApp)", desc: "Envio de mensagens, bot de prospecção regional" },
+          { icon: BarChart3, title: "Google Ads", desc: "Coleta automática de métricas de campanhas" },
+          { icon: Bot, title: "Lovable AI", desc: "Scripts, hooks, ideias, análise viral" },
+          { icon: Bell, title: "Resend (Email)", desc: "Envio transacional de emails" },
+          { icon: Cpu, title: "ElevenLabs (TTS)", desc: "Text-to-Speech para aulas de cursos" },
+        ]} />
+        <div className="space-y-1.5">
+          <p className="text-[11px] font-semibold text-foreground">🔐 Secrets Configurados:</p>
+          <div className="grid grid-cols-1 gap-1">
+            {[
+              { name: "ASAAS_API_KEY", desc: "Pagamentos" },
+              { name: "ASAAS_WEBHOOK_TOKEN", desc: "Webhook" },
+              { name: "ZAPI_INSTANCE_ID", desc: "WhatsApp" },
+              { name: "ZAPI_TOKEN", desc: "WhatsApp" },
+              { name: "RESEND_API_KEY", desc: "Email" },
+              { name: "ELEVENLABS_API_KEY", desc: "TTS" },
+              { name: "LOVABLE_API_KEY", desc: "IA" },
+            ].map((s) => (
+              <div key={s.name} className="flex items-center gap-2 p-1.5 rounded bg-muted/30 text-[10px]">
+                <Lock size={10} className="text-green-500 shrink-0" />
+                <span className="font-mono font-bold text-foreground">{s.name}</span>
+                <span className="text-muted-foreground">— {s.desc}</span>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
-    </CollapsibleSection>
-
-    <CollapsibleSection title="Exemplo: Edge Function WhatsApp" icon={Code2}>
-      <CodeBlock
-        title="supabase/functions/enviar-whatsapp/index.ts"
-        language="typescript"
-        code={`import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-
-serve(async (req) => {
-  const { telefone, mensagem } = await req.json();
-  
-  const ZAPI_INSTANCE = Deno.env.get('ZAPI_INSTANCE_ID');
-  const ZAPI_TOKEN = Deno.env.get('ZAPI_TOKEN');
-  
-  const response = await fetch(
-    \`https://api.z-api.io/instances/\${ZAPI_INSTANCE}/token/\${ZAPI_TOKEN}/send-text\`,
-    {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ phone: telefone, message: mensagem })
-    }
-  );
-
-  const data = await response.json();
-  return new Response(JSON.stringify(data), {
-    headers: { 'Content-Type': 'application/json' }
-  });
-});`}
-      />
-    </CollapsibleSection>
-
-    <CollapsibleSection title="Exemplo: Integração Asaas (Pagamentos)" icon={Code2}>
-      <CodeBlock
-        title="supabase/functions/asaas-criar-cobranca/index.ts"
-        language="typescript"
-        code={`// Cria cobrança PIX via Asaas
-const response = await fetch(
-  'https://api.asaas.com/v3/payments',
-  {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'access_token': Deno.env.get('ASAAS_API_KEY')!
-    },
-    body: JSON.stringify({
-      customer: customerId,
-      billingType: 'PIX',
-      value: valor,
-      description: descricao,
-      dueDate: vencimento
-    })
-  }
-);
-
-// Webhook recebe confirmação de pagamento
-// e credita cashback automaticamente via trigger SQL`}
-      />
-    </CollapsibleSection>
-  </div>
-);
-
-// === INTEGRATION SNIPPETS ===
-const IntegrationSection = () => (
-  <div className="space-y-3">
-    <CollapsibleSection title="Conectar ao Banco de Dados" icon={Database} defaultOpen>
-      <CodeBlock
-        title="Importação do cliente"
-        code={`import { supabase } from "@/integrations/supabase/client";
-
-// SELECT
-const { data, error } = await supabase
-  .from('produtos')
-  .select('*')
-  .eq('disponivel', true);
-
-// INSERT
-const { error } = await supabase
-  .from('notificacoes')
-  .insert({ user_id, titulo: 'Olá!', mensagem: '...', tipo: 'geral' });
-
-// UPDATE
-const { error } = await supabase
-  .from('pedidos')
-  .update({ status: 'entregue' })
-  .eq('id', pedidoId);
-
-// DELETE
-const { error } = await supabase
-  .from('produtos')
-  .delete()
-  .eq('id', produtoId);
-
-// RPC (chamar função SQL)
-const { data } = await supabase
-  .rpc('get_user_tier', { p_user_id: userId });
-
-// Verificar permissão granular
-const { data } = await supabase
-  .rpc('has_permission', { 
-    p_user_id: userId, 
-    p_resource: 'admin', 
-    p_action: 'access' 
-  });`}
-      />
-    </CollapsibleSection>
-
-    <CollapsibleSection title="Chamar Edge Functions" icon={Server}>
-      <CodeBlock
-        title="Invocando funções backend"
-        code={`// Enviar WhatsApp
-const { data, error } = await supabase.functions.invoke('enviar-whatsapp', {
+        </div>
+        <CodeBlock
+          title="Exemplos de invocação"
+          code={`// Enviar WhatsApp
+await supabase.functions.invoke('enviar-whatsapp', {
   body: { telefone: '5511999999999', mensagem: 'Olá!' }
 });
 
-// Criar cobrança Asaas
-const { data } = await supabase.functions.invoke('asaas-criar-cobranca', {
-  body: { valor: 150.00, descricao: 'Sessão de Massagem', tipo: 'PIX' }
+// Criar cobrança PIX
+await supabase.functions.invoke('asaas-criar-cobranca', {
+  body: { valor: 150, descricao: 'Sessão', tipo: 'PIX' }
 });
 
-// Gerar conteúdo com IA
-const { data } = await supabase.functions.invoke('generate-script', {
+// Gerar conteúdo IA
+await supabase.functions.invoke('generate-script', {
   body: { topic: 'Benefícios da massagem', brandId: '...' }
-});
-
-// Chat assistente
-const { data } = await supabase.functions.invoke('chat-assistente', {
-  body: { message: 'Quais serviços vocês oferecem?' }
 });`}
-      />
-    </CollapsibleSection>
+        />
+      </SectionCollapsible>
 
-    <CollapsibleSection title="Upload de Arquivos" icon={Code2}>
-      <CodeBlock
-        title="Storage: Upload e URL pública"
-        code={`// Upload de imagem
-const { data, error } = await supabase.storage
+      {/* 8. Snippets de Código */}
+      <SectionCollapsible
+        title="Snippets de Código"
+        subtitle="Exemplos práticos de uso da plataforma"
+        icon={Code2}
+      >
+        <CodeBlock
+          title="CRUD com Supabase Client"
+          code={`import { supabase } from "@/integrations/supabase/client";
+
+// SELECT
+const { data } = await supabase
+  .from('produtos').select('*').eq('disponivel', true);
+
+// INSERT
+await supabase.from('notificacoes')
+  .insert({ user_id, titulo: 'Olá!', mensagem: '...' });
+
+// UPDATE
+await supabase.from('pedidos')
+  .update({ status: 'entregue' }).eq('id', pedidoId);
+
+// RPC
+const { data } = await supabase
+  .rpc('has_permission', { 
+    p_user_id: userId, p_resource: 'admin', p_action: 'access' 
+  });`}
+        />
+        <CodeBlock
+          title="Upload de arquivos"
+          code={`// Upload
+const { data } = await supabase.storage
   .from('admin-uploads')
-  .upload(\`images/\${fileName}\`, file, {
-    cacheControl: '3600',
-    upsert: true
-  });
+  .upload(\`images/\${fileName}\`, file, { upsert: true });
 
-// Gerar URL pública
+// URL pública
 const { data: { publicUrl } } = supabase.storage
-  .from('admin-uploads')
-  .getPublicUrl(filePath);
+  .from('admin-uploads').getPublicUrl(filePath);`}
+        />
+        <CodeBlock
+          title="Realtime (tempo real)"
+          code={`const channel = supabase
+  .channel('notificacoes')
+  .on('postgres_changes', {
+    event: 'INSERT', schema: 'public',
+    table: 'notificacoes',
+    filter: \`user_id=eq.\${userId}\`
+  }, (payload) => {
+    toast.info(payload.new.titulo);
+  })
+  .subscribe();`}
+        />
+      </SectionCollapsible>
 
-// Buckets disponíveis:
-// avatars               — Fotos de perfil (público)
-// fotos-evolucao        — Fotos de tratamento (privado, URLs assinadas)
-// avaliacoes-posturais  — Fotos posturais (privado)
-// exercise-videos       — Vídeos de exercícios (público)
-// social-posts          — Posts Resinkra Moments (privado)
-// exames-arquivos       — Exames do paciente (privado)
-// admin-uploads         — Uploads administrativos (público)
-// corporativo-media     — Mídia corporativa (público)
-// landing-media         — Mídia da landing page (público)
-// headspa-imagens       — Imagens head spa (público)
-// servico-imagens       — Imagens de serviços (público)`}
-      />
-    </CollapsibleSection>
-
-    <CollapsibleSection title="Realtime (Tempo Real)" icon={Plug}>
-      <CodeBlock
-        title="Subscrição a mudanças em tempo real"
-        code={`// Escutar mudanças na tabela de notificações
-const channel = supabase
-  .channel('notificacoes-changes')
-  .on(
-    'postgres_changes',
-    {
-      event: 'INSERT',
-      schema: 'public',
-      table: 'notificacoes',
-      filter: \`user_id=eq.\${userId}\`
-    },
-    (payload) => {
-      toast.info(payload.new.titulo);
-      queryClient.invalidateQueries({ queryKey: ['notificacoes'] });
-    }
-  )
-  .subscribe();
-
-return () => { supabase.removeChannel(channel); };`}
-      />
-    </CollapsibleSection>
-
-    <CollapsibleSection title="Secrets Configurados" icon={Shield}>
-      <div className="grid grid-cols-1 gap-2 text-xs">
-        {[
-          { name: "ASAAS_API_KEY", desc: "API de pagamentos Asaas" },
-          { name: "ASAAS_WEBHOOK_TOKEN", desc: "Token de webhook Asaas" },
-          { name: "ZAPI_INSTANCE_ID", desc: "Instância Z-API WhatsApp" },
-          { name: "ZAPI_TOKEN", desc: "Token de acesso Z-API" },
-          { name: "RESEND_API_KEY", desc: "Envio de emails via Resend" },
-          { name: "ELEVENLABS_API_KEY", desc: "Text-to-Speech (conector)" },
-          { name: "LOVABLE_API_KEY", desc: "IA Lovable (scripts, hooks)" },
-        ].map((s) => (
-          <div key={s.name} className="flex items-center gap-2 p-2 rounded-md bg-muted/30">
-            <Shield size={14} className="text-green-500 shrink-0" />
-            <span className="font-mono font-semibold text-foreground">{s.name}</span>
-            <span className="text-muted-foreground">— {s.desc}</span>
-          </div>
-        ))}
-      </div>
-    </CollapsibleSection>
-  </div>
-);
-
-// === TECHNICAL REPORT ===
-const TechnicalReportSection = () => (
-  <div className="space-y-3">
-    <CollapsibleSection title="Métricas da Plataforma" icon={BookOpen} defaultOpen>
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-        {[
-          { label: "Feature Folders", value: "21" },
-          { label: "Componentes", value: "~200+" },
-          { label: "Tabelas DB", value: "95+" },
-          { label: "Políticas RLS", value: "262+" },
-          { label: "Edge Functions", value: "24" },
-          { label: "Funções SQL", value: "27+" },
-          { label: "Permissões", value: "30" },
-          { label: "Roles", value: "4" },
-          { label: "Horas Conteúdo", value: "~1.388h" },
-          { label: "Storage Buckets", value: "11" },
-          { label: "Secrets", value: "7" },
-          { label: "Triggers DB", value: "17+" },
-        ].map((m) => (
-          <Card key={m.label} className="p-3 text-center">
-            <div className="text-lg font-bold text-primary">{m.value}</div>
-            <div className="text-[10px] text-muted-foreground">{m.label}</div>
-          </Card>
-        ))}
-      </div>
-    </CollapsibleSection>
-
-    <CollapsibleSection title="Arquitetura de Segurança" icon={Shield}>
-      <CodeBlock
-        title="Camadas de proteção"
-        language="text"
-        code={`1. AUTENTICAÇÃO
+      {/* 9. Arquitetura de Segurança */}
+      <SectionCollapsible
+        title="Arquitetura de Segurança"
+        subtitle="5 camadas de proteção enterprise-grade"
+        icon={Shield}
+        badge="Enterprise"
+      >
+        <CodeBlock
+          title="Camadas de Proteção"
+          language="text"
+          code={`1. AUTENTICAÇÃO
    → Email/senha com verificação obrigatória
    → Rate limiting (5 tentativas / 15 min)
    → Proteção HIBP (senhas vazadas)
 
 2. AUTORIZAÇÃO (RBAC + Permissões Granulares)
-   → Tabela user_roles separada (anti-escalação)
-   → Função has_role() SECURITY DEFINER
-   → Sistema de permissões: roles → permissions → user_permissions_mv
-   → has_permission(user, resource, action) para controle fino
-   → ProtectedRoute com allowRoles no frontend
-   → AdminRoute para páginas administrativas
+   → user_roles separada (anti-escalação)
+   → has_role() + has_permission() SECURITY DEFINER
+   → Cache via user_permissions_mv + auto-refresh
+   → ProtectedRoute + AdminRoute no frontend
 
 3. ROW LEVEL SECURITY (RLS)
-   → Todas as tabelas com RLS ativado
+   → 262+ políticas em todas as tabelas
    → Políticas RESTRICTIVE para bloquear anon
-   → Usuários só acessam próprios dados
-   → Admins têm acesso total via has_role()
-   → Tabelas de permissões: admin gerencia, todos leem
+   → Admins via has_role(), users via auth.uid()
 
 4. PROTEÇÃO DE DADOS
    → Fotos sensíveis via URLs assinadas (1h)
@@ -844,105 +596,38 @@ const TechnicalReportSection = () => (
    → API keys em Secrets (nunca no código)
    → Webhooks com token de validação
    → Edge Functions com CORS configurado`}
-      />
-    </CollapsibleSection>
+        />
+      </SectionCollapsible>
 
-    <CollapsibleSection title="Fluxos de Negócio" icon={Layers}>
-      <CodeBlock
-        title="Fluxo de Cashback"
-        language="text"
-        code={`COMPRA/SESSÃO
-  └→ Trigger calcula cashback (% do produto/serviço)
-  └→ Multiplica pelo tier do usuário (1x/1.5x/2x)
-  └→ Insere em transacoes (tipo: cashback, expira: 90 dias)
-  └→ Cria notificação automática
+      {/* 10. Fluxos de Negócio */}
+      <SectionCollapsible
+        title="Fluxos de Negócio"
+        subtitle="Automações de cashback, indicações e desafios"
+        icon={Layers}
+      >
+        <CodeBlock
+          title="Fluxos Automáticos"
+          language="text"
+          code={`COMPRA/SESSÃO
+  └→ Trigger calcula cashback (% do produto)
+  └→ Multiplica pelo tier (Bronze 1x, Prata 1.5x, Ouro 2x)
+  └→ Insere em transacoes (expira: 90 dias)
+  └→ Notificação automática
 
 INDICAÇÃO
   └→ Amigo se cadastra com código
   └→ Amigo faz primeira compra
-  └→ Trigger credita R$ 10 ao indicador + R$ 5 ao indicado
-  └→ Notifica ambos
+  └→ R$ 10 ao indicador + R$ 5 ao indicado
 
 DESAFIO CONCLUÍDO
-  └→ Trigger credita recompensa ao participante
+  └→ Trigger credita recompensa
   └→ Notificação de parabéns
 
 CASHBACK EXPIRANDO
-  └→ Função notifica 7 dias antes
-  └→ process_expired_cashback() debita após vencimento`}
-      />
-    </CollapsibleSection>
-  </div>
-);
-
-export const CodigoPlataformaTab = () => {
-  return (
-    <div className="space-y-4">
-      <div>
-        <h3 className="text-lg font-semibold text-foreground flex items-center gap-2">
-          <Code2 className="text-primary" size={20} />
-          Código da Plataforma
-        </h3>
-        <p className="text-sm text-muted-foreground">
-          Documentação técnica, código-fonte, SQL, permissões e snippets de integração
-        </p>
-      </div>
-
-      <Tabs defaultValue="estrutura" className="w-full">
-        <TabsList className="w-full grid grid-cols-5 h-auto">
-          <TabsTrigger value="estrutura" className="text-[10px] sm:text-xs px-1 py-2">
-            <FolderTree size={14} className="mr-1 hidden sm:inline" />
-            Estrutura
-          </TabsTrigger>
-          <TabsTrigger value="codigo" className="text-[10px] sm:text-xs px-1 py-2">
-            <Code2 size={14} className="mr-1 hidden sm:inline" />
-            Código
-          </TabsTrigger>
-          <TabsTrigger value="database" className="text-[10px] sm:text-xs px-1 py-2">
-            <Database size={14} className="mr-1 hidden sm:inline" />
-            SQL
-          </TabsTrigger>
-          <TabsTrigger value="edge" className="text-[10px] sm:text-xs px-1 py-2">
-            <Server size={14} className="mr-1 hidden sm:inline" />
-            Backend
-          </TabsTrigger>
-          <TabsTrigger value="integracao" className="text-[10px] sm:text-xs px-1 py-2">
-            <Plug size={14} className="mr-1 hidden sm:inline" />
-            APIs
-          </TabsTrigger>
-        </TabsList>
-
-        <div className="mt-4">
-          <TabsContent value="estrutura">
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-              <ProjectStructureSection />
-            </motion.div>
-          </TabsContent>
-          <TabsContent value="codigo">
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-              <SourceCodeSection />
-            </motion.div>
-          </TabsContent>
-          <TabsContent value="database">
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-              <DatabaseSection />
-            </motion.div>
-          </TabsContent>
-          <TabsContent value="edge">
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-              <EdgeFunctionsSection />
-            </motion.div>
-          </TabsContent>
-          <TabsContent value="integracao">
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-              <IntegrationSection />
-              <div className="mt-6">
-                <TechnicalReportSection />
-              </div>
-            </motion.div>
-          </TabsContent>
-        </div>
-      </Tabs>
+  └→ Notifica 7 dias antes
+  └→ Debita automaticamente após vencimento`}
+        />
+      </SectionCollapsible>
     </div>
   );
 };
