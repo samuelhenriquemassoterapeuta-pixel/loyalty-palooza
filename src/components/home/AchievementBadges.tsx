@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { Trophy, ChevronRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Progress } from "@/components/ui/progress";
-import type { Achievement } from "@/hooks/useAchievements";
+import type { Achievement } from "@/features/conquistas/hooks/useAchievements";
 
 interface AchievementBadgesProps {
   achievements: Achievement[];

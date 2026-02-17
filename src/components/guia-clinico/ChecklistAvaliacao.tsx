@@ -8,7 +8,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
-import { useChecklistsAvaliacao } from "@/hooks/useChecklistsAvaliacao";
+import { useChecklistsAvaliacao } from "@/features/protocolos/hooks/useChecklistsAvaliacao";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 

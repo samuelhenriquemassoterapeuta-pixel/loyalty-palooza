@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { useCorporativoSecoes, CorporativoSecao } from "@/hooks/useCorporativoSecoes";
+import { useCorporativoSecoes, CorporativoSecao } from "@/features/corporativo/hooks/useCorporativoSecoes";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
