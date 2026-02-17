@@ -3556,6 +3556,65 @@ export type Database = {
           },
         ]
       }
+      terapeuta_cupons: {
+        Row: {
+          ativo: boolean
+          codigo: string
+          created_at: string
+          descricao: string | null
+          id: string
+          max_usos: number | null
+          servicos_aplicaveis: Json | null
+          terapeuta_id: string
+          tipo_desconto: string
+          updated_at: string
+          usos_atuais: number
+          valido_ate: string | null
+          valor_desconto: number
+          valor_minimo_compra: number | null
+        }
+        Insert: {
+          ativo?: boolean
+          codigo: string
+          created_at?: string
+          descricao?: string | null
+          id?: string
+          max_usos?: number | null
+          servicos_aplicaveis?: Json | null
+          terapeuta_id: string
+          tipo_desconto?: string
+          updated_at?: string
+          usos_atuais?: number
+          valido_ate?: string | null
+          valor_desconto?: number
+          valor_minimo_compra?: number | null
+        }
+        Update: {
+          ativo?: boolean
+          codigo?: string
+          created_at?: string
+          descricao?: string | null
+          id?: string
+          max_usos?: number | null
+          servicos_aplicaveis?: Json | null
+          terapeuta_id?: string
+          tipo_desconto?: string
+          updated_at?: string
+          usos_atuais?: number
+          valido_ate?: string | null
+          valor_desconto?: number
+          valor_minimo_compra?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "terapeuta_cupons_terapeuta_id_fkey"
+            columns: ["terapeuta_id"]
+            isOneToOne: false
+            referencedRelation: "terapeutas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       terapeutas: {
         Row: {
           created_at: string
@@ -3566,6 +3625,7 @@ export type Database = {
           id: string
           nome: string
           telefone: string | null
+          user_id: string | null
         }
         Insert: {
           created_at?: string
@@ -3576,6 +3636,7 @@ export type Database = {
           id?: string
           nome: string
           telefone?: string | null
+          user_id?: string | null
         }
         Update: {
           created_at?: string
@@ -3586,6 +3647,7 @@ export type Database = {
           id?: string
           nome?: string
           telefone?: string | null
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -4126,6 +4188,7 @@ export type Database = {
         Returns: boolean
       }
       is_parceiro: { Args: { _user_id: string }; Returns: boolean }
+      is_terapeuta: { Args: { _user_id: string }; Returns: boolean }
       notify_expiring_cashback: {
         Args: never
         Returns: {
@@ -4157,7 +4220,7 @@ export type Database = {
       resgatar_vale_presente: { Args: { p_codigo: string }; Returns: Json }
     }
     Enums: {
-      app_role: "admin" | "user" | "parceiro"
+      app_role: "admin" | "user" | "parceiro" | "terapeuta"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -4285,7 +4348,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["admin", "user", "parceiro"],
+      app_role: ["admin", "user", "parceiro", "terapeuta"],
     },
   },
 } as const

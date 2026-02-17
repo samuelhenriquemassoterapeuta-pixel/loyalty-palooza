@@ -85,6 +85,7 @@ const CursoSeitai = lazy(() => import("@/pages/CursoSeitai"));
 const CursoSeitaiHero = lazy(() => import("@/pages/CursoSeitaiHero"));
 const CursoBandagemElastica = lazy(() => import("@/pages/CursoBandagemElastica"));
 const CursoBandagemElasticaHero = lazy(() => import("@/pages/CursoBandagemElasticaHero"));
+const TerapeutaDashboard = lazy(() => import("@/pages/TerapeutaDashboard"));
 const Terapias = lazy(() => import("@/pages/Terapias"));
 const Offers = lazy(() => import("@/pages/Offers"));
 const ChatAssistente = lazy(() => import("@/pages/ChatAssistente"));
@@ -161,6 +162,7 @@ export const AnimatedRoutes = () => {
         <Route path="/recomendacoes" element={<ProtectedRoute><LazyPage><RecomendacoesIA /></LazyPage></ProtectedRoute>} />
         <Route path="/dashboard-rh" element={<ProtectedRoute requireAdmin><LazyPage><DashboardRH /></LazyPage></ProtectedRoute>} />
         <Route path="/parceiro-dashboard" element={<ProtectedRoute><LazyPage><ParceiroDashboard /></LazyPage></ProtectedRoute>} />
+        <Route path="/terapeuta-dashboard" element={<ProtectedRoute><LazyPage><TerapeutaDashboard /></LazyPage></ProtectedRoute>} />
         <Route path="/parceiro/:slug" element={<LazyPage><PerfilParceiro /></LazyPage>} />
         <Route path="/resinkra-moments" element={<ProtectedRoute><LazyPage><ResinkraMoments /></LazyPage></ProtectedRoute>} />
         <Route path="/checkin" element={<ProtectedRoute><LazyPage><Checkin /></LazyPage></ProtectedRoute>} />
