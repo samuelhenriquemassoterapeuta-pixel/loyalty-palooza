@@ -1,6 +1,7 @@
 import { Header } from "@/components/Header";
 import { BalanceCard } from "@/features/cashback/components/BalanceCard";
 import { QuickActions } from "@/components/QuickActions";
+import { CollapsibleDashboardSection } from "@/components/home/CollapsibleDashboardSection";
 import { TransactionHistory } from "@/features/cashback/components/TransactionHistory";
 import { InstallBanner } from "@/components/InstallBanner";
 import { ShareQRCode } from "@/components/ShareQRCode";
@@ -61,9 +62,10 @@ const Index = () => {
                   </motion.div>
 
                   {/* Section: Ações rápidas */}
-                  <motion.div variants={fadeUp} className="space-y-2.5">
-                    <p className="section-label px-1">Ações rápidas</p>
-                    <QuickActions />
+                  <motion.div variants={fadeUp}>
+                    <CollapsibleDashboardSection title="Ações rápidas" defaultOpen={false}>
+                      <QuickActions />
+                    </CollapsibleDashboardSection>
                   </motion.div>
 
                   {/* Section: Seu progresso */}
