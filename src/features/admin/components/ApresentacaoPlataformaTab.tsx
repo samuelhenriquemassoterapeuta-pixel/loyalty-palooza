@@ -4,12 +4,245 @@ import {
   ChevronLeft, ChevronRight, Rocket, DollarSign, Clock, Users, 
   Shield, Sparkles, BookOpen, Building2, Handshake, TrendingUp,
   Zap, Brain, Heart, Star, Award, Globe, Target, BarChart3,
-  CheckCircle2, ArrowRight, Smartphone, Layers, Bot, GraduationCap
+  CheckCircle2, ArrowRight, Smartphone, Layers, Bot, GraduationCap,
+  ChevronDown
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+
+/* ─── Ferramenta type + data ─── */
+interface FerramentaItem {
+  icon: string;
+  title: string;
+  desc: string;
+  details: string[];
+}
+
+const ferramentasCore: FerramentaItem[] = [
+  { icon: "📅", title: "Agendamento Online", desc: "Com check-in QR Code", details: [
+    "Agenda interativa com visualização diária/semanal",
+    "Check-in automático via QR Code na recepção",
+    "Lista de espera inteligente com cashback extra",
+    "Notificações de lembrete 24h antes da sessão",
+    "Integração direta com dashboard do terapeuta",
+  ]},
+  { icon: "💰", title: "Cashback & Fidelização", desc: "Gamificação completa", details: [
+    "Cashback automático por agendamento e compra",
+    "Sistema de XP, níveis e ranking motivacional",
+    "Programa de indicação com recompensa para ambos",
+    "Clube VIP com descontos e prioridade exclusiva",
+    "Dashboard de saldo e histórico para o usuário",
+  ]},
+  { icon: "📊", title: "Dashboard Financeiro", desc: "KPIs em tempo real", details: [
+    "Receitas, despesas e ticket médio em tempo real",
+    "Gráficos de evolução mensal e comparativo",
+    "Filtros por terapeuta, serviço e período",
+    "Métricas de recorrência e taxa de retenção",
+    "Exportação de relatórios para contabilidade",
+  ]},
+  { icon: "🛒", title: "E-commerce Interno", desc: "Produtos e pacotes", details: [
+    "Catálogo de produtos com fotos e descrições",
+    "Pacotes de sessões com desconto progressivo",
+    "Carrinho de compras e checkout integrado",
+    "Pagamento via PIX, cartão e cashback",
+    "Controle de estoque e alertas de reposição",
+  ]},
+  { icon: "🤖", title: "Chat IA Interno", desc: "Atendimento 24/7", details: [
+    "Assistente IA com streaming em tempo real",
+    "Tool calling para agendar sessões automaticamente",
+    "Respostas contextualizadas sobre serviços e preços",
+    "Suporte 24/7 sem necessidade de atendente humano",
+    "Histórico de conversas salvo por sessão",
+  ]},
+  { icon: "📱", title: "WhatsApp Bot", desc: "Prospecção automática", details: [
+    "Prospecção regional automática via Z-API",
+    "Qualificação de leads com perguntas inteligentes",
+    "Agendamento direto pelo WhatsApp com tool calling",
+    "Envio de confirmações e lembretes automáticos",
+    "Relatório de conversão de leads por campanha",
+  ]},
+  { icon: "🏆", title: "Desafios & XP", desc: "Engajamento gamificado", details: [
+    "Desafios semanais/mensais com metas personalizadas",
+    "Sistema de XP com progresso visual e níveis",
+    "Recompensas automáticas (cashback, desconto, bônus)",
+    "Ranking competitivo entre participantes",
+    "Histórico de desafios concluídos e conquistas",
+  ]},
+  { icon: "📋", title: "Protocolos Clínicos", desc: "Acompanhamento completo", details: [
+    "Protocolos personalizados por tipo de tratamento",
+    "Fichas de acompanhamento com métricas corporais",
+    "Fotos de evolução com comparativo antes/depois",
+    "Checklists de avaliação por sessão",
+    "Upload de exames e laudos médicos",
+  ]},
+  { icon: "🍽️", title: "Planos de Dieta", desc: "Nutrição integrada", details: [
+    "Ficha nutricional completa do paciente",
+    "Diário alimentar com registro de refeições",
+    "Controle de hidratação com meta diária",
+    "Histórico semanal com visualização gráfica",
+    "Conteúdos educativos sobre nutrição",
+  ]},
+  { icon: "🧘", title: "Exercícios & Alongamento", desc: "Pausas posturais", details: [
+    "Biblioteca de exercícios por categoria e nível",
+    "Vídeos demonstrativos com instruções detalhadas",
+    "Lembretes inteligentes de pausa e alongamento",
+    "Rotinas personalizadas por objetivo",
+    "Registro de sessões concluídas com XP",
+  ]},
+  { icon: "📸", title: "Avaliação Postural", desc: "Fotos e anotações", details: [
+    "Captura de fotos em 4 vistas (anterior, posterior, laterais)",
+    "Anotações visuais sobre desvios posturais",
+    "Comparativo de evolução entre avaliações",
+    "Relatório automático para o paciente",
+    "Integração com protocolos de tratamento",
+  ]},
+  { icon: "🎁", title: "Vale Presente Digital", desc: "Vendas recorrentes", details: [
+    "Criação de vales com valores customizados",
+    "QR Code único para resgate seguro",
+    "Personalização com mensagem e remetente",
+    "Vendas recorrentes em datas comemorativas",
+    "Dashboard de vendas e resgates por período",
+  ]},
+];
+
+const ferramentasAvancadas: FerramentaItem[] = [
+  { icon: "🏢", title: "Portal Corporativo B2B", desc: "QVT para empresas", details: [
+    "Planos corporativos de Qualidade de Vida no Trabalho",
+    "Gestão de colaboradores por empresa com limites",
+    "Dashboard B2B com métricas de uso e engajamento",
+    "Landing page profissional com cases e depoimentos",
+    "Galeria, FAQ e planos configuráveis pelo admin",
+  ]},
+  { icon: "🤝", title: "Programa de Parceiros", desc: "Comissões multinível", details: [
+    "Faixas de comissão: Bronze, Prata, Ouro, Diamante",
+    "Cupons exclusivos com rastreamento de uso",
+    "Dashboard de vendas e ganhos por parceiro",
+    "Materiais de divulgação personalizados",
+    "Pagamento automático de comissões",
+  ]},
+  { icon: "👑", title: "Clube VIP / Assinaturas", desc: "Receita recorrente", details: [
+    "Planos de assinatura com créditos mensais",
+    "Descontos exclusivos em serviços e produtos",
+    "Prioridade no agendamento para assinantes",
+    "Cashback bônus e benefícios progressivos",
+    "Renovação automática e gestão de cancelamento",
+  ]},
+  { icon: "📣", title: "Campanhas Marketing", desc: "Segmentação avançada", details: [
+    "Criação de campanhas por tipo (email, push, WhatsApp)",
+    "Segmentação por perfil, frequência e gasto",
+    "Agendamento de envio com métricas de abertura",
+    "Templates prontos para datas comemorativas",
+    "A/B testing de mensagens para otimização",
+  ]},
+  { icon: "🎯", title: "Banners Dinâmicos", desc: "A/B testing nativo", details: [
+    "Banners promocionais com data de expiração",
+    "Segmentação por tipo de cliente",
+    "Métricas de visualização e cliques",
+    "Suporte a imagens, vídeos e CTAs",
+    "Controle de prioridade e rotação automática",
+  ]},
+  { icon: "📈", title: "Google Ads Integrado", desc: "ROI em tempo real", details: [
+    "Dashboard com métricas de campanhas em tempo real",
+    "CPC, CTR, conversões e ROAS por campanha",
+    "Comparativo de performance entre períodos",
+    "Alertas automáticos de performance anormal",
+    "Integração direta com Google Ads API",
+  ]},
+  { icon: "🔔", title: "Notificações Push", desc: "PWA nativo", details: [
+    "Push notifications via Service Worker (PWA)",
+    "Segmentação por perfil e comportamento",
+    "Envio manual pelo admin ou automático por triggers",
+    "Histórico de notificações enviadas e lidas",
+    "Suporte a deep linking para ações específicas",
+  ]},
+  { icon: "📊", title: "Segmentação Clientes", desc: "CRM inteligente", details: [
+    "Classificação automática por frequência e gasto",
+    "Tags e filtros personalizados por comportamento",
+    "Identificação de clientes em risco de churn",
+    "Exportação de listas para campanhas direcionadas",
+    "Dashboard de lifetime value por segmento",
+  ]},
+  { icon: "⭐", title: "Avaliações & Feedback", desc: "NPS automático", details: [
+    "Feedback rápido por emoji após cada sessão",
+    "Avaliações com notas e comentários detalhados",
+    "Cálculo automático de NPS por terapeuta/serviço",
+    "Alertas para avaliações negativas em tempo real",
+    "Relatórios de satisfação por período",
+  ]},
+  { icon: "🔐", title: "Segurança Enterprise", desc: "RLS + Audit Logs", details: [
+    "262+ políticas RLS protegendo todas as tabelas",
+    "Audit logs completos de operações sensíveis",
+    "Rate limiting para proteção contra abuso",
+    "Permissões granulares (30 permissões distintas)",
+    "RBAC com 4 roles e materialização de cache",
+  ]},
+  { icon: "📄", title: "Lista de Espera", desc: "Cashback de fidelidade", details: [
+    "Inscrição com preferência de dia e horário",
+    "Cashback bônus para quem espera pacientemente",
+    "Notificação automática quando vaga abre",
+    "Priorização por tempo de espera e plano VIP",
+    "Dashboard admin com fila e métricas de conversão",
+  ]},
+  { icon: "🧠", title: "Resinkra AI", desc: "Conteúdo IA para social", details: [
+    "Geração de roteiros para Reels, Stories e Lives",
+    "Criação de carrosséis com estrutura pronta",
+    "Ganchos virais com score de poder e emoção",
+    "Banco de ideias por nicho e etapa do funil",
+    "Calendário editorial com agendamento de posts",
+  ]},
+];
+
+/* ─── Collapsible Tool Item ─── */
+const FerramentaCollapsibleItem = ({ item }: { item: FerramentaItem }) => {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="bg-card border rounded-xl overflow-hidden">
+      <button
+        onClick={() => setOpen(v => !v)}
+        className="w-full flex items-center gap-2 p-2.5 text-left"
+      >
+        <span className="text-base">{item.icon}</span>
+        <div className="flex-1 min-w-0">
+          <p className="text-[11px] font-semibold text-foreground leading-tight">{item.title}</p>
+          <p className="text-[9px] text-muted-foreground">{item.desc}</p>
+        </div>
+        <motion.div animate={{ rotate: open ? 180 : 0 }} transition={{ duration: 0.2 }} className="shrink-0">
+          <ChevronDown size={12} className="text-muted-foreground" />
+        </motion.div>
+      </button>
+      <AnimatePresence initial={false}>
+        {open && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.25 }}
+            className="overflow-hidden"
+          >
+            <div className="px-2.5 pb-2.5 space-y-1">
+              {item.details.map((d, i) => (
+                <div key={i} className="flex items-start gap-1.5">
+                  <CheckCircle2 className="w-3 h-3 text-primary shrink-0 mt-0.5" />
+                  <span className="text-[9px] text-muted-foreground leading-relaxed">{d}</span>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
+
+const FerramentasCollapsible = ({ items }: { items: FerramentaItem[] }) => (
+  <div className="grid grid-cols-1 gap-1.5 max-h-[55vh] overflow-y-auto pr-1">
+    {items.map(item => (
+      <FerramentaCollapsibleItem key={item.title} item={item} />
+    ))}
+  </div>
+);
 
 /* ─── Slide Data ─── */
 const slides = [
@@ -126,66 +359,16 @@ const slides = [
   {
     id: "ferramentas",
     title: "Ferramentas Completas",
-    subtitle: "Tudo que uma clínica precisa em um só lugar",
-    content: (
-      <div className="grid grid-cols-2 gap-2">
-        {[
-          { icon: "📅", title: "Agendamento Online", desc: "Com check-in QR Code" },
-          { icon: "💰", title: "Cashback & Fidelização", desc: "Gamificação completa" },
-          { icon: "📊", title: "Dashboard Financeiro", desc: "KPIs em tempo real" },
-          { icon: "🛒", title: "E-commerce Interno", desc: "Produtos e pacotes" },
-          { icon: "🤖", title: "Chat IA Interno", desc: "Atendimento 24/7" },
-          { icon: "📱", title: "WhatsApp Bot", desc: "Prospecção automática" },
-          { icon: "🏆", title: "Desafios & XP", desc: "Engajamento gamificado" },
-          { icon: "📋", title: "Protocolos Clínicos", desc: "Acompanhamento completo" },
-          { icon: "🍽️", title: "Planos de Dieta", desc: "Nutrição integrada" },
-          { icon: "🧘", title: "Exercícios & Alongamento", desc: "Pausas posturais" },
-          { icon: "📸", title: "Avaliação Postural", desc: "Fotos e anotações" },
-          { icon: "🎁", title: "Vale Presente Digital", desc: "Vendas recorrentes" },
-        ].map(f => (
-          <div key={f.title} className="bg-card border rounded-xl p-2.5 space-y-0.5">
-            <div className="flex items-center gap-1.5">
-              <span className="text-base">{f.icon}</span>
-              <p className="text-[11px] font-semibold text-foreground leading-tight">{f.title}</p>
-            </div>
-            <p className="text-[9px] text-muted-foreground">{f.desc}</p>
-          </div>
-        ))}
-      </div>
-    ),
+    subtitle: "Toque em cada ferramenta para ver detalhes",
+    content: <FerramentasCollapsible items={ferramentasCore} />,
     icon: Layers,
     color: "primary",
   },
   {
     id: "ferramentas2",
     title: "Mais Ferramentas",
-    subtitle: "Recursos avançados que diferenciam",
-    content: (
-      <div className="grid grid-cols-2 gap-2">
-        {[
-          { icon: "🏢", title: "Portal Corporativo B2B", desc: "QVT para empresas" },
-          { icon: "🤝", title: "Programa de Parceiros", desc: "Comissões multinível" },
-          { icon: "👑", title: "Clube VIP / Assinaturas", desc: "Receita recorrente" },
-          { icon: "📣", title: "Campanhas Marketing", desc: "Segmentação avançada" },
-          { icon: "🎯", title: "Banners Dinâmicos", desc: "A/B testing nativo" },
-          { icon: "📈", title: "Google Ads Integrado", desc: "ROI em tempo real" },
-          { icon: "🔔", title: "Notificações Push", desc: "PWA nativo" },
-          { icon: "📊", title: "Segmentação Clientes", desc: "CRM inteligente" },
-          { icon: "⭐", title: "Avaliações & Feedback", desc: "NPS automático" },
-          { icon: "🔐", title: "Segurança Enterprise", desc: "RLS + Audit Logs" },
-          { icon: "📄", title: "Lista de Espera", desc: "Cashback de fidelidade" },
-          { icon: "🧠", title: "Resinkra AI", desc: "Conteúdo IA para social" },
-        ].map(f => (
-          <div key={f.title} className="bg-card border rounded-xl p-2.5 space-y-0.5">
-            <div className="flex items-center gap-1.5">
-              <span className="text-base">{f.icon}</span>
-              <p className="text-[11px] font-semibold text-foreground leading-tight">{f.title}</p>
-            </div>
-            <p className="text-[9px] text-muted-foreground">{f.desc}</p>
-          </div>
-        ))}
-      </div>
-    ),
+    subtitle: "Toque em cada recurso para ver detalhes",
+    content: <FerramentasCollapsible items={ferramentasAvancadas} />,
     icon: Sparkles,
     color: "accent",
   },
