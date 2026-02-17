@@ -460,7 +460,7 @@ const ResinkraMoments = () => {
                 ))}
                 <div className="pt-2 border-t border-border/50">
                   <p className="text-xs text-muted-foreground">
-                    📸 Limite: <strong>1 post premiado por visita</strong> · Aprovação em até 24h
+                    📸 Limite: <strong>3 posts premiados por visita</strong> · Aprovação em até 24h
                   </p>
                 </div>
               </div>
