@@ -11,16 +11,24 @@ interface FerramentaItem {
 
 const monetizacaoItems: FerramentaItem[] = [
   { icon: "💰", title: "Tabela de Preços", desc: "17 cursos de R$ 497 a R$ 1.497", details: [
-    "Fitoterapia Clínica (140h) — R$ 1.497 (Premium)",
     "Óleos Essenciais (150h) — R$ 1.497 (Premium)",
+    "Fitoterapia Clínica (140h) — R$ 1.497 (Premium)",
+    "Gastronomia Saudável (130h) — R$ 1.397 (Premium)",
+    "Anatomia Humana (130h) — R$ 1.397 (Premium)",
     "Massagem Modeladora (128h) — R$ 1.297 (Premium)",
+    "Seitai e New Seitai (125h) — R$ 1.297 (Premium)",
+    "Bandagem Elástica (120h) — R$ 1.197 (Premium)",
     "Drenagem Linfática (116h) — R$ 1.097 (Intermediário)",
+    "Difusor de Ambientes (105h) — R$ 997 (Intermediário)",
     "Saboaria Artesanal (99h) — R$ 897 (Intermediário)",
-    "Head SPA Coreano (65h) — R$ 797 (Intermediário)",
+    "Velas Aromáticas (98h) — R$ 897 (Intermediário)",
+    "Vendas (75h) — R$ 797 (Intermediário)",
     "Alta Perfumaria Natural (70h) — R$ 797 (Intermediário)",
+    "Yūgen FaceSPA (70h) — R$ 797 (Intermediário)",
+    "Head SPA Coreano (65h) — R$ 797 (Intermediário)",
     "Aromaterapia dōTERRA (58h) — R$ 597 (Essencial)",
     "Método Resinkra (24h) — R$ 497 (Essencial)",
-    "Valor total do catálogo: R$ 19.167 · Ticket médio: R$ 1.010",
+    "Valor total do catálogo: R$ 17.459 · Ticket médio: R$ 1.027",
   ]},
   { icon: "📊", title: "Projeção de Faturamento", desc: "De R$ 3.985 a R$ 54.850/mês", details: [
     "Conservador: 5 alunos/mês · Ticket R$ 797 → R$ 3.985/mês (R$ 47.820/ano)",
