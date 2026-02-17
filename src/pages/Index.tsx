@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 import { Settings, Gift, Building2, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { useLandingConfig } from "@/features/landing/hooks/useLandingConfig";
+import homeBgFallback from "@/assets/home-bg.jpg";
 
 const stagger = {
   hidden: { opacity: 0 },
@@ -37,7 +38,7 @@ const Index = () => {
   const { showOnboarding, completeOnboarding } = useOnboarding();
   const { config: homeBg } = useLandingConfig("home_bg");
 
-  const bgUrl = homeBg?.imagem_url;
+  const bgUrl = homeBg?.imagem_url || homeBgFallback;
   const bgSpeed = homeBg?.velocidade || 30;
 
   return (
