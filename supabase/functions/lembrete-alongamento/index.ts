@@ -1,21 +1,13 @@
-import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { handleCors } from "../_shared/cors.ts";
+import { createServiceClient } from "../_shared/supabase-client.ts";
+import { jsonResponse, errorResponse } from "../_shared/response.ts";
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
-};
-
-serve(async (req: Request) => {
-  if (req.method === "OPTIONS") {
-    return new Response(null, { headers: corsHeaders });
-  }
+Deno.serve(async (req) => {
+  const corsRes = handleCors(req);
+  if (corsRes) return corsRes;
 
   try {
-    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-    const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-    const supabase = createClient(supabaseUrl, supabaseServiceKey);
+    const supabase = createServiceClient();
 
     // Get current time in São Paulo timezone
     const now = new Date();
@@ -35,7 +27,6 @@ serve(async (req: Request) => {
     const currentMinute = parseInt(parts.find((p) => p.type === "minute")!.value);
     const currentTimeStr = `${String(currentHour).padStart(2, "0")}:${String(currentMinute).padStart(2, "0")}`;
 
-    // Get day of week (0=Sunday, 1=Monday...6=Saturday) in SP timezone
     const dayStr = dayFormatter.format(now);
     const dayMap: Record<string, number> = {
       Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6,
@@ -44,7 +35,6 @@ serve(async (req: Request) => {
 
     console.log(`Processando lembretes: dia=${currentDay}, hora=${currentTimeStr} (São Paulo)`);
 
-    // Fetch active reminders that match the current time window (±30 min) and day
     const { data: lembretes, error: fetchError } = await supabase
       .from("lembretes_alongamento")
       .select("id, user_id, horario, dias_semana, mensagem_personalizada")
@@ -55,22 +45,15 @@ serve(async (req: Request) => {
     let notificacoesEnviadas = 0;
 
     for (const lembrete of lembretes || []) {
-      // Check if today is in the selected days
-      if (!lembrete.dias_semana.includes(currentDay)) {
-        continue;
-      }
+      if (!lembrete.dias_semana.includes(currentDay)) continue;
 
-      // Check if the time matches (within 30 minute window)
       const [lembreteHour, lembreteMinute] = lembrete.horario.split(":").map(Number);
       const lembreteMinutes = lembreteHour * 60 + lembreteMinute;
       const currentMinutes = currentHour * 60 + currentMinute;
       const diff = Math.abs(currentMinutes - lembreteMinutes);
 
-      if (diff > 30) {
-        continue;
-      }
+      if (diff > 30) continue;
 
-      // Check if already sent today (avoid duplicates)
       const todayStart = new Date();
       todayStart.setHours(0, 0, 0, 0);
 
@@ -88,7 +71,6 @@ serve(async (req: Request) => {
         continue;
       }
 
-      // Build notification message
       const mensagemPadrao = "Hora de alongar! Dedique alguns minutos para cuidar do seu corpo e melhorar sua flexibilidade. 🧘‍♀️";
       const mensagem = lembrete.mensagem_personalizada || mensagemPadrao;
 
@@ -109,25 +91,13 @@ serve(async (req: Request) => {
       }
     }
 
-    return new Response(
-      JSON.stringify({
-        success: true,
-        message: `${notificacoesEnviadas} lembretes de alongamento enviados`,
-        processed: lembretes?.length || 0,
-      }),
-      {
-        status: 200,
-        headers: { "Content-Type": "application/json", ...corsHeaders },
-      }
-    );
+    return jsonResponse({
+      success: true,
+      message: `${notificacoesEnviadas} lembretes de alongamento enviados`,
+      processed: lembretes?.length || 0,
+    });
   } catch (error: any) {
     console.error("Erro ao processar lembretes de alongamento:", error);
-    return new Response(
-      JSON.stringify({ error: error.message }),
-      {
-        status: 500,
-        headers: { "Content-Type": "application/json", ...corsHeaders },
-      }
-    );
+    return errorResponse(error.message, 500);
   }
 });

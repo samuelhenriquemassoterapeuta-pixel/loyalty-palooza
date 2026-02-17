@@ -1,56 +1,24 @@
-import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { handleCors } from "../_shared/cors.ts";
+import { createServiceClient } from "../_shared/supabase-client.ts";
+import { requireAuth } from "../_shared/auth.ts";
+import { jsonResponse, errorResponse } from "../_shared/response.ts";
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-};
-
-serve(async (req) => {
-  if (req.method === "OPTIONS") {
-    return new Response(null, { headers: corsHeaders });
-  }
+Deno.serve(async (req) => {
+  const corsRes = handleCors(req);
+  if (corsRes) return corsRes;
 
   try {
-    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-    const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-    
-    const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey);
+    const { userId: remetenteId } = await requireAuth(req);
+    const supabaseAdmin = createServiceClient();
 
-    // Verificar autenticação do usuário
-    const authHeader = req.headers.get("Authorization");
-    if (!authHeader) {
-      return new Response(
-        JSON.stringify({ error: "Não autorizado" }),
-        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
-    }
-
-    const token = authHeader.replace("Bearer ", "");
-    const { data: userData, error: userError } = await supabaseAdmin.auth.getUser(token);
-
-    if (userError || !userData.user) {
-      return new Response(
-        JSON.stringify({ error: "Usuário não autenticado" }),
-        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
-    }
-
-    const remetenteId = userData.user.id;
     const { destinatarioId, valor, destinatarioNome } = await req.json();
 
     if (!destinatarioId || !valor || valor <= 0) {
-      return new Response(
-        JSON.stringify({ error: "Dados inválidos" }),
-        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
+      return errorResponse("Dados inválidos");
     }
 
     if (remetenteId === destinatarioId) {
-      return new Response(
-        JSON.stringify({ error: "Não é possível transferir para si mesmo" }),
-        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
+      return errorResponse("Não é possível transferir para si mesmo");
     }
 
     // Verificar saldo do remetente
@@ -64,10 +32,7 @@ serve(async (req) => {
     const saldo = (transacoes || []).reduce((acc, t) => acc + Number(t.valor), 0);
 
     if (saldo < valor) {
-      return new Response(
-        JSON.stringify({ error: "Saldo insuficiente" }),
-        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
+      return errorResponse("Saldo insuficiente");
     }
 
     // Buscar nome do remetente
@@ -109,15 +74,10 @@ serve(async (req) => {
       tipo: "transferencia",
     });
 
-    return new Response(
-      JSON.stringify({ success: true, message: "Transferência realizada com sucesso" }),
-      { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-    );
+    return jsonResponse({ success: true, message: "Transferência realizada com sucesso" });
   } catch (error) {
+    if (error instanceof Response) return error;
     console.error("Erro na transferência:", error);
-    return new Response(
-      JSON.stringify({ error: "Erro ao realizar transferência" }),
-      { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-    );
+    return errorResponse("Erro ao realizar transferência", 500);
   }
 });

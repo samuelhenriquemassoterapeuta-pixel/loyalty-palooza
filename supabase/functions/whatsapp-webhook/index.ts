@@ -1,10 +1,6 @@
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2.89.0";
-
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
-};
+import { handleCors, corsHeaders } from "../_shared/cors.ts";
+import { createServiceClient } from "../_shared/supabase-client.ts";
+import { jsonResponse, errorResponse } from "../_shared/response.ts";
 
 const LOVABLE_AI_URL = "https://ai.gateway.lovable.dev/v1/chat/completions";
 const MAX_HISTORY = 20; // últimas mensagens para contexto
@@ -82,13 +78,10 @@ const aiTools = [
 ];
 
 Deno.serve(async (req) => {
-  if (req.method === "OPTIONS") {
-    return new Response(null, { headers: corsHeaders });
-  }
+  const corsRes = handleCors(req);
+  if (corsRes) return corsRes;
 
   try {
-    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-    const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     const ZAPI_INSTANCE_ID = Deno.env.get("ZAPI_INSTANCE_ID");
     const ZAPI_TOKEN = Deno.env.get("ZAPI_TOKEN");
@@ -96,16 +89,11 @@ Deno.serve(async (req) => {
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY não configurada");
     if (!ZAPI_INSTANCE_ID || !ZAPI_TOKEN) throw new Error("Credenciais Z-API não configuradas");
 
-    const supabase = createClient(supabaseUrl, supabaseServiceKey);
+    const supabase = createServiceClient();
     const body = await req.json();
 
-    // Z-API envia diferentes tipos de webhook — só processar mensagens recebidas
-    // Ignorar mensagens enviadas por nós (fromMe) e status updates
     if (body.fromMe || body.status || !body.text?.message) {
-      return new Response(JSON.stringify({ ok: true, skipped: true }), {
-        status: 200,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
+      return jsonResponse({ ok: true, skipped: true });
     }
 
     const phone = body.phone || body.chatId?.replace("@c.us", "") || "";
@@ -113,10 +101,7 @@ Deno.serve(async (req) => {
     const senderName = body.senderName || body.chatName || "";
 
     if (!phone || !userMessage) {
-      return new Response(JSON.stringify({ ok: true, skipped: true }), {
-        status: 200,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
+      return jsonResponse({ ok: true, skipped: true });
     }
 
     console.log(`📩 Mensagem de ${phone}: ${userMessage.substring(0, 100)}`);
@@ -131,21 +116,15 @@ Deno.serve(async (req) => {
     if (!conversa) {
       const { data: nova } = await supabase
         .from("whatsapp_conversas")
-        .insert({
-          telefone: phone,
-          nome: senderName || null,
-          mensagens: [],
-        })
+        .insert({ telefone: phone, nome: senderName || null, mensagens: [] })
         .select()
         .single();
       conversa = nova;
     }
 
-    // ── 2. Atualizar histórico com mensagem do usuário ──
+    // ── 2. Atualizar histórico ──
     const mensagens = Array.isArray(conversa.mensagens) ? conversa.mensagens : [];
     mensagens.push({ role: "user", content: userMessage, ts: new Date().toISOString() });
-
-    // Manter apenas últimas N mensagens
     const recentMessages = mensagens.slice(-MAX_HISTORY);
 
     // ── 3. Buscar contexto de negócio ──
@@ -162,18 +141,15 @@ Deno.serve(async (req) => {
     const servicosText = (servicosRes.data || [])
       .map((s: any) => `- ${s.nome}: R$ ${s.preco.toFixed(2)} (${s.duracao_minutos || 60}min, ${s.cashback_percentual || 0}% cashback) — ${s.descricao || ""}`)
       .join("\n");
-
     const terapeutasText = (terapeutasRes.data || [])
       .map((t: any) => `- ${t.nome} (${t.especialidade})`)
       .join("\n");
-
     const horariosText = (agendamentosRes.data || [])
       .map((a: any) => `- ${a.servico} em ${a.data_hora}`)
       .join("\n");
 
     // ── 4. Chamar Lovable AI ──
     const systemPrompt = buildSystemPrompt(servicosText, terapeutasText, horariosText);
-
     const aiMessages = [
       { role: "system", content: systemPrompt },
       ...recentMessages.map((m: any) => ({ role: m.role, content: m.content })),
@@ -205,7 +181,7 @@ Deno.serve(async (req) => {
     let replyText = "";
     let toolResults: string[] = [];
 
-    // ── 5. Processar tool calls (agendamento, transferência) ──
+    // ── 5. Processar tool calls ──
     if (choice?.message?.tool_calls?.length > 0) {
       for (const tc of choice.message.tool_calls) {
         const fn = tc.function;
@@ -216,7 +192,6 @@ Deno.serve(async (req) => {
           toolResults.push(result);
         } else if (fn.name === "transferir_humano") {
           toolResults.push(`🔄 Atendimento transferido para humano. Motivo: ${args.motivo}`);
-          // Atualizar status da conversa
           await supabase
             .from("whatsapp_conversas")
             .update({ status: "transferido", metadata: { motivo_transferencia: args.motivo } })
@@ -224,7 +199,6 @@ Deno.serve(async (req) => {
         }
       }
 
-      // Se houve tool calls, fazer segunda chamada para gerar resposta final
       const followUpMessages = [
         ...aiMessages,
         choice.message,
@@ -257,13 +231,9 @@ Deno.serve(async (req) => {
 
     // ── 6. Salvar resposta no histórico ──
     recentMessages.push({ role: "assistant", content: replyText, ts: new Date().toISOString() });
-
     await supabase
       .from("whatsapp_conversas")
-      .update({
-        mensagens: recentMessages,
-        nome: senderName || conversa.nome,
-      })
+      .update({ mensagens: recentMessages, nome: senderName || conversa.nome })
       .eq("id", conversa.id);
 
     // ── 7. Enviar resposta via Z-API ──
@@ -279,7 +249,6 @@ Deno.serve(async (req) => {
       console.error("Z-API send error:", zapiErr);
     }
 
-    // Logar no whatsapp_logs
     await supabase.from("whatsapp_logs").insert({
       telefone: phone,
       tipo: "assistente_ia",
@@ -288,18 +257,11 @@ Deno.serve(async (req) => {
     });
 
     console.log(`✅ Resposta enviada para ${phone}`);
-
-    return new Response(
-      JSON.stringify({ ok: true, phone, replied: true }),
-      { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-    );
+    return jsonResponse({ ok: true, phone, replied: true });
   } catch (error: unknown) {
     const msg = error instanceof Error ? error.message : "Erro desconhecido";
     console.error("Erro no webhook WhatsApp:", msg);
-    return new Response(
-      JSON.stringify({ error: msg }),
-      { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-    );
+    return jsonResponse({ error: msg });
   }
 });
 
@@ -313,7 +275,6 @@ async function processarAgendamento(
   try {
     const { servico, data_hora, terapeuta_nome, nome_cliente } = args;
 
-    // Validar que o serviço existe
     const { data: servicoData } = await supabase
       .from("servicos")
       .select("nome, preco")
@@ -326,7 +287,6 @@ async function processarAgendamento(
       return `Serviço "${servico}" não encontrado no catálogo.`;
     }
 
-    // Buscar terapeuta se especificado
     let terapeutaId: string | null = null;
     if (terapeuta_nome) {
       const { data: terapeuta } = await supabase
@@ -339,7 +299,6 @@ async function processarAgendamento(
       terapeutaId = terapeuta?.id || null;
     }
 
-    // Verificar conflito de horário
     const dataHora = new Date(data_hora);
     const inicio = new Date(dataHora.getTime() - 30 * 60000).toISOString();
     const fim = new Date(dataHora.getTime() + 30 * 60000).toISOString();
@@ -361,7 +320,6 @@ async function processarAgendamento(
       return `Horário ${dataHora.toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" })} indisponível. Sugira outro horário ao cliente.`;
     }
 
-    // Buscar user_id pelo telefone (se existir conta)
     const { data: profile } = await supabase
       .from("profiles")
       .select("id")
@@ -370,7 +328,6 @@ async function processarAgendamento(
       .single();
 
     if (!profile) {
-      // Salvar lead para agendamento manual
       await supabase
         .from("whatsapp_conversas")
         .update({
@@ -382,7 +339,6 @@ async function processarAgendamento(
       return `Cliente "${nome_cliente}" não possui conta no app. Agendamento salvo como pendente para confirmação manual pela equipe. Serviço: ${servicoData.nome}, Horário: ${dataHora.toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" })}.`;
     }
 
-    // Criar agendamento
     const { data: agendamento, error: agError } = await supabase
       .from("agendamentos")
       .insert({
