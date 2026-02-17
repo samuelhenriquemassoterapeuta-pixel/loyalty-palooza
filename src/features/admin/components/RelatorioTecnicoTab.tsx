@@ -56,9 +56,9 @@ const PAGES = [
   "Curso Difusor de Ambientes", "Curso Fitoterapia",
   "Curso Óleos Essenciais", "Curso Massagem Modeladora",
   "Curso Drenagem Linfática", "Curso Gastronomia Saudável",
-  "Curso de Vendas",
+  "Curso de Vendas", "Curso Seitai", "Curso Bandagem Elástica",
   // Admin
-  "Painel Admin (32 abas)", "Google Ads Dashboard",
+  "Painel Admin (32+ abas)", "Google Ads Dashboard",
   // Resinkra AI
   "AI Dashboard", "AI Criação", "AI Ganchos", "AI Calendário",
   "AI Histórico", "AI Ideias", "AI Onboarding", "AI Templates",
@@ -69,18 +69,20 @@ const CURSOS = [
   { nome: "Método Resinkra", modulos: 14, horas: 120 },
   { nome: "Aromaterapia Clínica", modulos: 14, horas: 100 },
   { nome: "Head SPA Japonês", modulos: 12, horas: 90 },
-  { nome: "Anatomia Humana", modulos: 12, horas: 100 },
+  { nome: "Anatomia Humana", modulos: 12, horas: 130 },
   { nome: "Yūgen Face SPA", modulos: 10, horas: 80 },
   { nome: "Perfumaria Natural", modulos: 10, horas: 80 },
-  { nome: "Velas Aromáticas", modulos: 10, horas: 70 },
-  { nome: "Saboaria Artesanal", modulos: 10, horas: 70 },
-  { nome: "Difusor de Ambientes", modulos: 8, horas: 60 },
-  { nome: "Fitoterapia Aplicada", modulos: 14, horas: 120 },
-  { nome: "Óleos Essenciais", modulos: 12, horas: 90 },
-  { nome: "Massagem Modeladora", modulos: 10, horas: 80 },
-  { nome: "Drenagem Linfática", modulos: 10, horas: 78 },
+  { nome: "Velas Aromáticas", modulos: 10, horas: 98 },
+  { nome: "Saboaria Artesanal", modulos: 10, horas: 99 },
+  { nome: "Difusor de Ambientes", modulos: 8, horas: 105 },
+  { nome: "Fitoterapia Aplicada", modulos: 14, horas: 140 },
+  { nome: "Óleos Essenciais", modulos: 12, horas: 150 },
+  { nome: "Massagem Modeladora", modulos: 10, horas: 128 },
+  { nome: "Drenagem Linfática", modulos: 10, horas: 116 },
   { nome: "Gastronomia Saudável", modulos: 14, horas: 130 },
-  { nome: "Vendas & Negócios", modulos: 12, horas: 100 },
+  { nome: "Vendas & Negócios", modulos: 12, horas: 75 },
+  { nome: "Seitai e New Seitai", modulos: 12, horas: 125 },
+  { nome: "Bandagem Elástica", modulos: 10, horas: 120 },
 ];
 
 const MODULOS_FUNCIONAIS = [
@@ -107,16 +109,16 @@ const MODULOS_FUNCIONAIS = [
   { modulo: "Dashboard RH Corporativo", complexidade: "Alta", freelancer: 12000, agencia: 18000 },
   { modulo: "Sistema de Parceiros", complexidade: "Alta", freelancer: 10000, agencia: 15000 },
   { modulo: "Landing Page Dinâmica (CMS)", complexidade: "Alta", freelancer: 12000, agencia: 18000 },
-  { modulo: "Painel Admin (32 abas)", complexidade: "Muito Alta", freelancer: 35000, agencia: 50000 },
+  { modulo: "Painel Admin (32+ abas)", complexidade: "Muito Alta", freelancer: 40000, agencia: 55000 },
   { modulo: "Campanhas de Marketing", complexidade: "Média", freelancer: 8000, agencia: 12000 },
   { modulo: "Banners Promocionais", complexidade: "Baixa", freelancer: 4000, agencia: 6000 },
   { modulo: "Segmentação de Clientes", complexidade: "Alta", freelancer: 10000, agencia: 15000 },
   { modulo: "Google Ads Dashboard", complexidade: "Alta", freelancer: 10000, agencia: 15000 },
   { modulo: "Resinkra AI (11 telas)", complexidade: "Muito Alta", freelancer: 30000, agencia: 42000 },
   { modulo: "PWA & Instalação", complexidade: "Média", freelancer: 6000, agencia: 10000 },
-  { modulo: "Infraestrutura EAD (15 cursos)", complexidade: "Muito Alta", freelancer: 45000, agencia: 65000 },
-  { modulo: "Conteúdo dos Cursos (~1.388h)", complexidade: "Muito Alta", freelancer: 180000, agencia: 180000 },
-  { modulo: "Segurança (RLS, Rate Limit, Audit)", complexidade: "Muito Alta", freelancer: 20000, agencia: 30000 },
+  { modulo: "Infraestrutura EAD (17 cursos)", complexidade: "Muito Alta", freelancer: 55000, agencia: 75000 },
+  { modulo: "Conteúdo dos Cursos (~1.886h)", complexidade: "Muito Alta", freelancer: 220000, agencia: 220000 },
+  { modulo: "Segurança (RLS, Rate Limit, Audit)", complexidade: "Muito Alta", freelancer: 25000, agencia: 35000 },
 ];
 
 const EDGE_FUNCTIONS = [
@@ -172,18 +174,18 @@ export default function RelatorioTecnicoTab() {
         {/* ─── Overview ─── */}
         <div className="grid grid-cols-3 sm:grid-cols-3 lg:grid-cols-6 gap-2">
           <MetricCard label="Páginas" value={PAGES.length} sub="rotas únicas" />
-          <MetricCard label="Componentes" value="~220+" sub="React / TSX" />
-          <MetricCard label="Hooks" value={58} sub="custom hooks" />
-          <MetricCard label="Tabelas" value={92} sub="banco de dados" />
-          <MetricCard label="Políticas RLS" value={262} sub="regras de segurança" />
-          <MetricCard label="Migrações" value={73} sub="schema changes" />
+          <MetricCard label="Componentes" value="~240+" sub="React / TSX" />
+          <MetricCard label="Hooks" value={62} sub="custom hooks" />
+          <MetricCard label="Tabelas" value={96} sub="banco de dados" />
+          <MetricCard label="Políticas RLS" value={316} sub="regras de segurança" />
+          <MetricCard label="Migrações" value={80} sub="schema changes" />
         </div>
 
         <div className="grid grid-cols-3 sm:grid-cols-3 lg:grid-cols-6 gap-2">
           <MetricCard label="Edge Functions" value={EDGE_FUNCTIONS.length} sub="serverless" />
-          <MetricCard label="Funções SQL" value={33} sub="procedures" />
-          <MetricCard label="Triggers" value={43} sub="automações" />
-          <MetricCard label="Índices" value={158} sub="performance" />
+          <MetricCard label="Funções SQL" value={38} sub="procedures" />
+          <MetricCard label="Triggers" value={54} sub="automações" />
+          <MetricCard label="Índices" value={171} sub="performance" />
           <MetricCard label="Cursos EAD" value={CURSOS.length} sub="certificáveis" />
           <MetricCard label="Horas Conteúdo" value={`~${totalHoras}h`} sub={`${totalModulos} módulos`} />
         </div>
@@ -276,7 +278,7 @@ export default function RelatorioTecnicoTab() {
           <CardContent className="space-y-3">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {[
-                { label: "Row Level Security (RLS)", desc: "262 políticas ativas em 92 tabelas" },
+                { label: "Row Level Security (RLS)", desc: "316 políticas ativas em 96 tabelas" },
                 { label: "Rate Limiting", desc: "Proteção contra brute-force via login_attempts + RPC" },
                 { label: "Audit Logs", desc: "Trigger automático em tabelas sensíveis" },
                 { label: "URLs Assinadas", desc: "Fotos de evolução e exames protegidos (1h TTL)" },
