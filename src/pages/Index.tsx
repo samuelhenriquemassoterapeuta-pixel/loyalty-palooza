@@ -74,81 +74,71 @@ const Index = () => {
                     <HomeDashboard />
                   </motion.div>
 
-                  {/* Corporativo Highlight Banner */}
-                  <motion.button
-                    variants={fadeUp}
-                    whileTap={{ scale: 0.98 }}
-                    whileHover={{ scale: 1.01 }}
-                    onClick={() => navigate("/corporativo")}
-                    className="w-full relative overflow-hidden flex items-center gap-4 p-5 rounded-2xl bg-gradient-to-r from-primary/90 to-primary text-primary-foreground shadow-glow hover:shadow-elevated transition-all duration-300"
-                  >
-                    <div className="absolute -right-6 -top-6 w-24 h-24 bg-primary-foreground/5 rounded-full blur-xl" />
-                    <div className="p-3 rounded-xl bg-primary-foreground/15 shadow-sm">
-                      <Building2 size={24} className="drop-shadow-sm" />
-                    </div>
-                    <div className="flex-1 text-left">
-                      <p className="font-bold text-base">Corporativo</p>
-                      <p className="text-xs opacity-80">
-                        Bem-estar para sua empresa — planos sob medida
-                      </p>
-                    </div>
-                    <ArrowRight size={18} className="opacity-70" />
-                  </motion.button>
+                  {/* Extras colapsável */}
+                  <motion.div variants={fadeUp}>
+                    <CollapsibleDashboardSection title="Extras" defaultOpen={false}>
+                      <div className="space-y-3">
+                        {/* Corporativo Highlight Banner */}
+                        <button
+                          onClick={() => navigate("/corporativo")}
+                          className="w-full relative overflow-hidden flex items-center gap-4 p-5 rounded-2xl bg-gradient-to-r from-primary/90 to-primary text-primary-foreground shadow-glow hover:shadow-elevated transition-all duration-300"
+                        >
+                          <div className="absolute -right-6 -top-6 w-24 h-24 bg-primary-foreground/5 rounded-full blur-xl" />
+                          <div className="p-3 rounded-xl bg-primary-foreground/15 shadow-sm">
+                            <Building2 size={24} className="drop-shadow-sm" />
+                          </div>
+                          <div className="flex-1 text-left">
+                            <p className="font-bold text-base">Corporativo</p>
+                            <p className="text-xs opacity-80">Bem-estar para sua empresa — planos sob medida</p>
+                          </div>
+                          <ArrowRight size={18} className="opacity-70" />
+                        </button>
 
-                  {/* Referral Banner */}
-                  <motion.button
-                    variants={fadeUp}
-                    whileTap={{ scale: 0.98 }}
-                    whileHover={{ scale: 1.01 }}
-                    onClick={() => navigate("/indicacoes")}
-                    className="w-full flex items-center gap-3 p-4 rounded-2xl glass-card-strong hover:shadow-elevated transition-all duration-300"
-                  >
-                    <div className="p-2.5 rounded-xl bg-accent/25 shadow-sm">
-                      <Gift className="text-accent" size={22} />
-                    </div>
-                    <div className="flex-1 text-left">
-                      <p className="font-semibold text-foreground">Indique e Ganhe</p>
-                      <p className="text-xs text-muted-foreground">
-                        Ganhe R$ 10 por cada amigo indicado
-                      </p>
-                    </div>
-                    <div className="text-xs px-3 py-1.5 rounded-full gradient-accent text-accent-foreground font-bold shadow-sm">
-                      R$ 10
-                    </div>
-                  </motion.button>
+                        {/* Referral Banner */}
+                        <button
+                          onClick={() => navigate("/indicacoes")}
+                          className="w-full flex items-center gap-3 p-4 rounded-2xl glass-card-strong hover:shadow-elevated transition-all duration-300"
+                        >
+                          <div className="p-2.5 rounded-xl bg-accent/25 shadow-sm">
+                            <Gift className="text-accent" size={22} />
+                          </div>
+                          <div className="flex-1 text-left">
+                            <p className="font-semibold text-foreground">Indique e Ganhe</p>
+                            <p className="text-xs text-muted-foreground">Ganhe R$ 10 por cada amigo indicado</p>
+                          </div>
+                          <div className="text-xs px-3 py-1.5 rounded-full gradient-accent text-accent-foreground font-bold shadow-sm">
+                            R$ 10
+                          </div>
+                        </button>
+
+                        {/* Share QR Code */}
+                        <ShareQRCode />
+
+                        {/* Admin Quick Access */}
+                        {isAdmin && (
+                          <button
+                            onClick={() => navigate("/admin")}
+                            className="w-full flex items-center gap-3 p-4 rounded-2xl glass-card-strong hover:shadow-elevated transition-all duration-300"
+                          >
+                            <div className="p-2 rounded-xl bg-primary/20">
+                              <Settings className="text-primary" size={20} />
+                            </div>
+                            <div className="flex-1 text-left">
+                              <p className="font-semibold text-foreground">Painel Admin</p>
+                              <p className="text-xs text-muted-foreground">Gerenciar produtos, serviços e pacotes</p>
+                            </div>
+                            <div className="text-xs px-2 py-1 rounded-full bg-primary/20 text-primary font-medium">
+                              Admin
+                            </div>
+                          </button>
+                        )}
+                      </div>
+                    </CollapsibleDashboardSection>
+                  </motion.div>
                 </div>
 
-                {/* Right column - sidebar content */}
+                {/* Right column - sidebar content (desktop) */}
                 <div className="lg:col-span-2 space-y-5 mt-6 lg:mt-0">
-                  {/* Share QR Code */}
-                  <motion.div variants={fadeUp}>
-                    <ShareQRCode />
-                  </motion.div>
-
-                  {/* Admin Quick Access */}
-                  {isAdmin && (
-                    <motion.button
-                      variants={fadeUp}
-                      whileTap={{ scale: 0.98 }}
-                      whileHover={{ scale: 1.01 }}
-                      onClick={() => navigate("/admin")}
-                      className="w-full flex items-center gap-3 p-4 rounded-2xl glass-card-strong hover:shadow-elevated transition-all duration-300"
-                    >
-                      <div className="p-2 rounded-xl bg-primary/20">
-                        <Settings className="text-primary" size={20} />
-                      </div>
-                      <div className="flex-1 text-left">
-                        <p className="font-semibold text-foreground">Painel Admin</p>
-                        <p className="text-xs text-muted-foreground">
-                          Gerenciar produtos, serviços e pacotes
-                        </p>
-                      </div>
-                      <div className="text-xs px-2 py-1 rounded-full bg-primary/20 text-primary font-medium">
-                        Admin
-                      </div>
-                    </motion.button>
-                  )}
-
                   {/* Section: Histórico */}
                   <motion.div variants={fadeUp} className="space-y-2.5">
                     <TransactionHistory />
