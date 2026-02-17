@@ -23,6 +23,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { AppLayout } from "@/components/AppLayout";
+import { AnimatedPageBackground } from "@/components/AnimatedPageBackground";
 import { useSocialPosts } from "@/features/social/hooks/useSocialPosts";
 import { toast } from "sonner";
 import { ButtonLoader } from "@/components/LoadingSpinner";
@@ -179,8 +180,9 @@ const ResinkraMoments = () => {
 
   return (
     <AppLayout>
-      <div className="min-h-screen bg-background gradient-hero pb-24 lg:pb-8">
-        <div className="max-w-lg lg:max-w-4xl mx-auto px-4 lg:px-8 safe-top pt-4">
+      <div className="min-h-screen bg-background gradient-hero pb-24 lg:pb-8 relative overflow-hidden">
+        <AnimatedPageBackground />
+        <div className="max-w-lg lg:max-w-4xl mx-auto px-4 lg:px-8 safe-top pt-4 relative z-10">
           {/* Header */}
           <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="flex items-center gap-3 mb-5">
             <button onClick={() => navigate(-1)} className="p-2 rounded-xl hover:bg-muted/50 transition-colors">

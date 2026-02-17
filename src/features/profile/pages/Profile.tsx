@@ -27,6 +27,7 @@ import {
 } from "lucide-react";
 import { PageLoading } from "@/components/LoadingSpinner";
 import { AppLayout } from "@/components/AppLayout";
+import { AnimatedPageBackground } from "@/components/AnimatedPageBackground";
 import { useAuth } from "@/contexts/AuthContext";
 import { useProfile } from "@/features/profile/hooks/useProfile";
 import { useAdmin } from "@/features/admin/hooks/useAdmin";
@@ -218,8 +219,9 @@ const Profile = () => {
 
   return (
     <AppLayout>
-      <div className="min-h-screen bg-background gradient-hero pb-24 lg:pb-8">
-        <div className="max-w-lg lg:max-w-4xl mx-auto px-4 lg:px-8 safe-top pt-4">
+      <div className="min-h-screen bg-background gradient-hero pb-24 lg:pb-8 relative overflow-hidden">
+        <AnimatedPageBackground />
+        <div className="max-w-lg lg:max-w-4xl mx-auto px-4 lg:px-8 safe-top pt-4 relative z-10">
           <motion.div
             variants={stagger}
             initial="hidden"

@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { Trophy, TrendingUp, Filter, Star, Gift, BarChart3 } from "lucide-react";
 import { AppLayout } from "@/components/AppLayout";
+import { AnimatedPageBackground } from "@/components/AnimatedPageBackground";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAchievementCelebration } from "@/features/conquistas/hooks/useAchievementCelebration";
 import { useRanking } from "@/features/conquistas/hooks/useRanking";
@@ -102,8 +103,9 @@ const Conquistas = () => {
 
   return (
     <AppLayout>
-      <div className="min-h-screen bg-background gradient-hero pb-24 lg:pb-8">
-        <div className="max-w-lg lg:max-w-4xl xl:max-w-5xl mx-auto px-4 lg:px-8 pt-6 safe-top">
+      <div className="min-h-screen bg-background gradient-hero pb-24 lg:pb-8 relative overflow-hidden">
+        <AnimatedPageBackground />
+        <div className="max-w-lg lg:max-w-4xl xl:max-w-5xl mx-auto px-4 lg:px-8 pt-6 safe-top relative z-10">
           <motion.div
             variants={stagger}
             initial="hidden"

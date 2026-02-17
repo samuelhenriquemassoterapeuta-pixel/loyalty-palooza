@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Apple, BarChart3, Trophy, ClipboardList, UtensilsCrossed, CalendarDays, BookOpen } from "lucide-react";
 import { AppLayout } from "@/components/AppLayout";
+import { AnimatedPageBackground } from "@/components/AnimatedPageBackground";
 import { DietasDashboard } from "@/features/dietas/components/DietasDashboard";
 import { FichaNutricionalForm } from "@/features/dietas/components/FichaNutricionalForm";
 import { HistoricoSemanal } from "@/features/dietas/components/HistoricoSemanal";
@@ -22,8 +23,9 @@ const fadeUp = {
 const Dietas = () => {
   return (
     <AppLayout>
-      <div className="min-h-screen bg-background pb-24 lg:pb-8">
-        <div className="max-w-lg lg:max-w-4xl xl:max-w-5xl mx-auto px-4 lg:px-8 pt-6 safe-top">
+      <div className="min-h-screen bg-background pb-24 lg:pb-8 relative overflow-hidden">
+        <AnimatedPageBackground />
+        <div className="max-w-lg lg:max-w-4xl xl:max-w-5xl mx-auto px-4 lg:px-8 pt-6 safe-top relative z-10">
           <motion.div
             variants={stagger}
             initial="hidden"

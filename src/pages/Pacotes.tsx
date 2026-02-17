@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { AppLayout } from "@/components/AppLayout";
+import { AnimatedPageBackground } from "@/components/AnimatedPageBackground";
 import { Progress } from "@/components/ui/progress";
 import { ArrowLeft, Package, Check, Clock, Sparkles, Calendar, AlertTriangle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -79,8 +80,9 @@ const Pacotes = () => {
 
   return (
     <AppLayout>
-      <div className="min-h-screen bg-background gradient-hero pb-24 lg:pb-8">
-        <div className="max-w-lg lg:max-w-4xl mx-auto px-4 lg:px-8 safe-top pt-4">
+      <div className="min-h-screen bg-background gradient-hero pb-24 lg:pb-8 relative overflow-hidden">
+        <AnimatedPageBackground />
+        <div className="max-w-lg lg:max-w-4xl mx-auto px-4 lg:px-8 safe-top pt-4 relative z-10">
           <motion.div
             variants={stagger}
             initial="hidden"

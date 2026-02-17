@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Search, Filter, Percent } from "lucide-react";
 import { AppLayout } from "@/components/AppLayout";
+import { AnimatedPageBackground } from "@/components/AnimatedPageBackground";
 import { Button } from "@/components/ui/button";
 
 const stagger = {
@@ -36,8 +37,9 @@ const allOffers = [
 const Offers = () => {
   return (
     <AppLayout>
-      <div className="min-h-screen bg-background gradient-hero pb-24 lg:pb-8">
-        <div className="max-w-lg lg:max-w-4xl mx-auto px-4 lg:px-8 safe-top pt-4">
+      <div className="min-h-screen bg-background gradient-hero pb-24 lg:pb-8 relative overflow-hidden">
+        <AnimatedPageBackground />
+        <div className="max-w-lg lg:max-w-4xl mx-auto px-4 lg:px-8 safe-top pt-4 relative z-10">
           <motion.div
             variants={stagger}
             initial="hidden"

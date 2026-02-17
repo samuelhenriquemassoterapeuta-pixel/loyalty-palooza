@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Activity, Search, Droplets, Accessibility, TreePine, ChevronDown, Dumbbell, ArrowRight, Apple, FileUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AppLayout } from "@/components/AppLayout";
+import { AnimatedPageBackground } from "@/components/AnimatedPageBackground";
 import { Input } from "@/components/ui/input";
 import { ProtocoloCard } from "@/features/protocolos/components/ProtocoloCard";
 import { DietasSection } from "@/features/protocolos/components/DietasSection";
@@ -75,8 +76,9 @@ const Protocolos = () => {
 
   return (
     <AppLayout>
-      <div className="min-h-screen bg-background pb-24 lg:pb-8">
-        <div className="max-w-lg lg:max-w-4xl xl:max-w-5xl mx-auto px-4 lg:px-8 pt-6 safe-top">
+      <div className="min-h-screen bg-background pb-24 lg:pb-8 relative overflow-hidden">
+        <AnimatedPageBackground />
+        <div className="max-w-lg lg:max-w-4xl xl:max-w-5xl mx-auto px-4 lg:px-8 pt-6 safe-top relative z-10">
           <motion.div
             variants={stagger}
             initial="hidden"
