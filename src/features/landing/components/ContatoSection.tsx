@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useParallax } from "@/hooks/useParallax";
 import { useLandingConfig } from "@/features/landing/hooks/useLandingConfig";
-import contatoBg from "@/assets/hero-options/contato-bg.jpg";
 
 const contactItemVariants = {
   hidden: { opacity: 0, x: 20 },
@@ -34,11 +33,6 @@ export const ContatoSection = () => {
 
   return (
     <section id="contato" ref={ref} className="py-14 sm:py-20 lg:py-28 relative overflow-hidden">
-      {/* Background image */}
-      <div className="absolute inset-0">
-        <img src={contatoBg} alt="" className="w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-background/70 backdrop-blur-[2px]" />
-      </div>
       <motion.div
         style={{ y }}
         className="absolute bottom-0 right-[5%] w-80 h-80 bg-primary/4 rounded-full blur-3xl pointer-events-none hidden lg:block"

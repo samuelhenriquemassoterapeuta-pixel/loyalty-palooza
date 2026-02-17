@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { Building2, ArrowRight } from "lucide-react";
+import { motion } from "framer-motion";
 import { FloatingContactButtons } from "@/components/FloatingContactButtons";
 import { LandingHeader } from "@/features/landing/components/LandingHeader";
 import { HeroSection, HeroAuthButtons } from "@/features/landing/components/HeroSection";
@@ -11,6 +12,7 @@ import { SobreSection } from "@/features/landing/components/SobreSection";
 import { ContatoSection } from "@/features/landing/components/ContatoSection";
 import { LandingFooter } from "@/features/landing/components/LandingFooter";
 import { CollapsibleSection } from "@/features/landing/components/CollapsibleSection";
+import heroBg from "@/assets/hero-options/hero-spa-resinkra.jpg";
 
 const Landing = () => {
   const navigate = useNavigate();
@@ -67,8 +69,29 @@ const Landing = () => {
       <PacotesSection />
       <DepoimentosSection />
       <SobreSection />
-      <ContatoSection />
-      <LandingFooter />
+
+      {/* Contato + Footer com imagem de fundo animada única */}
+      <div className="relative overflow-hidden">
+        <motion.img
+          src={heroBg}
+          alt=""
+          className="absolute inset-0 w-full h-full object-cover"
+          animate={{
+            scale: [1, 1.08, 1],
+          }}
+          transition={{
+            duration: 25,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        />
+        <div className="absolute inset-0 bg-background/70 backdrop-blur-[1px]" />
+        <div className="relative z-10">
+          <ContatoSection />
+          <LandingFooter />
+        </div>
+      </div>
+
       <FloatingContactButtons />
     </div>
   );
