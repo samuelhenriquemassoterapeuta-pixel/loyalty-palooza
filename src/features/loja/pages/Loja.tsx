@@ -479,28 +479,39 @@ export default function Loja() {
                   </CollapsibleDashboardSection>
                 </motion.div>
 
-                {loadingProdutos ? (
-                  <ProdutosGridSkeleton />
-                ) : produtosFiltrados.length === 0 ? (
-                  <div className="text-center py-12 glass-card rounded-2xl">
-                    <Package className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-                    <p className="text-muted-foreground">Nenhum produto encontrado</p>
-                  </div>
-                ) : (
-                  <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 lg:gap-4">
-                    {produtosFiltrados.map((produto, index) => (
-                      <ProdutoCard
-                        key={produto.id}
-                        produto={produto}
-                        index={index}
-                        noCarrinho={noCarrinho(produto.id)}
-                        onToggle={() => handleToggleCarrinho(produto)}
-                        levelDiscountPercent={storeDiscountPercent}
-                        cashbackBonusPercent={cashbackBonusPercent}
-                      />
-                    ))}
-                  </div>
-                )}
+                <CollapsibleDashboardSection
+                  title="Produtos"
+                  icon={<ShoppingBag size={16} />}
+                  defaultOpen={false}
+                  badge={
+                    <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-primary/10 text-primary">
+                      {produtosFiltrados.length}
+                    </span>
+                  }
+                >
+                  {loadingProdutos ? (
+                    <ProdutosGridSkeleton />
+                  ) : produtosFiltrados.length === 0 ? (
+                    <div className="text-center py-12 glass-card rounded-2xl">
+                      <Package className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+                      <p className="text-muted-foreground">Nenhum produto encontrado</p>
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 lg:gap-4">
+                      {produtosFiltrados.map((produto, index) => (
+                        <ProdutoCard
+                          key={produto.id}
+                          produto={produto}
+                          index={index}
+                          noCarrinho={noCarrinho(produto.id)}
+                          onToggle={() => handleToggleCarrinho(produto)}
+                          levelDiscountPercent={storeDiscountPercent}
+                          cashbackBonusPercent={cashbackBonusPercent}
+                        />
+                      ))}
+                    </div>
+                  )}
+                </CollapsibleDashboardSection>
               </TabsContent>
             </Tabs>
           </motion.div>
