@@ -23,10 +23,10 @@ const SectionTitle = ({ icon: Icon, title }: { icon: any; title: string }) => (
 );
 
 const MetricCard = ({ label, value, sub }: { label: string; value: string | number; sub?: string }) => (
-  <div className="p-4 rounded-xl border bg-card">
-    <p className="text-xs text-muted-foreground mb-1">{label}</p>
-    <p className="text-2xl font-bold text-foreground">{value}</p>
-    {sub && <p className="text-xs text-muted-foreground mt-1">{sub}</p>}
+  <div className="p-3 rounded-xl border bg-card">
+    <p className="text-[10px] text-muted-foreground mb-0.5 truncate">{label}</p>
+    <p className="text-lg font-bold text-foreground leading-tight">{value}</p>
+    {sub && <p className="text-[10px] text-muted-foreground mt-0.5 truncate">{sub}</p>}
   </div>
 );
 
@@ -148,21 +148,21 @@ export default function RelatorioTecnicoTab() {
 
   return (
     <ScrollArea className="h-[calc(100vh-220px)]">
-      <div className="space-y-6 pr-2">
+      <div className="space-y-4 pr-2">
         {/* ─── Header ─── */}
         <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-transparent">
-          <CardContent className="pt-6">
-            <div className="flex items-start justify-between flex-wrap gap-4">
+          <CardContent className="pt-4 pb-4">
+            <div className="flex items-center justify-between flex-wrap gap-2">
               <div>
-                <h2 className="text-2xl font-bold text-foreground flex items-center gap-2">
-                  <FileText className="w-6 h-6 text-primary" />
+                <h2 className="text-base sm:text-xl font-bold text-foreground flex items-center gap-2">
+                  <FileText className="w-5 h-5 text-primary shrink-0" />
                   Relatório Técnico & Financeiro
                 </h2>
-                <p className="text-muted-foreground mt-1">
-                  Auditoria completa da Plataforma Resinkra — atualizado em {new Date().toLocaleDateString("pt-BR")}
+                <p className="text-xs text-muted-foreground mt-1">
+                  Auditoria — {new Date().toLocaleDateString("pt-BR")}
                 </p>
               </div>
-              <Badge variant="outline" className="text-sm px-3 py-1 border-primary/30">
+              <Badge variant="outline" className="text-[10px] px-2 py-0.5 border-primary/30">
                 SaaS Enterprise
               </Badge>
             </div>
@@ -170,7 +170,7 @@ export default function RelatorioTecnicoTab() {
         </Card>
 
         {/* ─── Overview ─── */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+        <div className="grid grid-cols-3 sm:grid-cols-3 lg:grid-cols-6 gap-2">
           <MetricCard label="Páginas" value={PAGES.length} sub="rotas únicas" />
           <MetricCard label="Componentes" value="~220+" sub="React / TSX" />
           <MetricCard label="Hooks" value={58} sub="custom hooks" />
@@ -179,7 +179,7 @@ export default function RelatorioTecnicoTab() {
           <MetricCard label="Migrações" value={73} sub="schema changes" />
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+        <div className="grid grid-cols-3 sm:grid-cols-3 lg:grid-cols-6 gap-2">
           <MetricCard label="Edge Functions" value={EDGE_FUNCTIONS.length} sub="serverless" />
           <MetricCard label="Funções SQL" value={33} sub="procedures" />
           <MetricCard label="Triggers" value={43} sub="automações" />
