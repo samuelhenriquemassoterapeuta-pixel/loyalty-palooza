@@ -1,10 +1,7 @@
+import { handleCors } from "../_shared/cors.ts";
+import { createServiceClient, createUserClient } from "../_shared/supabase-client.ts";
+import { jsonResponse, errorResponse, streamResponse } from "../_shared/response.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.89.0";
-
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
-};
 
 const LOVABLE_AI_URL = "https://ai.gateway.lovable.dev/v1/chat/completions";
 
@@ -54,47 +51,34 @@ const aiTools = [
 ];
 
 Deno.serve(async (req) => {
-  if (req.method === "OPTIONS") {
-    return new Response(null, { headers: corsHeaders });
-  }
+  const corsResponse = handleCors(req);
+  if (corsResponse) return corsResponse;
 
   try {
     const authHeader = req.headers.get("Authorization");
     if (!authHeader?.startsWith("Bearer ")) {
-      return new Response(JSON.stringify({ error: "Não autorizado" }), {
-        status: 401,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
+      return errorResponse("Não autorizado", 401);
     }
 
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const supabaseAnonKey = Deno.env.get("SUPABASE_ANON_KEY")!;
-    const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
 
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY não configurada");
 
     // Validate user
-    const supabaseUser = createClient(supabaseUrl, supabaseAnonKey, {
-      global: { headers: { Authorization: authHeader } },
-    });
+    const supabaseUser = createUserClient(authHeader);
     const { data: authData, error: authError } = await supabaseUser.auth.getUser();
     if (authError || !authData?.user) {
-      return new Response(JSON.stringify({ error: "Não autorizado" }), {
-        status: 401,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
+      return errorResponse("Não autorizado", 401);
     }
 
     const userId = authData.user.id;
-    const supabase = createClient(supabaseUrl, supabaseServiceKey);
+    const supabase = createServiceClient();
 
     const { messages } = await req.json();
     if (!messages || !Array.isArray(messages)) {
-      return new Response(JSON.stringify({ error: "Mensagens são obrigatórias" }), {
-        status: 400,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
+      return errorResponse("Mensagens são obrigatórias", 400);
     }
 
     // Fetch business context
@@ -127,44 +111,7 @@ Deno.serve(async (req) => {
       ...messages.slice(-20).map((m: any) => ({ role: m.role, content: m.content })),
     ];
 
-    // First AI call
-    const aiResponse = await fetch(LOVABLE_AI_URL, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${LOVABLE_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: "google/gemini-2.5-flash",
-        messages: aiMessages,
-        tools: aiTools,
-        tool_choice: "auto",
-        stream: true,
-      }),
-    });
-
-    if (!aiResponse.ok) {
-      if (aiResponse.status === 429) {
-        return new Response(JSON.stringify({ error: "Limite de requisições excedido. Tente novamente em alguns minutos." }), {
-          status: 429,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
-      }
-      if (aiResponse.status === 402) {
-        return new Response(JSON.stringify({ error: "Créditos de IA insuficientes." }), {
-          status: 402,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
-      }
-      const errText = await aiResponse.text();
-      console.error(`AI error [${aiResponse.status}]:`, errText);
-      throw new Error(`AI retornou ${aiResponse.status}`);
-    }
-
-    // Check if we need to handle tool calls by reading the stream
-    // For simplicity with tool calls, we'll do a non-streaming first call,
-    // then stream the follow-up if there are tool calls
-    // Re-do without streaming to check for tool calls
+    // Non-streaming call to check for tool calls
     const aiResponseNonStream = await fetch(LOVABLE_AI_URL, {
       method: "POST",
       headers: {
@@ -180,16 +127,8 @@ Deno.serve(async (req) => {
     });
 
     if (!aiResponseNonStream.ok) {
-      if (aiResponseNonStream.status === 429) {
-        return new Response(JSON.stringify({ error: "Limite de requisições excedido." }), {
-          status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
-      }
-      if (aiResponseNonStream.status === 402) {
-        return new Response(JSON.stringify({ error: "Créditos de IA insuficientes." }), {
-          status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
-      }
+      if (aiResponseNonStream.status === 429) return errorResponse("Limite de requisições excedido.", 429);
+      if (aiResponseNonStream.status === 402) return errorResponse("Créditos de IA insuficientes.", 402);
       throw new Error(`AI retornou ${aiResponseNonStream.status}`);
     }
 
@@ -235,20 +174,14 @@ Deno.serve(async (req) => {
       });
 
       if (followUpResponse.ok) {
-        return new Response(followUpResponse.body, {
-          headers: { ...corsHeaders, "Content-Type": "text/event-stream" },
-        });
+        return streamResponse(followUpResponse.body);
       }
 
-      // Fallback: return non-streamed
-      return new Response(JSON.stringify({ content: "Agendamento processado! ✅" }), {
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
+      return jsonResponse({ content: "Agendamento processado! ✅" });
     }
 
     // No tool calls — stream directly
-    // Re-do as streaming call
-    const streamResponse = await fetch(LOVABLE_AI_URL, {
+    const streamRes = await fetch(LOVABLE_AI_URL, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${LOVABLE_API_KEY}`,
@@ -261,20 +194,16 @@ Deno.serve(async (req) => {
       }),
     });
 
-    if (!streamResponse.ok) {
-      throw new Error(`AI stream retornou ${streamResponse.status}`);
+    if (!streamRes.ok) {
+      throw new Error(`AI stream retornou ${streamRes.status}`);
     }
 
-    return new Response(streamResponse.body, {
-      headers: { ...corsHeaders, "Content-Type": "text/event-stream" },
-    });
+    return streamResponse(streamRes.body);
   } catch (error: unknown) {
     const msg = error instanceof Error ? error.message : "Erro desconhecido";
     console.error("Chat error:", msg);
-    return new Response(JSON.stringify({ error: msg }), {
-      status: 500,
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
+    if (error instanceof Response) return error;
+    return errorResponse(msg, 500);
   }
 });
 
