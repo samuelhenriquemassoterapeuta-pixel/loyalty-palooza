@@ -194,6 +194,70 @@ const ferramentasAvancadas: FerramentaItem[] = [
   ]},
 ];
 
+const ferramentasIA: FerramentaItem[] = [
+  { icon: "🤖", title: "Chat IA Interno", desc: "Assistente 24/7 com streaming e tool calling", details: [
+    "Assistente inteligente com respostas em streaming (tempo real)",
+    "Tool calling para agendar sessões automaticamente via chat",
+    "Consulta disponibilidade de terapeutas e horários livres",
+    "Respostas contextualizadas sobre serviços, preços e protocolos",
+    "Histórico de conversas salvo por sessão do usuário",
+    "Modelo: Google Gemini 3 Flash via Lovable AI Gateway",
+    "Suporte 24/7 sem necessidade de atendente humano",
+  ]},
+  { icon: "📱", title: "WhatsApp Bot", desc: "Prospecção regional e agendamento via Z-API", details: [
+    "Prospecção automática de leads regionais via WhatsApp",
+    "Qualificação inteligente com perguntas personalizadas",
+    "Agendamento direto pelo WhatsApp com tool calling",
+    "Integração nativa com Z-API para envio/recebimento",
+    "Painel admin (/chat-whatsapp) para monitorar conversas",
+    "Transbordo para atendimento humano quando necessário",
+    "Relatórios de conversão de leads por campanha",
+  ]},
+  { icon: "🧠", title: "Resinkra AI Studio", desc: "Roteirização profissional para Instagram", details: [
+    "Geração de roteiros para Reels com gancho + desenvolvimento + CTA",
+    "Criação de Carrosséis com estrutura slide-a-slide",
+    "Roteiros para Stories com sequência de telas e CTAs",
+    "Scripts para Lives com pauta, timestamps e interações",
+    "Score de viralidade automático para cada conteúdo",
+    "Prompts especializados por formato e perfil da marca",
+    "Edge Function dedicada: generate-script (Gemini 3 Flash)",
+  ]},
+  { icon: "⚡", title: "Ganchos Virais", desc: "Geração de hooks com score de poder", details: [
+    "Geração de ganchos persuasivos por tópico e nicho",
+    "Score de poder (1-10) para cada gancho gerado",
+    "Emoção principal identificada (curiosidade, medo, desejo, etc.)",
+    "Sugestão de complemento para finalizar o gancho",
+    "Categorização: pergunta, afirmação chocante, estatística, etc.",
+    "Recomendação de melhor uso (Reels, Stories, Carrossel)",
+    "Edge Function dedicada: generate-hooks (Gemini 3 Flash)",
+  ]},
+  { icon: "🎯", title: "Banco de Ideias", desc: "10 ideias por nicho distribuídas pelo funil", details: [
+    "Geração de 10 ideias de conteúdo por solicitação",
+    "Distribuição pelo funil: 4 Topo, 3 Meio, 3 Fundo",
+    "Cada ideia com título, descrição e tipo de conteúdo",
+    "Marcação de ideias já utilizadas para não repetir",
+    "Filtros por nicho, etapa do funil e tipo de conteúdo",
+    "Integração com calendário editorial para agendamento",
+    "Edge Function dedicada: generate-ideas (Gemini 3 Flash)",
+  ]},
+  { icon: "📊", title: "Análise de Viralidade", desc: "Análise de conteúdos externos com IA", details: [
+    "Cole a URL ou texto de um conteúdo para análise",
+    "Score de viralidade com métricas detalhadas",
+    "Identificação de pontos fortes e fracos do conteúdo",
+    "Sugestões de melhoria baseadas em padrões virais",
+    "Comparativo com benchmarks do nicho",
+    "Edge Function dedicada: analyze-viral (Gemini 3 Flash)",
+  ]},
+  { icon: "💡", title: "Recomendações Clínicas", desc: "Motor baseado em regras para protocolos", details: [
+    "Análise automática da ficha nutricional do paciente",
+    "Cruzamento com histórico cirúrgico e objetivos",
+    "Sugestão de tratamentos e protocolos personalizados",
+    "Gatilhos clínicos e de estilo de vida mapeados",
+    "Arquitetura rule-based (sem custo de créditos de IA)",
+    "Rota dedicada: /recomendacoes para o usuário final",
+  ]},
+];
+
 /* ─── Collapsible Tool Item ─── */
 const FerramentaCollapsibleItem = ({ item }: { item: FerramentaItem }) => {
   const [open, setOpen] = useState(false);
@@ -375,26 +439,8 @@ const slides = [
   {
     id: "ia",
     title: "Inteligência Artificial",
-    subtitle: "IA como diferencial competitivo real",
-    content: (
-      <div className="space-y-3">
-        {[
-          { icon: Bot, title: "Chat IA Interno", desc: "Assistente 24/7 com streaming e tool calling para agendamentos automáticos", color: "text-primary" },
-          { icon: Smartphone, title: "WhatsApp Bot", desc: "Prospecção regional, qualificação de leads e agendamento direto via Z-API", color: "text-accent" },
-          { icon: Brain, title: "Resinkra AI Studio", desc: "Roteirização para Reels, Carrosséis, Stories e Lives com análise de viralidade", color: "text-primary" },
-          { icon: Zap, title: "Ganchos Virais", desc: "Geração de hooks com score de poder e sugestão de complemento", color: "text-accent" },
-          { icon: Target, title: "Banco de Ideias", desc: "10 ideias por nicho distribuídas pelo funil: Topo, Meio e Fundo", color: "text-primary" },
-        ].map(item => (
-          <div key={item.title} className="flex gap-3 items-start bg-card border rounded-xl p-3">
-            <item.icon className={`w-5 h-5 ${item.color} shrink-0 mt-0.5`} />
-            <div>
-              <p className="text-xs font-semibold text-foreground">{item.title}</p>
-              <p className="text-[10px] text-muted-foreground leading-relaxed">{item.desc}</p>
-            </div>
-          </div>
-        ))}
-      </div>
-    ),
+    subtitle: "Toque em cada ferramenta IA para ver detalhes",
+    content: <FerramentasCollapsible items={ferramentasIA} />,
     icon: Brain,
     color: "primary",
   },
