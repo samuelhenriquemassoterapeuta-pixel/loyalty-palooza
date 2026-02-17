@@ -49,6 +49,7 @@ import { SocialPostsConfigTab } from "@/features/admin/components/SocialPostsCon
 import { NotificacoesAdminTab } from "@/features/admin/components/NotificacoesAdminTab";
 import { UsuariosAdminTab } from "@/features/admin/components/UsuariosAdminTab";
 import { CodigoPlataformaTab } from "@/features/admin/components/CodigoPlataformaTab";
+import VendaPlataformaTab from "@/features/admin/components/VendaPlataformaTab";
 
 const tabContentVariants = {
   hidden: { opacity: 0, y: 12 },
@@ -477,6 +478,10 @@ const Admin = () => {
                   <Code2 size={14} />
                   Código
                 </TabsTrigger>
+                <TabsTrigger value="venda-plataforma" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
+                  <DollarSign size={14} />
+                  Venda B2B
+                </TabsTrigger>
               </TabsList>
               <ScrollBar orientation="horizontal" className="h-1.5" />
             </ScrollArea>
@@ -707,6 +712,10 @@ const Admin = () => {
 
               <TabsContent value="codigo" forceMount={activeTab === "codigo" ? true : undefined} className={activeTab !== "codigo" ? "hidden" : ""}>
                 <CodigoPlataformaTab />
+              </TabsContent>
+
+              <TabsContent value="venda-plataforma" forceMount={activeTab === "venda-plataforma" ? true : undefined} className={activeTab !== "venda-plataforma" ? "hidden" : ""}>
+                <VendaPlataformaTab />
               </TabsContent>
             </motion.div>
           </AnimatePresence>
