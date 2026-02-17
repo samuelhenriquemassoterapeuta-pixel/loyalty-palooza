@@ -53,7 +53,7 @@ const Index = () => {
               initial={{ scale: 1.15, opacity: 0 }}
               animate={{
                 scale: [1.15, 1.25, 1.15],
-                opacity: [0.12, 0.18, 0.12],
+                opacity: [0.22, 0.32, 0.22],
               }}
               transition={{
                 duration: bgSpeed,
