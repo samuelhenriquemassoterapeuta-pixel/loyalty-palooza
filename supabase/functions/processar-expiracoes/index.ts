@@ -1,25 +1,16 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { handleCors } from "../_shared/cors.ts";
+import { createServiceClient } from "../_shared/supabase-client.ts";
+import { jsonResponse, errorResponse } from "../_shared/response.ts";
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-};
-
-serve(async (req) => {
-  if (req.method === "OPTIONS") {
-    return new Response("ok", { headers: corsHeaders });
-  }
+Deno.serve(async (req) => {
+  const corsRes = handleCors(req);
+  if (corsRes) return corsRes;
 
   try {
-    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-    const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-    const supabase = createClient(supabaseUrl, serviceRoleKey);
+    const supabase = createServiceClient();
 
     // 1. Process expired cashback
-    const { data: expired, error: expiredError } = await supabase.rpc(
-      "process_expired_cashback"
-    );
+    const { data: expired, error: expiredError } = await supabase.rpc("process_expired_cashback");
 
     if (expiredError) {
       console.error("Error processing expired cashback:", expiredError);
@@ -28,9 +19,7 @@ serve(async (req) => {
     }
 
     // 2. Notify users about cashback expiring soon (within 7 days)
-    const { data: expiring, error: expiringError } = await supabase.rpc(
-      "notify_expiring_cashback"
-    );
+    const { data: expiring, error: expiringError } = await supabase.rpc("notify_expiring_cashback");
 
     if (expiringError) {
       console.error("Error notifying expiring cashback:", expiringError);
@@ -38,25 +27,13 @@ serve(async (req) => {
       console.log("Expiring cashback notifications sent:", expiring);
     }
 
-    return new Response(
-      JSON.stringify({
-        success: true,
-        expired: expired || [],
-        expiring: expiring || [],
-      }),
-      {
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-        status: 200,
-      }
-    );
-  } catch (error) {
+    return jsonResponse({
+      success: true,
+      expired: expired || [],
+      expiring: expiring || [],
+    });
+  } catch (error: any) {
     console.error("Error in processar-expiracoes:", error);
-    return new Response(
-      JSON.stringify({ error: error.message }),
-      {
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-        status: 500,
-      }
-    );
+    return errorResponse(error.message, 500);
   }
 });

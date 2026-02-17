@@ -1,20 +1,13 @@
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2.89.0";
-
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
-};
+import { handleCors } from "../_shared/cors.ts";
+import { createServiceClient } from "../_shared/supabase-client.ts";
+import { jsonResponse, errorResponse } from "../_shared/response.ts";
 
 Deno.serve(async (req) => {
-  if (req.method === "OPTIONS") {
-    return new Response(null, { headers: corsHeaders });
-  }
+  const corsRes = handleCors(req);
+  if (corsRes) return corsRes;
 
   try {
-    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-    const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-    const supabase = createClient(supabaseUrl, supabaseServiceKey);
+    const supabase = createServiceClient();
 
     const results = {
       cashback_expirando: 0,
@@ -22,7 +15,7 @@ Deno.serve(async (req) => {
       assinaturas_expirando: 0,
     };
 
-    // 1. Notify about expiring cashback (reuses existing function)
+    // 1. Notify about expiring cashback
     const { data: expiringCashback } = await supabase.rpc("notify_expiring_cashback");
     results.cashback_expirando = expiringCashback?.length || 0;
 
@@ -37,7 +30,6 @@ Deno.serve(async (req) => {
 
     if (inactiveUsers && inactiveUsers.length > 0) {
       for (const user of inactiveUsers) {
-        // Check if already notified recently
         const { data: existing } = await supabase
           .from("notificacoes")
           .select("id")
@@ -94,13 +86,8 @@ Deno.serve(async (req) => {
     // 4. Process expired cashback
     await supabase.rpc("process_expired_cashback");
 
-    return new Response(JSON.stringify({ success: true, results }), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
+    return jsonResponse({ success: true, results });
   } catch (error: any) {
-    return new Response(JSON.stringify({ error: error.message }), {
-      status: 500,
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
+    return errorResponse(error.message, 500);
   }
 });
