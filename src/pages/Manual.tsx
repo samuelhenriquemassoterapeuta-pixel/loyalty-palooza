@@ -25,7 +25,8 @@ import {
 import { AppLayout } from "@/components/AppLayout";
 import { useAdmin } from "@/hooks/useAdmin";
 import { useParceiro } from "@/hooks/useParceiro";
-import { manualUsuario, manualParceiro, manualAdmin, type ManualData } from "@/data/manuaisContent";
+import { useTerapeuta } from "@/hooks/useTerapeuta";
+import { manualUsuario, manualParceiro, manualTerapeuta, manualAdmin, type ManualData } from "@/data/manuaisContent";
 
 const quickLinks = [
   { icon: Calendar, label: "Agendar", path: "/agendamento" },
@@ -187,16 +188,19 @@ export default function Manual() {
   const navigate = useNavigate();
   const { isAdmin } = useAdmin();
   const { parceiro } = useParceiro();
+  const { isTerapeuta } = useTerapeuta();
   const [activeTab, setActiveTab] = useState("usuario");
 
   const tabs = [
     { value: "usuario", label: "Usuário", icon: BookOpen },
+    ...(isTerapeuta ? [{ value: "terapeuta", label: "Terapeuta", icon: Users }] : []),
     ...(parceiro ? [{ value: "parceiro", label: "Parceiro", icon: Users }] : []),
     ...(isAdmin ? [{ value: "admin", label: "Admin", icon: Shield }] : []),
   ];
 
   const dataMap: Record<string, ManualData> = {
     usuario: manualUsuario,
+    terapeuta: manualTerapeuta,
     parceiro: manualParceiro,
     admin: manualAdmin,
   };
@@ -226,7 +230,7 @@ export default function Manual() {
             {/* Tab selector */}
             {tabs.length > 1 && (
               <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-              <TabsList className={`grid w-full ${tabs.length === 3 ? "grid-cols-3" : tabs.length === 2 ? "grid-cols-2" : "grid-cols-1"}`}>
+              <TabsList className={`grid w-full ${tabs.length >= 4 ? "grid-cols-4" : tabs.length === 3 ? "grid-cols-3" : tabs.length === 2 ? "grid-cols-2" : "grid-cols-1"}`}>
                   {tabs.map((tab) => (
                     <TabsTrigger key={tab.value} value={tab.value} className="gap-1.5 text-xs sm:text-sm">
                       <tab.icon className="w-4 h-4" />
