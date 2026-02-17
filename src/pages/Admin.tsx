@@ -1,7 +1,7 @@
 import { useState } from "react"; // v2
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, Plus, FileText, Users, Shield, Dumbbell, Sparkles, ClipboardList, StretchHorizontal, Salad, BookOpen, Stethoscope, Globe, Gift, Ticket, Crown, Building2, CreditCard, Handshake, Camera, Trophy, DollarSign, CalendarDays, Target, Megaphone, Send, BarChart3, Rocket } from "lucide-react";
+import { ArrowLeft, Plus, FileText, Users, Shield, Dumbbell, Sparkles, ClipboardList, StretchHorizontal, Salad, BookOpen, Stethoscope, Globe, Gift, Ticket, Crown, Building2, CreditCard, Handshake, Camera, Trophy, DollarSign, CalendarDays, Target, Megaphone, Send, BarChart3, Rocket, GraduationCap, Bell, UserCog, Settings2 } from "lucide-react";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -44,6 +44,10 @@ import BannersPromocionaisTab from "@/components/admin/BannersPromocionaisTab";
 import CorporativoConteudoTab from "@/components/admin/CorporativoConteudoTab";
 import RelatorioTecnicoTab from "@/components/admin/RelatorioTecnicoTab";
 import ApresentacaoPlataformaTab from "@/components/admin/ApresentacaoPlataformaTab";
+import { CursosAdminTab } from "@/components/admin/CursosAdminTab";
+import { SocialPostsConfigTab } from "@/components/admin/SocialPostsConfigTab";
+import { NotificacoesAdminTab } from "@/components/admin/NotificacoesAdminTab";
+import { UsuariosAdminTab } from "@/components/admin/UsuariosAdminTab";
 
 const tabContentVariants = {
   hidden: { opacity: 0, y: 12 },
@@ -448,6 +452,22 @@ const Admin = () => {
                   <FileText size={14} />
                   Relatório Técnico
                 </TabsTrigger>
+                <TabsTrigger value="cursos-admin" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
+                  <GraduationCap size={14} />
+                  Cursos
+                </TabsTrigger>
+                <TabsTrigger value="social-config" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
+                  <Settings2 size={14} />
+                  Config Moments
+                </TabsTrigger>
+                <TabsTrigger value="notificacoes-admin" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
+                  <Bell size={14} />
+                  Notificações
+                </TabsTrigger>
+                <TabsTrigger value="usuarios" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
+                  <UserCog size={14} />
+                  Usuários
+                </TabsTrigger>
                 <TabsTrigger value="apresentacao" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
                   <Rocket size={14} />
                   Apresentação
@@ -662,6 +682,22 @@ const Admin = () => {
 
               <TabsContent value="apresentacao" forceMount={activeTab === "apresentacao" ? true : undefined} className={activeTab !== "apresentacao" ? "hidden" : ""}>
                 <ApresentacaoPlataformaTab />
+              </TabsContent>
+
+              <TabsContent value="cursos-admin" forceMount={activeTab === "cursos-admin" ? true : undefined} className={activeTab !== "cursos-admin" ? "hidden" : ""}>
+                <CursosAdminTab />
+              </TabsContent>
+
+              <TabsContent value="social-config" forceMount={activeTab === "social-config" ? true : undefined} className={activeTab !== "social-config" ? "hidden" : ""}>
+                <SocialPostsConfigTab />
+              </TabsContent>
+
+              <TabsContent value="notificacoes-admin" forceMount={activeTab === "notificacoes-admin" ? true : undefined} className={activeTab !== "notificacoes-admin" ? "hidden" : ""}>
+                <NotificacoesAdminTab />
+              </TabsContent>
+
+              <TabsContent value="usuarios" forceMount={activeTab === "usuarios" ? true : undefined} className={activeTab !== "usuarios" ? "hidden" : ""}>
+                <UsuariosAdminTab />
               </TabsContent>
             </motion.div>
           </AnimatePresence>
