@@ -1,0 +1,22 @@
+import { Hand } from "lucide-react";
+import capaResinkra from "@/assets/cursos/capa-metodo-resinkra.jpg";
+import { CursoShell } from "@/features/cursos/components/CursoShell";
+import { cursoMetodoResinkraData } from "@/features/cursos/data/cursoMetodoResinkraContent";
+import { metodoResinkraAulaAssets } from "@/features/cursos/data/cursoMetodoResinkraAssets";
+
+export default function CursoMetodoResinkra({ embedded = false }: { embedded?: boolean }) {
+  return (
+    <CursoShell
+      embedded={embedded}
+      storageKey="resinkra_curso_metodo_resinkra_progress"
+      modulos={cursoMetodoResinkraData}
+      assets={metodoResinkraAulaAssets}
+      courseTitle="Método Resinkra"
+      courseSubtitle="Liberação miofascial + relaxamento profundo"
+      courseIcon={<Hand size={24} />}
+      coverImage={capaResinkra}
+      coverVideo=""
+      completionMessage="Parabéns! Você concluiu o Método Resinkra. 🏆 Certificado desbloqueado! 23 anos de prática agora estão nas suas mãos."
+    />
+  );
+}
