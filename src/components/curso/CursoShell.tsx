@@ -23,6 +23,7 @@ import { LazyVideo } from "@/components/curso/LazyVideo";
 import { CursoModuleView } from "@/components/curso/CursoModuleView";
 import { CursoLessonView } from "@/components/curso/CursoLessonView";
 import { useCursoProgress } from "@/hooks/useCursoProgress";
+import { useAdmin } from "@/hooks/useAdmin";
 import type { QuizQuestion } from "@/components/curso/QuizSection";
 
 const iconMap: Record<string, React.ElementType> = {
@@ -96,6 +97,7 @@ export function CursoShell({
     ? ({ children }: { children: React.ReactNode }) => <>{children}</>
     : AppLayout;
   const navigate = useNavigate();
+  const { isAdmin } = useAdmin();
   const [selectedModulo, setSelectedModulo] = useState<number | null>(null);
   const [selectedAula, setSelectedAula] = useState<number | null>(null);
 
@@ -109,6 +111,7 @@ export function CursoShell({
   // ─── Level unlock logic ───
   const nivelOrder: Record<string, number> = { iniciante: 0, intermediario: 1, avancado: 2 };
   const isLevelUnlocked = (nivel?: string): boolean => {
+    if (isAdmin) return true;
     if (!nivel || nivel === "iniciante") return true;
     const prevLevel = nivel === "avancado" ? "intermediario" : "iniciante";
     // All modules of the previous level must be 100%
