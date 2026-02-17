@@ -1,5 +1,5 @@
 import { useSearchParams } from "react-router-dom";
-import { GraduationCap, Flower2, Sparkles, Bone, Gem, Hand, Droplets, Flame, Bath, Wind, Leaf, FlaskConical, Fingerprint, Waves, LucideIcon } from "lucide-react";
+import { GraduationCap, Flower2, Sparkles, Bone, Gem, Hand, Droplets, Flame, Bath, Wind, Leaf, FlaskConical, Fingerprint, Waves, ChefHat, LucideIcon } from "lucide-react";
 import { AppLayout } from "@/components/AppLayout";
 import { lazy, Suspense, useMemo, useRef, useEffect } from "react";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
@@ -22,6 +22,7 @@ const CursoFitoterapiaHero = lazy(() => import("@/pages/CursoFitoterapiaHero"));
 const CursoOleosEssenciaisHero = lazy(() => import("@/pages/CursoOleosEssenciaisHero"));
 const CursoMassagemModeladoraHero = lazy(() => import("@/pages/CursoMassagemModeladoraHero"));
 const CursoDrenagemLinfaticaHero = lazy(() => import("@/pages/CursoDrenagemLinfaticaHero"));
+const CursoGastronomiaSaudavelHero = lazy(() => import("@/pages/CursoGastronomiaSaudavelHero"));
 
 interface TabDef {
   value: string;
@@ -46,6 +47,7 @@ const tabDefs: TabDef[] = [
   { value: "oleos", label: "Óleos", icon: FlaskConical, storageKey: "resinkra_curso_oleos_essenciais_progress", totalAulas: 0 },
   { value: "modeladora", label: "Modeladora", icon: Fingerprint, storageKey: "resinkra_curso_massagem_modeladora_progress", totalAulas: 0 },
   { value: "drenagem", label: "Drenagem", icon: Waves, storageKey: "resinkra_curso_drenagem_linfatica_progress", totalAulas: 0 },
+  { value: "gastronomia", label: "Gastronomia", icon: ChefHat, storageKey: "resinkra_curso_gastronomia_saudavel_progress", totalAulas: 0 },
 ];
 
 function getProgress(storageKey: string): number {
@@ -162,6 +164,7 @@ export default function Cursos() {
           {tab === "oleos" && <CursoOleosEssenciaisHero embedded />}
           {tab === "modeladora" && <CursoMassagemModeladoraHero embedded />}
           {tab === "drenagem" && <CursoDrenagemLinfaticaHero embedded />}
+          {tab === "gastronomia" && <CursoGastronomiaSaudavelHero embedded />}
         </Suspense>
       </div>
     </AppLayout>
