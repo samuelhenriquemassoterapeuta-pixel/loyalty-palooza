@@ -1,27 +1,18 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { handleCors } from "../_shared/cors.ts";
+import { requireAuth } from "../_shared/auth.ts";
+import { createUserClient } from "../_shared/supabase-client.ts";
+import { jsonResponse, errorResponse } from "../_shared/response.ts";
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
-};
-
-serve(async (req) => {
-  if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
+Deno.serve(async (req) => {
+  const corsResponse = handleCors(req);
+  if (corsResponse) return corsResponse;
 
   try {
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY not configured");
 
-    const authHeader = req.headers.get("Authorization");
-    if (!authHeader) return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } });
-
-    const supabase = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_ANON_KEY")!, {
-      global: { headers: { Authorization: authHeader } },
-    });
-    const { data: claimsData, error: claimsError } = await supabase.auth.getClaims(authHeader.replace("Bearer ", ""));
-    if (claimsError || !claimsData?.claims) return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } });
-    const userId = claimsData.claims.sub;
+    const { userId, authHeader } = await requireAuth(req);
+    const supabase = createUserClient(authHeader);
 
     const { brand_profile, topic, category, quantity = 10 } = await req.json();
 
@@ -62,8 +53,8 @@ Responda EXATAMENTE neste JSON:
     });
 
     if (!response.ok) {
-      if (response.status === 429) return new Response(JSON.stringify({ error: "Rate limit exceeded. Tente novamente em instantes." }), { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } });
-      if (response.status === 402) return new Response(JSON.stringify({ error: "Créditos insuficientes." }), { status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+      if (response.status === 429) return errorResponse("Rate limit exceeded. Tente novamente em instantes.", 429);
+      if (response.status === 402) return errorResponse("Créditos insuficientes.", 402);
       const t = await response.text();
       console.error("AI error:", response.status, t);
       throw new Error("Erro na geração de ganchos");
@@ -97,13 +88,10 @@ Responda EXATAMENTE neste JSON:
       if (insertError) throw insertError;
     }
 
-    return new Response(JSON.stringify({ count: hooksToInsert.length, success: true }), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
+    return jsonResponse({ count: hooksToInsert.length, success: true });
   } catch (e) {
     console.error("generate-hooks error:", e);
-    return new Response(JSON.stringify({ error: e instanceof Error ? e.message : "Unknown error" }), {
-      status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
+    if (e instanceof Response) return e;
+    return errorResponse(e instanceof Error ? e.message : "Unknown error", 500);
   }
 });

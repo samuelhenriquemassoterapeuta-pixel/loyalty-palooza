@@ -1,40 +1,27 @@
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
-};
+import { handleCors } from "../_shared/cors.ts";
+import { createServiceClient } from "../_shared/supabase-client.ts";
+import { requireAuthUser } from "../_shared/auth.ts";
+import { jsonResponse, errorResponse } from "../_shared/response.ts";
 
 const ASAAS_API_URL = "https://api.asaas.com/v3";
 
 Deno.serve(async (req) => {
-  if (req.method === "OPTIONS") {
-    return new Response(null, { headers: corsHeaders });
-  }
+  const corsResponse = handleCors(req);
+  if (corsResponse) return corsResponse;
 
   try {
     const ASAAS_API_KEY = Deno.env.get("ASAAS_API_KEY");
     if (!ASAAS_API_KEY) throw new Error("ASAAS_API_KEY não configurada");
 
-    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-    const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-    const supabase = createClient(supabaseUrl, supabaseServiceKey);
-
-    // Auth
-    const authHeader = req.headers.get("Authorization");
-    if (!authHeader) throw new Error("Não autorizado");
-
-    const token = authHeader.replace("Bearer ", "");
-    const { data: { user }, error: authError } = await supabase.auth.getUser(token);
-    if (authError || !user) throw new Error("Não autorizado");
+    const { userId, email } = await requireAuthUser(req);
+    const supabase = createServiceClient();
 
     const body = await req.json();
     const {
-      billingType, // PIX, CREDIT_CARD, BOLETO
+      billingType,
       value,
       description,
-      tipoReferencia, // pedido, assinatura, pacote, vale_presente
+      tipoReferencia,
       referenciaId,
       customerName,
       customerEmail,
@@ -58,7 +45,7 @@ Deno.serve(async (req) => {
     const { data: profile } = await supabase
       .from("profiles")
       .select("asaas_customer_id, nome, telefone")
-      .eq("id", user.id)
+      .eq("id", userId)
       .single();
 
     let asaasCustomerId = profile?.asaas_customer_id;
@@ -72,10 +59,10 @@ Deno.serve(async (req) => {
         },
         body: JSON.stringify({
           name: customerName || profile?.nome || "Cliente",
-          email: customerEmail || user.email,
+          email: customerEmail || email,
           cpfCnpj: customerCpfCnpj.replace(/\D/g, ""),
           mobilePhone: customerPhone || profile?.telefone || undefined,
-          externalReference: user.id,
+          externalReference: userId,
         }),
       });
 
@@ -86,11 +73,10 @@ Deno.serve(async (req) => {
 
       asaasCustomerId = customerData.id;
 
-      // Save customer ID to profile
       await supabase
         .from("profiles")
         .update({ asaas_customer_id: asaasCustomerId })
-        .eq("id", user.id);
+        .eq("id", userId);
     }
 
     // 2. Create payment
@@ -103,7 +89,6 @@ Deno.serve(async (req) => {
       externalReference: `${tipoReferencia}:${referenciaId}`,
     };
 
-    // Credit card specific
     if (billingType === "CREDIT_CARD" && creditCard) {
       paymentBody.creditCard = creditCard;
       paymentBody.creditCardHolderInfo = creditCardHolderInfo;
@@ -130,9 +115,7 @@ Deno.serve(async (req) => {
     // 3. Get PIX QR code if billing type is PIX
     let pixData = null;
     if (billingType === "PIX") {
-      // Wait a bit for payment to be processed
       await new Promise((r) => setTimeout(r, 1000));
-
       const pixRes = await fetch(`${ASAAS_API_URL}/payments/${paymentData.id}/pixQrCode`, {
         headers: { access_token: ASAAS_API_KEY },
       });
@@ -143,7 +126,7 @@ Deno.serve(async (req) => {
     const { data: pagamento, error: dbError } = await supabase
       .from("pagamentos_asaas")
       .insert({
-        user_id: user.id,
+        user_id: userId,
         asaas_payment_id: paymentData.id,
         asaas_customer_id: asaasCustomerId,
         tipo_referencia: tipoReferencia,
@@ -164,25 +147,20 @@ Deno.serve(async (req) => {
       console.error("DB error:", dbError);
     }
 
-    return new Response(
-      JSON.stringify({
-        success: true,
-        paymentId: paymentData.id,
-        status: paymentData.status,
-        invoiceUrl: paymentData.invoiceUrl,
-        bankSlipUrl: paymentData.bankSlipUrl,
-        pixQrCode: pixData?.encodedImage || null,
-        pixCopiaECola: pixData?.payload || null,
-        pixExpiration: pixData?.expirationDate || null,
-        pagamentoId: pagamento?.id,
-      }),
-      { headers: { ...corsHeaders, "Content-Type": "application/json" } }
-    );
+    return jsonResponse({
+      success: true,
+      paymentId: paymentData.id,
+      status: paymentData.status,
+      invoiceUrl: paymentData.invoiceUrl,
+      bankSlipUrl: paymentData.bankSlipUrl,
+      pixQrCode: pixData?.encodedImage || null,
+      pixCopiaECola: pixData?.payload || null,
+      pixExpiration: pixData?.expirationDate || null,
+      pagamentoId: pagamento?.id,
+    });
   } catch (error: any) {
     console.error("Error:", error);
-    return new Response(
-      JSON.stringify({ success: false, error: error.message }),
-      { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-    );
+    if (error instanceof Response) return error;
+    return errorResponse(error.message);
   }
 });
