@@ -463,8 +463,8 @@ const slides = [
                 <span className="text-xs font-medium text-destructive">Freelancer Sênior</span>
                 <Badge variant="destructive" className="text-[10px]">Tradicional</Badge>
               </div>
-              <p className="text-2xl font-bold text-destructive">R$ 748.000</p>
-              <p className="text-[10px] text-muted-foreground mt-1">18-24 meses de desenvolvimento</p>
+              <p className="text-2xl font-bold text-destructive">R$ 853.000</p>
+              <p className="text-[10px] text-muted-foreground mt-1">20-28 meses de desenvolvimento</p>
             </CardContent>
           </Card>
           <Card className="border-destructive/30 bg-destructive/5">
@@ -473,15 +473,15 @@ const slides = [
                 <span className="text-xs font-medium text-destructive">Agência Digital</span>
                 <Badge variant="destructive" className="text-[10px]">Tradicional</Badge>
               </div>
-              <p className="text-2xl font-bold text-destructive">R$ 1.076.000</p>
-              <p className="text-[10px] text-muted-foreground mt-1">24-36 meses de desenvolvimento</p>
+              <p className="text-2xl font-bold text-destructive">R$ 1.216.000</p>
+              <p className="text-[10px] text-muted-foreground mt-1">28-40 meses de desenvolvimento</p>
             </CardContent>
           </Card>
           <Card className="border-primary/30 bg-primary/5">
             <CardContent className="p-4">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-xs font-medium text-primary">Com Resinkra + IA</span>
-                <Badge className="text-[10px] bg-primary/20 text-primary border-primary/30">95% economia</Badge>
+                <Badge className="text-[10px] bg-primary/20 text-primary border-primary/30">96% economia</Badge>
               </div>
               <p className="text-2xl font-bold text-primary">Fração do custo</p>
               <p className="text-[10px] text-muted-foreground mt-1">Desenvolvimento acelerado por IA em semanas</p>
@@ -489,7 +489,7 @@ const slides = [
           </Card>
         </div>
         <div className="bg-accent/10 rounded-xl p-3 text-center">
-          <p className="text-xs text-accent font-semibold">💡 Manutenção mensal estimada no mercado: R$ 13.800 a R$ 29.000/mês</p>
+          <p className="text-xs text-accent font-semibold">💡 Manutenção mensal estimada no mercado: R$ 16.500 a R$ 34.000/mês</p>
         </div>
       </div>
     ),
@@ -770,7 +770,7 @@ const slides = [
     content: (
       <div className="space-y-2.5">
         {[
-          { icon: Shield, title: "Row Level Security", desc: "262 políticas RLS protegendo 92 tabelas" },
+          { icon: Shield, title: "Row Level Security", desc: "316 políticas RLS protegendo 96 tabelas" },
           { icon: Shield, title: "Audit Logs", desc: "Registro completo de operações sensíveis" },
           { icon: Shield, title: "Rate Limiting", desc: "Proteção contra abuso de login e API" },
           { icon: Globe, title: "Edge Functions", desc: "24 funções serverless com deploy automático" },
