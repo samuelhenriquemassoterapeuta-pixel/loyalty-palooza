@@ -114,7 +114,7 @@ export function CursoHeroPage({
 
   return (
     <Wrapper>
-      <div className={`min-h-screen bg-background ${embedded ? "pb-8" : "pb-32 lg:pb-8"}`}>
+      <div className={`min-h-screen bg-background overflow-x-hidden ${embedded ? "pb-8" : "pb-32 lg:pb-8"}`}>
         {/* Hero Cover */}
         <div className="relative w-full h-64 overflow-hidden">
           <img
