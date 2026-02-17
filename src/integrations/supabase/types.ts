@@ -2733,6 +2733,30 @@ export type Database = {
           },
         ]
       }
+      permissions: {
+        Row: {
+          action: string
+          created_at: string | null
+          description: string | null
+          id: string
+          resource: string
+        }
+        Insert: {
+          action: string
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          resource: string
+        }
+        Update: {
+          action?: string
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          resource?: string
+        }
+        Relationships: []
+      }
       plano_exercicios: {
         Row: {
           dia_semana: number
@@ -3195,6 +3219,60 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      role_permissions: {
+        Row: {
+          granted_at: string | null
+          permission_id: string
+          role_id: string
+        }
+        Insert: {
+          granted_at?: string | null
+          permission_id: string
+          role_id: string
+        }
+        Update: {
+          granted_at?: string | null
+          permission_id?: string
+          role_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "role_permissions_permission_id_fkey"
+            columns: ["permission_id"]
+            isOneToOne: false
+            referencedRelation: "permissions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "role_permissions_role_id_fkey"
+            columns: ["role_id"]
+            isOneToOne: false
+            referencedRelation: "roles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      roles: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          id: string
+          name: Database["public"]["Enums"]["app_role"]
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          name: Database["public"]["Enums"]["app_role"]
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          name?: Database["public"]["Enums"]["app_role"]
+        }
+        Relationships: []
       }
       scripts: {
         Row: {
@@ -4099,7 +4177,14 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      user_permissions_mv: {
+        Row: {
+          action: string | null
+          resource: string | null
+          user_id: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       check_login_rate_limit: {
@@ -4169,6 +4254,13 @@ export type Database = {
           nome: string
         }[]
       }
+      get_user_permissions: {
+        Args: { p_user_id: string }
+        Returns: {
+          action: string
+          resource: string
+        }[]
+      }
       get_user_tier: {
         Args: { p_user_id: string }
         Returns: {
@@ -4179,6 +4271,10 @@ export type Database = {
           tier_name: string
           total_gasto: number
         }[]
+      }
+      has_permission: {
+        Args: { p_action: string; p_resource: string; p_user_id: string }
+        Returns: boolean
       }
       has_role: {
         Args: {
