@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { AdminImageUpload } from "@/components/admin/AdminImageUpload";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -130,10 +131,8 @@ export const DietasConteudoTab = () => {
               </div>
             </div>
             <div><Label>Descrição</Label><Textarea value={form.descricao || ""} onChange={e => setForm({ ...form, descricao: e.target.value })} /></div>
-            <div className="grid grid-cols-2 gap-3">
-              <div><Label>Ordem</Label><Input type="number" value={form.ordem || 0} onChange={e => setForm({ ...form, ordem: e.target.value })} /></div>
-              <div><Label>URL Imagem</Label><Input value={form.imagem_url || ""} onChange={e => setForm({ ...form, imagem_url: e.target.value })} /></div>
-            </div>
+            <div><Label>Ordem</Label><Input type="number" value={form.ordem || 0} onChange={e => setForm({ ...form, ordem: e.target.value })} /></div>
+            <AdminImageUpload label="Imagem" value={form.imagem_url || ""} onChange={v => setForm({ ...form, imagem_url: v })} />
             <div><Label>Conteúdo (JSON)</Label><Textarea rows={6} className="font-mono text-xs" value={form.conteudo || "[]"} onChange={e => setForm({ ...form, conteudo: e.target.value })} /></div>
             <div className="flex items-center gap-2"><Switch checked={form.disponivel ?? true} onCheckedChange={v => setForm({ ...form, disponivel: v })} /><Label>Disponível</Label></div>
             <Button onClick={handleSave} disabled={saving} className="w-full">{saving ? "Salvando..." : "Salvar"}</Button>
