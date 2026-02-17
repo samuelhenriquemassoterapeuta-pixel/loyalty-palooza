@@ -18,6 +18,8 @@ import { ReagendarDialog } from "@/features/agendamentos/components/ReagendarDia
 import { PriorityBanner } from "@/features/agendamentos/components/PriorityBanner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ServicosListSkeleton, AgendamentosListSkeleton } from "@/components/skeletons";
+import { AppCollapsibleSection } from "@/components/AppCollapsibleSection";
+import { Sparkles } from "lucide-react";
 import { LoadingSpinner, ButtonLoader } from "@/components/LoadingSpinner";
 import { useAvaliacoes } from "@/hooks/useAvaliacoes";
 import {
@@ -434,69 +436,61 @@ const Agendamento = () => {
 
                 {/* Step 1: Serviço */}
                 {step === 1 && (
-                  <motion.div
-                    variants={stagger}
-                    initial="hidden"
-                    animate="show"
-                    className="space-y-3"
-                  >
-                    <motion.div variants={fadeUp}>
-                      <p className="section-label px-1 mb-3">Escolha o serviço</p>
-                    </motion.div>
-
-                    
-                    {loadingServicos ? (
-                      <ServicosListSkeleton />
-                    ) : servicos.length === 0 ? (
-                      <div className="text-center py-12 glass-card rounded-2xl">
-                        <p className="text-muted-foreground">Nenhum serviço disponível no momento.</p>
-                      </div>
-                    ) : (
-                      servicos.map((servico, index) => (
-                        <motion.div key={servico.id} variants={fadeUp}>
-                          <div
-                            className={`glass-card rounded-2xl p-4 cursor-pointer transition-all ${
-                              selectedServico?.id === servico.id
-                                ? "ring-2 ring-primary bg-primary/5"
-                                : "hover:bg-muted/30"
-                            }`}
-                            onClick={() => setSelectedServico(servico)}
-                          >
-                            <div className="flex justify-between items-center">
-                              <div className="flex-1 min-w-0">
-                                <h3 className="font-medium text-foreground">{servico.nome}</h3>
-                                {servico.descricao && (
-                                  <p className="text-xs text-muted-foreground mt-0.5">{servico.descricao}</p>
-                                )}
-                                <div className="flex items-center gap-3 mt-1">
-                                  <p className="text-sm text-muted-foreground flex items-center gap-1">
-                                    <Clock size={14} /> {servico.duracao} min
+                  <AppCollapsibleSection title="Escolha o serviço" icon={Sparkles} defaultOpen>
+                    <div className="space-y-3">
+                      {loadingServicos ? (
+                        <ServicosListSkeleton />
+                      ) : servicos.length === 0 ? (
+                        <div className="text-center py-12 glass-card rounded-2xl">
+                          <p className="text-muted-foreground">Nenhum serviço disponível no momento.</p>
+                        </div>
+                      ) : (
+                        servicos.map((servico) => (
+                          <motion.div key={servico.id} variants={fadeUp} initial="hidden" animate="show">
+                            <div
+                              className={`glass-card rounded-2xl p-4 cursor-pointer transition-all ${
+                                selectedServico?.id === servico.id
+                                  ? "ring-2 ring-primary bg-primary/5"
+                                  : "hover:bg-muted/30"
+                              }`}
+                              onClick={() => setSelectedServico(servico)}
+                            >
+                              <div className="flex justify-between items-center">
+                                <div className="flex-1 min-w-0">
+                                  <h3 className="font-medium text-foreground">{servico.nome}</h3>
+                                  {servico.descricao && (
+                                    <p className="text-xs text-muted-foreground mt-0.5">{servico.descricao}</p>
+                                  )}
+                                  <div className="flex items-center gap-3 mt-1">
+                                    <p className="text-sm text-muted-foreground flex items-center gap-1">
+                                      <Clock size={14} /> {servico.duracao} min
+                                    </p>
+                                    <button
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        navigate(`/servico/${servico.id}`);
+                                      }}
+                                      className="text-xs text-primary font-semibold flex items-center gap-1 hover:underline underline-offset-2 active:scale-95 transition-transform px-2 py-1 rounded-lg bg-primary/10 hover:bg-primary/20"
+                                    >
+                                      <Info size={13} /> Ver detalhes
+                                    </button>
+                                  </div>
+                                </div>
+                                <div className="text-right">
+                                  <p className="font-semibold text-primary">
+                                    R$ {servico.preco.toFixed(2).replace('.', ',')}
                                   </p>
-                                  <button
-                                    onClick={(e) => {
-                                      e.stopPropagation();
-                                      navigate(`/servico/${servico.id}`);
-                                    }}
-                                    className="text-xs text-primary font-semibold flex items-center gap-1 hover:underline underline-offset-2 active:scale-95 transition-transform px-2 py-1 rounded-lg bg-primary/10 hover:bg-primary/20"
-                                  >
-                                    <Info size={13} /> Ver detalhes
-                                  </button>
+                                  {selectedServico?.id === servico.id && (
+                                    <Check className="text-primary ml-auto" size={20} />
+                                  )}
                                 </div>
                               </div>
-                              <div className="text-right">
-                                <p className="font-semibold text-primary">
-                                  R$ {servico.preco.toFixed(2).replace('.', ',')}
-                                </p>
-                                {selectedServico?.id === servico.id && (
-                                  <Check className="text-primary ml-auto" size={20} />
-                                )}
-                              </div>
                             </div>
-                          </div>
-                        </motion.div>
-                      ))
-                    )}
-                  </motion.div>
+                          </motion.div>
+                        ))
+                      )}
+                    </div>
+                  </AppCollapsibleSection>
                 )}
 
                 {/* Step 2: Terapeuta */}
