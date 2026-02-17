@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useTransacoes } from "@/features/cashback/hooks/useTransacoes";
 import { useUserTier } from "@/features/cashback/hooks/useUserTier";
 import { AppLayout } from "@/components/AppLayout";
+import { AnimatedPageBackground } from "@/components/AnimatedPageBackground";
 import { CashbackBalanceCard } from "@/features/cashback/components/CashbackBalanceCard";
 import { CashbackTierCard } from "@/features/cashback/components/CashbackTierCard";
 import { CashbackEvolutionChart } from "@/features/cashback/components/CashbackEvolutionChart";
@@ -54,8 +55,9 @@ const Cashback = () => {
 
   return (
     <AppLayout>
-      <div className="min-h-screen bg-background gradient-hero pb-24 lg:pb-8">
-        <div className="max-w-lg lg:max-w-4xl mx-auto px-4 lg:px-8 safe-top pt-4">
+      <div className="min-h-screen bg-background gradient-hero pb-24 lg:pb-8 relative overflow-hidden">
+        <AnimatedPageBackground />
+        <div className="max-w-lg lg:max-w-4xl mx-auto px-4 lg:px-8 safe-top pt-4 relative z-10">
           {/* Header */}
           <motion.div
             initial={{ opacity: 0, y: -10 }}

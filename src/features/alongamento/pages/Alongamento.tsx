@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AppLayout } from "@/components/AppLayout";
+import { AnimatedPageBackground } from "@/components/AnimatedPageBackground";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { useToast } from "@/hooks/use-toast";
 import {
@@ -97,9 +98,10 @@ export default function Alongamento() {
 
   return (
     <AppLayout>
-      <div className="min-h-screen bg-background pb-32 lg:pb-8">
+      <div className="min-h-screen bg-background pb-32 lg:pb-8 relative overflow-hidden">
+        <AnimatedPageBackground />
         {/* Header */}
-        <div className="relative overflow-hidden bg-gradient-to-r from-primary/5 via-accent/5 to-primary/5 border-b border-border px-4 py-4 safe-top">
+        <div className="relative overflow-hidden bg-gradient-to-r from-primary/5 via-accent/5 to-primary/5 border-b border-border px-4 py-4 safe-top z-10">
           <div className="absolute -top-10 -right-10 w-24 h-24 bg-accent/10 rounded-full blur-2xl" />
           <div className="max-w-lg lg:max-w-4xl mx-auto flex items-center gap-4 relative z-10">
             <Button variant="ghost" size="icon" onClick={() => navigate(-1)} className="shrink-0">
@@ -118,7 +120,7 @@ export default function Alongamento() {
           </div>
         </div>
 
-        <div className="max-w-lg lg:max-w-4xl mx-auto px-4 lg:px-8 py-4 space-y-4">
+        <div className="max-w-lg lg:max-w-4xl mx-auto px-4 lg:px-8 py-4 space-y-4 relative z-10">
           <Tabs value={activeTab} onValueChange={setActiveTab}>
             <TabsList className="grid w-full grid-cols-4">
               <TabsTrigger value="exercicios" className="gap-1 text-xs">

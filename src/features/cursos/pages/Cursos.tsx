@@ -1,6 +1,7 @@
 import { useSearchParams } from "react-router-dom";
 import { GraduationCap, Flower2, Sparkles, Bone, Gem, Hand, Droplets, Flame, Bath, Wind, Leaf, FlaskConical, Fingerprint, Waves, ChefHat, Bandage, DollarSign, LucideIcon } from "lucide-react";
 import { AppLayout } from "@/components/AppLayout";
+import { AnimatedPageBackground } from "@/components/AnimatedPageBackground";
 import { lazy, Suspense, useMemo, useRef, useEffect } from "react";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { CursosHubHero } from "@/features/cursos/components/CursosHubHero";
@@ -124,10 +125,11 @@ export default function Cursos() {
 
   return (
     <AppLayout>
-      <div className="min-h-screen bg-background pb-32 lg:pb-8">
+      <div className="min-h-screen bg-background pb-32 lg:pb-8 relative overflow-hidden">
+        <AnimatedPageBackground />
         <CursosHubHero courses={allCourseStats} />
 
-        <div className="max-w-lg mx-auto px-4 pt-4 space-y-3">
+        <div className="max-w-lg mx-auto px-4 pt-4 space-y-3 relative z-10">
           {/* Continue Watching */}
           <ContinueWatchingCard courses={courseForContinue} onSelect={handleTabChange} />
 
