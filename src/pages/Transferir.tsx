@@ -12,6 +12,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { ButtonLoader } from "@/components/LoadingSpinner";
 import simboloVerde from "@/assets/simbolo-verde.png";
+import { emailSchema } from "@/lib/validations";
 
 const stagger = {
   hidden: { opacity: 0 },
@@ -44,8 +45,9 @@ const Transferir = () => {
   const [sucesso, setSucesso] = useState(false);
 
   const buscarUsuario = async () => {
-    if (!email.trim()) {
-      toast.error("Digite o email do destinatário");
+    const result = emailSchema.safeParse(email);
+    if (!result.success) {
+      toast.error(result.error.errors[0].message);
       return;
     }
     if (email.toLowerCase() === user?.email?.toLowerCase()) {
@@ -82,6 +84,10 @@ const Transferir = () => {
     const valorNumerico = parseFloat(valor.replace(",", "."));
     if (isNaN(valorNumerico) || valorNumerico <= 0) {
       toast.error("Digite um valor válido");
+      return;
+    }
+    if (valorNumerico > 10000) {
+      toast.error("Valor máximo: R$ 10.000");
       return;
     }
     if (valorNumerico > saldo) {

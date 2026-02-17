@@ -18,6 +18,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { criarValeSchema, resgatarValeSchema } from "@/lib/validations";
 
 const valoresSugeridos = [50, 100, 150, 200, 300, 500];
 
@@ -63,8 +64,16 @@ const ValePresente = () => {
   const valorFinal = tipoVale === "experiencia" && expAtual ? expAtual.valor : (valorCustom ? parseFloat(valorCustom) : valor);
 
   const handleComprar = async () => {
-    if (!destinatario.trim()) { toast.error("Informe o nome do destinatário"); return; }
-    if (!valorFinal || valorFinal <= 0) { toast.error("Informe um valor válido"); return; }
+    const validation = criarValeSchema.safeParse({
+      destinatario: destinatario,
+      email: email || undefined,
+      valor: valorFinal,
+      mensagem: mensagem || undefined,
+    });
+    if (!validation.success) {
+      toast.error(validation.error.errors[0].message);
+      return;
+    }
     if (agendarEntrega && !dataEntrega) { toast.error("Selecione a data de entrega"); return; }
 
     const result = await criarVale.mutateAsync({
@@ -83,8 +92,13 @@ const ValePresente = () => {
   };
 
   const handleResgatar = async () => {
-    if (!codigoResgate.trim()) { toast.error("Informe o código do vale presente"); return; }
-    await resgatarVale.mutateAsync(codigoResgate);
+    const validation = resgatarValeSchema.safeParse({ codigo: codigoResgate });
+    if (!validation.success) {
+      toast.error(validation.error.errors[0].message);
+      return;
+    }
+    await resgatarVale.mutateAsync(validation.data.codigo);
+    setCodigoResgate("");
     setCodigoResgate("");
   };
 
