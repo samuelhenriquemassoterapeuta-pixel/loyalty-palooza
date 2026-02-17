@@ -17,25 +17,26 @@ export const cursoGastronomiaSaudavelData: CursoModuloData[] = [
 
 ## Definição
 
-Gastronomia saudável é a arte de preparar refeições nutritivas, equilibradas e saborosas, utilizando ingredientes naturais, técnicas que preservam nutrientes e combinações inteligentes de alimentos.
+A gastronomia saudável vai além da simples preparação de alimentos. Ela representa uma abordagem holística que ao mesmo tempo valoriza o sabor, a nutrição e o bem-estar integral. Enquanto a culinária tradicional frequentemente se concentra principalmente no prazer imediato do paladar, essa metodologia inovadora visa desenvolver preparações que não somente satisfaçam o apetite, mas também promovam ativamente a saúde e o equilíbrio fisiológico.
 
-> Comer saudável não é comer sem sabor. É comer com inteligência, criatividade e prazer.
+## Gastronomia Saudável vs. Culinária Tradicional
 
-## Diferenças Importantes
-
-| Conceito | Foco | Característica |
+| Aspecto | Gastronomia Saudável | Culinária Tradicional |
 |---|---|---|
-| **Saudável** | Equilíbrio nutricional | Variedade, naturalidade, prazer |
-| **Fitness** | Performance física | Alto proteico, controle de macros |
-| **Funcional** | Saúde específica | Alimentos com propriedades terapêuticas |
-| **Diet/Light** | Restrição calórica | Redução de gordura, açúcar ou sódio |
+| **Foco principal** | Saúde + sabor | Sabor predominante |
+| **Ingredientes** | Naturais, integrais, minimamente processados | Pode incluir ultraprocessados livremente |
+| **Técnicas de preparo** | Preservação de nutrientes (vapor, assados) | Frituras, cozimentos prolongados |
+| **Consciência nutricional** | Alta — considera biodisponibilidade | Baixa a moderada |
+| **Restrições alimentares** | Naturalmente adaptável | Requer adaptações específicas |
+| **Sustentabilidade** | Valoriza ingredientes locais e sazonais | Nem sempre considera |
 
-## Por que é Importante?
+## Diferença entre Gastronomia Saudável, Fitness e Funcional
 
-- **Prevenção de doenças** — Alimentação inadequada é fator de risco para obesidade, diabetes, hipertensão
-- **Qualidade de vida** — Mais energia, disposição e bem-estar
-- **Longevidade** — Hábitos alimentares saudáveis aumentam a expectativa de vida
-- **Sustentabilidade** — Menos desperdício, mais consciência ambiental`,
+| Termo | Definição | Foco Principal |
+|---|---|---|
+| **Gastronomia Saudável** | Alimentação equilibrada com ingredientes naturais e técnicas que preservam nutrientes | Bem-estar geral e prevenção |
+| **Culinária Fitness** | Voltada para desempenho físico, ganho muscular e controle de peso | Performance e estética |
+| **Gastronomia Funcional** | Utiliza alimentos que oferecem benefícios específicos à saúde além da nutrição básica, ajudando a prevenir doenças, melhorar a digestão e fortalecer o sistema imunológico | Prevenção e tratamento de doenças |`,
         quiz: [
           {
             pergunta: "Qual a principal diferença entre gastronomia saudável e fitness?",
@@ -46,60 +47,90 @@ Gastronomia saudável é a arte de preparar refeições nutritivas, equilibradas
         ],
       },
       {
-        titulo: "1.2 História, Mercado e Tendências",
-        descricao: "Evolução, cenário atual e oportunidades profissionais",
+        titulo: "1.2 História e Mercado",
+        descricao: "Evolução da alimentação, cenário brasileiro e tendências",
         duracaoMinutos: 60,
-        conteudo: `# História, Mercado e Tendências
+        conteudo: `# História e Mercado da Gastronomia Saudável
 
-## Evolução da Alimentação Saudável
+## Evolução Histórica
 
-- **Anos 80-90:** Dietas restritivas, medo de gordura
-- **Anos 2000:** Surgimento dos funcionais e orgânicos
-- **Anos 2010:** Boom dos fit, low carb, sem glúten
-- **Anos 2020+:** Alimentação consciente, sustentável e personalizada
-
-## Mercado Atual
-
-| Segmento | Crescimento Anual | Oportunidade |
+| Período | Evento/Contribuição | Impacto |
 |---|---|---|
-| **Alimentação saudável** | 12-15% | Restaurantes, delivery, consultoria |
-| **Orgânicos** | 20% | Hortas urbanas, feiras, e-commerce |
-| **Plant-based** | 25% | Produtos veganos e vegetarianos |
-| **Marmitas saudáveis** | 18% | Meal prep, grab & go |
+| **Antiguidade** | Hipócrates: "Que teu alimento seja teu medicamento" | Base da relação entre comida e saúde |
+| **Século XIX** | Movimentos higienistas na Europa | Primeiras preocupações com qualidade dos alimentos |
+| **Década de 1960** | Contracultura e movimentos naturais | Valorização de alimentos orgânicos e integrais |
+| **Década de 1990** | Conceito de alimentos funcionais no Japão | Alimentos com benefícios específicos à saúde |
+| **Anos 2000** | Guias alimentares oficiais (Brasil, 2006/2014) | Recomendações baseadas em evidências |
+| **2015-2025** | Boom dos alimentos funcionais e personalizados | Mercado em expansão, produtos inovadores |
+
+## O Mercado no Brasil
+
+| Dado | Fonte | Implicação |
+|---|---|---|
+| Mercado movimenta **R$ 10 bilhões/ano** | ABENUTRI | Oportunidade enorme para produtos saudáveis |
+| Crescimento de **8% no último ano** | ABENUTRI | Mercado em expansão acelerada |
+| **20 fusões e aquisições** no setor (2023-2025) | Redirection International | Consolidação e profissionalização do setor |
+| Consumo per capita de ovos: **263 unidades/ano** (+8,5%) | ABPA | Aumento do consumo de proteínas |
+
+## Principais Tendências
+
+| Tendência | Descrição | Oportunidade |
+|---|---|---|
+| **Alimentos com propósito** | Proteínas, colágeno, adaptógenos, superfoods | Desenvolver linhas funcionais |
+| **Grab & go saudável** | Prontos para consumo imediato, práticos e nutritivos | Marmitas, saladas, sanduíches naturais |
+| **Superfoods brasileiras** | Açaí, camu-camu, castanha-do-pará, ora-pro-nóbis | Valorização de ingredientes nacionais |
+| **Adaptógenos** | Substâncias para lidar com estresse | Bebidas funcionais, shots |
+| **Upcycling alimentar** | Reaproveitamento de cascas, talos e sementes | Farinhas, snacks, redução de desperdício |
+| **Probióticos e fibras** | Saúde intestinal e imunidade | Kefir, kombucha, pães de fermentação natural |
+| **Menos conservantes** | Consumidores leem rótulos e buscam clean label | Rotulagem transparente |
+
+## Perfil do Consumidor
+
+| Perfil | Características | Oportunidade |
+|---|---|---|
+| **Saúde-consciente** | Busca bem-estar e longevidade | Cardápios funcionais |
+| **Prático e saudável** | Rotina agitada, quer comer bem sem perder tempo | Marmitas, delivery, congelados |
+| **Sustentável** | Valoriza origem local, orgânicos | Parcerias com produtores locais |
+| **Experiencial** | Busca novas experiências gastronômicas | Workshops, eventos, food experiences |`,
+        quiz: [
+          {
+            pergunta: "Quanto o mercado de alimentação saudável movimenta por ano no Brasil?",
+            opcoes: ["R$ 1 bilhão", "R$ 10 bilhões", "R$ 100 bilhões", "R$ 500 milhões"],
+            respostaCorreta: 1,
+            explicacao: "O mercado de vitaminas, suplementos e nutrição movimenta R$ 10 bilhões por ano segundo a ABENUTRI.",
+          },
+        ],
+      },
+      {
+        titulo: "1.3 Guia Alimentar e Saídas Profissionais",
+        descricao: "Referências oficiais e caminhos de carreira",
+        duracaoMinutos: 60,
+        conteudo: `# Guia Alimentar e Saídas Profissionais
+
+## O Guia Alimentar para a População Brasileira
+
+O Guia Alimentar do Ministério da Saúde classifica os alimentos em quatro categorias:
+
+| Categoria | Exemplos | Recomendação |
+|---|---|---|
+| **In natura** | Vegetais, frutas, ovos, carnes | Base da alimentação |
+| **Minimamente processados** | Arroz, feijão, farinhas, leite | Base da alimentação |
+| **Processados** | Queijos, pães, conservas | Consumo moderado |
+| **Ultraprocessados** | Refrigerantes, salgadinhos, macarrão instantâneo | Evitar |
+
+> **Regra de Ouro:** "Prefira sempre alimentos in natura ou minimamente processados e preparações culinárias a alimentos ultraprocessados."
 
 ## Saídas Profissionais
 
-- Chef de cozinha saudável
-- Personal chef (atendimento domiciliar)
-- Consultor de cardápios
-- Empreendedor de marmitas/delivery
-- Criador de conteúdo gastronômico
-- Professor/instrutor de culinária saudável
-
-## Guia Alimentar do Ministério da Saúde
-
-> "Faça de alimentos in natura ou minimamente processados a base da sua alimentação."
-
-### Os 10 Passos
-
-- Alimentos in natura como base
-- Uso moderado de óleos, gorduras, sal e açúcar
-- Limitar ultraprocessados
-- Comer com regularidade e atenção
-- Comer em ambientes apropriados
-- Comprar em feiras e mercados locais
-- Desenvolver habilidades culinárias
-- Planejar o uso do tempo para alimentação
-- Dar preferência a restaurantes com comida feita na hora
-- Ser crítico com publicidade de alimentos`,
-        quiz: [
-          {
-            pergunta: "Qual segmento tem maior crescimento no mercado de alimentação?",
-            opcoes: ["Fast food", "Plant-based (25% ao ano)", "Congelados industriais", "Enlatados"],
-            respostaCorreta: 1,
-            explicacao: "O segmento plant-based cresce cerca de 25% ao ano, impulsionado pela busca por alternativas sustentáveis e saudáveis.",
-          },
-        ],
+| Profissão | Descrição | Onde Atuar |
+|---|---|---|
+| **Personal Chef Saudável** | Cozinha personalizada para clientes | Domicílios, eventos privados |
+| **Restaurante ou Café Saudável** | Estabelecimento próprio | Food service |
+| **Marmitas e Delivery Saudável** | Produção e entrega de refeições | Delivery, dark kitchens |
+| **Produtor de Alimentos Funcionais** | Desenvolvimento de linha própria | Lojas, marketplaces |
+| **Consultor em Alimentação Saudável** | Assessoria para restaurantes | Food service |
+| **Educador / Instrutor de Cursos** | Ensino de gastronomia saudável | Escolas, cursos online |
+| **Chef Institucional** | Cozinha em spas, hospitais, empresas | Bem-estar corporativo |`,
       },
     ],
   },
@@ -120,90 +151,86 @@ Gastronomia saudável é a arte de preparar refeições nutritivas, equilibradas
 
 ## Macronutrientes
 
-| Nutriente | Função | Fontes Saudáveis | % Diária |
+| Macronutriente | Função Principal | Fontes Saudáveis | Porção Ideal no Prato |
 |---|---|---|---|
-| **Carboidratos** | Energia principal | Arroz integral, batata-doce, aveia, frutas | 45-65% |
-| **Proteínas** | Construção e reparação | Frango, peixe, ovos, leguminosas, tofu | 10-35% |
-| **Gorduras** | Energia, hormônios, absorção | Azeite, abacate, castanhas, peixes | 20-35% |
+| **Carboidratos** | Energia | Integrais, quinoa, batata-doce, aveia, frutas | 25-30% |
+| **Proteínas** | Construção e reparação de tecidos | Carnes magras, ovos, leguminosas, tofu | 25-30% |
+| **Gorduras saudáveis** | Hormônios, absorção de vitaminas | Azeite, abacate, castanhas, sementes | 15-20% |
 
 ## Micronutrientes Essenciais
 
-### Vitaminas
-
-| Vitamina | Função | Fontes |
+| Vitamina/Mineral | Função | Fontes |
 |---|---|---|
-| **A** | Visão, imunidade | Cenoura, abóbora, manga |
-| **C** | Antioxidante, imunidade | Acerola, laranja, kiwi |
-| **D** | Ossos, imunidade | Sol, peixes, ovos |
-| **E** | Antioxidante | Castanhas, azeite, abacate |
-| **K** | Coagulação | Vegetais verde-escuros |
-| **Complexo B** | Metabolismo, energia | Grãos integrais, carnes, ovos |
-
-### Minerais
-
-| Mineral | Função | Fontes |
-|---|---|---|
-| **Ferro** | Oxigenação | Feijão, lentilha, espinafre |
-| **Cálcio** | Ossos | Leite, brócolis, gergelim |
-| **Zinco** | Imunidade | Castanha, semente de abóbora |
-| **Magnésio** | Relaxamento | Banana, abacate, cacau |`,
+| **Vitamina C** | Imunidade, absorção de ferro | Frutas cítricas, kiwi, pimentão |
+| **Ferro** | Transporte de oxigênio | Carnes, folhas verde-escuras, feijão |
+| **Cálcio** | Ossos e dentes | Laticínios, vegetais verde-escuros, gergelim |
+| **Zinco** | Imunidade, cicatrização | Castanhas, sementes, carnes |
+| **Vitaminas do complexo B** | Energia, metabolismo | Grãos integrais, ovos, leguminosas |`,
         quiz: [
           {
-            pergunta: "Qual a proporção recomendada de carboidratos na dieta diária?",
-            opcoes: ["10-20%", "45-65%", "70-80%", "Menos de 5%"],
+            pergunta: "Qual a proporção recomendada de carboidratos no prato saudável?",
+            opcoes: ["10-15%", "25-30%", "50-60%", "Menos de 5%"],
             respostaCorreta: 1,
-            explicacao: "A recomendação é de 45-65% das calorias diárias vindas de carboidratos, preferencialmente complexos e integrais.",
+            explicacao: "A proporção ideal de carboidratos no prato saudável é de 25-30%, priorizando integrais e complexos.",
           },
         ],
       },
       {
-        titulo: "2.2 Alimentos Funcionais e Substituições",
-        descricao: "Sinergia alimentar e trocas inteligentes",
+        titulo: "2.2 Alimentos Funcionais e Sinergia",
+        descricao: "Compostos ativos e combinações que potencializam nutrientes",
         duracaoMinutos: 90,
-        conteudo: `# Alimentos Funcionais e Substituições Inteligentes
+        conteudo: `# Alimentos Funcionais e Sinergia Alimentar
 
-## O que são Alimentos Funcionais?
-
-Alimentos que, além de nutrir, oferecem benefícios específicos à saúde.
+## Alimentos Funcionais e Seus Benefícios
 
 | Alimento | Composto Ativo | Benefício |
 |---|---|---|
-| **Tomate** | Licopeno | Antioxidante, saúde cardiovascular |
-| **Cúrcuma** | Curcumina | Anti-inflamatório |
-| **Linhaça** | Ômega-3, lignanas | Saúde hormonal, intestinal |
-| **Aveia** | Beta-glucana | Redução do colesterol |
-| **Alho** | Alicina | Antibacteriano, cardiovascular |
-| **Gengibre** | Gingerol | Anti-inflamatório, digestivo |
+| **Cúrcuma** | Curcumina | Anti-inflamatório poderoso |
+| **Gengibre** | Gingeróis | Digestão, anti-inflamatório |
+| **Linhaça** | Ômega-3, lignanas | Saúde cardiovascular |
+| **Aveia** | Beta-glucana | Colesterol, saciedade |
+| **Iogurte natural** | Probióticos | Saúde intestinal |
+| **Cacau** | Flavonoides | Antioxidante, humor |
+| **Chá verde** | Catequinas | Metabolismo, antioxidante |
+| **Açaí** | Antocianinas | Antioxidante, energia |
+| **Castanha-do-pará** | Selênio | Imunidade, tireoide |
 
 ## Sinergia Alimentar
 
-> Alguns alimentos potencializam o efeito uns dos outros quando consumidos juntos.
+> Algumas combinações potencializam a absorção de nutrientes.
 
-| Combinação | Benefício |
-|---|---|
-| **Ferro + Vitamina C** | Limão no feijão aumenta absorção do ferro |
-| **Cúrcuma + Pimenta** | Piperina aumenta absorção da curcumina em 2000% |
-| **Tomate + Azeite** | Gordura aumenta absorção do licopeno |
-| **Cálcio + Vitamina D** | Vitamina D facilita absorção do cálcio |
-
-## Substituições Inteligentes
-
-| Substituir | Por | Benefício |
+| Combinação | Efeito | Exemplo |
 |---|---|---|
-| Farinha branca | Farinha de aveia/amêndoas | Mais fibras e nutrientes |
-| Açúcar refinado | Mel, tâmaras, xilitol | Menor índice glicêmico |
-| Arroz branco | Arroz integral, quinoa | Mais fibras e minerais |
-| Creme de leite | Leite de coco | Menos gordura saturada |
-| Manteiga | Azeite, ghee | Gorduras mais saudáveis |
-| Macarrão | Espaguete de abobrinha | Menos calorias, mais nutrientes |`,
+| **Ferro + Vitamina C** | Aumenta absorção do ferro | Feijoada + laranja, couve + limão |
+| **Cúrcuma + Pimenta-do-reino** | Aumenta biodisponibilidade da curcumina em até 2000% | Curry com pimenta |
+| **Gorduras + Vitaminas lipossolúveis** | Absorção de vitaminas A, D, E, K | Salada com azeite |
+| **Cálcio + Vitamina D** | Fixação do cálcio | Leite + sol |`,
         quiz: [
           {
-            pergunta: "Por que devemos adicionar limão ao feijão?",
-            opcoes: ["Apenas pelo sabor", "A vitamina C do limão aumenta a absorção do ferro do feijão", "Para conservar o feijão", "Não há benefício"],
-            respostaCorreta: 1,
-            explicacao: "A vitamina C do limão aumenta significativamente a absorção do ferro não-heme presente no feijão.",
+            pergunta: "Em quanto a pimenta-do-reino aumenta a absorção da curcumina?",
+            opcoes: ["100%", "500%", "Até 2000%", "Não tem efeito"],
+            respostaCorreta: 2,
+            explicacao: "A piperina da pimenta-do-reino aumenta a biodisponibilidade da curcumina em até 2000%.",
           },
         ],
+      },
+      {
+        titulo: "2.3 Substituições Inteligentes",
+        descricao: "Trocas práticas para uma alimentação mais saudável",
+        duracaoMinutos: 60,
+        conteudo: `# Substituições Inteligentes
+
+## Tabela de Substituições
+
+| Ingrediente Tradicional | Substituição Saudável | Benefício |
+|---|---|---|
+| Arroz branco | Arroz integral, quinoa, couve-flor ralada | Mais fibras, menor índice glicêmico |
+| Farinha de trigo branca | Farinha de aveia, amêndoas, coco | Sem glúten, mais nutrientes |
+| Açúcar refinado | Mel, tâmaras, banana madura, açúcar de coco | Menos processado, IG menor |
+| Óleo de soja | Azeite, óleo de coco, óleo de abacate | Gorduras mais saudáveis |
+| Sal comum | Sal rosa, ervas, especiarias | Menos sódio, mais sabor |
+
+> Substituir não é restringir — é escolher com inteligência!`,
       },
     ],
   },
@@ -217,41 +244,29 @@ Alimentos que, além de nutrir, oferecem benefícios específicos à saúde.
     nivel: "iniciante",
     aulas: [
       {
-        titulo: "3.1 Boas Práticas e Segurança Alimentar",
-        descricao: "Contaminação cruzada, higienização e armazenamento",
+        titulo: "3.1 Boas Práticas na Cozinha",
+        descricao: "Regras da OMS, contaminação cruzada e higienização",
         duracaoMinutos: 90,
-        conteudo: `# Boas Práticas e Segurança Alimentar
+        conteudo: `# Boas Práticas na Cozinha
 
-## Contaminação Cruzada
+## Regras de Ouro da OMS
 
-> Contaminação cruzada é a transferência de microrganismos de um alimento para outro, podendo causar intoxicação alimentar.
-
-### Como Evitar
-
-| Cuidado | Prática |
+| Regra | Descrição |
 |---|---|
-| **Tábuas separadas** | Uma para carnes, outra para vegetais |
-| **Lavagem de mãos** | Antes, durante e após manipulação |
-| **Armazenamento** | Alimentos crus separados dos prontos |
-| **Utensílios** | Não usar a mesma faca para alimentos diferentes sem lavar |
-| **Temperatura** | Alimentos perecíveis abaixo de 5°C ou acima de 60°C |
+| **1. Lave as mãos** | Antes de manipular alimentos e após usar banheiro |
+| **2. Separe alimentos crus de cozidos** | Evite contaminação cruzada |
+| **3. Cozinhe bem os alimentos** | Especialmente carnes, ovos e frutos do mar |
+| **4. Mantenha temperaturas seguras** | Abaixo de 5°C ou acima de 60°C |
+| **5. Use água e alimentos seguros** | Ingredientes de qualidade, água potável |
 
-## Higienização de Alimentos
+## Contaminação Cruzada — O que Evitar
 
-### Frutas e Verduras
-- Lavar em água corrente
-- Deixar de molho em solução clorada (1 colher de sopa de hipoclorito para 1 litro de água)
-- Tempo: 15 minutos
-- Enxaguar em água corrente
-
-## Temperaturas de Segurança
-
-| Zona | Temperatura | Risco |
-|---|---|---|
-| **Zona de perigo** | 5°C a 60°C | Multiplicação bacteriana |
-| **Refrigeração** | 0°C a 5°C | Conservação segura |
-| **Congelamento** | -18°C ou menos | Conservação prolongada |
-| **Cocção segura** | 74°C ou mais | Eliminação de patógenos |`,
+| Situação de Risco | Como Prevenir |
+|---|---|
+| Usar mesma tábua para carne e vegetais | Ter tábuas coloridas para cada tipo |
+| Guardar alimentos crus sobre cozidos | Organizar geladeira corretamente |
+| Manipular alimentos sem lavar as mãos | Higienização constante |
+| Utensílios contaminados | Lavar bem entre usos |`,
         quiz: [
           {
             pergunta: "Qual a zona de perigo de temperatura para alimentos?",
@@ -263,33 +278,34 @@ Alimentos que, além de nutrir, oferecem benefícios específicos à saúde.
       },
       {
         titulo: "3.2 Organização de Despensa e Geladeira",
-        descricao: "Como organizar para preservar alimentos e reduzir desperdício",
+        descricao: "Armazenamento correto e redução de desperdício",
         duracaoMinutos: 60,
         conteudo: `# Organização de Despensa e Geladeira
 
-## Despensa
+## Despensa Organizada
 
-| Prateleira | O que guardar | Dica |
+| Item | Como Armazenar | Validade |
 |---|---|---|
-| **Superior** | Enlatados, conservas | Mais longe do calor |
-| **Meio** | Grãos, farinhas, cereais | Em potes herméticos |
-| **Inferior** | Tubérculos, cebola, alho | Ambiente seco e escuro |
+| Grãos e cereais | Potes herméticos, longe da luz | 3-6 meses |
+| Farinhas | Potes herméticos, local fresco | 2-3 meses |
+| Especiarias | Vidros escuros, longe do calor | 6-12 meses |
+| Oleaginosas | Potes fechados, geladeira | 3 meses |
+
+## Geladeira Organizada
+
+| Prateleira | Alimentos | Temperatura |
+|---|---|---|
+| **Superior** | Laticínios, ovos, frios | 2-4°C |
+| **Média** | Carnes cruas (bem vedadas) | 2-4°C |
+| **Inferior** | Verduras, legumes | 4-8°C |
+| **Gaveta** | Frutas e vegetais | 4-8°C |
+| **Porta** | Bebidas, condimentos | 6-10°C |
 
 ### Regras de Ouro
 - Primeiro que entra, primeiro que sai (PEPS)
 - Verificar validade regularmente
 - Manter limpa e seca
 - Identificar e datar alimentos transferidos
-
-## Geladeira
-
-| Prateleira | O que guardar |
-|---|---|
-| **Superior** | Alimentos prontos, sobras |
-| **Meio** | Laticínios, ovos |
-| **Inferior** | Carnes, aves, peixes |
-| **Gavetas** | Frutas e verduras |
-| **Porta** | Condimentos, sucos, água |
 
 > Nunca guarde alimentos quentes na geladeira — espere esfriar para não alterar a temperatura interna.`,
         checklist: [
@@ -314,21 +330,19 @@ Alimentos que, além de nutrir, oferecem benefícios específicos à saúde.
     aulas: [
       {
         titulo: "4.1 Cortes de Vegetais",
-        descricao: "Tipos de corte e suas aplicações na cozinha saudável",
+        descricao: "Tipos de corte profissional e suas aplicações",
         duracaoMinutos: 90,
         conteudo: `# Cortes de Vegetais
 
 ## Principais Cortes
 
-| Corte | Tamanho | Aplicação |
+| Corte | Descrição | Aplicação |
 |---|---|---|
-| **Brunoise** | 2-3mm cubos | Refogados, molhos, decoração |
-| **Julienne** | Tiras finas (3mm) | Saladas, stir-fry |
-| **Chiffonade** | Tiras finas de folhas | Decoração, saladas |
-| **Macedônia** | 1cm cubos | Sopas, saladas, guisados |
-| **Mirepoix** | Cubos irregulares | Base de sopas e caldos |
-| **Rondelle** | Rodelas | Assados, refogados |
-| **Tourné** | Formato de barril | Apresentação refinada |
+| **Brunoise** | Cubos pequenos (2-3mm) | Refogados, sopas |
+| **Julienne** | Palitos finos | Saladas, wok |
+| **Paysanne** | Fatias finas | Sopas, ensopados |
+| **Chiffonade** | Folhas em tiras finas | Saladas, finalização |
+| **Rondelle** | Fatias redondas | Legumes cozidos |
 
 ## Dicas para Cortes Perfeitos
 
@@ -347,31 +361,31 @@ Alimentos que, além de nutrir, oferecem benefícios específicos à saúde.
 
 ## Comparativo de Métodos
 
-| Método | Preservação Nutricional | Uso de Gordura | Indicação |
+| Método | Descrição | Vantagens | Indicação |
 |---|---|---|---|
-| **Vapor** | ★★★★★ | Nenhum | Legumes, peixes, frango |
-| **Grelhar** | ★★★★☆ | Mínimo | Carnes, vegetais firmes |
-| **Assar** | ★★★★☆ | Pouco | Legumes, carnes, peixes |
-| **Refogar** | ★★★☆☆ | Pouco (azeite) | Vegetais, grãos |
-| **Escaldar** | ★★★★☆ | Nenhum | Vegetais, ovos |
-| **Sous vide** | ★★★★★ | Variável | Carnes, peixes |
-| **Cozinhar** | ★★★☆☆ | Nenhum | Leguminosas, grãos |
-| **Fritar** | ★☆☆☆☆ | Muito | Evitar |
+| **Cozimento a vapor** | Cozinhar no vapor sem imersão | Preserva nutrientes e cor | Vegetais, peixes |
+| **Assar** | Cozimento no forno | Sem adição de gordura | Carnes, legumes, pães |
+| **Grelhar** | Calor direto, superfície quente | Sabor defumado, pouca gordura | Carnes, peixes, vegetais |
+| **Saltear** | Cozimento rápido em pouca gordura | Mantém textura crocante | Vegetais, carnes em tiras |
+| **Refogar** | Cozimento na própria água, fogo baixo | Sabor concentrado | Legumes, molhos |
+| **Branqueamento** | Cozimento rápido em água fervente + choque térmico | Mantém cor e nutrientes | Legumes para congelar, saladas |
+| **Caramelizar** | Açúcar em fogo brando até dourar | Sabor adocicado | Cebolas, cenouras |
 
 ## Técnicas para Preservar Nutrientes
 
-- **Cozinhar al dente** — Vegetais crocantes mantêm mais vitaminas
-- **Usar pouca água** — Menos perda de minerais por lixiviação
-- **Aproveitar o caldo** — Os nutrientes ficam na água de cozimento
-- **Cortar no momento** — Evitar oxidação prolongada
-- **Tampas nas panelas** — Retém calor e reduz tempo de cocção
-- **Temperatura adequada** — Fogo alto rápido > fogo baixo prolongado
+| Técnica | Recomendação |
+|---|---|
+| **Cozinhar com casca** | Preserva fibras e vitaminas |
+| **Evitar cozimento excessivo** | Mantém nutrientes termossensíveis |
+| **Cortar apenas na hora do preparo** | Evita oxidação |
+| **Usar pouca água** | Menos perda de vitaminas hidrossolúveis |
+| **Aproveitar a água do cozimento** | Para sopas e molhos |
 
 > O vapor é o rei da cozinha saudável: preserva cor, textura, sabor e nutrientes!`,
         quiz: [
           {
             pergunta: "Qual o melhor método de cocção para preservar nutrientes?",
-            opcoes: ["Fritura", "Cozimento em bastante água", "Vapor", "Micro-ondas"],
+            opcoes: ["Fritura", "Cozimento em bastante água", "Cozimento a vapor", "Micro-ondas"],
             respostaCorreta: 2,
             explicacao: "O cozimento a vapor preserva cor, textura, sabor e praticamente todos os nutrientes dos alimentos.",
           },
@@ -383,59 +397,67 @@ Alimentos que, além de nutrir, oferecem benefícios específicos à saúde.
   // ── Módulo 5: Café da Manhã e Lanches ──
   {
     titulo: "Módulo 5 — Café da Manhã e Lanches",
-    descricao: "Receitas práticas para o dia a dia",
+    descricao: "Princípios e receitas práticas para o dia a dia",
     icone: "Heart",
     cor: "from-yellow-500/10 to-orange-500/10",
     nivel: "intermediario",
     aulas: [
       {
-        titulo: "5.1 Princípios e Receitas",
-        descricao: "Como montar cafés da manhã equilibrados e lanches saudáveis",
-        duracaoMinutos: 90,
-        conteudo: `# Café da Manhã e Lanches Saudáveis
-
-## Princípios do Café da Manhã Ideal
+        titulo: "5.1 Princípios do Café da Manhã Saudável",
+        descricao: "Componentes essenciais de um café equilibrado",
+        duracaoMinutos: 45,
+        conteudo: `# Princípios do Café da Manhã Saudável
 
 Um café da manhã equilibrado deve conter:
 
-| Componente | Exemplo | Função |
+| Componente | Função | Exemplos |
 |---|---|---|
-| **Carboidrato complexo** | Aveia, pão integral, tapioca | Energia sustentada |
-| **Proteína** | Ovo, queijo, iogurte | Saciedade, construção |
-| **Gordura boa** | Abacate, castanhas | Absorção de vitaminas |
-| **Fibras** | Frutas, sementes | Funcionamento intestinal |
-| **Vitaminas** | Frutas frescas | Imunidade, disposição |
+| **Carboidratos complexos** | Energia de liberação lenta | Aveia, pão integral, quinoa |
+| **Proteínas** | Saciedade | Ovos, iogurte, queijo, pasta de amendoim |
+| **Gorduras boas** | Energia, sabor | Abacate, castanhas, azeite |
+| **Frutas** | Vitaminas, fibras | Frutas frescas da estação |`,
+      },
+      {
+        titulo: "5.2 Receitas Práticas",
+        descricao: "Muffin de amêndoas, panqueca de banana e crepioca",
+        duracaoMinutos: 75,
+        conteudo: `# Receitas Práticas para Café da Manhã
 
-## Receitas Práticas
+## A. Muffin de Amêndoas com Maçã e Canela
 
-### Muffin de Banana e Aveia
-- 2 bananas maduras amassadas
-- 1 xícara de aveia
-- 2 ovos
-- 1 colher de mel
-- 1 colher de chá de canela
-- **Modo:** Misturar tudo, colocar em forminhas, assar 180°C por 20min
+| Ingrediente | Quantidade |
+|---|---|
+| Farinha de amêndoas | 2 xícaras |
+| Maçã ralada | 1 unidade |
+| Ovos | 3 unidades |
+| Mel ou açúcar de coco | 3 colheres |
+| Canela | 1 colher chá |
+| Fermento | 1 colher chá |
 
-### Panqueca Proteica
-- 1 banana
-- 2 ovos
-- 2 colheres de aveia
-- 1 colher de cacau (opcional)
-- **Modo:** Bater no liquidificador, grelhar em frigideira antiaderente
+**Modo de fazer:** Misturar todos os ingredientes, colocar em forminhas e assar a 180°C por 20 minutos. Rico em fibras e gorduras boas, sem farinha refinada.
 
-### Crepioca
-- 1 ovo
-- 2 colheres de tapioca
-- Recheio: queijo branco, tomate, rúcula
-- **Modo:** Misturar ovo e tapioca, grelhar, rechear
+## B. Panquecas de Banana Integral
 
-### Bowl Energético
-- Iogurte natural
-- Granola caseira
-- Frutas picadas
-- Mel e sementes (chia, linhaça)
+| Ingrediente | Quantidade |
+|---|---|
+| Banana madura | 2 unidades |
+| Ovos | 2 unidades |
+| Aveia em flocos | 1/2 xícara |
+| Canela | A gosto |
 
-> Prepare os ingredientes na noite anterior para agilizar pela manhã!`,
+**Modo de fazer:** Amassar as bananas, misturar os ovos, adicionar aveia e canela. Cozinhar em frigideira antiaderente. Naturalmente adocicado, pronto em poucos minutos.
+
+## C. Crepioca de Frango ao Curry
+
+| Ingrediente | Quantidade |
+|---|---|
+| Ovos | 2 unidades |
+| Goma de tapioca | 2 colheres |
+| Frango desfiado | 100g |
+| Curry | 1 colher chá |
+| Cebolinha | A gosto |
+
+**Modo de fazer:** Misturar ovos e tapioca, cozinhar em frigideira. Rechear com frango temperado com curry. Combina proteína magra e carboidrato leve.`,
         checklist: [
           "Carboidrato complexo no prato",
           "Fonte de proteína incluída",
@@ -457,81 +479,65 @@ Um café da manhã equilibrado deve conter:
     aulas: [
       {
         titulo: "6.1 Composição do Prato Saudável",
-        descricao: "Como montar um prato equilibrado e proporções ideais",
+        descricao: "Método Harvard e proporções ideais",
         duracaoMinutos: 60,
         conteudo: `# Composição do Prato Saudável
 
-## O Prato Ideal — Método Harvard
+## O Prato Ideal
 
 | Proporção | Grupo | Exemplos |
 |---|---|---|
-| **50% do prato** | Vegetais e legumes | Salada, legumes cozidos, refogados |
+| **50% do prato** | Vegetais e legumes | Salada (20-25%), legumes (25-30%) |
 | **25% do prato** | Proteína | Frango, peixe, ovos, leguminosas |
 | **25% do prato** | Carboidrato | Arroz integral, batata-doce, quinoa |
 | **+ Complemento** | Gordura boa | Azeite, abacate, castanhas |
 
-> O método Harvard é a forma mais simples e eficaz de montar um prato equilibrado sem contar calorias.
-
-## Dicas para Almoço e Jantar
-
-- **Variedade de cores** — Quanto mais colorido, mais nutrientes
-- **Salada primeiro** — Começa a saciedade
-- **Mastigar devagar** — 20 minutos para o cérebro registrar saciedade
-- **Jantar mais leve** — Metabolismo mais lento à noite
-- **Evitar líquidos durante** — Diluem sucos gástricos`,
+> Quanto mais colorido o prato, mais variados os nutrientes!`,
       },
       {
         titulo: "6.2 Receitas Completas",
-        descricao: "Cuscuz de quinoa, peixe assado e brownie low carb",
+        descricao: "Cuscuz de quinoa com camarões, peixe de forno e brownie low carb",
         duracaoMinutos: 120,
-        conteudo: `# Receitas Completas para Almoço e Jantar
+        conteudo: `# Receitas para Almoço e Jantar
 
-## Cuscuz de Quinoa com Legumes
+## A. Cuscuz de Quinoa com Abobrinha e Camarões
 
-**Ingredientes:**
-- 1 xícara de quinoa
-- 2 xícaras de água
-- 1 cenoura em cubos
-- 1 abobrinha em cubos
-- Salsinha e coentro picados
-- Azeite, sal, limão
+| Ingrediente | Quantidade |
+|---|---|
+| Quinoa em flocos | 1 xícara |
+| Abobrinha em cubos | 1 unidade |
+| Camarões limpos | 200g |
+| Alho, cebola, azeite | A gosto |
+| Caldo de legumes | 1 xícara |
 
-**Modo de preparo:**
-- Cozinhar quinoa na água por 15 minutos
-- Refogar legumes no azeite
-- Misturar tudo, temperar com limão e ervas
+**Modo de fazer:** Refogar camarões, reservar. Refogar abobrinha, adicionar quinoa e caldo. Cozinhar até absorver. Finalizar com camarões. Colorido, nutritivo e leve.
 
-## Peixe Assado com Ervas
+## B. Filé de Peixe de Forno com Legumes Salteados
 
-**Ingredientes:**
-- 2 filés de peixe branco
-- Alecrim, tomilho, salsinha
-- 1 limão (suco e raspas)
-- Azeite, sal, pimenta
+| Ingrediente | Quantidade |
+|---|---|
+| Filé de peixe (pescada, tilápia) | 4 unidades |
+| Legumes variados | A gosto |
+| Ervas frescas | Alecrim, tomilho |
+| Azeite | 3 colheres |
+| Sal, pimenta | A gosto |
 
-**Modo de preparo:**
-- Temperar peixe com ervas, limão e azeite
-- Assar em 200°C por 15-20 minutos
-- Servir com legumes assados
+**Modo de fazer:** Temperar o peixe com ervas, assar em forno médio por 15-20 minutos. Saltear legumes rapidamente. Servir com azeite de ervas. Prato equilibrado e funcional.
 
-## Brownie Low Carb de Cacau
+## C. Brownie Low Carb
 
-**Ingredientes:**
-- 2 ovos
-- 3 colheres de cacau em pó
-- 2 colheres de farinha de amêndoas
-- 2 colheres de mel ou xilitol
-- 1 colher de óleo de coco
+| Ingrediente | Quantidade |
+|---|---|
+| Cacau em pó | 1/2 xícara |
+| Farinha de amêndoas | 1 xícara |
+| Ovos | 3 unidades |
+| Mel ou xilitol | 1/2 xícara |
+| Manteiga ou óleo de coco | 1/2 xícara |
 
-**Modo de preparo:**
-- Misturar todos os ingredientes
-- Assar em forma pequena a 180°C por 15 minutos
-- Deixar esfriar antes de cortar
-
-> Dica: Acrescente nozes picadas por cima para mais crocância e nutrientes!`,
+**Modo de fazer:** Misturar todos os ingredientes, assar em forma untada a 180°C por 25 minutos. Mostra que é possível comer bem e com prazer, com ingredientes funcionais.`,
         quiz: [
           {
-            pergunta: "No método Harvard, qual proporção do prato deve ser de vegetais?",
+            pergunta: "Qual proporção do prato deve ser de vegetais e legumes?",
             opcoes: ["25%", "50%", "75%", "100%"],
             respostaCorreta: 1,
             explicacao: "Metade do prato (50%) deve ser composta por vegetais e legumes, garantindo fibras, vitaminas e minerais.",
@@ -550,50 +556,52 @@ Um café da manhã equilibrado deve conter:
     nivel: "intermediario",
     aulas: [
       {
-        titulo: "7.1 Alimentação por Público",
-        descricao: "Adaptações para diferentes necessidades alimentares",
-        duracaoMinutos: 120,
-        conteudo: `# Cozinha para Públicos Específicos
+        titulo: "7.1 Alimentação Infantil",
+        descricao: "Estratégias e receitas para crianças",
+        duracaoMinutos: 60,
+        conteudo: `# Alimentação Infantil Saudável
 
-## Alimentação Infantil
+## Estratégias
 
-| Princípio | Aplicação |
+| Estratégia | Descrição |
 |---|---|
-| **Apresentação lúdica** | Montar pratos com formatos divertidos |
-| **Cores variadas** | Crianças comem com os olhos |
-| **Texturas diferentes** | Estimular o paladar |
-| **Sem forçar** | Oferecer sem obrigar |
-| **Envolvimento** | Levar a criança para a cozinha |
+| **Apresentação lúdica** | Comidas em formatos divertidos |
+| **Envolvimento da criança** | Deixar ajudar no preparo |
+| **Introdução gradual** | Novos alimentos aos poucos |
+| **Lancheira saudável** | Opções nutritivas para escola |
 
-## Alimentação Vegetariana e Vegana
+## Receita: Lancheira Saudável
 
-| Nutriente | Atenção | Fontes Vegetais |
+- Sanduíche de pão integral com pasta de grão-de-bico
+- Palitos de cenoura e pepino
+- Fruta picada
+- Iogurte natural
+
+> Crianças comem com os olhos. Invista em cores e apresentação!`,
+      },
+      {
+        titulo: "7.2 Vegetariano, Vegano e Low Carb",
+        descricao: "Nutrientes críticos e adaptações",
+        duracaoMinutos: 60,
+        conteudo: `# Alimentação Vegetariana, Vegana e Low Carb
+
+## Vegetariano e Vegano — Nutrientes Críticos
+
+| Nutriente Crítico | Fontes Vegetais | Como Combinar |
 |---|---|---|
-| **Proteína** | Combinar leguminosas + cereais | Feijão + arroz, lentilha + quinoa |
-| **Ferro** | Associar com vitamina C | Feijão + limão, lentilha + laranja |
-| **B12** | Suplementação necessária (veganos) | Suplemento, nutritional yeast |
-| **Cálcio** | Fontes alternativas | Brócolis, gergelim, tofu |
-| **Ômega-3** | Fontes vegetais | Linhaça, chia, nozes |
+| **Proteínas** | Leguminosas + cereais | Arroz com feijão, quinoa com lentilha |
+| **Ferro** | Folhas verdes, leguminosas | Associar com vitamina C (limão) |
+| **Vitamina B12** | Suplementação (necessária) | Incluir na rotina |
+| **Cálcio** | Gergelim, vegetais escuros, leites vegetais fortificados | Consumir diariamente |
 
 ## Low Carb Saudável
 
-> Low carb não é zero carb. Prefira reduzir ultraprocessados, não legumes e frutas.
-
-| Permitido | Evitar | Moderação |
-|---|---|---|
-| Vegetais folhosos | Açúcar refinado | Frutas |
-| Proteínas magras | Farinha branca | Tubérculos |
-| Gorduras boas | Arroz branco | Leguminosas |
-| Oleaginosas | Pães e massas | Laticínios |
-
-## Restrições Alimentares
-
-| Restrição | Substituições |
+| Alimentos Permitidos | Alimentos a Evitar |
 |---|---|
-| **Sem glúten** | Farinha de arroz, amêndoas, tapioca |
-| **Sem lactose** | Leite vegetal, queijo vegano |
-| **Sem ovo** | Linhaça hidratada, banana, aquafaba |
-| **Sem açúcar** | Xilitol, eritritol, stevia |`,
+| Carnes, ovos, peixes | Açúcares, doces |
+| Vegetais não amiláceos | Grãos (arroz, trigo, milho) |
+| Abacate, azeite, castanhas | Tubérculos (batata, mandioca) |
+| Laticínios | Frutas muito doces |`,
         quiz: [
           {
             pergunta: "Qual nutriente veganos precisam necessariamente suplementar?",
@@ -602,6 +610,23 @@ Um café da manhã equilibrado deve conter:
             explicacao: "A vitamina B12 não é encontrada em alimentos vegetais, sendo necessária suplementação para veganos.",
           },
         ],
+      },
+      {
+        titulo: "7.3 Restrições Alimentares",
+        descricao: "Intolerância à lactose, doença celíaca, diabetes e alergias",
+        duracaoMinutos: 60,
+        conteudo: `# Restrições Alimentares
+
+## Cuidados por Condição
+
+| Condição | Cuidados Específicos |
+|---|---|
+| **Intolerância à lactose** | Usar leites vegetais, queijos sem lactose |
+| **Doença celíaca (glúten)** | Farinhas sem glúten (aveia, arroz, amêndoas) |
+| **Alergia a ovos** | Substituições (linhaça + água, purê de banana) |
+| **Diabetes** | Baixo índice glicêmico, controle de carboidratos |
+
+> Sempre pergunte ao cliente sobre alergias e restrições antes de preparar qualquer refeição!`,
       },
     ],
   },
@@ -615,46 +640,49 @@ Um café da manhã equilibrado deve conter:
     nivel: "intermediario",
     aulas: [
       {
-        titulo: "8.1 Aproveitamento Total dos Alimentos",
-        descricao: "Receitas e benefícios de cascas, talos e sementes",
-        duracaoMinutos: 90,
+        titulo: "8.1 Por que Aproveitar Integralmente",
+        descricao: "Nutrientes concentrados em cascas, talos e sementes",
+        duracaoMinutos: 45,
         conteudo: `# Aproveitamento Integral dos Alimentos
 
-## Por que Aproveitar Tudo?
+## Por que Aproveitar Integralmente
 
-- **Nutrição:** Cascas e talos concentram até 40% mais nutrientes
-- **Economia:** Reduz custos em até 30%
-- **Sustentabilidade:** Menos desperdício, menos lixo
-- **Criatividade:** Novas texturas e sabores
-
-## O que Aproveitar
-
-| Parte | Alimento | Uso |
+| Parte da Planta | Nutrientes | Formas de Uso |
 |---|---|---|
-| **Casca de banana** | Banana | Biomassa, bolo, farinha |
-| **Casca de abóbora** | Abóbora | Refogada, chips assados |
-| **Talos de brócolis** | Brócolis | Sopa, refogado, purê |
-| **Talos de couve** | Couve | Suco verde, refogado |
-| **Sementes de abóbora** | Abóbora | Torradas como snack |
-| **Casca de melancia** | Melancia | Doce, suco, conserva |
-| **Folhas de cenoura** | Cenoura | Tempero, pesto |
-| **Casca de batata** | Batata | Chips assados |
+| **Cascas** | Fibras, vitaminas, antioxidantes | Farofas, chips, bolos |
+| **Talos** | Fibras, cálcio | Refogados, sopas, farofas |
+| **Sementes** | Gorduras boas, proteínas | Farinhas, granolas |
+| **Folhas** | Clorofila, vitaminas | Sopas, sucos, refogados |
 
-## Receitas com Aproveitamento
+> Cascas e talos concentram até 40% mais nutrientes do que a polpa!`,
+      },
+      {
+        titulo: "8.2 Receitas com Aproveitamento Integral",
+        descricao: "Farinhas de cascas, chips, refogados e caldos",
+        duracaoMinutos: 45,
+        conteudo: `# Receitas com Aproveitamento Integral
 
-### Chips de Casca de Batata
-- Cascas de batata lavadas e secas
-- Azeite, sal, páprica
-- Assar a 200°C por 15 minutos
+## Receitas Práticas
 
-### Suco Verde Nutritivo
-- Talos de couve + casca de abacaxi + gengibre + água
-- Bater e coar
+| Receita | Ingredientes Aproveitados |
+|---|---|
+| **Farinha de cascas de frutas** | Cascas de banana, maçã, abacaxi |
+| **Bolo de casca de abóbora** | Casca de abóbora |
+| **Refogado de talos** | Talos de couve, espinafre, beterraba |
+| **Chips de cascas** | Cascas de batata, cenoura, abobrinha |
+| **Caldo de vegetais** | Sobras de legumes |
 
-### Farofa de Talos
-- Talos picados de brócolis, couve e salsinha
-- Refogar com cebola e alho
-- Adicionar farinha de mandioca
+## Como Fazer Chips de Cascas
+
+- Cascas de batata, cenoura ou abobrinha lavadas e secas
+- Temperar com azeite, sal e páprica
+- Assar a 200°C por 15 minutos até ficarem crocantes
+
+## Caldo de Vegetais Nutritivo
+
+- Juntar sobras de legumes (talos de cebola, casca de cenoura, talos de salsinha)
+- Cozinhar em água por 40 minutos
+- Coar e usar como base para sopas e risotos
 
 > Antes de jogar fora, pense: isso pode virar um ingrediente?`,
         checklist: [
@@ -677,42 +705,46 @@ Um café da manhã equilibrado deve conter:
     nivel: "intermediario",
     aulas: [
       {
-        titulo: "9.1 Montagem de Cardápios",
-        descricao: "Princípios, modelo semanal e lista de compras",
-        duracaoMinutos: 120,
-        conteudo: `# Planejamento e Montagem de Cardápios
+        titulo: "9.1 Como Montar Cardápios Saudáveis",
+        descricao: "Etapas, princípios e planejamento",
+        duracaoMinutos: 60,
+        conteudo: `# Como Montar Cardápios Saudáveis
 
-## Princípios do Cardápio Saudável
+## Etapas do Planejamento
 
-| Princípio | Aplicação |
+| Etapa | Descrição |
 |---|---|
-| **Variedade** | Alternar alimentos ao longo da semana |
-| **Equilíbrio** | Todos os grupos alimentares em cada refeição |
-| **Cores** | Mínimo 3 cores no prato |
-| **Sazonalidade** | Frutas e legumes da estação (mais baratos e nutritivos) |
-| **Praticidade** | Receitas viáveis para o dia a dia |
+| **1. Defina as refeições** | Café, almoço, lanche, jantar |
+| **2. Equilibre nutrientes** | Proteínas, carboidratos, gorduras em cada refeição |
+| **3. Varie ingredientes** | Diferentes cores, texturas, grupos alimentares |
+| **4. Considere a estação** | Ingredientes sazonais são mais baratos e saborosos |
+| **5. Planeje o preparo** | O que pode ser adiantado |
 
-## Modelo de Cardápio Semanal
+> Planejamento é a chave para comer bem, gastar menos e desperdiçar zero!`,
+      },
+      {
+        titulo: "9.2 Modelo de Cardápio Semanal",
+        descricao: "Cardápio completo segunda a sexta",
+        duracaoMinutos: 60,
+        conteudo: `# Modelo de Cardápio Semanal
 
-| Dia | Proteína | Carboidrato | Vegetal Principal |
+## Cardápio Completo
+
+| Dia | Café da Manhã | Almoço | Jantar |
 |---|---|---|---|
-| **Segunda** | Frango grelhado | Arroz integral | Brócolis |
-| **Terça** | Peixe assado | Batata-doce | Abobrinha |
-| **Quarta** | Ovo mexido/omelete | Quinoa | Espinafre |
-| **Quinta** | Carne magra | Mandioquinha | Cenoura |
-| **Sexta** | Leguminosas (feijão/lentilha) | Arroz integral | Couve |
-| **Sábado** | Frango desfiado | Macarrão integral | Mix de folhas |
-| **Domingo** | Peixe/frutos do mar | Batata | Salada colorida |
+| **Segunda** | Panqueca de banana + frutas | Frango grelhado + quinoa + salada | Sopa de legumes |
+| **Terça** | Iogurte + granola + morangos | Peixe assado + batata-doce + brócolis | Omelete + salada |
+| **Quarta** | Pão integral + ovo + abacate | Carne moída + arroz integral + couve | Crepioca + salada |
+| **Quinta** | Vitamina de frutas | Strogonoff de frango (leite de coco) + salada | Sopa creme de abóbora |
+| **Sexta** | Aveia com frutas e castanhas | Salmão + legumes assados | Pizza de couve-flor + salada |
 
-## Como Fazer a Lista de Compras
+## Dicas para a Lista de Compras
 
 - **Passo 1:** Definir o cardápio da semana
 - **Passo 2:** Listar todos os ingredientes necessários
 - **Passo 3:** Verificar o que já tem em casa
 - **Passo 4:** Organizar por seção do mercado
-- **Passo 5:** Comprar somente o necessário
-
-> Planejamento é a chave para comer bem, gastar menos e desperdiçar zero!`,
+- **Passo 5:** Comprar somente o necessário`,
         quiz: [
           {
             pergunta: "Qual o primeiro passo para uma alimentação saudável organizada?",
@@ -734,54 +766,55 @@ Um café da manhã equilibrado deve conter:
     nivel: "avancado",
     aulas: [
       {
-        titulo: "10.1 Marmitas Saudáveis e Delivery",
-        descricao: "Mercado, montagem, congelamento e embalagens",
-        duracaoMinutos: 120,
-        conteudo: `# Marmitas Saudáveis e Delivery
+        titulo: "10.1 Mercado de Marmitas Saudáveis",
+        descricao: "Oportunidades no mercado grab & go",
+        duracaoMinutos: 45,
+        conteudo: `# Mercado de Marmitas Saudáveis
 
-## O Mercado de Marmitas
+O mercado de alimentos "grab & go" (pegue e leve) está em expansão, com consumidores buscando praticidade sem abrir mão da saúde. A marca Ateliê, por exemplo, construiu fábrica estratégica em Ibiúna para que os vegetais cheguem ao consumidor em até 24 horas após colhidos.
 
-| Segmento | Público | Preço Médio |
-|---|---|---|
-| **Marmita fit** | Praticantes de exercício | R$ 25-40 |
-| **Marmita saudável** | Público geral | R$ 18-30 |
-| **Marmita low carb** | Público restritivo | R$ 28-45 |
-| **Marmita vegana** | Veganos/vegetarianos | R$ 22-35 |
-| **Grab & go** | Pressa, conveniência | R$ 15-25 |
+## Como Montar Marmitas
 
-## Montagem Eficiente
-
-### Passo a Passo do Meal Prep
-- **Domingo:** Compras + preparo de bases (arroz, feijão, proteínas)
-- **Segunda:** Montar marmitas da semana
-- **Diário:** Adicionar salada fresca no dia
-
-### Regras de Montagem
-
-| Regra | Motivo |
+| Etapa | Recomendação |
 |---|---|
-| **Separar molhados dos secos** | Evitar que amoleçam |
-| **Salada à parte** | Manter frescor |
-| **Porções padronizadas** | Controle nutricional |
-| **Identificar e datar** | Controle de validade |
+| **Escolha de embalagens** | Adequadas para congelamento, livres de BPA |
+| **Separação de alimentos** | Evitar que líquidos molhem outros itens |
+| **Cozimento adequado** | Levemente abaixo do ponto para não passar no reaquecimento |
+| **Resfriamento rápido** | Antes de congelar |
+| **Rotulagem** | Data de preparo, validade, instruções de reaquecimento |`,
+      },
+      {
+        titulo: "10.2 Congelamento de Alimentos",
+        descricao: "O que pode congelar, validade e dicas",
+        duracaoMinutos: 75,
+        conteudo: `# Congelamento de Alimentos
 
-## Congelamento
+## Guia de Congelamento
 
-| Alimento | Tempo de Congelamento | Dica |
-|---|---|---|
-| **Arroz/feijão** | Até 3 meses | Congelar em porções |
-| **Carnes cozidas** | Até 3 meses | Sem molho para não ressecar |
-| **Legumes cozidos** | Até 3 meses | Al dente para não desmanchar |
-| **Sopas e caldos** | Até 3 meses | Deixar espaço no pote (expansão) |
-| **Saladas** | ❌ Não congelar | Preparar frescas |
+| Alimento | Pode Congelar? | Validade | Dicas |
+|---|---|---|---|
+| Carnes cozidas | Sim | 3 meses | Bem embaladas |
+| Legumes cozidos | Sim (branquear antes) | 3 meses | Resfriar rápido |
+| Arroz | Sim | 1 mês | Em porções |
+| Feijão | Sim | 3 meses | Sem tempero |
+| Saladas verdes | Não | — | Consumir frescas |
+| Molhos | Sim | 3 meses | Em potes |
 
-> Congelar rápido preserva mais nutrientes. Use recipientes rasos para congelamento rápido.`,
+## Dicas Importantes
+
+- Congelar rápido preserva mais nutrientes
+- Usar recipientes rasos para congelamento rápido
+- Deixar espaço no pote (expansão)
+- Identificar com data e conteúdo
+- Descongelar na geladeira, nunca em temperatura ambiente
+
+> Marmitas bem planejadas e congeladas corretamente duram até 3 meses sem perder qualidade!`,
         quiz: [
           {
-            pergunta: "Qual o tempo máximo de congelamento para marmitas de arroz e feijão?",
-            opcoes: ["1 semana", "2 semanas", "Até 3 meses", "1 ano"],
+            pergunta: "Qual alimento NÃO deve ser congelado?",
+            opcoes: ["Arroz", "Feijão", "Saladas verdes", "Carnes cozidas"],
             respostaCorreta: 2,
-            explicacao: "Arroz e feijão podem ser congelados por até 3 meses, desde que em recipientes adequados e bem vedados.",
+            explicacao: "Saladas verdes não devem ser congeladas pois perdem textura e ficam murchas. Devem ser consumidas frescas.",
           },
         ],
         checklist: [
@@ -805,66 +838,71 @@ Um café da manhã equilibrado deve conter:
     nivel: "avancado",
     aulas: [
       {
-        titulo: "11.1 Modelos de Negócio",
-        descricao: "Como empreender na gastronomia saudável",
+        titulo: "11.1 Por que Empreender e Modelos de Negócio",
+        descricao: "Vantagens, modelos e investimento",
         duracaoMinutos: 60,
-        conteudo: `# Empreendedorismo na Gastronomia Saudável
+        conteudo: `# Empreendedorismo em Gastronomia Saudável
+
+## Por que Empreender
+
+| Vantagem | Descrição |
+|---|---|
+| **Mercado em crescimento** | 8% ao ano, R$ 10 bilhões movimentados |
+| **Consumidor disposto a pagar mais** | Valoriza qualidade e benefícios à saúde |
+| **Diversidade de modelos** | Restaurantes, delivery, marmitas, produtos |
+| **Tendência consolidada** | Não é moda passageira |
+| **Propósito** | Contribuir para saúde e bem-estar |
 
 ## Modelos de Negócio
 
-| Modelo | Investimento Inicial | Retorno | Complexidade |
-|---|---|---|---|
-| **Marmitas delivery** | R$ 2-5 mil | Médio-alto | Baixa |
-| **Food truck saudável** | R$ 30-80 mil | Alto | Média |
-| **Restaurante** | R$ 80-200 mil | Alto | Alta |
-| **Consultoria de cardápios** | R$ 1-3 mil | Médio | Baixa |
-| **Cursos de culinária** | R$ 2-5 mil | Médio | Baixa |
-| **E-commerce de produtos** | R$ 5-20 mil | Variável | Média |
-| **Personal chef** | R$ 1-3 mil | Médio-alto | Baixa |
-
-## Tendências do Setor
-
-- **Personalização** — Cardápios individualizados
-- **Sustentabilidade** — Embalagens biodegradáveis, zero desperdício
-- **Tecnologia** — Apps de pedido, automação de processos
-- **Transparência** — Origem dos ingredientes, informação nutricional
-- **Experiência** — Jantares temáticos, workshops
-
-## Dicas para Novos Empreendedores
-
-- **Planejamento** — Faça um plano de negócios antes de começar
-- **Diferenciação** — O que torna você único?
-- **Controle financeiro** — Separe finanças pessoais das empresariais
-- **Comece pequeno** — Valide antes de investir alto
-- **Invista em qualidade** — Ingredientes bons = clientes fiéis`,
+| Modelo | Descrição | Investimento Inicial |
+|---|---|---|
+| **Restaurante saudável** | Espaço físico com cardápio equilibrado | Alto |
+| **Dark kitchen** | Cozinha apenas para delivery | Médio |
+| **Marmitas congeladas** | Produção e venda de refeições | Médio |
+| **Personal Chef** | Atendimento personalizado em domicílio | Baixo |
+| **Produtos funcionais** | Linha própria (granolas, snacks, molhos) | Médio |
+| **Cursos e workshops** | Ensino de gastronomia saudável | Baixo |`,
       },
       {
-        titulo: "11.2 Tendências e Inovação",
-        descricao: "Novas oportunidades e mercado emergente",
+        titulo: "11.2 Tendências e Dicas para Empreendedores",
+        descricao: "Tendências de mercado e estratégias de sucesso",
         duracaoMinutos: 60,
-        conteudo: `# Tendências e Inovação
+        conteudo: `# Tendências e Dicas para Empreendedores
 
-## Mercado em Expansão
+## Tendências para Ficar de Olho
 
-| Tendência | Descrição | Oportunidade |
-|---|---|---|
-| **Plant-based** | Proteínas vegetais | Hambúrguer de grão-de-bico, leites vegetais |
-| **Fermentados** | Kombucha, kefir, kimchi | Produtos artesanais |
-| **Superfoods** | Açaí, spirulina, chlorella | Bowls e sucos funcionais |
-| **Comfort food saudável** | Versões fit de pratos tradicionais | Pizzas low carb, lasanhas de abobrinha |
-| **Snacks saudáveis** | Barrinhas, chips de legumes | Produtos embalados |
+| Tendência | Oportunidade |
+|---|---|
+| **Adaptógenos** | Shots funcionais, bebidas para foco e energia |
+| **Superfoods brasileiras** | Valorizar ingredientes nativos (açaí, camu-camu) |
+| **Probióticos** | Kombucha, kefir, pães de fermentação natural |
+| **Proteínas alternativas** | Receitas à base de plantas, leguminosas |
+| **Upcycling** | Aproveitamento integral, farinhas de cascas |
+| **Clean label** | Rótulos limpos, ingredientes reconhecíveis |
 
-## Como se Diferenciar
+## Dicas Essenciais
 
-> O mercado de comida saudável está crescendo, mas também está ficando competitivo. Diferenciação é a chave.
+### A. Planejamento é Essencial
+- Público-alvo e ocasiões de consumo
+- Proposta de valor clara
+- Análise de viabilidade financeira (cenários realistas e pessimistas)
+- Estrutura de custos (CMV, desperdício, horas extras)
 
-### Estratégias de Diferenciação
+### B. Diferenciação e Experiência
+- Experiência consistente e memorável
+- Atendimento de qualidade
+- Rapidez, cortesia e atenção aos detalhes
+- Capacidade de resolver problemas rapidamente
 
-- **Nicho específico** — Foque em um público (ex: marmitas para diabéticos)
-- **Storytelling** — Conte sua história e a dos ingredientes
-- **Qualidade visual** — Fotos profissionais fazem a diferença
-- **Atendimento excepcional** — Personalização e cuidado
-- **Inovação constante** — Novos pratos, combinações e apresentações`,
+### C. Controle Rigoroso
+- CMV (Custo das Mercadorias Vendidas)
+- Desperdício
+- Tempo e volume de atendimento
+- Tíquete médio e satisfação do cliente
+
+### D. Nicho é Poder
+Escolha um nicho específico e domine-o. Exemplo: a Casa de Bolos focou em bolo caseiro, algo único, adaptado em épocas sazonais, mas sem perder a essência.`,
         quiz: [
           {
             pergunta: "Qual a principal recomendação para começar a empreender na gastronomia?",
@@ -886,43 +924,51 @@ Um café da manhã equilibrado deve conter:
     nivel: "avancado",
     aulas: [
       {
-        titulo: "12.1 Marketing e Fotografia",
-        descricao: "Presença online, conteúdo que vende e food photography",
-        duracaoMinutos: 120,
-        conteudo: `# Marketing Digital para Gastronomia
+        titulo: "12.1 Presença Online",
+        descricao: "Plataformas, estratégias e frequência de postagem",
+        duracaoMinutos: 60,
+        conteudo: `# Presença Online
 
-## Presença Online
+## Plataformas e Estratégias
 
-| Canal | Estratégia | Frequência |
+| Plataforma | Estratégia | Frequência |
 |---|---|---|
-| **Instagram** | Fotos profissionais, reels de receitas | Diário |
-| **TikTok** | Vídeos curtos de receitas rápidas | 3-5x/semana |
-| **YouTube** | Receitas completas, tutoriais | Semanal |
-| **WhatsApp Business** | Cardápio, pedidos, relacionamento | Diário |
-| **Google Meu Negócio** | Visibilidade local | Sempre atualizado |
+| **Instagram** | Fotos atrativas, reels do preparo, stories | Diário |
+| **Pinterest** | Inspiração, receitas, tráfego | Semanal |
+| **TikTok** | Vídeos curtos de receitas e dicas | 3-5x semana |
+| **WhatsApp Business** | Relacionamento, pedidos, ofertas | Diário |
 
 ## Conteúdo que Vende
 
-| Tipo | Exemplo | Objetivo |
+| Tipo de Conteúdo | Exemplo | Objetivo |
 |---|---|---|
-| **Receita rápida** | "Jantar saudável em 15 min" | Engajamento |
-| **Antes e depois** | Ingredientes → prato pronto | Desejo |
-| **Educativo** | "5 trocas saudáveis simples" | Autoridade |
-| **Bastidores** | Preparação na cozinha | Humanização |
-| **Depoimentos** | Clientes satisfeitos | Prova social |
+| **Educativo** | "Benefícios da cúrcuma e como usar" | Autoridade |
+| **Processo criativo** | Bastidores da cozinha | Humanização |
+| **Receitas práticas** | "Almoço saudável em 15 minutos" | Engajamento |
+| **Promocional** | Kits de marmitas, combos | Conversão |
+| **Depoimentos** | Clientes satisfeitos | Prova social |`,
+      },
+      {
+        titulo: "12.2 Fotografia de Alimentos",
+        descricao: "Técnicas de food photography para redes sociais",
+        duracaoMinutos: 60,
+        conteudo: `# Fotografia de Alimentos
 
-## Fotografia de Alimentos
+## Dicas Essenciais
 
-### Dicas Essenciais
-
-| Dica | Aplicação |
+| Dica | Descrição |
 |---|---|
-| **Luz natural** | Fotografe perto de janelas |
-| **Ângulo 45°** | O mais versátil para pratos |
-| **Ângulo 90° (flat lay)** | Bowls, pizzas, pratos com textura |
-| **Composição** | Talheres, guardanapo, ingredientes ao redor |
-| **Cores complementares** | Fundo que contraste com o prato |
-| **Frescor** | Fotografe imediatamente após o preparo |
+| **Luz natural** | Prefira luz do dia, perto de janelas |
+| **Composição** | Pratos coloridos, texturas variadas |
+| **Ângulos** | 45° para pratos, de cima para mesas postas |
+| **Cenário** | Louças bonitas, talheres, guardanapos |
+
+## Regras de Ouro
+
+- Fotografe imediatamente após o preparo (frescor)
+- Use fundos que contrastem com o prato
+- Inclua ingredientes ao redor para contar uma história
+- Edite com moderação — naturalidade vende mais
 
 > Um prato bonito vende mais que um prato apenas gostoso. Na era digital, as pessoas comem com os olhos primeiro!`,
         quiz: [
@@ -946,50 +992,49 @@ Um café da manhã equilibrado deve conter:
     nivel: "avancado",
     aulas: [
       {
-        titulo: "13.1 Aspectos Legais e Precificação",
-        descricao: "Regulamentação, custos e formação de preço",
-        duracaoMinutos: 120,
-        conteudo: `# Gestão Financeira e Legal
+        titulo: "13.1 Aspectos Legais",
+        descricao: "Vigilância sanitária, MEI e licenciamento",
+        duracaoMinutos: 60,
+        conteudo: `# Aspectos Legais para Negócios de Alimentação
 
-## Aspectos Legais
+## Requisitos Legais
 
-| Requisito | Descrição |
+| Aspecto | O que fazer |
 |---|---|
-| **MEI** | Microempreendedor Individual — faturamento até R$ 81 mil/ano |
-| **Alvará sanitário** | Obrigatório para produção e venda de alimentos |
-| **Curso de manipulação** | Boas práticas de fabricação (BPF) |
-| **Rotulagem** | Obrigatória para produtos embalados (ANVISA) |
-| **Nota fiscal** | Emissão para vendas |
+| **Vigilância Sanitária** | Licenciamento e alvará |
+| **MEI** | Formalização para pequenos negócios |
+| **Corpo de Bombeiros** | AVCB (Auto de Vistoria) |
+| **Licenciamento ambiental** | Depende do tipo de atividade |
+| **Notas fiscais** | Emissão obrigatória |
 
-## Precificação — CMV (Custo de Mercadoria Vendida)
+> Regularize seu negócio desde o início. É mais barato do que resolver problemas depois!`,
+      },
+      {
+        titulo: "13.2 Precificação e CMV",
+        descricao: "Como calcular preços e controlar custos",
+        duracaoMinutos: 60,
+        conteudo: `# Precificação e CMV
 
-### Fórmula
-
-> **Preço de Venda = CMV ÷ Percentual do CMV**
-> 
-> Exemplo: Se o CMV é R$ 8,00 e representa 30% do preço → R$ 8,00 ÷ 0,30 = R$ 26,67
-
-### Composição do Custo
-
-| Item | Percentual Ideal |
-|---|---|
-| **CMV (ingredientes)** | 25-35% |
-| **Mão de obra** | 25-30% |
-| **Embalagem** | 5-10% |
-| **Despesas fixas** | 15-20% |
-| **Lucro** | 15-25% |
-
-### Exemplo Prático — Marmita Saudável
+## Exemplo Prático — Marmita Saudável (500g)
 
 | Item | Custo |
 |---|---|
-| Proteína (150g frango) | R$ 3,50 |
-| Carboidrato (arroz integral) | R$ 1,00 |
-| Legumes variados | R$ 2,00 |
-| Salada | R$ 1,00 |
+| Ingredientes | R$ 8,00 |
 | Embalagem | R$ 1,50 |
-| **CMV Total** | **R$ 9,00** |
-| **Preço sugerido (CMV 30%)** | **R$ 30,00** |
+| Mão de obra (proporcional) | R$ 3,00 |
+| Custos fixos (luz, gás) | R$ 1,00 |
+| **Custo total** | **R$ 13,50** |
+| **Multiplicador 2,5** | **R$ 33,75** |
+| **Preço sugerido** | **R$ 32,00 - R$ 35,00** |
+
+## CMV (Custo da Mercadoria Vendida)
+
+| Tipo de Negócio | CMV Ideal |
+|---|---|
+| Restaurantes | 28-35% |
+| Delivery | 30-40% |
+| Produtos industrializados | 20-30% |
+| Marmitas | 25-35% |
 
 ## Controle Financeiro
 
@@ -1000,10 +1045,10 @@ Um café da manhã equilibrado deve conter:
 - **Precificar corretamente** — Nunca vender abaixo do custo`,
         quiz: [
           {
-            pergunta: "Qual o percentual ideal do CMV no preço de venda de marmitas?",
+            pergunta: "Qual o CMV ideal para marmitas saudáveis?",
             opcoes: ["50-60%", "25-35%", "10-15%", "70-80%"],
             respostaCorreta: 1,
-            explicacao: "O CMV ideal deve ficar entre 25-35% do preço de venda, garantindo margem para cobrir outros custos e gerar lucro.",
+            explicacao: "O CMV ideal para marmitas deve ficar entre 25-35% do preço de venda, garantindo margem para cobrir outros custos e gerar lucro.",
           },
         ],
       },
@@ -1019,45 +1064,62 @@ Um café da manhã equilibrado deve conter:
     nivel: "avancado",
     aulas: [
       {
-        titulo: "14.1 Bônus e Certificação",
-        descricao: "Diversificação de receita, parcerias e materiais extras",
-        duracaoMinutos: 60,
-        conteudo: `# Bônus, Expansão e Certificação
+        titulo: "14.1 Diversificação de Produtos",
+        descricao: "Novas linhas de produtos e receitas",
+        duracaoMinutos: 30,
+        conteudo: `# Diversificação de Produtos
 
-## Diversificação de Receita
+## Oportunidades de Expansão
 
-| Estratégia | Descrição | Potencial |
-|---|---|---|
-| **Workshops presenciais** | Aulas práticas para grupos | Alto |
-| **Cursos online** | Receitas em vídeo, e-books | Escalável |
-| **Consultoria** | Montagem de cardápios personalizados | Alto valor |
-| **Produtos** | Granolas, temperos, snacks | Recorrente |
-| **Catering** | Eventos corporativos e sociais | Alto ticket |
-| **Livro de receitas** | Impresso ou digital | Passivo |
-
-## Parcerias Estratégicas
-
-| Parceiro | Benefício |
+| Produto | Descrição |
 |---|---|
-| **Nutricionistas** | Indicação mútua, credibilidade |
-| **Academias** | Público-alvo alinhado |
-| **Empresas** | Alimentação corporativa |
-| **Influenciadores** | Divulgação, alcance |
-| **Produtores locais** | Ingredientes frescos, storytelling |
+| **Molhos saudáveis** | Pesto, molho de tomate caseiro, vinagretes |
+| **Granolas e mixes** | Combinados de cereais, castanhas, frutas |
+| **Barras energéticas** | Snacks funcionais |
+| **Bebidas funcionais** | Kombucha, kefir, shots |
+| **Congelados saudáveis** | Hambúrgueres vegetais, legumes |
 
-## Materiais Exclusivos Inclusos
+> Diversificar produtos aumenta suas fontes de receita e atinge diferentes perfis de consumidor.`,
+      },
+      {
+        titulo: "14.2 Parcerias Estratégicas",
+        descricao: "Como criar parcerias que impulsionam o negócio",
+        duracaoMinutos: 30,
+        conteudo: `# Parcerias Estratégicas
 
-- ✅ E-book de 50 receitas saudáveis
-- ✅ Planilha de precificação automática
-- ✅ Modelo de cardápio semanal editável
-- ✅ Checklist de boas práticas de higiene
-- ✅ Lista de fornecedores verificados
-- ✅ Templates para redes sociais
+## Parceiros Ideais
+
+| Parceiro | Abordagem |
+|---|---|
+| **Academias** | Fornecer marmitas para alunos |
+| **Spas e clínicas** | Alimentação para programas de emagrecimento |
+| **Empresas** | Refeições saudáveis para colaboradores |
+| **Escolas** | Merenda escolar saudável |
+| **Produtores locais** | Ingredientes frescos, preço justo |
+
+> Parcerias estratégicas multiplicam seu alcance sem multiplicar seus custos!`,
+      },
+      {
+        titulo: "14.3 Bônus e Certificação",
+        descricao: "Materiais exclusivos e certificação profissional",
+        duracaoMinutos: 30,
+        conteudo: `# Bônus Exclusivos e Certificação
+
+## Bônus Inclusos
+
+| Bônus | Descrição |
+|---|---|
+| **Grupo VIP de alunas** | Comunidade exclusiva para troca de experiências |
+| **Lista de fornecedores verificados** | Qualidade garantida |
+| **Planilha de custos** | Controle financeiro facilitado |
+| **Ebook de receitas sazonais** | Pratos para cada estação |
+| **Modelos de cardápios editáveis** | Prontidão para começar |
 
 ## Certificação
 
-Ao finalizar o curso, você receberá o certificado de **Gastronomia Saudável — 130 horas**, válido para:
+Ao finalizar o curso, o aluno recebe certificado de conclusão de **Gastronomia Saudável — 130 horas**, comprovando as habilidades adquiridas e podendo utilizar como diferencial profissional.
 
+### Válido para:
 - Comprovar horas extracurriculares
 - Enriquecer currículo profissional
 - Abrir seu próprio negócio com credibilidade
