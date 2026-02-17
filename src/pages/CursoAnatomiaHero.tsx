@@ -16,7 +16,7 @@ export default function CursoAnatomiaHero({ embedded }: { embedded?: boolean }) 
       coverVideo={videoAnatomia}
       courseRoute="/curso-anatomia"
       level="Iniciante"
-      description="Estudo dos sistemas esquelético, muscular e nervoso com aplicação prática em avaliação postural e técnicas de palpação."
+      description="Curso completo de Anatomia Humana com 15 módulos e 130 horas — do iniciante ao avançado, com base científica e visão de mercado."
       embedded={embedded}
     />
   );
