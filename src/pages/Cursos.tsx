@@ -23,6 +23,7 @@ const CursoOleosEssenciaisHero = lazy(() => import("@/pages/CursoOleosEssenciais
 const CursoMassagemModeladoraHero = lazy(() => import("@/pages/CursoMassagemModeladoraHero"));
 const CursoDrenagemLinfaticaHero = lazy(() => import("@/pages/CursoDrenagemLinfaticaHero"));
 const CursoGastronomiaSaudavelHero = lazy(() => import("@/pages/CursoGastronomiaSaudavelHero"));
+const CursoSeitaiHero = lazy(() => import("@/pages/CursoSeitaiHero"));
 
 interface TabDef {
   value: string;
@@ -48,6 +49,7 @@ const tabDefs: TabDef[] = [
   { value: "modeladora", label: "Modeladora", icon: Fingerprint, storageKey: "resinkra_curso_massagem_modeladora_progress", totalAulas: 0 },
   { value: "drenagem", label: "Drenagem", icon: Waves, storageKey: "resinkra_curso_drenagem_linfatica_progress", totalAulas: 0 },
   { value: "gastronomia", label: "Gastronomia", icon: ChefHat, storageKey: "resinkra_curso_gastronomia_saudavel_progress", totalAulas: 0 },
+  { value: "seitai", label: "Seitai", icon: Fingerprint, storageKey: "resinkra_curso_seitai_progress", totalAulas: 0 },
 ];
 
 function getProgress(storageKey: string): number {
@@ -165,6 +167,7 @@ export default function Cursos() {
           {tab === "modeladora" && <CursoMassagemModeladoraHero embedded />}
           {tab === "drenagem" && <CursoDrenagemLinfaticaHero embedded />}
           {tab === "gastronomia" && <CursoGastronomiaSaudavelHero embedded />}
+          {tab === "seitai" && <CursoSeitaiHero embedded />}
         </Suspense>
       </div>
     </AppLayout>
