@@ -1,5 +1,5 @@
 import { useSearchParams } from "react-router-dom";
-import { GraduationCap, Flower2, Sparkles, Bone, Gem, Hand, Droplets, Flame, Bath, Wind, Leaf, FlaskConical, Fingerprint, Waves, ChefHat, LucideIcon } from "lucide-react";
+import { GraduationCap, Flower2, Sparkles, Bone, Gem, Hand, Droplets, Flame, Bath, Wind, Leaf, FlaskConical, Fingerprint, Waves, ChefHat, Bandage, LucideIcon } from "lucide-react";
 import { AppLayout } from "@/components/AppLayout";
 import { lazy, Suspense, useMemo, useRef, useEffect } from "react";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
@@ -24,6 +24,7 @@ const CursoMassagemModeladoraHero = lazy(() => import("@/pages/CursoMassagemMode
 const CursoDrenagemLinfaticaHero = lazy(() => import("@/pages/CursoDrenagemLinfaticaHero"));
 const CursoGastronomiaSaudavelHero = lazy(() => import("@/pages/CursoGastronomiaSaudavelHero"));
 const CursoSeitaiHero = lazy(() => import("@/pages/CursoSeitaiHero"));
+const CursoBandagemElasticaHero = lazy(() => import("@/pages/CursoBandagemElasticaHero"));
 
 interface TabDef {
   value: string;
@@ -50,6 +51,7 @@ const tabDefs: TabDef[] = [
   { value: "drenagem", label: "Drenagem", icon: Waves, storageKey: "resinkra_curso_drenagem_linfatica_progress", totalAulas: 0 },
   { value: "gastronomia", label: "Gastronomia", icon: ChefHat, storageKey: "resinkra_curso_gastronomia_saudavel_progress", totalAulas: 0 },
   { value: "seitai", label: "Seitai", icon: Fingerprint, storageKey: "resinkra_curso_seitai_progress", totalAulas: 0 },
+  { value: "bandagem", label: "Bandagem", icon: Bandage, storageKey: "resinkra_curso_bandagem_elastica_progress", totalAulas: 0 },
 ];
 
 function getProgress(storageKey: string): number {
@@ -168,6 +170,7 @@ export default function Cursos() {
           {tab === "drenagem" && <CursoDrenagemLinfaticaHero embedded />}
           {tab === "gastronomia" && <CursoGastronomiaSaudavelHero embedded />}
           {tab === "seitai" && <CursoSeitaiHero embedded />}
+          {tab === "bandagem" && <CursoBandagemElasticaHero embedded />}
         </Suspense>
       </div>
     </AppLayout>
