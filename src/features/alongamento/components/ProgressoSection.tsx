@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Activity, Clock, Flame, Trophy, TrendingUp, Calendar } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { AnimatedCounter } from "@/components/ui/animated-counter";
-import { SessaoAlongamento } from "@/hooks/useAlongamento";
+import { SessaoAlongamento } from "@/features/alongamento/hooks/useAlongamento";
 import { format, subDays, startOfDay, isSameDay, startOfWeek, endOfWeek, eachDayOfInterval } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import {

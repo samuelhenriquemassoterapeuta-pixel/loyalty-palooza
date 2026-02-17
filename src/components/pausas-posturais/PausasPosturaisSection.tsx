@@ -2,7 +2,7 @@ import { useState, useCallback } from "react";
 import { motion } from "framer-motion";
 import { Timer, Dumbbell, ChevronDown, ChevronUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { usePausasPosturais, MICRO_EXERCICIOS } from "@/hooks/usePausasPosturais";
+import { usePausasPosturais, MICRO_EXERCICIOS } from "@/features/alongamento/hooks/usePausasPosturais";
 import { PausaConfigCard } from "./PausaConfigCard";
 import { MicroExercicioCard } from "./MicroExercicioCard";
 import { AderenciaTracker } from "./AderenciaTracker";

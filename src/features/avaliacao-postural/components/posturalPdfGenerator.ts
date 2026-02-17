@@ -10,10 +10,10 @@ import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { AvaliacaoPostural, VistaPostural } from "@/hooks/useAvaliacaoPostural";
 import { supabase } from "@/integrations/supabase/client";
-import type { Annotation } from "@/components/avaliacao-postural/annotations/types";
-import { compositeImageWithAnnotations } from "@/components/avaliacao-postural/annotations/compositeRenderer";
-import type { ReferenceLine } from "@/components/avaliacao-postural/measurements/types";
-import { calcLineAngle } from "@/components/avaliacao-postural/measurements/types";
+import type { Annotation } from "@/features/avaliacao-postural/components/annotations/types";
+import { compositeImageWithAnnotations } from "@/features/avaliacao-postural/components/annotations/compositeRenderer";
+import type { ReferenceLine } from "@/features/avaliacao-postural/components/measurements/types";
+import { calcLineAngle } from "@/features/avaliacao-postural/components/measurements/types";
 
 // ── Constants ────────────────────────────────────
 

@@ -8,11 +8,11 @@ import { AppLayout } from "@/components/AppLayout";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { ConfirmDialog } from "@/components/ConfirmDialog";
 import { useAvaliacoesPosturais, AvaliacaoPostural } from "@/hooks/useAvaliacaoPostural";
-import { AvaliacaoCard } from "@/components/avaliacao-postural/AvaliacaoCard";
-import { AvaliacaoDetail } from "@/components/avaliacao-postural/AvaliacaoDetail";
-import { ComparacaoView } from "@/components/avaliacao-postural/ComparacaoView";
+import { AvaliacaoCard } from "@/features/avaliacao-postural/components/AvaliacaoCard";
+import { AvaliacaoDetail } from "@/features/avaliacao-postural/components/AvaliacaoDetail";
+import { ComparacaoView } from "@/features/avaliacao-postural/components/ComparacaoView";
 import { PausasPosturaisSection } from "@/components/pausas-posturais/PausasPosturaisSection";
-import { AngleEvolutionCharts } from "@/components/avaliacao-postural/AngleEvolutionCharts";
+import { AngleEvolutionCharts } from "@/features/avaliacao-postural/components/AngleEvolutionCharts";
 
 const stagger = {
   hidden: { opacity: 0 },

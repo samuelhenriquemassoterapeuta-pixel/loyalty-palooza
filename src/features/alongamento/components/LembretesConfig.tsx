@@ -15,7 +15,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
-import { useLembretesAlongamento } from "@/hooks/useLembretesAlongamento";
+import { useLembretesAlongamento } from "@/features/alongamento/hooks/useLembretesAlongamento";
 
 const DIAS_SEMANA = [
   { valor: 0, label: "D", nome: "Domingo" },

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Clock, Repeat, Target, Info, Play, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { ExercicioAlongamento } from "@/hooks/useAlongamento";
+import { ExercicioAlongamento } from "@/features/alongamento/hooks/useAlongamento";
 import { ExercicioAnimado } from "./ExercicioAnimado";
 
 interface ExercicioDetailProps {

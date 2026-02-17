@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Settings2, Clock, Calendar, Power } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
-import { PausaConfig, INTERVALOS_OPCOES } from "@/hooks/usePausasPosturais";
+import { PausaConfig, INTERVALOS_OPCOES } from "@/features/alongamento/hooks/usePausasPosturais";
 
 const DIAS_SEMANA = [
   { value: 0, label: "Dom" },
