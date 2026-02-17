@@ -13,16 +13,16 @@ import {
   useUsuarioPlanos,
   useSessoesAlongamento,
   usePlanoExercicios,
-} from "@/hooks/useAlongamento";
-import { ExercicioCard } from "@/components/alongamento/ExercicioCard";
-import { ExercicioDetail } from "@/components/alongamento/ExercicioDetail";
-import { PlanoCard } from "@/components/alongamento/PlanoCard";
-import { ProgressoSection } from "@/components/alongamento/ProgressoSection";
-import { SessaoPlayer } from "@/components/alongamento/SessaoPlayer";
-import { DicasSeguranca } from "@/components/alongamento/DicasSeguranca";
-import { LembretesConfig } from "@/components/alongamento/LembretesConfig";
-import { NivelProgressao, getNiveisDesbloqueados } from "@/components/alongamento/NivelProgressao";
-import { ExercicioAlongamento } from "@/hooks/useAlongamento";
+} from "@/features/alongamento/hooks/useAlongamento";
+import { ExercicioCard } from "@/features/alongamento/components/ExercicioCard";
+import { ExercicioDetail } from "@/features/alongamento/components/ExercicioDetail";
+import { PlanoCard } from "@/features/alongamento/components/PlanoCard";
+import { ProgressoSection } from "@/features/alongamento/components/ProgressoSection";
+import { SessaoPlayer } from "@/features/alongamento/components/SessaoPlayer";
+import { DicasSeguranca } from "@/features/alongamento/components/DicasSeguranca";
+import { LembretesConfig } from "@/features/alongamento/components/LembretesConfig";
+import { NivelProgressao, getNiveisDesbloqueados } from "@/features/alongamento/components/NivelProgressao";
+import { ExercicioAlongamento } from "@/features/alongamento/hooks/useAlongamento";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Card } from "@/components/ui/card";
 

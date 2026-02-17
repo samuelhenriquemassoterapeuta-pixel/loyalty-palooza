@@ -2,8 +2,8 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import type { VistaPostural } from "@/hooks/useAvaliacaoPostural";
-import type { ReferenceLine } from "@/components/avaliacao-postural/measurements/types";
-import { calcLineAngle } from "@/components/avaliacao-postural/measurements/types";
+import type { ReferenceLine } from "@/features/avaliacao-postural/components/measurements/types";
+import { calcLineAngle } from "@/features/avaliacao-postural/components/measurements/types";
 
 export interface MeasurementDataPoint {
   date: string;

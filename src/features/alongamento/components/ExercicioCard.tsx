@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { Clock, Repeat, ChevronRight, Lock } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ExercicioAlongamento } from "@/hooks/useAlongamento";
+import { ExercicioAlongamento } from "@/features/alongamento/hooks/useAlongamento";
 import { ExercicioAnimado } from "./ExercicioAnimado";
 
 const nivelConfig: Record<string, { label: string; color: string }> = {

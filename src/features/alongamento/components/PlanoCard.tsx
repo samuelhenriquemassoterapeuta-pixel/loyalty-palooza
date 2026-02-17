@@ -3,7 +3,7 @@ import { Calendar, Clock, Target, Zap, Play, Pause } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { PlanoAlongamento } from "@/hooks/useAlongamento";
+import { PlanoAlongamento } from "@/features/alongamento/hooks/useAlongamento";
 
 const nivelConfig: Record<string, { label: string; icon: typeof Zap; color: string }> = {
   iniciante: { label: "Iniciante", icon: Zap, color: "bg-highlight/10 text-highlight" },

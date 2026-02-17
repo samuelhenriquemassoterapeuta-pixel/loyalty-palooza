@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Play, Pause, SkipForward, CheckCircle, X, Timer, Wind } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { ExercicioAlongamento } from "@/hooks/useAlongamento";
+import { ExercicioAlongamento } from "@/features/alongamento/hooks/useAlongamento";
 
 interface SessaoPlayerProps {
   exercicios: ExercicioAlongamento[];

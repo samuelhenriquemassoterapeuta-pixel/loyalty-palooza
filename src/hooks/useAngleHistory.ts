@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import type { Annotation, AngleAnnotation } from "@/components/avaliacao-postural/annotations/types";
+import type { Annotation, AngleAnnotation } from "@/features/avaliacao-postural/components/annotations/types";
 import type { VistaPostural } from "@/hooks/useAvaliacaoPostural";
 
 export interface AngleDataPoint {
