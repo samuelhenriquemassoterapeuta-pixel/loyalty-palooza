@@ -76,7 +76,7 @@ const Protocolos = () => {
 
   return (
     <AppLayout>
-      <div className="min-h-screen bg-background pb-24 lg:pb-8 relative overflow-hidden">
+      <div className="min-h-screen bg-background pb-24 lg:pb-8 relative">
         <AnimatedPageBackground />
         <div className="max-w-lg lg:max-w-4xl xl:max-w-5xl mx-auto px-4 lg:px-8 pt-6 safe-top relative z-10">
           <motion.div

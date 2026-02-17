@@ -98,7 +98,7 @@ export default function Alongamento() {
 
   return (
     <AppLayout>
-      <div className="min-h-screen bg-background pb-32 lg:pb-8 relative overflow-hidden">
+      <div className="min-h-screen bg-background pb-32 lg:pb-8 relative">
         <AnimatedPageBackground />
         {/* Header */}
         <div className="relative overflow-hidden bg-gradient-to-r from-primary/5 via-accent/5 to-primary/5 border-b border-border px-4 py-4 safe-top z-10">

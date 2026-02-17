@@ -14,23 +14,25 @@ export const AnimatedPageBackground = ({ configKey = "home_bg" }: AnimatedPageBa
   if (!bgUrl) return null;
 
   return (
-    <motion.div
-      className="absolute inset-0 pointer-events-none z-0"
-      initial={{ scale: 1.15, opacity: 0 }}
-      animate={{
-        scale: [1.15, 1.25, 1.15],
-        opacity: [0.22, 0.32, 0.22],
-      }}
-      transition={{
-        duration: bgSpeed,
-        repeat: Infinity,
-        ease: "easeInOut",
-      }}
-      style={{
-        backgroundImage: `url(${bgUrl})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-      }}
-    />
+    <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+      <motion.div
+        className="w-full h-full"
+        initial={{ scale: 1.15, opacity: 0 }}
+        animate={{
+          scale: [1.15, 1.25, 1.15],
+          opacity: [0.22, 0.32, 0.22],
+        }}
+        transition={{
+          duration: bgSpeed,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+        style={{
+          backgroundImage: `url(${bgUrl})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      />
+    </div>
   );
 };

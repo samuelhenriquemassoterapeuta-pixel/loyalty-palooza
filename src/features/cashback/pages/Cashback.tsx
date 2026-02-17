@@ -55,7 +55,7 @@ const Cashback = () => {
 
   return (
     <AppLayout>
-      <div className="min-h-screen bg-background gradient-hero pb-24 lg:pb-8 relative overflow-hidden">
+      <div className="min-h-screen bg-background gradient-hero pb-24 lg:pb-8 relative">
         <AnimatedPageBackground />
         <div className="max-w-lg lg:max-w-4xl mx-auto px-4 lg:px-8 safe-top pt-4 relative z-10">
           {/* Header */}

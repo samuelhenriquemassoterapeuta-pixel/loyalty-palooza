@@ -210,27 +210,29 @@ export default function Loja() {
 
   return (
     <AppLayout>
-    <div className="min-h-screen bg-background gradient-hero pb-32 lg:pb-8 relative overflow-hidden">
+    <div className="min-h-screen bg-background gradient-hero pb-32 lg:pb-8 relative">
       {/* Animated background image */}
       {bgUrl && (
-        <motion.div
-          className="absolute inset-0 pointer-events-none z-0"
-          initial={{ scale: 1.15, opacity: 0 }}
-          animate={{
-            scale: [1.15, 1.25, 1.15],
-            opacity: [0.22, 0.32, 0.22],
-          }}
-          transition={{
-            duration: bgSpeed,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-          style={{
-            backgroundImage: `url(${bgUrl})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-          }}
-        />
+        <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+          <motion.div
+            className="w-full h-full"
+            initial={{ scale: 1.15, opacity: 0 }}
+            animate={{
+              scale: [1.15, 1.25, 1.15],
+              opacity: [0.22, 0.32, 0.22],
+            }}
+            transition={{
+              duration: bgSpeed,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+            style={{
+              backgroundImage: `url(${bgUrl})`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+            }}
+          />
+        </div>
       )}
       {/* Header */}
       <div className="relative overflow-hidden px-4 py-4 safe-top z-10">
