@@ -14,6 +14,7 @@ import { cursoMassagemModeladoraData } from "@/data/cursoMassagemModeladoraConte
 import { cursoDrenagemLinfaticaData } from "@/data/cursoDrenagemLinfaticaContent";
 import { cursoGastronomiaSaudavelData } from "@/data/cursoGastronomiaSaudavelContent";
 import { cursoSeitaiData } from "@/data/cursoSeitaiContent";
+import { cursoBandagemElasticaData } from "@/data/cursoBandagemElasticaContent";
 
 function computeStats(title: string, storageKey: string, modulos: { aulas: { duracaoMinutos: number }[] }[]) {
   const totalAulas = modulos.reduce((a, m) => a + m.aulas.length, 0);
@@ -39,4 +40,5 @@ export const allCourseStats = [
   computeStats("Drenagem Linfática", "resinkra_curso_drenagem_linfatica_progress", cursoDrenagemLinfaticaData),
   computeStats("Gastronomia Saudável", "resinkra_curso_gastronomia_saudavel_progress", cursoGastronomiaSaudavelData),
   computeStats("Seitai e New Seitai", "resinkra_curso_seitai_progress", cursoSeitaiData),
+  computeStats("Bandagem Elástica", "resinkra_curso_bandagem_elastica_progress", cursoBandagemElasticaData),
 ];
