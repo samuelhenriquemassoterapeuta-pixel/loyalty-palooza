@@ -22,6 +22,7 @@ import { AppLayout } from "@/components/AppLayout";
 import { LazyVideo } from "@/components/curso/LazyVideo";
 import { CursoModuleView } from "@/components/curso/CursoModuleView";
 import { CursoLessonView } from "@/components/curso/CursoLessonView";
+import { CertificadoCurso } from "@/components/curso/CertificadoCurso";
 import { useCursoProgress } from "@/hooks/useCursoProgress";
 import { useAdmin } from "@/hooks/useAdmin";
 import type { QuizQuestion } from "@/components/curso/QuizSection";
@@ -300,6 +301,7 @@ export function CursoShell({
                   {completionMessage ||
                     `Parabéns! Você concluiu todas as aulas do curso ${courseTitle}.`}
                 </p>
+                <CertificadoCurso courseTitle={courseTitle} totalHoras={totalHoras} />
               </Card>
             </motion.div>
           )}
