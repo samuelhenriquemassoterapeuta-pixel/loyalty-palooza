@@ -1143,6 +1143,30 @@ export type Database = {
         }
         Relationships: []
       }
+      cromos_usuarios: {
+        Row: {
+          elemento: string
+          id: string
+          quantidade: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          elemento: string
+          id?: string
+          quantidade?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          elemento?: string
+          id?: string
+          quantidade?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       curso_aulas: {
         Row: {
           ativo: boolean
@@ -2939,6 +2963,41 @@ export type Database = {
           },
         ]
       }
+      produto_elementos: {
+        Row: {
+          created_at: string
+          elemento: string
+          id: string
+          multiplicador: number
+          produto_id: string | null
+          servico_nome: string | null
+        }
+        Insert: {
+          created_at?: string
+          elemento: string
+          id?: string
+          multiplicador?: number
+          produto_id?: string | null
+          servico_nome?: string | null
+        }
+        Update: {
+          created_at?: string
+          elemento?: string
+          id?: string
+          multiplicador?: number
+          produto_id?: string | null
+          servico_nome?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "produto_elementos_produto_id_fkey"
+            columns: ["produto_id"]
+            isOneToOne: true
+            referencedRelation: "produtos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       produtos: {
         Row: {
           cashback_percentual: number | null
@@ -3140,6 +3199,72 @@ export type Database = {
         }
         Relationships: []
       }
+      receitas_alquimia: {
+        Row: {
+          agua_requerido: number
+          ar_requerido: number
+          ativo: boolean
+          created_at: string
+          descricao: string | null
+          elemento_gerado: string | null
+          eter_requerido: number
+          fogo_requerido: number
+          icone: string | null
+          id: string
+          nivel_minimo: string
+          nome: string
+          ordem: number
+          quantidade_gerada: number | null
+          recompensa_descricao: string | null
+          recompensa_tipo: string
+          recompensa_valor: number
+          terra_requerido: number
+          usos_maximos: number | null
+        }
+        Insert: {
+          agua_requerido?: number
+          ar_requerido?: number
+          ativo?: boolean
+          created_at?: string
+          descricao?: string | null
+          elemento_gerado?: string | null
+          eter_requerido?: number
+          fogo_requerido?: number
+          icone?: string | null
+          id?: string
+          nivel_minimo?: string
+          nome: string
+          ordem?: number
+          quantidade_gerada?: number | null
+          recompensa_descricao?: string | null
+          recompensa_tipo: string
+          recompensa_valor?: number
+          terra_requerido?: number
+          usos_maximos?: number | null
+        }
+        Update: {
+          agua_requerido?: number
+          ar_requerido?: number
+          ativo?: boolean
+          created_at?: string
+          descricao?: string | null
+          elemento_gerado?: string | null
+          eter_requerido?: number
+          fogo_requerido?: number
+          icone?: string | null
+          id?: string
+          nivel_minimo?: string
+          nome?: string
+          ordem?: number
+          quantidade_gerada?: number | null
+          recompensa_descricao?: string | null
+          recompensa_tipo?: string
+          recompensa_valor?: number
+          terra_requerido?: number
+          usos_maximos?: number | null
+        }
+        Relationships: []
+      }
       recomendacoes_ia: {
         Row: {
           aceita: boolean | null
@@ -3173,6 +3298,57 @@ export type Database = {
           tipo?: string
           titulo?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      recompensas_cromos: {
+        Row: {
+          ativo: boolean
+          created_at: string
+          descricao: string | null
+          elemento_requerido: string
+          estoque: number | null
+          icone: string | null
+          id: string
+          nivel_minimo: string
+          nome: string
+          ordem: number
+          quantidade_requerida: number
+          recompensa_descricao: string | null
+          recompensa_tipo: string
+          recompensa_valor: number
+        }
+        Insert: {
+          ativo?: boolean
+          created_at?: string
+          descricao?: string | null
+          elemento_requerido: string
+          estoque?: number | null
+          icone?: string | null
+          id?: string
+          nivel_minimo?: string
+          nome: string
+          ordem?: number
+          quantidade_requerida: number
+          recompensa_descricao?: string | null
+          recompensa_tipo: string
+          recompensa_valor?: number
+        }
+        Update: {
+          ativo?: boolean
+          created_at?: string
+          descricao?: string | null
+          elemento_requerido?: string
+          estoque?: number | null
+          icone?: string | null
+          id?: string
+          nivel_minimo?: string
+          nome?: string
+          ordem?: number
+          quantidade_requerida?: number
+          recompensa_descricao?: string | null
+          recompensa_tipo?: string
+          recompensa_valor?: number
         }
         Relationships: []
       }
@@ -3214,6 +3390,60 @@ export type Database = {
             columns: ["terapeuta_id"]
             isOneToOne: false
             referencedRelation: "terapeutas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      resgates_cromos: {
+        Row: {
+          codigo_resgate: string
+          created_at: string
+          expira_em: string
+          id: string
+          receita_id: string | null
+          recompensa_id: string | null
+          tipo: string
+          user_id: string
+          utilizado: boolean
+          utilizado_em: string | null
+        }
+        Insert: {
+          codigo_resgate?: string
+          created_at?: string
+          expira_em?: string
+          id?: string
+          receita_id?: string | null
+          recompensa_id?: string | null
+          tipo: string
+          user_id: string
+          utilizado?: boolean
+          utilizado_em?: string | null
+        }
+        Update: {
+          codigo_resgate?: string
+          created_at?: string
+          expira_em?: string
+          id?: string
+          receita_id?: string | null
+          recompensa_id?: string | null
+          tipo?: string
+          user_id?: string
+          utilizado?: boolean
+          utilizado_em?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "resgates_cromos_receita_id_fkey"
+            columns: ["receita_id"]
+            isOneToOne: false
+            referencedRelation: "receitas_alquimia"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "resgates_cromos_recompensa_id_fkey"
+            columns: ["recompensa_id"]
+            isOneToOne: false
+            referencedRelation: "recompensas_cromos"
             referencedColumns: ["id"]
           },
         ]
@@ -3876,6 +4106,39 @@ export type Database = {
         }
         Relationships: []
       }
+      transacoes_cromos: {
+        Row: {
+          created_at: string
+          descricao: string | null
+          elemento: string
+          id: string
+          quantidade: number
+          referencia_id: string | null
+          tipo: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          descricao?: string | null
+          elemento: string
+          id?: string
+          quantidade: number
+          referencia_id?: string | null
+          tipo: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          descricao?: string | null
+          elemento?: string
+          id?: string
+          quantidade?: number
+          referencia_id?: string | null
+          tipo?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       trends: {
         Row: {
           category: string | null
@@ -4322,6 +4585,7 @@ export type Database = {
           next_attempt_at: string
         }[]
       }
+      executar_alquimia: { Args: { p_receita_id: string }; Returns: Json }
       get_achievements_ranking: {
         Args: { p_limit?: number }
         Returns: {
@@ -4434,6 +4698,10 @@ export type Database = {
       record_login_attempt: {
         Args: { p_email: string; p_ip_address?: string; p_success?: boolean }
         Returns: undefined
+      }
+      resgatar_recompensa_cromo: {
+        Args: { p_recompensa_id: string }
+        Returns: Json
       }
       resgatar_vale_presente: { Args: { p_codigo: string }; Returns: Json }
     }

@@ -96,6 +96,9 @@ const NotFound = lazy(() => import("@/pages/NotFound"));
 // Admin Pages
 const GoogleAdsDashboard = lazy(() => import("@/features/admin/pages/GoogleAdsDashboard"));
 
+// Cromos Pages
+const CromosDashboard = lazy(() => import("@/features/cromos/pages/CromosDashboard"));
+
 // Resinkra AI Pages
 const ResinkraAIDashboard = lazy(() => import("@/features/resinkra-ai/pages/ResinkraAIDashboard"));
 const ResinkraAIOnboarding = lazy(() => import("@/features/resinkra-ai/pages/ResinkraAIOnboarding"));
@@ -169,6 +172,7 @@ export const AnimatedRoutes = () => {
         <Route path="/checkin" element={<ProtectedRoute><LazyPage><Checkin /></LazyPage></ProtectedRoute>} />
         <Route path="/desafios" element={<ProtectedRoute><LazyPage><DesafiosPage /></LazyPage></ProtectedRoute>} />
         <Route path="/minha-jornada" element={<ProtectedRoute><LazyPage><MinhaJornada /></LazyPage></ProtectedRoute>} />
+        <Route path="/cromos" element={<ProtectedRoute><LazyPage><CromosDashboard /></LazyPage></ProtectedRoute>} />
         <Route path="/conteudo-social" element={<ProtectedRoute requireAdmin><LazyPage><ConteudoSocial /></LazyPage></ProtectedRoute>} />
         <Route path="/terapeuta/:id" element={<LazyPage><CartaoTerapeuta /></LazyPage>} />
         <Route path="/terapeuta/:id/qrcode" element={<LazyPage><QRCodeTerapeuta /></LazyPage>} />
