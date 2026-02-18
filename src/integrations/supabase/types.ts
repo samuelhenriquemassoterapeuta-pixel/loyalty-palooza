@@ -2325,6 +2325,116 @@ export type Database = {
         }
         Relationships: []
       }
+      liga_participantes: {
+        Row: {
+          compras: number
+          id: string
+          indicacoes: number
+          liga_id: string
+          pontos: number
+          posicao: number | null
+          posts_social: number
+          premiado: boolean
+          sessoes: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          compras?: number
+          id?: string
+          indicacoes?: number
+          liga_id: string
+          pontos?: number
+          posicao?: number | null
+          posts_social?: number
+          premiado?: boolean
+          sessoes?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          compras?: number
+          id?: string
+          indicacoes?: number
+          liga_id?: string
+          pontos?: number
+          posicao?: number | null
+          posts_social?: number
+          premiado?: boolean
+          sessoes?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "liga_participantes_liga_id_fkey"
+            columns: ["liga_id"]
+            isOneToOne: false
+            referencedRelation: "ligas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ligas: {
+        Row: {
+          ativa: boolean
+          cor: string
+          created_at: string
+          criterio: string
+          data_fim: string
+          data_inicio: string
+          descricao: string | null
+          icone: string
+          id: string
+          nome: string
+          premio_1: string | null
+          premio_1_valor: number
+          premio_2: string | null
+          premio_2_valor: number
+          premio_3: string | null
+          premio_3_valor: number
+          tipo: string
+        }
+        Insert: {
+          ativa?: boolean
+          cor?: string
+          created_at?: string
+          criterio?: string
+          data_fim: string
+          data_inicio: string
+          descricao?: string | null
+          icone?: string
+          id?: string
+          nome: string
+          premio_1?: string | null
+          premio_1_valor?: number
+          premio_2?: string | null
+          premio_2_valor?: number
+          premio_3?: string | null
+          premio_3_valor?: number
+          tipo?: string
+        }
+        Update: {
+          ativa?: boolean
+          cor?: string
+          created_at?: string
+          criterio?: string
+          data_fim?: string
+          data_inicio?: string
+          descricao?: string | null
+          icone?: string
+          id?: string
+          nome?: string
+          premio_1?: string | null
+          premio_1_valor?: number
+          premio_2?: string | null
+          premio_2_valor?: number
+          premio_3?: string | null
+          premio_3_valor?: number
+          tipo?: string
+        }
+        Relationships: []
+      }
       lista_espera: {
         Row: {
           ativo: boolean
@@ -2395,6 +2505,389 @@ export type Database = {
           success?: boolean
         }
         Relationships: []
+      }
+      marketplace_agendamentos: {
+        Row: {
+          cancelado_por: string | null
+          cliente_id: string
+          comissao_valor: number
+          created_at: string
+          data_hora: string
+          duracao_minutos: number
+          endereco: string | null
+          id: string
+          local_tipo: string
+          motivo_cancelamento: string | null
+          observacoes: string | null
+          pagamento_status: string
+          servico_id: string | null
+          status: string
+          terapeuta_id: string
+          updated_at: string
+          valor: number
+        }
+        Insert: {
+          cancelado_por?: string | null
+          cliente_id: string
+          comissao_valor?: number
+          created_at?: string
+          data_hora: string
+          duracao_minutos?: number
+          endereco?: string | null
+          id?: string
+          local_tipo?: string
+          motivo_cancelamento?: string | null
+          observacoes?: string | null
+          pagamento_status?: string
+          servico_id?: string | null
+          status?: string
+          terapeuta_id: string
+          updated_at?: string
+          valor: number
+        }
+        Update: {
+          cancelado_por?: string | null
+          cliente_id?: string
+          comissao_valor?: number
+          created_at?: string
+          data_hora?: string
+          duracao_minutos?: number
+          endereco?: string | null
+          id?: string
+          local_tipo?: string
+          motivo_cancelamento?: string | null
+          observacoes?: string | null
+          pagamento_status?: string
+          servico_id?: string | null
+          status?: string
+          terapeuta_id?: string
+          updated_at?: string
+          valor?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "marketplace_agendamentos_servico_id_fkey"
+            columns: ["servico_id"]
+            isOneToOne: false
+            referencedRelation: "marketplace_servicos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "marketplace_agendamentos_terapeuta_id_fkey"
+            columns: ["terapeuta_id"]
+            isOneToOne: false
+            referencedRelation: "marketplace_terapeutas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      marketplace_avaliacoes: {
+        Row: {
+          agendamento_id: string | null
+          comentario: string | null
+          created_at: string
+          id: string
+          nota: number
+          respondido_em: string | null
+          resposta_terapeuta: string | null
+          terapeuta_id: string
+          user_id: string
+          visivel: boolean
+        }
+        Insert: {
+          agendamento_id?: string | null
+          comentario?: string | null
+          created_at?: string
+          id?: string
+          nota: number
+          respondido_em?: string | null
+          resposta_terapeuta?: string | null
+          terapeuta_id: string
+          user_id: string
+          visivel?: boolean
+        }
+        Update: {
+          agendamento_id?: string | null
+          comentario?: string | null
+          created_at?: string
+          id?: string
+          nota?: number
+          respondido_em?: string | null
+          resposta_terapeuta?: string | null
+          terapeuta_id?: string
+          user_id?: string
+          visivel?: boolean
+        }
+        Relationships: [
+          {
+            foreignKeyName: "marketplace_avaliacoes_terapeuta_id_fkey"
+            columns: ["terapeuta_id"]
+            isOneToOne: false
+            referencedRelation: "marketplace_terapeutas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      marketplace_candidaturas: {
+        Row: {
+          aprovado_em: string | null
+          aprovado_por: string | null
+          atende_clinica: boolean
+          atende_domicilio: boolean
+          bairros_atendimento: string[]
+          bio: string | null
+          certificacoes: Json
+          cidade: string
+          cpf: string
+          created_at: string
+          documentos_url: string[] | null
+          email: string
+          especialidades: string[]
+          estado: string
+          experiencia_anos: number
+          foto_url: string | null
+          horarios_disponiveis: Json
+          id: string
+          motivo_rejeicao: string | null
+          nome_completo: string
+          preco_maximo: number
+          preco_minimo: number
+          status: string
+          telefone: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          aprovado_em?: string | null
+          aprovado_por?: string | null
+          atende_clinica?: boolean
+          atende_domicilio?: boolean
+          bairros_atendimento?: string[]
+          bio?: string | null
+          certificacoes?: Json
+          cidade: string
+          cpf: string
+          created_at?: string
+          documentos_url?: string[] | null
+          email: string
+          especialidades?: string[]
+          estado: string
+          experiencia_anos?: number
+          foto_url?: string | null
+          horarios_disponiveis?: Json
+          id?: string
+          motivo_rejeicao?: string | null
+          nome_completo: string
+          preco_maximo?: number
+          preco_minimo?: number
+          status?: string
+          telefone: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          aprovado_em?: string | null
+          aprovado_por?: string | null
+          atende_clinica?: boolean
+          atende_domicilio?: boolean
+          bairros_atendimento?: string[]
+          bio?: string | null
+          certificacoes?: Json
+          cidade?: string
+          cpf?: string
+          created_at?: string
+          documentos_url?: string[] | null
+          email?: string
+          especialidades?: string[]
+          estado?: string
+          experiencia_anos?: number
+          foto_url?: string | null
+          horarios_disponiveis?: Json
+          id?: string
+          motivo_rejeicao?: string | null
+          nome_completo?: string
+          preco_maximo?: number
+          preco_minimo?: number
+          status?: string
+          telefone?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      marketplace_favoritos: {
+        Row: {
+          created_at: string
+          id: string
+          terapeuta_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          terapeuta_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          terapeuta_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "marketplace_favoritos_terapeuta_id_fkey"
+            columns: ["terapeuta_id"]
+            isOneToOne: false
+            referencedRelation: "marketplace_terapeutas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      marketplace_servicos: {
+        Row: {
+          ativo: boolean
+          categoria: string
+          created_at: string
+          descricao: string | null
+          duracao_minutos: number
+          id: string
+          nome: string
+          preco: number
+          terapeuta_id: string
+        }
+        Insert: {
+          ativo?: boolean
+          categoria?: string
+          created_at?: string
+          descricao?: string | null
+          duracao_minutos?: number
+          id?: string
+          nome: string
+          preco: number
+          terapeuta_id: string
+        }
+        Update: {
+          ativo?: boolean
+          categoria?: string
+          created_at?: string
+          descricao?: string | null
+          duracao_minutos?: number
+          id?: string
+          nome?: string
+          preco?: number
+          terapeuta_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "marketplace_servicos_terapeuta_id_fkey"
+            columns: ["terapeuta_id"]
+            isOneToOne: false
+            referencedRelation: "marketplace_terapeutas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      marketplace_terapeutas: {
+        Row: {
+          atende_clinica: boolean
+          atende_domicilio: boolean
+          ativo: boolean
+          bairros_atendimento: string[]
+          bio: string | null
+          candidatura_id: string | null
+          certificacoes: Json
+          cidade: string
+          comissao_percentual: number
+          created_at: string
+          destaque: boolean
+          especialidades: string[]
+          estado: string
+          experiencia_anos: number
+          foto_url: string | null
+          horarios_disponiveis: Json
+          id: string
+          media_avaliacoes: number
+          nome: string
+          preco_maximo: number
+          preco_minimo: number
+          slug: string
+          taxa_resposta: number
+          total_atendimentos: number
+          total_avaliacoes: number
+          updated_at: string
+          user_id: string
+          verificado: boolean
+        }
+        Insert: {
+          atende_clinica?: boolean
+          atende_domicilio?: boolean
+          ativo?: boolean
+          bairros_atendimento?: string[]
+          bio?: string | null
+          candidatura_id?: string | null
+          certificacoes?: Json
+          cidade: string
+          comissao_percentual?: number
+          created_at?: string
+          destaque?: boolean
+          especialidades?: string[]
+          estado: string
+          experiencia_anos?: number
+          foto_url?: string | null
+          horarios_disponiveis?: Json
+          id?: string
+          media_avaliacoes?: number
+          nome: string
+          preco_maximo?: number
+          preco_minimo?: number
+          slug: string
+          taxa_resposta?: number
+          total_atendimentos?: number
+          total_avaliacoes?: number
+          updated_at?: string
+          user_id: string
+          verificado?: boolean
+        }
+        Update: {
+          atende_clinica?: boolean
+          atende_domicilio?: boolean
+          ativo?: boolean
+          bairros_atendimento?: string[]
+          bio?: string | null
+          candidatura_id?: string | null
+          certificacoes?: Json
+          cidade?: string
+          comissao_percentual?: number
+          created_at?: string
+          destaque?: boolean
+          especialidades?: string[]
+          estado?: string
+          experiencia_anos?: number
+          foto_url?: string | null
+          horarios_disponiveis?: Json
+          id?: string
+          media_avaliacoes?: number
+          nome?: string
+          preco_maximo?: number
+          preco_minimo?: number
+          slug?: string
+          taxa_resposta?: number
+          total_atendimentos?: number
+          total_avaliacoes?: number
+          updated_at?: string
+          user_id?: string
+          verificado?: boolean
+        }
+        Relationships: [
+          {
+            foreignKeyName: "marketplace_terapeutas_candidatura_id_fkey"
+            columns: ["candidatura_id"]
+            isOneToOne: false
+            referencedRelation: "marketplace_candidaturas"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       metas_semanais: {
         Row: {

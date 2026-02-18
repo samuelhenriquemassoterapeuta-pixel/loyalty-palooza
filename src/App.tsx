@@ -8,6 +8,7 @@ import { ThemeProvider } from "next-themes";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { AnimatedRoutes } from "@/components/AnimatedRoutes";
 import { SplashScreen } from "@/components/SplashScreen";
+import { ResiChatbot } from "@/components/ResiChatbot";
 
 const queryClient = new QueryClient();
 
@@ -41,6 +42,7 @@ const App = () => {
             <Sonner />
             <BrowserRouter>
               <AnimatedRoutes />
+              <ResiChatbot />
             </BrowserRouter>
           </AuthProvider>
         </TooltipProvider>
