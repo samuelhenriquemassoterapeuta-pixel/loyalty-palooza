@@ -1,15 +1,18 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { AppLayout } from "@/components/AppLayout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
-import { ArrowLeft, Smile, Frown, Meh, Zap, Moon, Droplets, Activity, Brain, Check, TrendingUp, BarChart3 } from "lucide-react";
+import { ArrowLeft, Smile, Zap, Moon, Droplets, Activity, Brain, Check, TrendingUp, BarChart3, Target } from "lucide-react";
 import { useNavigate, Link } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useWellnessTracker, type WellnessCheckinInput } from "@/features/bem-estar/hooks/useWellnessTracker";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useAuth } from "@/contexts/AuthContext";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
 const MOODS = [
   { value: 1, emoji: "😢", label: "Péssimo" },
@@ -19,8 +22,54 @@ const MOODS = [
   { value: 5, emoji: "😄", label: "Ótimo" },
 ];
 
+interface GoalResult {
+  label: string;
+  met: boolean;
+  icon: string;
+  detail: string;
+}
+
+const GoalsFeedback = ({ results }: { results: GoalResult[] }) => (
+  <motion.div
+    initial={{ opacity: 0, y: 10, scale: 0.95 }}
+    animate={{ opacity: 1, y: 0, scale: 1 }}
+    exit={{ opacity: 0, y: -10 }}
+    className="rounded-2xl border border-primary/20 bg-gradient-to-br from-primary/5 to-accent/5 p-4 space-y-2"
+  >
+    <div className="flex items-center gap-2 mb-1">
+      <Target size={16} className="text-primary" />
+      <span className="text-sm font-semibold text-foreground">Progresso das Metas</span>
+    </div>
+    <div className="grid grid-cols-2 gap-2">
+      {results.map((r) => (
+        <div
+          key={r.label}
+          className={`flex items-center gap-2 p-2.5 rounded-xl text-xs ${
+            r.met ? "bg-primary/10" : "bg-muted/50"
+          }`}
+        >
+          <span className="text-base">{r.icon}</span>
+          <div className="flex-1 min-w-0">
+            <p className={`font-medium truncate ${r.met ? "text-primary" : "text-muted-foreground"}`}>
+              {r.label}
+            </p>
+            <p className="text-[10px] text-muted-foreground truncate">{r.detail}</p>
+          </div>
+          {r.met && <Check size={14} className="text-primary shrink-0" />}
+        </div>
+      ))}
+    </div>
+    {results.every(r => r.met) && (
+      <p className="text-xs text-center text-primary font-medium pt-1">
+        🎯 Todas as metas atingidas hoje! Incrível! 🎉
+      </p>
+    )}
+  </motion.div>
+);
+
 const WellnessTracker = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const { todayCheckin, history, loadingToday, saveCheckin, averages } = useWellnessTracker();
 
   const [humor, setHumor] = useState(todayCheckin?.humor || 3);
@@ -31,9 +80,23 @@ const WellnessTracker = () => {
   const [estresse, setEstresse] = useState(todayCheckin?.estresse || 3);
   const [agua, setAgua] = useState(todayCheckin?.agua_litros || 1.5);
   const [exercicio, setExercicio] = useState(todayCheckin?.exercicio_min || 0);
+  const [showGoalsFeedback, setShowGoalsFeedback] = useState(false);
+
+  const { data: metas } = useQuery({
+    queryKey: ["wellness-metas-tracker", user?.id],
+    enabled: !!user,
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("wellness_metas")
+        .select("*")
+        .eq("user_id", user!.id)
+        .maybeSingle();
+      return data;
+    },
+  });
 
   // Sync state when todayCheckin loads
-  useState(() => {
+  useEffect(() => {
     if (todayCheckin) {
       setHumor(todayCheckin.humor);
       setEnergia(todayCheckin.energia);
@@ -44,7 +107,54 @@ const WellnessTracker = () => {
       setAgua(todayCheckin.agua_litros || 1.5);
       setExercicio(todayCheckin.exercicio_min);
     }
-  });
+  }, [todayCheckin]);
+
+  const getGoalResults = (): GoalResult[] => {
+    if (!metas) return [];
+    const results: GoalResult[] = [];
+
+    if (metas.meta_agua_litros) {
+      results.push({
+        label: "Água",
+        met: agua >= metas.meta_agua_litros,
+        icon: "💧",
+        detail: `${agua}L / ${metas.meta_agua_litros}L`,
+      });
+    }
+    if (metas.meta_sono_horas) {
+      results.push({
+        label: "Sono",
+        met: (sonoHoras || 0) >= metas.meta_sono_horas,
+        icon: "🌙",
+        detail: `${sonoHoras}h / ${metas.meta_sono_horas}h`,
+      });
+    }
+    if (metas.meta_energia_min) {
+      results.push({
+        label: "Energia",
+        met: energia >= metas.meta_energia_min,
+        icon: "⚡",
+        detail: `${energia}/5 (meta: ≥${metas.meta_energia_min})`,
+      });
+    }
+    if (metas.meta_humor_min) {
+      results.push({
+        label: "Humor",
+        met: humor >= metas.meta_humor_min,
+        icon: "😊",
+        detail: `${humor}/5 (meta: ≥${metas.meta_humor_min})`,
+      });
+    }
+    if (metas.meta_estresse_max) {
+      results.push({
+        label: "Estresse",
+        met: (estresse || 5) <= metas.meta_estresse_max,
+        icon: "🧘",
+        detail: `${estresse}/5 (meta: ≤${metas.meta_estresse_max})`,
+      });
+    }
+    return results;
+  };
 
   const handleSave = () => {
     const input: WellnessCheckinInput = {
@@ -60,7 +170,11 @@ const WellnessTracker = () => {
       exercicio_min: exercicio,
       observacoes: null,
     };
-    saveCheckin.mutate(input);
+    saveCheckin.mutate(input, {
+      onSuccess: () => {
+        if (metas) setShowGoalsFeedback(true);
+      },
+    });
   };
 
   if (loadingToday) {
@@ -74,6 +188,8 @@ const WellnessTracker = () => {
       </AppLayout>
     );
   }
+
+  const goalResults = getGoalResults();
 
   return (
     <AppLayout>
@@ -97,6 +213,13 @@ const WellnessTracker = () => {
             <span className="font-medium">Check-in de hoje já registrado! Atualize se desejar.</span>
           </div>
         )}
+
+        {/* Goals Feedback */}
+        <AnimatePresence>
+          {showGoalsFeedback && goalResults.length > 0 && (
+            <GoalsFeedback results={goalResults} />
+          )}
+        </AnimatePresence>
 
         {/* Mood */}
         <Card>
