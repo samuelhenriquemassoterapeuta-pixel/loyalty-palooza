@@ -28,6 +28,7 @@ import WellnessHydrationWidget from "@/features/bem-estar/components/WellnessHyd
 import WellnessExerciseWidget from "@/features/bem-estar/components/WellnessExerciseWidget";
 import WellnessSleepWidget from "@/features/bem-estar/components/WellnessSleepWidget";
 import WellnessStressWidget from "@/features/bem-estar/components/WellnessStressWidget";
+import WellnessMoodWidget from "@/features/bem-estar/components/WellnessMoodWidget";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 14 },
@@ -251,6 +252,9 @@ const BemEstarHub = () => {
 
           {/* AI Insight */}
           <WellnessInsight />
+
+          {/* Mood Quick Selector */}
+          <WellnessMoodWidget />
 
           {/* Daily Habits */}
           <WellnessDailyHabits />
