@@ -8,6 +8,7 @@ import { ShareQRCode } from "@/components/ShareQRCode";
 import { OnboardingTour, useOnboarding } from "@/components/OnboardingTour";
 import { AppLayout } from "@/components/AppLayout";
 import { HomeDashboard } from "@/components/home/HomeDashboard";
+import { WellnessHomeWidget } from "@/features/bem-estar/components/WellnessHomeWidget";
 import { useAdmin } from "@/features/admin/hooks/useAdmin";
 import { useNavigate } from "react-router-dom";
 import { Settings, Gift, Building2, ArrowRight } from "lucide-react";
@@ -96,6 +97,11 @@ const Index = () => {
                     <CollapsibleDashboardSection title="Ações rápidas" defaultOpen={false}>
                       <QuickActions />
                     </CollapsibleDashboardSection>
+                  </motion.div>
+
+                  {/* Wellness Widget */}
+                  <motion.div variants={fadeUp}>
+                    <WellnessHomeWidget />
                   </motion.div>
 
                   {/* Section: Seu progresso */}
