@@ -16,6 +16,7 @@ import { useServicos, Servico } from "@/features/terapias/hooks/useServicos";
 import { useTerapeutas, Terapeuta } from "@/features/terapeuta/hooks/useTerapeutas";
 import { TerapeutaSelector } from "@/features/agendamentos/components/TerapeutaSelector";
 import { AvaliacaoDialog } from "@/features/agendamentos/components/AvaliacaoDialog";
+import { PagamentoAgendamentoDialog } from "@/features/agendamentos/components/PagamentoAgendamentoDialog";
 import { ReagendarDialog } from "@/features/agendamentos/components/ReagendarDialog";
 import { PriorityBanner } from "@/features/agendamentos/components/PriorityBanner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -91,6 +92,12 @@ const Agendamento = () => {
     terapeutaId?: string;
     terapeutaNome?: string;
   } | null>(null);
+  const [pagamentoDialogOpen, setPagamentoDialogOpen] = useState(false);
+  const [agendamentoPagamento, setAgendamentoPagamento] = useState<{
+    id: string;
+    servico: string;
+    valor: number;
+  } | null>(null);
 
   // Pre-select service from URL query param
   const preSelectedFromUrl = searchParams.get("servico");
@@ -127,7 +134,7 @@ const Agendamento = () => {
     dataHora.setHours(hours, minutes, 0, 0);
 
     setSaving(true);
-    const { error } = await createAgendamento(dataHora, selectedServico.nome, undefined, selectedTerapeuta?.id, selectedServico.id);
+    const { error, data: novoAgendamento } = await createAgendamento(dataHora, selectedServico.nome, undefined, selectedTerapeuta?.id, selectedServico.id);
     setSaving(false);
 
     if (error) {
@@ -140,11 +147,9 @@ const Agendamento = () => {
           : errorMessage,
       });
       
-      // Refresh occupied slots so the conflicting one appears as blocked
       if (isConflict) {
         await fetchHorariosOcupados();
       }
-      // Stay on step 4 — do NOT reset form or switch tabs
       return;
     }
     
@@ -155,6 +160,12 @@ const Agendamento = () => {
         onClick: () => navigate("/anamnese"),
       },
     });
+
+    // Open payment dialog
+    const agId = novoAgendamento?.id;
+    const svcNome = selectedServico.nome;
+    const svcPreco = selectedServico.preco;
+
     setStep(1);
     setSelectedDate(undefined);
     setSelectedHorario(null);
@@ -162,6 +173,11 @@ const Agendamento = () => {
     setSelectedTerapeuta(null);
     setHorariosOcupados([]);
     setActiveTab("agendados");
+
+    if (agId) {
+      setAgendamentoPagamento({ id: agId, servico: svcNome, valor: svcPreco });
+      setPagamentoDialogOpen(true);
+    }
   };
 
   const handleCancelar = async () => {
@@ -680,6 +696,20 @@ const Agendamento = () => {
         onSubmit={handleReagendar}
         getHorariosOcupados={getHorariosOcupados}
       />
+
+      {/* Pagamento Dialog */}
+      {agendamentoPagamento && (
+        <PagamentoAgendamentoDialog
+          open={pagamentoDialogOpen}
+          onOpenChange={setPagamentoDialogOpen}
+          servicoNome={agendamentoPagamento.servico}
+          valor={agendamentoPagamento.valor}
+          agendamentoId={agendamentoPagamento.id}
+          onSuccess={() => {
+            setAgendamentoPagamento(null);
+          }}
+        />
+      )}
 
     </div>
     </AppLayout>
