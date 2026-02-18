@@ -39,7 +39,7 @@ const Checkin = () => {
 
   return (
     <AppLayout>
-      <div className="max-w-lg mx-auto px-4 py-6 space-y-6 pb-24">
+      <div className="max-w-lg mx-auto px-4 py-6 space-y-6 pb-24 gradient-hero min-h-screen">
         <div className="flex items-center gap-3">
           <Button variant="ghost" size="icon" onClick={() => navigate(-1)}>
             <ArrowLeft size={20} />
