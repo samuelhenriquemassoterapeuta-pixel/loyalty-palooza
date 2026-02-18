@@ -5654,6 +5654,77 @@ export type Database = {
         }
         Relationships: []
       }
+      wellness_conquistas: {
+        Row: {
+          ativo: boolean
+          categoria: string
+          codigo: string
+          condicao_tipo: string
+          condicao_valor: number
+          created_at: string
+          descricao: string
+          icone: string
+          id: string
+          ordem: number
+          titulo: string
+        }
+        Insert: {
+          ativo?: boolean
+          categoria?: string
+          codigo: string
+          condicao_tipo: string
+          condicao_valor?: number
+          created_at?: string
+          descricao: string
+          icone?: string
+          id?: string
+          ordem?: number
+          titulo: string
+        }
+        Update: {
+          ativo?: boolean
+          categoria?: string
+          codigo?: string
+          condicao_tipo?: string
+          condicao_valor?: number
+          created_at?: string
+          descricao?: string
+          icone?: string
+          id?: string
+          ordem?: number
+          titulo?: string
+        }
+        Relationships: []
+      }
+      wellness_conquistas_usuario: {
+        Row: {
+          conquista_id: string
+          desbloqueada_em: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          conquista_id: string
+          desbloqueada_em?: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          conquista_id?: string
+          desbloqueada_em?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "wellness_conquistas_usuario_conquista_id_fkey"
+            columns: ["conquista_id"]
+            isOneToOne: false
+            referencedRelation: "wellness_conquistas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       wellness_metas: {
         Row: {
           created_at: string

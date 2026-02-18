@@ -8,6 +8,7 @@ import {
   Heart, Activity, Brain, BookHeart, MessageCircle,
   BarChart3, TrendingUp, ArrowRight, Sparkles, Moon, Droplets, Flame, Trophy, LineChart, FileText
 } from "lucide-react";
+import WellnessAchievements from "@/features/bem-estar/components/WellnessAchievements";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 14 },
@@ -238,6 +239,9 @@ const BemEstarHub = () => {
               </div>
             </motion.div>
           )}
+
+          {/* Achievements */}
+          <WellnessAchievements />
 
           {/* Features Grid */}
           <motion.div variants={stagger} initial="hidden" animate="show" className="space-y-2">
