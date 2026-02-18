@@ -6,7 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import {
   Heart, Activity, Brain, BookHeart, MessageCircle,
-  BarChart3, TrendingUp, ArrowRight, Sparkles, Moon, Droplets
+  BarChart3, TrendingUp, ArrowRight, Sparkles, Moon, Droplets, Flame, Trophy
 } from "lucide-react";
 
 const fadeUp = {
@@ -22,6 +22,19 @@ const moodEmojis = ["", "😢", "😕", "😐", "😊", "😄"];
 
 const BemEstarHub = () => {
   const { user } = useAuth();
+
+  const { data: streakData } = useQuery({
+    queryKey: ["wellness-streak", user?.id],
+    enabled: !!user,
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("wellness_streaks")
+        .select("*")
+        .eq("user_id", user!.id)
+        .maybeSingle();
+      return data;
+    },
+  });
 
   const { data: todayCheckin } = useQuery({
     queryKey: ["wellness-today-hub", user?.id],
@@ -120,6 +133,28 @@ const BemEstarHub = () => {
               </div>
             </div>
           </motion.div>
+
+          {/* Streak Banner */}
+          {streakData && streakData.streak_atual > 0 && (
+            <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="mb-6">
+              <div className="rounded-2xl bg-gradient-to-r from-primary/10 via-accent/10 to-highlight/10 border border-primary/20 p-4 flex items-center gap-4">
+                <div className="flex items-center gap-1">
+                  <Flame size={28} className="text-primary" />
+                  <span className="text-3xl font-black text-foreground">{streakData.streak_atual}</span>
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm font-bold text-foreground">
+                    {streakData.streak_atual === 1 ? "dia de streak!" : "dias de streak!"}
+                  </p>
+                  <p className="text-[10px] text-muted-foreground">
+                    Recorde: {streakData.melhor_streak} dias • {streakData.total_checkins} check-ins total
+                    {streakData.bonus_total_creditado > 0 && ` • ℜ ${Number(streakData.bonus_total_creditado).toFixed(2)} ganhos`}
+                  </p>
+                </div>
+                {streakData.streak_atual >= 7 && <Trophy size={20} className="text-highlight" />}
+              </div>
+            </motion.div>
+          )}
 
           {/* Today's status */}
           {todayCheckin ? (
