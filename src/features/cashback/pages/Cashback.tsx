@@ -144,7 +144,7 @@ const Cashback = () => {
                     ].map((item) => (
                       <div
                         key={item.label}
-                        className="p-3 rounded-2xl glass-card text-center"
+                        className="p-3 rounded-2xl glass-card text-center hover:border-primary/30 active:scale-[0.97] transition-all"
                       >
                         <span className="text-2xl">{item.emoji}</span>
                         <p className="font-semibold text-xs text-foreground mt-1">

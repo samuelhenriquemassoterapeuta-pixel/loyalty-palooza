@@ -130,9 +130,9 @@ const ConteudoSocial = () => {
             </CardHeader>
             <CardContent>
               <Tabs value={formato} onValueChange={(v) => setFormato(v as any)} className="mb-4">
-                <TabsList className="grid grid-cols-3 w-full">
+                <TabsList className="grid grid-cols-3 w-full h-11">
                   {Object.entries(formatoLabels).map(([key, { label, icon: Icon }]) => (
-                    <TabsTrigger key={key} value={key} className="gap-1 text-xs">
+                    <TabsTrigger key={key} value={key} className="gap-1.5 text-xs data-[state=active]:shadow-sm">
                       <Icon className="w-3.5 h-3.5" />
                       {label}
                     </TabsTrigger>
