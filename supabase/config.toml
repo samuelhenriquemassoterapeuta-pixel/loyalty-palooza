@@ -83,3 +83,9 @@ verify_jwt = false
 
 [functions.lembretes-wellness]
 verify_jwt = false
+
+[functions.recomendar-sessao]
+verify_jwt = false
+
+[functions.reflexao-diario]
+verify_jwt = false

@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { Calendar, ShoppingBag, Clock, Gift, Crown, Brain, QrCode, Trophy, TrendingUp, Camera, Ticket, FileText, Headphones, Sparkles, MessageCircle } from "lucide-react";
+import { Calendar, ShoppingBag, Clock, Gift, Crown, Brain, QrCode, Trophy, TrendingUp, Camera, Ticket, FileText, Headphones, Sparkles, MessageCircle, BookHeart } from "lucide-react";
 
 const actions = [
   {
@@ -82,6 +82,14 @@ const actions = [
     iconColor: "text-primary",
     iconBg: "bg-primary/15",
     path: "/assistente-saude",
+  },
+  {
+    icon: BookHeart,
+    label: "Diário",
+    description: "Humor & IA",
+    iconColor: "text-accent",
+    iconBg: "bg-accent/15",
+    path: "/diario-humor",
   },
   {
     icon: Headphones,
