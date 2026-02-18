@@ -125,12 +125,12 @@ const Conquistas = () => {
 
             <Tabs defaultValue="conquistas">
               <motion.div variants={fadeUp}>
-                <TabsList className="w-full grid grid-cols-2">
-                  <TabsTrigger value="conquistas" className="text-xs gap-1.5">
-                    <Trophy size={13} /> Minhas Conquistas
+                <TabsList className="w-full grid grid-cols-2 h-11">
+                  <TabsTrigger value="conquistas" className="text-xs gap-1.5 data-[state=active]:shadow-sm">
+                    <Trophy size={14} /> Minhas Conquistas
                   </TabsTrigger>
-                  <TabsTrigger value="ranking" className="text-xs gap-1.5">
-                    <TrendingUp size={13} /> Ranking
+                  <TabsTrigger value="ranking" className="text-xs gap-1.5 data-[state=active]:shadow-sm">
+                    <TrendingUp size={14} /> Ranking
                   </TabsTrigger>
                 </TabsList>
               </motion.div>
@@ -199,17 +199,30 @@ const Conquistas = () => {
                 </motion.div>
 
                 {/* Achievement list */}
-                <div className="space-y-2">
+                <motion.div
+                  initial="hidden"
+                  animate="show"
+                  variants={stagger}
+                  className="space-y-2"
+                >
                   {filteredAchievements.map((a, i) => (
-                    <AchievementDetailCard key={a.id} achievement={a} index={i} />
+                    <motion.div key={a.id} variants={fadeUp}>
+                      <AchievementDetailCard achievement={a} index={i} />
+                    </motion.div>
                   ))}
                   {filteredAchievements.length === 0 && (
-                    <div className="text-center py-12 text-muted-foreground text-sm">
-                      <Trophy size={36} className="mx-auto mb-3 opacity-30" />
-                      <p>Nenhuma conquista nesta categoria.</p>
-                    </div>
+                    <motion.div variants={fadeUp} className="text-center py-16">
+                      <Trophy size={40} className="mx-auto text-muted-foreground/30 mb-3" />
+                      <p className="font-medium text-foreground mb-1">Nenhuma conquista aqui</p>
+                      <p className="text-sm text-muted-foreground">Tente outro filtro</p>
+                      {filter !== "todos" && (
+                        <button onClick={() => setFilter("todos")} className="mt-3 text-sm text-primary hover:underline">
+                          Ver todos
+                        </button>
+                      )}
+                    </motion.div>
                   )}
-                </div>
+                </motion.div>
               </TabsContent>
 
               {/* Ranking Tab */}
