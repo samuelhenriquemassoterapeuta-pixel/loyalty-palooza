@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { AppLayout } from "@/components/AppLayout";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -12,6 +13,7 @@ import WellnessAchievements from "@/features/bem-estar/components/WellnessAchiev
 import WeeklyComparison from "@/features/bem-estar/components/WeeklyComparison";
 import WellnessInsight from "@/features/bem-estar/components/WellnessInsight";
 import WellnessShareCard from "@/features/bem-estar/components/WellnessShareCard";
+import WellnessOnboarding from "@/features/bem-estar/components/WellnessOnboarding";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 14 },
@@ -26,7 +28,8 @@ const moodEmojis = ["", "😢", "😕", "😐", "😊", "😄"];
 
 const BemEstarHub = () => {
   const { user } = useAuth();
-
+  const [showOnboarding, setShowOnboarding] = useState(false);
+  const [onboardingDismissed, setOnboardingDismissed] = useState(false);
   const { data: streakData } = useQuery({
     queryKey: ["wellness-streak", user?.id],
     enabled: !!user,
@@ -92,6 +95,21 @@ const BemEstarHub = () => {
       }));
     },
   });
+
+  const { data: hasMetas } = useQuery({
+    queryKey: ["wellness-has-metas", user?.id],
+    enabled: !!user,
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("wellness_metas")
+        .select("id")
+        .eq("user_id", user!.id)
+        .maybeSingle();
+      return !!data;
+    },
+  });
+
+  const isNewUser = hasMetas === false && !streakData && !onboardingDismissed;
 
   const features = [
     {
@@ -162,6 +180,9 @@ const BemEstarHub = () => {
 
   return (
     <AppLayout>
+      {isNewUser && (
+        <WellnessOnboarding onComplete={() => setOnboardingDismissed(true)} />
+      )}
       <div className="min-h-screen bg-background pb-24 lg:pb-8">
         <div className="max-w-2xl mx-auto px-4 pt-6 safe-top">
           {/* Header */}
