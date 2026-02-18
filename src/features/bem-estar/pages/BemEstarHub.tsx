@@ -115,6 +115,14 @@ const BemEstarHub = () => {
       color: "bg-accent/15",
       iconColor: "text-accent",
     },
+    {
+      icon: TrendingUp,
+      label: "Minhas Metas",
+      desc: "Defina objetivos diários de bem-estar",
+      path: "/metas-wellness",
+      color: "bg-highlight/15",
+      iconColor: "text-highlight",
+    },
   ];
 
   return (
