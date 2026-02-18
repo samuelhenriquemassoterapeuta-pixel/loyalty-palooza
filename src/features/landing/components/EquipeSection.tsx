@@ -5,6 +5,7 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { useTerapeutas } from "@/features/terapeuta/hooks/useTerapeutas";
 import { CollapsibleSection } from "./CollapsibleSection";
 import { Loader2 } from "lucide-react";
+import QRCode from "react-qr-code";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },
@@ -90,7 +91,16 @@ export const EquipeSection = () => {
                         )}
                       </div>
 
-                      <ArrowRight size={16} className="text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity shrink-0" />
+                      <div className="flex flex-col items-center gap-1 shrink-0">
+                        <div className="bg-white rounded-lg p-1 shadow-sm border border-border/50">
+                          <QRCode
+                            value={`${window.location.origin}/terapeuta/${terapeuta.id}`}
+                            size={48}
+                            level="L"
+                          />
+                        </div>
+                        <ArrowRight size={12} className="text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
+                      </div>
                     </div>
                   </button>
                 </motion.div>

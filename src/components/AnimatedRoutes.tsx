@@ -49,6 +49,7 @@ const DesafiosPage = lazy(() => import("@/pages/Desafios"));
 const MinhaJornada = lazy(() => import("@/pages/MinhaJornada"));
 const ServicoDetalhe = lazy(() => import("@/features/terapias/pages/ServicoDetalhe"));
 const CartaoTerapeuta = lazy(() => import("@/features/terapeuta/pages/CartaoTerapeuta"));
+const QRCodeTerapeuta = lazy(() => import("@/features/terapeuta/pages/QRCodeTerapeuta"));
 const ConteudoSocial = lazy(() => import("@/features/social/pages/ConteudoSocial"));
 const CursoVendas = lazy(() => import("@/features/cursos/pages/CursoVendas"));
 const CursoAromaterapia = lazy(() => import("@/features/cursos/pages/CursoAromaterapia"));
@@ -170,6 +171,7 @@ export const AnimatedRoutes = () => {
         <Route path="/minha-jornada" element={<ProtectedRoute><LazyPage><MinhaJornada /></LazyPage></ProtectedRoute>} />
         <Route path="/conteudo-social" element={<ProtectedRoute requireAdmin><LazyPage><ConteudoSocial /></LazyPage></ProtectedRoute>} />
         <Route path="/terapeuta/:id" element={<LazyPage><CartaoTerapeuta /></LazyPage>} />
+        <Route path="/terapeuta/:id/qrcode" element={<LazyPage><QRCodeTerapeuta /></LazyPage>} />
         <Route path="/cursos" element={<ProtectedRoute allowRoles={["admin", "terapeuta"]}><LazyPage><Cursos /></LazyPage></ProtectedRoute>} />
         <Route path="/curso-vendas" element={<ProtectedRoute allowRoles={["admin", "terapeuta"]}><LazyPage><CursoVendas /></LazyPage></ProtectedRoute>} />
         <Route path="/curso-aromaterapia" element={<ProtectedRoute allowRoles={["admin", "terapeuta"]}><LazyPage><CursoAromaterapia /></LazyPage></ProtectedRoute>} />
