@@ -355,23 +355,24 @@ const WellnessTracker = () => {
           </Card>
         )}
 
-        {/* Save Button */}
-        <Button
-          onClick={handleSave}
-          disabled={saveCheckin.isPending}
-          className="w-full"
-          size="lg"
-        >
-          {saveCheckin.isPending ? "Salvando..." : todayCheckin ? "Atualizar check-in" : "Salvar check-in de hoje"}
-        </Button>
-
-        {/* Progress Analysis Link */}
-        <Link to="/analise-progresso">
-          <Button variant="outline" className="w-full gap-2" size="lg">
-            <BarChart3 size={18} />
-            Ver Análise de Progresso com IA
+        {/* Save Button - Sticky */}
+        <div className="sticky bottom-24 lg:bottom-4 z-20 space-y-2 bg-gradient-to-t from-background via-background to-transparent pt-4 -mx-4 px-4">
+          <Button
+            onClick={handleSave}
+            disabled={saveCheckin.isPending}
+            className="w-full shadow-elevated"
+            size="lg"
+          >
+            {saveCheckin.isPending ? "Salvando..." : todayCheckin ? "Atualizar check-in" : "✨ Salvar check-in de hoje"}
           </Button>
-        </Link>
+
+          <Link to="/analise-progresso">
+            <Button variant="outline" className="w-full gap-2" size="lg">
+              <BarChart3 size={18} />
+              Ver Análise de Progresso com IA
+            </Button>
+          </Link>
+        </div>
       </div>
     </AppLayout>
   );
