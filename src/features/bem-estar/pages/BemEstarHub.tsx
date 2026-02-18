@@ -333,23 +333,29 @@ const BemEstarHub = () => {
 
           {/* Features Grid */}
           <WellnessLazySection>
-            <motion.div variants={stagger} initial="hidden" animate="show" className="space-y-2">
-              <p className="text-xs font-medium text-muted-foreground px-1">Funcionalidades</p>
-              {features.map((feature) => (
-                <motion.div key={feature.path} variants={fadeUp}>
-                  <Link to={feature.path} className="flex items-center gap-4 p-4 rounded-2xl glass-card hover:shadow-elevated transition-all group">
-                    <div className={`p-3 rounded-xl ${feature.color}`}>
-                      <feature.icon size={22} className={feature.iconColor} />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-semibold text-foreground">{feature.label}</p>
-                      <p className="text-xs text-muted-foreground">{feature.desc}</p>
-                    </div>
-                    <ArrowRight size={16} className="text-muted-foreground group-hover:text-primary transition-colors" />
-                  </Link>
-                </motion.div>
-              ))}
-            </motion.div>
+            <WellnessCollapsibleGroup title="Todas as Funcionalidades" icon="🧭">
+              <div className="grid grid-cols-1 gap-2">
+                {features.map((feature, i) => (
+                  <motion.div
+                    key={feature.path}
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: i * 0.04 }}
+                  >
+                    <Link to={feature.path} className="flex items-center gap-4 p-4 rounded-2xl glass-card hover:shadow-elevated transition-all group">
+                      <div className={`p-3 rounded-xl ${feature.color}`}>
+                        <feature.icon size={22} className={feature.iconColor} />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors">{feature.label}</p>
+                        <p className="text-xs text-muted-foreground">{feature.desc}</p>
+                      </div>
+                      <ArrowRight size={16} className="text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all" />
+                    </Link>
+                  </motion.div>
+                ))}
+              </div>
+            </WellnessCollapsibleGroup>
           </WellnessLazySection>
 
         </div>
