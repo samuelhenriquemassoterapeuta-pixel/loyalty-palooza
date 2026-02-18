@@ -27,6 +27,10 @@ Deno.serve(async (req) => {
       const errorText = await response.text();
       console.error("ElevenLabs error:", response.status, errorText);
       if (response.status === 429) return errorResponse("Rate limit exceeded. Try again later.", 429);
+      // Detect quota exceeded from ElevenLabs
+      if (errorText.includes("quota_exceeded")) {
+        return errorResponse("Cota de narração esgotada. Tente novamente mais tarde.", 503);
+      }
       return errorResponse("TTS generation failed", 500);
     }
 
