@@ -1,7 +1,10 @@
-export const cursoMoxabustaoData = [
+import { type ModuloContent } from "@/features/cursos/data/cursoVendasContent";
+
+export const cursoMoxabustaoData: ModuloContent[] = [
   {
     titulo: "Módulo 1 — Fundamentos da Moxabustão",
     descricao: "Teoria e prática da terapia com moxa.",
+    icone: "Lightbulb", cor: "from-orange-50 to-amber-50",
     aulas: [
       { titulo: "O que é moxabustão e suas origens", descricao: "História e princípios da terapia com Artemisia.", duracaoMinutos: 15, conteudo: "# Moxabustão\n\nA moxabustão (Jiu Fa) é a aplicação de calor terapêutico através da combustão da erva Artemisia vulgaris (moxa) em pontos de acupuntura.\n\n## Origens\n- Prática tão antiga quanto a acupuntura\n- O ideograma chinês para acupuntura (针灸) inclui moxa\n- Citada no Huang Di Nei Jing\n\n## Mecanismo de ação\n- Aquece e tonifica o Qi\n- Expele frio e umidade\n- Fortalece o Yang\n- Melhora a circulação\n- Estimula a imunidade\n\n## Tipos de moxa\n- **Bastão (charuto):** mais comum, indireta\n- **Cone:** direta sobre a pele ou sobre gengibre/sal\n- **Sem fumaça:** para ambientes fechados\n- **Agulha aquecida:** combinada com acupuntura\n\n> A moxa aquece onde o frio adoece." },
       { titulo: "Técnicas de aplicação de moxa", descricao: "Métodos seguros de moxabustão direta e indireta.", duracaoMinutos: 25, conteudo: "# Técnicas de Moxabustão\n\n## Moxabustão indireta (bastão)\n- Mantenha 2-3 cm da pele\n- Movimentos circulares ou estáticos\n- Duração: 5-15 minutos por ponto\n- Até a pele ficar rosada e quente\n\n## Moxabustão com interposição\n- **Gengibre:** dor articular, frio\n- **Alho:** imunidade, infecções\n- **Sal (no umbigo):** tonifica Rim Yang\n\n## Moxabustão direta (cones)\n- Cones pequenos sobre o ponto\n- Remover antes de queimar a pele\n- Requer experiência e cuidado\n\n## Pontos mais utilizados\n- E36 (Zusanli): energia geral, imunidade\n- Ren4 (Guanyuan): tonifica Rim\n- Ren8 (Shenque/umbigo): emergência, frio interno\n- B23 (Shenshu): lombalgia, fraqueza\n- Du4 (Mingmen): porta da vitalidade\n\n## Segurança\n- Ambiente ventilado\n- Cinzeiro próximo\n- Nunca deixar moxa sem supervisão\n- Testar temperatura na própria pele primeiro\n\n> A moxabustão é suave mas poderosa. Domine a técnica antes de aplicar." },
