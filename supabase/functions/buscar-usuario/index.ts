@@ -9,20 +9,32 @@ Deno.serve(async (req) => {
   if (corsRes) return corsRes;
 
   try {
-    await requireAuth(req);
+    const { userId } = await requireAuth(req);
     const supabaseAdmin = createServiceClient();
+
+    // Verificar se o usuário é admin
+    const { data: isAdmin } = await supabaseAdmin.rpc("has_role", {
+      _user_id: userId,
+      _role: "admin",
+    });
+
+    if (!isAdmin) {
+      return errorResponse("Acesso restrito a administradores", 403);
+    }
 
     const body = await req.json();
     const { email } = validate(buscarUsuarioSchema, body);
 
-    // Buscar usuário pelo email no auth.users
-    const { data: authData, error: authError } = await supabaseAdmin.auth.admin.listUsers();
+    // Buscar usuário diretamente pelo email (sem listar todos)
+    const { data: foundUserData, error: authError } = await supabaseAdmin.auth.admin.listUsers({
+      filter: `email.eq.${email.toLowerCase()}`,
+      page: 1,
+      perPage: 1,
+    });
 
     if (authError) throw authError;
 
-    const foundUser = authData.users.find(
-      (u) => u.email?.toLowerCase() === email.toLowerCase()
-    );
+    const foundUser = foundUserData.users?.[0];
 
     if (!foundUser) {
       return errorResponse("Usuário não encontrado", 404);
