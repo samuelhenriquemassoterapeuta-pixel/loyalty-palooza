@@ -70,10 +70,10 @@ const actions = [
   {
     icon: Sparkles,
     label: "Bem-Estar",
-    description: "Plano IA",
+    description: "Hub IA",
     iconColor: "text-highlight",
     iconBg: "bg-highlight/15",
-    path: "/bem-estar",
+    path: "/bem-estar-hub",
   },
   {
     icon: MessageCircle,

@@ -125,6 +125,7 @@ const AssistenteSaude = lazy(() => import("@/features/bem-estar/pages/Assistente
 const WellnessTracker = lazy(() => import("@/features/bem-estar/pages/WellnessTracker"));
 const AnaliseProgresso = lazy(() => import("@/features/bem-estar/pages/AnaliseProgresso"));
 const DiarioHumor = lazy(() => import("@/features/bem-estar/pages/DiarioHumor"));
+const BemEstarHub = lazy(() => import("@/features/bem-estar/pages/BemEstarHub"));
 
 // Academy
 const AcademyLanding = lazy(() => import("@/features/academy/pages/AcademyLanding"));
@@ -296,6 +297,7 @@ export const AnimatedRoutes = () => {
         <Route path="/liga" element={<ProtectedRoute><LazyPage><LigaResinkra /></LazyPage></ProtectedRoute>} />
 
         {/* Bem-Estar IA */}
+        <Route path="/bem-estar-hub" element={<ProtectedRoute><LazyPage><BemEstarHub /></LazyPage></ProtectedRoute>} />
         <Route path="/bem-estar" element={<ProtectedRoute><LazyPage><PlanoBemEstar /></LazyPage></ProtectedRoute>} />
         <Route path="/assistente-saude" element={<ProtectedRoute><LazyPage><AssistenteSaude /></LazyPage></ProtectedRoute>} />
         <Route path="/wellness-tracker" element={<ProtectedRoute><LazyPage><WellnessTracker /></LazyPage></ProtectedRoute>} />
