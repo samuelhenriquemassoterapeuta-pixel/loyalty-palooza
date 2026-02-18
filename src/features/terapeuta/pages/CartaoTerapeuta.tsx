@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowLeft, Share2, Phone, Mail, Star, Calendar, MessageCircle } from "lucide-react";
+import { ArrowLeft, Share2, Phone, Mail, Star, Calendar, MessageCircle, QrCode } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import QRCodeSVG from "react-qr-code";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
@@ -178,8 +179,28 @@ const CartaoTerapeuta = () => {
           </motion.div>
         )}
 
+        {/* QR Code section */}
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}>
+          <Card>
+            <CardContent className="py-4 flex flex-col items-center gap-3">
+              <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">QR Code</h3>
+              <div className="bg-white rounded-xl p-3 shadow-sm border">
+                <QRCodeSVG value={`${window.location.origin}/terapeuta/${terapeuta.id}`} size={120} level="M" />
+              </div>
+              <p className="text-xs text-muted-foreground text-center">Escaneie para acessar este cartão</p>
+              <Link
+                to={`/terapeuta/${terapeuta.id}/qrcode`}
+                className="text-xs text-primary font-medium hover:underline flex items-center gap-1"
+              >
+                <QrCode className="w-3.5 h-3.5" />
+                Abrir versão para impressão
+              </Link>
+            </CardContent>
+          </Card>
+        </motion.div>
+
         {/* Export section */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}>
           <Card>
             <CardContent className="py-4">
               <button
