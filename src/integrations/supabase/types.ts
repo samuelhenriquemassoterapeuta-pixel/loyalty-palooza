@@ -5818,7 +5818,7 @@ export type Database = {
         Returns: boolean
       }
       incrementar_voto_sugestao: {
-        Args: { p_sugestao_id: string }
+        Args: { sugestao_id: string }
         Returns: undefined
       }
       is_parceiro: { Args: { _user_id: string }; Returns: boolean }
