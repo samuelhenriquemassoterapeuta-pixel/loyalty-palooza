@@ -45,7 +45,7 @@ const ServicoDetalhe = () => {
 
   return (
     <AppLayout>
-      <div className="min-h-screen bg-background pb-24 lg:pb-8">
+      <div className="min-h-screen bg-background gradient-hero pb-24 lg:pb-8">
         {/* Hero / Cover Image */}
         {imagemCapa && (
           <div className="relative w-full h-56 lg:h-72 overflow-hidden">

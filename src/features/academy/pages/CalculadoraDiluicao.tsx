@@ -116,7 +116,7 @@ export default function CalculadoraDiluicao() {
 
   return (
     <AppLayout>
-      <div className="min-h-screen bg-background pb-32 lg:pb-8">
+      <div className="min-h-screen bg-background gradient-hero pb-32 lg:pb-8">
         {/* Header */}
         <div className="bg-gradient-to-br from-primary/10 via-accent/5 to-highlight/10 border-b border-border px-4 py-6 safe-top">
           <div className="max-w-lg mx-auto">
