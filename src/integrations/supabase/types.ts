@@ -5654,6 +5654,51 @@ export type Database = {
         }
         Relationships: []
       }
+      wellness_metas: {
+        Row: {
+          created_at: string
+          horario_lembrete: string | null
+          id: string
+          lembrete_checkin: boolean | null
+          meta_agua_litros: number | null
+          meta_energia_min: number | null
+          meta_estresse_max: number | null
+          meta_humor_min: number | null
+          meta_passos: number | null
+          meta_sono_horas: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          horario_lembrete?: string | null
+          id?: string
+          lembrete_checkin?: boolean | null
+          meta_agua_litros?: number | null
+          meta_energia_min?: number | null
+          meta_estresse_max?: number | null
+          meta_humor_min?: number | null
+          meta_passos?: number | null
+          meta_sono_horas?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          horario_lembrete?: string | null
+          id?: string
+          lembrete_checkin?: boolean | null
+          meta_agua_litros?: number | null
+          meta_energia_min?: number | null
+          meta_estresse_max?: number | null
+          meta_humor_min?: number | null
+          meta_passos?: number | null
+          meta_sono_horas?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       wellness_streaks: {
         Row: {
           bonus_total_creditado: number
