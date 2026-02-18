@@ -128,6 +128,7 @@ const DiarioHumor = lazy(() => import("@/features/bem-estar/pages/DiarioHumor"))
 const BemEstarHub = lazy(() => import("@/features/bem-estar/pages/BemEstarHub"));
 const MetasWellness = lazy(() => import("@/features/bem-estar/pages/MetasWellness"));
 const EvolucaoWellness = lazy(() => import("@/features/bem-estar/pages/EvolucaoWellness"));
+const RelatorioWellness = lazy(() => import("@/features/bem-estar/pages/RelatorioWellness"));
 
 // Academy
 const AcademyLanding = lazy(() => import("@/features/academy/pages/AcademyLanding"));
@@ -307,6 +308,7 @@ export const AnimatedRoutes = () => {
         <Route path="/diario-humor" element={<ProtectedRoute><LazyPage><DiarioHumor /></LazyPage></ProtectedRoute>} />
         <Route path="/metas-wellness" element={<ProtectedRoute><LazyPage><MetasWellness /></LazyPage></ProtectedRoute>} />
         <Route path="/evolucao-wellness" element={<ProtectedRoute><LazyPage><EvolucaoWellness /></LazyPage></ProtectedRoute>} />
+        <Route path="/relatorio-wellness" element={<ProtectedRoute><LazyPage><RelatorioWellness /></LazyPage></ProtectedRoute>} />
 
         {/* Resinkra AI Routes — Admin Only */}
         <Route path="/resinkra-ai" element={<AdminRoute><LazyPage><ResinkraAIDashboard /></LazyPage></AdminRoute>} />
