@@ -19,6 +19,7 @@ import WellnessScore from "@/features/bem-estar/components/WellnessScore";
 import WellnessCalendar from "@/features/bem-estar/components/WellnessCalendar";
 import WellnessMoodTrends from "@/features/bem-estar/components/WellnessMoodTrends";
 import WellnessDailyHabits from "@/features/bem-estar/components/WellnessDailyHabits";
+import WellnessGoalsWidget from "@/features/bem-estar/components/WellnessGoalsWidget";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 14 },
@@ -237,6 +238,9 @@ const BemEstarHub = () => {
 
           {/* Daily Habits */}
           <WellnessDailyHabits />
+
+          {/* Goals Progress */}
+          <WellnessGoalsWidget />
 
           {/* Today's status */}
           {todayCheckin ? (
