@@ -470,16 +470,50 @@ const Agendamento = () => {
                   </motion.div>
                 )}
 
-                {/* Progress */}
-                <div className="flex gap-2">
-                  {[1, 2, 3, 4].map((s) => (
-                    <div
-                      key={s}
-                      className={`h-1.5 flex-1 rounded-full transition-colors ${
-                        s <= step ? "bg-primary" : "bg-muted"
-                      }`}
-                    />
-                  ))}
+                {/* Stepper visual */}
+                <div className="glass-card rounded-2xl p-4">
+                  <div className="flex items-center justify-between">
+                    {[
+                      { num: 1, label: "Serviço", icon: Sparkles },
+                      { num: 2, label: "Terapeuta", icon: User },
+                      { num: 3, label: "Data", icon: CalendarDays },
+                      { num: 4, label: "Horário", icon: Clock },
+                    ].map((s, i) => (
+                      <div key={s.num} className="flex items-center flex-1">
+                        <button
+                          onClick={() => s.num < step && setStep(s.num)}
+                          disabled={s.num > step}
+                          className="flex flex-col items-center gap-1 group"
+                        >
+                          <motion.div
+                            animate={{
+                              scale: s.num === step ? 1.1 : 1,
+                              backgroundColor: s.num <= step
+                                ? "hsl(var(--primary))"
+                                : "hsl(var(--muted))",
+                            }}
+                            className="w-9 h-9 rounded-xl flex items-center justify-center transition-colors"
+                          >
+                            {s.num < step ? (
+                              <Check size={16} className="text-primary-foreground" />
+                            ) : (
+                              <s.icon size={16} className={s.num <= step ? "text-primary-foreground" : "text-muted-foreground"} />
+                            )}
+                          </motion.div>
+                          <span className={`text-[10px] font-medium transition-colors ${
+                            s.num <= step ? "text-primary" : "text-muted-foreground"
+                          }`}>
+                            {s.label}
+                          </span>
+                        </button>
+                        {i < 3 && (
+                          <div className={`flex-1 h-0.5 mx-1 rounded-full transition-colors ${
+                            s.num < step ? "bg-primary" : "bg-muted"
+                          }`} />
+                        )}
+                      </div>
+                    ))}
+                  </div>
                 </div>
 
                 {/* Step 1: Serviço */}
