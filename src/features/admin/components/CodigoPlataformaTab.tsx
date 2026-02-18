@@ -39,6 +39,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { toast } from "sonner";
 import { generateAllCoursesMarkdown } from "@/features/cursos/utils/generateCourseMarkdown";
+import { generatePlatformMarkdown } from "@/features/admin/utils/generatePlatformMarkdown";
 
 // ── Reusable Components ──
 
@@ -175,6 +176,34 @@ const CourseMarkdownBlock = () => {
 
 // ── Main Component ──
 
+const PlatformMarkdownBlock = () => {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = () => {
+    const markdown = generatePlatformMarkdown();
+    navigator.clipboard.writeText(markdown);
+    setCopied(true);
+    toast.success("Markdown completo da plataforma copiado!");
+    setTimeout(() => setCopied(false), 3000);
+  };
+
+  return (
+    <div className="flex items-center gap-3 p-4 rounded-2xl border border-primary/30 bg-primary/5">
+      <div className="p-2.5 rounded-xl bg-primary/10">
+        <BookOpen size={20} className="text-primary" />
+      </div>
+      <div className="flex-1 min-w-0">
+        <span className="text-sm font-semibold text-foreground block">Exportar Plataforma Completa</span>
+        <span className="text-[11px] text-muted-foreground">Gera um documento Markdown com toda a documentação da plataforma</span>
+      </div>
+      <Button size="sm" onClick={handleCopy} className="gap-2 shrink-0">
+        {copied ? <Check size={14} /> : <Copy size={14} />}
+        {copied ? "Copiado!" : "Copiar Tudo"}
+      </Button>
+    </div>
+  );
+};
+
 export const CodigoPlataformaTab = () => {
   return (
     <div className="space-y-3">
@@ -186,6 +215,9 @@ export const CodigoPlataformaTab = () => {
         <h3 className="text-lg font-bold text-foreground">Código da Plataforma</h3>
         <p className="text-xs text-muted-foreground">Arquitetura, banco de dados, backend e integrações</p>
       </div>
+
+      {/* Export Full Platform Markdown */}
+      <PlatformMarkdownBlock />
 
       {/* Métricas resumo */}
       <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
