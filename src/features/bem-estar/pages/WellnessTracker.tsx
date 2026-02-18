@@ -3,8 +3,8 @@ import { AppLayout } from "@/components/AppLayout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
-import { ArrowLeft, Smile, Frown, Meh, Zap, Moon, Droplets, Activity, Brain, Check, TrendingUp } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { ArrowLeft, Smile, Frown, Meh, Zap, Moon, Droplets, Activity, Brain, Check, TrendingUp, BarChart3 } from "lucide-react";
+import { useNavigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useWellnessTracker, type WellnessCheckinInput } from "@/features/bem-estar/hooks/useWellnessTracker";
 import { format } from "date-fns";
@@ -241,6 +241,14 @@ const WellnessTracker = () => {
         >
           {saveCheckin.isPending ? "Salvando..." : todayCheckin ? "Atualizar check-in" : "Salvar check-in de hoje"}
         </Button>
+
+        {/* Progress Analysis Link */}
+        <Link to="/analise-progresso">
+          <Button variant="outline" className="w-full gap-2" size="lg">
+            <BarChart3 size={18} />
+            Ver Análise de Progresso com IA
+          </Button>
+        </Link>
       </div>
     </AppLayout>
   );

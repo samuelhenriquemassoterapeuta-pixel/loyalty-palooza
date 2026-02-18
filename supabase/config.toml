@@ -77,3 +77,9 @@ verify_jwt = false
 
 [functions.assistente-saude]
 verify_jwt = false
+
+[functions.analise-progresso]
+verify_jwt = false
+
+[functions.lembretes-wellness]
+verify_jwt = false
