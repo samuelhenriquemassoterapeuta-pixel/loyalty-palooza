@@ -31,6 +31,7 @@ import WellnessStressWidget from "@/features/bem-estar/components/WellnessStress
 import WellnessMoodWidget from "@/features/bem-estar/components/WellnessMoodWidget";
 import WellnessEnergyWidget from "@/features/bem-estar/components/WellnessEnergyWidget";
 import WellnessDailyTip from "@/features/bem-estar/components/WellnessDailyTip";
+import WellnessQuickNote from "@/features/bem-estar/components/WellnessQuickNote";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 14 },
@@ -263,6 +264,9 @@ const BemEstarHub = () => {
 
           {/* Energy Quick Selector */}
           <WellnessEnergyWidget />
+
+          {/* Quick Note */}
+          <WellnessQuickNote />
 
           {/* Daily Habits */}
           <WellnessDailyHabits />
