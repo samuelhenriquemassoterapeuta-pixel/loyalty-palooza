@@ -124,12 +124,13 @@ export default function PlaylistMusical() {
           <iframe
             width="100%"
             height="200"
-            src={`https://www.youtube.com/embed/${track.youtubeId}?autoplay=1&rel=0`}
+            src={`https://www.youtube.com/embed/${track.youtubeId}?autoplay=1&rel=0&modestbranding=1`}
             title={track.title}
             frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
             className="rounded-xl"
+            onError={() => setPlayingTrack(null)}
           />
         </motion.div>
       )}
