@@ -12,8 +12,11 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ArrowLeft, Ticket, GraduationCap, Plus, Trash2, ToggleLeft, ToggleRight, Stethoscope, BookOpen } from "lucide-react";
+import { ArrowLeft, Ticket, GraduationCap, Plus, Trash2, ToggleLeft, ToggleRight, Stethoscope, BookOpen, FileText, Search, Clock, CheckCircle2, Edit3 } from "lucide-react";
 import { toast } from "sonner";
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
+import { TerapeutaAnamneseSection } from "@/features/terapeuta/components/TerapeutaAnamneseSection";
 
 const TerapeutaDashboard = () => {
   const navigate = useNavigate();
@@ -95,8 +98,9 @@ const TerapeutaDashboard = () => {
         </div>
 
         <Tabs defaultValue="cupons" className="w-full">
-          <TabsList className="w-full grid grid-cols-2">
+          <TabsList className="w-full grid grid-cols-3">
             <TabsTrigger value="cupons" className="gap-2"><Ticket className="h-4 w-4" /> Cupons</TabsTrigger>
+            <TabsTrigger value="anamnese" className="gap-2"><FileText className="h-4 w-4" /> Anamnese</TabsTrigger>
             <TabsTrigger value="cursos" className="gap-2"><GraduationCap className="h-4 w-4" /> Cursos</TabsTrigger>
           </TabsList>
 
@@ -239,6 +243,11 @@ const TerapeutaDashboard = () => {
                 <p>• Cupons são válidos para serviços do seu atendimento</p>
               </CardContent>
             </Card>
+          </TabsContent>
+
+          {/* ANAMNESE TAB */}
+          <TabsContent value="anamnese" className="space-y-4 mt-4">
+            <TerapeutaAnamneseSection terapeutaId={terapeuta?.id} />
           </TabsContent>
 
           {/* CURSOS TAB */}

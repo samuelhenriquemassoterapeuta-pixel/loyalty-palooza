@@ -150,6 +150,10 @@ const Agendamento = () => {
     
     toast.success("Agendamento realizado com sucesso!", {
       description: `Sua sessão foi agendada para ${format(dataHora, "dd/MM/yyyy 'às' HH:mm", { locale: ptBR })}`,
+      action: {
+        label: "Preencher Anamnese",
+        onClick: () => navigate("/anamnese"),
+      },
     });
     setStep(1);
     setSelectedDate(undefined);

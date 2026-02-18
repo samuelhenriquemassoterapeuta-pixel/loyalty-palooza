@@ -1,7 +1,7 @@
 import { useState } from "react"; // v2
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, Plus, FileText, Users, Shield, Dumbbell, Sparkles, ClipboardList, StretchHorizontal, Salad, BookOpen, Stethoscope, Globe, Gift, Ticket, Crown, Building2, CreditCard, Handshake, Camera, Trophy, DollarSign, CalendarDays, Target, Megaphone, Send, BarChart3, Rocket, GraduationCap, Bell, UserCog, Settings2, Code2 } from "lucide-react";
+import { ArrowLeft, Plus, FileText, Users, Shield, Dumbbell, Sparkles, ClipboardList, StretchHorizontal, Salad, BookOpen, Stethoscope, Globe, Gift, Ticket, Crown, Building2, CreditCard, Handshake, Camera, Trophy, DollarSign, CalendarDays, Target, Megaphone, Send, BarChart3, Rocket, GraduationCap, Bell, UserCog, Settings2, Code2, FilePlus2 } from "lucide-react";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -51,6 +51,7 @@ import { UsuariosAdminTab } from "@/features/admin/components/UsuariosAdminTab";
 import { CodigoPlataformaTab } from "@/features/admin/components/CodigoPlataformaTab";
 import VendaPlataformaTab from "@/features/admin/components/VendaPlataformaTab";
 import AnalyticsDashboardTab from "@/features/admin/components/AnalyticsDashboardTab";
+import AnamneseAdminTab from "@/features/admin/components/AnamneseAdminTab";
 
 const tabContentVariants = {
   hidden: { opacity: 0, y: 12 },
@@ -391,6 +392,10 @@ const Admin = () => {
                   <Stethoscope size={14} />
                   Seções Clínicas
                 </TabsTrigger>
+                <TabsTrigger value="anamnese" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
+                  <FilePlus2 size={14} />
+                  Anamnese
+                </TabsTrigger>
                 <TabsTrigger value="dietas-conteudo" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
                   <BookOpen size={14} />
                   Conteúdo Dietas
@@ -599,6 +604,10 @@ const Admin = () => {
 
               <TabsContent value="dietas-conteudo" forceMount={activeTab === "dietas-conteudo" ? true : undefined} className={activeTab !== "dietas-conteudo" ? "hidden" : ""}>
                 <DietasConteudoTab />
+              </TabsContent>
+
+              <TabsContent value="anamnese" forceMount={activeTab === "anamnese" ? true : undefined} className={activeTab !== "anamnese" ? "hidden" : ""}>
+                <AnamneseAdminTab />
               </TabsContent>
 
               <TabsContent value="headspa" forceMount={activeTab === "headspa" ? true : undefined} className={activeTab !== "headspa" ? "hidden" : ""}>

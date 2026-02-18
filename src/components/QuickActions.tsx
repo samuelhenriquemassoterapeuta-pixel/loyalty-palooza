@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { Calendar, ShoppingBag, Clock, Gift, Crown, Brain, QrCode, Trophy, TrendingUp, Camera, Ticket } from "lucide-react";
+import { Calendar, ShoppingBag, Clock, Gift, Crown, Brain, QrCode, Trophy, TrendingUp, Camera, Ticket, FileText } from "lucide-react";
 
 const actions = [
   {
@@ -58,6 +58,14 @@ const actions = [
     iconColor: "text-highlight",
     iconBg: "bg-highlight/15",
     path: "/clube-vip",
+  },
+  {
+    icon: FileText,
+    label: "Anamnese",
+    description: "Fichas",
+    iconColor: "text-accent",
+    iconBg: "bg-accent/15",
+    path: "/anamnese",
   },
 ];
 
