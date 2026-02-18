@@ -2,6 +2,7 @@
  * Per-domain markdown generators for platform documentation.
  * Each function returns a detailed markdown string for its domain.
  */
+import { generateMediaMarkdown } from "./generateMediaMarkdown";
 
 // ── Agendamentos ──
 export function generateAgendamentosMarkdown(): string {
@@ -679,4 +680,5 @@ export const allDomainMarkdowns: DomainMarkdownEntry[] = [
   { id: "guia-clinico", name: "Guia Clínico", icon: "BookOpen", generator: generateGuiaClinicoMarkdown },
   { id: "cromos", name: "Cromos Colecionáveis", icon: "Sparkles", generator: generateCromosMarkdown },
   { id: "admin", name: "Painel Administrativo", icon: "Settings", generator: generateAdminMarkdown },
+  { id: "media", name: "Imagens & Vídeos", icon: "Image", generator: generateMediaMarkdown },
 ];
