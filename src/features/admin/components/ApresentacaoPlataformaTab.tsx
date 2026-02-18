@@ -432,68 +432,72 @@ const investimentoOptions: InvestimentoOption[] = [
     label: "Freelancer Sênior",
     badge: "Tradicional",
     badgeColor: "destructive",
-    valor: "R$ 950.000+",
-    prazo: "24-32 meses de desenvolvimento",
+    valor: "R$ 1.450.000+",
+    prazo: "30-40 meses de desenvolvimento",
     cardStyle: "border-destructive/20 bg-destructive/5",
     details: [
-      "95+ páginas e 250+ componentes React/TypeScript",
-      "96 tabelas com 316+ políticas RLS de segurança",
-      "24 Edge Functions para integrações externas",
-      "Sistema completo de IA (Resinkra AI, Chat, Análise Viral)",
-      "PWA mobile-first com suporte offline",
-      "Risco alto: dependência de único profissional",
-      "Sem garantia de escalabilidade ou manutenção",
+      "100+ páginas e 300+ componentes React/TypeScript",
+      "134 tabelas com 366 políticas RLS de segurança",
+      "45 Edge Functions para integrações e IA",
+      "Sistema completo de IA (Resinkra AI, Chat, Análise Viral, Wellness)",
+      "PWA mobile-first com suporte offline e Capacitor",
+      "29 módulos de funcionalidades (academy, marketplace, liga, etc.)",
+      "Risco crítico: dependência de único profissional, burnout provável",
+      "Sem garantia de escalabilidade — reescrita provável após 18 meses",
     ],
   },
   {
     label: "Agência Digital",
     badge: "Tradicional",
     badgeColor: "destructive",
-    valor: "R$ 1.350.000+",
-    prazo: "30-42 meses de desenvolvimento",
+    valor: "R$ 2.200.000+",
+    prazo: "36-48 meses de desenvolvimento",
     cardStyle: "border-destructive/30 bg-destructive/5",
     details: [
-      "Equipe de 8-12 profissionais (devs, designers, PMs)",
-      "Custo mensal médio de R$ 35.000-55.000 com equipe",
-      "17 cursos profissionalizantes (1.886h de conteúdo)",
-      "Módulo corporativo B2B completo com dashboard RH",
-      "Integração Z-API WhatsApp + Resend e-mail marketing",
-      "Google Ads dashboard + automação de campanhas",
-      "Overhead de gestão: reuniões, sprints, documentação",
+      "Equipe de 10-15 profissionais (devs, designers, PMs, QA)",
+      "Custo mensal médio de R$ 45.000-75.000 com equipe",
+      "17 cursos profissionalizantes (1.886h de conteúdo educacional)",
+      "Módulo corporativo B2B completo com dashboard RH e métricas",
+      "51 database functions + 57 triggers automáticos",
+      "Integrações: Z-API, Resend, Asaas, Google Ads, IA generativa",
+      "Overhead de gestão: reuniões, sprints, documentação, deploys",
+      "Manutenção mensal pós-entrega: R$ 25.000-45.000",
     ],
   },
   {
     label: "Software House Enterprise",
     badge: "Tradicional",
     badgeColor: "destructive",
-    valor: "R$ 1.800.000+",
-    prazo: "18-24 meses com equipe dedicada",
+    valor: "R$ 3.200.000+",
+    prazo: "24-30 meses com equipe dedicada",
     cardStyle: "border-destructive/40 bg-destructive/5",
     details: [
-      "Arquitetura enterprise com microsserviços",
-      "QA dedicado, DevOps, monitoramento 24/7",
-      "Licenciamento White-Label multi-tenant",
-      "SLA contratual com penalidades",
-      "Custo mensal de manutenção: R$ 45.000-70.000",
-      "Contrato mínimo de 12 meses obrigatório",
-      "Total 3 anos (dev + manutenção): R$ 3.5M+",
+      "Arquitetura enterprise com microsserviços e multi-tenant",
+      "QA dedicado, DevOps, CI/CD, monitoramento 24/7",
+      "Licenciamento White-Label com personalização total",
+      "SLA contratual com penalidades e suporte premium",
+      "Custo mensal de manutenção: R$ 55.000-90.000",
+      "Contrato mínimo de 18 meses obrigatório",
+      "Total 3 anos (dev + manutenção): R$ 5.5M+",
+      "Fonte: Quiker.com.br e B2Bit — pesquisa mercado 2025",
     ],
   },
   {
     label: "Com Resinkra + IA",
-    badge: "96% economia",
+    badge: "97% economia",
     badgeColor: "primary",
     valor: "Fração do custo",
     prazo: "Desenvolvimento acelerado por IA em semanas",
     cardStyle: "border-primary/30 bg-primary/5",
     details: [
-      "95+ páginas entregues e funcionando em produção",
-      "250+ componentes com design system consistente",
-      "96 tabelas + 316 RLS policies — segurança enterprise",
-      "24 Edge Functions ativas com deploy automático",
+      "100+ páginas entregues e funcionando em produção",
+      "300+ componentes com design system consistente",
+      "134 tabelas + 366 RLS policies — segurança enterprise",
+      "45 Edge Functions ativas com deploy automático",
+      "51 database functions + 57 triggers para automação",
       "17 cursos (1.886h) + certificação automática",
-      "IA nativa: roteiros virais, ganchos, análise de conteúdo",
-      "Manutenção contínua por IA — sem equipe fixa",
+      "IA nativa: roteiros virais, wellness, análise de conteúdo",
+      "29 módulos integrados — manutenção contínua por IA",
       "Iterações em tempo real — ajustes em minutos, não semanas",
     ],
   },
@@ -552,11 +556,11 @@ const InvestimentoContent = () => (
   <div className="space-y-3 max-h-[60vh] overflow-y-auto pr-1">
     <div className="grid grid-cols-2 gap-2 text-center mb-1">
       <div className="bg-destructive/10 rounded-xl p-2">
-        <p className="text-sm font-bold text-destructive">R$ 950K–1.8M</p>
+        <p className="text-sm font-bold text-destructive">R$ 1.4M–3.2M</p>
         <p className="text-[9px] text-muted-foreground">Custo tradicional</p>
       </div>
       <div className="bg-primary/10 rounded-xl p-2">
-        <p className="text-sm font-bold text-primary">96% economia</p>
+        <p className="text-sm font-bold text-primary">97% economia</p>
         <p className="text-[9px] text-muted-foreground">Com Resinkra + IA</p>
       </div>
     </div>
@@ -566,17 +570,18 @@ const InvestimentoContent = () => (
       ))}
     </div>
     <div className="bg-accent/10 rounded-xl p-3 space-y-1.5">
-      <p className="text-xs text-accent font-semibold text-center">💡 Custos de manutenção no mercado</p>
+      <p className="text-xs text-accent font-semibold text-center">💡 Custos de manutenção no mercado (2025)</p>
       <div className="grid grid-cols-2 gap-2 text-center">
         <div>
-          <p className="text-[10px] font-semibold text-destructive">R$ 16.500–34.000</p>
+          <p className="text-[10px] font-semibold text-destructive">R$ 25.000–45.000</p>
           <p className="text-[8px] text-muted-foreground">Freelancer/Agência por mês</p>
         </div>
         <div>
-          <p className="text-[10px] font-semibold text-destructive">R$ 45.000–70.000</p>
+          <p className="text-[10px] font-semibold text-destructive">R$ 55.000–90.000</p>
           <p className="text-[8px] text-muted-foreground">Software House por mês</p>
         </div>
       </div>
+      <p className="text-[8px] text-muted-foreground text-center italic">Fonte: Quiker.com.br, B2Bit — pesquisa mercado 2025</p>
     </div>
   </div>
 );
