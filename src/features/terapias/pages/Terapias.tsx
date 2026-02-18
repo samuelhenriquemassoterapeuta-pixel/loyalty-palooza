@@ -16,7 +16,7 @@ const Terapias = () => {
   );
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background gradient-hero">
       {/* Hero */}
       <div className="bg-card/50 border-b border-border/40">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10 sm:py-16 text-center">

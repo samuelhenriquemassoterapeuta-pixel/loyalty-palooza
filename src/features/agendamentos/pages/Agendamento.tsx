@@ -298,7 +298,7 @@ const Agendamento = () => {
         <motion.div variants={stagger} initial="hidden" animate="show" className="space-y-5">
           <motion.div variants={fadeUp}>
             <Tabs value={activeTab} onValueChange={setActiveTab}>
-              <TabsList className="grid w-full grid-cols-2">
+              <TabsList className="grid w-full grid-cols-2 h-11">
                 <TabsTrigger value="novo">Novo Agendamento</TabsTrigger>
                 <TabsTrigger value="agendados" className="relative">
                   Meus Agendamentos
