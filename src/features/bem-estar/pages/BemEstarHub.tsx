@@ -13,6 +13,7 @@ import WellnessAchievements from "@/features/bem-estar/components/WellnessAchiev
 import WeeklyComparison from "@/features/bem-estar/components/WeeklyComparison";
 import WellnessInsight from "@/features/bem-estar/components/WellnessInsight";
 import WellnessShareCard from "@/features/bem-estar/components/WellnessShareCard";
+import WellnessCorrelations from "@/features/bem-estar/components/WellnessCorrelations";
 import WellnessOnboarding from "@/features/bem-estar/components/WellnessOnboarding";
 
 const fadeUp = {
@@ -291,6 +292,9 @@ const BemEstarHub = () => {
 
           {/* Weekly Comparison */}
           <WeeklyComparison />
+
+          {/* Correlations */}
+          <WellnessCorrelations />
 
           {/* Achievements */}
           <WellnessAchievements />
