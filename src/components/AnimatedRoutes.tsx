@@ -107,6 +107,7 @@ const CalculadoraDiluicao = lazy(() => import("@/features/academy/pages/Calculad
 
 // Admin Pages
 const GoogleAdsDashboard = lazy(() => import("@/features/admin/pages/GoogleAdsDashboard"));
+const ModerarPlaylists = lazy(() => import("@/features/admin/pages/ModerarPlaylists"));
 
 // Cromos Pages
 const CromosDashboard = lazy(() => import("@/features/cromos/pages/CromosDashboard"));
@@ -170,6 +171,7 @@ export const AnimatedRoutes = () => {
         <Route path="/transferir" element={<ProtectedRoute><LazyPage><Transferir /></LazyPage></ProtectedRoute>} />
         <Route path="/admin" element={<ProtectedRoute requireAdmin><LazyPage><Admin /></LazyPage></ProtectedRoute>} />
         <Route path="/admin/google-ads" element={<ProtectedRoute requireAdmin><LazyPage><GoogleAdsDashboard /></LazyPage></ProtectedRoute>} />
+        <Route path="/admin/moderar-playlists" element={<ProtectedRoute requireAdmin><LazyPage><ModerarPlaylists /></LazyPage></ProtectedRoute>} />
         <Route path="/indicacoes" element={<ProtectedRoute><LazyPage><Indicacoes /></LazyPage></ProtectedRoute>} />
         <Route path="/cashback" element={<ProtectedRoute><LazyPage><Cashback /></LazyPage></ProtectedRoute>} />
         <Route path="/manual" element={<ProtectedRoute><LazyPage><Manual /></LazyPage></ProtectedRoute>} />
