@@ -91,7 +91,7 @@ export function usePlaylistDB(categoriaFiltro: string) {
       return;
     }
 
-    await supabase.rpc("incrementar_voto_sugestao", { p_sugestao_id: sugestaoId });
+    await supabase.rpc("incrementar_voto_sugestao", { sugestao_id: sugestaoId });
     toast({ title: "Voto registrado! 🗳️" });
     loadData();
   };
