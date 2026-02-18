@@ -205,6 +205,16 @@ export default function Cursos() {
         <div className="max-w-lg mx-auto px-4 pt-4 space-y-3 relative z-10">
           <ContinueWatchingCard courses={courseForContinue} onSelect={handleTabChange} />
 
+          {/* Course count indicator */}
+          <div className="flex items-center justify-between px-1">
+            <p className="text-xs text-muted-foreground font-medium">
+              {sortedTabs.length} cursos disponíveis
+            </p>
+            <p className="text-xs text-muted-foreground">
+              ← deslize →
+            </p>
+          </div>
+
           <div
             ref={scrollRef}
             className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide -mx-4 px-4"

@@ -268,7 +268,8 @@ const Protocolos = () => {
                               ))}
                             </div>
                           ) : (
-                            <div className="text-center py-6 text-muted-foreground text-sm border border-dashed rounded-xl">
+                            <div className="text-center py-10 text-muted-foreground text-sm border border-dashed rounded-xl">
+                              <Activity size={32} className="mx-auto mb-2 opacity-30" />
                               <p>Nenhum protocolo nesta categoria.</p>
                             </div>
                           )}
@@ -291,10 +292,15 @@ const Protocolos = () => {
                         p.descricao?.toLowerCase().includes(search.toLowerCase()))
                   )
               ) && (
-                <div className="text-center py-12 text-muted-foreground text-sm">
-                  <Activity size={36} className="mx-auto mb-3 opacity-30" />
-                  <p>Nenhum protocolo encontrado.</p>
-                </div>
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="text-center py-16 text-muted-foreground text-sm"
+                >
+                  <Search size={40} className="mx-auto mb-3 opacity-20" />
+                  <p className="font-medium">Nenhum protocolo encontrado</p>
+                  <p className="text-xs text-muted-foreground/60 mt-1">Tente outro termo de busca</p>
+                </motion.div>
               )}
 
             {/* Seção geral de exames */}
