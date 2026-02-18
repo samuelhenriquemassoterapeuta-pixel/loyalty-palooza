@@ -12,7 +12,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ArrowLeft, Ticket, GraduationCap, Plus, Trash2, ToggleLeft, ToggleRight, Stethoscope, BookOpen, FileText, Search, Clock, CheckCircle2, Edit3 } from "lucide-react";
+import { ArrowLeft, Ticket, GraduationCap, Plus, Trash2, ToggleLeft, ToggleRight, Stethoscope, BookOpen, FileText, Search, Clock, CheckCircle2, Edit3, Palette } from "lucide-react";
 import { toast } from "sonner";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -98,10 +98,11 @@ const TerapeutaDashboard = () => {
         </div>
 
         <Tabs defaultValue="cupons" className="w-full">
-          <TabsList className="w-full grid grid-cols-3">
-            <TabsTrigger value="cupons" className="gap-2"><Ticket className="h-4 w-4" /> Cupons</TabsTrigger>
-            <TabsTrigger value="anamnese" className="gap-2"><FileText className="h-4 w-4" /> Anamnese</TabsTrigger>
-            <TabsTrigger value="cursos" className="gap-2"><GraduationCap className="h-4 w-4" /> Cursos</TabsTrigger>
+          <TabsList className="w-full grid grid-cols-4">
+            <TabsTrigger value="cupons" className="gap-1 text-xs"><Ticket className="h-4 w-4" /> Cupons</TabsTrigger>
+            <TabsTrigger value="anamnese" className="gap-1 text-xs"><FileText className="h-4 w-4" /> Anamnese</TabsTrigger>
+            <TabsTrigger value="materiais" className="gap-1 text-xs"><Palette className="h-4 w-4" /> Materiais</TabsTrigger>
+            <TabsTrigger value="cursos" className="gap-1 text-xs"><GraduationCap className="h-4 w-4" /> Cursos</TabsTrigger>
           </TabsList>
 
           {/* CUPONS TAB */}
@@ -248,6 +249,26 @@ const TerapeutaDashboard = () => {
           {/* ANAMNESE TAB */}
           <TabsContent value="anamnese" className="space-y-4 mt-4">
             <TerapeutaAnamneseSection terapeutaId={terapeuta?.id} />
+          </TabsContent>
+
+          {/* MATERIAIS TAB */}
+          <TabsContent value="materiais" className="space-y-4 mt-4">
+            <h2 className="text-lg font-semibold text-foreground">Materiais Gráficos</h2>
+            <p className="text-sm text-muted-foreground">
+              Acesse materiais profissionais para divulgação da clínica.
+            </p>
+            <Card className="cursor-pointer hover:shadow-md transition-shadow" onClick={() => navigate("/materiais")}>
+              <CardContent className="py-5 flex items-center gap-4">
+                <div className="p-3 rounded-xl bg-primary/10">
+                  <Palette className="h-6 w-6 text-primary" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-semibold text-foreground">Editor de Materiais</h3>
+                  <p className="text-xs text-muted-foreground">Folders, cartões, catálogos e mais</p>
+                </div>
+                <ArrowLeft className="h-4 w-4 text-muted-foreground rotate-180" />
+              </CardContent>
+            </Card>
           </TabsContent>
 
           {/* CURSOS TAB */}
