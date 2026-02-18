@@ -11,6 +11,7 @@ import {
 import WellnessAchievements from "@/features/bem-estar/components/WellnessAchievements";
 import WeeklyComparison from "@/features/bem-estar/components/WeeklyComparison";
 import WellnessInsight from "@/features/bem-estar/components/WellnessInsight";
+import WellnessShareCard from "@/features/bem-estar/components/WellnessShareCard";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 14 },
@@ -74,6 +75,21 @@ const BemEstarHub = () => {
         stress: avg(data.map(d => d.estresse).filter(Boolean) as number[]),
         agua: avg(data.map(d => d.agua_litros).filter(Boolean) as number[]),
       };
+    },
+  });
+
+  const { data: userBadges = [] } = useQuery({
+    queryKey: ["wellness-badges-hub", user?.id],
+    enabled: !!user,
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("wellness_conquistas_usuario")
+        .select("conquista_id, wellness_conquistas(icone, titulo)")
+        .eq("user_id", user!.id);
+      return (data || []).map((d: any) => ({
+        icone: d.wellness_conquistas?.icone || "🏆",
+        titulo: d.wellness_conquistas?.titulo || "",
+      }));
     },
   });
 
@@ -179,6 +195,13 @@ const BemEstarHub = () => {
                   </p>
                 </div>
                 {streakData.streak_atual >= 7 && <Trophy size={20} className="text-highlight" />}
+                <WellnessShareCard
+                  streakAtual={streakData.streak_atual}
+                  melhorStreak={streakData.melhor_streak}
+                  totalCheckins={streakData.total_checkins}
+                  conquistas={userBadges}
+                  weekStats={weekStats ? { humor: weekStats.humor, energia: weekStats.energia, sono: weekStats.sono, agua: weekStats.agua } : undefined}
+                />
               </div>
             </motion.div>
           )}
