@@ -291,7 +291,7 @@ export default function Loja() {
 
           <motion.div variants={fadeUp}>
             <Tabs value={activeTab} onValueChange={setActiveTab}>
-              <TabsList className="grid w-full grid-cols-2">
+              <TabsList className="grid w-full grid-cols-2 h-11">
                 <TabsTrigger value="loja">Produtos</TabsTrigger>
                 <TabsTrigger value="pedidos">Meus Pedidos</TabsTrigger>
               </TabsList>

@@ -90,7 +90,7 @@ const TerapeutaDashboard = () => {
 
   return (
     <AppLayout>
-      <div className="p-4 md:p-6 space-y-6 max-w-4xl mx-auto pb-32">
+      <div className="p-4 md:p-6 space-y-6 max-w-4xl mx-auto pb-32 gradient-hero">
         {/* Header */}
         <div className="flex items-center gap-3">
           <Button variant="ghost" size="icon" onClick={() => navigate(-1)}>
@@ -106,7 +106,7 @@ const TerapeutaDashboard = () => {
         </div>
 
         <Tabs defaultValue="agenda" className="w-full">
-          <TabsList className="w-full grid grid-cols-3 sm:grid-cols-6">
+          <TabsList className="w-full grid grid-cols-3 sm:grid-cols-6 h-11">
             <TabsTrigger value="agenda" className="gap-1 text-xs"><CalendarDays className="h-4 w-4" /> <span className="hidden sm:inline">Agenda</span><span className="sm:hidden">Agenda</span></TabsTrigger>
             <TabsTrigger value="pacientes" className="gap-1 text-xs"><Users className="h-4 w-4" /> <span>Pacientes</span></TabsTrigger>
             <TabsTrigger value="cupons" className="gap-1 text-xs"><Ticket className="h-4 w-4" /> <span>Cupons</span></TabsTrigger>

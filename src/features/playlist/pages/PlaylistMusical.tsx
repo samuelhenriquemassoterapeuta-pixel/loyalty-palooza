@@ -144,7 +144,7 @@ export default function PlaylistMusical() {
 
   return (
     <AppLayout>
-      <div className="min-h-screen bg-background pb-32 lg:pb-8">
+      <div className="min-h-screen bg-background gradient-hero pb-32 lg:pb-8">
         {/* Header */}
         <div className="relative overflow-hidden bg-gradient-to-br from-primary/10 via-accent/5 to-highlight/10 border-b border-border px-4 py-6 safe-top">
           <div className="absolute -top-20 -right-20 w-40 h-40 bg-accent/20 rounded-full blur-3xl" />
