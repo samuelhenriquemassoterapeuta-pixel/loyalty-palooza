@@ -30,6 +30,7 @@ import WellnessSleepWidget from "@/features/bem-estar/components/WellnessSleepWi
 import WellnessStressWidget from "@/features/bem-estar/components/WellnessStressWidget";
 import WellnessMoodWidget from "@/features/bem-estar/components/WellnessMoodWidget";
 import WellnessEnergyWidget from "@/features/bem-estar/components/WellnessEnergyWidget";
+import WellnessDailyTip from "@/features/bem-estar/components/WellnessDailyTip";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 14 },
@@ -250,6 +251,9 @@ const BemEstarHub = () => {
           {streakData && streakData.streak_atual > 0 && (
             <WellnessStreakMilestones streakAtual={streakData.streak_atual} />
           )}
+
+          {/* Daily Tip */}
+          <WellnessDailyTip />
 
           {/* AI Insight */}
           <WellnessInsight />
