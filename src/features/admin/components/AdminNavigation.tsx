@@ -139,9 +139,9 @@ interface AdminNavigationProps {
 
 export const AdminNavigation = ({ activeTab, onTabChange }: AdminNavigationProps) => {
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(() => {
-    // Auto-expand the group containing the active tab
+    // Only expand the group containing the active tab
     const activeGroup = adminNavGroups.find(g => g.items.some(i => i.id === activeTab));
-    return new Set(activeGroup ? [activeGroup.id] : ["visao-geral"]);
+    return new Set(activeGroup ? [activeGroup.id] : []);
   });
   const [search, setSearch] = useState("");
 
@@ -176,7 +176,7 @@ export const AdminNavigation = ({ activeTab, onTabChange }: AdminNavigationProps
         />
       </div>
 
-      <ScrollArea className="max-h-[60vh]">
+      <ScrollArea className="max-h-[75vh] lg:max-h-[80vh]">
         <div className="space-y-1">
           {filteredGroups.map((group) => {
             const isExpanded = expandedGroups.has(group.id) || search.trim().length > 0;
