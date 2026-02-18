@@ -5654,6 +5654,39 @@ export type Database = {
         }
         Relationships: []
       }
+      wellness_streaks: {
+        Row: {
+          bonus_total_creditado: number
+          id: string
+          melhor_streak: number
+          streak_atual: number
+          total_checkins: number
+          ultimo_checkin: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          bonus_total_creditado?: number
+          id?: string
+          melhor_streak?: number
+          streak_atual?: number
+          total_checkins?: number
+          ultimo_checkin?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          bonus_total_creditado?: number
+          id?: string
+          melhor_streak?: number
+          streak_atual?: number
+          total_checkins?: number
+          ultimo_checkin?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       whatsapp_conversas: {
         Row: {
           created_at: string
