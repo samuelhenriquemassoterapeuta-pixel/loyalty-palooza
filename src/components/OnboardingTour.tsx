@@ -1,17 +1,14 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
-  X, 
-  ChevronRight, 
-  ChevronLeft,
-  Calendar,
-  ShoppingBag,
-  Gift,
-  Wallet,
-  Check
+  X, ChevronRight, ChevronLeft, Calendar, ShoppingBag, 
+  Gift, Wallet, Check, User
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
 import simboloVerde from "@/assets/simbolo-verde.png";
 
 interface OnboardingStep {
@@ -22,6 +19,7 @@ interface OnboardingStep {
   description: string;
   color: string;
   tip?: string;
+  isForm?: boolean;
 }
 
 const steps: OnboardingStep[] = [
@@ -34,6 +32,14 @@ const steps: OnboardingStep[] = [
   },
   {
     id: 2,
+    icon: User,
+    title: "Complete seu perfil",
+    description: "Nos conte um pouco sobre você para personalizar sua experiência.",
+    color: "from-primary to-accent",
+    isForm: true,
+  },
+  {
+    id: 3,
     icon: Calendar,
     title: "Agende suas sessões",
     description: "Marque massagens e terapias de forma rápida. Escolha o serviço, data e horário em poucos toques.",
@@ -41,7 +47,7 @@ const steps: OnboardingStep[] = [
     tip: "Dica: Você pode reagendar com até 24h de antecedência"
   },
   {
-    id: 3,
+    id: 4,
     icon: ShoppingBag,
     title: "Loja exclusiva",
     description: "Produtos selecionados para seu bem-estar. Compre e retire na clínica ou receba em casa.",
@@ -49,15 +55,15 @@ const steps: OnboardingStep[] = [
     tip: "Dica: Use seu cashback para economizar nas compras"
   },
   {
-    id: 4,
+    id: 5,
     icon: Wallet,
     title: "Cashback em tudo",
     description: "Ganhe dinheiro de volta em cada compra e agendamento. Seu saldo fica disponível automaticamente.",
     color: "from-highlight to-primary",
-    tip: "Dica: O cashback nunca expira!"
+    tip: "Dica: O cashback é válido por 90 dias — use antes de expirar!"
   },
   {
-    id: 5,
+    id: 6,
     icon: Gift,
     title: "Indique e ganhe",
     description: "Compartilhe seu código com amigos e ganhe R$ 10 por cada indicação. Quanto mais amigos, mais você ganha!",
@@ -73,9 +79,27 @@ interface OnboardingTourProps {
 
 export const OnboardingTour = ({ onComplete, isOpen }: OnboardingTourProps) => {
   const [currentStep, setCurrentStep] = useState(0);
-  const navigate = useNavigate();
+  const [nome, setNome] = useState("");
+  const [telefone, setTelefone] = useState("");
+  const [saving, setSaving] = useState(false);
+  const { user } = useAuth();
 
-  const handleNext = () => {
+  const handleNext = async () => {
+    // If we're on the form step, save the profile
+    if (steps[currentStep].isForm && nome.trim()) {
+      setSaving(true);
+      try {
+        await supabase
+          .from("profiles")
+          .update({ 
+            nome: nome.trim(), 
+            telefone: telefone.trim() || null 
+          })
+          .eq("id", user?.id);
+      } catch {}
+      setSaving(false);
+    }
+
     if (currentStep < steps.length - 1) {
       setCurrentStep(currentStep + 1);
     } else {
@@ -84,18 +108,18 @@ export const OnboardingTour = ({ onComplete, isOpen }: OnboardingTourProps) => {
   };
 
   const handlePrev = () => {
-    if (currentStep > 0) {
-      setCurrentStep(currentStep - 1);
-    }
+    if (currentStep > 0) setCurrentStep(currentStep - 1);
   };
 
-  const handleComplete = () => {
+  const handleComplete = async () => {
     localStorage.setItem("resinkra_onboarding_completed", "true");
+    if (user) {
+      await supabase
+        .from("profiles")
+        .update({ onboarding_completo: true })
+        .eq("id", user.id);
+    }
     onComplete();
-  };
-
-  const handleSkip = () => {
-    handleComplete();
   };
 
   if (!isOpen) return null;
@@ -104,6 +128,7 @@ export const OnboardingTour = ({ onComplete, isOpen }: OnboardingTourProps) => {
   const Icon = step.icon;
   const StepImage = step.image;
   const isLastStep = currentStep === steps.length - 1;
+  const isFormStep = step.isForm;
 
   return (
     <AnimatePresence>
@@ -141,15 +166,13 @@ export const OnboardingTour = ({ onComplete, isOpen }: OnboardingTourProps) => {
               ) : null}
             </motion.div>
 
-            {/* Skip button */}
             <button
-              onClick={handleSkip}
+              onClick={handleComplete}
               className="absolute top-4 right-4 p-2 rounded-full bg-white/20 hover:bg-white/30 transition-colors"
             >
               <X size={20} className="text-white" />
             </button>
 
-            {/* Step indicator */}
             <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
               {steps.map((_, index) => (
                 <motion.div
@@ -186,6 +209,36 @@ export const OnboardingTour = ({ onComplete, isOpen }: OnboardingTourProps) => {
               {step.description}
             </motion.p>
 
+            {/* Profile form */}
+            {isFormStep && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.25 }}
+                className="space-y-3 mb-4"
+              >
+                <div className="space-y-1.5">
+                  <Label htmlFor="onb-nome" className="text-sm">Seu nome</Label>
+                  <Input
+                    id="onb-nome"
+                    placeholder="Como podemos te chamar?"
+                    value={nome}
+                    onChange={(e) => setNome(e.target.value)}
+                    autoFocus
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <Label htmlFor="onb-tel" className="text-sm">WhatsApp <span className="text-muted-foreground">(opcional)</span></Label>
+                  <Input
+                    id="onb-tel"
+                    placeholder="(11) 99999-9999"
+                    value={telefone}
+                    onChange={(e) => setTelefone(e.target.value)}
+                  />
+                </div>
+              </motion.div>
+            )}
+
             {step.tip && (
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
@@ -197,14 +250,9 @@ export const OnboardingTour = ({ onComplete, isOpen }: OnboardingTourProps) => {
               </motion.div>
             )}
 
-            {/* Navigation buttons */}
             <div className="flex gap-3 mt-6">
               {currentStep > 0 && (
-                <Button
-                  variant="outline"
-                  onClick={handlePrev}
-                  className="flex-1 gap-2"
-                >
+                <Button variant="outline" onClick={handlePrev} className="flex-1 gap-2">
                   <ChevronLeft size={18} />
                   Voltar
                 </Button>
@@ -212,6 +260,7 @@ export const OnboardingTour = ({ onComplete, isOpen }: OnboardingTourProps) => {
               
               <Button
                 onClick={handleNext}
+                disabled={saving || (isFormStep && !nome.trim())}
                 className={`flex-1 gap-2 ${currentStep === 0 ? 'w-full' : ''}`}
               >
                 {isLastStep ? (
@@ -221,8 +270,8 @@ export const OnboardingTour = ({ onComplete, isOpen }: OnboardingTourProps) => {
                   </>
                 ) : (
                   <>
-                    Próximo
-                    <ChevronRight size={18} />
+                    {saving ? "Salvando..." : "Próximo"}
+                    {!saving && <ChevronRight size={18} />}
                   </>
                 )}
               </Button>
@@ -237,17 +286,35 @@ export const OnboardingTour = ({ onComplete, isOpen }: OnboardingTourProps) => {
 // Hook para controlar o onboarding
 export const useOnboarding = () => {
   const [showOnboarding, setShowOnboarding] = useState(false);
+  const { user } = useAuth();
 
   useEffect(() => {
-    const completed = localStorage.getItem("resinkra_onboarding_completed");
-    if (!completed) {
-      // Pequeno delay para mostrar após o app carregar
-      const timer = setTimeout(() => {
-        setShowOnboarding(true);
-      }, 1000);
-      return () => clearTimeout(timer);
+    if (!user) return;
+
+    const localCompleted = localStorage.getItem("resinkra_onboarding_completed");
+    if (localCompleted) {
+      setShowOnboarding(false);
+      return;
     }
-  }, []);
+
+    // Check database
+    const checkOnboarding = async () => {
+      const { data } = await supabase
+        .from("profiles")
+        .select("onboarding_completo")
+        .eq("id", user.id)
+        .maybeSingle();
+
+      if (data?.onboarding_completo) {
+        localStorage.setItem("resinkra_onboarding_completed", "true");
+        setShowOnboarding(false);
+      } else {
+        setTimeout(() => setShowOnboarding(true), 1000);
+      }
+    };
+
+    checkOnboarding();
+  }, [user]);
 
   const startOnboarding = () => setShowOnboarding(true);
   const completeOnboarding = () => setShowOnboarding(false);
@@ -256,10 +323,5 @@ export const useOnboarding = () => {
     setShowOnboarding(true);
   };
 
-  return {
-    showOnboarding,
-    startOnboarding,
-    completeOnboarding,
-    resetOnboarding
-  };
+  return { showOnboarding, startOnboarding, completeOnboarding, resetOnboarding };
 };
