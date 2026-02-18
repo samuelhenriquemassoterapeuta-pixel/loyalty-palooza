@@ -32,6 +32,7 @@ import WellnessMoodWidget from "@/features/bem-estar/components/WellnessMoodWidg
 import WellnessEnergyWidget from "@/features/bem-estar/components/WellnessEnergyWidget";
 import WellnessDailyTip from "@/features/bem-estar/components/WellnessDailyTip";
 import WellnessQuickNote from "@/features/bem-estar/components/WellnessQuickNote";
+import WellnessDailyProgress from "@/features/bem-estar/components/WellnessDailyProgress";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 14 },
@@ -218,6 +219,9 @@ const BemEstarHub = () => {
 
           {/* Quick Actions */}
           <WellnessQuickActions />
+
+          {/* Daily Progress */}
+          <WellnessDailyProgress />
 
           {/* Streak Banner */}
           {streakData && streakData.streak_atual > 0 && (
