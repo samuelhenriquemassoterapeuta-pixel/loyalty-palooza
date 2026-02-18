@@ -93,6 +93,10 @@ const ChatAssistente = lazy(() => import("@/pages/ChatAssistente"));
 const ChatWhatsApp = lazy(() => import("@/pages/ChatWhatsApp"));
 const NotFound = lazy(() => import("@/pages/NotFound"));
 
+// Academy
+const AcademyLanding = lazy(() => import("@/features/academy/pages/AcademyLanding"));
+const CalculadoraDiluicao = lazy(() => import("@/features/academy/pages/CalculadoraDiluicao"));
+
 // Admin Pages
 const GoogleAdsDashboard = lazy(() => import("@/features/admin/pages/GoogleAdsDashboard"));
 
@@ -146,6 +150,8 @@ export const AnimatedRoutes = () => {
         <Route path="/qrcode" element={<LazyPage><QRCodePrint /></LazyPage>} />
         <Route path="/" element={<PageTransition><HomeRoute /></PageTransition>} />
         <Route path="/site" element={<PageTransition><Landing /></PageTransition>} />
+        <Route path="/academy" element={<LazyPage><AcademyLanding /></LazyPage>} />
+        <Route path="/calculadora-diluicao" element={<ProtectedRoute allowRoles={["admin", "terapeuta"]}><LazyPage><CalculadoraDiluicao /></LazyPage></ProtectedRoute>} />
         <Route path="/servico/:id" element={<ProtectedRoute><LazyPage><ServicoDetalhe /></LazyPage></ProtectedRoute>} />
         <Route path="/agendamento" element={<ProtectedRoute><LazyPage><Agendamento /></LazyPage></ProtectedRoute>} />
         <Route path="/pacotes" element={<ProtectedRoute><LazyPage><Pacotes /></LazyPage></ProtectedRoute>} />
