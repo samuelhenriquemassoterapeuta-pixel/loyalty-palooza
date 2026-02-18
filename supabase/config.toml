@@ -89,3 +89,6 @@ verify_jwt = false
 
 [functions.reflexao-diario]
 verify_jwt = false
+
+[functions.wellness-insight]
+verify_jwt = false

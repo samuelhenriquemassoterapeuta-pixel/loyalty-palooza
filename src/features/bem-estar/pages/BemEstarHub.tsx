@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import WellnessAchievements from "@/features/bem-estar/components/WellnessAchievements";
 import WeeklyComparison from "@/features/bem-estar/components/WeeklyComparison";
+import WellnessInsight from "@/features/bem-estar/components/WellnessInsight";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 14 },
@@ -181,6 +182,9 @@ const BemEstarHub = () => {
               </div>
             </motion.div>
           )}
+
+          {/* AI Insight */}
+          <WellnessInsight />
 
           {/* Today's status */}
           {todayCheckin ? (
