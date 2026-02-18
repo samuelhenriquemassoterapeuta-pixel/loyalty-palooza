@@ -77,10 +77,26 @@ export const useWellnessTracker = () => {
         if (error) throw error;
       }
     },
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ["wellness-checkin-today"] });
       queryClient.invalidateQueries({ queryKey: ["wellness-checkins"] });
+      queryClient.invalidateQueries({ queryKey: ["wellness-streak"] });
+      queryClient.invalidateQueries({ queryKey: ["wellness-week-hub"] });
       toast.success("Check-in salvo! 💚");
+
+      // Auto-check conquistas in background
+      try {
+        const { data } = await supabase.functions.invoke("wellness-check-conquistas");
+        if (data?.unlocked?.length > 0) {
+          queryClient.invalidateQueries({ queryKey: ["wellness-conquistas-user"] });
+          queryClient.invalidateQueries({ queryKey: ["wellness-badges-hub"] });
+          data.unlocked.forEach((title: string) => {
+            toast.success(`🏆 Conquista desbloqueada: ${title}!`);
+          });
+        }
+      } catch {
+        // Silent fail - achievements check is non-critical
+      }
     },
     onError: (err: any) => {
       toast.error(err.message || "Erro ao salvar check-in");
