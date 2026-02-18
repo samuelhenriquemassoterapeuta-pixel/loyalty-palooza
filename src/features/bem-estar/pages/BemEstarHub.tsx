@@ -22,6 +22,7 @@ import WellnessDailyHabits from "@/features/bem-estar/components/WellnessDailyHa
 import WellnessGoalsWidget from "@/features/bem-estar/components/WellnessGoalsWidget";
 import WellnessStreakMilestones from "@/features/bem-estar/components/WellnessStreakMilestones";
 import WellnessQuickActions from "@/features/bem-estar/components/WellnessQuickActions";
+import WellnessWeeklySummary from "@/features/bem-estar/components/WellnessWeeklySummary";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 14 },
@@ -324,6 +325,9 @@ const BemEstarHub = () => {
 
           {/* Mood Trends Sparkline */}
           <WellnessMoodTrends />
+
+          {/* Weekly Summary */}
+          <WellnessWeeklySummary />
 
           {/* Check-in Calendar */}
           <WellnessCalendar />
