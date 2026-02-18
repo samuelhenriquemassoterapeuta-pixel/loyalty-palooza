@@ -93,6 +93,14 @@ const ChatAssistente = lazy(() => import("@/pages/ChatAssistente"));
 const ChatWhatsApp = lazy(() => import("@/pages/ChatWhatsApp"));
 const NotFound = lazy(() => import("@/pages/NotFound"));
 
+// Marketplace
+const Marketplace = lazy(() => import("@/features/marketplace/pages/Marketplace"));
+const MarketplacePerfil = lazy(() => import("@/features/marketplace/pages/MarketplacePerfil"));
+const MarketplaceCandidatura = lazy(() => import("@/features/marketplace/pages/MarketplaceCandidatura"));
+
+// Liga
+const LigaResinkra = lazy(() => import("@/features/liga/pages/LigaResinkra"));
+
 // Academy
 const AcademyLanding = lazy(() => import("@/features/academy/pages/AcademyLanding"));
 const CalculadoraDiluicao = lazy(() => import("@/features/academy/pages/CalculadoraDiluicao"));
@@ -233,6 +241,14 @@ export const AnimatedRoutes = () => {
         <Route path="/ofertas" element={<ProtectedRoute><LazyPage><Offers /></LazyPage></ProtectedRoute>} />
         <Route path="/chat" element={<ProtectedRoute><LazyPage><ChatAssistente /></LazyPage></ProtectedRoute>} />
         <Route path="/chat-whatsapp" element={<ProtectedRoute requireAdmin><LazyPage><ChatWhatsApp /></LazyPage></ProtectedRoute>} />
+
+        {/* Marketplace */}
+        <Route path="/marketplace" element={<LazyPage><Marketplace /></LazyPage>} />
+        <Route path="/marketplace/candidatura" element={<ProtectedRoute><LazyPage><MarketplaceCandidatura /></LazyPage></ProtectedRoute>} />
+        <Route path="/marketplace/:slug" element={<LazyPage><MarketplacePerfil /></LazyPage>} />
+
+        {/* Liga */}
+        <Route path="/liga" element={<ProtectedRoute><LazyPage><LigaResinkra /></LazyPage></ProtectedRoute>} />
 
         {/* Resinkra AI Routes — Admin Only */}
         <Route path="/resinkra-ai" element={<AdminRoute><LazyPage><ResinkraAIDashboard /></LazyPage></AdminRoute>} />

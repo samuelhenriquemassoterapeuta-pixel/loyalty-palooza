@@ -1,5 +1,6 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { Plus, CreditCard, Send } from "lucide-react";
+import { Plus, CreditCard, Send, QrCode, Trophy, ShoppingBag, Receipt, ArrowUpRight, ArrowDownLeft } from "lucide-react";
 import { AppLayout } from "@/components/AppLayout";
 import { AnimatedPageBackground } from "@/components/AnimatedPageBackground";
 import { Button } from "@/components/ui/button";
@@ -10,6 +11,8 @@ import { useNavigate } from "react-router-dom";
 import { WalletPageSkeleton } from "@/components/skeletons";
 import { formatResinks, RESINKS_SYMBOL } from "@/lib/resinks";
 import { ResinksCoin } from "@/components/ui/resinks-value";
+import QRCode from "react-qr-code";
+import { useAuth } from "@/contexts/AuthContext";
 
 const stagger = {
   hidden: { opacity: 0 },
@@ -30,8 +33,10 @@ const fadeUp = {
 
 const Wallet = () => {
   const navigate = useNavigate();
-  const { stats, loading } = useTransacoes();
+  const { user } = useAuth();
+  const { stats, transacoes, loading } = useTransacoes();
   const { profile } = useProfile();
+  const [showQR, setShowQR] = useState(false);
 
   const displayName = profile?.nome || "Usuário";
 
@@ -93,7 +98,28 @@ const Wallet = () => {
                     <Send size={18} className="mr-2" />
                     Transferir
                   </Button>
+                  <Button 
+                    variant="secondary" 
+                    className="flex-1 bg-primary-foreground/20 text-primary-foreground border-0 hover:bg-primary-foreground/30 rounded-xl"
+                    onClick={() => setShowQR(!showQR)}
+                  >
+                    <QrCode size={18} className="mr-2" />
+                    QR Code
+                  </Button>
                 </div>
+
+                {showQR && user && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    className="mt-4 bg-primary-foreground/10 rounded-xl p-4 flex flex-col items-center gap-2"
+                  >
+                    <div className="bg-white p-3 rounded-xl">
+                      <QRCode value={`resinkra://pay/${user.id}`} size={120} />
+                    </div>
+                    <p className="text-xs opacity-70">Mostre para receber pagamentos</p>
+                  </motion.div>
+                )}
               </div>
             </motion.div>
 
