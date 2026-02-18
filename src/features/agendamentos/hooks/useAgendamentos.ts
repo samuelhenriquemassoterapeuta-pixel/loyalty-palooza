@@ -63,12 +63,14 @@ export const useAgendamentos = () => {
       observacoes,
       terapeuta_id,
       servico_id,
+      playlist_id,
     }: {
       data_hora: Date;
       servico: string;
       observacoes?: string;
       terapeuta_id?: string;
       servico_id?: string;
+      playlist_id?: string;
     }) => {
       if (!user) throw new Error("Usuário não autenticado");
 
@@ -99,6 +101,7 @@ export const useAgendamentos = () => {
           observacoes,
           terapeuta_id,
           servico_id: servico_id || undefined,
+          playlist_id: playlist_id || undefined,
           status: "agendado",
         })
         .select()
@@ -128,7 +131,8 @@ export const useAgendamentos = () => {
     servico: string,
     observacoes?: string,
     terapeuta_id?: string,
-    servico_id?: string
+    servico_id?: string,
+    playlist_id?: string
   ) => {
     try {
       const data = await createMutation.mutateAsync({
@@ -137,6 +141,7 @@ export const useAgendamentos = () => {
         observacoes,
         terapeuta_id,
         servico_id,
+        playlist_id,
       });
       return { error: null, data };
     } catch (err: unknown) {
