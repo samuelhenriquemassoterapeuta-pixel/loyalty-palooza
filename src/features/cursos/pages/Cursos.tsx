@@ -207,10 +207,10 @@ export default function Cursos() {
 
           {/* Course count indicator */}
           <div className="flex items-center justify-between px-1">
-            <p className="text-xs text-muted-foreground font-medium">
+            <p className="text-[10px] text-muted-foreground font-medium uppercase tracking-wider">
               {sortedTabs.length} cursos disponíveis
             </p>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-[10px] text-muted-foreground opacity-60">
               ← deslize →
             </p>
           </div>
