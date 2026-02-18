@@ -45,6 +45,11 @@ import WellnessActivityHeatmap from "@/features/bem-estar/components/WellnessAct
 import WellnessConsistencyScore from "@/features/bem-estar/components/WellnessConsistencyScore";
 import WellnessPersonalRecords from "@/features/bem-estar/components/WellnessPersonalRecords";
 import WellnessCommunityCompare from "@/features/bem-estar/components/WellnessCommunityCompare";
+import WellnessMindfulness from "@/features/bem-estar/components/WellnessMindfulness";
+import WellnessGratitude from "@/features/bem-estar/components/WellnessGratitude";
+import WellnessReportCard from "@/features/bem-estar/components/WellnessReportCard";
+import WellnessStreakForecast from "@/features/bem-estar/components/WellnessStreakForecast";
+import WellnessLevelXP from "@/features/bem-estar/components/WellnessLevelXP";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 14 },
@@ -401,6 +406,21 @@ const BemEstarHub = () => {
 
           {/* Community Comparison */}
           <WellnessCommunityCompare />
+
+          {/* Mindfulness Timer */}
+          <WellnessMindfulness />
+
+          {/* Gratitude Journal */}
+          <WellnessGratitude />
+
+          {/* Weekly Report Card */}
+          <WellnessReportCard />
+
+          {/* Streak Forecast */}
+          <WellnessStreakForecast />
+
+          {/* Level XP */}
+          <WellnessLevelXP />
 
           {/* Hydration Quick Tracker */}
           <WellnessHydrationWidget />
