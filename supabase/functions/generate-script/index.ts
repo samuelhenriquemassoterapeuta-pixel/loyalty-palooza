@@ -357,6 +357,50 @@ Deno.serve(async (req) => {
 
     if (insertError) throw insertError;
 
+    // === AUTO-AGENDAR NO CALENDÁRIO ===
+    try {
+      const bestHours: Record<string, number> = {
+        reels: 19, carousel: 10, stories: 12, live: 20, post: 18,
+      };
+      const hour = bestHours[scriptReq.content_type] || 19;
+      
+      // Agendar para o próximo dia útil (seg-sex)
+      const now = new Date();
+      let scheduled = new Date(now);
+      scheduled.setDate(scheduled.getDate() + 1);
+      // Pular fim de semana
+      while (scheduled.getDay() === 0 || scheduled.getDay() === 6) {
+        scheduled.setDate(scheduled.getDate() + 1);
+      }
+      const scheduledDate = scheduled.toISOString().split("T")[0];
+      const scheduledTime = `${String(hour).padStart(2, "0")}:00`;
+
+      const contentTypeLabels: Record<string, string> = {
+        reels: "📹 Reels", carousel: "📸 Carrossel", stories: "📖 Stories",
+        live: "🔴 Live", post: "📝 Post",
+      };
+      const label = contentTypeLabels[scriptReq.content_type] || "Conteúdo";
+
+      await supabase.from("calendar_events").insert({
+        user_id: userId,
+        title: `${label}: ${scriptReq.topic.substring(0, 60)}`,
+        description: parsed.hook || scriptReq.topic,
+        scheduled_date: scheduledDate,
+        scheduled_time: scheduledTime,
+        content_type: scriptReq.content_type,
+        script_id: inserted.id,
+        status: "scheduled",
+        color: scriptReq.content_type === "reels" ? "#8B5CF6" :
+               scriptReq.content_type === "carousel" ? "#3B82F6" :
+               scriptReq.content_type === "stories" ? "#F59E0B" :
+               scriptReq.content_type === "live" ? "#EF4444" : "#10B981",
+      });
+      console.log("Auto-agendado no calendário:", scheduledDate, scheduledTime);
+    } catch (calErr) {
+      console.error("Erro ao auto-agendar (não-crítico):", calErr);
+      // Não falha a resposta se o calendário der erro
+    }
+
     return jsonResponse({ script_id: inserted.id, success: true });
   } catch (e) {
     console.error("generate-script error:", e);
