@@ -9,32 +9,28 @@ import {
   Heart, Activity, Brain, BookHeart, MessageCircle,
   BarChart3, TrendingUp, ArrowRight, Sparkles, Moon, Droplets, Flame, Trophy, LineChart, FileText
 } from "lucide-react";
-import WellnessAchievements from "@/features/bem-estar/components/WellnessAchievements";
-import WeeklyComparison from "@/features/bem-estar/components/WeeklyComparison";
-import WellnessInsight from "@/features/bem-estar/components/WellnessInsight";
-import WellnessShareCard from "@/features/bem-estar/components/WellnessShareCard";
-import WellnessCorrelations from "@/features/bem-estar/components/WellnessCorrelations";
+import { WellnessLazySection, WellnessCollapsibleGroup } from "@/features/bem-estar/components/WellnessLazySection";
+
+// === ABOVE-THE-FOLD (always loaded) ===
 import WellnessOnboarding from "@/features/bem-estar/components/WellnessOnboarding";
-import WellnessScore from "@/features/bem-estar/components/WellnessScore";
-import WellnessCalendar from "@/features/bem-estar/components/WellnessCalendar";
-import WellnessMoodTrends from "@/features/bem-estar/components/WellnessMoodTrends";
-import WellnessDailyHabits from "@/features/bem-estar/components/WellnessDailyHabits";
-import WellnessGoalsWidget from "@/features/bem-estar/components/WellnessGoalsWidget";
-import WellnessStreakMilestones from "@/features/bem-estar/components/WellnessStreakMilestones";
 import WellnessQuickActions from "@/features/bem-estar/components/WellnessQuickActions";
-import WellnessWeeklySummary from "@/features/bem-estar/components/WellnessWeeklySummary";
-import WellnessBreathing from "@/features/bem-estar/components/WellnessBreathing";
-import WellnessHydrationWidget from "@/features/bem-estar/components/WellnessHydrationWidget";
-import WellnessExerciseWidget from "@/features/bem-estar/components/WellnessExerciseWidget";
-import WellnessSleepWidget from "@/features/bem-estar/components/WellnessSleepWidget";
-import WellnessStressWidget from "@/features/bem-estar/components/WellnessStressWidget";
-import WellnessMoodWidget from "@/features/bem-estar/components/WellnessMoodWidget";
-import WellnessEnergyWidget from "@/features/bem-estar/components/WellnessEnergyWidget";
-import WellnessDailyTip from "@/features/bem-estar/components/WellnessDailyTip";
-import WellnessQuickNote from "@/features/bem-estar/components/WellnessQuickNote";
 import WellnessDailyProgress from "@/features/bem-estar/components/WellnessDailyProgress";
+import WellnessShareCard from "@/features/bem-estar/components/WellnessShareCard";
+import WellnessStreakMilestones from "@/features/bem-estar/components/WellnessStreakMilestones";
+import WellnessScore from "@/features/bem-estar/components/WellnessScore";
+
+// === DEFERRED (lazy-loaded on scroll) ===
+import WellnessDailyTip from "@/features/bem-estar/components/WellnessDailyTip";
 import WellnessWeeklyChallenge from "@/features/bem-estar/components/WellnessWeeklyChallenge";
 import WellnessMotivation from "@/features/bem-estar/components/WellnessMotivation";
+import WellnessInsight from "@/features/bem-estar/components/WellnessInsight";
+import WellnessMoodWidget from "@/features/bem-estar/components/WellnessMoodWidget";
+import WellnessEnergyWidget from "@/features/bem-estar/components/WellnessEnergyWidget";
+import WellnessQuickNote from "@/features/bem-estar/components/WellnessQuickNote";
+import WellnessDailyHabits from "@/features/bem-estar/components/WellnessDailyHabits";
+import WellnessGoalsWidget from "@/features/bem-estar/components/WellnessGoalsWidget";
+import WellnessMoodTrends from "@/features/bem-estar/components/WellnessMoodTrends";
+import WellnessWeeklySummary from "@/features/bem-estar/components/WellnessWeeklySummary";
 import WellnessMonthlySummary from "@/features/bem-estar/components/WellnessMonthlySummary";
 import WellnessBodyMap from "@/features/bem-estar/components/WellnessBodyMap";
 import WellnessNutritionLog from "@/features/bem-estar/components/WellnessNutritionLog";
@@ -50,6 +46,15 @@ import WellnessGratitude from "@/features/bem-estar/components/WellnessGratitude
 import WellnessReportCard from "@/features/bem-estar/components/WellnessReportCard";
 import WellnessStreakForecast from "@/features/bem-estar/components/WellnessStreakForecast";
 import WellnessLevelXP from "@/features/bem-estar/components/WellnessLevelXP";
+import WellnessHydrationWidget from "@/features/bem-estar/components/WellnessHydrationWidget";
+import WellnessExerciseWidget from "@/features/bem-estar/components/WellnessExerciseWidget";
+import WellnessSleepWidget from "@/features/bem-estar/components/WellnessSleepWidget";
+import WellnessStressWidget from "@/features/bem-estar/components/WellnessStressWidget";
+import WellnessBreathing from "@/features/bem-estar/components/WellnessBreathing";
+import WellnessCalendar from "@/features/bem-estar/components/WellnessCalendar";
+import WeeklyComparison from "@/features/bem-estar/components/WeeklyComparison";
+import WellnessCorrelations from "@/features/bem-estar/components/WellnessCorrelations";
+import WellnessAchievements from "@/features/bem-estar/components/WellnessAchievements";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 14 },
@@ -59,22 +64,28 @@ const stagger = {
   hidden: { opacity: 0 },
   show: { opacity: 1, transition: { staggerChildren: 0.07 } },
 };
-
 const moodEmojis = ["", "😢", "😕", "😐", "😊", "😄"];
+
+const features = [
+  { icon: Activity, label: "Tracker Diário", desc: "Registre humor, sono, energia e mais", path: "/wellness-tracker", color: "bg-primary/15", iconColor: "text-primary" },
+  { icon: BarChart3, label: "Análise de Progresso", desc: "Score de saúde e tendências com IA", path: "/analise-progresso", color: "bg-accent/15", iconColor: "text-accent" },
+  { icon: BookHeart, label: "Diário de Humor", desc: "Journaling com reflexão de IA", path: "/diario-humor", color: "bg-highlight/15", iconColor: "text-highlight" },
+  { icon: Brain, label: "Plano Inteligente", desc: "Plano semanal personalizado com IA", path: "/bem-estar", color: "bg-primary/15", iconColor: "text-primary" },
+  { icon: MessageCircle, label: "Aria — Assistente IA", desc: "Converse sobre saúde e bem-estar", path: "/assistente-saude", color: "bg-accent/15", iconColor: "text-accent" },
+  { icon: TrendingUp, label: "Minhas Metas", desc: "Defina objetivos diários de bem-estar", path: "/metas-wellness", color: "bg-highlight/15", iconColor: "text-highlight" },
+  { icon: LineChart, label: "Evolução Visual", desc: "Gráficos de tendências ao longo do tempo", path: "/evolucao-wellness", color: "bg-primary/15", iconColor: "text-primary" },
+  { icon: FileText, label: "Relatório PDF", desc: "Exporte seus dados para compartilhar", path: "/relatorio-wellness", color: "bg-accent/15", iconColor: "text-accent" },
+];
 
 const BemEstarHub = () => {
   const { user } = useAuth();
-  const [showOnboarding, setShowOnboarding] = useState(false);
   const [onboardingDismissed, setOnboardingDismissed] = useState(false);
+
   const { data: streakData } = useQuery({
     queryKey: ["wellness-streak", user?.id],
     enabled: !!user,
     queryFn: async () => {
-      const { data } = await supabase
-        .from("wellness_streaks")
-        .select("*")
-        .eq("user_id", user!.id)
-        .maybeSingle();
+      const { data } = await supabase.from("wellness_streaks").select("*").eq("user_id", user!.id).maybeSingle();
       return data;
     },
   });
@@ -84,12 +95,7 @@ const BemEstarHub = () => {
     enabled: !!user,
     queryFn: async () => {
       const today = new Date().toISOString().split("T")[0];
-      const { data } = await supabase
-        .from("wellness_checkins")
-        .select("*")
-        .eq("user_id", user!.id)
-        .eq("data", today)
-        .maybeSingle();
+      const { data } = await supabase.from("wellness_checkins").select("*").eq("user_id", user!.id).eq("data", today).maybeSingle();
       return data;
     },
   });
@@ -125,10 +131,7 @@ const BemEstarHub = () => {
         .from("wellness_conquistas_usuario")
         .select("conquista_id, wellness_conquistas(icone, titulo)")
         .eq("user_id", user!.id);
-      return (data || []).map((d: any) => ({
-        icone: d.wellness_conquistas?.icone || "🏆",
-        titulo: d.wellness_conquistas?.titulo || "",
-      }));
+      return (data || []).map((d: any) => ({ icone: d.wellness_conquistas?.icone || "🏆", titulo: d.wellness_conquistas?.titulo || "" }));
     },
   });
 
@@ -136,92 +139,20 @@ const BemEstarHub = () => {
     queryKey: ["wellness-has-metas", user?.id],
     enabled: !!user,
     queryFn: async () => {
-      const { data } = await supabase
-        .from("wellness_metas")
-        .select("id")
-        .eq("user_id", user!.id)
-        .maybeSingle();
+      const { data } = await supabase.from("wellness_metas").select("id").eq("user_id", user!.id).maybeSingle();
       return !!data;
     },
   });
 
   const isNewUser = hasMetas === false && !streakData && !onboardingDismissed;
 
-  const features = [
-    {
-      icon: Activity,
-      label: "Tracker Diário",
-      desc: "Registre humor, sono, energia e mais",
-      path: "/wellness-tracker",
-      color: "bg-primary/15",
-      iconColor: "text-primary",
-    },
-    {
-      icon: BarChart3,
-      label: "Análise de Progresso",
-      desc: "Score de saúde e tendências com IA",
-      path: "/analise-progresso",
-      color: "bg-accent/15",
-      iconColor: "text-accent",
-    },
-    {
-      icon: BookHeart,
-      label: "Diário de Humor",
-      desc: "Journaling com reflexão de IA",
-      path: "/diario-humor",
-      color: "bg-highlight/15",
-      iconColor: "text-highlight",
-    },
-    {
-      icon: Brain,
-      label: "Plano Inteligente",
-      desc: "Plano semanal personalizado com IA",
-      path: "/bem-estar",
-      color: "bg-primary/15",
-      iconColor: "text-primary",
-    },
-    {
-      icon: MessageCircle,
-      label: "Aria — Assistente IA",
-      desc: "Converse sobre saúde e bem-estar",
-      path: "/assistente-saude",
-      color: "bg-accent/15",
-      iconColor: "text-accent",
-    },
-    {
-      icon: TrendingUp,
-      label: "Minhas Metas",
-      desc: "Defina objetivos diários de bem-estar",
-      path: "/metas-wellness",
-      color: "bg-highlight/15",
-      iconColor: "text-highlight",
-    },
-    {
-      icon: LineChart,
-      label: "Evolução Visual",
-      desc: "Gráficos de tendências ao longo do tempo",
-      path: "/evolucao-wellness",
-      color: "bg-primary/15",
-      iconColor: "text-primary",
-    },
-    {
-      icon: FileText,
-      label: "Relatório PDF",
-      desc: "Exporte seus dados para compartilhar",
-      path: "/relatorio-wellness",
-      color: "bg-accent/15",
-      iconColor: "text-accent",
-    },
-  ];
-
   return (
     <AppLayout>
-      {isNewUser && (
-        <WellnessOnboarding onComplete={() => setOnboardingDismissed(true)} />
-      )}
+      {isNewUser && <WellnessOnboarding onComplete={() => setOnboardingDismissed(true)} />}
       <div className="min-h-screen bg-background pb-24 lg:pb-8">
         <div className="max-w-2xl mx-auto px-4 pt-6 safe-top">
-          {/* Header */}
+
+          {/* ===== ABOVE THE FOLD — Always rendered ===== */}
           <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
             <div className="flex items-center gap-3 mb-1">
               <div className="h-11 w-11 rounded-2xl bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center">
@@ -234,10 +165,7 @@ const BemEstarHub = () => {
             </div>
           </motion.div>
 
-          {/* Quick Actions */}
           <WellnessQuickActions />
-
-          {/* Daily Progress */}
           <WellnessDailyProgress />
 
           {/* Streak Banner */}
@@ -249,9 +177,7 @@ const BemEstarHub = () => {
                   <span className="text-3xl font-black text-foreground">{streakData.streak_atual}</span>
                 </div>
                 <div className="flex-1">
-                  <p className="text-sm font-bold text-foreground">
-                    {streakData.streak_atual === 1 ? "dia de streak!" : "dias de streak!"}
-                  </p>
+                  <p className="text-sm font-bold text-foreground">{streakData.streak_atual === 1 ? "dia de streak!" : "dias de streak!"}</p>
                   <p className="text-[10px] text-muted-foreground">
                     Recorde: {streakData.melhor_streak} dias • {streakData.total_checkins} check-ins total
                     {streakData.bonus_total_creditado > 0 && ` • ℜ ${Number(streakData.bonus_total_creditado).toFixed(2)} ganhos`}
@@ -269,58 +195,18 @@ const BemEstarHub = () => {
             </motion.div>
           )}
 
-          {/* Streak Milestones */}
-          {streakData && streakData.streak_atual > 0 && (
-            <WellnessStreakMilestones streakAtual={streakData.streak_atual} />
-          )}
+          {streakData && streakData.streak_atual > 0 && <WellnessStreakMilestones streakAtual={streakData.streak_atual} />}
 
-          {/* Daily Tip */}
-          <WellnessDailyTip />
-
-          {/* Weekly Challenge */}
-          <WellnessWeeklyChallenge />
-
-          {/* Motivation Quote */}
-          <WellnessMotivation />
-
-          {/* AI Insight */}
-          <WellnessInsight />
-
-          {/* Mood Quick Selector */}
-          <WellnessMoodWidget />
-
-          {/* Energy Quick Selector */}
-          <WellnessEnergyWidget />
-
-          {/* Quick Note */}
-          <WellnessQuickNote />
-
-          {/* Daily Habits */}
-          <WellnessDailyHabits />
-
-          {/* Goals Progress */}
-          <WellnessGoalsWidget />
-
-          {/* Today's status */}
+          {/* Today's Check-in */}
           {todayCheckin ? (
             <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
               <div className="rounded-2xl border border-primary/20 bg-gradient-to-br from-primary/5 to-accent/5 p-4">
                 <div className="flex items-center justify-between mb-3">
                   <p className="text-xs font-medium text-muted-foreground">Seu check-in de hoje</p>
-                  <Link to="/wellness-tracker" className="text-xs text-primary font-medium flex items-center gap-1">
-                    Editar <ArrowRight size={12} />
-                  </Link>
+                  <Link to="/wellness-tracker" className="text-xs text-primary font-medium flex items-center gap-1">Editar <ArrowRight size={12} /></Link>
                 </div>
                 <div className="flex items-center gap-4">
-                  <WellnessScore
-                    humor={todayCheckin.humor}
-                    energia={todayCheckin.energia}
-                    sonoHoras={todayCheckin.sono_horas}
-                    aguaLitros={todayCheckin.agua_litros}
-                    estresse={todayCheckin.estresse}
-                    exercicioMin={todayCheckin.exercicio_min}
-                    dor={todayCheckin.dor}
-                  />
+                  <WellnessScore humor={todayCheckin.humor} energia={todayCheckin.energia} sonoHoras={todayCheckin.sono_horas} aguaLitros={todayCheckin.agua_litros} estresse={todayCheckin.estresse} exercicioMin={todayCheckin.exercicio_min} dor={todayCheckin.dor} />
                   <div className="flex-1 space-y-1.5">
                     <div className="flex items-center gap-3 text-xs text-muted-foreground">
                       <span className="flex items-center gap-1">{moodEmojis[todayCheckin.humor] || "😐"} Humor {todayCheckin.humor}/5</span>
@@ -339,10 +225,7 @@ const BemEstarHub = () => {
             </motion.div>
           ) : (
             <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
-              <Link
-                to="/wellness-tracker"
-                className="block rounded-2xl border border-dashed border-primary/30 bg-primary/5 p-5 text-center hover:bg-primary/10 transition-colors"
-              >
+              <Link to="/wellness-tracker" className="block rounded-2xl border border-dashed border-primary/30 bg-primary/5 p-5 text-center hover:bg-primary/10 transition-colors">
                 <Sparkles size={24} className="text-primary mx-auto mb-2" />
                 <p className="text-sm font-semibold text-foreground">Faça seu check-in de hoje</p>
                 <p className="text-xs text-muted-foreground mt-0.5">Registre como você está se sentindo agora</p>
@@ -350,126 +233,125 @@ const BemEstarHub = () => {
             </motion.div>
           )}
 
+          {/* ===== LAZY SECTIONS — Render on scroll ===== */}
+
+          {/* Quick Inputs */}
+          <WellnessLazySection>
+            <WellnessDailyTip />
+            <WellnessWeeklyChallenge />
+            <WellnessMotivation />
+            <WellnessInsight />
+            <WellnessMoodWidget />
+            <WellnessEnergyWidget />
+            <WellnessQuickNote />
+          </WellnessLazySection>
+
+          {/* Habits & Goals */}
+          <WellnessLazySection>
+            <WellnessDailyHabits />
+            <WellnessGoalsWidget />
+          </WellnessLazySection>
+
           {/* Week Stats */}
           {weekStats && weekStats.dias >= 2 && (
-            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="mb-6">
-              <p className="text-xs font-medium text-muted-foreground mb-2 px-1">Média da semana ({weekStats.dias} dias)</p>
-              <div className="grid grid-cols-4 gap-2">
-                {[
-                  { label: "Humor", value: weekStats.humor, max: 5, icon: "😊" },
-                  { label: "Energia", value: weekStats.energia, max: 5, icon: "⚡" },
-                  { label: "Sono", value: `${weekStats.sono}h`, max: null, icon: "🌙" },
-                  { label: "Água", value: weekStats.agua, max: null, icon: "💧" },
-                ].map((stat) => (
-                  <div key={stat.label} className="glass-card rounded-xl p-3 text-center">
-                    <span className="text-lg">{stat.icon}</span>
-                    <p className="text-sm font-bold text-foreground mt-1">{stat.value}</p>
-                    <p className="text-[10px] text-muted-foreground">{stat.label}</p>
-                  </div>
-                ))}
-              </div>
-            </motion.div>
+            <WellnessLazySection>
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
+                <p className="text-xs font-medium text-muted-foreground mb-2 px-1">Média da semana ({weekStats.dias} dias)</p>
+                <div className="grid grid-cols-4 gap-2">
+                  {[
+                    { label: "Humor", value: weekStats.humor, icon: "😊" },
+                    { label: "Energia", value: weekStats.energia, icon: "⚡" },
+                    { label: "Sono", value: `${weekStats.sono}h`, icon: "🌙" },
+                    { label: "Água", value: weekStats.agua, icon: "💧" },
+                  ].map((stat) => (
+                    <div key={stat.label} className="glass-card rounded-xl p-3 text-center">
+                      <span className="text-lg">{stat.icon}</span>
+                      <p className="text-sm font-bold text-foreground mt-1">{stat.value}</p>
+                      <p className="text-[10px] text-muted-foreground">{stat.label}</p>
+                    </div>
+                  ))}
+                </div>
+              </motion.div>
+            </WellnessLazySection>
           )}
 
-          {/* Mood Trends Sparkline */}
-          <WellnessMoodTrends />
+          {/* 📊 Analytics Section */}
+          <WellnessLazySection>
+            <WellnessCollapsibleGroup title="Análises & Tendências" icon="📊" defaultOpen>
+              <WellnessMoodTrends />
+              <WellnessWeeklySummary />
+              <WellnessMonthlySummary />
+              <WeeklyComparison />
+              <WellnessCorrelations />
+            </WellnessCollapsibleGroup>
+          </WellnessLazySection>
 
-          {/* Weekly Summary */}
-          <WellnessWeeklySummary />
+          {/* 🏥 Health Trackers Section */}
+          <WellnessLazySection>
+            <WellnessCollapsibleGroup title="Rastreadores de Saúde" icon="🏥">
+              <WellnessBodyMap />
+              <WellnessNutritionLog />
+              <WellnessSleepQuality />
+              <WellnessHydrationWidget />
+              <WellnessExerciseWidget />
+              <WellnessSleepWidget />
+              <WellnessStressWidget />
+            </WellnessCollapsibleGroup>
+          </WellnessLazySection>
 
-          {/* Monthly Summary */}
-          <WellnessMonthlySummary />
+          {/* 🧘 Mindfulness & Journaling */}
+          <WellnessLazySection>
+            <WellnessCollapsibleGroup title="Mindfulness & Journaling" icon="🧘">
+              <WellnessMindfulness />
+              <WellnessBreathing />
+              <WellnessGratitude />
+              <WellnessMoodJournal />
+            </WellnessCollapsibleGroup>
+          </WellnessLazySection>
 
-          {/* Body Pain Map */}
-          <WellnessBodyMap />
+          {/* 🎯 Goals & Gamification */}
+          <WellnessLazySection>
+            <WellnessCollapsibleGroup title="Metas & Gamificação" icon="🎯">
+              <WellnessWeeklyGoals />
+              <WellnessLevelXP />
+              <WellnessStreakForecast />
+              <WellnessReportCard />
+            </WellnessCollapsibleGroup>
+          </WellnessLazySection>
 
-          {/* Nutrition Quick Log */}
-          <WellnessNutritionLog />
-
-          {/* Sleep Quality Detail */}
-          <WellnessSleepQuality />
-
-          {/* Weekly Goals Progress */}
-          <WellnessWeeklyGoals />
-
-          {/* Mood Journal Quick Entry */}
-          <WellnessMoodJournal />
-
-          {/* Activity Heatmap */}
-          <WellnessActivityHeatmap />
-
-          {/* Consistency Score */}
-          <WellnessConsistencyScore />
-
-          {/* Personal Records */}
-          <WellnessPersonalRecords />
-
-          {/* Community Comparison */}
-          <WellnessCommunityCompare />
-
-          {/* Mindfulness Timer */}
-          <WellnessMindfulness />
-
-          {/* Gratitude Journal */}
-          <WellnessGratitude />
-
-          {/* Weekly Report Card */}
-          <WellnessReportCard />
-
-          {/* Streak Forecast */}
-          <WellnessStreakForecast />
-
-          {/* Level XP */}
-          <WellnessLevelXP />
-
-          {/* Hydration Quick Tracker */}
-          <WellnessHydrationWidget />
-
-          {/* Exercise Quick Tracker */}
-          <WellnessExerciseWidget />
-
-          {/* Sleep Quick Tracker */}
-          <WellnessSleepWidget />
-
-          {/* Stress Quick Tracker */}
-          <WellnessStressWidget />
-
-          {/* Breathing Exercise */}
-          <WellnessBreathing />
-
-          {/* Check-in Calendar */}
-          <WellnessCalendar />
-
-          {/* Weekly Comparison */}
-          <WeeklyComparison />
-
-          {/* Correlations */}
-          <WellnessCorrelations />
-
-          {/* Achievements */}
-          <WellnessAchievements />
+          {/* 🏆 Records & Community */}
+          <WellnessLazySection>
+            <WellnessCollapsibleGroup title="Recordes & Comunidade" icon="🏆">
+              <WellnessActivityHeatmap />
+              <WellnessConsistencyScore />
+              <WellnessPersonalRecords />
+              <WellnessCommunityCompare />
+              <WellnessCalendar />
+              <WellnessAchievements />
+            </WellnessCollapsibleGroup>
+          </WellnessLazySection>
 
           {/* Features Grid */}
-          <motion.div variants={stagger} initial="hidden" animate="show" className="space-y-2">
-            <p className="text-xs font-medium text-muted-foreground px-1">Funcionalidades</p>
-            {features.map((feature) => (
-              <motion.div key={feature.path} variants={fadeUp}>
-                <Link
-                  to={feature.path}
-                  className="flex items-center gap-4 p-4 rounded-2xl glass-card hover:shadow-elevated transition-all group"
-                >
-                  <div className={`p-3 rounded-xl ${feature.color}`}>
-                    <feature.icon size={22} className={feature.iconColor} />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-semibold text-foreground">{feature.label}</p>
-                    <p className="text-xs text-muted-foreground">{feature.desc}</p>
-                  </div>
-                  <ArrowRight size={16} className="text-muted-foreground group-hover:text-primary transition-colors" />
-                </Link>
-              </motion.div>
-            ))}
-          </motion.div>
+          <WellnessLazySection>
+            <motion.div variants={stagger} initial="hidden" animate="show" className="space-y-2">
+              <p className="text-xs font-medium text-muted-foreground px-1">Funcionalidades</p>
+              {features.map((feature) => (
+                <motion.div key={feature.path} variants={fadeUp}>
+                  <Link to={feature.path} className="flex items-center gap-4 p-4 rounded-2xl glass-card hover:shadow-elevated transition-all group">
+                    <div className={`p-3 rounded-xl ${feature.color}`}>
+                      <feature.icon size={22} className={feature.iconColor} />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-semibold text-foreground">{feature.label}</p>
+                      <p className="text-xs text-muted-foreground">{feature.desc}</p>
+                    </div>
+                    <ArrowRight size={16} className="text-muted-foreground group-hover:text-primary transition-colors" />
+                  </Link>
+                </motion.div>
+              ))}
+            </motion.div>
+          </WellnessLazySection>
+
         </div>
       </div>
     </AppLayout>
