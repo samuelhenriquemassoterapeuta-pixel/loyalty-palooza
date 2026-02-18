@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
-import { User, Check, Loader2, Star } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { User, Check, Loader2, Star, ExternalLink } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Terapeuta } from "@/features/terapeuta/hooks/useTerapeutas";
 
@@ -28,6 +29,7 @@ const stagger = {
 };
 
 export const TerapeutaSelector = ({ terapeutas, loading, selectedId, onSelect }: TerapeutaSelectorProps) => {
+  const navigate = useNavigate();
   if (loading) {
     return (
       <div className="flex justify-center py-12">
@@ -89,11 +91,23 @@ export const TerapeutaSelector = ({ terapeutas, loading, selectedId, onSelect }:
                 )}
               </div>
               
-              {selectedId === terapeuta.id && (
-                <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center">
-                  <Check size={14} className="text-primary-foreground" />
-                </div>
-              )}
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    navigate(`/terapeuta/${terapeuta.id}`);
+                  }}
+                  className="w-7 h-7 rounded-full bg-muted/50 flex items-center justify-center hover:bg-muted transition-colors"
+                  title="Ver cartão de visita"
+                >
+                  <ExternalLink size={13} className="text-muted-foreground" />
+                </button>
+                {selectedId === terapeuta.id && (
+                  <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center">
+                    <Check size={14} className="text-primary-foreground" />
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </motion.div>
