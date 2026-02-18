@@ -127,7 +127,7 @@ const Agendamento = () => {
     dataHora.setHours(hours, minutes, 0, 0);
 
     setSaving(true);
-    const { error } = await createAgendamento(dataHora, selectedServico.nome, undefined, selectedTerapeuta?.id);
+    const { error } = await createAgendamento(dataHora, selectedServico.nome, undefined, selectedTerapeuta?.id, selectedServico.id);
     setSaving(false);
 
     if (error) {
