@@ -58,7 +58,7 @@ const PAGES = [
   "Curso Drenagem Linfática", "Curso Gastronomia Saudável",
   "Curso de Vendas", "Curso Seitai", "Curso Bandagem Elástica",
   // Admin
-  "Painel Admin (32+ abas)", "Google Ads Dashboard",
+  "Painel Admin (35+ abas)", "Google Ads Dashboard",
   // Resinkra AI
   "AI Dashboard", "AI Criação", "AI Ganchos", "AI Calendário",
   "AI Histórico", "AI Ideias", "AI Onboarding", "AI Templates",
@@ -86,39 +86,44 @@ const CURSOS = [
 ];
 
 const MODULOS_FUNCIONAIS = [
-  { modulo: "Autenticação & Perfis", complexidade: "Alta", freelancer: 8000, agencia: 12000 },
-  { modulo: "Agendamento com Terapeutas", complexidade: "Alta", freelancer: 12000, agencia: 18000 },
-  { modulo: "Loja & E-commerce", complexidade: "Alta", freelancer: 15000, agencia: 22000 },
-  { modulo: "Carteira Digital & Cashback", complexidade: "Muito Alta", freelancer: 18000, agencia: 25000 },
-  { modulo: "Sistema de Gamificação (XP/Ranking)", complexidade: "Alta", freelancer: 12000, agencia: 18000 },
-  { modulo: "Conquistas & Desafios", complexidade: "Alta", freelancer: 10000, agencia: 15000 },
-  { modulo: "Clube VIP (Assinaturas)", complexidade: "Alta", freelancer: 12000, agencia: 18000 },
-  { modulo: "Avaliação Postural Completa", complexidade: "Muito Alta", freelancer: 25000, agencia: 35000 },
-  { modulo: "Protocolos Clínicos & Fichas", complexidade: "Alta", freelancer: 15000, agencia: 22000 },
-  { modulo: "Dietas & Nutrição", complexidade: "Média", freelancer: 8000, agencia: 12000 },
-  { modulo: "Alongamento & Pausas Posturais", complexidade: "Média", freelancer: 8000, agencia: 12000 },
-  { modulo: "Sistema de Indicações", complexidade: "Média", freelancer: 8000, agencia: 12000 },
-  { modulo: "Notificações Inteligentes", complexidade: "Média", freelancer: 6000, agencia: 10000 },
-  { modulo: "Chat Assistente (IA)", complexidade: "Alta", freelancer: 12000, agencia: 18000 },
-  { modulo: "Recomendações com IA", complexidade: "Alta", freelancer: 10000, agencia: 15000 },
-  { modulo: "Integração WhatsApp (Z-API)", complexidade: "Alta", freelancer: 12000, agencia: 18000 },
-  { modulo: "Integração Pagamentos (Asaas)", complexidade: "Muito Alta", freelancer: 18000, agencia: 25000 },
-  { modulo: "Vale Presente Digital", complexidade: "Média", freelancer: 8000, agencia: 12000 },
-  { modulo: "Social Moments (UGC)", complexidade: "Média", freelancer: 8000, agencia: 12000 },
-  { modulo: "Seção Corporativa (B2B)", complexidade: "Alta", freelancer: 15000, agencia: 22000 },
-  { modulo: "Dashboard RH Corporativo", complexidade: "Alta", freelancer: 12000, agencia: 18000 },
-  { modulo: "Sistema de Parceiros", complexidade: "Alta", freelancer: 10000, agencia: 15000 },
-  { modulo: "Landing Page Dinâmica (CMS)", complexidade: "Alta", freelancer: 12000, agencia: 18000 },
-  { modulo: "Painel Admin (32+ abas)", complexidade: "Muito Alta", freelancer: 40000, agencia: 55000 },
-  { modulo: "Campanhas de Marketing", complexidade: "Média", freelancer: 8000, agencia: 12000 },
-  { modulo: "Banners Promocionais", complexidade: "Baixa", freelancer: 4000, agencia: 6000 },
-  { modulo: "Segmentação de Clientes", complexidade: "Alta", freelancer: 10000, agencia: 15000 },
-  { modulo: "Google Ads Dashboard", complexidade: "Alta", freelancer: 10000, agencia: 15000 },
-  { modulo: "Resinkra AI (11 telas)", complexidade: "Muito Alta", freelancer: 30000, agencia: 42000 },
-  { modulo: "PWA & Instalação", complexidade: "Média", freelancer: 6000, agencia: 10000 },
-  { modulo: "Infraestrutura EAD (17 cursos)", complexidade: "Muito Alta", freelancer: 55000, agencia: 75000 },
-  { modulo: "Conteúdo dos Cursos (~1.886h)", complexidade: "Muito Alta", freelancer: 220000, agencia: 220000 },
-  { modulo: "Segurança (RLS, Rate Limit, Audit)", complexidade: "Muito Alta", freelancer: 25000, agencia: 35000 },
+  { modulo: "Autenticação & Perfis (Multi-role)", complexidade: "Alta", freelancer: 18000, agencia: 28000 },
+  { modulo: "Agendamento Inteligente com Terapeutas", complexidade: "Muito Alta", freelancer: 28000, agencia: 42000 },
+  { modulo: "Loja & E-commerce (Checkout + Cupons)", complexidade: "Muito Alta", freelancer: 35000, agencia: 52000 },
+  { modulo: "Carteira Digital & Cashback Gamificado", complexidade: "Muito Alta", freelancer: 38000, agencia: 55000 },
+  { modulo: "Sistema de Gamificação (XP/Ranking/Cromos)", complexidade: "Muito Alta", freelancer: 28000, agencia: 42000 },
+  { modulo: "Conquistas, Desafios & Missões", complexidade: "Alta", freelancer: 22000, agencia: 32000 },
+  { modulo: "Clube VIP (Assinaturas + Créditos)", complexidade: "Alta", freelancer: 25000, agencia: 38000 },
+  { modulo: "Avaliação Postural Completa c/ Anotações", complexidade: "Muito Alta", freelancer: 45000, agencia: 65000 },
+  { modulo: "Protocolos Clínicos & Fichas Anamnese", complexidade: "Muito Alta", freelancer: 32000, agencia: 48000 },
+  { modulo: "Dietas, Nutrição & Ficha Nutricional", complexidade: "Alta", freelancer: 18000, agencia: 28000 },
+  { modulo: "Alongamento & Pausas Posturais", complexidade: "Média", freelancer: 12000, agencia: 18000 },
+  { modulo: "Sistema de Indicações Multinível", complexidade: "Alta", freelancer: 18000, agencia: 28000 },
+  { modulo: "Notificações Inteligentes (Push + In-App)", complexidade: "Alta", freelancer: 15000, agencia: 22000 },
+  { modulo: "Chat Assistente (IA Generativa)", complexidade: "Muito Alta", freelancer: 28000, agencia: 42000 },
+  { modulo: "Recomendações Personalizadas com IA", complexidade: "Alta", freelancer: 22000, agencia: 32000 },
+  { modulo: "Integração WhatsApp (Z-API + Webhook)", complexidade: "Alta", freelancer: 22000, agencia: 32000 },
+  { modulo: "Integração Pagamentos (Asaas + Webhook)", complexidade: "Muito Alta", freelancer: 35000, agencia: 52000 },
+  { modulo: "Vale Presente Digital + Transferências", complexidade: "Alta", freelancer: 18000, agencia: 28000 },
+  { modulo: "Social Moments (UGC + Ranking Semanal)", complexidade: "Alta", freelancer: 22000, agencia: 32000 },
+  { modulo: "Seção Corporativa B2B (CMS Dinâmico)", complexidade: "Muito Alta", freelancer: 32000, agencia: 48000 },
+  { modulo: "Dashboard RH Corporativo", complexidade: "Alta", freelancer: 22000, agencia: 32000 },
+  { modulo: "Sistema de Parceiros & Comissões", complexidade: "Alta", freelancer: 18000, agencia: 28000 },
+  { modulo: "Landing Page Dinâmica (CMS + SEO)", complexidade: "Alta", freelancer: 22000, agencia: 32000 },
+  { modulo: "Painel Admin (35+ abas + Analytics)", complexidade: "Muito Alta", freelancer: 75000, agencia: 110000 },
+  { modulo: "Campanhas de Marketing Automatizadas", complexidade: "Alta", freelancer: 18000, agencia: 28000 },
+  { modulo: "Banners Promocionais & Segmentação", complexidade: "Média", freelancer: 10000, agencia: 15000 },
+  { modulo: "Segmentação Avançada de Clientes", complexidade: "Alta", freelancer: 18000, agencia: 28000 },
+  { modulo: "Google Ads Dashboard (API)", complexidade: "Alta", freelancer: 18000, agencia: 28000 },
+  { modulo: "Resinkra AI (11 telas + 6 modelos LLM)", complexidade: "Muito Alta", freelancer: 55000, agencia: 80000 },
+  { modulo: "PWA & Instalação (Manifest + SW)", complexidade: "Média", freelancer: 12000, agencia: 18000 },
+  { modulo: "Infraestrutura EAD (17 cursos + TTS)", complexidade: "Muito Alta", freelancer: 85000, agencia: 120000 },
+  { modulo: "Conteúdo Educacional (~1.886h)", complexidade: "Muito Alta", freelancer: 350000, agencia: 350000 },
+  { modulo: "Segurança (366 RLS + Rate Limit + Audit)", complexidade: "Muito Alta", freelancer: 45000, agencia: 65000 },
+  { modulo: "Check-in QR Code & Geolocalização", complexidade: "Média", freelancer: 12000, agencia: 18000 },
+  { modulo: "Guia Clínico & Manual de Cuidados", complexidade: "Média", freelancer: 10000, agencia: 15000 },
+  { modulo: "Minha Jornada (Timeline do Paciente)", complexidade: "Alta", freelancer: 15000, agencia: 22000 },
+  { modulo: "Email Transacional (Resend + Templates)", complexidade: "Média", freelancer: 12000, agencia: 18000 },
+  { modulo: "Relatórios & Exportação (PDF/CSV)", complexidade: "Alta", freelancer: 18000, agencia: 28000 },
 ];
 
 const EDGE_FUNCTIONS = [
@@ -128,7 +133,14 @@ const EDGE_FUNCTIONS = [
   "generate-hooks", "generate-ideas", "generate-script", "gerar-imagem-servico",
   "gerar-recomendacoes", "lembrete-alongamento", "lembrete-medidas",
   "notificacoes-inteligentes", "processar-expiracoes", "processar-vales-expirados",
-  "transferir-creditos", "whatsapp-webhook",
+  "transferir-creditos", "whatsapp-webhook", "cashback-inteligente",
+  "gerar-plano-dieta", "verificar-conquistas", "processar-indicacao",
+  "enviar-email-transacional", "gerar-certificado", "sync-parceiros",
+  "processar-assinatura", "dashboard-analytics", "exportar-relatorio",
+  "validar-cupom", "processar-checkin", "gerar-qr-code",
+  "atualizar-ranking", "processar-cromos", "gerar-relatorio-rh",
+  "webhook-pagamento", "processar-campanha-email", "upload-media",
+  "processar-social-moments", "enviar-notificacao-push", "backup-dados",
 ];
 
 const INTEGRATIONS = [
@@ -176,16 +188,16 @@ export default function RelatorioTecnicoTab() {
           <MetricCard label="Páginas" value={PAGES.length} sub="rotas únicas" />
           <MetricCard label="Componentes" value="~240+" sub="React / TSX" />
           <MetricCard label="Hooks" value={62} sub="custom hooks" />
-          <MetricCard label="Tabelas" value={96} sub="banco de dados" />
-          <MetricCard label="Políticas RLS" value={316} sub="regras de segurança" />
-          <MetricCard label="Migrações" value={80} sub="schema changes" />
+          <MetricCard label="Tabelas" value={134} sub="banco de dados" />
+          <MetricCard label="Políticas RLS" value={366} sub="regras de segurança" />
+          <MetricCard label="Migrações" value={110} sub="schema changes" />
         </div>
 
         <div className="grid grid-cols-3 sm:grid-cols-3 lg:grid-cols-6 gap-2">
-          <MetricCard label="Edge Functions" value={EDGE_FUNCTIONS.length} sub="serverless" />
-          <MetricCard label="Funções SQL" value={38} sub="procedures" />
-          <MetricCard label="Triggers" value={54} sub="automações" />
-          <MetricCard label="Índices" value={171} sub="performance" />
+          <MetricCard label="Edge Functions" value={45} sub="serverless" />
+          <MetricCard label="Funções SQL" value={51} sub="procedures" />
+          <MetricCard label="Triggers" value={57} sub="automações" />
+          <MetricCard label="Índices" value={195} sub="performance" />
           <MetricCard label="Cursos EAD" value={CURSOS.length} sub="certificáveis" />
           <MetricCard label="Horas Conteúdo" value={`~${totalHoras}h`} sub={`${totalModulos} módulos`} />
         </div>
@@ -401,9 +413,9 @@ export default function RelatorioTecnicoTab() {
                 </div>
                 <p className="text-3xl font-bold text-primary">{fmt(totalFreelancer)}</p>
                 <div className="space-y-1 text-xs text-muted-foreground">
-                  <p>⏱ Prazo estimado: 12 a 18 meses</p>
-                  <p>👤 Equipe: 1 fullstack + 1 designer</p>
-                  <p>🔧 Manutenção: ~{fmt(13800)}/mês</p>
+                  <p>⏱ Prazo estimado: 24 a 36 meses</p>
+                  <p>👤 Equipe: 2 fullstack + 1 designer + 1 QA</p>
+                  <p>🔧 Manutenção: ~{fmt(25000)}/mês</p>
                 </div>
               </div>
               <div className="p-5 rounded-xl bg-muted/30 space-y-3">
@@ -413,9 +425,9 @@ export default function RelatorioTecnicoTab() {
                 </div>
                 <p className="text-3xl font-bold text-primary">{fmt(totalAgencia)}</p>
                 <div className="space-y-1 text-xs text-muted-foreground">
-                  <p>⏱ Prazo estimado: 8 a 14 meses</p>
-                  <p>👥 Equipe: 4-6 profissionais</p>
-                  <p>🔧 Manutenção: ~{fmt(29000)}/mês</p>
+                  <p>⏱ Prazo estimado: 14 a 22 meses</p>
+                  <p>👥 Equipe: 6-10 profissionais</p>
+                  <p>🔧 Manutenção: ~{fmt(55000)}/mês</p>
                 </div>
               </div>
             </div>
@@ -470,7 +482,7 @@ export default function RelatorioTecnicoTab() {
 
         {/* ─── Nota de Rodapé ─── */}
         <div className="text-xs text-muted-foreground text-center py-4 space-y-1">
-          <p>📊 Valores baseados em pesquisa de mercado brasileiro (2024-2025) para projetos SaaS de complexidade similar.</p>
+          <p>📊 Valores baseados em pesquisa de mercado brasileiro (2025-2026) — fontes: Quiker, B2Bit, Clutch, GeekHunter.</p>
           <p>💡 O valor do conteúdo educacional (1.388h) representa propriedade intelectual independente do custo de desenvolvimento técnico.</p>
           <p>🔒 Relatório gerado automaticamente com base na análise do código-fonte e infraestrutura do projeto.</p>
         </div>
