@@ -25,6 +25,7 @@ import WellnessQuickActions from "@/features/bem-estar/components/WellnessQuickA
 import WellnessWeeklySummary from "@/features/bem-estar/components/WellnessWeeklySummary";
 import WellnessBreathing from "@/features/bem-estar/components/WellnessBreathing";
 import WellnessHydrationWidget from "@/features/bem-estar/components/WellnessHydrationWidget";
+import WellnessExerciseWidget from "@/features/bem-estar/components/WellnessExerciseWidget";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 14 },
@@ -333,6 +334,9 @@ const BemEstarHub = () => {
 
           {/* Hydration Quick Tracker */}
           <WellnessHydrationWidget />
+
+          {/* Exercise Quick Tracker */}
+          <WellnessExerciseWidget />
 
           {/* Breathing Exercise */}
           <WellnessBreathing />
