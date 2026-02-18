@@ -282,19 +282,19 @@ const Profile = () => {
               <div className="absolute -bottom-8 -left-8 w-24 h-24 rounded-full bg-highlight/20 blur-xl" />
               
               <div className="relative z-10 grid grid-cols-3 gap-4 text-center">
-                <div>
+                <div className="space-y-0.5">
                   <p className="text-2xl font-bold font-serif">
                     R$ {transacoesStats.totalCashback.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ".")}
                   </p>
-                  <p className="text-xs opacity-80">Total cashback</p>
+                  <p className="text-[10px] opacity-80 uppercase tracking-wider">Cashback</p>
                 </div>
-                <div className="border-x border-primary-foreground/20">
+                <div className="border-x border-primary-foreground/20 space-y-0.5">
                   <p className="text-2xl font-bold font-serif">{totalCompras}</p>
-                  <p className="text-xs opacity-80">Compras</p>
+                  <p className="text-[10px] opacity-80 uppercase tracking-wider">Compras</p>
                 </div>
-                <div>
+                <div className="space-y-0.5">
                   <p className="text-2xl font-bold font-serif">{totalAgendamentos}</p>
-                  <p className="text-xs opacity-80">Agendamentos</p>
+                  <p className="text-[10px] opacity-80 uppercase tracking-wider">Sessões</p>
                 </div>
               </div>
             </motion.div>
