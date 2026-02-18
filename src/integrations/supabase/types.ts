@@ -2214,6 +2214,131 @@ export type Database = {
           },
         ]
       }
+      moments_destaques: {
+        Row: {
+          created_at: string | null
+          id: string
+          pago: boolean | null
+          post_id: string | null
+          semana_referencia: string
+          user_id: string
+          xp_bonus: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          pago?: boolean | null
+          post_id?: string | null
+          semana_referencia: string
+          user_id: string
+          xp_bonus?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          pago?: boolean | null
+          post_id?: string | null
+          semana_referencia?: string
+          user_id?: string
+          xp_bonus?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "moments_destaques_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "social_posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      moments_missoes: {
+        Row: {
+          ativa: boolean | null
+          created_at: string | null
+          data_fim: string
+          data_inicio: string
+          descricao: string | null
+          id: string
+          multiplicador_cashback: number | null
+          multiplicador_cromos: number | null
+          multiplicador_xp: number | null
+          requisito_tipo: string
+          requisito_valor: string | null
+          titulo: string
+        }
+        Insert: {
+          ativa?: boolean | null
+          created_at?: string | null
+          data_fim: string
+          data_inicio?: string
+          descricao?: string | null
+          id?: string
+          multiplicador_cashback?: number | null
+          multiplicador_cromos?: number | null
+          multiplicador_xp?: number | null
+          requisito_tipo?: string
+          requisito_valor?: string | null
+          titulo: string
+        }
+        Update: {
+          ativa?: boolean | null
+          created_at?: string | null
+          data_fim?: string
+          data_inicio?: string
+          descricao?: string | null
+          id?: string
+          multiplicador_cashback?: number | null
+          multiplicador_cromos?: number | null
+          multiplicador_xp?: number | null
+          requisito_tipo?: string
+          requisito_valor?: string | null
+          titulo?: string
+        }
+        Relationships: []
+      }
+      moments_ranking: {
+        Row: {
+          created_at: string | null
+          id: string
+          posicao: number | null
+          premio_ganho: string | null
+          semana_fim: string
+          semana_inicio: string
+          total_cashback: number | null
+          total_cromos: number | null
+          total_posts: number | null
+          total_xp: number | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          posicao?: number | null
+          premio_ganho?: string | null
+          semana_fim: string
+          semana_inicio: string
+          total_cashback?: number | null
+          total_cromos?: number | null
+          total_posts?: number | null
+          total_xp?: number | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          posicao?: number | null
+          premio_ganho?: string | null
+          semana_fim?: string
+          semana_inicio?: string
+          total_cashback?: number | null
+          total_cromos?: number | null
+          total_posts?: number | null
+          total_xp?: number | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       notificacoes: {
         Row: {
           created_at: string
@@ -3780,10 +3905,13 @@ export type Database = {
           aprovado_por: string | null
           cashback_valor: number
           created_at: string
+          cromos_ether: number | null
           descricao: string | null
           id: string
           link_post: string | null
+          missao_id: string | null
           motivo_rejeicao: string | null
+          multiplicador_aplicado: number | null
           plataforma: string
           screenshot_url: string | null
           status: string
@@ -3798,10 +3926,13 @@ export type Database = {
           aprovado_por?: string | null
           cashback_valor?: number
           created_at?: string
+          cromos_ether?: number | null
           descricao?: string | null
           id?: string
           link_post?: string | null
+          missao_id?: string | null
           motivo_rejeicao?: string | null
+          multiplicador_aplicado?: number | null
           plataforma?: string
           screenshot_url?: string | null
           status?: string
@@ -3816,10 +3947,13 @@ export type Database = {
           aprovado_por?: string | null
           cashback_valor?: number
           created_at?: string
+          cromos_ether?: number | null
           descricao?: string | null
           id?: string
           link_post?: string | null
+          missao_id?: string | null
           motivo_rejeicao?: string | null
+          multiplicador_aplicado?: number | null
           plataforma?: string
           screenshot_url?: string | null
           status?: string
@@ -3834,6 +3968,13 @@ export type Database = {
             columns: ["agendamento_id"]
             isOneToOne: false
             referencedRelation: "agendamentos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "social_posts_missao_id_fkey"
+            columns: ["missao_id"]
+            isOneToOne: false
+            referencedRelation: "moments_missoes"
             referencedColumns: ["id"]
           },
         ]

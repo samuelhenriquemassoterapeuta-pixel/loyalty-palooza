@@ -1,21 +1,9 @@
 import { useState, useRef } from "react";
 import { motion } from "framer-motion";
 import {
-  ArrowLeft,
-  Camera,
-  Instagram,
-  Video,
-  Image,
-  Send,
-  CheckCircle2,
-  Clock,
-  XCircle,
-  Gift,
-  Sparkles,
-  Link as LinkIcon,
-  ImagePlus,
-  X,
-  Loader2,
+  ArrowLeft, Camera, Instagram, Video, Image, Send,
+  CheckCircle2, Clock, XCircle, Link as LinkIcon,
+  ImagePlus, X, Loader2, Sparkles, Trophy,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -25,20 +13,18 @@ import { Badge } from "@/components/ui/badge";
 import { AppLayout } from "@/components/AppLayout";
 import { AnimatedPageBackground } from "@/components/AnimatedPageBackground";
 import { useSocialPosts } from "@/features/social/hooks/useSocialPosts";
+import { MomentsMissaoCard } from "@/features/social/components/MomentsMissaoCard";
+import { MomentsRankingTab } from "@/features/social/components/MomentsRankingTab";
 import { toast } from "sonner";
 import { ButtonLoader } from "@/components/LoadingSpinner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
+  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
 
 const ACCEPTED_FORMATS = "image/jpeg,image/png,image/webp,image/heic";
-const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+const MAX_FILE_SIZE = 5 * 1024 * 1024;
 
 const stagger = {
   hidden: { opacity: 0 },
@@ -61,24 +47,23 @@ const TIPO_ICONS: Record<string, typeof Camera> = {
   reels: Video,
 };
 
+type Tab = "novo" | "historico" | "ranking";
+
 const ResinkraMoments = () => {
   const navigate = useNavigate();
   const {
-    config,
-    posts,
-    agendamentosDisponiveis,
-    submitPost,
-    totalCashbackGanho,
-    totalPostsAprovados,
-    totalPostsPendentes,
-    loading,
+    config, posts, agendamentosDisponiveis, missoes, ranking,
+    submitPost, totalCashbackGanho, totalCromosGanhos,
+    totalPostsAprovados, totalPostsPendentes, loading,
   } = useSocialPosts();
 
+  const [tab, setTab] = useState<Tab>("novo");
   const [tipoPost, setTipoPost] = useState("story");
   const [plataforma, setPlataforma] = useState("instagram");
   const [linkPost, setLinkPost] = useState("");
   const [descricao, setDescricao] = useState("");
   const [agendamentoId, setAgendamentoId] = useState("");
+  const [missaoSelecionada, setMissaoSelecionada] = useState<string | null>(null);
   const [enviando, setEnviando] = useState(false);
   const [screenshotFile, setScreenshotFile] = useState<File | null>(null);
   const [screenshotPreview, setScreenshotPreview] = useState<string | null>(null);
@@ -100,8 +85,7 @@ const ResinkraMoments = () => {
       return;
     }
     setScreenshotFile(file);
-    const url = URL.createObjectURL(file);
-    setScreenshotPreview(url);
+    setScreenshotPreview(URL.createObjectURL(file));
   };
 
   const clearScreenshot = () => {
@@ -120,11 +104,7 @@ const ResinkraMoments = () => {
         .from("social-posts")
         .upload(path, screenshotFile, { contentType: screenshotFile.type, upsert: false });
       if (error) throw error;
-
-      const { data: urlData } = supabase.storage
-        .from("social-posts")
-        .getPublicUrl(path);
-
+      const { data: urlData } = supabase.storage.from("social-posts").getPublicUrl(path);
       return urlData.publicUrl || path;
     } catch (err: any) {
       console.error("Upload error:", err);
@@ -146,7 +126,6 @@ const ResinkraMoments = () => {
       if (screenshotFile) {
         screenshotUrl = await uploadScreenshot();
       }
-
       await submitPost.mutateAsync({
         tipo_post: tipoPost,
         plataforma,
@@ -154,11 +133,13 @@ const ResinkraMoments = () => {
         screenshot_url: screenshotUrl || undefined,
         descricao: descricao.trim() || undefined,
         agendamento_id: agendamentoId || undefined,
+        missao_id: missaoSelecionada || undefined,
       });
       toast.success("Post enviado para aprovação! 📸");
       setLinkPost("");
       setDescricao("");
       setAgendamentoId("");
+      setMissaoSelecionada(null);
       clearScreenshot();
     } catch (err: any) {
       toast.error(err.message || "Erro ao enviar post");
@@ -177,6 +158,12 @@ const ResinkraMoments = () => {
     if (status === "rejeitado") return "Rejeitado";
     return "Pendente";
   };
+
+  const TABS: { key: Tab; label: string; icon: typeof Sparkles }[] = [
+    { key: "novo", label: "Novo Post", icon: Sparkles },
+    { key: "historico", label: "Histórico", icon: Clock },
+    { key: "ranking", label: "Ranking", icon: Trophy },
+  ];
 
   return (
     <AppLayout>
@@ -205,73 +192,112 @@ const ResinkraMoments = () => {
                     <Camera size={28} />
                   </div>
                   <h2 className="text-lg font-bold font-serif">Poste e Ganhe!</h2>
-                  <p className="text-sm opacity-90">Compartilhe sua experiência na Resinkra nas redes sociais e receba cashback + XP</p>
+                  <p className="text-sm opacity-90">Cashback + XP + Cromos Éther ✨</p>
                 </div>
               </div>
             </motion.div>
 
             {/* Stats */}
-            <motion.div variants={fadeUp} className="grid grid-cols-3 gap-3">
+            <motion.div variants={fadeUp} className="grid grid-cols-4 gap-2">
               <div className="p-3 rounded-2xl glass-card-strong text-center">
-                <p className="text-xl font-bold text-foreground">{totalPostsAprovados}</p>
+                <p className="text-lg font-bold text-foreground">{totalPostsAprovados}</p>
                 <p className="text-[10px] text-muted-foreground">Aprovados</p>
               </div>
               <div className="p-3 rounded-2xl glass-card-strong text-center">
-                <p className="text-xl font-bold text-highlight">R$ {totalCashbackGanho.toFixed(2).replace(".", ",")}</p>
+                <p className="text-lg font-bold text-highlight">R$ {totalCashbackGanho.toFixed(0)}</p>
                 <p className="text-[10px] text-muted-foreground">Cashback</p>
               </div>
               <div className="p-3 rounded-2xl glass-card-strong text-center">
-                <p className="text-xl font-bold text-warning">{totalPostsPendentes}</p>
+                <p className="text-lg font-bold text-primary">✨ {totalCromosGanhos}</p>
+                <p className="text-[10px] text-muted-foreground">Éther</p>
+              </div>
+              <div className="p-3 rounded-2xl glass-card-strong text-center">
+                <p className="text-lg font-bold text-warning">{totalPostsPendentes}</p>
                 <p className="text-[10px] text-muted-foreground">Pendentes</p>
               </div>
             </motion.div>
 
-            {/* Reward tiers */}
-            <motion.div variants={fadeUp} className="space-y-2.5">
-              <p className="section-label px-1">Recompensas por tipo</p>
-              <div className="space-y-2">
-                {config.map((c) => {
-                  const Icon = TIPO_ICONS[c.tipo_post] || Camera;
-                  const isSelected = tipoPost === c.tipo_post;
-                  return (
-                    <button
-                      key={c.id}
-                      onClick={() => setTipoPost(c.tipo_post)}
-                      className={`w-full p-4 rounded-2xl transition-all duration-200 text-left flex items-center gap-3 ${
-                        isSelected
-                          ? "glass-card-strong ring-2 ring-primary/50 shadow-md"
-                          : "glass-card-strong opacity-70 hover:opacity-100"
-                      }`}
-                    >
-                      <div className={`p-2.5 rounded-xl ${isSelected ? "bg-primary/15" : "bg-muted/50"}`}>
-                        <Icon size={20} className={isSelected ? "text-primary" : "text-muted-foreground"} />
-                      </div>
-                      <div className="flex-1">
-                        <p className="font-medium text-foreground">{c.label}</p>
-                        <p className="text-xs text-muted-foreground">{c.descricao}</p>
-                      </div>
-                      <div className="text-right">
-                        <p className="text-sm font-bold text-highlight">R$ {Number(c.cashback_valor).toFixed(2).replace(".", ",")}</p>
-                        <p className="text-[10px] text-muted-foreground">+{c.xp_valor} XP</p>
-                      </div>
-                    </button>
-                  );
-                })}
-              </div>
+            {/* Tabs */}
+            <motion.div variants={fadeUp} className="flex gap-1 p-1 rounded-2xl glass-card-strong">
+              {TABS.map((t) => (
+                <button
+                  key={t.key}
+                  onClick={() => setTab(t.key)}
+                  className={`flex-1 py-2.5 px-3 rounded-xl text-xs font-medium flex items-center justify-center gap-1.5 transition-all ${
+                    tab === t.key
+                      ? "bg-primary text-primary-foreground shadow-sm"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  <t.icon size={14} />
+                  {t.label}
+                </button>
+              ))}
             </motion.div>
 
-            {/* Submit form */}
-            <motion.div variants={fadeUp} className="space-y-2.5">
-              <p className="section-label px-1">Enviar post</p>
-              <div className="p-4 rounded-2xl glass-card-strong space-y-3">
-                  <>
+            {/* TAB: Novo Post */}
+            {tab === "novo" && (
+              <>
+                {/* Missões ativas */}
+                {missoes.length > 0 && (
+                  <motion.div variants={fadeUp} className="space-y-2.5">
+                    <p className="section-label px-1">🔥 Missão Especial</p>
+                    {missoes.map((m) => (
+                      <MomentsMissaoCard
+                        key={m.id}
+                        missao={m}
+                        isActive={true}
+                        selectedId={missaoSelecionada}
+                        onSelect={setMissaoSelecionada}
+                      />
+                    ))}
+                  </motion.div>
+                )}
+
+                {/* Reward tiers */}
+                <motion.div variants={fadeUp} className="space-y-2.5">
+                  <p className="section-label px-1">Recompensas por tipo</p>
+                  <div className="space-y-2">
+                    {config.map((c) => {
+                      const Icon = TIPO_ICONS[c.tipo_post] || Camera;
+                      const isSelected = tipoPost === c.tipo_post;
+                      const baseCromos = c.tipo_post === "story" ? 1 : c.tipo_post === "feed" ? 3 : 5;
+                      return (
+                        <button
+                          key={c.id}
+                          onClick={() => setTipoPost(c.tipo_post)}
+                          className={`w-full p-4 rounded-2xl transition-all duration-200 text-left flex items-center gap-3 ${
+                            isSelected
+                              ? "glass-card-strong ring-2 ring-primary/50 shadow-md"
+                              : "glass-card-strong opacity-70 hover:opacity-100"
+                          }`}
+                        >
+                          <div className={`p-2.5 rounded-xl ${isSelected ? "bg-primary/15" : "bg-muted/50"}`}>
+                            <Icon size={20} className={isSelected ? "text-primary" : "text-muted-foreground"} />
+                          </div>
+                          <div className="flex-1">
+                            <p className="font-medium text-foreground">{c.label}</p>
+                            <p className="text-xs text-muted-foreground">{c.descricao}</p>
+                          </div>
+                          <div className="text-right">
+                            <p className="text-sm font-bold text-highlight">R$ {Number(c.cashback_valor).toFixed(2).replace(".", ",")}</p>
+                            <p className="text-[10px] text-muted-foreground">+{c.xp_valor} XP · ✨{baseCromos}</p>
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </motion.div>
+
+                {/* Submit form */}
+                <motion.div variants={fadeUp} className="space-y-2.5">
+                  <p className="section-label px-1">Enviar post</p>
+                  <div className="p-4 rounded-2xl glass-card-strong space-y-3">
                     {agendamentosDisponiveis.length > 0 && (
                       <div>
                         <label className="text-xs text-muted-foreground mb-1 block">Visita relacionada (opcional)</label>
                         <Select value={agendamentoId} onValueChange={setAgendamentoId}>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Selecione a visita" />
-                          </SelectTrigger>
+                          <SelectTrigger><SelectValue placeholder="Selecione a visita" /></SelectTrigger>
                           <SelectContent>
                             {agendamentosDisponiveis.map((a: any) => (
                               <SelectItem key={a.id} value={a.id}>
@@ -306,35 +332,13 @@ const ResinkraMoments = () => {
                     {/* Screenshot / Foto */}
                     <div>
                       <label className="text-xs text-muted-foreground mb-1 block">Foto ou Screenshot do post</label>
-                      
-                      {/* Hidden inputs */}
-                      <input
-                        ref={cameraRef}
-                        type="file"
-                        accept="image/jpeg,image/png,image/webp"
-                        capture="environment"
-                        className="hidden"
-                        onChange={(e) => e.target.files?.[0] && handleFileSelect(e.target.files[0])}
-                      />
-                      <input
-                        ref={galleryRef}
-                        type="file"
-                        accept={ACCEPTED_FORMATS}
-                        className="hidden"
-                        onChange={(e) => e.target.files?.[0] && handleFileSelect(e.target.files[0])}
-                      />
+                      <input ref={cameraRef} type="file" accept="image/jpeg,image/png,image/webp" capture="environment" className="hidden" onChange={(e) => e.target.files?.[0] && handleFileSelect(e.target.files[0])} />
+                      <input ref={galleryRef} type="file" accept={ACCEPTED_FORMATS} className="hidden" onChange={(e) => e.target.files?.[0] && handleFileSelect(e.target.files[0])} />
 
                       {screenshotPreview ? (
                         <div className="relative rounded-xl overflow-hidden border border-border">
-                          <img
-                            src={screenshotPreview}
-                            alt="Preview"
-                            className="w-full max-h-48 object-cover"
-                          />
-                          <button
-                            onClick={clearScreenshot}
-                            className="absolute top-2 right-2 p-1.5 rounded-full bg-background/80 backdrop-blur-sm hover:bg-destructive/20 transition-colors"
-                          >
+                          <img src={screenshotPreview} alt="Preview" className="w-full max-h-48 object-cover" />
+                          <button onClick={clearScreenshot} className="absolute top-2 right-2 p-1.5 rounded-full bg-background/80 backdrop-blur-sm hover:bg-destructive/20 transition-colors">
                             <X size={14} className="text-foreground" />
                           </button>
                           {uploading && (
@@ -345,19 +349,11 @@ const ResinkraMoments = () => {
                         </div>
                       ) : (
                         <div className="flex gap-2">
-                          <button
-                            type="button"
-                            onClick={() => cameraRef.current?.click()}
-                            className="flex-1 p-3 rounded-xl border-2 border-dashed border-primary/30 bg-primary/5 hover:bg-primary/10 transition-colors flex flex-col items-center gap-1.5"
-                          >
+                          <button type="button" onClick={() => cameraRef.current?.click()} className="flex-1 p-3 rounded-xl border-2 border-dashed border-primary/30 bg-primary/5 hover:bg-primary/10 transition-colors flex flex-col items-center gap-1.5">
                             <Camera size={20} className="text-primary" />
                             <span className="text-xs font-medium text-primary">Câmera</span>
                           </button>
-                          <button
-                            type="button"
-                            onClick={() => galleryRef.current?.click()}
-                            className="flex-1 p-3 rounded-xl border-2 border-dashed border-muted-foreground/30 bg-muted/30 hover:bg-muted/50 transition-colors flex flex-col items-center gap-1.5"
-                          >
+                          <button type="button" onClick={() => galleryRef.current?.click()} className="flex-1 p-3 rounded-xl border-2 border-dashed border-muted-foreground/30 bg-muted/30 hover:bg-muted/50 transition-colors flex flex-col items-center gap-1.5">
                             <ImagePlus size={20} className="text-muted-foreground" />
                             <span className="text-xs font-medium text-muted-foreground">Galeria</span>
                           </button>
@@ -369,23 +365,13 @@ const ResinkraMoments = () => {
                       <label className="text-xs text-muted-foreground mb-1 block">Link do post (opcional)</label>
                       <div className="relative">
                         <LinkIcon size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-                        <Input
-                          placeholder="https://instagram.com/p/..."
-                          value={linkPost}
-                          onChange={(e) => setLinkPost(e.target.value)}
-                          className="pl-9"
-                        />
+                        <Input placeholder="https://instagram.com/p/..." value={linkPost} onChange={(e) => setLinkPost(e.target.value)} className="pl-9" />
                       </div>
                     </div>
 
                     <div>
                       <label className="text-xs text-muted-foreground mb-1 block">Comentário (opcional)</label>
-                      <Textarea
-                        placeholder="Conte como foi sua experiência..."
-                        value={descricao}
-                        onChange={(e) => setDescricao(e.target.value)}
-                        rows={2}
-                      />
+                      <Textarea placeholder="Conte como foi sua experiência..." value={descricao} onChange={(e) => setDescricao(e.target.value)} rows={2} />
                     </div>
 
                     <Button onClick={handleSubmit} disabled={enviando} className="w-full gap-2">
@@ -395,78 +381,94 @@ const ResinkraMoments = () => {
 
                     {selectedConfig && (
                       <p className="text-xs text-center text-muted-foreground">
-                        Você receberá <span className="text-highlight font-semibold">R$ {Number(selectedConfig.cashback_valor).toFixed(2).replace(".", ",")}</span> + <span className="text-primary font-semibold">{selectedConfig.xp_valor} XP</span> após aprovação
+                        Você receberá <span className="text-highlight font-semibold">R$ {Number(selectedConfig.cashback_valor).toFixed(2).replace(".", ",")}</span> + <span className="text-primary font-semibold">{selectedConfig.xp_valor} XP</span> + <span className="font-semibold">✨ Cromos</span> após aprovação
+                        {missaoSelecionada && <span className="text-warning font-semibold"> (c/ missão 🔥)</span>}
                       </p>
                     )}
-                  </>
-              </div>
-            </motion.div>
+                  </div>
+                </motion.div>
 
-            {/* History */}
-            {posts.length > 0 && (
-              <motion.div variants={fadeUp} className="space-y-2.5">
-                <p className="section-label px-1">Histórico</p>
-                <div className="space-y-2">
-                  {posts.map((post) => {
-                    const Icon = TIPO_ICONS[post.tipo_post] || Camera;
-                    return (
-                      <div key={post.id} className="p-4 rounded-2xl glass-card-strong">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-3">
-                            <div className="p-2 rounded-xl bg-primary/10">
-                              <Icon size={18} className="text-primary" />
-                            </div>
-                            <div>
-                              <p className="font-medium text-foreground text-sm capitalize">{post.tipo_post} · {post.plataforma}</p>
-                              <p className="text-xs text-muted-foreground">{new Date(post.created_at).toLocaleDateString("pt-BR")}</p>
-                            </div>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            {post.status === "aprovado" && (
-                              <Badge variant="outline" className="text-highlight border-highlight/30 text-[10px]">
-                                +R$ {Number(post.cashback_valor).toFixed(2).replace(".", ",")}
-                              </Badge>
-                            )}
-                            <div className="flex items-center gap-1">
-                              {statusIcon(post.status)}
-                              <span className="text-xs text-muted-foreground">{statusLabel(post.status)}</span>
-                            </div>
-                          </div>
+                {/* How it works */}
+                <motion.div variants={fadeUp} className="space-y-2.5">
+                  <p className="section-label px-1">Como funciona</p>
+                  <div className="p-4 rounded-2xl glass-card-strong space-y-3">
+                    {[
+                      { step: "1", text: "Visite a Resinkra e aproveite seu atendimento" },
+                      { step: "2", text: "Poste nas redes sociais marcando @resinkra" },
+                      { step: "3", text: "Envie o link do post aqui no app" },
+                      { step: "4", text: "Após aprovação, receba cashback + XP + Cromos!" },
+                    ].map(({ step, text }) => (
+                      <div key={step} className="flex items-center gap-3">
+                        <div className="w-7 h-7 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+                          <span className="text-xs font-bold text-primary">{step}</span>
                         </div>
-                        {post.motivo_rejeicao && (
-                          <p className="text-xs text-destructive mt-2 bg-destructive/10 p-2 rounded-lg">{post.motivo_rejeicao}</p>
-                        )}
+                        <p className="text-sm text-muted-foreground">{text}</p>
                       </div>
-                    );
-                  })}
-                </div>
+                    ))}
+                    <div className="pt-2 border-t border-border/50">
+                      <p className="text-xs text-muted-foreground">
+                        📸 Limite: <strong>3 posts premiados por visita</strong> · Aprovação em até 24h
+                      </p>
+                    </div>
+                  </div>
+                </motion.div>
+              </>
+            )}
+
+            {/* TAB: Histórico */}
+            {tab === "historico" && (
+              <motion.div variants={fadeUp} className="space-y-2.5">
+                {posts.length === 0 ? (
+                  <div className="text-center py-12 space-y-3">
+                    <Camera size={48} className="mx-auto text-muted-foreground/40" />
+                    <p className="text-muted-foreground text-sm">Nenhum post enviado ainda</p>
+                    <Button variant="outline" onClick={() => setTab("novo")}>Enviar primeiro post</Button>
+                  </div>
+                ) : (
+                  <div className="space-y-2">
+                    {posts.map((post) => {
+                      const Icon = TIPO_ICONS[post.tipo_post] || Camera;
+                      return (
+                        <div key={post.id} className="p-4 rounded-2xl glass-card-strong">
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                              <div className="p-2 rounded-xl bg-primary/10">
+                                <Icon size={18} className="text-primary" />
+                              </div>
+                              <div>
+                                <p className="font-medium text-foreground text-sm capitalize">{post.tipo_post} · {post.plataforma}</p>
+                                <p className="text-xs text-muted-foreground">{new Date(post.created_at).toLocaleDateString("pt-BR")}</p>
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              {post.status === "aprovado" && (
+                                <Badge variant="outline" className="text-highlight border-highlight/30 text-[10px]">
+                                  +R$ {Number(post.cashback_valor).toFixed(2).replace(".", ",")}
+                                  {post.cromos_ether > 0 && ` · ✨${post.cromos_ether}`}
+                                </Badge>
+                              )}
+                              <div className="flex items-center gap-1">
+                                {statusIcon(post.status)}
+                                <span className="text-xs text-muted-foreground">{statusLabel(post.status)}</span>
+                              </div>
+                            </div>
+                          </div>
+                          {post.motivo_rejeicao && (
+                            <p className="text-xs text-destructive mt-2 bg-destructive/10 p-2 rounded-lg">{post.motivo_rejeicao}</p>
+                          )}
+                          {post.multiplicador_aplicado > 1 && (
+                            <p className="text-[10px] text-warning mt-1">🔥 Missão {post.multiplicador_aplicado}x aplicada</p>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
               </motion.div>
             )}
 
-            {/* How it works */}
-            <motion.div variants={fadeUp} className="space-y-2.5">
-              <p className="section-label px-1">Como funciona</p>
-              <div className="p-4 rounded-2xl glass-card-strong space-y-3">
-                {[
-                  { step: "1", text: "Visite a Resinkra e aproveite seu atendimento" },
-                  { step: "2", text: "Poste nas redes sociais marcando @resinkra" },
-                  { step: "3", text: "Envie o link do post aqui no app" },
-                  { step: "4", text: "Após aprovação, receba cashback + XP!" },
-                ].map(({ step, text }) => (
-                  <div key={step} className="flex items-center gap-3">
-                    <div className="w-7 h-7 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-                      <span className="text-xs font-bold text-primary">{step}</span>
-                    </div>
-                    <p className="text-sm text-muted-foreground">{text}</p>
-                  </div>
-                ))}
-                <div className="pt-2 border-t border-border/50">
-                  <p className="text-xs text-muted-foreground">
-                    📸 Limite: <strong>3 posts premiados por visita</strong> · Aprovação em até 24h
-                  </p>
-                </div>
-              </div>
-            </motion.div>
+            {/* TAB: Ranking */}
+            {tab === "ranking" && <MomentsRankingTab ranking={ranking} />}
           </motion.div>
         </div>
       </div>
