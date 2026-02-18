@@ -9,6 +9,7 @@ import {
   BarChart3, TrendingUp, ArrowRight, Sparkles, Moon, Droplets, Flame, Trophy, LineChart, FileText
 } from "lucide-react";
 import WellnessAchievements from "@/features/bem-estar/components/WellnessAchievements";
+import WeeklyComparison from "@/features/bem-estar/components/WeeklyComparison";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 14 },
@@ -239,6 +240,9 @@ const BemEstarHub = () => {
               </div>
             </motion.div>
           )}
+
+          {/* Weekly Comparison */}
+          <WeeklyComparison />
 
           {/* Achievements */}
           <WellnessAchievements />
