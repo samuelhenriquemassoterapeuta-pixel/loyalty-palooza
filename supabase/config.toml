@@ -71,3 +71,6 @@ verify_jwt = false
 
 [functions.validar-playlist]
 verify_jwt = false
+
+[functions.creditar-recompensa-sugestao]
+verify_jwt = false

@@ -427,6 +427,33 @@ export type Database = {
         }
         Relationships: []
       }
+      badges: {
+        Row: {
+          created_at: string | null
+          descricao: string | null
+          id: string
+          imagem_url: string | null
+          nome: string
+          tipo: string
+        }
+        Insert: {
+          created_at?: string | null
+          descricao?: string | null
+          id?: string
+          imagem_url?: string | null
+          nome: string
+          tipo: string
+        }
+        Update: {
+          created_at?: string | null
+          descricao?: string | null
+          id?: string
+          imagem_url?: string | null
+          nome?: string
+          tipo?: string
+        }
+        Relationships: []
+      }
       banners_dismissals: {
         Row: {
           banner_id: string
@@ -845,6 +872,38 @@ export type Database = {
           titulo?: string
         }
         Relationships: []
+      }
+      conquistas_usuario_badges: {
+        Row: {
+          badge_id: string
+          data_conquista: string | null
+          id: string
+          metadata: Json | null
+          usuario_id: string
+        }
+        Insert: {
+          badge_id: string
+          data_conquista?: string | null
+          id?: string
+          metadata?: Json | null
+          usuario_id: string
+        }
+        Update: {
+          badge_id?: string
+          data_conquista?: string | null
+          id?: string
+          metadata?: Json | null
+          usuario_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "conquistas_usuario_badges_badge_id_fkey"
+            columns: ["badge_id"]
+            isOneToOne: false
+            referencedRelation: "badges"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       content_ideas: {
         Row: {
@@ -5645,6 +5704,13 @@ export type Database = {
       }
     }
     Functions: {
+      calcular_ranking_curadores: {
+        Args: { mes?: string }
+        Returns: {
+          total_escolhas: number
+          usuario_id: string
+        }[]
+      }
       check_and_unlock_achievements: {
         Args: { p_user_id: string }
         Returns: {
