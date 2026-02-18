@@ -102,6 +102,9 @@ const CromosDashboard = lazy(() => import("@/features/cromos/pages/CromosDashboa
 // Materiais Gráficos
 const MateriaisGraficos = lazy(() => import("@/features/materiais/pages/MateriaisGraficos"));
 
+// Anamnese
+const Anamnese = lazy(() => import("@/features/anamnese/pages/Anamnese"));
+
 // Resinkra AI Pages
 const ResinkraAIDashboard = lazy(() => import("@/features/resinkra-ai/pages/ResinkraAIDashboard"));
 const ResinkraAIOnboarding = lazy(() => import("@/features/resinkra-ai/pages/ResinkraAIOnboarding"));
@@ -178,6 +181,7 @@ export const AnimatedRoutes = () => {
         <Route path="/cromos" element={<ProtectedRoute><LazyPage><CromosDashboard /></LazyPage></ProtectedRoute>} />
         <Route path="/conteudo-social" element={<ProtectedRoute requireAdmin><LazyPage><ConteudoSocial /></LazyPage></ProtectedRoute>} />
         <Route path="/materiais" element={<ProtectedRoute requireAdmin><LazyPage><MateriaisGraficos /></LazyPage></ProtectedRoute>} />
+        <Route path="/anamnese" element={<ProtectedRoute><LazyPage><Anamnese /></LazyPage></ProtectedRoute>} />
         <Route path="/terapeuta/:id" element={<LazyPage><CartaoTerapeuta /></LazyPage>} />
         <Route path="/terapeuta/:id/qrcode" element={<LazyPage><QRCodeTerapeuta /></LazyPage>} />
         <Route path="/cursos" element={<ProtectedRoute allowRoles={["admin", "terapeuta"]}><LazyPage><Cursos /></LazyPage></ProtectedRoute>} />

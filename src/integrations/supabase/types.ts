@@ -55,6 +55,39 @@ export type Database = {
           },
         ]
       }
+      anamnese_templates: {
+        Row: {
+          ativo: boolean
+          campos: Json
+          created_at: string
+          descricao: string | null
+          id: string
+          ordem: number
+          servico_nome: string
+          titulo: string
+        }
+        Insert: {
+          ativo?: boolean
+          campos?: Json
+          created_at?: string
+          descricao?: string | null
+          id?: string
+          ordem?: number
+          servico_nome: string
+          titulo: string
+        }
+        Update: {
+          ativo?: boolean
+          campos?: Json
+          created_at?: string
+          descricao?: string | null
+          id?: string
+          ordem?: number
+          servico_nome?: string
+          titulo?: string
+        }
+        Relationships: []
+      }
       anotacoes_posturais: {
         Row: {
           anotacoes: Json
@@ -1785,6 +1818,127 @@ export type Database = {
             columns: ["protocolo_usuario_id"]
             isOneToOne: false
             referencedRelation: "usuario_protocolos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      fichas_anamnese: {
+        Row: {
+          agendamento_id: string | null
+          alergias: string[] | null
+          assinatura_data: string | null
+          assinatura_paciente: string | null
+          atividade_fisica_descricao: string | null
+          campos_especificos: Json | null
+          cirurgias_previas: string | null
+          created_at: string
+          data_nascimento: string | null
+          email: string | null
+          endereco: string | null
+          etilista: boolean | null
+          fumante: boolean | null
+          historico_doencas: string[] | null
+          id: string
+          medicamentos_uso: string | null
+          nome_completo: string
+          observacoes_gerais: string | null
+          pratica_atividade_fisica: boolean | null
+          pressao_arterial: string | null
+          profissao: string | null
+          protocolo_usuario_id: string | null
+          queixa_principal: string | null
+          servico_nome: string
+          sexo: string | null
+          status: string
+          telefone: string | null
+          terapeuta_id: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          agendamento_id?: string | null
+          alergias?: string[] | null
+          assinatura_data?: string | null
+          assinatura_paciente?: string | null
+          atividade_fisica_descricao?: string | null
+          campos_especificos?: Json | null
+          cirurgias_previas?: string | null
+          created_at?: string
+          data_nascimento?: string | null
+          email?: string | null
+          endereco?: string | null
+          etilista?: boolean | null
+          fumante?: boolean | null
+          historico_doencas?: string[] | null
+          id?: string
+          medicamentos_uso?: string | null
+          nome_completo: string
+          observacoes_gerais?: string | null
+          pratica_atividade_fisica?: boolean | null
+          pressao_arterial?: string | null
+          profissao?: string | null
+          protocolo_usuario_id?: string | null
+          queixa_principal?: string | null
+          servico_nome: string
+          sexo?: string | null
+          status?: string
+          telefone?: string | null
+          terapeuta_id?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          agendamento_id?: string | null
+          alergias?: string[] | null
+          assinatura_data?: string | null
+          assinatura_paciente?: string | null
+          atividade_fisica_descricao?: string | null
+          campos_especificos?: Json | null
+          cirurgias_previas?: string | null
+          created_at?: string
+          data_nascimento?: string | null
+          email?: string | null
+          endereco?: string | null
+          etilista?: boolean | null
+          fumante?: boolean | null
+          historico_doencas?: string[] | null
+          id?: string
+          medicamentos_uso?: string | null
+          nome_completo?: string
+          observacoes_gerais?: string | null
+          pratica_atividade_fisica?: boolean | null
+          pressao_arterial?: string | null
+          profissao?: string | null
+          protocolo_usuario_id?: string | null
+          queixa_principal?: string | null
+          servico_nome?: string
+          sexo?: string | null
+          status?: string
+          telefone?: string | null
+          terapeuta_id?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fichas_anamnese_agendamento_id_fkey"
+            columns: ["agendamento_id"]
+            isOneToOne: false
+            referencedRelation: "agendamentos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fichas_anamnese_protocolo_usuario_id_fkey"
+            columns: ["protocolo_usuario_id"]
+            isOneToOne: false
+            referencedRelation: "usuario_protocolos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fichas_anamnese_terapeuta_id_fkey"
+            columns: ["terapeuta_id"]
+            isOneToOne: false
+            referencedRelation: "terapeutas"
             referencedColumns: ["id"]
           },
         ]
