@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AppLayout } from "@/components/AppLayout";
 import { useTerapeuta } from "@/features/terapeuta/hooks/useTerapeuta";
+import { useTerapeutaAgenda } from "@/features/terapeuta/hooks/useTerapeutaAgenda";
 import { useAdmin } from "@/features/admin/hooks/useAdmin";
 import { PageLoading } from "@/components/LoadingSpinner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -12,11 +13,13 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ArrowLeft, Ticket, GraduationCap, Plus, Trash2, ToggleLeft, ToggleRight, Stethoscope, BookOpen, FileText, Search, Clock, CheckCircle2, Edit3, Palette } from "lucide-react";
+import { ArrowLeft, Ticket, GraduationCap, Plus, Trash2, ToggleLeft, ToggleRight, Stethoscope, BookOpen, FileText, Search, Clock, CheckCircle2, Edit3, Palette, CalendarDays, Users } from "lucide-react";
 import { toast } from "sonner";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { TerapeutaAnamneseSection } from "@/features/terapeuta/components/TerapeutaAnamneseSection";
+import { TerapeutaAgendaTab } from "@/features/terapeuta/components/TerapeutaAgendaTab";
+import { TerapeutaPacientesTab } from "@/features/terapeuta/components/TerapeutaPacientesTab";
 
 const TerapeutaDashboard = () => {
   const navigate = useNavigate();
@@ -27,6 +30,11 @@ const TerapeutaDashboard = () => {
     criarCupom, toggleCupom, deletarCupom,
   } = useTerapeuta();
 
+  const {
+    proximos, passados, pacientes,
+    isLoading: loadingAgenda,
+    atualizarStatus,
+  } = useTerapeutaAgenda(terapeuta?.id);
   const [novoCupom, setNovoCupom] = useState({
     codigo: "",
     descricao: "",
@@ -97,13 +105,31 @@ const TerapeutaDashboard = () => {
           </div>
         </div>
 
-        <Tabs defaultValue="cupons" className="w-full">
-          <TabsList className="w-full grid grid-cols-4">
+        <Tabs defaultValue="agenda" className="w-full">
+          <TabsList className="w-full grid grid-cols-6">
+            <TabsTrigger value="agenda" className="gap-1 text-xs"><CalendarDays className="h-4 w-4" /> Agenda</TabsTrigger>
+            <TabsTrigger value="pacientes" className="gap-1 text-xs"><Users className="h-4 w-4" /> Pacientes</TabsTrigger>
             <TabsTrigger value="cupons" className="gap-1 text-xs"><Ticket className="h-4 w-4" /> Cupons</TabsTrigger>
             <TabsTrigger value="anamnese" className="gap-1 text-xs"><FileText className="h-4 w-4" /> Anamnese</TabsTrigger>
             <TabsTrigger value="materiais" className="gap-1 text-xs"><Palette className="h-4 w-4" /> Materiais</TabsTrigger>
             <TabsTrigger value="cursos" className="gap-1 text-xs"><GraduationCap className="h-4 w-4" /> Cursos</TabsTrigger>
           </TabsList>
+
+          {/* AGENDA TAB */}
+          <TabsContent value="agenda" className="space-y-4 mt-4">
+            <TerapeutaAgendaTab
+              proximos={proximos}
+              passados={passados}
+              isLoading={loadingAgenda}
+              onAtualizarStatus={(id, status) => atualizarStatus.mutate({ id, status })}
+              isPending={atualizarStatus.isPending}
+            />
+          </TabsContent>
+
+          {/* PACIENTES TAB */}
+          <TabsContent value="pacientes" className="space-y-4 mt-4">
+            <TerapeutaPacientesTab pacientes={pacientes} isLoading={loadingAgenda} />
+          </TabsContent>
 
           {/* CUPONS TAB */}
           <TabsContent value="cupons" className="space-y-4 mt-4">
