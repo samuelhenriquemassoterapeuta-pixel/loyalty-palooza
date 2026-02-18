@@ -41,6 +41,7 @@ import WellnessNutritionLog from "@/features/bem-estar/components/WellnessNutrit
 import WellnessSleepQuality from "@/features/bem-estar/components/WellnessSleepQuality";
 import WellnessWeeklyGoals from "@/features/bem-estar/components/WellnessWeeklyGoals";
 import WellnessMoodJournal from "@/features/bem-estar/components/WellnessMoodJournal";
+import WellnessActivityHeatmap from "@/features/bem-estar/components/WellnessActivityHeatmap";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 14 },
@@ -385,6 +386,9 @@ const BemEstarHub = () => {
 
           {/* Mood Journal Quick Entry */}
           <WellnessMoodJournal />
+
+          {/* Activity Heatmap */}
+          <WellnessActivityHeatmap />
 
           {/* Hydration Quick Tracker */}
           <WellnessHydrationWidget />
