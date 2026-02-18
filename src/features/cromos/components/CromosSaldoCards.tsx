@@ -23,23 +23,45 @@ export const CromosSaldoCards = ({ saldos, totalCromos, nivel }: Props) => {
 
   return (
     <div className="space-y-4">
-      {/* Nível header */}
-      <div className="glass-card rounded-2xl p-4 flex items-center gap-3">
-        <span className="text-2xl">{nivelInfo.emoji}</span>
-        <div className="flex-1">
-          <p className={`font-bold ${nivelInfo.cor}`}>Nível {nivelInfo.label}</p>
-          <p className="text-xs text-muted-foreground">
-            {totalCromos} cromos elementais coletados
-          </p>
-        </div>
-        {nivel !== "plenitude" && (
-          <div className="text-right">
-            <p className="text-xs text-muted-foreground">Próximo nível</p>
-            <p className="text-sm font-semibold text-foreground">
-              {nivel === "equilibrio" ? "500" : "1000"} cromos
+      {/* Nível header com barra de progresso */}
+      <div className="glass-card rounded-2xl p-4 space-y-3">
+        <div className="flex items-center gap-3">
+          <motion.span
+            className="text-2xl"
+            animate={{ scale: [1, 1.15, 1] }}
+            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+          >
+            {nivelInfo.emoji}
+          </motion.span>
+          <div className="flex-1">
+            <p className={`font-bold ${nivelInfo.cor}`}>Nível {nivelInfo.label}</p>
+            <p className="text-xs text-muted-foreground">
+              {totalCromos} cromos elementais coletados
             </p>
           </div>
-        )}
+          {nivel !== "plenitude" && (
+            <div className="text-right">
+              <p className="text-xs text-muted-foreground">Próximo nível</p>
+              <p className="text-sm font-semibold text-foreground">
+                {nivel === "equilibrio" ? "500" : "1000"} cromos
+              </p>
+            </div>
+          )}
+        </div>
+        {nivel !== "plenitude" && (() => {
+          const meta = nivel === "equilibrio" ? 500 : 1000;
+          const pct = Math.min((totalCromos / meta) * 100, 100);
+          return (
+            <div className="h-2 rounded-full bg-muted overflow-hidden">
+              <motion.div
+                className="h-full rounded-full bg-primary"
+                initial={{ width: 0 }}
+                animate={{ width: `${pct}%` }}
+                transition={{ duration: 0.8, ease: "easeOut" }}
+              />
+            </div>
+          );
+        })()}
       </div>
 
       {/* Element cards */}

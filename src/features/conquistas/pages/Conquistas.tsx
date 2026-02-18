@@ -162,30 +162,37 @@ const Conquistas = () => {
                   </AppCollapsibleSection>
                 </motion.div>
 
-                {/* Filter */}
+                {/* Filter with count badges */}
                 <motion.div variants={fadeUp} className="flex items-center gap-2">
                   <Filter size={14} className="text-muted-foreground" />
                   <div className="flex gap-1.5">
                     {(
                       [
-                        { key: "todos", label: "Todos" },
-                        { key: "desbloqueados", label: "Desbloqueados" },
-                        { key: "em_progresso", label: "Em progresso" },
+                        { key: "todos", label: "Todos", count: achievements.length },
+                        { key: "desbloqueados", label: "Desbloqueados", count: achievements.filter(a => a.unlocked).length },
+                        { key: "em_progresso", label: "Em progresso", count: achievements.filter(a => !a.unlocked && a.progress > 0).length },
                       ] as const
                     ).map((f) => (
                       <button
                         key={f.key}
                         onClick={() => setFilter(f.key)}
                         className={`
-                          text-xs px-2.5 py-1 rounded-full transition-colors
+                          text-xs px-2.5 py-1.5 rounded-full transition-all flex items-center gap-1
                           ${
                             filter === f.key
-                              ? "bg-primary text-primary-foreground font-semibold"
+                              ? "bg-primary text-primary-foreground font-semibold shadow-sm"
                               : "bg-muted text-muted-foreground hover:bg-muted/80"
                           }
                         `}
                       >
                         {f.label}
+                        <span className={`text-[9px] px-1 rounded-full ${
+                          filter === f.key
+                            ? "bg-primary-foreground/20"
+                            : "bg-foreground/10"
+                        }`}>
+                          {f.count}
+                        </span>
                       </button>
                     ))}
                   </div>
