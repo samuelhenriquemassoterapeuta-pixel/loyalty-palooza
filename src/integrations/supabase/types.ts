@@ -5725,6 +5725,33 @@ export type Database = {
           },
         ]
       }
+      wellness_habitos_diarios: {
+        Row: {
+          created_at: string
+          data: string
+          habitos_completos: string[]
+          id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          data?: string
+          habitos_completos?: string[]
+          id?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          data?: string
+          habitos_completos?: string[]
+          id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       wellness_metas: {
         Row: {
           created_at: string
