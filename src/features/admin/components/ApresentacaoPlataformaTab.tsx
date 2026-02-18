@@ -416,6 +416,171 @@ const FerramentasCollapsible = ({ items }: { items: FerramentaItem[] }) => (
   </div>
 );
 
+/* ─── Investimento Collapsible ─── */
+interface InvestimentoOption {
+  label: string;
+  badge: string;
+  badgeColor: "destructive" | "primary";
+  valor: string;
+  prazo: string;
+  cardStyle: string;
+  details: string[];
+}
+
+const investimentoOptions: InvestimentoOption[] = [
+  {
+    label: "Freelancer Sênior",
+    badge: "Tradicional",
+    badgeColor: "destructive",
+    valor: "R$ 950.000+",
+    prazo: "24-32 meses de desenvolvimento",
+    cardStyle: "border-destructive/20 bg-destructive/5",
+    details: [
+      "95+ páginas e 250+ componentes React/TypeScript",
+      "96 tabelas com 316+ políticas RLS de segurança",
+      "24 Edge Functions para integrações externas",
+      "Sistema completo de IA (Resinkra AI, Chat, Análise Viral)",
+      "PWA mobile-first com suporte offline",
+      "Risco alto: dependência de único profissional",
+      "Sem garantia de escalabilidade ou manutenção",
+    ],
+  },
+  {
+    label: "Agência Digital",
+    badge: "Tradicional",
+    badgeColor: "destructive",
+    valor: "R$ 1.350.000+",
+    prazo: "30-42 meses de desenvolvimento",
+    cardStyle: "border-destructive/30 bg-destructive/5",
+    details: [
+      "Equipe de 8-12 profissionais (devs, designers, PMs)",
+      "Custo mensal médio de R$ 35.000-55.000 com equipe",
+      "17 cursos profissionalizantes (1.886h de conteúdo)",
+      "Módulo corporativo B2B completo com dashboard RH",
+      "Integração Z-API WhatsApp + Resend e-mail marketing",
+      "Google Ads dashboard + automação de campanhas",
+      "Overhead de gestão: reuniões, sprints, documentação",
+    ],
+  },
+  {
+    label: "Software House Enterprise",
+    badge: "Tradicional",
+    badgeColor: "destructive",
+    valor: "R$ 1.800.000+",
+    prazo: "18-24 meses com equipe dedicada",
+    cardStyle: "border-destructive/40 bg-destructive/5",
+    details: [
+      "Arquitetura enterprise com microsserviços",
+      "QA dedicado, DevOps, monitoramento 24/7",
+      "Licenciamento White-Label multi-tenant",
+      "SLA contratual com penalidades",
+      "Custo mensal de manutenção: R$ 45.000-70.000",
+      "Contrato mínimo de 12 meses obrigatório",
+      "Total 3 anos (dev + manutenção): R$ 3.5M+",
+    ],
+  },
+  {
+    label: "Com Resinkra + IA",
+    badge: "96% economia",
+    badgeColor: "primary",
+    valor: "Fração do custo",
+    prazo: "Desenvolvimento acelerado por IA em semanas",
+    cardStyle: "border-primary/30 bg-primary/5",
+    details: [
+      "95+ páginas entregues e funcionando em produção",
+      "250+ componentes com design system consistente",
+      "96 tabelas + 316 RLS policies — segurança enterprise",
+      "24 Edge Functions ativas com deploy automático",
+      "17 cursos (1.886h) + certificação automática",
+      "IA nativa: roteiros virais, ganchos, análise de conteúdo",
+      "Manutenção contínua por IA — sem equipe fixa",
+      "Iterações em tempo real — ajustes em minutos, não semanas",
+    ],
+  },
+];
+
+const InvestimentoCollapsibleCard = ({ opt }: { opt: InvestimentoOption }) => {
+  const [open, setOpen] = useState(false);
+  const isResinkra = opt.badgeColor === "primary";
+  return (
+    <Card className={opt.cardStyle}>
+      <CardContent className="p-0">
+        <button
+          onClick={() => setOpen(!open)}
+          className="w-full p-4 flex flex-col gap-1 text-left"
+        >
+          <div className="flex items-center justify-between">
+            <span className={`text-xs font-medium ${isResinkra ? "text-primary" : "text-destructive"}`}>{opt.label}</span>
+            <div className="flex items-center gap-1.5">
+              <Badge variant={isResinkra ? "default" : "destructive"} className={`text-[10px] ${isResinkra ? "bg-primary/20 text-primary border-primary/30" : ""}`}>
+                {opt.badge}
+              </Badge>
+              <motion.div animate={{ rotate: open ? 180 : 0 }} transition={{ duration: 0.2 }}>
+                <ChevronDown size={14} className="text-muted-foreground" />
+              </motion.div>
+            </div>
+          </div>
+          <p className={`text-2xl font-bold ${isResinkra ? "text-primary" : "text-destructive"}`}>{opt.valor}</p>
+          <p className="text-[10px] text-muted-foreground">{opt.prazo}</p>
+        </button>
+        <AnimatePresence initial={false}>
+          {open && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.25 }}
+              className="overflow-hidden"
+            >
+              <div className="px-4 pb-4 space-y-1.5 border-t border-border/50 pt-3">
+                {opt.details.map((d, i) => (
+                  <div key={i} className="flex items-start gap-2">
+                    <CheckCircle2 className={`w-3 h-3 shrink-0 mt-0.5 ${isResinkra ? "text-primary" : "text-muted-foreground"}`} />
+                    <span className="text-[10px] text-muted-foreground leading-relaxed">{d}</span>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </CardContent>
+    </Card>
+  );
+};
+
+const InvestimentoContent = () => (
+  <div className="space-y-3 max-h-[60vh] overflow-y-auto pr-1">
+    <div className="grid grid-cols-2 gap-2 text-center mb-1">
+      <div className="bg-destructive/10 rounded-xl p-2">
+        <p className="text-sm font-bold text-destructive">R$ 950K–1.8M</p>
+        <p className="text-[9px] text-muted-foreground">Custo tradicional</p>
+      </div>
+      <div className="bg-primary/10 rounded-xl p-2">
+        <p className="text-sm font-bold text-primary">96% economia</p>
+        <p className="text-[9px] text-muted-foreground">Com Resinkra + IA</p>
+      </div>
+    </div>
+    <div className="grid gap-2.5">
+      {investimentoOptions.map(opt => (
+        <InvestimentoCollapsibleCard key={opt.label} opt={opt} />
+      ))}
+    </div>
+    <div className="bg-accent/10 rounded-xl p-3 space-y-1.5">
+      <p className="text-xs text-accent font-semibold text-center">💡 Custos de manutenção no mercado</p>
+      <div className="grid grid-cols-2 gap-2 text-center">
+        <div>
+          <p className="text-[10px] font-semibold text-destructive">R$ 16.500–34.000</p>
+          <p className="text-[8px] text-muted-foreground">Freelancer/Agência por mês</p>
+        </div>
+        <div>
+          <p className="text-[10px] font-semibold text-destructive">R$ 45.000–70.000</p>
+          <p className="text-[8px] text-muted-foreground">Software House por mês</p>
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
 /* ─── Slide Data ─── */
 const slides = [
   {
@@ -434,9 +599,9 @@ const slides = [
         </p>
         <div className="grid grid-cols-2 gap-3 max-w-sm mx-auto">
           {[
-            { n: "91", l: "Páginas" },
-            { n: "220+", l: "Componentes" },
-            { n: "92", l: "Tabelas DB" },
+            { n: "95+", l: "Páginas" },
+            { n: "250+", l: "Componentes" },
+            { n: "96", l: "Tabelas DB" },
             { n: "24", l: "Edge Functions" },
           ].map(m => (
             <div key={m.l} className="bg-card border rounded-xl p-3 text-center">
@@ -454,45 +619,7 @@ const slides = [
     id: "custo",
     title: "Investimento Tradicional vs. Resinkra",
     subtitle: "Quanto custaria desenvolver tudo isso do zero?",
-    content: (
-      <div className="space-y-4">
-        <div className="grid gap-3">
-          <Card className="border-destructive/20 bg-destructive/5">
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-xs font-medium text-destructive">Freelancer Sênior</span>
-                <Badge variant="destructive" className="text-[10px]">Tradicional</Badge>
-              </div>
-              <p className="text-2xl font-bold text-destructive">R$ 853.000</p>
-              <p className="text-[10px] text-muted-foreground mt-1">20-28 meses de desenvolvimento</p>
-            </CardContent>
-          </Card>
-          <Card className="border-destructive/30 bg-destructive/5">
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-xs font-medium text-destructive">Agência Digital</span>
-                <Badge variant="destructive" className="text-[10px]">Tradicional</Badge>
-              </div>
-              <p className="text-2xl font-bold text-destructive">R$ 1.216.000</p>
-              <p className="text-[10px] text-muted-foreground mt-1">28-40 meses de desenvolvimento</p>
-            </CardContent>
-          </Card>
-          <Card className="border-primary/30 bg-primary/5">
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-xs font-medium text-primary">Com Resinkra + IA</span>
-                <Badge className="text-[10px] bg-primary/20 text-primary border-primary/30">96% economia</Badge>
-              </div>
-              <p className="text-2xl font-bold text-primary">Fração do custo</p>
-              <p className="text-[10px] text-muted-foreground mt-1">Desenvolvimento acelerado por IA em semanas</p>
-            </CardContent>
-          </Card>
-        </div>
-        <div className="bg-accent/10 rounded-xl p-3 text-center">
-          <p className="text-xs text-accent font-semibold">💡 Manutenção mensal estimada no mercado: R$ 16.500 a R$ 34.000/mês</p>
-        </div>
-      </div>
-    ),
+    content: <InvestimentoContent />,
     icon: DollarSign,
     color: "accent",
   },
