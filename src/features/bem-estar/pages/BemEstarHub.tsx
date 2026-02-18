@@ -16,6 +16,7 @@ import WellnessShareCard from "@/features/bem-estar/components/WellnessShareCard
 import WellnessCorrelations from "@/features/bem-estar/components/WellnessCorrelations";
 import WellnessOnboarding from "@/features/bem-estar/components/WellnessOnboarding";
 import WellnessScore from "@/features/bem-estar/components/WellnessScore";
+import WellnessCalendar from "@/features/bem-estar/components/WellnessCalendar";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 14 },
@@ -301,6 +302,9 @@ const BemEstarHub = () => {
               </div>
             </motion.div>
           )}
+
+          {/* Check-in Calendar */}
+          <WellnessCalendar />
 
           {/* Weekly Comparison */}
           <WeeklyComparison />
