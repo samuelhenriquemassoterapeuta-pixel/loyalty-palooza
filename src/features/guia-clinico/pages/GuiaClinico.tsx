@@ -39,7 +39,7 @@ const GuiaClinico = () => {
 
   return (
     <AppLayout>
-      <div className="min-h-screen bg-background pb-24 lg:pb-8">
+      <div className="min-h-screen bg-background gradient-hero pb-24 lg:pb-8">
         <div className="max-w-lg lg:max-w-4xl xl:max-w-5xl mx-auto px-4 lg:px-8 pt-6 safe-top">
           <motion.div
             variants={stagger}
@@ -63,7 +63,7 @@ const GuiaClinico = () => {
             {/* Tabs */}
             <motion.div variants={fadeUp}>
               <Tabs value={tab} onValueChange={setTab} className="w-full">
-                <TabsList className="w-full grid grid-cols-5">
+                <TabsList className="w-full grid grid-cols-5 h-11">
                   <TabsTrigger value="contraindicacoes" className="text-[10px] sm:text-xs gap-1">
                     <ShieldAlert size={13} />
                     <span className="hidden sm:inline">Contra</span>ind.
