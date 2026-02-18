@@ -121,6 +121,7 @@ const LigaResinkra = lazy(() => import("@/features/liga/pages/LigaResinkra"));
 
 // Bem-Estar IA
 const PlanoBemEstar = lazy(() => import("@/features/bem-estar/pages/PlanoBemEstar"));
+const AssistenteSaude = lazy(() => import("@/features/bem-estar/pages/AssistenteSaude"));
 
 // Academy
 const AcademyLanding = lazy(() => import("@/features/academy/pages/AcademyLanding"));
@@ -293,6 +294,7 @@ export const AnimatedRoutes = () => {
 
         {/* Bem-Estar IA */}
         <Route path="/bem-estar" element={<ProtectedRoute><LazyPage><PlanoBemEstar /></LazyPage></ProtectedRoute>} />
+        <Route path="/assistente-saude" element={<ProtectedRoute><LazyPage><AssistenteSaude /></LazyPage></ProtectedRoute>} />
 
         {/* Resinkra AI Routes — Admin Only */}
         <Route path="/resinkra-ai" element={<AdminRoute><LazyPage><ResinkraAIDashboard /></LazyPage></AdminRoute>} />

@@ -74,3 +74,6 @@ verify_jwt = false
 
 [functions.creditar-recompensa-sugestao]
 verify_jwt = false
+
+[functions.assistente-saude]
+verify_jwt = false
