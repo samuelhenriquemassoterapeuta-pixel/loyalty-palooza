@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
-import { ArrowLeft, Eye, EyeOff } from "lucide-react";
+import { ArrowLeft, Eye, EyeOff, TrendingUp, Lightbulb, History, Zap } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useTransacoes } from "@/features/cashback/hooks/useTransacoes";
 import { useUserTier } from "@/features/cashback/hooks/useUserTier";
@@ -13,6 +13,7 @@ import { CashbackHistoryList } from "@/features/cashback/components/CashbackHist
 import { ConquistasSection } from "@/features/cashback/components/ConquistasSection";
 import { StreakCard } from "@/features/cashback/components/StreakCard";
 import { CashbackInteligenteSection } from "@/features/cashback/components/CashbackInteligenteSection";
+import { AppCollapsibleSection } from "@/components/AppCollapsibleSection";
 import { Skeleton } from "@/components/ui/skeleton";
 
 const stagger = {
@@ -125,56 +126,61 @@ const Cashback = () => {
                 <StreakCard />
               </motion.div>
 
-              {/* Conquistas / Badges */}
-              <motion.div variants={fadeUp} className="space-y-2.5">
-                <p className="section-label px-1">Conquistas</p>
-                <ConquistasSection />
+              {/* Conquistas / Badges - Collapsible */}
+              <motion.div variants={fadeUp}>
+                <AppCollapsibleSection title="Conquistas" icon={Zap}>
+                  <ConquistasSection />
+                </AppCollapsibleSection>
               </motion.div>
 
-              {/* How Resinks works */}
-              <motion.div variants={fadeUp} className="space-y-2.5">
-                <p className="section-label px-1">Como ganhar Resinks</p>
-                <div className="grid grid-cols-3 gap-2">
-                  {[
-                    { emoji: "🛒", label: "Compras", desc: "Ganhe na loja" },
-                    { emoji: "💆", label: "Sessões", desc: "Ganhe ao concluir" },
-                    { emoji: "👥", label: "Indicações", desc: "Indique amigos" },
-                  ].map((item) => (
-                    <div
-                      key={item.label}
-                      className="p-3 rounded-2xl glass-card text-center"
-                    >
-                      <span className="text-2xl">{item.emoji}</span>
-                      <p className="font-semibold text-xs text-foreground mt-1">
-                        {item.label}
-                      </p>
-                      <p className="text-[10px] text-muted-foreground">{item.desc}</p>
-                    </div>
-                  ))}
-                </div>
+              {/* How Resinks works - Collapsible */}
+              <motion.div variants={fadeUp}>
+                <AppCollapsibleSection title="Como ganhar Resinks" icon={Lightbulb}>
+                  <div className="grid grid-cols-3 gap-2">
+                    {[
+                      { emoji: "🛒", label: "Compras", desc: "Ganhe na loja" },
+                      { emoji: "💆", label: "Sessões", desc: "Ganhe ao concluir" },
+                      { emoji: "👥", label: "Indicações", desc: "Indique amigos" },
+                    ].map((item) => (
+                      <div
+                        key={item.label}
+                        className="p-3 rounded-2xl glass-card text-center"
+                      >
+                        <span className="text-2xl">{item.emoji}</span>
+                        <p className="font-semibold text-xs text-foreground mt-1">
+                          {item.label}
+                        </p>
+                        <p className="text-[10px] text-muted-foreground">{item.desc}</p>
+                      </div>
+                    ))}
+                  </div>
+                </AppCollapsibleSection>
               </motion.div>
 
-              {/* AI Suggestions */}
-              <motion.div variants={fadeUp} className="space-y-2.5">
-                <p className="section-label px-1">Sugestões para você ✨</p>
-                <CashbackInteligenteSection />
+              {/* AI Suggestions - Collapsible */}
+              <motion.div variants={fadeUp}>
+                <AppCollapsibleSection title="Sugestões para você ✨" icon={Lightbulb}>
+                  <CashbackInteligenteSection />
+                </AppCollapsibleSection>
               </motion.div>
 
-              {/* Evolution Chart */}
-              <motion.div variants={fadeUp} className="space-y-2.5">
-                <p className="section-label px-1">Evolução</p>
-                <CashbackEvolutionChart transacoes={transacoes} />
+              {/* Evolution Chart - Collapsible */}
+              <motion.div variants={fadeUp}>
+                <AppCollapsibleSection title="Evolução" icon={TrendingUp}>
+                  <CashbackEvolutionChart transacoes={transacoes} />
+                </AppCollapsibleSection>
               </motion.div>
 
-              {/* Transaction History */}
-              <motion.div variants={fadeUp} className="space-y-2.5">
-                <p className="section-label px-1">Movimentações</p>
-                <CashbackHistoryList
-                  transacoes={transacoes}
-                  hasNextPage={hasNextPage}
-                  isFetchingNextPage={isFetchingNextPage}
-                  onLoadMore={() => fetchNextPage()}
-                />
+              {/* Transaction History - Collapsible */}
+              <motion.div variants={fadeUp}>
+                <AppCollapsibleSection title="Movimentações" icon={History}>
+                  <CashbackHistoryList
+                    transacoes={transacoes}
+                    hasNextPage={hasNextPage}
+                    isFetchingNextPage={isFetchingNextPage}
+                    onLoadMore={() => fetchNextPage()}
+                  />
+                </AppCollapsibleSection>
               </motion.div>
             </motion.div>
           )}

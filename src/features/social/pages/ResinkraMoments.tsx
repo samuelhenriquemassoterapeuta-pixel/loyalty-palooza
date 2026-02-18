@@ -419,17 +419,24 @@ const ResinkraMoments = () => {
             {tab === "historico" && (
               <motion.div variants={fadeUp} className="space-y-2.5">
                 {posts.length === 0 ? (
-                  <div className="text-center py-12 space-y-3">
-                    <Camera size={48} className="mx-auto text-muted-foreground/40" />
-                    <p className="text-muted-foreground text-sm">Nenhum post enviado ainda</p>
+                  <div className="text-center py-16 space-y-3">
+                    <Camera size={48} className="mx-auto text-muted-foreground/30" />
+                    <p className="text-muted-foreground font-medium">Nenhum post enviado ainda</p>
+                    <p className="text-xs text-muted-foreground/60">Poste nas redes e ganhe recompensas!</p>
                     <Button variant="outline" onClick={() => setTab("novo")}>Enviar primeiro post</Button>
                   </div>
                 ) : (
                   <div className="space-y-2">
-                    {posts.map((post) => {
+                    {posts.map((post, i) => {
                       const Icon = TIPO_ICONS[post.tipo_post] || Camera;
                       return (
-                        <div key={post.id} className="p-4 rounded-2xl glass-card-strong">
+                        <motion.div
+                          key={post.id}
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: i * 0.05 }}
+                          className="p-4 rounded-2xl glass-card-strong"
+                        >
                           <div className="flex items-center justify-between">
                             <div className="flex items-center gap-3">
                               <div className="p-2 rounded-xl bg-primary/10">
@@ -459,7 +466,7 @@ const ResinkraMoments = () => {
                           {post.multiplicador_aplicado > 1 && (
                             <p className="text-[10px] text-warning mt-1">🔥 Missão {post.multiplicador_aplicado}x aplicada</p>
                           )}
-                        </div>
+                        </motion.div>
                       );
                     })}
                   </div>
