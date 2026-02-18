@@ -85,7 +85,12 @@ export function NarracaoPlayer({ texto, titulo }: NarracaoPlayerProps) {
 
       if (!response.ok) {
         const errData = await response.json().catch(() => ({}));
-        throw new Error(errData.error || `Erro ${response.status}`);
+        const errMsg = errData.error || `Erro ${response.status}`;
+        // Friendly message for quota exceeded
+        if (response.status === 503 || errMsg.includes("quota") || errMsg.includes("Cota")) {
+          throw new Error("A narração está temporariamente indisponível. Leia o conteúdo da aula abaixo.");
+        }
+        throw new Error(errMsg);
       }
 
       const audioBlob = await response.blob();
