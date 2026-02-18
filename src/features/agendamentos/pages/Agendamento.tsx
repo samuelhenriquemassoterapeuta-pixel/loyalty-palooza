@@ -340,7 +340,7 @@ const Agendamento = () => {
                       return (
                         <motion.div key={agendamento.id} variants={fadeUp}>
                           <div
-                            className={`glass-card rounded-2xl p-4 ${isCanceled ? "opacity-60" : ""} ${isPast && !isCanceled ? "bg-muted/30" : ""}`}
+                            className={`glass-card rounded-2xl p-4 hover:shadow-sm active:scale-[0.995] transition-all ${isCanceled ? "opacity-60" : ""} ${isPast && !isCanceled ? "bg-muted/30" : ""}`}
                           >
                             <div className="flex justify-between items-start">
                               <div>
