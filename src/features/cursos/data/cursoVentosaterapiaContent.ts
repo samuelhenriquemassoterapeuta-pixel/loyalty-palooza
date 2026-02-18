@@ -1,7 +1,10 @@
-export const cursoVentosaterapiaData = [
+import { type ModuloContent } from "@/features/cursos/data/cursoVendasContent";
+
+export const cursoVentosaterapiaData: ModuloContent[] = [
   {
     titulo: "Módulo 1 — Fundamentos da Ventosaterapia",
     descricao: "Teoria, indicações e técnicas de aplicação de ventosas.",
+    icone: "Lightbulb", cor: "from-purple-50 to-fuchsia-50",
     aulas: [
       { titulo: "História e princípios da ventosaterapia", descricao: "Origens e fundamentos teóricos das ventosas.", duracaoMinutos: 20, conteudo: "# História da Ventosaterapia\n\nA ventosaterapia é uma das práticas mais antigas da medicina, com registros de mais de 3.000 anos.\n\n## Origens\n- Egípcios (Papiro de Ebers, 1550 a.C.)\n- Medicina Tradicional Chinesa\n- Hipócrates na Grécia Antiga\n- Medicina Árabe (Al-Hijama)\n\n## Mecanismo de ação\n- Sucção cria pressão negativa\n- Aumenta circulação sanguínea local\n- Estimula o sistema linfático\n- Libera fascial e miofascial\n- Promove analgesia por gate control\n\n## Tipos de ventosas\n- **Vidro:** tradicionais, com fogo\n- **Acrílico/silicone:** com bomba ou manual\n- **Magnéticas:** com ímãs integrados\n- **Pneumáticas:** controle preciso de pressão\n\n> A ventosa é uma ferramenta versátil que complementa qualquer técnica manual." },
       { titulo: "Indicações e contraindicações", descricao: "Quando usar e quando evitar a ventosaterapia.", duracaoMinutos: 15, conteudo: "# Indicações e Contraindicações\n\n## Indicações\n- Dores musculares e articulares\n- Tensão cervical e lombar\n- Enxaqueca e cefaleia tensional\n- Problemas respiratórios (asma, bronquite)\n- Celulite e retenção de líquidos\n- Estresse e insônia\n\n## Contraindicações absolutas\n- Gravidez (região abdominal e lombar)\n- Pele lesionada, queimada ou infectada\n- Varizes proeminentes\n- Hemofilia ou uso de anticoagulantes\n- Febre alta\n- Câncer ativo na região\n\n## Contraindicações relativas\n- Pele muito sensível\n- Diabetes descompensado\n- Idosos com pele frágil\n- Crianças muito pequenas\n\n## Efeitos colaterais esperados\n- Marcas circulares (equimoses) — normais\n- Duram 3-10 dias\n- Cores indicam grau de estagnação\n\n> As marcas da ventosa não são hematomas. São evidência terapêutica." },

@@ -15,6 +15,25 @@ import { cursoDrenagemLinfaticaData } from "@/features/cursos/data/cursoDrenagem
 import { cursoGastronomiaSaudavelData } from "@/features/cursos/data/cursoGastronomiaSaudavelContent";
 import { cursoSeitaiData } from "@/features/cursos/data/cursoSeitaiContent";
 import { cursoBandagemElasticaData } from "@/features/cursos/data/cursoBandagemElasticaContent";
+// Expansion courses
+import { cursoFitoterapiaAplicadaData } from "@/features/cursos/data/cursoFitoterapiaAplicadaContent";
+import { cursoGestantesData } from "@/features/cursos/data/cursoGestantesContent";
+import { cursoNeurocienciaData } from "@/features/cursos/data/cursoNeurocienciaContent";
+import { cursoGeriatricaData } from "@/features/cursos/data/cursoGeriatricaContent";
+import { cursoEsportivaData } from "@/features/cursos/data/cursoEsportivaContent";
+import { cursoMarketingDigitalData } from "@/features/cursos/data/cursoMarketingDigitalContent";
+import { cursoPetMassageData } from "@/features/cursos/data/cursoPetMassageContent";
+import { cursoMindfulnessData } from "@/features/cursos/data/cursoMindfulnessContent";
+import { cursoMtcIntroData } from "@/features/cursos/data/cursoMtcIntroContent";
+import { cursoMeridianosData } from "@/features/cursos/data/cursoMeridianosContent";
+import { cursoVentosaterapiaData } from "@/features/cursos/data/cursoVentosaterapiaContent";
+import { cursoMoxabustaoData } from "@/features/cursos/data/cursoMoxabustaoContent";
+import { cursoAuriculoterapiaData } from "@/features/cursos/data/cursoAuriculoterapiaContent";
+import { cursoTuiNaData } from "@/features/cursos/data/cursoTuiNaContent";
+import { cursoDiagnosticoMtcData } from "@/features/cursos/data/cursoDiagnosticoMtcContent";
+import { cursoFitoterapiaChinContent } from "@/features/cursos/data/cursoFitoterapiaChinContent";
+import { cursoQiGongData } from "@/features/cursos/data/cursoQiGongContent";
+import { cursoAlimentacaoChinesaData } from "@/features/cursos/data/cursoAlimentacaoChinesaContent";
 
 function computeStats(title: string, storageKey: string, modulos: { aulas: { duracaoMinutos: number }[] }[]) {
   const totalAulas = modulos.reduce((a, m) => a + m.aulas.length, 0);
@@ -24,6 +43,7 @@ function computeStats(title: string, storageKey: string, modulos: { aulas: { dur
 }
 
 export const allCourseStats = [
+  // Base courses
   computeStats("Método Resinkra", "resinkra_curso_metodo_resinkra_progress", cursoMetodoResinkraData),
   computeStats("Vendas", "resinkra_curso_vendas_progress", cursoVendasData),
   computeStats("Aromaterapia", "resinkra_curso_aromaterapia_progress", cursoAromaterapiaData),
@@ -41,4 +61,23 @@ export const allCourseStats = [
   computeStats("Gastronomia Saudável", "resinkra_curso_gastronomia_saudavel_progress", cursoGastronomiaSaudavelData),
   computeStats("Seitai e New Seitai", "resinkra_curso_seitai_progress", cursoSeitaiData),
   computeStats("Bandagem Elástica", "resinkra_curso_bandagem_elastica_progress", cursoBandagemElasticaData),
+  // Expansion courses
+  computeStats("Fitoterapia Aplicada", "resinkra_curso_fitoterapia_aplicada_progress", cursoFitoterapiaAplicadaData),
+  computeStats("Gestantes", "resinkra_curso_gestantes_progress", cursoGestantesData),
+  computeStats("Neurociência da Dor", "resinkra_curso_neurociencia_progress", cursoNeurocienciaData),
+  computeStats("Massagem Geriátrica", "resinkra_curso_geriatrica_progress", cursoGeriatricaData),
+  computeStats("Massagem Esportiva", "resinkra_curso_esportiva_progress", cursoEsportivaData),
+  computeStats("Marketing Digital", "resinkra_curso_marketing_digital_progress", cursoMarketingDigitalData),
+  computeStats("Pet Massage", "resinkra_curso_pet_massage_progress", cursoPetMassageData),
+  computeStats("Mindfulness", "resinkra_curso_mindfulness_progress", cursoMindfulnessData),
+  computeStats("Introdução à MTC", "resinkra_curso_mtc_intro_progress", cursoMtcIntroData),
+  computeStats("Meridianos e Pontos", "resinkra_curso_meridianos_progress", cursoMeridianosData),
+  computeStats("Ventosaterapia", "resinkra_curso_ventosaterapia_progress", cursoVentosaterapiaData),
+  computeStats("Moxabustão", "resinkra_curso_moxabustao_progress", cursoMoxabustaoData),
+  computeStats("Auriculoterapia", "resinkra_curso_auriculoterapia_progress", cursoAuriculoterapiaData),
+  computeStats("Tui Na", "resinkra_curso_tui_na_progress", cursoTuiNaData),
+  computeStats("Diagnóstico MTC", "resinkra_curso_diagnostico_mtc_progress", cursoDiagnosticoMtcData),
+  computeStats("Fitoterapia Chinesa", "resinkra_curso_fitoterapia_chin_progress", cursoFitoterapiaChinContent),
+  computeStats("Qi Gong", "resinkra_curso_qi_gong_progress", cursoQiGongData),
+  computeStats("Dietética Chinesa", "resinkra_curso_alimentacao_chinesa_progress", cursoAlimentacaoChinesaData),
 ];

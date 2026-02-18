@@ -1,7 +1,10 @@
-export const cursoDiagnosticoMtcData = [
+import { type ModuloContent } from "@/features/cursos/data/cursoVendasContent";
+
+export const cursoDiagnosticoMtcData: ModuloContent[] = [
   {
     titulo: "Módulo 1 — Diagnóstico pela Língua e Pulso",
     descricao: "Métodos diagnósticos tradicionais da MTC.",
+    icone: "Lightbulb", cor: "from-rose-50 to-red-50",
     aulas: [
       { titulo: "Os Quatro Métodos Diagnósticos", descricao: "Inspeção, ausculta, interrogatório e palpação.", duracaoMinutos: 20, conteudo: "# Os Quatro Métodos Diagnósticos\n\n## Wang (Inspeção)\n- Aparência geral e vitalidade (Shen)\n- Cor da face (5 cores = 5 elementos)\n- Língua (corpo, saburra, forma)\n- Olhos, pele, postura\n\n## Wen (Ausculta e Olfação)\n- Tom e força da voz\n- Respiração\n- Tosse\n- Odor corporal\n\n## Wen (Interrogatório)\n- As 10 perguntas clássicas de Zhang Jingyue\n- Sono, apetite, sede, evacuação\n- Dor, temperatura, emoções\n- Menstruação (mulheres)\n\n## Qie (Palpação)\n- Pulso radial (diagnóstico principal)\n- Palpação de meridianos\n- Palpação abdominal\n- Pontos de dor (Ashi)\n\n> O bom diagnóstico combina os quatro métodos. Nunca confie em apenas um." },
       { titulo: "Diagnóstico pela língua (She Zhen)", descricao: "Como ler a língua para identificar padrões.", duracaoMinutos: 30, conteudo: "# Diagnóstico pela Língua\n\n## O que observar\n\n### Corpo da língua\n- **Cor:** pálida (deficiência), vermelha (calor), roxa (estagnação)\n- **Forma:** inchada (umidade), fina (deficiência de sangue), com marcas dentais (deficiência de Qi do Baço)\n- **Movimento:** trêmula (vento), desviada (vento interno)\n\n### Saburra\n- **Cor:** branca (frio), amarela (calor), cinza/preta (extremos)\n- **Espessura:** fina (normal ou exterior), espessa (interior)\n- **Umidade:** úmida (frio), seca (calor/secura)\n- **Distribuição:** parcial indica localização do desequilíbrio\n\n## Mapa da língua\n- **Ponta:** Coração e Pulmão\n- **Centro:** Baço e Estômago\n- **Laterais:** Fígado e Vesícula Biliar\n- **Raiz:** Rim e Bexiga\n\n## Exemplos clínicos\n- Pálida, inchada, saburra branca = deficiência de Yang do Baço\n- Vermelha, sem saburra = deficiência de Yin\n- Roxa com pontos = estagnação de Sangue\n\n> A língua nunca mente. Ela reflete o estado interno com precisão." },

@@ -53,7 +53,7 @@ interface CursoHeroPageProps {
   courseSubtitle: string;
   courseIcon: React.ReactNode;
   coverImage: string;
-  coverVideo: string;
+  coverVideo?: string;
   courseRoute: string;
   level?: string;
   description?: string;

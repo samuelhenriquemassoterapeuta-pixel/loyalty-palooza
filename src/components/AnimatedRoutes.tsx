@@ -86,6 +86,24 @@ const CursoSeitai = lazy(() => import("@/features/cursos/pages/CursoSeitai"));
 const CursoSeitaiHero = lazy(() => import("@/features/cursos/pages/CursoSeitaiHero"));
 const CursoBandagemElastica = lazy(() => import("@/features/cursos/pages/CursoBandagemElastica"));
 const CursoBandagemElasticaHero = lazy(() => import("@/features/cursos/pages/CursoBandagemElasticaHero"));
+const CursoFitoterapiaAplicadaHero = lazy(() => import("@/features/cursos/pages/CursoFitoterapiaAplicadaHero"));
+const CursoGestantesHero = lazy(() => import("@/features/cursos/pages/CursoGestantesHero"));
+const CursoNeurocienciaHero = lazy(() => import("@/features/cursos/pages/CursoNeurocienciaHero"));
+const CursoGeriatricaHero = lazy(() => import("@/features/cursos/pages/CursoGeriatricaHero"));
+const CursoEsportivaHero = lazy(() => import("@/features/cursos/pages/CursoEsportivaHero"));
+const CursoMarketingDigitalHero = lazy(() => import("@/features/cursos/pages/CursoMarketingDigitalHero"));
+const CursoPetMassageHero = lazy(() => import("@/features/cursos/pages/CursoPetMassageHero"));
+const CursoMindfulnessHero = lazy(() => import("@/features/cursos/pages/CursoMindfulnessHero"));
+const CursoMtcIntroHero = lazy(() => import("@/features/cursos/pages/CursoMtcIntroHero"));
+const CursoMeridianosHero = lazy(() => import("@/features/cursos/pages/CursoMeridianosHero"));
+const CursoVentosaterapiaHero = lazy(() => import("@/features/cursos/pages/CursoVentosaterapiaHero"));
+const CursoMoxabustaoHero = lazy(() => import("@/features/cursos/pages/CursoMoxabustaoHero"));
+const CursoAuriculoterapiaHero = lazy(() => import("@/features/cursos/pages/CursoAuriculoterapiaHero"));
+const CursoTuiNaHero = lazy(() => import("@/features/cursos/pages/CursoTuiNaHero"));
+const CursoDiagnosticoMtcHero = lazy(() => import("@/features/cursos/pages/CursoDiagnosticoMtcHero"));
+const CursoFitoterapiaChinHero = lazy(() => import("@/features/cursos/pages/CursoFitoterapiaChinHero"));
+const CursoQiGongHero = lazy(() => import("@/features/cursos/pages/CursoQiGongHero"));
+const CursoAlimentacaoChinesaHero = lazy(() => import("@/features/cursos/pages/CursoAlimentacaoChinesaHero"));
 const TerapeutaDashboard = lazy(() => import("@/features/terapeuta/pages/TerapeutaDashboard"));
 const Terapias = lazy(() => import("@/features/terapias/pages/Terapias"));
 const Offers = lazy(() => import("@/pages/Offers"));
@@ -239,6 +257,24 @@ export const AnimatedRoutes = () => {
         <Route path="/curso/seitai" element={<ProtectedRoute allowRoles={["admin", "terapeuta"]}><LazyPage><CursoSeitaiHero /></LazyPage></ProtectedRoute>} />
         <Route path="/curso-bandagem-elastica" element={<ProtectedRoute allowRoles={["admin", "terapeuta"]}><LazyPage><CursoBandagemElastica /></LazyPage></ProtectedRoute>} />
         <Route path="/curso/bandagem-elastica" element={<ProtectedRoute allowRoles={["admin", "terapeuta"]}><LazyPage><CursoBandagemElasticaHero /></LazyPage></ProtectedRoute>} />
+        <Route path="/curso/fitoterapia-aplicada" element={<ProtectedRoute allowRoles={["admin", "terapeuta"]}><LazyPage><CursoFitoterapiaAplicadaHero /></LazyPage></ProtectedRoute>} />
+        <Route path="/curso/gestantes" element={<ProtectedRoute allowRoles={["admin", "terapeuta"]}><LazyPage><CursoGestantesHero /></LazyPage></ProtectedRoute>} />
+        <Route path="/curso/neurociencia" element={<ProtectedRoute allowRoles={["admin", "terapeuta"]}><LazyPage><CursoNeurocienciaHero /></LazyPage></ProtectedRoute>} />
+        <Route path="/curso/geriatrica" element={<ProtectedRoute allowRoles={["admin", "terapeuta"]}><LazyPage><CursoGeriatricaHero /></LazyPage></ProtectedRoute>} />
+        <Route path="/curso/esportiva" element={<ProtectedRoute allowRoles={["admin", "terapeuta"]}><LazyPage><CursoEsportivaHero /></LazyPage></ProtectedRoute>} />
+        <Route path="/curso/marketing-digital" element={<ProtectedRoute allowRoles={["admin", "terapeuta"]}><LazyPage><CursoMarketingDigitalHero /></LazyPage></ProtectedRoute>} />
+        <Route path="/curso/pet-massage" element={<ProtectedRoute allowRoles={["admin", "terapeuta"]}><LazyPage><CursoPetMassageHero /></LazyPage></ProtectedRoute>} />
+        <Route path="/curso/mindfulness" element={<ProtectedRoute allowRoles={["admin", "terapeuta"]}><LazyPage><CursoMindfulnessHero /></LazyPage></ProtectedRoute>} />
+        <Route path="/curso/mtc-intro" element={<ProtectedRoute allowRoles={["admin", "terapeuta"]}><LazyPage><CursoMtcIntroHero /></LazyPage></ProtectedRoute>} />
+        <Route path="/curso/meridianos" element={<ProtectedRoute allowRoles={["admin", "terapeuta"]}><LazyPage><CursoMeridianosHero /></LazyPage></ProtectedRoute>} />
+        <Route path="/curso/ventosaterapia" element={<ProtectedRoute allowRoles={["admin", "terapeuta"]}><LazyPage><CursoVentosaterapiaHero /></LazyPage></ProtectedRoute>} />
+        <Route path="/curso/moxabustao" element={<ProtectedRoute allowRoles={["admin", "terapeuta"]}><LazyPage><CursoMoxabustaoHero /></LazyPage></ProtectedRoute>} />
+        <Route path="/curso/auriculoterapia" element={<ProtectedRoute allowRoles={["admin", "terapeuta"]}><LazyPage><CursoAuriculoterapiaHero /></LazyPage></ProtectedRoute>} />
+        <Route path="/curso/tui-na" element={<ProtectedRoute allowRoles={["admin", "terapeuta"]}><LazyPage><CursoTuiNaHero /></LazyPage></ProtectedRoute>} />
+        <Route path="/curso/diagnostico-mtc" element={<ProtectedRoute allowRoles={["admin", "terapeuta"]}><LazyPage><CursoDiagnosticoMtcHero /></LazyPage></ProtectedRoute>} />
+        <Route path="/curso/fitoterapia-chinesa" element={<ProtectedRoute allowRoles={["admin", "terapeuta"]}><LazyPage><CursoFitoterapiaChinHero /></LazyPage></ProtectedRoute>} />
+        <Route path="/curso/qi-gong" element={<ProtectedRoute allowRoles={["admin", "terapeuta"]}><LazyPage><CursoQiGongHero /></LazyPage></ProtectedRoute>} />
+        <Route path="/curso/alimentacao-chinesa" element={<ProtectedRoute allowRoles={["admin", "terapeuta"]}><LazyPage><CursoAlimentacaoChinesaHero /></LazyPage></ProtectedRoute>} />
         <Route path="/terapias" element={<LazyPage><Terapias /></LazyPage>} />
         <Route path="/ofertas" element={<ProtectedRoute><LazyPage><Offers /></LazyPage></ProtectedRoute>} />
         <Route path="/chat" element={<ProtectedRoute><LazyPage><ChatAssistente /></LazyPage></ProtectedRoute>} />

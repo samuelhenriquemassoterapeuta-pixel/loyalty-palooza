@@ -1,7 +1,10 @@
-export const cursoAlimentacaoChinesaData = [
+import { type ModuloContent } from "@/features/cursos/data/cursoVendasContent";
+
+export const cursoAlimentacaoChinesaData: ModuloContent[] = [
   {
     titulo: "Módulo 1 — Fundamentos da Dietética Chinesa",
     descricao: "Princípios da alimentação segundo a MTC.",
+    icone: "Lightbulb", cor: "from-yellow-50 to-amber-50",
     aulas: [
       { titulo: "Relação entre alimentação e Qi", descricao: "Como os alimentos geram energia vital.", duracaoMinutos: 20, conteudo: "# Alimentação e Qi\n\nNa MTC, os alimentos são a principal fonte de Qi pós-natal. O Baço e o Estômago transformam os alimentos em Qi e Sangue que nutrem todo o corpo.\n\n## O processo digestivo na MTC\n1. Estômago recebe e amadurece os alimentos\n2. Baço transforma e transporta as essências\n3. Qi puro sobe para o Pulmão\n4. Qi impuro desce para eliminação\n\n## Alimentação adequada\n- Comer em horários regulares\n- Mastigar bem (pré-digestão)\n- Preferir alimentos cozidos (facilita a transformação)\n- Evitar excesso de frios e crus\n- Beber líquidos mornos\n\n## Erros comuns\n- Excesso de alimentos crus e gelados\n- Comer rápido e distraído\n- Pular refeições\n- Excesso de açúcar e farinha refinada\n- Beber muito líquido durante as refeições\n\n> Na MTC, como você come é tão importante quanto o que você come." },
       { titulo: "Natureza e sabor dos alimentos", descricao: "Classificação energética dos alimentos.", duracaoMinutos: 25, conteudo: "# Natureza e Sabor\n\n## Natureza térmica\n- **Quente:** pimenta, canela, gengibre seco\n- **Morna:** frango, aveia, cebola, alho\n- **Neutra:** arroz, batata, cenoura, ovo\n- **Fresca:** tofu, trigo, pepino, pera\n- **Fria:** melancia, banana, tomate, iogurte\n\n## Os cinco sabores\n- **Ácido/azedo:** astringe, consolida → limão, vinagre\n- **Amargo:** drena, seca → café, jiló\n- **Doce:** tonifica, harmoniza → arroz, mel, abóbora\n- **Picante:** dispersa, move → gengibre, alho, hortelã\n- **Salgado:** amolece, umedece → alga, sal marinho\n\n## Ação nos órgãos\n| Sabor | Órgão |\n| Ácido | Fígado |\n| Amargo | Coração |\n| Doce | Baço |\n| Picante | Pulmão |\n| Salgado | Rim |\n\n> Cada alimento é um remédio em potencial. Saiba usá-los." },
