@@ -9,6 +9,7 @@ import { HeadSpaSection } from "@/features/landing/components/HeadSpaSection";
 import { PacotesSection } from "@/features/landing/components/PacotesSection";
 import { DepoimentosSection } from "@/features/landing/components/DepoimentosSection";
 import { SobreSection } from "@/features/landing/components/SobreSection";
+import { EquipeSection } from "@/features/landing/components/EquipeSection";
 import { ContatoSection } from "@/features/landing/components/ContatoSection";
 import { LandingFooter } from "@/features/landing/components/LandingFooter";
 import { CollapsibleSection } from "@/features/landing/components/CollapsibleSection";
@@ -68,6 +69,7 @@ const Landing = () => {
       <HeadSpaSection />
       <PacotesSection />
       <DepoimentosSection />
+      <EquipeSection />
       <SobreSection />
 
       {/* Contato + Footer com imagem de fundo animada única */}
