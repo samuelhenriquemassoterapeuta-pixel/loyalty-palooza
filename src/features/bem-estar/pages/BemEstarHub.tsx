@@ -36,6 +36,7 @@ import WellnessDailyProgress from "@/features/bem-estar/components/WellnessDaily
 import WellnessWeeklyChallenge from "@/features/bem-estar/components/WellnessWeeklyChallenge";
 import WellnessMotivation from "@/features/bem-estar/components/WellnessMotivation";
 import WellnessMonthlySummary from "@/features/bem-estar/components/WellnessMonthlySummary";
+import WellnessBodyMap from "@/features/bem-estar/components/WellnessBodyMap";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 14 },
@@ -365,6 +366,9 @@ const BemEstarHub = () => {
 
           {/* Monthly Summary */}
           <WellnessMonthlySummary />
+
+          {/* Body Pain Map */}
+          <WellnessBodyMap />
 
           {/* Hydration Quick Tracker */}
           <WellnessHydrationWidget />
