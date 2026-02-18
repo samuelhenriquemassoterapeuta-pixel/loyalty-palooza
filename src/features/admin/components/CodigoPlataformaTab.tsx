@@ -53,6 +53,7 @@ import { toast } from "sonner";
 import { generateAllCoursesMarkdown } from "@/features/cursos/utils/generateCourseMarkdown";
 import { generatePlatformMarkdown } from "@/features/admin/utils/generatePlatformMarkdown";
 import { allDomainMarkdowns } from "@/features/admin/utils/generateDomainMarkdowns";
+import { generateMediaMarkdown } from "@/features/admin/utils/generateMediaMarkdown";
 
 // ── Reusable Components ──
 
@@ -187,11 +188,36 @@ const CourseMarkdownBlock = () => {
   );
 };
 
+const MediaMarkdownBlock = () => {
+  const [copied, setCopied] = useState(false);
+  const markdown = generateMediaMarkdown();
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(markdown);
+    setCopied(true);
+    toast.success("Markdown de mídia copiado!");
+    setTimeout(() => setCopied(false), 3000);
+  };
+
+  return (
+    <div className="space-y-3">
+      <div className="flex items-center justify-between">
+        <p className="text-xs text-muted-foreground">Catálogo completo de todas as imagens e vídeos da plataforma</p>
+        <Button size="sm" variant="outline" onClick={handleCopy} className="gap-2">
+          {copied ? <Check size={14} className="text-green-500" /> : <Copy size={14} />}
+          {copied ? "Copiado!" : "Copiar Tudo"}
+        </Button>
+      </div>
+      <CodeBlock title="Catálogo de Imagens & Vídeos (Markdown)" language="markdown" code={markdown} />
+    </div>
+  );
+};
+
 // ── Icon map for domain sections ──
 const domainIconMap: Record<string, React.ElementType> = {
   Calendar, CreditCard, ShoppingCart, Shield, MessageSquare,
   Trophy, Building2, Bot, Activity, Gift, Headphones, Globe,
-  Users, Stethoscope, FileText, Heart, Tag, BookOpen, Sparkles, Settings,
+  Users, Stethoscope, FileText, Heart, Tag, BookOpen, Sparkles, Settings, Image,
 };
 
 const DomainMarkdownSection = ({ domain }: { domain: typeof allDomainMarkdowns[0] }) => {
@@ -754,7 +780,17 @@ CASHBACK EXPIRANDO
         <CourseMarkdownBlock />
       </SectionCollapsible>
 
-      {/* 12. Documentação por Módulo */}
+      {/* 12. Imagens & Vídeos */}
+      <SectionCollapsible
+        title="Imagens & Vídeos"
+        subtitle="Catálogo completo de mídia estática e dinâmica"
+        icon={Image}
+        badge="~363 arquivos"
+      >
+        <MediaMarkdownBlock />
+      </SectionCollapsible>
+
+      {/* 13. Documentação por Módulo */}
       <div className="space-y-1">
         <div className="flex items-center gap-2 px-1 pt-4 pb-2">
           <div className="p-2 rounded-xl bg-accent/10">
