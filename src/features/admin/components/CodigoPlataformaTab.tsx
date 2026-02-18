@@ -218,6 +218,7 @@ const domainIconMap: Record<string, React.ElementType> = {
   Calendar, CreditCard, ShoppingCart, Shield, MessageSquare,
   Trophy, Building2, Bot, Activity, Gift, Headphones, Globe,
   Users, Stethoscope, FileText, Heart, Tag, BookOpen, Sparkles, Settings, Image,
+  GraduationCap, Zap,
 };
 
 const DomainMarkdownSection = ({ domain }: { domain: typeof allDomainMarkdowns[0] }) => {
@@ -300,14 +301,14 @@ export const CodigoPlataformaTab = () => {
       {/* Métricas resumo */}
       <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
         {[
-          { label: "Tabelas DB", value: "95+" },
-          { label: "Políticas RLS", value: "262+" },
-          { label: "Edge Functions", value: "24" },
+          { label: "Tabelas DB", value: "134" },
+          { label: "Políticas RLS", value: "366" },
+          { label: "Edge Functions", value: "44" },
           { label: "Permissões", value: "30" },
-          { label: "Componentes", value: "200+" },
-          { label: "Funções SQL", value: "27+" },
+          { label: "Componentes", value: "300+" },
+          { label: "Funções SQL", value: "51" },
           { label: "Storage", value: "11" },
-          { label: "Triggers", value: "17+" },
+          { label: "Triggers", value: "57" },
         ].map((m) => (
           <Card key={m.label} className="p-2.5 text-center">
             <div className="text-base font-bold text-primary">{m.value}</div>
@@ -319,7 +320,7 @@ export const CodigoPlataformaTab = () => {
       {/* 1. Estrutura do Projeto */}
       <SectionCollapsible
         title="Estrutura do Projeto"
-        subtitle="Feature Folders com 21 domínios isolados"
+        subtitle="Feature Folders com 29 domínios isolados"
         icon={FolderTree}
         badge="React + Vite"
       >
@@ -333,21 +334,29 @@ export const CodigoPlataformaTab = () => {
         ]} />
         <CodeBlock
           language="text"
-          title="src/features/ — 21 Feature Folders"
-          code={`admin/          → Painel administrativo (39+ componentes)
+          title="src/features/ — 29 Feature Folders"
+          code={`academy/        → Calculadora de diluição e ferramentas educativas
+admin/          → Painel administrativo (39+ componentes)
 agendamentos/   → Fluxo de agendamento com check-in QR
 alongamento/    → Exercícios e pausas posturais
+anamnese/       → Fichas de anamnese dinâmicas por serviço
 avaliacao-postural/ → Fotos, ângulos e anotações
+bem-estar/      → Diário de bem-estar, humor e wellness
 cashback/       → Wallet, tiers, transações
 conquistas/     → Gamificação, XP, ranking
 corporativo/    → Portal B2B para empresas
+cromos/         → Cromos colecionáveis por elementos
 cupom/          → Editor de cupons de desconto
 cursos/         → 17 cursos com módulos e progresso
 dietas/         → Planos nutricionais personalizados
 guia-clinico/   → Guia clínico interativo
 landing/        → Landing page com parallax
+liga/           → Liga de bem-estar e competições
 loja/           → E-commerce interno (produtos + pacotes)
+marketplace/    → Marketplace de terapeutas
+materiais/      → Materiais gráficos e downloads
 pagamento/      → Integração Asaas (PIX, boleto)
+playlist/       → Playlist musical terapêutica
 profile/        → Perfil do usuário + ficha nutricional
 protocolos/     → Protocolos terapêuticos completos
 resinkra-ai/    → IA para criação de conteúdo social
@@ -363,7 +372,7 @@ vale-presente/  → Sistema de vales digitais`}
         title="Autenticação & Permissões"
         subtitle="RBAC granular com 4 roles e 30 permissões"
         icon={KeyRound}
-        badge="RBAC"
+        badge="4 Roles"
       >
         <FeatureGrid items={[
           { icon: Lock, title: "Email/Senha + Verificação", desc: "Rate limiting (5 tentativas/15min) + check HIBP" },
@@ -428,25 +437,27 @@ SELECT * FROM get_user_permissions('user-uuid');
       {/* 3. Banco de Dados */}
       <SectionCollapsible
         title="Banco de Dados"
-        subtitle="95+ tabelas com RLS em todas, 262+ políticas"
+        subtitle="134 tabelas com RLS em todas, 366 políticas"
         icon={Database}
-        badge="95+ tabelas"
+        badge="134 tabelas"
       >
         <div className="space-y-2">
           {[
             { group: "👤 Usuários & Auth", tables: "profiles, user_roles, roles, login_attempts, audit_logs", count: 5 },
             { group: "🔑 Permissões", tables: "permissions, role_permissions, user_permissions_mv", count: 3 },
-            { group: "📅 Serviços", tables: "servicos, servicos_detalhes, agendamentos, terapeutas", count: 4 },
+            { group: "📅 Serviços", tables: "servicos, servicos_detalhes, agendamentos, terapeutas, horarios_disponiveis", count: 5 },
             { group: "🛒 Produtos", tables: "produtos, pedidos, pedido_itens, pacotes, pacotes_usuario", count: 5 },
-            { group: "💰 Financeiro", tables: "transacoes, indicacoes, vale_presentes, pagamentos_asaas, cupons", count: 5 },
-            { group: "🏆 Gamificação", tables: "desafios, desafio_participantes, checkins, conquistas", count: 4 },
-            { group: "🩺 Saúde", tables: "protocolos, usuario_protocolos, fichas_acompanhamento, avaliacoes_posturais", count: 4 },
+            { group: "💰 Financeiro", tables: "transacoes, indicacoes, vale_presentes, pagamentos_asaas, cupons, assinaturas_*", count: 7 },
+            { group: "🏆 Gamificação", tables: "desafios, desafio_participantes, checkins, conquistas, cromos_usuarios, badges", count: 6 },
+            { group: "🩺 Saúde", tables: "protocolos, usuario_protocolos, fichas_acompanhamento, avaliacoes_posturais, fichas_anamnese, anamnese_templates", count: 8 },
             { group: "🥗 Nutrição", tables: "planos_dieta, diario_alimentar, ficha_nutricional, dietas_conteudo", count: 4 },
             { group: "📚 Educação", tables: "curso_modulos, curso_aulas, curso_progresso", count: 3 },
-            { group: "📱 Social", tables: "social_posts, social_posts_config, notificacoes, banners_promocionais", count: 4 },
-            { group: "🏢 Corporativo", tables: "empresas_corporativas, colaboradores_empresa, corporativo_*", count: "8+" },
+            { group: "📱 Social", tables: "social_posts, social_posts_config, notificacoes, banners_promocionais, banners_dismissals", count: 5 },
+            { group: "🏢 Corporativo", tables: "empresas_corporativas, colaboradores_empresa, corporativo_*", count: "11" },
             { group: "📣 Marketing", tables: "campanhas_marketing, google_ads_metrics, landing_config", count: 3 },
             { group: "🤝 Parceiros", tables: "parceiros, parceiro_cupons, parceiro_comissoes, parceiro_faixas_comissao", count: 4 },
+            { group: "🤖 IA & Conteúdo", tables: "brand_profiles, scripts, hooks, content_ideas, calendar_events", count: 5 },
+            { group: "🧘 Bem-Estar", tables: "wellness_*, diario_bem_estar", count: "8+" },
           ].map((g) => (
             <div key={g.group} className="p-2.5 rounded-lg bg-muted/30 border border-border/40">
               <div className="flex items-center justify-between mb-0.5">
@@ -478,9 +489,9 @@ USING (auth.uid() = user_id OR is_terapeuta(auth.uid()));`}
       {/* 4. Funções SQL & Triggers */}
       <SectionCollapsible
         title="Funções SQL & Triggers"
-        subtitle="27+ funções e 17+ triggers automáticos"
+        subtitle="51 funções e 57 triggers automáticos"
         icon={Terminal}
-        badge="27+ funções"
+        badge="51 funções"
       >
         <FeatureGrid items={[
           { icon: CreditCard, title: "credit_cashback_on_order()", desc: "Cashback automático em pedidos com multiplicador de tier" },
@@ -515,9 +526,9 @@ END; $$;`}
       {/* 5. Edge Functions */}
       <SectionCollapsible
         title="Edge Functions (Backend)"
-        subtitle="24 funções serverless em Deno/TypeScript"
+        subtitle="44 funções serverless em Deno/TypeScript"
         icon={Server}
-        badge="24 funções"
+        badge="44 funções"
       >
         <div className="space-y-2">
           <p className="text-[11px] font-semibold text-foreground">💳 Pagamentos (Asaas)</p>
@@ -540,23 +551,48 @@ END; $$;`}
           <p className="text-[11px] font-semibold text-foreground">🤖 Inteligência Artificial</p>
           <FeatureGrid items={[
             { icon: Bot, title: "chat-assistente", desc: "Assistente IA conversacional 24/7" },
+            { icon: Bot, title: "resi-chat", desc: "Chat contextual da Resi" },
             { icon: Bot, title: "generate-script", desc: "Gera roteiros para Reels/Stories" },
             { icon: Bot, title: "generate-hooks", desc: "Ganchos virais com score de poder" },
             { icon: Bot, title: "generate-ideas", desc: "10 ideias por nicho e funil" },
+            { icon: Bot, title: "gerar-ideias-semanais", desc: "Ideias semanais automatizadas" },
             { icon: Bot, title: "analyze-viral", desc: "Análise de potencial viral" },
             { icon: Bot, title: "gerar-recomendacoes", desc: "Recomendações personalizadas" },
+            { icon: Bot, title: "gerar-imagem-servico", desc: "Gera imagens com IA" },
+          ]} />
+
+          <p className="text-[11px] font-semibold text-foreground">🧘 Saúde & Bem-Estar</p>
+          <FeatureGrid items={[
+            { icon: Heart, title: "assistente-saude", desc: "Assistente de saúde com IA" },
+            { icon: Heart, title: "insights-saude", desc: "Insights de saúde personalizados" },
+            { icon: Heart, title: "plano-bem-estar", desc: "Gera plano de bem-estar com IA" },
+            { icon: Heart, title: "recomendar-sessao", desc: "Recomenda sessão terapêutica" },
+            { icon: Heart, title: "reflexao-diario", desc: "Reflexão do diário de bem-estar" },
+            { icon: Heart, title: "analise-progresso", desc: "Análise de progresso do paciente" },
+            { icon: Heart, title: "wellness-insight", desc: "Insight de wellness com IA" },
+            { icon: Heart, title: "wellness-correlations", desc: "Correlações de bem-estar" },
+            { icon: Heart, title: "wellness-check-conquistas", desc: "Verifica conquistas wellness" },
+            { icon: Heart, title: "wellness-update-streak", desc: "Atualiza streak de bem-estar" },
+            { icon: Heart, title: "lembretes-wellness", desc: "Lembretes de bem-estar" },
+            { icon: Heart, title: "lembrete-medidas", desc: "Lembrete de registrar medidas" },
           ]} />
 
           <p className="text-[11px] font-semibold text-foreground">⚙️ Infraestrutura</p>
           <FeatureGrid items={[
             { icon: BarChart3, title: "fetch-google-ads", desc: "Coleta métricas Google Ads" },
-            { icon: Image, title: "gerar-imagem-servico", desc: "Gera imagens com IA" },
+            { icon: BarChart3, title: "atualizar-trends", desc: "Atualiza tendências e métricas" },
             { icon: Cpu, title: "curso-tts", desc: "Text-to-Speech para cursos" },
             { icon: Zap, title: "processar-expiracoes", desc: "Expira cashback vencido" },
             { icon: Zap, title: "processar-vales-expirados", desc: "Expira vales presente" },
             { icon: Users, title: "transferir-creditos", desc: "Transferência entre usuários" },
             { icon: Shield, title: "check-rate-limit", desc: "Rate limiting de login" },
             { icon: Users, title: "buscar-usuario", desc: "Busca por email/telefone" },
+            { icon: Zap, title: "creditar-recompensa-sugestao", desc: "Credita recompensa por sugestão" },
+            { icon: Bell, title: "enviar-email-notificacao", desc: "Email de notificação" },
+            { icon: Bell, title: "enviar-push", desc: "Push notification" },
+            { icon: Bell, title: "notificar-roteiros-pendentes", desc: "Notifica roteiros pendentes" },
+            { icon: Cpu, title: "validar-playlist", desc: "Valida links YouTube/Spotify" },
+            { icon: Cpu, title: "cashback-inteligente", desc: "Cashback sugerido por IA" },
           ]} />
         </div>
       </SectionCollapsible>
@@ -707,7 +743,7 @@ const { data: { publicUrl } } = supabase.storage
         title="Arquitetura de Segurança"
         subtitle="5 camadas de proteção enterprise-grade"
         icon={Shield}
-        badge="Enterprise"
+        badge="366 políticas"
       >
         <CodeBlock
           title="Camadas de Proteção"
@@ -724,7 +760,7 @@ const { data: { publicUrl } } = supabase.storage
    → ProtectedRoute + AdminRoute no frontend
 
 3. ROW LEVEL SECURITY (RLS)
-   → 262+ políticas em todas as tabelas
+   → 366 políticas em todas as 134 tabelas
    → Políticas RESTRICTIVE para bloquear anon
    → Admins via has_role(), users via auth.uid()
 

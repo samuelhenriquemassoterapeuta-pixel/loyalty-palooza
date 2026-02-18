@@ -647,6 +647,105 @@ export function generateAdminMarkdown(): string {
   return md;
 }
 
+// ── Bem-Estar ──
+export function generateBemEstarMarkdown(): string {
+  let md = `# 🧘 Módulo: Bem-Estar & Wellness\n\n`;
+  md += `> Diário de bem-estar com humor, sono, energia, estresse e insights por IA.\n\n`;
+
+  md += `## Estrutura de Arquivos\n\n`;
+  md += "```\nsrc/features/bem-estar/\n├── components/\n│   ├── WellnessCalendar.tsx      — Calendário de registros\n│   ├── WellnessChart.tsx         — Gráficos de evolução\n│   ├── WellnessInsightCard.tsx   — Card de insight IA\n│   └── WellnessStreakCard.tsx    — Card de streak\n├── hooks/\n│   └── useWellness.ts            — Hook de CRUD e queries\n└── pages/\n    └── BemEstar.tsx               — Página principal\n```\n\n";
+
+  md += `## Tabelas do Banco de Dados\n\n`;
+  md += `| Tabela | Descrição |\n|---|---|\n`;
+  md += `| diario_bem_estar | Registros diários de humor/sono/energia |\n`;
+  md += `| wellness_streaks | Sequências de registros |\n`;
+  md += `| wellness_insights | Insights gerados por IA |\n`;
+  md += `| wellness_goals | Metas de bem-estar |\n\n`;
+
+  md += `## Edge Functions\n\n`;
+  md += `| Função | Descrição |\n|---|---|\n`;
+  md += `| wellness-insight | Gera insight personalizado com IA |\n`;
+  md += `| wellness-correlations | Analisa correlações de bem-estar |\n`;
+  md += `| wellness-check-conquistas | Verifica conquistas wellness |\n`;
+  md += `| wellness-update-streak | Atualiza streak de registro |\n`;
+  md += `| lembretes-wellness | Lembretes de check-in diário |\n`;
+  md += `| reflexao-diario | Reflexão sobre diário |\n`;
+  md += `| plano-bem-estar | Gera plano de bem-estar com IA |\n\n`;
+
+  return md;
+}
+
+// ── Academy ──
+export function generateAcademyMarkdown(): string {
+  let md = `# 🎓 Módulo: Academy\n\n`;
+  md += `> Ferramentas educativas incluindo calculadora de diluição para óleos essenciais.\n\n`;
+
+  md += `## Estrutura de Arquivos\n\n`;
+  md += "```\nsrc/features/academy/\n└── pages/\n    └── CalculadoraDiluicao.tsx  — Calculadora de diluição\n```\n\n";
+
+  md += `## Funcionalidades\n\n`;
+  md += `- Calculadora de diluição de óleos essenciais\n`;
+  md += `- Referência de dosagem por faixa etária\n`;
+  md += `- Tabela de sinergias entre óleos\n\n`;
+
+  md += `## Tabelas do Banco de Dados\n\n`;
+  md += `| Tabela | Descrição |\n|---|---|\n`;
+  md += `| academy_waitlist | Lista de espera para cursos |\n\n`;
+
+  return md;
+}
+
+// ── Liga ──
+export function generateLigaMarkdown(): string {
+  let md = `# ⚔️ Módulo: Liga de Bem-Estar\n\n`;
+  md += `> Sistema de ligas e competições entre usuários.\n\n`;
+
+  md += `## Estrutura de Arquivos\n\n`;
+  md += "```\nsrc/features/liga/\n├── hooks/\n│   └── useLiga.ts          — Hook de rankings e ligas\n└── pages/\n    └── Liga.tsx              — Página principal\n```\n\n";
+
+  md += `## Funcionalidades\n\n`;
+  md += `- Rankings semanais de bem-estar\n`;
+  md += `- Competições entre grupos de usuários\n`;
+  md += `- Recompensas por posição no ranking\n`;
+  md += `- Integração com sistema de XP e conquistas\n\n`;
+
+  return md;
+}
+
+// ── Marketplace ──
+export function generateMarketplaceMarkdown(): string {
+  let md = `# 🏪 Módulo: Marketplace de Terapeutas\n\n`;
+  md += `> Marketplace para terapeutas oferecerem seus serviços com perfis e avaliações.\n\n`;
+
+  md += `## Estrutura de Arquivos\n\n`;
+  md += "```\nsrc/features/marketplace/\n├── components/\n│   ├── TerapeutaCard.tsx       — Card de terapeuta\n│   └── TerapeutaFilters.tsx   — Filtros de busca\n├── hooks/\n│   └── useMarketplace.ts      — Hook de queries\n└── pages/\n    └── Marketplace.tsx         — Página principal\n```\n\n";
+
+  md += `## Funcionalidades\n\n`;
+  md += `- Catálogo de terapeutas com perfis\n`;
+  md += `- Filtros por especialidade, avaliação e localização\n`;
+  md += `- Avaliações e reviews de pacientes\n`;
+  md += `- Link direto para agendamento\n\n`;
+
+  return md;
+}
+
+// ── Materiais Gráficos ──
+export function generateMateriaisMarkdown(): string {
+  let md = `# 🎨 Módulo: Materiais Gráficos\n\n`;
+  md += `> Downloads de materiais gráficos e recursos visuais para terapeutas.\n\n`;
+
+  md += `## Estrutura de Arquivos\n\n`;
+  md += "```\nsrc/features/materiais/\n├── components/\n│   └── MaterialCard.tsx      — Card de material\n└── pages/\n    └── MateriaisGraficos.tsx  — Página de downloads\n```\n\n";
+
+  md += `## Funcionalidades\n\n`;
+  md += `- Catálogo de materiais gráficos\n`;
+  md += `- Download de templates e recursos\n`;
+  md += `- Categorias por tipo de material\n`;
+  md += `- Preview antes do download\n\n`;
+
+  return md;
+}
+
 /**
  * Registry of all domain markdown generators.
  */
@@ -666,6 +765,7 @@ export const allDomainMarkdowns: DomainMarkdownEntry[] = [
   { id: "conquistas", name: "Gamificação & Conquistas", icon: "Trophy", generator: generateConquistasMarkdown },
   { id: "corporativo", name: "Corporativo (B2B)", icon: "Building2", generator: generateCorporativoMarkdown },
   { id: "resinkra-ai", name: "Resinkra AI", icon: "Bot", generator: generateResinkraAIMarkdown },
+  { id: "bem-estar", name: "Bem-Estar & Wellness", icon: "Heart", generator: generateBemEstarMarkdown },
   { id: "dietas", name: "Nutrição & Dietas", icon: "Utensils", generator: generateDietasMarkdown },
   { id: "alongamento", name: "Alongamento & Postura", icon: "Activity", generator: generateAlongamentoMarkdown },
   { id: "vale-presente", name: "Vale Presente", icon: "Gift", generator: generateValePresenteMarkdown },
@@ -679,6 +779,10 @@ export const allDomainMarkdowns: DomainMarkdownEntry[] = [
   { id: "cupom", name: "Cupons de Desconto", icon: "Tag", generator: generateCupomMarkdown },
   { id: "guia-clinico", name: "Guia Clínico", icon: "BookOpen", generator: generateGuiaClinicoMarkdown },
   { id: "cromos", name: "Cromos Colecionáveis", icon: "Sparkles", generator: generateCromosMarkdown },
+  { id: "academy", name: "Academy", icon: "GraduationCap", generator: generateAcademyMarkdown },
+  { id: "liga", name: "Liga de Bem-Estar", icon: "Trophy", generator: generateLigaMarkdown },
+  { id: "marketplace", name: "Marketplace", icon: "Globe", generator: generateMarketplaceMarkdown },
+  { id: "materiais", name: "Materiais Gráficos", icon: "Image", generator: generateMateriaisMarkdown },
   { id: "admin", name: "Painel Administrativo", icon: "Settings", generator: generateAdminMarkdown },
   { id: "media", name: "Imagens & Vídeos", icon: "Image", generator: generateMediaMarkdown },
 ];
