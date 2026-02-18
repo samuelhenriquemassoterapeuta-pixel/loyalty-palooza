@@ -28,6 +28,10 @@ const playlists: PlaylistCategory[] = [
       { title: "528 Hz — Frequência do Amor", artist: "Solfeggio Tones", youtubeId: "JuWP-sCHMEA" },
       { title: "396 Hz — Liberação do Medo", artist: "Deep Healing", youtubeId: "FcTFQqi4YHg" },
       { title: "741 Hz — Despertar Intuição", artist: "Frequency Healing", youtubeId: "eTUigJTMWbE" },
+      { title: "174 Hz — Alívio da Dor", artist: "Solfeggio Frequencies", youtubeId: "LJ8KWOX10W4" },
+      { title: "285 Hz — Regeneração Celular", artist: "Healing Frequencies", youtubeId: "j3mlkUUkOLg" },
+      { title: "639 Hz — Conexão e Harmonia", artist: "Heart Chakra", youtubeId: "Tm97S8JKFOE" },
+      { title: "852 Hz — Despertar Espiritual", artist: "Third Eye Frequency", youtubeId: "QWmX-jPOxns" },
     ],
   },
   {
@@ -41,6 +45,10 @@ const playlists: PlaylistCategory[] = [
       { title: "Stress Relief — Ocean Waves", artist: "Nature Therapy", youtubeId: "bn9F19Hi1Lk" },
       { title: "Sleeping Music — Soft Piano", artist: "Sleep Easy", youtubeId: "1ZYbU82GVz4" },
       { title: "Relaxing Rain — 3 Hours", artist: "Ambient Rain", youtubeId: "q76bMs-NwRk" },
+      { title: "Calming Waterfall — Forest Ambience", artist: "Nature Sounds", youtubeId: "IvjMgVS6kng" },
+      { title: "Night Sounds — Crickets & Stream", artist: "Sleep Therapy", youtubeId: "jX6kn9_U8qk" },
+      { title: "Deep Sleep — Delta Waves", artist: "Brainwave Music", youtubeId: "tt2k8PGm-TI" },
+      { title: "Peaceful Morning — Birdsong", artist: "Dawn Chorus", youtubeId: "rYoZgpAEkFs" },
     ],
   },
   {
@@ -54,6 +62,10 @@ const playlists: PlaylistCategory[] = [
       { title: "Acoustic Guitar — Soft Melodies", artist: "Guitar Dreams", youtubeId: "PYdm0rJXeRk" },
       { title: "Classical Cello — Deep Focus", artist: "Cello Suite", youtubeId: "GX1dVR97jB8" },
       { title: "Harp & Flute — Ethereal", artist: "Serene Sounds", youtubeId: "LIA9TLaGyRk" },
+      { title: "Violin — Emotional Melodies", artist: "String Dreams", youtubeId: "0hoeUKGfIH0" },
+      { title: "Saxophone — Smooth Jazz Night", artist: "Jazz Lounge", youtubeId: "VnA9uKm-ISU" },
+      { title: "Piano Concerto — Moonlight Sonata", artist: "Beethoven", youtubeId: "4Tr0otuiQuU" },
+      { title: "Handpan — Meditative Flow", artist: "Hang Drum Music", youtubeId: "EDlC7oG_2W4" },
     ],
   },
   {
@@ -67,6 +79,10 @@ const playlists: PlaylistCategory[] = [
       { title: "Healing Spa — Nature Sounds", artist: "Wellness Music", youtubeId: "x7gcPM_dxzI" },
       { title: "Massage Music — Calm River", artist: "Body & Mind", youtubeId: "oGFBq_eBnms" },
       { title: "Zen Garden — Tibetan Bowls", artist: "Spa Zen", youtubeId: "HyjB8HXf4KQ" },
+      { title: "Hot Stones — Ambient Warmth", artist: "Thermal Spa", youtubeId: "77ZozI0rw7w" },
+      { title: "Aromatherapy — Lavender Fields", artist: "Essential Calm", youtubeId: "s3JldKoA0mY" },
+      { title: "Crystal Singing Bowls — Cleansing", artist: "Sound Bath", youtubeId: "je_3FmZMwMU" },
+      { title: "Waterfall Therapy — Tropical Spa", artist: "Nature Spa", youtubeId: "YSTw72dRkEE" },
     ],
   },
   {
@@ -78,8 +94,12 @@ const playlists: PlaylistCategory[] = [
     tracks: [
       { title: "Japanese Zen — Shakuhachi Flute", artist: "Zen Master", youtubeId: "smHXC6PdVR0" },
       { title: "Chinese Guzheng — Traditional", artist: "Oriental Dreams", youtubeId: "cwXJpuoTJZk" },
-      { title: "Indian Sitar — Meditation Raga", artist: "Raga Flow", youtubeId: "dQw4w9WgXcQ" },
+      { title: "Indian Sitar — Evening Raga", artist: "Raga Flow", youtubeId: "YNfJEpcMqLs" },
       { title: "Korean Gayageum — Healing", artist: "Asian Harmony", youtubeId: "5qap5aO4i9A" },
+      { title: "Koto — Cherry Blossom Spring", artist: "Japan Sounds", youtubeId: "bBEBob2Pa-g" },
+      { title: "Erhu — Melancolia Oriental", artist: "Chinese Strings", youtubeId: "0q5mHzXkwZ0" },
+      { title: "Bansuri Flute — Rainy Season", artist: "Indian Flute", youtubeId: "NBFSDlWCNl0" },
+      { title: "Gamelan — Balinese Temple", artist: "Southeast Asia", youtubeId: "T5S8CSKXfJM" },
     ],
   },
   {
@@ -93,6 +113,10 @@ const playlists: PlaylistCategory[] = [
       { title: "Gayatri Mantra — Deva Premal", artist: "Deva Premal", youtubeId: "iqalsifLPWY" },
       { title: "Om Namah Shivaya — 1 Hora", artist: "Sacred Chants", youtubeId: "JCN3jFYdI2k" },
       { title: "Lokah Samastah Sukhino Bhavantu", artist: "Mantra Music", youtubeId: "glHB-RKRX2g" },
+      { title: "Hare Krishna — Kirtan", artist: "Bhakti Yoga", youtubeId: "b3KUstB1-EQ" },
+      { title: "Medicine Buddha Mantra", artist: "Tibetan Monks", youtubeId: "lS7MEhfwFBY" },
+      { title: "So Hum — Breath Meditation", artist: "Vedic Chants", youtubeId: "05UuqF7aM0o" },
+      { title: "Ra Ma Da Sa — Healing Mantra", artist: "Kundalini Yoga", youtubeId: "MNuJMYRD5dQ" },
     ],
   },
 ];
