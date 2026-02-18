@@ -204,7 +204,7 @@ export const ProtocoloDetail = ({ protocolo, onBack }: ProtocoloDetailProps) => 
 
       {/* Tabs with compact summary badges */}
       <Tabs value={tab} onValueChange={setTab} className="w-full">
-        <TabsList className={`w-full grid ${
+        <TabsList className={`w-full grid h-11 ${
           meuProtocolo 
             ? hasSecoes ? "grid-cols-5" : "grid-cols-4"
             : hasSecoes ? "grid-cols-3" : "grid-cols-2"
