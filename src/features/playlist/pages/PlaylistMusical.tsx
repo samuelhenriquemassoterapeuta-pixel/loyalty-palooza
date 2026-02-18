@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, Play, Pause, Volume2, Headphones, Heart, Timer, Music, Search, QrCode, Repeat } from "lucide-react";
+import { ArrowLeft, Play, Pause, Volume2, Headphones, Heart, Timer, Music, Search, QrCode, Repeat, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -12,6 +12,9 @@ import { useFavoritos } from "../hooks/useFavoritos";
 import { TimerSessao } from "../components/TimerSessao";
 import { SugestaoHorario } from "../components/SugestaoHorario";
 import { QRCodeFaixa } from "../components/QRCodeFaixa";
+import { PlaylistCommunitySection } from "../components/PlaylistCommunitySection";
+import { SugerirPlaylistModal } from "../components/SugerirPlaylistModal";
+import { usePlaylistDB } from "../hooks/usePlaylistDB";
 
 export default function PlaylistMusical() {
   const navigate = useNavigate();
@@ -19,10 +22,13 @@ export default function PlaylistMusical() {
   const [playingTrack, setPlayingTrack] = useState<string | null>(null);
   const [showTimer, setShowTimer] = useState(false);
   const [showFavoritos, setShowFavoritos] = useState(false);
+  const [showCommunity, setShowCommunity] = useState(false);
+  const [showSugerir, setShowSugerir] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [fluxoContinuo, setFluxoContinuo] = useState(false);
   const [qrTrack, setQrTrack] = useState<{ youtubeId: string; title: string } | null>(null);
   const { toggleFavorito, isFavorito, totalFavoritos } = useFavoritos();
+  const { playlists: dbPlaylists, sugestoes, loadData, votar, curtir } = usePlaylistDB("todos");
 
   const activePlaylist = playlists.find(p => p.id === activeCategory);
 
@@ -184,6 +190,14 @@ export default function PlaylistMusical() {
               >
                 <Repeat size={14} /> Fluxo
               </Button>
+              <Button
+                variant={showCommunity ? "default" : "outline"}
+                size="sm"
+                onClick={() => { setShowCommunity(!showCommunity); setActiveCategory(null); setShowFavoritos(false); setSearchQuery(""); }}
+                className="gap-1 text-xs"
+              >
+                <Users size={14} /> Comunidade
+              </Button>
             </div>
           </div>
         </div>
@@ -310,6 +324,17 @@ export default function PlaylistMusical() {
               </div>
             </div>
           )}
+
+          {/* Community Section */}
+          {showCommunity && (
+            <PlaylistCommunitySection
+              sugestoes={sugestoes}
+              popularPlaylists={dbPlaylists}
+              onVotar={votar}
+              onCurtir={curtir}
+              onSugerir={() => setShowSugerir(true)}
+            />
+          )}
         </div>
       </div>
 
@@ -323,6 +348,13 @@ export default function PlaylistMusical() {
           />
         )}
       </AnimatePresence>
+
+      {/* Sugerir Playlist Modal */}
+      <SugerirPlaylistModal
+        open={showSugerir}
+        onClose={() => setShowSugerir(false)}
+        onSuccess={loadData}
+      />
     </AppLayout>
   );
 }

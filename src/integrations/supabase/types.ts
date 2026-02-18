@@ -38,6 +38,7 @@ export type Database = {
           data_hora: string
           id: string
           observacoes: string | null
+          playlist_id: string | null
           servico: string
           servico_id: string | null
           status: string
@@ -49,6 +50,7 @@ export type Database = {
           data_hora: string
           id?: string
           observacoes?: string | null
+          playlist_id?: string | null
           servico: string
           servico_id?: string | null
           status?: string
@@ -60,6 +62,7 @@ export type Database = {
           data_hora?: string
           id?: string
           observacoes?: string | null
+          playlist_id?: string | null
           servico?: string
           servico_id?: string | null
           status?: string
@@ -67,6 +70,13 @@ export type Database = {
           user_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "agendamentos_playlist_id_fkey"
+            columns: ["playlist_id"]
+            isOneToOne: false
+            referencedRelation: "playlists"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "agendamentos_servico_id_fkey"
             columns: ["servico_id"]
@@ -335,6 +345,48 @@ export type Database = {
             columns: ["produto_id"]
             isOneToOne: false
             referencedRelation: "produtos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      avaliacoes_playlist: {
+        Row: {
+          agendamento_id: string | null
+          created_at: string | null
+          gostou: boolean | null
+          id: string
+          playlist_id: string | null
+          usuario_id: string
+        }
+        Insert: {
+          agendamento_id?: string | null
+          created_at?: string | null
+          gostou?: boolean | null
+          id?: string
+          playlist_id?: string | null
+          usuario_id: string
+        }
+        Update: {
+          agendamento_id?: string | null
+          created_at?: string | null
+          gostou?: boolean | null
+          id?: string
+          playlist_id?: string | null
+          usuario_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "avaliacoes_playlist_agendamento_id_fkey"
+            columns: ["agendamento_id"]
+            isOneToOne: false
+            referencedRelation: "agendamentos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "avaliacoes_playlist_playlist_id_fkey"
+            columns: ["playlist_id"]
+            isOneToOne: false
+            referencedRelation: "playlists"
             referencedColumns: ["id"]
           },
         ]
@@ -3807,6 +3859,54 @@ export type Database = {
           },
         ]
       }
+      playlists: {
+        Row: {
+          artista: string | null
+          ativa: boolean | null
+          capa_url: string | null
+          categoria: string
+          created_at: string | null
+          data_sugestao: string | null
+          descricao: string | null
+          frequencia: number | null
+          id: string
+          nome: string
+          sugerida_por: string | null
+          vezes_escolhida: number | null
+          youtube_id: string | null
+        }
+        Insert: {
+          artista?: string | null
+          ativa?: boolean | null
+          capa_url?: string | null
+          categoria?: string
+          created_at?: string | null
+          data_sugestao?: string | null
+          descricao?: string | null
+          frequencia?: number | null
+          id?: string
+          nome: string
+          sugerida_por?: string | null
+          vezes_escolhida?: number | null
+          youtube_id?: string | null
+        }
+        Update: {
+          artista?: string | null
+          ativa?: boolean | null
+          capa_url?: string | null
+          categoria?: string
+          created_at?: string | null
+          data_sugestao?: string | null
+          descricao?: string | null
+          frequencia?: number | null
+          id?: string
+          nome?: string
+          sugerida_por?: string | null
+          vezes_escolhida?: number | null
+          youtube_id?: string | null
+        }
+        Relationships: []
+      }
       produto_elementos: {
         Row: {
           created_at: string
@@ -4776,6 +4876,57 @@ export type Database = {
         }
         Relationships: []
       }
+      sugestoes_playlist: {
+        Row: {
+          categoria: string | null
+          created_at: string | null
+          descricao: string | null
+          id: string
+          justificativa: string | null
+          link: string
+          moderado_por: string | null
+          moderated_at: string | null
+          nome: string
+          recompensa_cashback: number | null
+          status: string | null
+          usuario_id: string
+          votos: number | null
+          xp_recompensa: number | null
+        }
+        Insert: {
+          categoria?: string | null
+          created_at?: string | null
+          descricao?: string | null
+          id?: string
+          justificativa?: string | null
+          link: string
+          moderado_por?: string | null
+          moderated_at?: string | null
+          nome: string
+          recompensa_cashback?: number | null
+          status?: string | null
+          usuario_id: string
+          votos?: number | null
+          xp_recompensa?: number | null
+        }
+        Update: {
+          categoria?: string | null
+          created_at?: string | null
+          descricao?: string | null
+          id?: string
+          justificativa?: string | null
+          link?: string
+          moderado_por?: string | null
+          moderated_at?: string | null
+          nome?: string
+          recompensa_cashback?: number | null
+          status?: string | null
+          usuario_id?: string
+          votos?: number | null
+          xp_recompensa?: number | null
+        }
+        Relationships: []
+      }
       team_members: {
         Row: {
           brand_id: string | null
@@ -5364,6 +5515,35 @@ export type Database = {
           },
         ]
       }
+      votos_sugestoes: {
+        Row: {
+          created_at: string | null
+          id: string
+          sugestao_id: string
+          usuario_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          sugestao_id: string
+          usuario_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          sugestao_id?: string
+          usuario_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "votos_sugestoes_sugestao_id_fkey"
+            columns: ["sugestao_id"]
+            isOneToOne: false
+            referencedRelation: "sugestoes_playlist"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       whatsapp_conversas: {
         Row: {
           created_at: string
@@ -5570,6 +5750,10 @@ export type Database = {
           _user_id: string
         }
         Returns: boolean
+      }
+      incrementar_voto_sugestao: {
+        Args: { p_sugestao_id: string }
+        Returns: undefined
       }
       is_parceiro: { Args: { _user_id: string }; Returns: boolean }
       is_terapeuta: { Args: { _user_id: string }; Returns: boolean }
