@@ -80,9 +80,19 @@ export const useWellnessTracker = () => {
     onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ["wellness-checkin-today"] });
       queryClient.invalidateQueries({ queryKey: ["wellness-checkins"] });
-      queryClient.invalidateQueries({ queryKey: ["wellness-streak"] });
       queryClient.invalidateQueries({ queryKey: ["wellness-week-hub"] });
       toast.success("Check-in salvo! 💚");
+
+      // Update streak in background
+      try {
+        const { data: streakResult } = await supabase.functions.invoke("wellness-update-streak");
+        queryClient.invalidateQueries({ queryKey: ["wellness-streak"] });
+        if (streakResult?.bonus) {
+          toast.success(`🔥 Streak de ${streakResult.streak_atual} dias! +R$ ${streakResult.bonus.toFixed(2).replace(".", ",")} cashback!`);
+        }
+      } catch {
+        // Silent fail
+      }
 
       // Auto-check conquistas in background
       try {
@@ -95,7 +105,7 @@ export const useWellnessTracker = () => {
           });
         }
       } catch {
-        // Silent fail - achievements check is non-critical
+        // Silent fail
       }
     },
     onError: (err: any) => {
