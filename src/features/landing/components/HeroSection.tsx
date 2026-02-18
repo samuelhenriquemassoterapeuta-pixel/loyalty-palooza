@@ -1,16 +1,19 @@
-import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
-import { ArrowRight, Leaf, Sparkles, ChevronDown } from "lucide-react";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { ArrowRight, Leaf, Sparkles, Star, Users, Calendar } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { useState, useRef } from "react";
+import { useRef } from "react";
 import { Button } from "@/components/ui/button";
-import simboloVerde from "@/assets/simbolo-verde.png";
-import iconeFlor from "@/assets/icone-flor.png";
 import heroBg from "@/assets/hero-options/hero-spa-resinkra.jpg";
 import { useLandingConfig } from "@/features/landing/hooks/useLandingConfig";
 
+const socialProof = [
+  { icon: Users, value: "2.500+", label: "Clientes atendidos" },
+  { icon: Star, value: "4.9", label: "Avaliação média" },
+  { icon: Calendar, value: "15.000+", label: "Sessões realizadas" },
+];
+
 export const HeroSection = () => {
   const navigate = useNavigate();
-  const [heroOpen, setHeroOpen] = useState(false);
   const { config } = useLandingConfig("hero");
   const heroRef = useRef<HTMLElement>(null);
 
@@ -23,7 +26,6 @@ export const HeroSection = () => {
   const imageScale = useTransform(scrollYProgress, [0, 1], [1, 1.15]);
   const overlayOpacity = useTransform(scrollYProgress, [0, 0.5], [0.3, 0.7]);
 
-  // Dynamic content with fallbacks
   const badge = config?.badge || "Spa Terapia & Bem-estar";
   const tituloParte1 = config?.titulo_parte1 || "Onde o tempo";
   const tituloDestaque = config?.titulo_destaque || "desacelera";
@@ -54,148 +56,138 @@ export const HeroSection = () => {
             <motion.div
               key={i}
               className="absolute w-1 h-1 rounded-full bg-primary/30"
-              style={{
-                left: `${15 + i * 14}%`,
-                top: `${20 + (i % 3) * 25}%`,
-              }}
-              animate={{
-                y: [0, -30, 0],
-                opacity: [0.2, 0.6, 0.2],
-                scale: [1, 1.5, 1],
-              }}
-              transition={{
-                duration: 4 + i * 0.8,
-                repeat: Infinity,
-                delay: i * 0.6,
-                ease: "easeInOut",
-              }}
+              style={{ left: `${15 + i * 14}%`, top: `${20 + (i % 3) * 25}%` }}
+              animate={{ y: [0, -30, 0], opacity: [0.2, 0.6, 0.2], scale: [1, 1.5, 1] }}
+              transition={{ duration: 4 + i * 0.8, repeat: Infinity, delay: i * 0.6, ease: "easeInOut" }}
             />
           ))}
         </div>
       </div>
 
-      {/* Text content — below the image */}
+      {/* Text content — always visible for conversion */}
       <div className="bg-background relative">
-        {/* Decorative gradient line */}
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
 
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-14">
           <div className="max-w-3xl">
+            {/* Badge */}
             <motion.div
               initial={{ opacity: 0, y: 20, filter: "blur(10px)" }}
               animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             >
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-card/80 backdrop-blur-sm border border-border/50 shadow-sm mb-6">
-                <motion.div
-                  animate={{ rotate: [0, 15, -15, 0] }}
-                  transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                >
+                <motion.div animate={{ rotate: [0, 15, -15, 0] }} transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}>
                   <Sparkles size={14} className="text-primary" />
                 </motion.div>
                 <span className="text-xs font-semibold text-foreground">{badge}</span>
               </div>
             </motion.div>
 
-            {/* Clickable title with chevron */}
-            <motion.button
+            {/* Title — always visible */}
+            <motion.h1
               initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
               animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
               transition={{ duration: 0.8, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
-              onClick={() => setHeroOpen((v) => !v)}
-              className="w-full flex items-start gap-3 text-left group"
-              aria-expanded={heroOpen}
+              className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground leading-tight"
             >
-              <h1 className="flex-1 text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground leading-tight">
-                {tituloParte1}{" "}
-                <span className="text-gradient font-serif italic">{tituloDestaque}</span>{" "}
-                {tituloParte2}
-              </h1>
-              <motion.div
-                animate={{ rotate: heroOpen ? 180 : 0 }}
-                transition={{ duration: 0.3, type: "spring", stiffness: 200 }}
-                className="shrink-0 mt-2 p-1.5 rounded-full bg-primary/10 border border-primary/20 group-hover:bg-primary/20 group-hover:shadow-md transition-all duration-300"
+              {tituloParte1}{" "}
+              <span className="text-gradient font-serif italic">{tituloDestaque}</span>{" "}
+              {tituloParte2}
+            </motion.h1>
+
+            {/* Subtitle — always visible */}
+            <motion.p
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.3, duration: 0.5 }}
+              className="mt-5 text-lg text-muted-foreground leading-relaxed max-w-2xl"
+            >
+              {subtitulo}
+            </motion.p>
+
+            {/* CTA Buttons — always visible */}
+            <motion.div
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4, duration: 0.5 }}
+              className="mt-8 flex flex-col sm:flex-row gap-4"
+            >
+              <Button size="xl" onClick={() => navigate("/auth")} className="group relative overflow-hidden">
+                <motion.span
+                  className="absolute inset-0 bg-primary-foreground/10"
+                  initial={{ x: "-100%" }}
+                  whileHover={{ x: "100%" }}
+                  transition={{ duration: 0.5 }}
+                />
+                {botaoPrimario}
+                <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+              </Button>
+              <Button
+                size="xl"
+                variant="outline"
+                onClick={() => document.querySelector("#servicos")?.scrollIntoView({ behavior: "smooth" })}
+                className="group"
               >
-                <ChevronDown size={18} className="text-primary" />
-              </motion.div>
-            </motion.button>
+                <Leaf size={18} className="group-hover:rotate-12 transition-transform duration-300" />
+                {botaoSecundario}
+              </Button>
+            </motion.div>
 
-            {/* Collapsible content */}
-            <AnimatePresence initial={false}>
-              {heroOpen && (
-                <motion.div
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: "auto", opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                  className="overflow-hidden"
-                >
-                  <motion.p
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.15, duration: 0.5 }}
-                    className="mt-6 text-lg text-muted-foreground leading-relaxed max-w-2xl"
-                  >
-                    {subtitulo}
-                  </motion.p>
-
+            {/* Sinais */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.55 }}
+              className="mt-8 flex items-center gap-6 text-foreground/80"
+            >
+              {sinais.map((sinal: string, i: number) => {
+                const colors = ["bg-highlight", "bg-accent", "bg-primary"];
+                return (
                   <motion.div
-                    initial={{ opacity: 0, y: 15 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.25, duration: 0.5 }}
-                    className="mt-8 flex flex-col sm:flex-row gap-4"
+                    key={i}
+                    initial={{ opacity: 0, scale: 0 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.6 + i * 0.1, type: "spring", stiffness: 300 }}
+                    className="flex items-center gap-2"
                   >
-                    <Button size="xl" onClick={() => navigate("/auth")} className="group relative overflow-hidden">
-                      <motion.span
-                        className="absolute inset-0 bg-primary-foreground/10"
-                        initial={{ x: "-100%" }}
-                        whileHover={{ x: "100%" }}
-                        transition={{ duration: 0.5 }}
-                      />
-                      {botaoPrimario}
-                      <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
-                    </Button>
-                    <Button
-                      size="xl"
-                      variant="outline"
-                      onClick={() => { document.querySelector("#servicos")?.scrollIntoView({ behavior: "smooth" }); }}
-                      className="group"
-                    >
-                      <Leaf size={18} className="group-hover:rotate-12 transition-transform duration-300" />
-                      {botaoSecundario}
-                    </Button>
+                    <motion.div
+                      className={`w-2.5 h-2.5 rounded-full ${colors[i % colors.length]} shadow-sm`}
+                      animate={{ scale: [1, 1.3, 1] }}
+                      transition={{ duration: 2, repeat: Infinity, delay: i * 0.5 }}
+                    />
+                    <span className="text-sm font-medium">{sinal}</span>
                   </motion.div>
-
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.4 }}
-                    className="mt-10 flex items-center gap-6 text-foreground/80"
-                  >
-                    {sinais.map((sinal: string, i: number) => {
-                      const colors = ["bg-highlight", "bg-accent", "bg-primary"];
-                      return (
-                        <motion.div
-                          key={i}
-                          initial={{ opacity: 0, scale: 0 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          transition={{ delay: 0.5 + i * 0.1, type: "spring", stiffness: 300 }}
-                          className="flex items-center gap-2"
-                        >
-                          <motion.div
-                            className={`w-2.5 h-2.5 rounded-full ${colors[i % colors.length]} shadow-sm`}
-                            animate={{ scale: [1, 1.3, 1] }}
-                            transition={{ duration: 2, repeat: Infinity, delay: i * 0.5 }}
-                          />
-                          <span className="text-sm font-medium">{sinal}</span>
-                        </motion.div>
-                      );
-                    })}
-                  </motion.div>
-                </motion.div>
-              )}
-            </AnimatePresence>
+                );
+              })}
+            </motion.div>
           </div>
+
+          {/* Social Proof Numbers */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.7, duration: 0.6 }}
+            className="mt-12 pt-8 border-t border-border/50"
+          >
+            <div className="grid grid-cols-3 gap-4 sm:gap-8 max-w-lg">
+              {socialProof.map((item, i) => (
+                <motion.div
+                  key={item.label}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.8 + i * 0.1 }}
+                  className="text-center sm:text-left"
+                >
+                  <div className="flex items-center justify-center sm:justify-start gap-1.5 mb-1">
+                    <item.icon size={14} className="text-primary" />
+                    <span className="text-xl sm:text-2xl font-black text-foreground">{item.value}</span>
+                  </div>
+                  <p className="text-[10px] sm:text-xs text-muted-foreground">{item.label}</p>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
         </div>
       </div>
     </section>
