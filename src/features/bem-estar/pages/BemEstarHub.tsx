@@ -277,7 +277,7 @@ const BemEstarHub = () => {
 
           {/* 📊 Analytics Section */}
           <WellnessLazySection>
-            <WellnessCollapsibleGroup title="Análises & Tendências" icon="📊" defaultOpen>
+            <WellnessCollapsibleGroup title="Análises & Tendências" icon="📊">
               <WellnessMoodTrends />
               <WellnessWeeklySummary />
               <WellnessMonthlySummary />
