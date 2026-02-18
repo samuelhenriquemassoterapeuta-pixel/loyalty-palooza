@@ -39,6 +39,7 @@ export type Database = {
           id: string
           observacoes: string | null
           servico: string
+          servico_id: string | null
           status: string
           terapeuta_id: string | null
           user_id: string
@@ -49,6 +50,7 @@ export type Database = {
           id?: string
           observacoes?: string | null
           servico: string
+          servico_id?: string | null
           status?: string
           terapeuta_id?: string | null
           user_id: string
@@ -59,11 +61,19 @@ export type Database = {
           id?: string
           observacoes?: string | null
           servico?: string
+          servico_id?: string | null
           status?: string
           terapeuta_id?: string | null
           user_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "agendamentos_servico_id_fkey"
+            columns: ["servico_id"]
+            isOneToOne: false
+            referencedRelation: "servicos"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "agendamentos_terapeuta_id_fkey"
             columns: ["terapeuta_id"]
@@ -2169,6 +2179,50 @@ export type Database = {
           },
         ]
       }
+      horarios_disponiveis: {
+        Row: {
+          ativo: boolean
+          created_at: string
+          dia_semana: number
+          hora_fim: string
+          hora_inicio: string
+          id: string
+          intervalo_minutos: number
+          terapeuta_id: string
+          updated_at: string
+        }
+        Insert: {
+          ativo?: boolean
+          created_at?: string
+          dia_semana: number
+          hora_fim: string
+          hora_inicio: string
+          id?: string
+          intervalo_minutos?: number
+          terapeuta_id: string
+          updated_at?: string
+        }
+        Update: {
+          ativo?: boolean
+          created_at?: string
+          dia_semana?: number
+          hora_fim?: string
+          hora_inicio?: string
+          id?: string
+          intervalo_minutos?: number
+          terapeuta_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "horarios_disponiveis_terapeuta_id_fkey"
+            columns: ["terapeuta_id"]
+            isOneToOne: false
+            referencedRelation: "terapeutas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       indicacoes: {
         Row: {
           cashback_valor: number
@@ -3993,6 +4047,7 @@ export type Database = {
           imagens: string[] | null
           nome: string
           preco: number
+          slug: string | null
           video_url: string | null
         }
         Insert: {
@@ -4009,6 +4064,7 @@ export type Database = {
           imagens?: string[] | null
           nome: string
           preco: number
+          slug?: string | null
           video_url?: string | null
         }
         Update: {
@@ -4025,6 +4081,7 @@ export type Database = {
           imagens?: string[] | null
           nome?: string
           preco?: number
+          slug?: string | null
           video_url?: string | null
         }
         Relationships: []
