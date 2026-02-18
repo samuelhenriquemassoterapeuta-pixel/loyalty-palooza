@@ -10,6 +10,9 @@ import { CashbackBalanceCard } from "@/features/cashback/components/CashbackBala
 import { CashbackTierCard } from "@/features/cashback/components/CashbackTierCard";
 import { CashbackEvolutionChart } from "@/features/cashback/components/CashbackEvolutionChart";
 import { CashbackHistoryList } from "@/features/cashback/components/CashbackHistoryList";
+import { ConquistasSection } from "@/features/cashback/components/ConquistasSection";
+import { StreakCard } from "@/features/cashback/components/StreakCard";
+import { CashbackInteligenteSection } from "@/features/cashback/components/CashbackInteligenteSection";
 import { Skeleton } from "@/components/ui/skeleton";
 
 const stagger = {
@@ -31,7 +34,7 @@ const fadeUp = {
 
 const Cashback = () => {
   const navigate = useNavigate();
-  const { transacoes, loading } = useTransacoes();
+  const { transacoes, loading, fetchNextPage, hasNextPage, isFetchingNextPage } = useTransacoes();
   const { tier, loading: tierLoading } = useUserTier();
   const [showValues, setShowValues] = useState(true);
 
@@ -117,6 +120,17 @@ const Cashback = () => {
                 </motion.div>
               )}
 
+              {/* Streak Card */}
+              <motion.div variants={fadeUp}>
+                <StreakCard />
+              </motion.div>
+
+              {/* Conquistas / Badges */}
+              <motion.div variants={fadeUp} className="space-y-2.5">
+                <p className="section-label px-1">Conquistas</p>
+                <ConquistasSection />
+              </motion.div>
+
               {/* How Resinks works */}
               <motion.div variants={fadeUp} className="space-y-2.5">
                 <p className="section-label px-1">Como ganhar Resinks</p>
@@ -140,6 +154,12 @@ const Cashback = () => {
                 </div>
               </motion.div>
 
+              {/* AI Suggestions */}
+              <motion.div variants={fadeUp} className="space-y-2.5">
+                <p className="section-label px-1">Sugestões para você ✨</p>
+                <CashbackInteligenteSection />
+              </motion.div>
+
               {/* Evolution Chart */}
               <motion.div variants={fadeUp} className="space-y-2.5">
                 <p className="section-label px-1">Evolução</p>
@@ -149,7 +169,12 @@ const Cashback = () => {
               {/* Transaction History */}
               <motion.div variants={fadeUp} className="space-y-2.5">
                 <p className="section-label px-1">Movimentações</p>
-                <CashbackHistoryList transacoes={transacoes} />
+                <CashbackHistoryList
+                  transacoes={transacoes}
+                  hasNextPage={hasNextPage}
+                  isFetchingNextPage={isFetchingNextPage}
+                  onLoadMore={() => fetchNextPage()}
+                />
               </motion.div>
             </motion.div>
           )}

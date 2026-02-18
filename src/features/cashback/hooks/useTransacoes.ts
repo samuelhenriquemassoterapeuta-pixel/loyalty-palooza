@@ -1,4 +1,5 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useInfiniteQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMemo } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -21,30 +22,27 @@ export interface UserStats {
   totalAgendamentos: number;
 }
 
+const PAGE_SIZE = 30;
+
 function calcularStats(data: Transacao[]): UserStats {
-  // Cashback ganho (créditos)
   const cashbackGanho = data
     .filter((t) => t.tipo === "cashback")
     .reduce((acc, t) => acc + Number(t.valor), 0);
 
-  // Cashback usado (débitos de uso)
   const cashbackUsado = Math.abs(
     data
       .filter((t) => t.tipo === "uso_cashback")
       .reduce((acc, t) => acc + Number(t.valor), 0)
   );
 
-  // Cashback expirado (débitos de expiração)
   const cashbackExpirado = Math.abs(
     data
       .filter((t) => t.tipo === "cashback_expirado")
       .reduce((acc, t) => acc + Number(t.valor), 0)
   );
 
-  // Saldo de cashback disponível = ganho - usado - expirado
   const saldoCashback = cashbackGanho - cashbackUsado - cashbackExpirado;
 
-  // Total gasto (débitos - valores negativos, excluindo cashback_expirado e uso_cashback)
   const gasto = Math.abs(
     data
       .filter(
@@ -56,7 +54,6 @@ function calcularStats(data: Transacao[]): UserStats {
       .reduce((acc, t) => acc + Number(t.valor), 0)
   );
 
-  // Saldo é a soma de todas as transações
   const saldoTotal = data.reduce((acc, t) => acc + Number(t.valor), 0);
 
   const compras = data.filter(
@@ -78,25 +75,41 @@ export const useTransacoes = () => {
   const queryClient = useQueryClient();
 
   const {
-    data: transacoes = [],
+    data,
     isLoading: loading,
     error: queryError,
-  } = useQuery({
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery({
     queryKey: ["transacoes", user?.id],
     enabled: !!user,
-    queryFn: async () => {
+    initialPageParam: 0,
+    queryFn: async ({ pageParam = 0 }) => {
+      const from = pageParam * PAGE_SIZE;
+      const to = from + PAGE_SIZE - 1;
+
       const { data, error } = await supabase
         .from("transacoes")
         .select("*")
         .eq("user_id", user!.id)
         .order("created_at", { ascending: false })
-        .limit(50);
+        .range(from, to);
 
       if (error) throw error;
       return (data || []) as Transacao[];
     },
-    staleTime: 30_000, // 30s antes de considerar stale
+    getNextPageParam: (lastPage, allPages) => {
+      if (lastPage.length < PAGE_SIZE) return undefined;
+      return allPages.length;
+    },
+    staleTime: 30_000,
   });
+
+  const transacoes = useMemo(
+    () => data?.pages.flat() ?? [],
+    [data]
+  );
 
   const stats = calcularStats(transacoes);
   const error = queryError ? (queryError as Error).message : null;
@@ -130,7 +143,6 @@ export const useTransacoes = () => {
     },
   });
 
-  // Wrapper para manter API compatível com consumers existentes
   const createTransacao = async (
     tipo: string,
     valor: number,
@@ -154,5 +166,15 @@ export const useTransacoes = () => {
     queryClient.invalidateQueries({ queryKey: ["transacoes"] });
   };
 
-  return { transacoes, stats, loading, error, createTransacao, refetch };
+  return {
+    transacoes,
+    stats,
+    loading,
+    error,
+    createTransacao,
+    refetch,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  };
 };

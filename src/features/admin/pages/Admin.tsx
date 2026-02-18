@@ -50,6 +50,7 @@ import { NotificacoesAdminTab } from "@/features/admin/components/NotificacoesAd
 import { UsuariosAdminTab } from "@/features/admin/components/UsuariosAdminTab";
 import { CodigoPlataformaTab } from "@/features/admin/components/CodigoPlataformaTab";
 import VendaPlataformaTab from "@/features/admin/components/VendaPlataformaTab";
+import AnalyticsDashboardTab from "@/features/admin/components/AnalyticsDashboardTab";
 
 const tabContentVariants = {
   hidden: { opacity: 0, y: 12 },
@@ -422,6 +423,10 @@ const Admin = () => {
                   <Camera size={14} />
                   Moments
                 </TabsTrigger>
+                <TabsTrigger value="analytics" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
+                  <BarChart3 size={14} />
+                  Analytics
+                </TabsTrigger>
                 <TabsTrigger value="financeiro" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
                   <DollarSign size={14} />
                   Financeiro
@@ -622,6 +627,10 @@ const Admin = () => {
 
               <TabsContent value="social-posts" forceMount={activeTab === "social-posts" ? true : undefined} className={activeTab !== "social-posts" ? "hidden" : ""}>
                 <SocialPostsTab />
+              </TabsContent>
+
+              <TabsContent value="analytics" forceMount={activeTab === "analytics" ? true : undefined} className={activeTab !== "analytics" ? "hidden" : ""}>
+                <AnalyticsDashboardTab />
               </TabsContent>
 
               <TabsContent value="financeiro" forceMount={activeTab === "financeiro" ? true : undefined} className={activeTab !== "financeiro" ? "hidden" : ""}>

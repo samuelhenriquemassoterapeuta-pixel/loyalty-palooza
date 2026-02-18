@@ -682,6 +682,57 @@ export type Database = {
           },
         ]
       }
+      conquistas: {
+        Row: {
+          ativo: boolean
+          categoria: string
+          codigo: string
+          condicao_tipo: string
+          condicao_valor: number
+          created_at: string
+          descricao: string
+          icone: string
+          id: string
+          ordem: number
+          recompensa_tipo: string | null
+          recompensa_valor: number | null
+          secreta: boolean
+          titulo: string
+        }
+        Insert: {
+          ativo?: boolean
+          categoria?: string
+          codigo: string
+          condicao_tipo: string
+          condicao_valor?: number
+          created_at?: string
+          descricao: string
+          icone?: string
+          id?: string
+          ordem?: number
+          recompensa_tipo?: string | null
+          recompensa_valor?: number | null
+          secreta?: boolean
+          titulo: string
+        }
+        Update: {
+          ativo?: boolean
+          categoria?: string
+          codigo?: string
+          condicao_tipo?: string
+          condicao_valor?: number
+          created_at?: string
+          descricao?: string
+          icone?: string
+          id?: string
+          ordem?: number
+          recompensa_tipo?: string | null
+          recompensa_valor?: number | null
+          secreta?: boolean
+          titulo?: string
+        }
+        Relationships: []
+      }
       content_ideas: {
         Row: {
           brand_id: string | null
@@ -3882,6 +3933,68 @@ export type Database = {
         }
         Relationships: []
       }
+      user_streaks: {
+        Row: {
+          bonus_total_creditado: number
+          id: string
+          melhor_streak: number
+          streak_atual: number
+          ultima_semana_contada: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          bonus_total_creditado?: number
+          id?: string
+          melhor_streak?: number
+          streak_atual?: number
+          ultima_semana_contada?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          bonus_total_creditado?: number
+          id?: string
+          melhor_streak?: number
+          streak_atual?: number
+          ultima_semana_contada?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      usuario_conquistas: {
+        Row: {
+          conquista_id: string
+          desbloqueada_em: string
+          id: string
+          recompensa_creditada: boolean
+          user_id: string
+        }
+        Insert: {
+          conquista_id: string
+          desbloqueada_em?: string
+          id?: string
+          recompensa_creditada?: boolean
+          user_id: string
+        }
+        Update: {
+          conquista_id?: string
+          desbloqueada_em?: string
+          id?: string
+          recompensa_creditada?: boolean
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "usuario_conquistas_conquista_id_fkey"
+            columns: ["conquista_id"]
+            isOneToOne: false
+            referencedRelation: "conquistas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       usuario_planos_alongamento: {
         Row: {
           created_at: string
@@ -4187,6 +4300,15 @@ export type Database = {
       }
     }
     Functions: {
+      check_and_unlock_achievements: {
+        Args: { p_user_id: string }
+        Returns: {
+          conquista_codigo: string
+          conquista_icone: string
+          conquista_titulo: string
+          recompensa: number
+        }[]
+      }
       check_login_rate_limit: {
         Args: {
           p_email: string
