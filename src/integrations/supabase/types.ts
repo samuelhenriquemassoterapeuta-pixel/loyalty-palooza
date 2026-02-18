@@ -3394,6 +3394,7 @@ export type Database = {
           id: string
           indicado_por: string | null
           nome: string | null
+          onboarding_completo: boolean
           telefone: string | null
           updated_at: string
         }
@@ -3405,6 +3406,7 @@ export type Database = {
           id: string
           indicado_por?: string | null
           nome?: string | null
+          onboarding_completo?: boolean
           telefone?: string | null
           updated_at?: string
         }
@@ -3416,6 +3418,7 @@ export type Database = {
           id?: string
           indicado_por?: string | null
           nome?: string | null
+          onboarding_completo?: boolean
           telefone?: string | null
           updated_at?: string
         }
