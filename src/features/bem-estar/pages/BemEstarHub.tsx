@@ -17,6 +17,7 @@ import WellnessCorrelations from "@/features/bem-estar/components/WellnessCorrel
 import WellnessOnboarding from "@/features/bem-estar/components/WellnessOnboarding";
 import WellnessScore from "@/features/bem-estar/components/WellnessScore";
 import WellnessCalendar from "@/features/bem-estar/components/WellnessCalendar";
+import WellnessMoodTrends from "@/features/bem-estar/components/WellnessMoodTrends";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 14 },
@@ -302,6 +303,9 @@ const BemEstarHub = () => {
               </div>
             </motion.div>
           )}
+
+          {/* Mood Trends Sparkline */}
+          <WellnessMoodTrends />
 
           {/* Check-in Calendar */}
           <WellnessCalendar />
