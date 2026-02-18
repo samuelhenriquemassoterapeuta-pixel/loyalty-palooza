@@ -15,6 +15,7 @@ import WellnessInsight from "@/features/bem-estar/components/WellnessInsight";
 import WellnessShareCard from "@/features/bem-estar/components/WellnessShareCard";
 import WellnessCorrelations from "@/features/bem-estar/components/WellnessCorrelations";
 import WellnessOnboarding from "@/features/bem-estar/components/WellnessOnboarding";
+import WellnessScore from "@/features/bem-estar/components/WellnessScore";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 14 },
@@ -235,24 +236,35 @@ const BemEstarHub = () => {
           {todayCheckin ? (
             <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
               <div className="rounded-2xl border border-primary/20 bg-gradient-to-br from-primary/5 to-accent/5 p-4">
-                <p className="text-xs font-medium text-muted-foreground mb-3">Seu check-in de hoje</p>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-4">
-                    <span className="text-3xl">{moodEmojis[todayCheckin.humor] || "😐"}</span>
-                    <div className="space-y-1">
-                      <div className="flex items-center gap-3 text-xs text-muted-foreground">
-                        <span className="flex items-center gap-1"><TrendingUp size={12} className="text-primary" /> Energia {todayCheckin.energia}/5</span>
-                        <span className="flex items-center gap-1"><Moon size={12} className="text-accent" /> {todayCheckin.sono_horas || "—"}h sono</span>
-                      </div>
-                      <div className="flex items-center gap-3 text-xs text-muted-foreground">
-                        <span className="flex items-center gap-1"><Droplets size={12} className="text-accent" /> {todayCheckin.agua_litros || 0}L</span>
-                        <span className="flex items-center gap-1"><Sparkles size={12} className="text-highlight" /> Stress {todayCheckin.estresse || 0}/5</span>
-                      </div>
-                    </div>
-                  </div>
+                <div className="flex items-center justify-between mb-3">
+                  <p className="text-xs font-medium text-muted-foreground">Seu check-in de hoje</p>
                   <Link to="/wellness-tracker" className="text-xs text-primary font-medium flex items-center gap-1">
                     Editar <ArrowRight size={12} />
                   </Link>
+                </div>
+                <div className="flex items-center gap-4">
+                  <WellnessScore
+                    humor={todayCheckin.humor}
+                    energia={todayCheckin.energia}
+                    sonoHoras={todayCheckin.sono_horas}
+                    aguaLitros={todayCheckin.agua_litros}
+                    estresse={todayCheckin.estresse}
+                    exercicioMin={todayCheckin.exercicio_min}
+                    dor={todayCheckin.dor}
+                  />
+                  <div className="flex-1 space-y-1.5">
+                    <div className="flex items-center gap-3 text-xs text-muted-foreground">
+                      <span className="flex items-center gap-1">{moodEmojis[todayCheckin.humor] || "😐"} Humor {todayCheckin.humor}/5</span>
+                      <span className="flex items-center gap-1"><TrendingUp size={12} className="text-primary" /> Energia {todayCheckin.energia}/5</span>
+                    </div>
+                    <div className="flex items-center gap-3 text-xs text-muted-foreground">
+                      <span className="flex items-center gap-1"><Moon size={12} className="text-accent" /> {todayCheckin.sono_horas || "—"}h sono</span>
+                      <span className="flex items-center gap-1"><Droplets size={12} className="text-accent" /> {todayCheckin.agua_litros || 0}L</span>
+                    </div>
+                    <div className="flex items-center gap-3 text-xs text-muted-foreground">
+                      <span className="flex items-center gap-1"><Sparkles size={12} className="text-highlight" /> Stress {todayCheckin.estresse || 0}/5</span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </motion.div>
