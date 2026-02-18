@@ -1,6 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Scissors, Percent, Tag, Sparkles } from "lucide-react";
+import QRCode from "react-qr-code";
 import logoMarrom from "@/assets/logo-marrom.png";
 import logoBranco from "@/assets/logo-branco.png";
 
@@ -143,6 +144,15 @@ export const CupomVisual = React.forwardRef<HTMLDivElement, CupomVisualProps>(
                 <p className={`text-[8px] uppercase tracking-widest ${config.mutedText} mb-0.5`}>Use o código</p>
                 <p className={`text-lg font-mono font-bold tracking-[0.15em] ${config.mainText}`}>{data.codigo}</p>
               </div>
+
+              {/* QR Code */}
+              <div className="bg-white rounded-lg p-1.5 mt-2">
+                <QRCode
+                  value={`${window.location.origin}/cupom?code=${data.codigo}`}
+                  size={52}
+                  level="M"
+                />
+              </div>
             </div>
 
             {/* Footer */}
@@ -194,9 +204,18 @@ export const CupomVisual = React.forwardRef<HTMLDivElement, CupomVisualProps>(
 
               <div className={`w-3/4 border-t border-dashed ${config.borderClass} my-1`} />
 
-              <div className={`${config.tagBg} backdrop-blur-sm rounded-lg px-4 py-1.5`}>
-                <p className={`text-[7px] uppercase tracking-widest ${config.mutedText}`}>Código</p>
-                <p className={`text-base font-mono font-bold tracking-[0.12em] ${config.mainText}`}>{data.codigo}</p>
+              <div className="flex items-center gap-3">
+                <div className={`${config.tagBg} backdrop-blur-sm rounded-lg px-4 py-1.5`}>
+                  <p className={`text-[7px] uppercase tracking-widest ${config.mutedText}`}>Código</p>
+                  <p className={`text-base font-mono font-bold tracking-[0.12em] ${config.mainText}`}>{data.codigo}</p>
+                </div>
+                <div className="bg-white rounded-lg p-1">
+                  <QRCode
+                    value={`${window.location.origin}/cupom?code=${data.codigo}`}
+                    size={40}
+                    level="M"
+                  />
+                </div>
               </div>
             </div>
 
@@ -241,9 +260,18 @@ export const CupomVisual = React.forwardRef<HTMLDivElement, CupomVisualProps>(
             <p className={`text-xs font-bold ${config.mainText} leading-tight`} style={{ fontFamily: "var(--font-serif)" }}>{data.titulo}</p>
             <p className={`text-[9px] ${config.mutedText}`}>{data.subtitulo}</p>
 
-            <div className={`${config.tagBg} rounded-md px-3 py-1 inline-block`}>
-              <p className={`text-[7px] uppercase tracking-widest ${config.mutedText}`}>Código</p>
-              <p className={`text-sm font-mono font-bold tracking-wider ${config.mainText}`}>{data.codigo}</p>
+            <div className="flex items-center gap-2">
+              <div className={`${config.tagBg} rounded-md px-3 py-1`}>
+                <p className={`text-[7px] uppercase tracking-widest ${config.mutedText}`}>Código</p>
+                <p className={`text-sm font-mono font-bold tracking-wider ${config.mainText}`}>{data.codigo}</p>
+              </div>
+              <div className="bg-white rounded-md p-1">
+                <QRCode
+                  value={`${window.location.origin}/cupom?code=${data.codigo}`}
+                  size={36}
+                  level="M"
+                />
+              </div>
             </div>
 
             <div className="flex items-center gap-3">
