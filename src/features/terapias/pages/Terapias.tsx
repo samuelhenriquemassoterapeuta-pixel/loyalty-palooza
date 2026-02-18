@@ -68,13 +68,42 @@ const Terapias = () => {
             ))}
           </div>
         ) : filtered.length > 0 ? (
-          filtered.map((terapia) => (
-            <TerapiaCard key={terapia.id} terapia={terapia} />
-          ))
+          <motion.div
+            initial="hidden"
+            animate="show"
+            variants={{
+              hidden: { opacity: 0 },
+              show: { opacity: 1, transition: { staggerChildren: 0.06 } },
+            }}
+            className="space-y-3"
+          >
+            {filtered.map((terapia, i) => (
+              <motion.div
+                key={terapia.id}
+                variants={{
+                  hidden: { opacity: 0, y: 12 },
+                  show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 260, damping: 24 } },
+                }}
+              >
+                <TerapiaCard terapia={terapia} />
+              </motion.div>
+            ))}
+          </motion.div>
         ) : (
-          <div className="text-center py-16">
-            <p className="text-muted-foreground">Nenhuma terapia encontrada.</p>
-          </div>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center py-16"
+          >
+            <Search size={40} className="mx-auto text-muted-foreground/30 mb-3" />
+            <p className="font-medium text-foreground mb-1">Nenhuma terapia encontrada</p>
+            <p className="text-sm text-muted-foreground">Tente outra palavra-chave</p>
+            {search && (
+              <button onClick={() => setSearch("")} className="mt-3 text-sm text-primary hover:underline">
+                Limpar busca
+              </button>
+            )}
+          </motion.div>
         )}
       </div>
     </div>
