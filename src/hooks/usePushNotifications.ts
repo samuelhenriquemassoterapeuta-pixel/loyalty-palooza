@@ -10,7 +10,7 @@ declare global {
 }
 
 // This will be set via environment or fetched from edge function
-const VAPID_PUBLIC_KEY = import.meta.env.VITE_VAPID_PUBLIC_KEY || "";
+const VAPID_PUBLIC_KEY = "BFnGlGQTNTRYHTYSnIs0JeZ2UB1zvjx2-Ak1vrr_lgPJZSJjqiiHk_C4AABMdgReGPba1A5jieG5fw2MBKKGeEc";
 
 function urlBase64ToUint8Array(base64String: string) {
   const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
