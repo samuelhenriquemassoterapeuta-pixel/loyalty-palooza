@@ -38,6 +38,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { toast } from "sonner";
+import { generateAllCoursesMarkdown } from "@/features/cursos/utils/generateCourseMarkdown";
 
 // ── Reusable Components ──
 
@@ -146,6 +147,31 @@ const FeatureGrid = ({ items }: { items: { icon: React.ElementType; title: strin
     ))}
   </div>
 );
+
+const CourseMarkdownBlock = () => {
+  const [copied, setCopied] = useState(false);
+  const markdown = generateAllCoursesMarkdown();
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(markdown);
+    setCopied(true);
+    toast.success("Markdown copiado! Cole em outra plataforma para verificar.");
+    setTimeout(() => setCopied(false), 3000);
+  };
+
+  return (
+    <div className="space-y-3">
+      <div className="flex items-center justify-between">
+        <p className="text-xs text-muted-foreground">Clique para copiar o markdown completo da estrutura de todos os cursos</p>
+        <Button size="sm" variant="outline" onClick={handleCopy} className="gap-2">
+          {copied ? <Check size={14} className="text-green-500" /> : <Copy size={14} />}
+          {copied ? "Copiado!" : "Copiar Tudo"}
+        </Button>
+      </div>
+      <CodeBlock title="Estrutura Completa dos Cursos (Markdown)" language="markdown" code={markdown} />
+    </div>
+  );
+};
 
 // ── Main Component ──
 
@@ -633,6 +659,15 @@ CASHBACK EXPIRANDO
   └→ Notifica 7 dias antes
   └→ Debita automaticamente após vencimento`}
         />
+      </SectionCollapsible>
+
+      {/* 11. Estrutura dos Cursos — Auditoria de Conteúdo */}
+      <SectionCollapsible
+        title="Estrutura dos Cursos"
+        subtitle="Markdown completo para auditoria de direitos autorais"
+        icon={GraduationCap}
+      >
+        <CourseMarkdownBlock />
       </SectionCollapsible>
     </div>
   );

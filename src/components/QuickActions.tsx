@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { Calendar, ShoppingBag, Clock, Gift, Crown, Brain, QrCode, Trophy, TrendingUp, Camera, Ticket, FileText } from "lucide-react";
+import { Calendar, ShoppingBag, Clock, Gift, Crown, Brain, QrCode, Trophy, TrendingUp, Camera, Ticket, FileText, Headphones } from "lucide-react";
 
 const actions = [
   {
@@ -66,6 +66,14 @@ const actions = [
     iconColor: "text-accent",
     iconBg: "bg-accent/15",
     path: "/anamnese",
+  },
+  {
+    icon: Headphones,
+    label: "Playlist",
+    description: "Musical",
+    iconColor: "text-primary",
+    iconBg: "bg-primary/15",
+    path: "/playlist",
   },
 ];
 

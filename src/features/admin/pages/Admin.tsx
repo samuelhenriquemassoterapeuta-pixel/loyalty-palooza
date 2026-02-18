@@ -52,6 +52,7 @@ import { CodigoPlataformaTab } from "@/features/admin/components/CodigoPlataform
 import VendaPlataformaTab from "@/features/admin/components/VendaPlataformaTab";
 import AnalyticsDashboardTab from "@/features/admin/components/AnalyticsDashboardTab";
 import AnamneseAdminTab from "@/features/admin/components/AnamneseAdminTab";
+import { MateriaisAdminTab } from "@/features/admin/components/MateriaisAdminTab";
 
 const tabContentVariants = {
   hidden: { opacity: 0, y: 12 },
@@ -484,6 +485,10 @@ const Admin = () => {
                   <Rocket size={14} />
                   Apresentação
                 </TabsTrigger>
+                <TabsTrigger value="materiais-admin" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
+                  <FileText size={14} />
+                  Materiais
+                </TabsTrigger>
                 <TabsTrigger value="codigo" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
                   <Code2 size={14} />
                   Código
@@ -726,6 +731,10 @@ const Admin = () => {
 
               <TabsContent value="usuarios" forceMount={activeTab === "usuarios" ? true : undefined} className={activeTab !== "usuarios" ? "hidden" : ""}>
                 <UsuariosAdminTab />
+              </TabsContent>
+
+              <TabsContent value="materiais-admin" forceMount={activeTab === "materiais-admin" ? true : undefined} className={activeTab !== "materiais-admin" ? "hidden" : ""}>
+                <MateriaisAdminTab />
               </TabsContent>
 
               <TabsContent value="codigo" forceMount={activeTab === "codigo" ? true : undefined} className={activeTab !== "codigo" ? "hidden" : ""}>
