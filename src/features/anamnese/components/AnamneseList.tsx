@@ -81,7 +81,7 @@ export function AnamneseList({ fichas, loading, onNew, onView }: Props) {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.05 }}
                 onClick={() => onView(ficha)}
-                className="flex items-center gap-4 p-4 rounded-xl bg-card border border-border hover:border-primary/30 cursor-pointer transition-all"
+                className="flex items-center gap-4 p-4 rounded-xl bg-card border border-border hover:border-primary/30 hover:shadow-sm active:scale-[0.99] cursor-pointer transition-all"
               >
                 <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
                   <FileText size={18} className="text-primary" />

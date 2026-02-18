@@ -163,9 +163,9 @@ const Conquistas = () => {
                 </motion.div>
 
                 {/* Filter with count badges */}
-                <motion.div variants={fadeUp} className="flex items-center gap-2">
-                  <Filter size={14} className="text-muted-foreground" />
-                  <div className="flex gap-1.5">
+                <motion.div variants={fadeUp} className="flex items-center gap-2 overflow-x-auto scrollbar-none">
+                  <Filter size={14} className="text-muted-foreground shrink-0" />
+                  <div className="flex gap-1.5 shrink-0">
                     {(
                       [
                         { key: "todos", label: "Todos", count: achievements.length },
