@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Home, CalendarDays, ShoppingBag, User, Gift, Wallet, Crown, Settings, Bell, Dumbbell, Activity, BookOpen, Scan, Apple, Globe, Ticket, Handshake, GraduationCap, Leaf, Zap, BarChart3, Stethoscope } from "lucide-react";
+import { Home, CalendarDays, ShoppingBag, User, Gift, Wallet, Crown, Settings, Bell, Dumbbell, Activity, BookOpen, Scan, Apple, Globe, Ticket, Handshake, GraduationCap, Leaf, Zap, BarChart3, Stethoscope, Headphones } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAdmin } from "@/features/admin/hooks/useAdmin";
 import { useProfile } from "@/features/profile/hooks/useProfile";
@@ -25,6 +25,7 @@ const navItems = [
   { icon: Stethoscope, label: "Terapeuta", path: "/terapeuta-dashboard" },
   { icon: GraduationCap, label: "Cursos", path: "/cursos" },
   { icon: Leaf, label: "Terapias", path: "/terapias" },
+  { icon: Headphones, label: "Playlist", path: "/playlist" },
 ];
 
 const bottomItems = [
