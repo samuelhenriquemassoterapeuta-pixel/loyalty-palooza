@@ -6,7 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import {
   Heart, Activity, Brain, BookHeart, MessageCircle,
-  BarChart3, TrendingUp, ArrowRight, Sparkles, Moon, Droplets, Flame, Trophy, LineChart
+  BarChart3, TrendingUp, ArrowRight, Sparkles, Moon, Droplets, Flame, Trophy, LineChart, FileText
 } from "lucide-react";
 
 const fadeUp = {
@@ -130,6 +130,14 @@ const BemEstarHub = () => {
       path: "/evolucao-wellness",
       color: "bg-primary/15",
       iconColor: "text-primary",
+    },
+    {
+      icon: FileText,
+      label: "Relatório PDF",
+      desc: "Exporte seus dados para compartilhar",
+      path: "/relatorio-wellness",
+      color: "bg-accent/15",
+      iconColor: "text-accent",
     },
   ];
 
