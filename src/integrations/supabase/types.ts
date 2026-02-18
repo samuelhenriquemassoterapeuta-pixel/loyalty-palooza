@@ -5752,6 +5752,36 @@ export type Database = {
         }
         Relationships: []
       }
+      wellness_habitos_personalizados: {
+        Row: {
+          ativo: boolean
+          created_at: string
+          emoji: string
+          id: string
+          label: string
+          ordem: number
+          user_id: string
+        }
+        Insert: {
+          ativo?: boolean
+          created_at?: string
+          emoji?: string
+          id?: string
+          label: string
+          ordem?: number
+          user_id: string
+        }
+        Update: {
+          ativo?: boolean
+          created_at?: string
+          emoji?: string
+          id?: string
+          label?: string
+          ordem?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
       wellness_metas: {
         Row: {
           created_at: string
