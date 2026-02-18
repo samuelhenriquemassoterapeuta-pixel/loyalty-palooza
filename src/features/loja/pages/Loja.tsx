@@ -495,8 +495,14 @@ export default function Loja() {
                     <ProdutosGridSkeleton />
                   ) : produtosFiltrados.length === 0 ? (
                     <div className="text-center py-12 glass-card rounded-2xl">
-                      <Package className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-                      <p className="text-muted-foreground">Nenhum produto encontrado</p>
+                      <Search className="w-12 h-12 text-muted-foreground/30 mx-auto mb-4" />
+                      <p className="font-medium text-foreground mb-1">Nenhum produto encontrado</p>
+                      <p className="text-sm text-muted-foreground">Tente outra busca ou categoria</p>
+                      {(busca || categoriaAtiva !== "todos") && (
+                        <Button variant="link" size="sm" className="mt-2" onClick={() => { setBusca(""); setCategoriaAtiva("todos"); }}>
+                          Limpar filtros
+                        </Button>
+                      )}
                     </div>
                   ) : (
                     <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 lg:gap-4">
