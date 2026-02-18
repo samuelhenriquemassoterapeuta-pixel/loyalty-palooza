@@ -8,15 +8,15 @@ export function generatePlatformMarkdown(): string {
   // ── 1. Visão Geral ──
   md += `---\n\n## 📋 Visão Geral\n\n`;
   md += `| Métrica | Valor |\n|---|---|\n`;
-  md += `| Tabelas no Banco | 95+ |\n`;
-  md += `| Políticas RLS | 262+ |\n`;
-  md += `| Edge Functions | 24 |\n`;
+  md += `| Tabelas no Banco | 134 |\n`;
+  md += `| Políticas RLS | 366 |\n`;
+  md += `| Edge Functions | 44 |\n`;
   md += `| Permissões RBAC | 30 |\n`;
-  md += `| Componentes React | 200+ |\n`;
-  md += `| Funções SQL | 27+ |\n`;
+  md += `| Componentes React | 300+ |\n`;
+  md += `| Funções SQL | 51 |\n`;
   md += `| Storage Buckets | 11 |\n`;
-  md += `| Triggers | 17+ |\n`;
-  md += `| Feature Folders | 21 |\n`;
+  md += `| Triggers | 57 |\n`;
+  md += `| Feature Folders | 29 |\n`;
   md += `| Cursos Completos | 17 |\n\n`;
 
   // ── 2. Stack Tecnológico ──
@@ -40,19 +40,26 @@ export function generatePlatformMarkdown(): string {
   // ── 3. Feature Folders ──
   md += `---\n\n## 📁 Estrutura de Diretórios (Feature Folders)\n\n`;
   const features = [
+    { name: "academy/", desc: "Calculadora de diluição e ferramentas educativas" },
     { name: "admin/", desc: "Painel administrativo (39+ componentes, 15+ abas)" },
     { name: "agendamentos/", desc: "Fluxo de agendamento com check-in QR e feedback pós-sessão" },
     { name: "alongamento/", desc: "Exercícios e pausas posturais com timer e lembretes" },
+    { name: "anamnese/", desc: "Fichas de anamnese dinâmicas por serviço com templates configuráveis" },
     { name: "avaliacao-postural/", desc: "Fotos 4 vistas, ângulos e anotações por ponto anatômico" },
+    { name: "bem-estar/", desc: "Diário de bem-estar, humor, sono, energia e wellness com IA" },
     { name: "cashback/", desc: "Wallet digital, tiers (Bronze/Prata/Ouro), transações e expiração" },
     { name: "conquistas/", desc: "Gamificação completa: XP, badges, ranking, desafios" },
     { name: "corporativo/", desc: "Portal B2B — planos QVT, cases, depoimentos, galeria, FAQ" },
+    { name: "cromos/", desc: "Cromos colecionáveis por elementos (água, fogo, terra, ar, éter)" },
     { name: "cupom/", desc: "Editor de cupons de desconto com regras e expiração" },
     { name: "cursos/", desc: "17 cursos completos com módulos, aulas, quiz, checklist e certificação" },
     { name: "dietas/", desc: "Planos nutricionais, diário alimentar, ficha nutricional" },
     { name: "guia-clinico/", desc: "Guia clínico interativo com protocolos e recomendações" },
     { name: "landing/", desc: "Landing page com parallax, seções dinâmicas e CMS" },
+    { name: "liga/", desc: "Liga de bem-estar com competições e rankings" },
     { name: "loja/", desc: "E-commerce interno — produtos, pacotes, carrinho, pedidos" },
+    { name: "marketplace/", desc: "Marketplace de terapeutas com perfis e avaliações" },
+    { name: "materiais/", desc: "Materiais gráficos e downloads para terapeutas" },
     { name: "pagamento/", desc: "Integração Asaas (PIX, boleto) com webhook de confirmação" },
     { name: "playlist/", desc: "Playlist musical terapêutica com 6 categorias e 90+ faixas" },
     { name: "profile/", desc: "Perfil do usuário, ficha nutricional, histórico cirúrgico" },
@@ -111,24 +118,25 @@ export function generatePlatformMarkdown(): string {
   md += "```\n\n";
 
   // ── 5. Banco de Dados ──
-  md += `---\n\n## 🗄️ Banco de Dados (95+ tabelas)\n\n`;
+  md += `---\n\n## 🗄️ Banco de Dados (134 tabelas)\n\n`;
   const dbGroups = [
     { group: "Usuários & Auth", tables: "profiles, user_roles, roles, login_attempts, audit_logs", count: 5 },
     { group: "Permissões", tables: "permissions, role_permissions, user_permissions_mv", count: 3 },
     { group: "Serviços", tables: "servicos, servicos_detalhes, agendamentos, terapeutas, horarios_disponiveis", count: 5 },
     { group: "Produtos & Loja", tables: "produtos, pedidos, pedido_itens, pacotes, pacotes_usuario, carrinho", count: 6 },
     { group: "Financeiro", tables: "transacoes, indicacoes, vale_presentes, pagamentos_asaas, cupons, assinaturas_planos, assinaturas_usuario", count: 7 },
-    { group: "Gamificação", tables: "desafios, desafio_participantes, checkins, conquistas, cromos_usuarios", count: 5 },
+    { group: "Gamificação", tables: "desafios, desafio_participantes, checkins, conquistas, cromos_usuarios, badges, conquistas_usuario_badges", count: 7 },
     { group: "Saúde & Protocolos", tables: "protocolos, usuario_protocolos, fichas_acompanhamento, avaliacoes_posturais, anotacoes_posturais, checklists_avaliacao, fichas_anamnese, anamnese_templates", count: 8 },
     { group: "Nutrição", tables: "planos_dieta, diario_alimentar, ficha_nutricional, dietas_conteudo, historico_cirurgico", count: 5 },
-    { group: "Educação", tables: "curso_modulos, curso_aulas, curso_progresso", count: 3 },
+    { group: "Bem-Estar", tables: "wellness_*, diario_bem_estar, humor_*, energia_*", count: "8+" },
+    { group: "Educação", tables: "curso_modulos, curso_aulas, curso_progresso, academy_waitlist", count: 4 },
     { group: "Social", tables: "social_posts, social_posts_config, notificacoes, banners_promocionais, banners_dismissals", count: 5 },
     { group: "Corporativo", tables: "empresas_corporativas, colaboradores_empresa, corporativo_beneficios, corporativo_cases, corporativo_depoimentos, corporativo_eventos, corporativo_faq, corporativo_galeria, corporativo_logos, corporativo_planos, corporativo_secoes", count: 11 },
     { group: "Marketing", tables: "campanhas_marketing, google_ads_metrics, landing_config", count: 3 },
     { group: "Parceiros", tables: "parceiros, parceiro_cupons, parceiro_comissoes, parceiro_faixas_comissao", count: 4 },
     { group: "IA / Conteúdo", tables: "brand_profiles, scripts, hooks, content_ideas, calendar_events", count: 5 },
     { group: "Exercícios", tables: "exercicios_alongamento, lembretes_alongamento, sessoes_alongamento", count: 3 },
-    { group: "Avaliações", tables: "avaliacoes, feedback_rapido, exames_usuario, fotos_evolucao", count: 4 },
+    { group: "Avaliações", tables: "avaliacoes, avaliacoes_playlist, feedback_rapido, exames_usuario, fotos_evolucao", count: 5 },
     { group: "Head SPA", tables: "headspa_imagens", count: 1 },
     { group: "Recompensas Social", tables: "social_rewards_config", count: 1 },
   ];
@@ -147,7 +155,7 @@ export function generatePlatformMarkdown(): string {
 
   // ── 6. Funções SQL & Triggers ──
   md += `---\n\n## ⚡ Funções SQL & Triggers\n\n`;
-  md += `### Funções Principais (27+)\n\n`;
+  md += `### Funções Principais (51)\n\n`;
   const sqlFunctions = [
     { name: "credit_cashback_on_order()", desc: "Cashback automático em pedidos com multiplicador de tier" },
     { name: "credit_cashback_on_agendamento()", desc: "Cashback em sessões terapêuticas" },
@@ -171,7 +179,7 @@ export function generatePlatformMarkdown(): string {
   });
   md += `\n`;
 
-  md += `### Triggers Automáticos (17+)\n\n`;
+  md += `### Triggers Automáticos (57)\n\n`;
   const triggers = [
     "Cashback automático em pedidos",
     "Cashback em agendamentos confirmados",
@@ -193,7 +201,7 @@ export function generatePlatformMarkdown(): string {
   md += `\n`;
 
   // ── 7. Edge Functions ──
-  md += `---\n\n## 🖥️ Edge Functions (24 funções serverless)\n\n`;
+  md += `---\n\n## 🖥️ Edge Functions (44 funções serverless)\n\n`;
 
   md += `### 💳 Pagamentos (Asaas)\n\n`;
   md += `| Função | Descrição |\n|---|---|\n`;
@@ -207,28 +215,52 @@ export function generatePlatformMarkdown(): string {
   md += `| whatsapp-webhook | Recebe mensagens WhatsApp |\n`;
   md += `| enviar-campanha | Dispara campanhas de marketing |\n`;
   md += `| enviar-lembretes | Lembretes de agendamento |\n`;
+  md += `| enviar-email-notificacao | Email de notificação |\n`;
+  md += `| enviar-push | Push notification |\n`;
   md += `| lembrete-alongamento | Notifica pausas posturais |\n`;
-  md += `| notificacoes-inteligentes | Notificações contextuais IA |\n\n`;
+  md += `| lembrete-medidas | Lembrete de registrar medidas |\n`;
+  md += `| lembretes-wellness | Lembretes de bem-estar |\n`;
+  md += `| notificacoes-inteligentes | Notificações contextuais IA |\n`;
+  md += `| notificar-roteiros-pendentes | Roteiros pendentes |\n\n`;
 
   md += `### 🤖 Inteligência Artificial\n\n`;
   md += `| Função | Descrição |\n|---|---|\n`;
   md += `| chat-assistente | Assistente IA conversacional 24/7 |\n`;
+  md += `| resi-chat | Chat contextual da Resi |\n`;
   md += `| generate-script | Gera roteiros para Reels/Stories |\n`;
   md += `| generate-hooks | Ganchos virais com score de poder |\n`;
   md += `| generate-ideas | 10 ideias por nicho e funil |\n`;
+  md += `| gerar-ideias-semanais | Ideias semanais automatizadas |\n`;
   md += `| analyze-viral | Análise de potencial viral |\n`;
-  md += `| gerar-recomendacoes | Recomendações personalizadas |\n\n`;
+  md += `| gerar-recomendacoes | Recomendações personalizadas |\n`;
+  md += `| gerar-imagem-servico | Gera imagens com IA |\n`;
+  md += `| cashback-inteligente | Cashback sugerido por IA |\n\n`;
+
+  md += `### 🧘 Saúde & Bem-Estar\n\n`;
+  md += `| Função | Descrição |\n|---|---|\n`;
+  md += `| assistente-saude | Assistente de saúde com IA |\n`;
+  md += `| insights-saude | Insights de saúde personalizados |\n`;
+  md += `| plano-bem-estar | Gera plano de bem-estar com IA |\n`;
+  md += `| recomendar-sessao | Recomenda sessão terapêutica |\n`;
+  md += `| reflexao-diario | Reflexão do diário de bem-estar |\n`;
+  md += `| analise-progresso | Análise de progresso do paciente |\n`;
+  md += `| wellness-insight | Insight de wellness com IA |\n`;
+  md += `| wellness-correlations | Correlações de bem-estar |\n`;
+  md += `| wellness-check-conquistas | Verifica conquistas wellness |\n`;
+  md += `| wellness-update-streak | Atualiza streak de bem-estar |\n\n`;
 
   md += `### ⚙️ Infraestrutura\n\n`;
   md += `| Função | Descrição |\n|---|---|\n`;
   md += `| fetch-google-ads | Coleta métricas Google Ads |\n`;
-  md += `| gerar-imagem-servico | Gera imagens com IA |\n`;
+  md += `| atualizar-trends | Atualiza tendências e métricas |\n`;
   md += `| curso-tts | Text-to-Speech para cursos |\n`;
   md += `| processar-expiracoes | Expira cashback vencido |\n`;
   md += `| processar-vales-expirados | Expira vales presente |\n`;
   md += `| transferir-creditos | Transferência entre usuários |\n`;
   md += `| check-rate-limit | Rate limiting de login |\n`;
-  md += `| buscar-usuario | Busca por email/telefone |\n\n`;
+  md += `| buscar-usuario | Busca por email/telefone |\n`;
+  md += `| creditar-recompensa-sugestao | Credita recompensa por sugestão |\n`;
+  md += `| validar-playlist | Valida links YouTube/Spotify |\n\n`;
 
   // ── 8. Storage ──
   md += `---\n\n## 💾 Storage (11 buckets)\n\n`;
@@ -273,7 +305,7 @@ export function generatePlatformMarkdown(): string {
   md += `- Cache via user_permissions_mv + auto-refresh\n`;
   md += `- ProtectedRoute + AdminRoute no frontend\n\n`;
   md += `### Camada 3 — Row Level Security (RLS)\n`;
-  md += `- 262+ políticas em todas as tabelas\n`;
+  md += `- 366 políticas em todas as 134 tabelas\n`;
   md += `- Políticas RESTRICTIVE para bloquear anon\n`;
   md += `- Admins via has_role(), users via auth.uid()\n\n`;
   md += `### Camada 4 — Proteção de Dados\n`;
@@ -464,16 +496,16 @@ export function generatePlatformMarkdown(): string {
   md += `---\n\n`;
   md += `## 📊 Resumo Final\n\n`;
   md += `| Item | Quantidade |\n|---|---|\n`;
-  md += `| Feature Folders | 22 |\n`;
-  md += `| Tabelas DB | 95+ |\n`;
-  md += `| Políticas RLS | 262+ |\n`;
-  md += `| Edge Functions | 24 |\n`;
-  md += `| Funções SQL | 27+ |\n`;
-  md += `| Triggers | 17+ |\n`;
+  md += `| Feature Folders | 29 |\n`;
+  md += `| Tabelas DB | 134 |\n`;
+  md += `| Políticas RLS | 366 |\n`;
+  md += `| Edge Functions | 44 |\n`;
+  md += `| Funções SQL | 51 |\n`;
+  md += `| Triggers | 57 |\n`;
   md += `| Permissões RBAC | 30 |\n`;
   md += `| Storage Buckets | 11 |\n`;
   md += `| Cursos | 17 |\n`;
-  md += `| Abas Admin | 23 |\n`;
+  md += `| Abas Admin | 35+ |\n`;
   md += `| Integrações | 6 |\n`;
   md += `| Secrets | 7 |\n\n`;
   md += `> Resinkra — Plataforma completa de saúde, bem-estar e educação com gamificação, IA e B2B.\n`;
