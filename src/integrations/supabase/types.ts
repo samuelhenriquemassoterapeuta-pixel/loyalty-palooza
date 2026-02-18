@@ -5603,6 +5603,57 @@ export type Database = {
           },
         ]
       }
+      wellness_checkins: {
+        Row: {
+          agua_litros: number | null
+          created_at: string
+          data: string
+          dor: number | null
+          dor_local: string | null
+          energia: number
+          estresse: number | null
+          exercicio_min: number | null
+          humor: number
+          id: string
+          observacoes: string | null
+          sono_horas: number | null
+          sono_qualidade: number | null
+          user_id: string
+        }
+        Insert: {
+          agua_litros?: number | null
+          created_at?: string
+          data?: string
+          dor?: number | null
+          dor_local?: string | null
+          energia: number
+          estresse?: number | null
+          exercicio_min?: number | null
+          humor: number
+          id?: string
+          observacoes?: string | null
+          sono_horas?: number | null
+          sono_qualidade?: number | null
+          user_id: string
+        }
+        Update: {
+          agua_litros?: number | null
+          created_at?: string
+          data?: string
+          dor?: number | null
+          dor_local?: string | null
+          energia?: number
+          estresse?: number | null
+          exercicio_min?: number | null
+          humor?: number
+          id?: string
+          observacoes?: string | null
+          sono_horas?: number | null
+          sono_qualidade?: number | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       whatsapp_conversas: {
         Row: {
           created_at: string
