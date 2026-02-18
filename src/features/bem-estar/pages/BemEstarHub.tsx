@@ -21,6 +21,7 @@ import WellnessMoodTrends from "@/features/bem-estar/components/WellnessMoodTren
 import WellnessDailyHabits from "@/features/bem-estar/components/WellnessDailyHabits";
 import WellnessGoalsWidget from "@/features/bem-estar/components/WellnessGoalsWidget";
 import WellnessStreakMilestones from "@/features/bem-estar/components/WellnessStreakMilestones";
+import WellnessQuickActions from "@/features/bem-estar/components/WellnessQuickActions";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 14 },
@@ -204,6 +205,9 @@ const BemEstarHub = () => {
               </div>
             </div>
           </motion.div>
+
+          {/* Quick Actions */}
+          <WellnessQuickActions />
 
           {/* Streak Banner */}
           {streakData && streakData.streak_atual > 0 && (
