@@ -33,6 +33,18 @@ import {
   DollarSign,
   Target,
   Sparkles,
+  Calendar,
+  ShoppingCart,
+  Trophy,
+  Building2,
+  Activity,
+  Gift,
+  Headphones,
+  Heart,
+  Tag,
+  Settings,
+  FileText,
+  Stethoscope,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -40,6 +52,7 @@ import { Card } from "@/components/ui/card";
 import { toast } from "sonner";
 import { generateAllCoursesMarkdown } from "@/features/cursos/utils/generateCourseMarkdown";
 import { generatePlatformMarkdown } from "@/features/admin/utils/generatePlatformMarkdown";
+import { allDomainMarkdowns } from "@/features/admin/utils/generateDomainMarkdowns";
 
 // ── Reusable Components ──
 
@@ -171,6 +184,45 @@ const CourseMarkdownBlock = () => {
       </div>
       <CodeBlock title="Estrutura Completa dos Cursos (Markdown)" language="markdown" code={markdown} />
     </div>
+  );
+};
+
+// ── Icon map for domain sections ──
+const domainIconMap: Record<string, React.ElementType> = {
+  Calendar, CreditCard, ShoppingCart, Shield, MessageSquare,
+  Trophy, Building2, Bot, Activity, Gift, Headphones, Globe,
+  Users, Stethoscope, FileText, Heart, Tag, BookOpen, Sparkles, Settings,
+};
+
+const DomainMarkdownSection = ({ domain }: { domain: typeof allDomainMarkdowns[0] }) => {
+  const [copied, setCopied] = useState(false);
+  const IconComponent = domainIconMap[domain.icon] || Code2;
+
+  const handleCopy = () => {
+    const md = domain.generator();
+    navigator.clipboard.writeText(md);
+    setCopied(true);
+    toast.success(`Markdown de "${domain.name}" copiado!`);
+    setTimeout(() => setCopied(false), 3000);
+  };
+
+  return (
+    <SectionCollapsible
+      title={domain.name}
+      icon={IconComponent}
+      defaultOpen={false}
+    >
+      <div className="space-y-3">
+        <div className="flex items-center justify-between">
+          <p className="text-xs text-muted-foreground">Documentação completa do módulo em Markdown</p>
+          <Button size="sm" variant="outline" onClick={handleCopy} className="gap-2">
+            {copied ? <Check size={14} className="text-green-500" /> : <Copy size={14} />}
+            {copied ? "Copiado!" : "Copiar"}
+          </Button>
+        </div>
+        <CodeBlock title={`${domain.name} (Markdown)`} language="markdown" code={domain.generator()} />
+      </div>
+    </SectionCollapsible>
   );
 };
 
@@ -701,6 +753,23 @@ CASHBACK EXPIRANDO
       >
         <CourseMarkdownBlock />
       </SectionCollapsible>
+
+      {/* 12. Documentação por Módulo */}
+      <div className="space-y-1">
+        <div className="flex items-center gap-2 px-1 pt-4 pb-2">
+          <div className="p-2 rounded-xl bg-accent/10">
+            <Layers size={18} className="text-accent" />
+          </div>
+          <div>
+            <h4 className="text-sm font-bold text-foreground">Documentação por Módulo</h4>
+            <p className="text-[10px] text-muted-foreground">Clique em cada módulo para ver e copiar o markdown específico</p>
+          </div>
+          <Badge variant="secondary" className="text-[10px] ml-auto">{allDomainMarkdowns.length} módulos</Badge>
+        </div>
+        {allDomainMarkdowns.map((domain) => (
+          <DomainMarkdownSection key={domain.id} domain={domain} />
+        ))}
+      </div>
     </div>
   );
 };
