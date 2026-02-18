@@ -1,5 +1,6 @@
+import { useRef, useCallback, useEffect } from "react";
 import { motion } from "framer-motion";
-import { ArrowDownLeft, ArrowUpRight, ShoppingBag, CalendarDays, Gift, Repeat } from "lucide-react";
+import { ArrowDownLeft, ArrowUpRight, ShoppingBag, CalendarDays, Gift, Repeat, Loader2 } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { Transacao } from "@/features/cashback/hooks/useTransacoes";
@@ -43,12 +44,40 @@ const getLabel = (tipo: string) => {
 
 interface CashbackHistoryListProps {
   transacoes: Transacao[];
+  hasNextPage?: boolean;
+  isFetchingNextPage?: boolean;
+  onLoadMore?: () => void;
 }
 
-export const CashbackHistoryList = ({ transacoes }: CashbackHistoryListProps) => {
+export const CashbackHistoryList = ({
+  transacoes,
+  hasNextPage,
+  isFetchingNextPage,
+  onLoadMore,
+}: CashbackHistoryListProps) => {
   const cashbackTransacoes = transacoes.filter(
     (t) => t.tipo === "cashback" || t.tipo === "uso_cashback"
   );
+
+  // Infinite scroll sentinel
+  const sentinelRef = useRef<HTMLDivElement>(null);
+
+  const handleIntersection = useCallback(
+    (entries: IntersectionObserverEntry[]) => {
+      if (entries[0]?.isIntersecting && hasNextPage && !isFetchingNextPage && onLoadMore) {
+        onLoadMore();
+      }
+    },
+    [hasNextPage, isFetchingNextPage, onLoadMore]
+  );
+
+  useEffect(() => {
+    const el = sentinelRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(handleIntersection, { threshold: 0.1 });
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [handleIntersection]);
 
   if (cashbackTransacoes.length === 0) {
     return (
@@ -117,6 +146,21 @@ export const CashbackHistoryList = ({ transacoes }: CashbackHistoryListProps) =>
           );
         })}
       </motion.div>
+
+      {/* Infinite scroll sentinel */}
+      <div ref={sentinelRef} className="h-4" />
+
+      {isFetchingNextPage && (
+        <div className="flex justify-center py-4">
+          <Loader2 size={20} className="animate-spin text-muted-foreground" />
+        </div>
+      )}
+
+      {!hasNextPage && cashbackTransacoes.length > 10 && (
+        <p className="text-center text-xs text-muted-foreground py-3">
+          Todas as movimentações carregadas
+        </p>
+      )}
     </div>
   );
 };
