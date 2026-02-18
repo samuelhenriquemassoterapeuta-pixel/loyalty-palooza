@@ -1,16 +1,16 @@
-import { useState } from "react"; // v2
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, Plus, FileText, Users, Shield, Dumbbell, Sparkles, ClipboardList, StretchHorizontal, Salad, BookOpen, Stethoscope, Globe, Gift, Ticket, Crown, Building2, CreditCard, Handshake, Camera, Trophy, DollarSign, CalendarDays, Target, Megaphone, Send, BarChart3, Rocket, GraduationCap, Bell, UserCog, Settings2, Code2, FilePlus2 } from "lucide-react";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ArrowLeft, Plus, Shield, BarChart3, Ticket, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PageLoading } from "@/components/LoadingSpinner";
 import { useAdmin } from "@/features/admin/hooks/useAdmin";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
+import { AdminNavigation, adminNavGroups } from "@/features/admin/components/AdminNavigation";
 import { StatsCards } from "@/features/admin/components/StatsCards";
 import { DashboardTab } from "@/features/admin/components/DashboardTab";
 import { PedidosTab } from "@/features/admin/components/PedidosTab";
@@ -60,6 +60,22 @@ const tabContentVariants = {
   exit: { opacity: 0, y: -8, transition: { duration: 0.15 } },
 };
 
+// Get active tab label for header breadcrumb
+const getActiveLabel = (tab: string): string => {
+  for (const group of adminNavGroups) {
+    const item = group.items.find(i => i.id === tab);
+    if (item) return item.label;
+  }
+  return "Dashboard";
+};
+
+const getActiveGroup = (tab: string): string => {
+  for (const group of adminNavGroups) {
+    if (group.items.some(i => i.id === tab)) return group.label;
+  }
+  return "";
+};
+
 const Admin = () => {
   const navigate = useNavigate();
   const { isAdmin, loading: loadingAdmin } = useAdmin();
@@ -70,6 +86,7 @@ const Admin = () => {
   const [editingItem, setEditingItem] = useState<any>(null);
   const [formData, setFormData] = useState<any>({});
   const [saving, setSaving] = useState(false);
+  const [navOpen, setNavOpen] = useState(false);
 
   // Fetch data
   const { data: produtos = [], isLoading: loadingProdutos } = useQuery({
@@ -255,6 +272,11 @@ const Admin = () => {
     }
   };
 
+  const handleTabChange = (tab: string) => {
+    setActiveTab(tab);
+    setNavOpen(false);
+  };
+
   if (loadingAdmin) {
     return <PageLoading text="Verificando permissões..." />;
   }
@@ -278,19 +300,137 @@ const Admin = () => {
     );
   }
 
-  const showNewButton =
-    activeTab === "produtos" || activeTab === "servicos" || activeTab === "pacotes";
+  const showNewButton = activeTab === "produtos" || activeTab === "servicos" || activeTab === "pacotes";
+
+  const renderContent = () => {
+    switch (activeTab) {
+      case "dashboard":
+        return <DashboardTab stats={stats} pedidos={pedidos} transacoes={transacoes} />;
+      case "analytics":
+        return <AnalyticsDashboardTab />;
+      case "financeiro":
+        return <FinanceiroTab />;
+      case "auditoria":
+        return <AuditLogsViewer />;
+      case "agendamentos":
+        return <AgendamentosTab />;
+      case "pedidos":
+        return <PedidosTab pedidos={pedidos} isLoading={loadingPedidos} onUpdateStatus={updatePedidoStatus} />;
+      case "terapeutas":
+        return <TerapeutasTab />;
+      case "usuarios":
+        return <UsuariosAdminTab />;
+      case "produtos":
+        return <CrudListTab items={produtos} isLoading={loadingProdutos} emptyMessage="Nenhum produto cadastrado" type="produtos" onEdit={openEditDialog} onDelete={handleDelete} onToggle={toggleDisponivel} />;
+      case "servicos":
+        return <CrudListTab items={servicos} isLoading={loadingServicos} emptyMessage="Nenhum serviço cadastrado" type="servicos" onEdit={openEditDialog} onDelete={handleDelete} onToggle={toggleDisponivel} />;
+      case "servicos-detalhes":
+        return <ServicosDetalhesTab />;
+      case "pacotes":
+        return <CrudListTab items={pacotes} isLoading={loadingPacotes} emptyMessage="Nenhum pacote cadastrado" type="pacotes" onEdit={openEditDialog} onDelete={handleDelete} onToggle={toggleDisponivel} />;
+      case "protocolos":
+        return <ProtocolosTab />;
+      case "exercicios":
+        return <ExerciciosTab />;
+      case "planos-alongamento":
+        return <PlanosAlongamentoTab />;
+      case "planos-dieta":
+        return <PlanosDietaTab />;
+      case "dietas-conteudo":
+        return <DietasConteudoTab />;
+      case "secoes-clinicas":
+        return <SecoesClinicasTab />;
+      case "anamnese":
+        return <AnamneseAdminTab />;
+      case "headspa":
+        return <HeadSpaImagensTab />;
+      case "planos-vip":
+        return <PlanosVipTab />;
+      case "assinaturas":
+        return <AssinaturasTab />;
+      case "indicacoes":
+        return <IndicacoesTab />;
+      case "desafios-admin":
+        return <DesafiosTab />;
+      case "vales":
+        return <ValesPresenteTab />;
+      case "cupom":
+        return (
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-lg font-semibold text-foreground">Editor de Cupom</h3>
+                <p className="text-sm text-muted-foreground">Crie cupons visuais para redes sociais e impressão</p>
+              </div>
+              <Button onClick={() => navigate("/cupom-editor")} className="gap-2 shadow-button">
+                <Ticket className="w-4 h-4" />
+                Abrir Editor
+              </Button>
+            </div>
+          </div>
+        );
+      case "empresas":
+        return <EmpresasTab />;
+      case "corp-conteudo":
+        return <CorporativoConteudoTab />;
+      case "parceiros":
+        return <ParceirosTab />;
+      case "landing":
+        return <LandingPageTab />;
+      case "segmentacao":
+        return <SegmentacaoClientesTab />;
+      case "campanhas":
+        return <CampanhasMarketingTab />;
+      case "banners":
+        return <BannersPromocionaisTab />;
+      case "google-ads":
+        return (
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-lg font-semibold text-foreground">Google Ads Dashboard</h3>
+                <p className="text-sm text-muted-foreground">Métricas e performance das campanhas Google Ads</p>
+              </div>
+              <Button onClick={() => navigate("/admin/google-ads")} className="gap-2 shadow-button">
+                <BarChart3 className="w-4 h-4" />
+                Abrir Dashboard
+              </Button>
+            </div>
+          </div>
+        );
+      case "notificacoes-admin":
+        return <NotificacoesAdminTab />;
+      case "social-posts":
+        return <SocialPostsTab />;
+      case "social-config":
+        return <SocialPostsConfigTab />;
+      case "cursos-admin":
+        return <CursosAdminTab />;
+      case "materiais-admin":
+        return <MateriaisAdminTab />;
+      case "relatorio-tecnico":
+        return <RelatorioTecnicoTab />;
+      case "apresentacao":
+        return <ApresentacaoPlataformaTab />;
+      case "codigo":
+        return <CodigoPlataformaTab />;
+      case "venda-plataforma":
+        return <VendaPlataformaTab />;
+      default:
+        return <DashboardTab stats={stats} pedidos={pedidos} transacoes={transacoes} />;
+    }
+  };
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Animated Header */}
+      {/* Header */}
       <motion.div
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.4, ease: "easeOut" }}
         className="gradient-primary shadow-button sticky top-0 z-10"
       >
-        <div className="max-w-4xl mx-auto px-4 safe-top">
+        <div className="max-w-6xl mx-auto px-4 safe-top">
           <div className="flex items-center gap-3 py-4">
             <button
               onClick={() => navigate(-1)}
@@ -298,455 +438,84 @@ const Admin = () => {
             >
               <ArrowLeft size={20} className="text-primary-foreground" />
             </button>
-            <div className="flex-1">
+            <div className="flex-1 min-w-0">
               <h1 className="text-lg font-bold text-primary-foreground">Painel Admin</h1>
-              <p className="text-xs text-primary-foreground/70">Gerencie seu negócio</p>
+              <p className="text-xs text-primary-foreground/70 truncate">
+                {getActiveGroup(activeTab)} › {getActiveLabel(activeTab)}
+              </p>
             </div>
             <ThemeToggle />
+            {/* Mobile nav toggle */}
+            <Sheet open={navOpen} onOpenChange={setNavOpen}>
+              <SheetTrigger asChild>
+                <button className="lg:hidden p-2 rounded-xl bg-primary-foreground/10 hover:bg-primary-foreground/20 transition-all">
+                  <Menu size={20} className="text-primary-foreground" />
+                </button>
+              </SheetTrigger>
+              <SheetContent side="left" className="w-72 p-4 pt-8">
+                <h2 className="text-sm font-bold text-foreground mb-4">Navegação</h2>
+                <AdminNavigation activeTab={activeTab} onTabChange={handleTabChange} />
+              </SheetContent>
+            </Sheet>
           </div>
         </div>
       </motion.div>
 
-      <div className="max-w-4xl mx-auto px-4 py-6">
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-        >
-          <StatsCards
-            totalProdutos={produtos.length}
-            totalServicos={servicos.length}
-            totalPacotes={pacotes.length}
-            totalUsuarios={usuarios.length}
-          />
-        </motion.div>
-
-        <Tabs value={activeTab} onValueChange={setActiveTab}>
-          {/* Scrollable tabs */}
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="mb-4 -mx-4 px-4"
+      <div className="max-w-6xl mx-auto px-4 py-6">
+        <div className="flex gap-6">
+          {/* Desktop sidebar */}
+          <motion.aside
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.1 }}
+            className="hidden lg:block w-60 shrink-0 sticky top-24 self-start"
           >
-            <ScrollArea className="w-full">
-              <TabsList className="inline-flex w-auto min-w-full sm:w-full h-auto p-1 gap-1 bg-card shadow-card">
-                <TabsTrigger value="dashboard" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap data-[state=active]:shadow-sm transition-all duration-200">
-                  Dashboard
-                </TabsTrigger>
-                <TabsTrigger value="agendamentos" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
-                  <CalendarDays size={14} />
-                  Agendamentos
-                </TabsTrigger>
-                <TabsTrigger value="exercicios" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
-                  <Dumbbell size={14} />
-                  Exercícios
-                </TabsTrigger>
-                <TabsTrigger value="landing" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
-                  <Globe size={14} />
-                  Landing Page
-                </TabsTrigger>
-                <TabsTrigger value="vales" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
-                  <Gift size={14} />
-                  Vales Presente
-                </TabsTrigger>
-                <TabsTrigger value="cupom" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
-                  <Ticket size={14} />
-                  Cupom
-                </TabsTrigger>
-                <TabsTrigger value="pedidos" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap data-[state=active]:shadow-sm transition-all duration-200">
-                  Pedidos
-                </TabsTrigger>
-                <TabsTrigger value="produtos" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap data-[state=active]:shadow-sm transition-all duration-200">
-                  Produtos
-                </TabsTrigger>
-                <TabsTrigger value="servicos" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap data-[state=active]:shadow-sm transition-all duration-200">
-                  Serviços
-                </TabsTrigger>
-                <TabsTrigger value="servicos-detalhes" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
-                  <Sparkles size={14} />
-                  Detalhes Serviços
-                </TabsTrigger>
-                <TabsTrigger value="pacotes" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap data-[state=active]:shadow-sm transition-all duration-200">
-                  Pacotes
-                </TabsTrigger>
-                <TabsTrigger value="terapeutas" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap data-[state=active]:shadow-sm transition-all duration-200">
-                  Terapeutas
-                </TabsTrigger>
-                <TabsTrigger value="indicacoes" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
-                  <Users size={14} />
-                  Indicações
-                </TabsTrigger>
-                <TabsTrigger value="protocolos" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
-                  <ClipboardList size={14} />
-                  Protocolos
-                </TabsTrigger>
-                <TabsTrigger value="planos-alongamento" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
-                  <StretchHorizontal size={14} />
-                  Planos Along.
-                </TabsTrigger>
-                <TabsTrigger value="planos-dieta" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
-                  <Salad size={14} />
-                  Planos Dieta
-                </TabsTrigger>
-                <TabsTrigger value="secoes-clinicas" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
-                  <Stethoscope size={14} />
-                  Seções Clínicas
-                </TabsTrigger>
-                <TabsTrigger value="anamnese" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
-                  <FilePlus2 size={14} />
-                  Anamnese
-                </TabsTrigger>
-                <TabsTrigger value="dietas-conteudo" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
-                  <BookOpen size={14} />
-                  Conteúdo Dietas
-                </TabsTrigger>
-                <TabsTrigger value="headspa" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
-                  <Sparkles size={14} />
-                  Head SPA
-                </TabsTrigger>
-                <TabsTrigger value="planos-vip" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
-                  <Crown size={14} />
-                  Planos VIP
-                </TabsTrigger>
-                <TabsTrigger value="empresas" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
-                  <Building2 size={14} />
-                  Empresas
-                </TabsTrigger>
-                <TabsTrigger value="corp-conteudo" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
-                  <Globe size={14} />
-                  Pág. Corporativa
-                </TabsTrigger>
-                <TabsTrigger value="parceiros" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
-                  <Handshake size={14} />
-                  Parceiros
-                </TabsTrigger>
-                <TabsTrigger value="assinaturas" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
-                  <CreditCard size={14} />
-                  Assinaturas
-                </TabsTrigger>
-                <TabsTrigger value="social-posts" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
-                  <Camera size={14} />
-                  Moments
-                </TabsTrigger>
-                <TabsTrigger value="analytics" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
-                  <BarChart3 size={14} />
-                  Analytics
-                </TabsTrigger>
-                <TabsTrigger value="financeiro" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
-                  <DollarSign size={14} />
-                  Financeiro
-                </TabsTrigger>
-                <TabsTrigger value="desafios-admin" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
-                  <Trophy size={14} />
-                  Desafios
-                </TabsTrigger>
-                <TabsTrigger value="auditoria" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
-                  <FileText size={14} />
-                  Auditoria
-                </TabsTrigger>
-                <TabsTrigger value="segmentacao" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
-                  <Target size={14} />
-                  Segmentação
-                </TabsTrigger>
-                <TabsTrigger value="campanhas" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
-                  <Send size={14} />
-                  Campanhas
-                </TabsTrigger>
-                <TabsTrigger value="banners" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
-                  <Megaphone size={14} />
-                  Banners
-                </TabsTrigger>
-                <TabsTrigger value="google-ads" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
-                  <BarChart3 size={14} />
-                  Google Ads
-                </TabsTrigger>
-                <TabsTrigger value="relatorio-tecnico" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
-                  <FileText size={14} />
-                  Relatório Técnico
-                </TabsTrigger>
-                <TabsTrigger value="cursos-admin" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
-                  <GraduationCap size={14} />
-                  Cursos
-                </TabsTrigger>
-                <TabsTrigger value="social-config" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
-                  <Settings2 size={14} />
-                  Config Moments
-                </TabsTrigger>
-                <TabsTrigger value="notificacoes-admin" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
-                  <Bell size={14} />
-                  Notificações
-                </TabsTrigger>
-                <TabsTrigger value="usuarios" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
-                  <UserCog size={14} />
-                  Usuários
-                </TabsTrigger>
-                <TabsTrigger value="apresentacao" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
-                  <Rocket size={14} />
-                  Apresentação
-                </TabsTrigger>
-                <TabsTrigger value="materiais-admin" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
-                  <FileText size={14} />
-                  Materiais
-                </TabsTrigger>
-                <TabsTrigger value="codigo" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
-                  <Code2 size={14} />
-                  Código
-                </TabsTrigger>
-                <TabsTrigger value="venda-plataforma" className="text-xs sm:text-sm px-3 py-2 whitespace-nowrap flex items-center gap-1 data-[state=active]:shadow-sm transition-all duration-200">
-                  <DollarSign size={14} />
-                  Venda B2B
-                </TabsTrigger>
-              </TabsList>
-              <ScrollBar orientation="horizontal" className="h-1.5" />
-            </ScrollArea>
-          </motion.div>
+            <AdminNavigation activeTab={activeTab} onTabChange={handleTabChange} />
+          </motion.aside>
 
-          {showNewButton && (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              className="flex justify-end mb-4"
-            >
-              <Button size="sm" onClick={openCreateDialog} className="shadow-button active:scale-95 transition-transform">
-                <Plus className="w-4 h-4 mr-1" />
-                Novo
-              </Button>
-            </motion.div>
-          )}
-
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={activeTab}
-              variants={tabContentVariants}
-              initial="hidden"
-              animate="visible"
-              exit="exit"
-            >
-              <TabsContent value="dashboard" forceMount={activeTab === "dashboard" ? true : undefined} className={activeTab !== "dashboard" ? "hidden" : ""}>
-                <DashboardTab stats={stats} pedidos={pedidos} transacoes={transacoes} />
-              </TabsContent>
-
-              <TabsContent value="agendamentos" forceMount={activeTab === "agendamentos" ? true : undefined} className={activeTab !== "agendamentos" ? "hidden" : ""}>
-                <AgendamentosTab />
-              </TabsContent>
-
-              <TabsContent value="pedidos" forceMount={activeTab === "pedidos" ? true : undefined} className={activeTab !== "pedidos" ? "hidden" : ""}>
-                <PedidosTab
-                  pedidos={pedidos}
-                  isLoading={loadingPedidos}
-                  onUpdateStatus={updatePedidoStatus}
+          {/* Content */}
+          <div className="flex-1 min-w-0">
+            {activeTab === "dashboard" && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 }}
+              >
+                <StatsCards
+                  totalProdutos={produtos.length}
+                  totalServicos={servicos.length}
+                  totalPacotes={pacotes.length}
+                  totalUsuarios={usuarios.length}
                 />
-              </TabsContent>
+              </motion.div>
+            )}
 
-              <TabsContent value="produtos" forceMount={activeTab === "produtos" ? true : undefined} className={activeTab !== "produtos" ? "hidden" : ""}>
-                <CrudListTab
-                  items={produtos}
-                  isLoading={loadingProdutos}
-                  emptyMessage="Nenhum produto cadastrado"
-                  type="produtos"
-                  onEdit={openEditDialog}
-                  onDelete={handleDelete}
-                  onToggle={toggleDisponivel}
-                />
-              </TabsContent>
+            {showNewButton && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="flex justify-end mb-4"
+              >
+                <Button size="sm" onClick={openCreateDialog} className="shadow-button active:scale-95 transition-transform">
+                  <Plus className="w-4 h-4 mr-1" />
+                  Novo
+                </Button>
+              </motion.div>
+            )}
 
-              <TabsContent value="servicos" forceMount={activeTab === "servicos" ? true : undefined} className={activeTab !== "servicos" ? "hidden" : ""}>
-                <CrudListTab
-                  items={servicos}
-                  isLoading={loadingServicos}
-                  emptyMessage="Nenhum serviço cadastrado"
-                  type="servicos"
-                  onEdit={openEditDialog}
-                  onDelete={handleDelete}
-                  onToggle={toggleDisponivel}
-                />
-              </TabsContent>
-
-              <TabsContent value="servicos-detalhes" forceMount={activeTab === "servicos-detalhes" ? true : undefined} className={activeTab !== "servicos-detalhes" ? "hidden" : ""}>
-                <ServicosDetalhesTab />
-              </TabsContent>
-
-              <TabsContent value="pacotes" forceMount={activeTab === "pacotes" ? true : undefined} className={activeTab !== "pacotes" ? "hidden" : ""}>
-                <CrudListTab
-                  items={pacotes}
-                  isLoading={loadingPacotes}
-                  emptyMessage="Nenhum pacote cadastrado"
-                  type="pacotes"
-                  onEdit={openEditDialog}
-                  onDelete={handleDelete}
-                  onToggle={toggleDisponivel}
-                />
-              </TabsContent>
-
-              <TabsContent value="terapeutas" forceMount={activeTab === "terapeutas" ? true : undefined} className={activeTab !== "terapeutas" ? "hidden" : ""}>
-                <TerapeutasTab />
-              </TabsContent>
-
-              <TabsContent value="indicacoes" forceMount={activeTab === "indicacoes" ? true : undefined} className={activeTab !== "indicacoes" ? "hidden" : ""}>
-                <IndicacoesTab />
-              </TabsContent>
-
-              <TabsContent value="exercicios" forceMount={activeTab === "exercicios" ? true : undefined} className={activeTab !== "exercicios" ? "hidden" : ""}>
-                <ExerciciosTab />
-              </TabsContent>
-
-              <TabsContent value="protocolos" forceMount={activeTab === "protocolos" ? true : undefined} className={activeTab !== "protocolos" ? "hidden" : ""}>
-                <ProtocolosTab />
-              </TabsContent>
-
-              <TabsContent value="planos-alongamento" forceMount={activeTab === "planos-alongamento" ? true : undefined} className={activeTab !== "planos-alongamento" ? "hidden" : ""}>
-                <PlanosAlongamentoTab />
-              </TabsContent>
-
-              <TabsContent value="planos-dieta" forceMount={activeTab === "planos-dieta" ? true : undefined} className={activeTab !== "planos-dieta" ? "hidden" : ""}>
-                <PlanosDietaTab />
-              </TabsContent>
-
-              <TabsContent value="secoes-clinicas" forceMount={activeTab === "secoes-clinicas" ? true : undefined} className={activeTab !== "secoes-clinicas" ? "hidden" : ""}>
-                <SecoesClinicasTab />
-              </TabsContent>
-
-              <TabsContent value="dietas-conteudo" forceMount={activeTab === "dietas-conteudo" ? true : undefined} className={activeTab !== "dietas-conteudo" ? "hidden" : ""}>
-                <DietasConteudoTab />
-              </TabsContent>
-
-              <TabsContent value="anamnese" forceMount={activeTab === "anamnese" ? true : undefined} className={activeTab !== "anamnese" ? "hidden" : ""}>
-                <AnamneseAdminTab />
-              </TabsContent>
-
-              <TabsContent value="headspa" forceMount={activeTab === "headspa" ? true : undefined} className={activeTab !== "headspa" ? "hidden" : ""}>
-                <HeadSpaImagensTab />
-              </TabsContent>
-
-              <TabsContent value="planos-vip" forceMount={activeTab === "planos-vip" ? true : undefined} className={activeTab !== "planos-vip" ? "hidden" : ""}>
-                <PlanosVipTab />
-              </TabsContent>
-
-              <TabsContent value="empresas" forceMount={activeTab === "empresas" ? true : undefined} className={activeTab !== "empresas" ? "hidden" : ""}>
-                <EmpresasTab />
-              </TabsContent>
-
-              <TabsContent value="corp-conteudo" forceMount={activeTab === "corp-conteudo" ? true : undefined} className={activeTab !== "corp-conteudo" ? "hidden" : ""}>
-                <CorporativoConteudoTab />
-              </TabsContent>
-
-              <TabsContent value="assinaturas" forceMount={activeTab === "assinaturas" ? true : undefined} className={activeTab !== "assinaturas" ? "hidden" : ""}>
-                <AssinaturasTab />
-              </TabsContent>
-
-              <TabsContent value="parceiros" forceMount={activeTab === "parceiros" ? true : undefined} className={activeTab !== "parceiros" ? "hidden" : ""}>
-                <ParceirosTab />
-              </TabsContent>
-
-              <TabsContent value="social-posts" forceMount={activeTab === "social-posts" ? true : undefined} className={activeTab !== "social-posts" ? "hidden" : ""}>
-                <SocialPostsTab />
-              </TabsContent>
-
-              <TabsContent value="analytics" forceMount={activeTab === "analytics" ? true : undefined} className={activeTab !== "analytics" ? "hidden" : ""}>
-                <AnalyticsDashboardTab />
-              </TabsContent>
-
-              <TabsContent value="financeiro" forceMount={activeTab === "financeiro" ? true : undefined} className={activeTab !== "financeiro" ? "hidden" : ""}>
-                <FinanceiroTab />
-              </TabsContent>
-
-              <TabsContent value="desafios-admin" forceMount={activeTab === "desafios-admin" ? true : undefined} className={activeTab !== "desafios-admin" ? "hidden" : ""}>
-                <DesafiosTab />
-              </TabsContent>
-
-              <TabsContent value="auditoria" forceMount={activeTab === "auditoria" ? true : undefined} className={activeTab !== "auditoria" ? "hidden" : ""}>
-                <AuditLogsViewer />
-              </TabsContent>
-
-              <TabsContent value="landing" forceMount={activeTab === "landing" ? true : undefined} className={activeTab !== "landing" ? "hidden" : ""}>
-                <LandingPageTab />
-              </TabsContent>
-
-              <TabsContent value="vales" forceMount={activeTab === "vales" ? true : undefined} className={activeTab !== "vales" ? "hidden" : ""}>
-                <ValesPresenteTab />
-              </TabsContent>
-
-              <TabsContent value="cupom" forceMount={activeTab === "cupom" ? true : undefined} className={activeTab !== "cupom" ? "hidden" : ""}>
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <h3 className="text-lg font-semibold text-foreground">Editor de Cupom</h3>
-                      <p className="text-sm text-muted-foreground">Crie cupons visuais para redes sociais e impressão</p>
-                    </div>
-                    <Button onClick={() => navigate("/cupom-editor")} className="gap-2 shadow-button">
-                      <Ticket className="w-4 h-4" />
-                      Abrir Editor
-                    </Button>
-                  </div>
-                </div>
-              </TabsContent>
-
-              <TabsContent value="segmentacao" forceMount={activeTab === "segmentacao" ? true : undefined} className={activeTab !== "segmentacao" ? "hidden" : ""}>
-                <SegmentacaoClientesTab />
-              </TabsContent>
-
-              <TabsContent value="campanhas" forceMount={activeTab === "campanhas" ? true : undefined} className={activeTab !== "campanhas" ? "hidden" : ""}>
-                <CampanhasMarketingTab />
-              </TabsContent>
-
-              <TabsContent value="banners" forceMount={activeTab === "banners" ? true : undefined} className={activeTab !== "banners" ? "hidden" : ""}>
-                <BannersPromocionaisTab />
-              </TabsContent>
-
-              <TabsContent value="google-ads" forceMount={activeTab === "google-ads" ? true : undefined} className={activeTab !== "google-ads" ? "hidden" : ""}>
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <h3 className="text-lg font-semibold text-foreground">Google Ads Dashboard</h3>
-                      <p className="text-sm text-muted-foreground">Métricas e performance das campanhas Google Ads</p>
-                    </div>
-                    <Button onClick={() => navigate("/admin/google-ads")} className="gap-2 shadow-button">
-                      <BarChart3 className="w-4 h-4" />
-                      Abrir Dashboard
-                    </Button>
-                  </div>
-                </div>
-              </TabsContent>
-
-              <TabsContent value="relatorio-tecnico" forceMount={activeTab === "relatorio-tecnico" ? true : undefined} className={activeTab !== "relatorio-tecnico" ? "hidden" : ""}>
-                <RelatorioTecnicoTab />
-              </TabsContent>
-
-              <TabsContent value="apresentacao" forceMount={activeTab === "apresentacao" ? true : undefined} className={activeTab !== "apresentacao" ? "hidden" : ""}>
-                <ApresentacaoPlataformaTab />
-              </TabsContent>
-
-              <TabsContent value="cursos-admin" forceMount={activeTab === "cursos-admin" ? true : undefined} className={activeTab !== "cursos-admin" ? "hidden" : ""}>
-                <CursosAdminTab />
-              </TabsContent>
-
-              <TabsContent value="social-config" forceMount={activeTab === "social-config" ? true : undefined} className={activeTab !== "social-config" ? "hidden" : ""}>
-                <SocialPostsConfigTab />
-              </TabsContent>
-
-              <TabsContent value="notificacoes-admin" forceMount={activeTab === "notificacoes-admin" ? true : undefined} className={activeTab !== "notificacoes-admin" ? "hidden" : ""}>
-                <NotificacoesAdminTab />
-              </TabsContent>
-
-              <TabsContent value="usuarios" forceMount={activeTab === "usuarios" ? true : undefined} className={activeTab !== "usuarios" ? "hidden" : ""}>
-                <UsuariosAdminTab />
-              </TabsContent>
-
-              <TabsContent value="materiais-admin" forceMount={activeTab === "materiais-admin" ? true : undefined} className={activeTab !== "materiais-admin" ? "hidden" : ""}>
-                <MateriaisAdminTab />
-              </TabsContent>
-
-              <TabsContent value="codigo" forceMount={activeTab === "codigo" ? true : undefined} className={activeTab !== "codigo" ? "hidden" : ""}>
-                <CodigoPlataformaTab />
-              </TabsContent>
-
-              <TabsContent value="venda-plataforma" forceMount={activeTab === "venda-plataforma" ? true : undefined} className={activeTab !== "venda-plataforma" ? "hidden" : ""}>
-                <VendaPlataformaTab />
-              </TabsContent>
-            </motion.div>
-          </AnimatePresence>
-        </Tabs>
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeTab}
+                variants={tabContentVariants}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+              >
+                {renderContent()}
+              </motion.div>
+            </AnimatePresence>
+          </div>
+        </div>
       </div>
 
       <AdminFormDialog
