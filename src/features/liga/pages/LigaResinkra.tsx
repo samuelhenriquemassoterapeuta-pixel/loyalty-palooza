@@ -122,7 +122,7 @@ export default function LigaResinkra() {
 
   return (
     <AppLayout>
-      <div className="min-h-screen bg-background pb-32 lg:pb-8">
+      <div className="min-h-screen bg-background gradient-hero pb-32 lg:pb-8">
         <div className="px-4 py-4 safe-top">
           <div className="max-w-lg mx-auto flex items-center gap-4">
             <button onClick={() => navigate(-1)} className="p-2 rounded-xl hover:bg-muted/50 transition-colors">

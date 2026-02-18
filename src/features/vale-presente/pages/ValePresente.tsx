@@ -154,7 +154,7 @@ const ValePresente = () => {
 
       <div className="max-w-lg mx-auto px-4 py-6 pb-32 space-y-6">
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="w-full grid grid-cols-3 bg-card shadow-card">
+          <TabsList className="w-full grid grid-cols-3 bg-card shadow-card h-11">
             <TabsTrigger value="comprar" className="text-xs gap-1"><Gift size={14} /> Comprar</TabsTrigger>
             <TabsTrigger value="resgatar" className="text-xs gap-1"><Ticket size={14} /> Resgatar</TabsTrigger>
             <TabsTrigger value="meus" className="text-xs gap-1"><Send size={14} /> Meus Vales</TabsTrigger>

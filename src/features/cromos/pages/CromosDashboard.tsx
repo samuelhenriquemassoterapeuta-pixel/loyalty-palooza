@@ -80,7 +80,7 @@ export default function CromosDashboard() {
 
   return (
     <AppLayout>
-      <div className="min-h-screen bg-background pb-32 lg:pb-8">
+      <div className="min-h-screen bg-background gradient-hero pb-32 lg:pb-8">
         {/* Header */}
         <div className="px-4 py-4 safe-top">
           <div className="max-w-lg lg:max-w-4xl mx-auto flex items-center gap-4">
@@ -104,7 +104,7 @@ export default function CromosDashboard() {
 
           {/* Tabs */}
           <Tabs value={activeTab} onValueChange={setActiveTab}>
-            <TabsList className="grid w-full grid-cols-3">
+            <TabsList className="grid w-full grid-cols-3 h-11">
               <TabsTrigger value="cromos" className="gap-1">
                 <FlaskConical size={14} />
                 Alquimia

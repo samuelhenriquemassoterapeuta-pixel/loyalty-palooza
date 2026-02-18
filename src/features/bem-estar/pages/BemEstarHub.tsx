@@ -149,7 +149,7 @@ const BemEstarHub = () => {
   return (
     <AppLayout>
       {isNewUser && <WellnessOnboarding onComplete={() => setOnboardingDismissed(true)} />}
-      <div className="min-h-screen bg-background pb-24 lg:pb-8">
+      <div className="min-h-screen bg-background gradient-hero pb-24 lg:pb-8">
         <div className="max-w-2xl mx-auto px-4 pt-6 safe-top">
 
           {/* ===== ABOVE THE FOLD — Always rendered ===== */}

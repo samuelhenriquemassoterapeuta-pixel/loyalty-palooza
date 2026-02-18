@@ -73,7 +73,7 @@ export default function Marketplace() {
 
   return (
     <AppLayout>
-      <div className="min-h-screen bg-background pb-32 lg:pb-8">
+      <div className="min-h-screen bg-background gradient-hero pb-32 lg:pb-8">
         {/* Header */}
         <div className="px-4 py-4 safe-top">
           <div className="max-w-5xl mx-auto flex items-center gap-4">
@@ -124,7 +124,7 @@ export default function Marketplace() {
             {/* Tabs */}
             <motion.div variants={fadeUp}>
               <Tabs value={activeTab} onValueChange={setActiveTab}>
-                <TabsList className="grid w-full grid-cols-2">
+                <TabsList className="grid w-full grid-cols-2 h-11">
                   <TabsTrigger value="explorar">Explorar</TabsTrigger>
                   <TabsTrigger value="favoritos">
                     Favoritos {favoritosTerapeutas.length > 0 && `(${favoritosTerapeutas.length})`}

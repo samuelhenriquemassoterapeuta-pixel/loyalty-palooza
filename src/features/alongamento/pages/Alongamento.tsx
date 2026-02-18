@@ -98,7 +98,7 @@ export default function Alongamento() {
 
   return (
     <AppLayout>
-      <div className="min-h-screen bg-background pb-32 lg:pb-8 relative">
+      <div className="min-h-screen bg-background gradient-hero pb-32 lg:pb-8 relative">
         <AnimatedPageBackground />
         {/* Header */}
         <div className="relative overflow-hidden bg-gradient-to-r from-primary/5 via-accent/5 to-primary/5 border-b border-border px-4 py-4 safe-top z-10">
@@ -122,7 +122,7 @@ export default function Alongamento() {
 
         <div className="max-w-lg lg:max-w-4xl mx-auto px-4 lg:px-8 py-4 space-y-4 relative z-10">
           <Tabs value={activeTab} onValueChange={setActiveTab}>
-            <TabsList className="grid w-full grid-cols-4">
+            <TabsList className="grid w-full grid-cols-4 h-11">
               <TabsTrigger value="exercicios" className="gap-1 text-xs">
                 <Dumbbell size={14} />
                 Exercícios
