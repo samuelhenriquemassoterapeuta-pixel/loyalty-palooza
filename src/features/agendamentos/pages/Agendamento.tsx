@@ -19,6 +19,7 @@ import { AvaliacaoDialog } from "@/features/agendamentos/components/AvaliacaoDia
 import { PagamentoAgendamentoDialog } from "@/features/agendamentos/components/PagamentoAgendamentoDialog";
 import { ReagendarDialog } from "@/features/agendamentos/components/ReagendarDialog";
 import { PriorityBanner } from "@/features/agendamentos/components/PriorityBanner";
+import { PlaylistSelector } from "@/features/playlist/components/PlaylistSelector";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ServicosListSkeleton, AgendamentosListSkeleton } from "@/components/skeletons";
 import { AppCollapsibleSection } from "@/components/AppCollapsibleSection";
@@ -98,6 +99,7 @@ const Agendamento = () => {
     servico: string;
     valor: number;
   } | null>(null);
+  const [selectedPlaylist, setSelectedPlaylist] = useState<string | null>(null);
 
   // Pre-select service from URL query param
   const preSelectedFromUrl = searchParams.get("servico");
@@ -134,7 +136,7 @@ const Agendamento = () => {
     dataHora.setHours(hours, minutes, 0, 0);
 
     setSaving(true);
-    const { error, data: novoAgendamento } = await createAgendamento(dataHora, selectedServico.nome, undefined, selectedTerapeuta?.id, selectedServico.id);
+    const { error, data: novoAgendamento } = await createAgendamento(dataHora, selectedServico.nome, undefined, selectedTerapeuta?.id, selectedServico.id, selectedPlaylist || undefined);
     setSaving(false);
 
     if (error) {
@@ -172,6 +174,7 @@ const Agendamento = () => {
     setSelectedServico(null);
     setSelectedTerapeuta(null);
     setHorariosOcupados([]);
+    setSelectedPlaylist(null);
     setActiveTab("agendados");
 
     if (agId) {
@@ -625,8 +628,23 @@ const Agendamento = () => {
                           Total: R$ {selectedServico.preco.toFixed(2).replace('.', ',')}
                         </p>
                       </div>
-                    )}
-                  </motion.div>
+                  )}
+
+                  {/* Playlist Selector */}
+                  {selectedDate && selectedHorario && selectedServico && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="mt-4"
+                    >
+                      <PlaylistSelector
+                        onSelect={setSelectedPlaylist}
+                        selectedId={selectedPlaylist}
+                        servicoId={selectedServico.id}
+                      />
+                    </motion.div>
+                  )}
+                </motion.div>
                 )}
 
                 {/* Botão de ação */}
