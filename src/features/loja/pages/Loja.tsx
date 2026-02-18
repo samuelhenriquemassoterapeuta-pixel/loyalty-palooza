@@ -433,7 +433,7 @@ export default function Loja() {
 
                 {/* Filtros de Categoria - Colapsável */}
                 <motion.div variants={fadeUp}>
-                  <CollapsibleDashboardSection title="Filtrar por categoria" defaultOpen={false}>
+                  <CollapsibleDashboardSection title="Filtrar por categoria" defaultOpen={true}>
                     <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none">
                       {(() => {
                         const categoriasUnicas = Array.from(
@@ -484,7 +484,7 @@ export default function Loja() {
                 <CollapsibleDashboardSection
                   title="Produtos"
                   icon={<ShoppingBag size={16} />}
-                  defaultOpen={false}
+                  defaultOpen={true}
                   badge={
                     <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-primary/10 text-primary">
                       {produtosFiltrados.length}
