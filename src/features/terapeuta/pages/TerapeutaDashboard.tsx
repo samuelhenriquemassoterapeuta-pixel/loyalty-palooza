@@ -106,13 +106,13 @@ const TerapeutaDashboard = () => {
         </div>
 
         <Tabs defaultValue="agenda" className="w-full">
-          <TabsList className="w-full grid grid-cols-6">
-            <TabsTrigger value="agenda" className="gap-1 text-xs"><CalendarDays className="h-4 w-4" /> Agenda</TabsTrigger>
-            <TabsTrigger value="pacientes" className="gap-1 text-xs"><Users className="h-4 w-4" /> Pacientes</TabsTrigger>
-            <TabsTrigger value="cupons" className="gap-1 text-xs"><Ticket className="h-4 w-4" /> Cupons</TabsTrigger>
-            <TabsTrigger value="anamnese" className="gap-1 text-xs"><FileText className="h-4 w-4" /> Anamnese</TabsTrigger>
-            <TabsTrigger value="materiais" className="gap-1 text-xs"><Palette className="h-4 w-4" /> Materiais</TabsTrigger>
-            <TabsTrigger value="cursos" className="gap-1 text-xs"><GraduationCap className="h-4 w-4" /> Cursos</TabsTrigger>
+          <TabsList className="w-full grid grid-cols-3 sm:grid-cols-6">
+            <TabsTrigger value="agenda" className="gap-1 text-xs"><CalendarDays className="h-4 w-4" /> <span className="hidden sm:inline">Agenda</span><span className="sm:hidden">Agenda</span></TabsTrigger>
+            <TabsTrigger value="pacientes" className="gap-1 text-xs"><Users className="h-4 w-4" /> <span>Pacientes</span></TabsTrigger>
+            <TabsTrigger value="cupons" className="gap-1 text-xs"><Ticket className="h-4 w-4" /> <span>Cupons</span></TabsTrigger>
+            <TabsTrigger value="anamnese" className="gap-1 text-xs"><FileText className="h-4 w-4" /> <span>Anamnese</span></TabsTrigger>
+            <TabsTrigger value="materiais" className="gap-1 text-xs"><Palette className="h-4 w-4" /> <span>Materiais</span></TabsTrigger>
+            <TabsTrigger value="cursos" className="gap-1 text-xs"><GraduationCap className="h-4 w-4" /> <span>Cursos</span></TabsTrigger>
           </TabsList>
 
           {/* AGENDA TAB */}
@@ -283,7 +283,7 @@ const TerapeutaDashboard = () => {
             <p className="text-sm text-muted-foreground">
               Acesse materiais profissionais para divulgação da clínica.
             </p>
-            <Card className="cursor-pointer hover:shadow-md transition-shadow" onClick={() => navigate("/materiais")}>
+            <Card className="cursor-pointer hover:shadow-md hover:border-primary/30 active:scale-[0.99] transition-all" onClick={() => navigate("/materiais")}>
               <CardContent className="py-5 flex items-center gap-4">
                 <div className="p-3 rounded-xl bg-primary/10">
                   <Palette className="h-6 w-6 text-primary" />
@@ -305,7 +305,7 @@ const TerapeutaDashboard = () => {
             </p>
 
             <div className="grid gap-3">
-              <Card className="cursor-pointer hover:shadow-md transition-shadow" onClick={() => navigate("/cursos")}>
+              <Card className="cursor-pointer hover:shadow-md hover:border-primary/30 active:scale-[0.99] transition-all" onClick={() => navigate("/cursos")}>
                 <CardContent className="py-5 flex items-center gap-4">
                   <div className="p-3 rounded-xl bg-primary/10">
                     <GraduationCap className="h-6 w-6 text-primary" />
@@ -318,7 +318,7 @@ const TerapeutaDashboard = () => {
                 </CardContent>
               </Card>
 
-              <Card className="cursor-pointer hover:shadow-md transition-shadow" onClick={() => navigate("/manual")}>
+              <Card className="cursor-pointer hover:shadow-md hover:border-primary/30 active:scale-[0.99] transition-all" onClick={() => navigate("/manual")}>
                 <CardContent className="py-5 flex items-center gap-4">
                   <div className="p-3 rounded-xl bg-secondary/10">
                     <BookOpen className="h-6 w-6 text-secondary-foreground" />
