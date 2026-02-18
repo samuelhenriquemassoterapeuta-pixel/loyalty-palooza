@@ -17,8 +17,8 @@ const containerVariants = {
 };
 
 const cardVariants = {
-  hidden: { opacity: 0, y: 30, scale: 0.97 },
-  visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.5, ease: [0, 0, 0.2, 1] as const } },
+  hidden: { opacity: 0, y: 30, scale: 0.97, filter: "blur(4px)" },
+  visible: { opacity: 1, y: 0, scale: 1, filter: "blur(0px)", transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] as const } },
 };
 
 const categoryConfig: Record<string, { label: string; icon: typeof Leaf; color: string; description: string }> = {
@@ -161,7 +161,7 @@ export const ServicosSection = () => {
                   <motion.div
                     key={cat}
                     variants={cardVariants}
-                    className="rounded-2xl border border-border/60 bg-card overflow-hidden shadow-sm"
+                    className="rounded-2xl border border-border/60 bg-card overflow-hidden shadow-sm hover:shadow-lg hover:border-primary/20 transition-all duration-500"
                   >
                     <button
                       onClick={() => toggle(cat)}
@@ -205,8 +205,8 @@ export const ServicosSection = () => {
                                 initial={{ opacity: 0, y: 12 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.3 }}
-                                whileHover={{ y: -4, transition: { duration: 0.2 } }}
-                                className="group rounded-xl border border-border/40 bg-background/60 p-4 cursor-default"
+                                whileHover={{ y: -6, scale: 1.02, transition: { duration: 0.25, type: "spring", stiffness: 300 } }}
+                                className="group rounded-xl border border-border/40 bg-background/60 backdrop-blur-sm p-4 cursor-default hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 transition-all duration-300"
                               >
                                 <div className="flex items-start justify-between mb-3">
                                   <h3 className="text-sm font-bold text-foreground leading-snug pr-2">
