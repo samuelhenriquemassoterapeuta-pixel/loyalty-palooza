@@ -20,6 +20,7 @@ import WellnessCalendar from "@/features/bem-estar/components/WellnessCalendar";
 import WellnessMoodTrends from "@/features/bem-estar/components/WellnessMoodTrends";
 import WellnessDailyHabits from "@/features/bem-estar/components/WellnessDailyHabits";
 import WellnessGoalsWidget from "@/features/bem-estar/components/WellnessGoalsWidget";
+import WellnessStreakMilestones from "@/features/bem-estar/components/WellnessStreakMilestones";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 14 },
@@ -231,6 +232,11 @@ const BemEstarHub = () => {
                 />
               </div>
             </motion.div>
+          )}
+
+          {/* Streak Milestones */}
+          {streakData && streakData.streak_atual > 0 && (
+            <WellnessStreakMilestones streakAtual={streakData.streak_atual} />
           )}
 
           {/* AI Insight */}
