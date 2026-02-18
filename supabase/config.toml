@@ -59,3 +59,12 @@ verify_jwt = false
 
 [functions.chat-assistente]
 verify_jwt = false
+
+[functions.notificar-roteiros-pendentes]
+verify_jwt = false
+
+[functions.gerar-ideias-semanais]
+verify_jwt = false
+
+[functions.atualizar-trends]
+verify_jwt = false
