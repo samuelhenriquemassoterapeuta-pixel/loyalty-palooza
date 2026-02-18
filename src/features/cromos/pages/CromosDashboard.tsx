@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, Sparkles, FlaskConical, Gift, History } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -121,40 +121,62 @@ export default function CromosDashboard() {
 
             <TabsContent value="cromos" className="mt-4 space-y-3">
               {receitas.length === 0 ? (
-                <div className="text-center py-12 glass-card rounded-2xl">
-                  <FlaskConical className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-                  <p className="text-muted-foreground">Nenhuma receita disponível</p>
-                </div>
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="text-center py-16 glass-card rounded-2xl"
+                >
+                  <FlaskConical className="w-14 h-14 text-muted-foreground/40 mx-auto mb-4" />
+                  <p className="text-muted-foreground font-medium">Nenhuma receita disponível</p>
+                  <p className="text-xs text-muted-foreground/60 mt-1">Colete mais elementos para desbloquear</p>
+                </motion.div>
               ) : (
-                receitas.map((r) => (
-                  <ReceitaAlquimiaCard
+                receitas.map((r, i) => (
+                  <motion.div
                     key={r.id}
-                    receita={r}
-                    podeExecutar={podeExecutarReceita(r)}
-                    executando={executandoAlquimia}
-                    onExecutar={() => handleAlquimia(r.id)}
-                    getSaldo={getSaldo}
-                  />
+                    initial={{ opacity: 0, y: 12 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: i * 0.06 }}
+                  >
+                    <ReceitaAlquimiaCard
+                      receita={r}
+                      podeExecutar={podeExecutarReceita(r)}
+                      executando={executandoAlquimia}
+                      onExecutar={() => handleAlquimia(r.id)}
+                      getSaldo={getSaldo}
+                    />
+                  </motion.div>
                 ))
               )}
             </TabsContent>
 
             <TabsContent value="recompensas" className="mt-4 space-y-3">
               {recompensas.length === 0 ? (
-                <div className="text-center py-12 glass-card rounded-2xl">
-                  <Gift className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-                  <p className="text-muted-foreground">Nenhuma recompensa disponível</p>
-                </div>
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="text-center py-16 glass-card rounded-2xl"
+                >
+                  <Gift className="w-14 h-14 text-muted-foreground/40 mx-auto mb-4" />
+                  <p className="text-muted-foreground font-medium">Nenhuma recompensa disponível</p>
+                  <p className="text-xs text-muted-foreground/60 mt-1">Continue combinando alquimias!</p>
+                </motion.div>
               ) : (
-                recompensas.map((r) => (
-                  <RecompensaCromoCard
+                recompensas.map((r, i) => (
+                  <motion.div
                     key={r.id}
-                    recompensa={r}
-                    podeResgatar={podeResgatar(r)}
-                    resgatando={resgatando}
-                    onResgatar={() => handleResgate(r.id)}
-                    getSaldo={getSaldo}
-                  />
+                    initial={{ opacity: 0, y: 12 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: i * 0.06 }}
+                  >
+                    <RecompensaCromoCard
+                      recompensa={r}
+                      podeResgatar={podeResgatar(r)}
+                      resgatando={resgatando}
+                      onResgatar={() => handleResgate(r.id)}
+                      getSaldo={getSaldo}
+                    />
+                  </motion.div>
                 ))
               )}
             </TabsContent>
