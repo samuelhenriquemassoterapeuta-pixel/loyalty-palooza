@@ -31,21 +31,38 @@ export const CollapsibleSection = ({
   const [isOpen, setIsOpen] = useState(defaultOpen);
 
   return (
-    <section id={id} className={className}>
+    <motion.section
+      id={id}
+      className={className}
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+    >
       {/* Clickable header */}
       <button
         onClick={() => setIsOpen((v) => !v)}
         className="w-full text-center cursor-pointer group"
         aria-expanded={isOpen}
       >
-        {badge && <div className="mb-4 flex justify-center">{badge}</div>}
+        {badge && (
+          <motion.div
+            className="mb-4 flex justify-center"
+            initial={{ opacity: 0, scale: 0.8 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+          >
+            {badge}
+          </motion.div>
+        )}
 
         <div className="flex items-start justify-center gap-3">
           <div className="flex-1 min-w-0">{title}</div>
           <motion.div
             animate={{ rotate: isOpen ? 180 : 0 }}
-            transition={{ duration: 0.25 }}
-            className="shrink-0 mt-2 p-1.5 rounded-full bg-primary/10 border border-primary/20 group-hover:bg-primary/20 transition-colors"
+            transition={{ duration: 0.3, type: "spring", stiffness: 200 }}
+            className="shrink-0 mt-2 p-1.5 rounded-full bg-primary/10 border border-primary/20 group-hover:bg-primary/20 group-hover:shadow-md transition-all duration-300"
           >
             <ChevronDown
               size={18}
@@ -66,13 +83,20 @@ export const CollapsibleSection = ({
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
+            transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
             className="overflow-hidden"
           >
-            <div className="pt-6 sm:pt-10">{children}</div>
+            <motion.div
+              initial={{ y: 20 }}
+              animate={{ y: 0 }}
+              transition={{ duration: 0.4, delay: 0.1 }}
+              className="pt-6 sm:pt-10"
+            >
+              {children}
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
-    </section>
+    </motion.section>
   );
 };

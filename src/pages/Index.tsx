@@ -67,6 +67,9 @@ const Index = () => {
               }}
             />
           )}
+          {/* Decorative gradient orbs for depth */}
+          <div className="absolute top-20 -right-32 w-64 h-64 bg-primary/5 rounded-full blur-3xl pointer-events-none z-0" />
+          <div className="absolute bottom-40 -left-20 w-48 h-48 bg-accent/5 rounded-full blur-3xl pointer-events-none z-0" />
           <div className="max-w-lg lg:max-w-5xl xl:max-w-6xl mx-auto px-4 lg:px-8 safe-top relative z-10">
             <Header />
 

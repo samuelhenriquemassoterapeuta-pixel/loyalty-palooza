@@ -27,8 +27,8 @@ const containerVariants = {
 };
 
 const cardVariants = {
-  hidden: { opacity: 0, y: 35, rotateX: 8 },
-  visible: { opacity: 1, y: 0, rotateX: 0, transition: { duration: 0.6, ease: [0, 0, 0.2, 1] as const } },
+  hidden: { opacity: 0, y: 35, rotateX: 8, filter: "blur(4px)" },
+  visible: { opacity: 1, y: 0, rotateX: 0, filter: "blur(0px)", transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] as const } },
 };
 
 const defaultFallback: Depoimento[] = [
@@ -141,8 +141,8 @@ export const DepoimentosSection = () => {
               <motion.div
                 key={i}
                 variants={cardVariants}
-                whileHover={{ y: -8, scale: 1.02, transition: { duration: 0.25 } }}
-                className="card-organic p-6 flex flex-col"
+                whileHover={{ y: -8, scale: 1.03, rotateY: 2, transition: { duration: 0.3, type: "spring", stiffness: 300 } }}
+                className="card-organic p-6 flex flex-col hover:shadow-xl hover:shadow-primary/5 hover:border-primary/20 transition-shadow duration-500"
                 style={{ transformStyle: "preserve-3d" }}
               >
                 <Quote size={24} className="text-primary/20 mb-3" />
