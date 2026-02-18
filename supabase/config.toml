@@ -68,3 +68,6 @@ verify_jwt = false
 
 [functions.atualizar-trends]
 verify_jwt = false
+
+[functions.validar-playlist]
+verify_jwt = false
