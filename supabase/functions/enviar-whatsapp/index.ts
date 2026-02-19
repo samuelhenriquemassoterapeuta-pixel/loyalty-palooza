@@ -1,3 +1,23 @@
+/**
+ * @module edge-functions/enviar-whatsapp
+ * @description Serviço de envio de mensagens via WhatsApp usando a Z-API.
+ *
+ * Utilizado por todo o sistema para:
+ * - Notificações de agendamento
+ * - Lembretes automáticos
+ * - Campanhas de marketing
+ * - Confirmação de pedidos
+ *
+ * Características:
+ * - Suporta envio em lote (array de mensagens)
+ * - Salva log de envio (`whatsapp_logs`) para auditoria
+ * - Formata números automaticamente (adiciona 55 se necessário)
+ *
+ * Secrets:
+ * - `ZAPI_INSTANCE_ID`: ID da instância Z-API
+ * - `ZAPI_TOKEN`: Token de segurança Z-API
+ */
+
 import { handleCors } from "../_shared/cors.ts";
 import { createServiceClient } from "../_shared/supabase-client.ts";
 import { jsonResponse, errorResponse } from "../_shared/response.ts";
@@ -5,10 +25,10 @@ import { jsonResponse, errorResponse } from "../_shared/response.ts";
 interface WhatsAppPayload {
   telefone: string;
   mensagem: string;
-  tipo?: string;
-  user_id?: string;
-  referencia_id?: string;
-  referencia_tipo?: string;
+  tipo?: string; // Categoria do envio (ex: "lembrete", "campanha")
+  user_id?: string; // Para vincular ao log
+  referencia_id?: string; // ID da entidade relacionada (ex: agendamento_id)
+  referencia_tipo?: string; // Tipo da entidade (ex: "agendamento")
 }
 
 Deno.serve(async (req) => {
@@ -16,6 +36,7 @@ Deno.serve(async (req) => {
   if (corsResponse) return corsResponse;
 
   try {
+    // 1. Validação de Secrets
     const ZAPI_INSTANCE_ID = Deno.env.get("ZAPI_INSTANCE_ID");
     const ZAPI_TOKEN = Deno.env.get("ZAPI_TOKEN");
 
@@ -25,11 +46,14 @@ Deno.serve(async (req) => {
 
     const supabase = createServiceClient();
 
+    // 2. Parsing e Normalização do Payload
     const body = await req.json();
+    // Suporta envio único (objeto) ou em lote (array)
     const messages: WhatsAppPayload[] = Array.isArray(body.messages) ? body.messages : [body];
 
     const results = [];
 
+    // 3. Processamento Sequencial
     for (const msg of messages) {
       const { telefone, mensagem, tipo = "geral", user_id, referencia_id, referencia_tipo } = msg;
 
@@ -38,11 +62,13 @@ Deno.serve(async (req) => {
         continue;
       }
 
+      // Formatação do número: remove não-dígitos e garante DDI 55 (Brasil)
       const phoneClean = telefone.replace(/\D/g, "");
       const phoneFormatted = phoneClean.startsWith("55") ? phoneClean : `55${phoneClean}`;
 
       let logId: string | null = null;
 
+      // 4. Criação do Log (Status: Enviando)
       const { data: logData } = await supabase
         .from("whatsapp_logs")
         .insert({
@@ -60,6 +86,7 @@ Deno.serve(async (req) => {
       logId = logData?.id || null;
 
       try {
+        // 5. Chamada à Z-API
         const zapiUrl = `https://api.z-api.io/instances/${ZAPI_INSTANCE_ID}/token/${ZAPI_TOKEN}/send-text`;
         
         const zapiResponse = await fetch(zapiUrl, {
@@ -77,6 +104,7 @@ Deno.serve(async (req) => {
           throw new Error(zapiResult?.message || `Z-API retornou status ${zapiResponse.status}`);
         }
 
+        // 6. Atualização do Log (Status: Enviado)
         if (logId) {
           await supabase
             .from("whatsapp_logs")
@@ -89,6 +117,7 @@ Deno.serve(async (req) => {
       } catch (sendError: unknown) {
         const errorMsg = sendError instanceof Error ? sendError.message : "Erro desconhecido";
 
+        // Atualização do Log (Status: Erro)
         if (logId) {
           await supabase
             .from("whatsapp_logs")
@@ -101,6 +130,7 @@ Deno.serve(async (req) => {
       }
     }
 
+    // 7. Resumo da Operação
     const enviados = results.filter((r) => r.status === "enviado").length;
     const erros = results.filter((r) => r.status === "erro").length;
 

@@ -1,11 +1,31 @@
+/**
+ * @module edge-functions/whatsapp-webhook
+ * @description Webhook para receber mensagens e eventos do WhatsApp (via Z-API).
+ *
+ * Funciona como o "cérebro" do chatbot da Resinkra.
+ *
+ * Capacidades:
+ * 1. Recebe mensagens de texto dos usuários
+ * 2. Mantém histórico de conversas (`whatsapp_conversas`)
+ * 3. Integra com Lovable AI (Gemini) para responder dúvidas
+ * 4. Realiza agendamento automático via Tool Calling da IA
+ * 5. Gerencia transbordo para atendimento humano
+ *
+ * Fluxo:
+ * Recebe Msg -> Busca Contexto (Serviços/Horários) -> Envia p/ IA -> Processa Resposta/Tools -> Envia Resposta
+ *
+ * @see enviar-whatsapp — Usado para enviar a resposta final
+ */
+
 import { handleCors, corsHeaders } from "../_shared/cors.ts";
 import { createServiceClient } from "../_shared/supabase-client.ts";
 import { jsonResponse, errorResponse } from "../_shared/response.ts";
 
 const LOVABLE_AI_URL = "https://ai.gateway.lovable.dev/v1/chat/completions";
-const MAX_HISTORY = 20; // últimas mensagens para contexto
+const MAX_HISTORY = 20; // Limite de mensagens mantidas no contexto para a IA
 
 // ── System prompt do assistente ──
+// Define a personalidade e conhecimento base do bot
 function buildSystemPrompt(servicos: string, terapeutas: string, horariosOcupados: string) {
   return `Você é o Assistente Virtual da Resinkra, especializado em bem-estar, massoterapia e terapias holísticas em Uberaba/MG. Seu tom é amigável, profissional e proativo, como um consultor de bem-estar confiável. Responda em português brasileiro com emojis moderados (😊👍🌿).
 
@@ -41,6 +61,7 @@ ${horariosOcupados}
 }
 
 // ── Tools para a IA ──
+// Definição das ações que a IA pode executar
 const aiTools = [
   {
     type: "function",
@@ -92,6 +113,7 @@ Deno.serve(async (req) => {
     const supabase = createServiceClient();
     const body = await req.json();
 
+    // Ignora mensagens enviadas por mim ou atualizações de status
     if (body.fromMe || body.status || !body.text?.message) {
       return jsonResponse({ ok: true, skipped: true });
     }
@@ -127,7 +149,7 @@ Deno.serve(async (req) => {
     mensagens.push({ role: "user", content: userMessage, ts: new Date().toISOString() });
     const recentMessages = mensagens.slice(-MAX_HISTORY);
 
-    // ── 3. Buscar contexto de negócio ──
+    // ── 3. Buscar contexto de negócio (Catálogo em tempo real) ──
     const [servicosRes, terapeutasRes, agendamentosRes] = await Promise.all([
       supabase.from("servicos").select("nome, preco, descricao, duracao_minutos, cashback_percentual, categoria").eq("ativo", true),
       supabase.rpc("get_terapeutas_publicos"),
@@ -138,6 +160,7 @@ Deno.serve(async (req) => {
         .in("status", ["confirmado", "agendado"]),
     ]);
 
+    // Formata o contexto para o prompt
     const servicosText = (servicosRes.data || [])
       .map((s: any) => `- ${s.nome}: R$ ${s.preco.toFixed(2)} (${s.duracao_minutos || 60}min, ${s.cashback_percentual || 0}% cashback) — ${s.descricao || ""}`)
       .join("\n");
@@ -148,7 +171,7 @@ Deno.serve(async (req) => {
       .map((a: any) => `- ${a.servico} em ${a.data_hora}`)
       .join("\n");
 
-    // ── 4. Chamar Lovable AI ──
+    // ── 4. Chamar Lovable AI (Gemini) ──
     const systemPrompt = buildSystemPrompt(servicosText, terapeutasText, horariosText);
     const aiMessages = [
       { role: "system", content: systemPrompt },
@@ -181,7 +204,7 @@ Deno.serve(async (req) => {
     let replyText = "";
     let toolResults: string[] = [];
 
-    // ── 5. Processar tool calls ──
+    // ── 5. Processar Tool Calls (Agendamento Automático) ──
     if (choice?.message?.tool_calls?.length > 0) {
       for (const tc of choice.message.tool_calls) {
         const fn = tc.function;
@@ -199,6 +222,7 @@ Deno.serve(async (req) => {
         }
       }
 
+      // Reenvia o resultado da tool para a IA gerar a resposta final
       const followUpMessages = [
         ...aiMessages,
         choice.message,
@@ -265,7 +289,8 @@ Deno.serve(async (req) => {
   }
 });
 
-// ── Função de agendamento automático ──
+// ── Função auxiliar: processarAgendamento ──
+// Lógica de agendamento: verifica conflitos, busca usuário, cria registro
 async function processarAgendamento(
   supabase: any,
   args: { servico: string; data_hora: string; terapeuta_nome?: string; nome_cliente: string },
@@ -275,6 +300,7 @@ async function processarAgendamento(
   try {
     const { servico, data_hora, terapeuta_nome, nome_cliente } = args;
 
+    // Busca serviço
     const { data: servicoData } = await supabase
       .from("servicos")
       .select("nome, preco")
@@ -287,6 +313,7 @@ async function processarAgendamento(
       return `Serviço "${servico}" não encontrado no catálogo.`;
     }
 
+    // Busca terapeuta (opcional)
     let terapeutaId: string | null = null;
     if (terapeuta_nome) {
       const { data: terapeuta } = await supabase
@@ -299,6 +326,7 @@ async function processarAgendamento(
       terapeutaId = terapeuta?.id || null;
     }
 
+    // Valida conflito de horário
     const dataHora = new Date(data_hora);
     const inicio = new Date(dataHora.getTime() - 30 * 60000).toISOString();
     const fim = new Date(dataHora.getTime() + 30 * 60000).toISOString();
@@ -320,6 +348,7 @@ async function processarAgendamento(
       return `Horário ${dataHora.toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" })} indisponível. Sugira outro horário ao cliente.`;
     }
 
+    // Identifica usuário pelo telefone
     const { data: profile } = await supabase
       .from("profiles")
       .select("id")
@@ -327,6 +356,7 @@ async function processarAgendamento(
       .limit(1)
       .single();
 
+    // Se usuário não existe, marca como pendente no metadata da conversa
     if (!profile) {
       await supabase
         .from("whatsapp_conversas")
@@ -339,6 +369,7 @@ async function processarAgendamento(
       return `Cliente "${nome_cliente}" não possui conta no app. Agendamento salvo como pendente para confirmação manual pela equipe. Serviço: ${servicoData.nome}, Horário: ${dataHora.toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" })}.`;
     }
 
+    // Cria agendamento real
     const { data: agendamento, error: agError } = await supabase
       .from("agendamentos")
       .insert({
