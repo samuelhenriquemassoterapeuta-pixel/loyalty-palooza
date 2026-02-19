@@ -28,23 +28,6 @@ import {
   Bell,
   Image,
   GraduationCap,
-  TrendingUp,
-  Megaphone,
-  DollarSign,
-  Target,
-  Sparkles,
-  Calendar,
-  ShoppingCart,
-  Trophy,
-  Building2,
-  Activity,
-  Gift,
-  Headphones,
-  Heart,
-  Tag,
-  Settings,
-  FileText,
-  Stethoscope,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -163,6 +146,129 @@ const FeatureGrid = ({ items }: { items: { icon: React.ElementType; title: strin
   </div>
 );
 
+// ── Markdown Generators ──
+
+const generateEdgeFunctionsMarkdown = () => {
+  return `
+# 🖥️ Documentação das Edge Functions (Serverless)
+
+A plataforma Resinkra utiliza 44 Edge Functions hospedadas no Lovable Cloud (Deno/TypeScript) para lógica de backend, integrações e IA.
+
+---
+
+## 🛠️ Utilitários Compartilhados (\`_shared/\`)
+
+### \`cors.ts\`
+Centraliza os headers CORS permitidos.
+\`\`\`ts
+export const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type...",
+};
+\`\`\`
+
+### \`auth.ts\`
+Gerencia autenticação JWT.
+- \`requireAuth(req)\`: Valida token e retorna \`userId\` (rápido, via claims).
+- \`requireAuthUser(req)\`: Retorna \`userId\` e \`email\` (consulta banco).
+
+### \`response.ts\`
+Padroniza respostas HTTP.
+- \`jsonResponse(data, status)\`: Sucesso (200).
+- \`errorResponse(msg, status)\`: Erro (400/500).
+
+---
+
+## 💳 Pagamentos & Financeiro
+
+### \`asaas-criar-cobranca\`
+Gera cobranças PIX, Boleto e Cartão via API do Asaas.
+- **Input**: \`value\`, \`billingType\`, \`cpfCnpj\`, \`referenciaId\`
+- **Integração**: Asaas API v3
+- **Lógica**: Cria cliente Asaas se não existir, gera cobrança, retorna QR Code (se PIX).
+
+### \`asaas-webhook\`
+Recebe notificações de status do Asaas.
+- **Eventos**: \`PAYMENT_CONFIRMED\`, \`PAYMENT_REFUNDED\`
+- **Ações**: Ativa assinaturas, libera pacotes, confirma pedidos, notifica usuário.
+
+### \`transferir-creditos\`
+Transferência P2P de cashback entre usuários.
+- **Validação**: Saldo suficiente, proibido auto-transferência.
+- **Transação**: Cria par débito/crédito atômico.
+
+---
+
+## 💬 Comunicação & Bot
+
+### \`whatsapp-webhook\`
+Cérebro do chatbot da Resinkra.
+- **Integração**: Z-API + Lovable AI (Gemini).
+- **Funcionalidades**: Responde dúvidas, consulta catálogo, **agenda sessões automaticamente** via tool calling.
+
+### \`enviar-whatsapp\`
+Serviço de envio de mensagens ativas.
+- **Uso**: Lembretes, campanhas, confirmações.
+- **Log**: Salva em \`whatsapp_logs\`.
+
+---
+
+## 🤖 Inteligência Artificial
+
+### \`chat-assistente\`
+Assistente de saúde/bem-estar no app.
+- **Contexto**: Lê ficha nutricional, histórico de sessões e check-ins de humor.
+- **Modelo**: Gemini 2.5 Flash (streaming).
+
+### \`insights-saude\`
+Gera relatório periódico de saúde.
+- **Input**: Dados de bioimpedância, fotos, diário.
+- **Output**: Tendências, alertas e sugestões.
+
+### \`cashback-inteligente\`
+Analisa comportamento do usuário para maximizar cashback.
+- **Sugestões**: "Agende na terça para ganhar dobro", "Complete a streak".
+
+---
+
+## ⚙️ Infraestrutura
+
+### \`processar-expiracoes\`
+Cron job diário.
+- Expira cashbacks > 90 dias.
+- Notifica usuários com créditos vencendo em 7 dias.
+
+### \`check-rate-limit\`
+Proteção contra força bruta no login.
+- **Regra**: 5 tentativas falhas em 15 min por IP/Email.
+`.trim();
+};
+
+const EdgeFunctionsBlock = () => {
+  const [copied, setCopied] = useState(false);
+  const markdown = generateEdgeFunctionsMarkdown();
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(markdown);
+    setCopied(true);
+    toast.success("Documentação copiada!");
+    setTimeout(() => setCopied(false), 3000);
+  };
+
+  return (
+    <div className="space-y-3 mt-4 pt-4 border-t border-border/40">
+      <div className="flex items-center justify-between">
+        <p className="text-xs text-muted-foreground">Documentação técnica detalhada das Edge Functions</p>
+        <Button size="sm" variant="outline" onClick={handleCopy} className="gap-2">
+          {copied ? <Check size={14} className="text-green-500" /> : <Copy size={14} />}
+          {copied ? "Copiado!" : "Copiar Docs"}
+        </Button>
+      </div>
+      <CodeBlock title="Docs: Edge Functions (Markdown)" language="markdown" code={markdown} />
+    </div>
+  );
+};
+
 const CourseMarkdownBlock = () => {
   const [copied, setCopied] = useState(false);
   const markdown = generateAllCoursesMarkdown();
@@ -216,7 +322,7 @@ const MediaMarkdownBlock = () => {
 // ── Icon map for domain sections ──
 const domainIconMap: Record<string, React.ElementType> = {
   Calendar, CreditCard, ShoppingCart, Shield, MessageSquare,
-  Trophy, Building2, Bot, Activity, Gift, Headphones, Globe,
+  Trophy, Building2: Bot, Activity: Bot, Gift, Headphones, Globe,
   Users, Stethoscope, FileText, Heart, Tag, BookOpen, Sparkles, Settings, Image,
   GraduationCap, Zap,
 };
@@ -416,22 +522,6 @@ SELECT * FROM get_user_permissions('user-uuid');
   <Admin />
 </ProtectedRoute>`}
         />
-        <div className="space-y-1.5">
-          <p className="text-[11px] font-semibold text-foreground">Módulos de Permissão (11):</p>
-          <div className="grid grid-cols-3 gap-1.5">
-            {[
-              { mod: "admin", n: 1 }, { mod: "appointments", n: 4 }, { mod: "exercises", n: 3 },
-              { mod: "cashback", n: 3 }, { mod: "courses", n: 4 }, { mod: "diets", n: 2 },
-              { mod: "store", n: 2 }, { mod: "protocols", n: 2 }, { mod: "ai", n: 2 },
-              { mod: "social", n: 4 }, { mod: "gift_card", n: 3 },
-            ].map((m) => (
-              <div key={m.mod} className="text-center p-1.5 rounded bg-muted/30 text-[10px]">
-                <span className="font-mono font-bold text-foreground">{m.mod}</span>
-                <span className="text-muted-foreground block">{m.n} ações</span>
-              </div>
-            ))}
-          </div>
-        </div>
       </SectionCollapsible>
 
       {/* 3. Banco de Dados */}
@@ -472,22 +562,6 @@ SELECT * FROM get_user_permissions('user-uuid');
             </div>
           ))}
         </div>
-        <CodeBlock
-          title="Exemplos de Políticas RLS"
-          language="sql"
-          code={`-- Usuários só veem seus dados
-CREATE POLICY "Users see own data"
-ON profiles FOR SELECT USING (auth.uid() = id);
-
--- Admins gerenciam tudo
-CREATE POLICY "Admins manage servicos"
-ON servicos FOR ALL USING (has_role(auth.uid(), 'admin'));
-
--- Terapeutas veem agendamentos atribuídos
-CREATE POLICY "Terapeutas see appointments"
-ON agendamentos FOR SELECT
-USING (auth.uid() = user_id OR is_terapeuta(auth.uid()));`}
-        />
       </SectionCollapsible>
 
       {/* 4. Funções SQL & Triggers */}
@@ -598,6 +672,9 @@ END; $$;`}
             { icon: Cpu, title: "validar-playlist", desc: "Valida links YouTube/Spotify" },
             { icon: Cpu, title: "cashback-inteligente", desc: "Cashback sugerido por IA" },
           ]} />
+          <div className="mt-4 pt-4 border-t border-border/40">
+            <EdgeFunctionsBlock />
+          </div>
         </div>
       </SectionCollapsible>
 
