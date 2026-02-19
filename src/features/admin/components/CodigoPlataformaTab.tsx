@@ -528,7 +528,7 @@ END; $$;`}
         title="Edge Functions (Backend)"
         subtitle="45 funções serverless em Deno/TypeScript"
         icon={Server}
-        badge="44 funções"
+        badge="45 funções"
       >
         <div className="space-y-2">
           <p className="text-[11px] font-semibold text-foreground">💳 Pagamentos (Asaas)</p>
