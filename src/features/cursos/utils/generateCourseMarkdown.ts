@@ -15,6 +15,25 @@ import { cursoDrenagemLinfaticaData } from "@/features/cursos/data/cursoDrenagem
 import { cursoGastronomiaSaudavelData } from "@/features/cursos/data/cursoGastronomiaSaudavelContent";
 import { cursoSeitaiData } from "@/features/cursos/data/cursoSeitaiContent";
 import { cursoBandagemElasticaData } from "@/features/cursos/data/cursoBandagemElasticaContent";
+// Expansion courses
+import { cursoFitoterapiaAplicadaData } from "@/features/cursos/data/cursoFitoterapiaAplicadaContent";
+import { cursoGestantesData } from "@/features/cursos/data/cursoGestantesContent";
+import { cursoNeurocienciaData } from "@/features/cursos/data/cursoNeurocienciaContent";
+import { cursoGeriatricaData } from "@/features/cursos/data/cursoGeriatricaContent";
+import { cursoEsportivaData } from "@/features/cursos/data/cursoEsportivaContent";
+import { cursoMarketingDigitalData } from "@/features/cursos/data/cursoMarketingDigitalContent";
+import { cursoPetMassageData } from "@/features/cursos/data/cursoPetMassageContent";
+import { cursoMindfulnessData } from "@/features/cursos/data/cursoMindfulnessContent";
+import { cursoMtcIntroData } from "@/features/cursos/data/cursoMtcIntroContent";
+import { cursoMeridianosData } from "@/features/cursos/data/cursoMeridianosContent";
+import { cursoVentosaterapiaData } from "@/features/cursos/data/cursoVentosaterapiaContent";
+import { cursoMoxabustaoData } from "@/features/cursos/data/cursoMoxabustaoContent";
+import { cursoAuriculoterapiaData } from "@/features/cursos/data/cursoAuriculoterapiaContent";
+import { cursoTuiNaData } from "@/features/cursos/data/cursoTuiNaContent";
+import { cursoDiagnosticoMtcData } from "@/features/cursos/data/cursoDiagnosticoMtcContent";
+import { cursoFitoterapiaChinContent } from "@/features/cursos/data/cursoFitoterapiaChinContent";
+import { cursoQiGongData } from "@/features/cursos/data/cursoQiGongContent";
+import { cursoAlimentacaoChinesaData } from "@/features/cursos/data/cursoAlimentacaoChinesaContent";
 import type { ModuloContent } from "@/features/cursos/data/cursoVendasContent";
 
 interface CourseEntry {
@@ -23,6 +42,7 @@ interface CourseEntry {
 }
 
 const allCourses: CourseEntry[] = [
+  // ── Base (17) ──
   { name: "Método Resinkra", data: cursoMetodoResinkraData },
   { name: "Vendas e Negócios", data: cursoVendasData },
   { name: "Aromaterapia Clínica", data: cursoAromaterapiaData },
@@ -40,6 +60,25 @@ const allCourses: CourseEntry[] = [
   { name: "Gastronomia Saudável", data: cursoGastronomiaSaudavelData },
   { name: "Seitai e New Seitai", data: cursoSeitaiData },
   { name: "Bandagem Elástica", data: cursoBandagemElasticaData },
+  // ── Expansão (18) ──
+  { name: "Fitoterapia Aplicada", data: cursoFitoterapiaAplicadaData },
+  { name: "Massagem para Gestantes", data: cursoGestantesData },
+  { name: "Neurociência da Dor", data: cursoNeurocienciaData },
+  { name: "Massagem Geriátrica", data: cursoGeriatricaData },
+  { name: "Massagem Esportiva", data: cursoEsportivaData },
+  { name: "Marketing Digital para Terapeutas", data: cursoMarketingDigitalData },
+  { name: "Pet Massage", data: cursoPetMassageData },
+  { name: "Mindfulness e Meditação", data: cursoMindfulnessData },
+  { name: "Introdução à MTC", data: cursoMtcIntroData },
+  { name: "Meridianos e Pontos de Acupuntura", data: cursoMeridianosData },
+  { name: "Ventosaterapia", data: cursoVentosaterapiaData },
+  { name: "Moxabustão", data: cursoMoxabustaoData },
+  { name: "Auriculoterapia", data: cursoAuriculoterapiaData },
+  { name: "Tui Na — Massagem Chinesa", data: cursoTuiNaData },
+  { name: "Diagnóstico pela MTC", data: cursoDiagnosticoMtcData },
+  { name: "Fitoterapia Chinesa", data: cursoFitoterapiaChinContent },
+  { name: "Qi Gong Terapêutico", data: cursoQiGongData },
+  { name: "Dietética Chinesa", data: cursoAlimentacaoChinesaData },
 ];
 
 export function generateAllCoursesMarkdown(): string {
@@ -68,7 +107,7 @@ export function generateAllCoursesMarkdown(): string {
         md += `- **Aula ${ai + 1}:** ${aula.titulo} (${aula.duracaoMinutos}min)\n`;
         md += `  - ${aula.descricao}\n`;
         
-        // Extract first 3 H2 headings from content as topics
+        // Extract first 5 H2 headings from content as topics
         const h2s = aula.conteudo.match(/^## .+/gm);
         if (h2s && h2s.length > 0) {
           const topics = h2s.slice(0, 5).map(h => h.replace("## ", ""));

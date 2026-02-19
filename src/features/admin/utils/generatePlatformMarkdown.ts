@@ -17,7 +17,7 @@ export function generatePlatformMarkdown(): string {
   md += `| Storage Buckets | 11 |\n`;
   md += `| Triggers | 57 |\n`;
   md += `| Feature Folders | 29 |\n`;
-  md += `| Cursos Completos | 17 |\n\n`;
+  md += `| Cursos Completos | 35 |\n\n`;
 
   // ── 2. Stack Tecnológico ──
   md += `---\n\n## ⚙️ Stack Tecnológico\n\n`;
@@ -52,7 +52,7 @@ export function generatePlatformMarkdown(): string {
     { name: "corporativo/", desc: "Portal B2B — planos QVT, cases, depoimentos, galeria, FAQ" },
     { name: "cromos/", desc: "Cromos colecionáveis por elementos (água, fogo, terra, ar, éter)" },
     { name: "cupom/", desc: "Editor de cupons de desconto com regras e expiração" },
-    { name: "cursos/", desc: "17 cursos completos com módulos, aulas, quiz, checklist e certificação" },
+    { name: "cursos/", desc: "35 cursos completos (17 base + 18 expansão) com módulos, aulas, quiz, checklist e certificação" },
     { name: "dietas/", desc: "Planos nutricionais, diário alimentar, ficha nutricional" },
     { name: "guia-clinico/", desc: "Guia clínico interativo com protocolos e recomendações" },
     { name: "landing/", desc: "Landing page com parallax, seções dinâmicas e CMS" },
@@ -403,8 +403,8 @@ export function generatePlatformMarkdown(): string {
   md += `- Feedback pós-sessão (emoji + texto)\n`;
   md += `- Histórico completo de sessões\n\n`;
 
-  md += `### 📚 Cursos (17 formações)\n`;
-  md += `- 17 cursos com ~1.886 horas de conteúdo\n`;
+  md += `### 📚 Cursos (35 formações)\n`;
+  md += `- 35 cursos (17 base + 18 expansão) com conteúdo completo\n`;
   md += `- Módulos com aulas, quizzes e checklists\n`;
   md += `- Progressão persistente por localStorage\n`;
   md += `- Narração por IA (ElevenLabs TTS)\n`;
@@ -504,7 +504,7 @@ export function generatePlatformMarkdown(): string {
   md += `| Triggers | 57 |\n`;
   md += `| Permissões RBAC | 30 |\n`;
   md += `| Storage Buckets | 11 |\n`;
-  md += `| Cursos | 17 |\n`;
+  md += `| Cursos | 35 |\n`;
   md += `| Abas Admin | 35+ |\n`;
   md += `| Integrações | 6 |\n`;
   md += `| Secrets | 7 |\n\n`;
