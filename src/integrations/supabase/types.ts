@@ -704,6 +704,75 @@ export type Database = {
         }
         Relationships: []
       }
+      chat_interactions: {
+        Row: {
+          agent: string
+          assistant_message: string
+          created_at: string | null
+          id: string
+          platform: string | null
+          response_time_ms: number | null
+          tokens_used: number | null
+          user_id: string
+          user_message: string
+        }
+        Insert: {
+          agent: string
+          assistant_message: string
+          created_at?: string | null
+          id?: string
+          platform?: string | null
+          response_time_ms?: number | null
+          tokens_used?: number | null
+          user_id: string
+          user_message: string
+        }
+        Update: {
+          agent?: string
+          assistant_message?: string
+          created_at?: string | null
+          id?: string
+          platform?: string | null
+          response_time_ms?: number | null
+          tokens_used?: number | null
+          user_id?: string
+          user_message?: string
+        }
+        Relationships: []
+      }
+      chat_sessions: {
+        Row: {
+          conversation_history: Json | null
+          created_at: string | null
+          current_agent: string | null
+          id: string
+          last_activity: string | null
+          platform: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          conversation_history?: Json | null
+          created_at?: string | null
+          current_agent?: string | null
+          id?: string
+          last_activity?: string | null
+          platform?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          conversation_history?: Json | null
+          created_at?: string | null
+          current_agent?: string | null
+          id?: string
+          last_activity?: string | null
+          platform?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       checkins: {
         Row: {
           agendamento_id: string | null
@@ -4490,6 +4559,45 @@ export type Database = {
           },
         ]
       }
+      resi_agents_config: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          emoji: string | null
+          id: string
+          is_active: boolean | null
+          keywords: string[] | null
+          name: string
+          priority: number | null
+          system_prompt: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          emoji?: string | null
+          id: string
+          is_active?: boolean | null
+          keywords?: string[] | null
+          name: string
+          priority?: number | null
+          system_prompt?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          emoji?: string | null
+          id?: string
+          is_active?: boolean | null
+          keywords?: string[] | null
+          name?: string
+          priority?: number | null
+          system_prompt?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       resinkra_user_settings: {
         Row: {
           created_at: string | null
@@ -5951,6 +6059,18 @@ export type Database = {
       }
     }
     Views: {
+      chat_analytics: {
+        Row: {
+          agent: string | null
+          avg_response_time_ms: number | null
+          date: string | null
+          platform: string | null
+          total_messages: number | null
+          total_tokens: number | null
+          unique_users: number | null
+        }
+        Relationships: []
+      }
       user_permissions_mv: {
         Row: {
           action: string | null
@@ -5990,6 +6110,7 @@ export type Database = {
           next_attempt_at: string
         }[]
       }
+      cleanup_old_chat_sessions: { Args: never; Returns: number }
       executar_alquimia: { Args: { p_receita_id: string }; Returns: Json }
       get_achievements_ranking: {
         Args: { p_limit?: number }
@@ -6003,6 +6124,16 @@ export type Database = {
         }[]
       }
       get_empresa_stats: { Args: { p_empresa_id: string }; Returns: Json }
+      get_resi_stats: {
+        Args: { days_back?: number }
+        Returns: {
+          agent: string
+          avg_messages_per_conversation: number
+          most_active_hour: number
+          total_conversations: number
+          unique_users: number
+        }[]
+      }
       get_segmentacao_clientes: {
         Args: never
         Returns: {
