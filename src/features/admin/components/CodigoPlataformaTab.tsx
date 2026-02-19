@@ -303,7 +303,7 @@ export const CodigoPlataformaTab = () => {
         {[
           { label: "Tabelas DB", value: "134" },
           { label: "Políticas RLS", value: "366" },
-          { label: "Edge Functions", value: "45" },
+          { label: "Edge Functions", value: "44" },
           { label: "Permissões", value: "30" },
           { label: "Componentes", value: "300+" },
           { label: "Funções SQL", value: "51" },
@@ -526,9 +526,9 @@ END; $$;`}
       {/* 5. Edge Functions */}
       <SectionCollapsible
         title="Edge Functions (Backend)"
-        subtitle="45 funções serverless em Deno/TypeScript"
+        subtitle="44 funções serverless em Deno/TypeScript"
         icon={Server}
-        badge="45 funções"
+        badge="44 funções"
       >
         <div className="space-y-2">
           <p className="text-[11px] font-semibold text-foreground">💳 Pagamentos (Asaas)</p>

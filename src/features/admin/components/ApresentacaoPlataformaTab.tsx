@@ -438,7 +438,7 @@ const investimentoOptions: InvestimentoOption[] = [
     details: [
       "100+ páginas e 300+ componentes React/TypeScript",
       "134 tabelas com 366 políticas RLS de segurança",
-      "45 Edge Functions para integrações e IA",
+      "44 Edge Functions para integrações e IA",
       "Sistema completo de IA (Resinkra AI, Chat, Análise Viral, Wellness)",
       "PWA mobile-first com suporte offline e Capacitor",
       "29 módulos de funcionalidades (academy, marketplace, liga, etc.)",
@@ -493,7 +493,7 @@ const investimentoOptions: InvestimentoOption[] = [
       "100+ páginas entregues e funcionando em produção",
       "300+ componentes com design system consistente",
       "134 tabelas + 366 RLS policies — segurança enterprise",
-      "45 Edge Functions ativas com deploy automático",
+      "44 Edge Functions ativas com deploy automático",
       "51 database functions + 57 triggers para automação",
       "17 cursos (1.886h) + certificação automática",
       "IA nativa: roteiros virais, wellness, análise de conteúdo",
@@ -607,7 +607,7 @@ const slides = [
             { n: "100+", l: "Páginas" },
             { n: "300+", l: "Componentes" },
             { n: "134", l: "Tabelas DB" },
-            { n: "45", l: "Edge Functions" },
+            { n: "44", l: "Edge Functions" },
           ].map(m => (
             <div key={m.l} className="bg-card border rounded-xl p-3 text-center">
               <p className="text-xl font-bold text-primary">{m.n}</p>

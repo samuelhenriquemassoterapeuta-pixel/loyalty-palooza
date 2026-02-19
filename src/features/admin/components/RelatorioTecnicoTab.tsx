@@ -127,20 +127,19 @@ const MODULOS_FUNCIONAIS = [
 ];
 
 const EDGE_FUNCTIONS = [
-  "analyze-viral", "asaas-criar-cobranca", "asaas-status", "asaas-webhook",
-  "buscar-usuario", "chat-assistente", "check-rate-limit", "curso-tts",
-  "enviar-campanha", "enviar-lembretes", "enviar-whatsapp", "fetch-google-ads",
-  "generate-hooks", "generate-ideas", "generate-script", "gerar-imagem-servico",
-  "gerar-recomendacoes", "lembrete-alongamento", "lembrete-medidas",
-  "notificacoes-inteligentes", "processar-expiracoes", "processar-vales-expirados",
-  "transferir-creditos", "whatsapp-webhook", "cashback-inteligente",
-  "gerar-plano-dieta", "verificar-conquistas", "processar-indicacao",
-  "enviar-email-transacional", "gerar-certificado", "sync-parceiros",
-  "processar-assinatura", "dashboard-analytics", "exportar-relatorio",
-  "validar-cupom", "processar-checkin", "gerar-qr-code",
-  "atualizar-ranking", "processar-cromos", "gerar-relatorio-rh",
-  "webhook-pagamento", "processar-campanha-email", "upload-media",
-  "processar-social-moments", "enviar-notificacao-push", "backup-dados",
+  "analise-progresso", "analyze-viral", "asaas-criar-cobranca", "asaas-status",
+  "asaas-webhook", "assistente-saude", "atualizar-trends", "buscar-usuario",
+  "cashback-inteligente", "chat-assistente", "check-rate-limit",
+  "creditar-recompensa-sugestao", "curso-tts", "enviar-campanha",
+  "enviar-email-notificacao", "enviar-lembretes", "enviar-push", "enviar-whatsapp",
+  "fetch-google-ads", "generate-hooks", "generate-ideas", "generate-script",
+  "gerar-ideias-semanais", "gerar-imagem-servico", "gerar-recomendacoes",
+  "insights-saude", "lembrete-alongamento", "lembrete-medidas", "lembretes-wellness",
+  "notificacoes-inteligentes", "notificar-roteiros-pendentes", "plano-bem-estar",
+  "processar-expiracoes", "processar-vales-expirados", "recomendar-sessao",
+  "reflexao-diario", "resi-chat", "transferir-creditos", "validar-playlist",
+  "wellness-check-conquistas", "wellness-correlations", "wellness-insight",
+  "wellness-update-streak", "whatsapp-webhook",
 ];
 
 const INTEGRATIONS = [
@@ -194,7 +193,7 @@ export default function RelatorioTecnicoTab() {
         </div>
 
         <div className="grid grid-cols-3 sm:grid-cols-3 lg:grid-cols-6 gap-2">
-          <MetricCard label="Edge Functions" value={45} sub="serverless" />
+          <MetricCard label="Edge Functions" value={44} sub="serverless" />
           <MetricCard label="Funções SQL" value={51} sub="procedures" />
           <MetricCard label="Triggers" value={57} sub="automações" />
           <MetricCard label="Índices" value={195} sub="performance" />
