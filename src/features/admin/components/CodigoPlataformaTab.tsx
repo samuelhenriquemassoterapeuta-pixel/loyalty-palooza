@@ -28,6 +28,17 @@ import {
   Bell,
   Image,
   GraduationCap,
+  Calendar,
+  ShoppingCart,
+  Trophy,
+  Gift,
+  Headphones,
+  Stethoscope,
+  FileText,
+  Heart,
+  Tag,
+  Sparkles,
+  Settings,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
