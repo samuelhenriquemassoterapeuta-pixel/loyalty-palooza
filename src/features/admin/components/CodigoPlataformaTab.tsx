@@ -347,7 +347,7 @@ conquistas/     → Gamificação, XP, ranking
 corporativo/    → Portal B2B para empresas
 cromos/         → Cromos colecionáveis por elementos
 cupom/          → Editor de cupons de desconto
-cursos/         → 17 cursos com módulos e progresso
+cursos/         → 35 cursos (17 base + 18 expansão) com progresso
 dietas/         → Planos nutricionais personalizados
 guia-clinico/   → Guia clínico interativo
 landing/        → Landing page com parallax
@@ -446,18 +446,22 @@ SELECT * FROM get_user_permissions('user-uuid');
             { group: "👤 Usuários & Auth", tables: "profiles, user_roles, roles, login_attempts, audit_logs", count: 5 },
             { group: "🔑 Permissões", tables: "permissions, role_permissions, user_permissions_mv", count: 3 },
             { group: "📅 Serviços", tables: "servicos, servicos_detalhes, agendamentos, terapeutas, horarios_disponiveis", count: 5 },
-            { group: "🛒 Produtos", tables: "produtos, pedidos, pedido_itens, pacotes, pacotes_usuario", count: 5 },
-            { group: "💰 Financeiro", tables: "transacoes, indicacoes, vale_presentes, pagamentos_asaas, cupons, assinaturas_*", count: 7 },
-            { group: "🏆 Gamificação", tables: "desafios, desafio_participantes, checkins, conquistas, cromos_usuarios, badges", count: 6 },
-            { group: "🩺 Saúde", tables: "protocolos, usuario_protocolos, fichas_acompanhamento, avaliacoes_posturais, fichas_anamnese, anamnese_templates", count: 8 },
-            { group: "🥗 Nutrição", tables: "planos_dieta, diario_alimentar, ficha_nutricional, dietas_conteudo", count: 4 },
-            { group: "📚 Educação", tables: "curso_modulos, curso_aulas, curso_progresso", count: 3 },
+            { group: "🛒 Produtos & Loja", tables: "produtos, pedidos, pedido_itens, pacotes, pacotes_usuario, carrinho", count: 6 },
+            { group: "💰 Financeiro", tables: "transacoes, indicacoes, vale_presentes, pagamentos_asaas, cupons, assinaturas_planos, assinaturas_usuario", count: 7 },
+            { group: "🏆 Gamificação", tables: "desafios, desafio_participantes, checkins, conquistas, cromos_usuarios, badges, conquistas_usuario_badges", count: 7 },
+            { group: "🩺 Saúde & Protocolos", tables: "protocolos, usuario_protocolos, fichas_acompanhamento, avaliacoes_posturais, anotacoes_posturais, checklists_avaliacao, fichas_anamnese, anamnese_templates", count: 8 },
+            { group: "🥗 Nutrição", tables: "planos_dieta, diario_alimentar, ficha_nutricional, dietas_conteudo, historico_cirurgico", count: 5 },
+            { group: "📚 Educação", tables: "curso_modulos, curso_aulas, curso_progresso, academy_waitlist", count: 4 },
             { group: "📱 Social", tables: "social_posts, social_posts_config, notificacoes, banners_promocionais, banners_dismissals", count: 5 },
             { group: "🏢 Corporativo", tables: "empresas_corporativas, colaboradores_empresa, corporativo_*", count: "11" },
             { group: "📣 Marketing", tables: "campanhas_marketing, google_ads_metrics, landing_config", count: 3 },
             { group: "🤝 Parceiros", tables: "parceiros, parceiro_cupons, parceiro_comissoes, parceiro_faixas_comissao", count: 4 },
             { group: "🤖 IA & Conteúdo", tables: "brand_profiles, scripts, hooks, content_ideas, calendar_events", count: 5 },
-            { group: "🧘 Bem-Estar", tables: "wellness_*, diario_bem_estar", count: "8+" },
+            { group: "🧘 Bem-Estar", tables: "wellness_*, diario_bem_estar, humor_*, energia_*", count: "8+" },
+            { group: "🏋️ Exercícios", tables: "exercicios_alongamento, lembretes_alongamento, sessoes_alongamento", count: 3 },
+            { group: "⭐ Avaliações", tables: "avaliacoes, avaliacoes_playlist, feedback_rapido, exames_usuario, fotos_evolucao", count: 5 },
+            { group: "💆 Head SPA", tables: "headspa_imagens", count: 1 },
+            { group: "🎁 Recompensas Social", tables: "social_rewards_config", count: 1 },
           ].map((g) => (
             <div key={g.group} className="p-2.5 rounded-lg bg-muted/30 border border-border/40">
               <div className="flex items-center justify-between mb-0.5">
@@ -790,7 +794,16 @@ const { data: { publicUrl } } = supabase.storage
   └→ Trigger calcula cashback (% do produto)
   └→ Multiplica pelo tier (Bronze 1x, Prata 1.5x, Ouro 2x)
   └→ Insere em transacoes (expira: 90 dias)
+  └→ Credita cromos do elemento correspondente
   └→ Notificação automática
+
+AGENDAMENTO
+  └→ Usuário agenda serviço + terapeuta + playlist
+  └→ Notificação para terapeuta
+  └→ Lembrete automático pré-sessão (WhatsApp/push)
+  └→ Check-in via QR Code
+  └→ Feedback pós-sessão (emoji + comentário)
+  └→ Cashback + cromos creditados ao concluir
 
 INDICAÇÃO
   └→ Amigo se cadastra com código
@@ -801,9 +814,28 @@ DESAFIO CONCLUÍDO
   └→ Trigger credita recompensa
   └→ Notificação de parabéns
 
+RESINKRA MOMENTS (Social)
+  └→ Usuário posta foto (story/feed/reels)
+  └→ Admin aprova post
+  └→ Cashback + XP + Cromos Éther creditados
+  └→ Ranking semanal atualizado
+  └→ Missões especiais com multiplicadores
+
 CASHBACK EXPIRANDO
   └→ Notifica 7 dias antes
-  └→ Debita automaticamente após vencimento`}
+  └→ Debita automaticamente após vencimento
+
+VALE PRESENTE
+  └→ Comprador cria vale com QR
+  └→ Destinatário resgata código
+  └→ Valor creditado como cashback (180 dias)
+  └→ Notifica comprador e destinatário
+
+ALQUIMIA (Cromos)
+  └→ Usuário combina cromos de elementos
+  └→ Receita valida saldo de cada elemento
+  └→ Debita cromos + credita recompensa
+  └→ Notificação de sucesso`}
         />
       </SectionCollapsible>
 
