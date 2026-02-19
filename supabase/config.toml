@@ -92,3 +92,9 @@ verify_jwt = false
 
 [functions.wellness-insight]
 verify_jwt = false
+
+[functions.resi-router]
+verify_jwt = false
+
+[functions.resi-whatsapp]
+verify_jwt = false
