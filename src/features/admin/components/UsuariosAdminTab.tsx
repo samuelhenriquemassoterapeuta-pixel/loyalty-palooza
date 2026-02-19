@@ -11,6 +11,7 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Search, Shield, UserPlus, Trash2, User } from "lucide-react";
 import { format } from "date-fns";
+import { AdminCreateUser } from "./AdminCreateUser";
 
 const ROLE_COLORS: Record<string, string> = {
   admin: "bg-red-500/10 text-red-600 border-red-200",
@@ -23,6 +24,7 @@ export const UsuariosAdminTab = () => {
   const queryClient = useQueryClient();
   const [search, setSearch] = useState("");
   const [roleDialog, setRoleDialog] = useState(false);
+  const [createDialog, setCreateDialog] = useState(false);
   const [selectedUser, setSelectedUser] = useState<any>(null);
   const [newRole, setNewRole] = useState<string>("user");
 
@@ -89,6 +91,11 @@ export const UsuariosAdminTab = () => {
     } catch (e: any) { toast.error(e.message); }
   };
 
+  const handleCreateSuccess = () => {
+    queryClient.invalidateQueries({ queryKey: ["admin-usuarios-profiles"] });
+    queryClient.invalidateQueries({ queryKey: ["admin-all-user-roles"] });
+  };
+
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
@@ -96,6 +103,10 @@ export const UsuariosAdminTab = () => {
           <h3 className="text-lg font-semibold text-foreground">Gerenciamento de Usuários</h3>
           <p className="text-sm text-muted-foreground">{profiles.length} usuário(s) cadastrado(s)</p>
         </div>
+        <Button size="sm" className="gap-2" onClick={() => setCreateDialog(true)}>
+          <UserPlus className="w-4 h-4" />
+          Novo Usuário
+        </Button>
       </div>
 
       <div className="relative">
@@ -146,6 +157,7 @@ export const UsuariosAdminTab = () => {
         </div>
       )}
 
+      {/* Modal: adicionar role a usuário existente */}
       <Dialog open={roleDialog} onOpenChange={setRoleDialog}>
         <DialogContent>
           <DialogHeader><DialogTitle>Adicionar Role — {selectedUser?.nome || "Usuário"}</DialogTitle></DialogHeader>
@@ -166,6 +178,13 @@ export const UsuariosAdminTab = () => {
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* Modal: criar novo usuário */}
+      <AdminCreateUser
+        open={createDialog}
+        onOpenChange={setCreateDialog}
+        onSuccess={handleCreateSuccess}
+      />
     </div>
   );
 };
