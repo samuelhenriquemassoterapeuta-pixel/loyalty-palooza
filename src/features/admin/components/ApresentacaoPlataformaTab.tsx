@@ -172,7 +172,7 @@ const ferramentasAvancadas: FerramentaItem[] = [
     "Relatórios de satisfação por período",
   ]},
   { icon: "🔐", title: "Segurança Enterprise", desc: "RLS + Audit Logs", details: [
-    "262+ políticas RLS protegendo todas as tabelas",
+    "366 políticas RLS protegendo todas as 134 tabelas",
     "Audit logs completos de operações sensíveis",
     "Rate limiting para proteção contra abuso",
     "Permissões granulares (30 permissões distintas)",
@@ -604,10 +604,10 @@ const slides = [
         </p>
         <div className="grid grid-cols-2 gap-3 max-w-sm mx-auto">
           {[
-            { n: "95+", l: "Páginas" },
-            { n: "250+", l: "Componentes" },
-            { n: "96", l: "Tabelas DB" },
-            { n: "24", l: "Edge Functions" },
+            { n: "100+", l: "Páginas" },
+            { n: "300+", l: "Componentes" },
+            { n: "134", l: "Tabelas DB" },
+            { n: "45", l: "Edge Functions" },
           ].map(m => (
             <div key={m.l} className="bg-card border rounded-xl p-3 text-center">
               <p className="text-xl font-bold text-primary">{m.n}</p>
@@ -635,10 +635,10 @@ const slides = [
     content: (
       <div className="space-y-4">
         {[
-          { label: "Freelancer Solo", meses: 24, pct: 100 },
-          { label: "Equipe Pequena (3-5)", meses: 14, pct: 58 },
-          { label: "Agência Digital", meses: 18, pct: 75 },
-          { label: "Software House", meses: 12, pct: 50 },
+          { label: "Freelancer Sênior", meses: 36, pct: 100 },
+          { label: "Equipe Pequena (3-5)", meses: 24, pct: 67 },
+          { label: "Agência Digital", meses: 42, pct: 100 },
+          { label: "Software House", meses: 28, pct: 78 },
         ].map(item => (
           <div key={item.label} className="space-y-1">
             <div className="flex justify-between text-xs">
@@ -687,30 +687,31 @@ const slides = [
   {
     id: "cursos",
     title: "Catálogo de Cursos",
-    subtitle: "15 cursos profissionalizantes com certificação",
+    subtitle: "17 cursos profissionalizantes com certificação",
     content: (
       <div className="space-y-3">
         <div className="grid grid-cols-3 gap-2 text-center mb-2">
           <div className="bg-primary/10 rounded-xl p-2">
-            <p className="text-lg font-bold text-primary">15</p>
+            <p className="text-lg font-bold text-primary">17</p>
             <p className="text-[9px] text-muted-foreground">Cursos</p>
           </div>
           <div className="bg-accent/10 rounded-xl p-2">
-            <p className="text-lg font-bold text-accent">154</p>
+            <p className="text-lg font-bold text-accent">190</p>
             <p className="text-[9px] text-muted-foreground">Módulos</p>
           </div>
           <div className="bg-primary/10 rounded-xl p-2">
-            <p className="text-lg font-bold text-primary">1.388h</p>
+            <p className="text-lg font-bold text-primary">1.886h</p>
             <p className="text-[9px] text-muted-foreground">Conteúdo</p>
           </div>
         </div>
         <div className="grid grid-cols-1 gap-1.5 max-h-[220px] overflow-y-auto pr-1">
           {[
-            "Head SPA Coreano — 65h", "Aromaterapia — 58h", "Alta Perfumaria Natural — 70h",
-            "Massagem Modeladora — 128h", "Drenagem Linfática — 116h", "Fitoterapia — 140h",
-            "Óleos Essenciais — 150h", "Velas Aromáticas — 98h", "Saboaria Artesanal — 99h",
-            "Difusor de Ambientes — 105h", "Gastronomia Saudável — 130h", "Vendas — 75h",
-            "Yūgen FaceSPA — 70h", "Anatomia Humana — 7 módulos", "Método Resinkra — 24h"
+            "Método Resinkra — 120h", "Aromaterapia Clínica — 100h", "Head SPA Japonês — 90h",
+            "Anatomia Humana — 130h", "Yūgen Face SPA — 80h", "Perfumaria Natural — 80h",
+            "Velas Aromáticas — 98h", "Saboaria Artesanal — 99h", "Difusor de Ambientes — 105h",
+            "Fitoterapia Aplicada — 140h", "Óleos Essenciais — 150h", "Massagem Modeladora — 128h",
+            "Drenagem Linfática — 116h", "Gastronomia Saudável — 130h", "Vendas & Negócios — 75h",
+            "Seitai e New Seitai — 125h", "Bandagem Elástica — 120h"
           ].map(c => (
             <div key={c} className="flex items-center gap-2 bg-card border rounded-lg px-2.5 py-1.5">
               <GraduationCap className="w-3 h-3 text-primary shrink-0" />

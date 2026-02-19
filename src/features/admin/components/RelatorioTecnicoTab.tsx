@@ -86,44 +86,44 @@ const CURSOS = [
 ];
 
 const MODULOS_FUNCIONAIS = [
-  { modulo: "Autenticação & Perfis (Multi-role)", complexidade: "Alta", freelancer: 18000, agencia: 28000 },
-  { modulo: "Agendamento Inteligente com Terapeutas", complexidade: "Muito Alta", freelancer: 28000, agencia: 42000 },
-  { modulo: "Loja & E-commerce (Checkout + Cupons)", complexidade: "Muito Alta", freelancer: 35000, agencia: 52000 },
-  { modulo: "Carteira Digital & Cashback Gamificado", complexidade: "Muito Alta", freelancer: 38000, agencia: 55000 },
-  { modulo: "Sistema de Gamificação (XP/Ranking/Cromos)", complexidade: "Muito Alta", freelancer: 28000, agencia: 42000 },
-  { modulo: "Conquistas, Desafios & Missões", complexidade: "Alta", freelancer: 22000, agencia: 32000 },
-  { modulo: "Clube VIP (Assinaturas + Créditos)", complexidade: "Alta", freelancer: 25000, agencia: 38000 },
-  { modulo: "Avaliação Postural Completa c/ Anotações", complexidade: "Muito Alta", freelancer: 45000, agencia: 65000 },
-  { modulo: "Protocolos Clínicos & Fichas Anamnese", complexidade: "Muito Alta", freelancer: 32000, agencia: 48000 },
-  { modulo: "Dietas, Nutrição & Ficha Nutricional", complexidade: "Alta", freelancer: 18000, agencia: 28000 },
-  { modulo: "Alongamento & Pausas Posturais", complexidade: "Média", freelancer: 12000, agencia: 18000 },
-  { modulo: "Sistema de Indicações Multinível", complexidade: "Alta", freelancer: 18000, agencia: 28000 },
-  { modulo: "Notificações Inteligentes (Push + In-App)", complexidade: "Alta", freelancer: 15000, agencia: 22000 },
-  { modulo: "Chat Assistente (IA Generativa)", complexidade: "Muito Alta", freelancer: 28000, agencia: 42000 },
-  { modulo: "Recomendações Personalizadas com IA", complexidade: "Alta", freelancer: 22000, agencia: 32000 },
-  { modulo: "Integração WhatsApp (Z-API + Webhook)", complexidade: "Alta", freelancer: 22000, agencia: 32000 },
-  { modulo: "Integração Pagamentos (Asaas + Webhook)", complexidade: "Muito Alta", freelancer: 35000, agencia: 52000 },
-  { modulo: "Vale Presente Digital + Transferências", complexidade: "Alta", freelancer: 18000, agencia: 28000 },
-  { modulo: "Social Moments (UGC + Ranking Semanal)", complexidade: "Alta", freelancer: 22000, agencia: 32000 },
-  { modulo: "Seção Corporativa B2B (CMS Dinâmico)", complexidade: "Muito Alta", freelancer: 32000, agencia: 48000 },
-  { modulo: "Dashboard RH Corporativo", complexidade: "Alta", freelancer: 22000, agencia: 32000 },
-  { modulo: "Sistema de Parceiros & Comissões", complexidade: "Alta", freelancer: 18000, agencia: 28000 },
-  { modulo: "Landing Page Dinâmica (CMS + SEO)", complexidade: "Alta", freelancer: 22000, agencia: 32000 },
-  { modulo: "Painel Admin (35+ abas + Analytics)", complexidade: "Muito Alta", freelancer: 75000, agencia: 110000 },
-  { modulo: "Campanhas de Marketing Automatizadas", complexidade: "Alta", freelancer: 18000, agencia: 28000 },
-  { modulo: "Banners Promocionais & Segmentação", complexidade: "Média", freelancer: 10000, agencia: 15000 },
-  { modulo: "Segmentação Avançada de Clientes", complexidade: "Alta", freelancer: 18000, agencia: 28000 },
-  { modulo: "Google Ads Dashboard (API)", complexidade: "Alta", freelancer: 18000, agencia: 28000 },
-  { modulo: "Resinkra AI (11 telas + 6 modelos LLM)", complexidade: "Muito Alta", freelancer: 55000, agencia: 80000 },
-  { modulo: "PWA & Instalação (Manifest + SW)", complexidade: "Média", freelancer: 12000, agencia: 18000 },
-  { modulo: "Infraestrutura EAD (17 cursos + TTS)", complexidade: "Muito Alta", freelancer: 85000, agencia: 120000 },
-  { modulo: "Conteúdo Educacional (~1.886h)", complexidade: "Muito Alta", freelancer: 350000, agencia: 350000 },
-  { modulo: "Segurança (366 RLS + Rate Limit + Audit)", complexidade: "Muito Alta", freelancer: 45000, agencia: 65000 },
-  { modulo: "Check-in QR Code & Geolocalização", complexidade: "Média", freelancer: 12000, agencia: 18000 },
-  { modulo: "Guia Clínico & Manual de Cuidados", complexidade: "Média", freelancer: 10000, agencia: 15000 },
-  { modulo: "Minha Jornada (Timeline do Paciente)", complexidade: "Alta", freelancer: 15000, agencia: 22000 },
-  { modulo: "Email Transacional (Resend + Templates)", complexidade: "Média", freelancer: 12000, agencia: 18000 },
-  { modulo: "Relatórios & Exportação (PDF/CSV)", complexidade: "Alta", freelancer: 18000, agencia: 28000 },
+  { modulo: "Autenticação & Perfis (Multi-role)", complexidade: "Alta", freelancer: 22000, agencia: 35000 },
+  { modulo: "Agendamento Inteligente com Terapeutas", complexidade: "Muito Alta", freelancer: 35000, agencia: 58000 },
+  { modulo: "Loja & E-commerce (Checkout + Cupons)", complexidade: "Muito Alta", freelancer: 42000, agencia: 68000 },
+  { modulo: "Carteira Digital & Cashback Gamificado", complexidade: "Muito Alta", freelancer: 45000, agencia: 72000 },
+  { modulo: "Sistema de Gamificação (XP/Ranking/Cromos)", complexidade: "Muito Alta", freelancer: 35000, agencia: 58000 },
+  { modulo: "Conquistas, Desafios & Missões", complexidade: "Alta", freelancer: 25000, agencia: 38000 },
+  { modulo: "Clube VIP (Assinaturas + Créditos)", complexidade: "Alta", freelancer: 28000, agencia: 42000 },
+  { modulo: "Avaliação Postural Completa c/ Anotações", complexidade: "Muito Alta", freelancer: 52000, agencia: 82000 },
+  { modulo: "Protocolos Clínicos & Fichas Anamnese", complexidade: "Muito Alta", freelancer: 38000, agencia: 62000 },
+  { modulo: "Dietas, Nutrição & Ficha Nutricional", complexidade: "Alta", freelancer: 22000, agencia: 35000 },
+  { modulo: "Alongamento & Pausas Posturais", complexidade: "Média", freelancer: 14000, agencia: 22000 },
+  { modulo: "Sistema de Indicações Multinível", complexidade: "Alta", freelancer: 22000, agencia: 38000 },
+  { modulo: "Notificações Inteligentes (Push + In-App)", complexidade: "Alta", freelancer: 18000, agencia: 28000 },
+  { modulo: "Chat Assistente (IA Generativa)", complexidade: "Muito Alta", freelancer: 35000, agencia: 58000 },
+  { modulo: "Recomendações Personalizadas com IA", complexidade: "Alta", freelancer: 25000, agencia: 38000 },
+  { modulo: "Integração WhatsApp (Z-API + Webhook)", complexidade: "Alta", freelancer: 25000, agencia: 42000 },
+  { modulo: "Integração Pagamentos (Asaas + Webhook)", complexidade: "Muito Alta", freelancer: 42000, agencia: 68000 },
+  { modulo: "Vale Presente Digital + Transferências", complexidade: "Alta", freelancer: 22000, agencia: 35000 },
+  { modulo: "Social Moments (UGC + Ranking Semanal)", complexidade: "Alta", freelancer: 25000, agencia: 38000 },
+  { modulo: "Seção Corporativa B2B (CMS Dinâmico)", complexidade: "Muito Alta", freelancer: 38000, agencia: 65000 },
+  { modulo: "Dashboard RH Corporativo", complexidade: "Alta", freelancer: 25000, agencia: 38000 },
+  { modulo: "Sistema de Parceiros & Comissões", complexidade: "Alta", freelancer: 22000, agencia: 35000 },
+  { modulo: "Landing Page Dinâmica (CMS + SEO)", complexidade: "Alta", freelancer: 25000, agencia: 38000 },
+  { modulo: "Painel Admin (35+ abas + Analytics)", complexidade: "Muito Alta", freelancer: 88000, agencia: 155000 },
+  { modulo: "Campanhas de Marketing Automatizadas", complexidade: "Alta", freelancer: 22000, agencia: 35000 },
+  { modulo: "Banners Promocionais & Segmentação", complexidade: "Média", freelancer: 12000, agencia: 18000 },
+  { modulo: "Segmentação Avançada de Clientes", complexidade: "Alta", freelancer: 22000, agencia: 35000 },
+  { modulo: "Google Ads Dashboard (API)", complexidade: "Alta", freelancer: 22000, agencia: 35000 },
+  { modulo: "Resinkra AI (11 telas + 6 modelos LLM)", complexidade: "Muito Alta", freelancer: 65000, agencia: 115000 },
+  { modulo: "PWA & Instalação (Manifest + SW)", complexidade: "Média", freelancer: 15000, agencia: 22000 },
+  { modulo: "Infraestrutura EAD (17 cursos + TTS)", complexidade: "Muito Alta", freelancer: 95000, agencia: 160000 },
+  { modulo: "Conteúdo Educacional (~1.886h)", complexidade: "Muito Alta", freelancer: 380000, agencia: 420000 },
+  { modulo: "Segurança (366 RLS + Rate Limit + Audit)", complexidade: "Muito Alta", freelancer: 52000, agencia: 88000 },
+  { modulo: "Check-in QR Code & Geolocalização", complexidade: "Média", freelancer: 14000, agencia: 22000 },
+  { modulo: "Guia Clínico & Manual de Cuidados", complexidade: "Média", freelancer: 12000, agencia: 18000 },
+  { modulo: "Minha Jornada (Timeline do Paciente)", complexidade: "Alta", freelancer: 18000, agencia: 28000 },
+  { modulo: "Email Transacional (Resend + Templates)", complexidade: "Média", freelancer: 15000, agencia: 22000 },
+  { modulo: "Relatórios & Exportação (PDF/CSV)", complexidade: "Alta", freelancer: 22000, agencia: 35000 },
 ];
 
 const EDGE_FUNCTIONS = [
@@ -290,7 +290,7 @@ export default function RelatorioTecnicoTab() {
           <CardContent className="space-y-3">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {[
-                { label: "Row Level Security (RLS)", desc: "316 políticas ativas em 96 tabelas" },
+                { label: "Row Level Security (RLS)", desc: "366 políticas ativas em 134 tabelas" },
                 { label: "Rate Limiting", desc: "Proteção contra brute-force via login_attempts + RPC" },
                 { label: "Audit Logs", desc: "Trigger automático em tabelas sensíveis" },
                 { label: "URLs Assinadas", desc: "Fotos de evolução e exames protegidos (1h TTL)" },
@@ -413,7 +413,7 @@ export default function RelatorioTecnicoTab() {
                 </div>
                 <p className="text-3xl font-bold text-primary">{fmt(totalFreelancer)}</p>
                 <div className="space-y-1 text-xs text-muted-foreground">
-                  <p>⏱ Prazo estimado: 24 a 36 meses</p>
+                  <p>⏱ Prazo estimado: 30 a 40 meses</p>
                   <p>👤 Equipe: 2 fullstack + 1 designer + 1 QA</p>
                   <p>🔧 Manutenção: ~{fmt(25000)}/mês</p>
                 </div>
@@ -425,8 +425,8 @@ export default function RelatorioTecnicoTab() {
                 </div>
                 <p className="text-3xl font-bold text-primary">{fmt(totalAgencia)}</p>
                 <div className="space-y-1 text-xs text-muted-foreground">
-                  <p>⏱ Prazo estimado: 14 a 22 meses</p>
-                  <p>👥 Equipe: 6-10 profissionais</p>
+                  <p>⏱ Prazo estimado: 36 a 48 meses</p>
+                  <p>👥 Equipe: 10-15 profissionais</p>
                   <p>🔧 Manutenção: ~{fmt(55000)}/mês</p>
                 </div>
               </div>
@@ -483,7 +483,7 @@ export default function RelatorioTecnicoTab() {
         {/* ─── Nota de Rodapé ─── */}
         <div className="text-xs text-muted-foreground text-center py-4 space-y-1">
           <p>📊 Valores baseados em pesquisa de mercado brasileiro (2025-2026) — fontes: Quiker, B2Bit, Clutch, GeekHunter.</p>
-          <p>💡 O valor do conteúdo educacional (1.388h) representa propriedade intelectual independente do custo de desenvolvimento técnico.</p>
+          <p>💡 O valor do conteúdo educacional (~1.886h) representa propriedade intelectual independente do custo de desenvolvimento técnico.</p>
           <p>🔒 Relatório gerado automaticamente com base na análise do código-fonte e infraestrutura do projeto.</p>
         </div>
       </div>
