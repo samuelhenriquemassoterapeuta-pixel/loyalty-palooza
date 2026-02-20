@@ -365,8 +365,14 @@ export function detectAgentFromMessage(message: string): keyof typeof RESI_AGENT
 // ============================================================
 // 🆓 CONFIGURAÇÃO GOOGLE GEMINI (GRATUITO!)
 // ============================================================
+// Modelos em ordem de fallback para garantir disponibilidade máxima
+const GEMINI_FALLBACK_MODELS = [
+  'gemini-2.0-flash',
+  'gemini-1.5-flash',
+  'gemini-1.5-flash-8b',
+];
+
 export const GEMINI_CONFIG = {
-  apiUrl: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent',
   get apiKey() { return Deno.env.get('GEMINI_API_KEY') || ''; },
   generationConfig: {
     temperature: 0.7,
@@ -423,30 +429,42 @@ export async function callGemini(
     }
   ];
 
-  const response = await fetch(`${GEMINI_CONFIG.apiUrl}?key=${apiKey}`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      contents,
-      generationConfig: GEMINI_CONFIG.generationConfig,
-      safetySettings: GEMINI_CONFIG.safetySettings,
-    })
-  });
+  const requestBody = {
+    contents,
+    generationConfig: GEMINI_CONFIG.generationConfig,
+    safetySettings: GEMINI_CONFIG.safetySettings,
+  };
 
-  if (!response.ok) {
-    const errorText = await response.text();
-    console.error('Erro Gemini:', errorText);
-    throw new Error(`Erro na API Gemini: ${response.status}`);
+  // Tenta modelos em ordem até um funcionar (fallback automático em caso de rate limit)
+  for (const model of GEMINI_FALLBACK_MODELS) {
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(requestBody),
+      });
+
+      if (response.status === 429) {
+        console.log(`Modelo ${model} rate limited, tentando próximo...`);
+        continue;
+      }
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error(`Gemini ${model} erro ${response.status}:`, errorText);
+        continue;
+      }
+
+      const data = await response.json();
+      const generatedText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+      
+      if (generatedText) return generatedText;
+    } catch (e) {
+      console.error(`Erro ao chamar modelo ${model}:`, e);
+      continue;
+    }
   }
 
-  const data = await response.json();
-  const generatedText = data.candidates?.[0]?.content?.parts?.[0]?.text;
-  
-  if (!generatedText) {
-    throw new Error('Resposta vazia do Gemini');
-  }
-
-  return generatedText;
+  throw new Error('Todos os modelos Gemini falharam ou atingiram rate limit');
 }

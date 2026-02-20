@@ -5,6 +5,56 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+// Modelos disponíveis na API v1beta — em ordem de fallback
+const GEMINI_MODELS = [
+  { model: "gemini-2.0-flash", version: "v1beta" },
+  { model: "gemini-2.0-flash-lite", version: "v1beta" },
+  { model: "gemini-1.5-flash", version: "v1" },
+  { model: "gemini-1.5-flash-8b", version: "v1" },
+];
+
+async function callGeminiWithFallback(apiKey: string, contents: any[], config: any): Promise<string> {
+  for (let i = 0; i < GEMINI_MODELS.length; i++) {
+    const { model, version } = GEMINI_MODELS[i];
+    const url = `https://generativelanguage.googleapis.com/${version}/models/${model}:generateContent?key=${apiKey}`;
+    
+    // Pequeno delay entre tentativas para evitar burst de rate limit
+    if (i > 0) {
+      await new Promise(resolve => setTimeout(resolve, 1000));
+    }
+    
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ contents, ...config }),
+      });
+
+      if (response.status === 429) {
+        console.log(`Modelo ${model} (${version}) rate limited (429), tentando próximo...`);
+        continue;
+      }
+
+      if (!response.ok) {
+        const errText = await response.text();
+        console.error(`Gemini ${model} erro ${response.status}:`, errText);
+        continue;
+      }
+
+      const data = await response.json();
+      const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+      if (text) {
+        console.log(`✅ Respondido com modelo: ${model} (${version})`);
+        return text;
+      }
+    } catch (e) {
+      console.error(`Erro ao chamar ${model}:`, e);
+      continue;
+    }
+  }
+  throw new Error("Todos os modelos Gemini falharam ou estão com rate limit");
+}
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -16,6 +66,14 @@ serve(async (req) => {
     if (!message || typeof message !== "string" || message.length > 2000) {
       return new Response(JSON.stringify({ error: "Mensagem inválida" }), {
         status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    const GEMINI_API_KEY = Deno.env.get("GEMINI_API_KEY");
+    if (!GEMINI_API_KEY) {
+      return new Response(JSON.stringify({ reply: "Serviço temporariamente indisponível. Tente novamente! 🙏" }), {
+        status: 200,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
@@ -43,34 +101,31 @@ ${context ? `Contexto do usuário: ${context}` : ""}
 
 Responda sempre em português brasileiro. Se não souber algo específico, oriente o usuário a entrar em contato pelo WhatsApp ou visitar a clínica.`;
 
-    const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${Deno.env.get("LOVABLE_API_KEY")}`,
-        "HTTP-Referer": "https://resinkra.com",
-      },
-      body: JSON.stringify({
-        model: "google/gemini-2.5-flash",
-        messages: [
-          { role: "system", content: systemPrompt },
-          { role: "user", content: message },
-        ],
-        max_tokens: 500,
-        temperature: 0.7,
-      }),
-    });
+    const contents = [
+      { role: "user", parts: [{ text: `INSTRUÇÕES DO SISTEMA:\n\n${systemPrompt}` }] },
+      { role: "model", parts: [{ text: "Entendido! Sou a Resi, sua assistente da Resinkra. 🌿" }] },
+      { role: "user", parts: [{ text: message }] },
+    ];
 
-    const data = await response.json();
-    const reply = data.choices?.[0]?.message?.content || "Desculpe, não consegui processar sua pergunta. Tente novamente! 🌿";
+    const config = {
+      generationConfig: { temperature: 0.7, topK: 40, topP: 0.95, maxOutputTokens: 500 },
+      safetySettings: [
+        { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_NONE" },
+        { category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_NONE" },
+        { category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_NONE" },
+      ],
+    };
+
+    const reply = await callGeminiWithFallback(GEMINI_API_KEY, contents, config);
 
     return new Response(JSON.stringify({ reply }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (error) {
-    console.error("Resi chat error:", error);
+    const errMsg = error instanceof Error ? error.message : String(error);
+    console.error("Resi chat error:", errMsg);
     return new Response(
-      JSON.stringify({ reply: "Ops, tive um probleminha técnico. Tente novamente em alguns instantes! 🙏" }),
+      JSON.stringify({ reply: "Ops, estou com muitas conversas agora. Tente novamente em alguns segundos! 🌿" }),
       { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }
