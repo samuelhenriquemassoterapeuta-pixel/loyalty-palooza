@@ -366,7 +366,7 @@ export function detectAgentFromMessage(message: string): keyof typeof RESI_AGENT
 // 🆓 CONFIGURAÇÃO GOOGLE GEMINI (GRATUITO!)
 // ============================================================
 export const GEMINI_CONFIG = {
-  apiUrl: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent',
+  apiUrl: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent',
   get apiKey() { return Deno.env.get('GEMINI_API_KEY') || ''; },
   generationConfig: {
     temperature: 0.7,
