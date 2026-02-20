@@ -1708,6 +1708,39 @@ export type Database = {
           },
         ]
       }
+      diario_bem_estar: {
+        Row: {
+          created_at: string
+          energia_fisica: number | null
+          humor: number | null
+          id: string
+          nivel_estresse: number | null
+          observacoes: string | null
+          qualidade_sono: number | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          energia_fisica?: number | null
+          humor?: number | null
+          id?: string
+          nivel_estresse?: number | null
+          observacoes?: string | null
+          qualidade_sono?: number | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          energia_fisica?: number | null
+          humor?: number | null
+          id?: string
+          nivel_estresse?: number | null
+          observacoes?: string | null
+          qualidade_sono?: number | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       dietas_conteudo: {
         Row: {
           categoria: string
@@ -6177,6 +6210,25 @@ export type Database = {
       }
     }
     Views: {
+      b2b_roi_analytics: {
+        Row: {
+          empresa_id: string | null
+          empresa_nome: string | null
+          media_energia: number | null
+          media_estresse: number | null
+          mes_referencia: string | null
+          total_funcionarios_engajados: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "colaboradores_empresa_empresa_id_fkey"
+            columns: ["empresa_id"]
+            isOneToOne: false
+            referencedRelation: "empresas_corporativas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       chat_analytics: {
         Row: {
           agent: string | null
