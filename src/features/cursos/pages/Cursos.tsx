@@ -1,5 +1,5 @@
 import { useSearchParams } from "react-router-dom";
-import { GraduationCap, Flower2, Sparkles, Bone, Gem, Hand, Droplets, Flame, Bath, Wind, Leaf, FlaskConical, Fingerprint, Waves, ChefHat, Bandage, DollarSign, Heart, Brain, HeartHandshake, Dumbbell, Megaphone, PawPrint, Sun, CircleDot, Route, Ear, ScanEye, TreePine, Apple, LucideIcon } from "lucide-react";
+import { GraduationCap, Flower2, Sparkles, Bone, Gem, Hand, Droplets, Flame, Bath, Wind, Leaf, FlaskConical, Fingerprint, Waves, ChefHat, Bandage, DollarSign, Heart, Brain, HeartHandshake, Dumbbell, Megaphone, PawPrint, Sun, CircleDot, Route, Ear, ScanEye, TreePine, Apple, Code2, LucideIcon } from "lucide-react";
 import { AppLayout } from "@/components/AppLayout";
 import { AnimatedPageBackground } from "@/components/AnimatedPageBackground";
 import { lazy, Suspense, useMemo, useRef, useEffect } from "react";
@@ -10,6 +10,7 @@ import { ContinueWatchingCard } from "@/features/cursos/components/ContinueWatch
 import { allCourseStats } from "@/features/cursos/data/cursosHubStats";
 import { useAdmin } from "@/features/admin/hooks/useAdmin";
 import { MonetizacaoCursosTab } from "@/features/cursos/components/MonetizacaoCursosTab";
+import { CodigoCursosTab } from "@/features/cursos/components/CodigoCursosTab";
 
 // Base course heroes
 const CursoVendasHero = lazy(() => import("@/features/cursos/pages/CursoVendasHero"));
@@ -237,16 +238,28 @@ export default function Cursos() {
               );
             })}
             {isAdmin && (
-              <div data-tab="monetizacao">
-                <CursoTabButton
-                  label="Monetização"
-                  icon={DollarSign}
-                  value="monetizacao"
-                  active={tab === "monetizacao"}
-                  pct={0}
-                  onClick={() => handleTabChange("monetizacao")}
-                />
-              </div>
+              <>
+                <div data-tab="monetizacao">
+                  <CursoTabButton
+                    label="Monetização"
+                    icon={DollarSign}
+                    value="monetizacao"
+                    active={tab === "monetizacao"}
+                    pct={0}
+                    onClick={() => handleTabChange("monetizacao")}
+                  />
+                </div>
+                <div data-tab="codigo">
+                  <CursoTabButton
+                    label="Código"
+                    icon={Code2}
+                    value="codigo"
+                    active={tab === "codigo"}
+                    pct={0}
+                    onClick={() => handleTabChange("codigo")}
+                  />
+                </div>
+              </>
             )}
           </div>
         </div>
@@ -254,6 +267,8 @@ export default function Cursos() {
         <Suspense fallback={<div className="flex justify-center py-12"><LoadingSpinner /></div>}>
           {tab === "monetizacao" && isAdmin ? (
             <MonetizacaoCursosTab />
+          ) : tab === "codigo" && isAdmin ? (
+            <CodigoCursosTab />
           ) : ActiveHero ? (
             <ActiveHero embedded />
           ) : (
