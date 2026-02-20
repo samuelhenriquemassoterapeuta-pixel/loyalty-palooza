@@ -104,3 +104,6 @@ verify_jwt = false
 
 [functions.resi-agent-router]
 verify_jwt = false
+
+[functions.analisar-refeicao]
+verify_jwt = false
