@@ -1086,6 +1086,7 @@ const slides = [
 /* ─── Component ─── */
 const ApresentacaoPlataformaTab = () => {
   const [current, setCurrent] = useState(0);
+  const [showIndex, setShowIndex] = useState(false);
   const total = slides.length;
   const slide = slides[current];
 
@@ -1094,11 +1095,47 @@ const ApresentacaoPlataformaTab = () => {
 
   return (
     <div className="space-y-3">
-      {/* Progress */}
+      {/* Progress + índice */}
       <div className="flex items-center gap-2">
-        <span className="text-[10px] text-muted-foreground font-medium">{current + 1}/{total}</span>
+        <span className="text-[10px] text-muted-foreground font-medium shrink-0">{current + 1}/{total}</span>
         <Progress value={((current + 1) / total) * 100} className="flex-1 h-1.5" />
+        <button
+          onClick={() => setShowIndex(v => !v)}
+          className="text-[10px] text-primary font-semibold shrink-0 px-2 py-0.5 rounded-full bg-primary/10 hover:bg-primary/20 transition-colors"
+        >
+          {showIndex ? "Fechar" : "Índice"}
+        </button>
       </div>
+
+      {/* Índice de slides */}
+      <AnimatePresence>
+        {showIndex && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.25 }}
+            className="overflow-hidden"
+          >
+            <div className="grid grid-cols-2 gap-1.5 pb-1">
+              {slides.map((s, i) => (
+                <button
+                  key={s.id}
+                  onClick={() => { setCurrent(i); setShowIndex(false); }}
+                  className={`flex items-center gap-2 px-2.5 py-2 rounded-xl text-left transition-colors ${
+                    i === current
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-card border border-border hover:bg-muted/50"
+                  }`}
+                >
+                  <span className={`text-[9px] font-bold shrink-0 w-4 ${i === current ? "text-primary-foreground/70" : "text-muted-foreground"}`}>{i + 1}</span>
+                  <span className={`text-[10px] font-medium leading-tight ${i === current ? "text-primary-foreground" : "text-foreground"}`}>{s.title}</span>
+                </button>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Slide */}
       <AnimatePresence mode="wait">
@@ -1171,3 +1208,5 @@ const ApresentacaoPlataformaTab = () => {
 };
 
 export default ApresentacaoPlataformaTab;
+
+
