@@ -527,7 +527,7 @@ export function generatePlatformMarkdown(): string {
 
   // ── Footer ──
   md += `---\n\n`;
-  md += `## 📊 Resumo Final (Atualizado 19/02/2026)\n\n`;
+  md += `## 📊 Resumo Final (Atualizado 20/02/2026)\n\n`;
   md += `| Item | Quantidade |\n|---|---|\n`;
   md += `| Feature Folders | 29 |\n`;
   md += `| Tabelas DB | 137 |\n`;
@@ -544,6 +544,7 @@ export function generatePlatformMarkdown(): string {
   md += `| Secrets | 7 |\n\n`;
   md += `> Resinkra — Plataforma completa de saúde, bem-estar e educação com gamificação, IA e B2B.\n`;
   md += `> 🆕 **19/02/2026**: Sistema multi-agente Resi (resi-router + 5 agentes + AdminResiAgents + ResiChat)\n`;
+  md += `> 🔄 **20/02/2026 (atualizado)**: Edge Function resi-agent-router reescrita com cache de 5 min, sessões persistentes, roteamento dinâmico via banco, nome/emoji/menu no retorno. Frontend ResiChatbot.tsx atualizado com sessionId estável. AdminResiAgents.tsx corrigido (importação toast + interface Agent). resi_agents_config populado com os 5 agentes especializados.\n`;
 
   return md;
 }
