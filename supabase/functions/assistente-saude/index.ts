@@ -11,8 +11,8 @@ Deno.serve(async (req) => {
   try {
     const { userId } = await requireAuth(req);
     const supabase = createServiceClient();
-    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-    if (!LOVABLE_API_KEY) return errorResponse("Chave de IA não configurada", 500);
+    const GEMINI_API_KEY = Deno.env.get("GEMINI_API_KEY");
+    if (!GEMINI_API_KEY) return errorResponse("Chave de IA não configurada", 500);
 
     const { messages } = await req.json();
     if (!messages || !Array.isArray(messages)) return errorResponse("Mensagens inválidas", 400);
@@ -78,28 +78,47 @@ REGRAS:
 
 ${userContext}`;
 
-    const aiResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+    // Build Gemini contents from conversation history
+    const lastUserMessage = messages[messages.length - 1]?.content || "";
+    const conversationHistory = messages.slice(0, -1).map((m: any) => ({
+      role: m.role === "assistant" ? "model" : "user",
+      parts: [{ text: m.content }],
+    }));
+
+    const contents = [
+      { role: "user", parts: [{ text: `INSTRUÇÕES DO SISTEMA:\n\n${systemPrompt}` }] },
+      { role: "model", parts: [{ text: "Entendido! Sou Aria, sua assistente de bem-estar. 🌿" }] },
+      ...conversationHistory,
+      { role: "user", parts: [{ text: lastUserMessage }] },
+    ];
+
+    const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
+
+    const aiResponse = await fetch(geminiUrl, {
       method: "POST",
-      headers: { Authorization: `Bearer ${LOVABLE_API_KEY}`, "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        model: "google/gemini-3-flash-preview",
-        messages: [
-          { role: "system", content: systemPrompt },
-          ...messages.slice(-10), // Keep last 10 messages for context
+        contents,
+        generationConfig: { temperature: 0.7, topK: 40, topP: 0.95, maxOutputTokens: 1000 },
+        safetySettings: [
+          { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_NONE" },
+          { category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_NONE" },
+          { category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_NONE" },
         ],
-        stream: true,
       }),
     });
 
     if (!aiResponse.ok) {
-      if (aiResponse.status === 429) return errorResponse("Limite de requisições atingido. Tente novamente em breve.", 429);
-      if (aiResponse.status === 402) return errorResponse("Créditos de IA insuficientes.", 402);
-      console.error("AI error:", aiResponse.status, await aiResponse.text());
-      return errorResponse("Erro ao processar mensagem", 500);
+      const errText = await aiResponse.text();
+      console.error("Gemini error:", aiResponse.status, errText);
+      return errorResponse("Erro ao processar mensagem com IA", 500);
     }
 
-    return new Response(aiResponse.body, {
-      headers: { ...corsHeaders, "Content-Type": "text/event-stream" },
+    const aiData = await aiResponse.json();
+    const reply = aiData.candidates?.[0]?.content?.parts?.[0]?.text || "Desculpe, não consegui processar. Tente novamente!";
+
+    return new Response(JSON.stringify({ content: reply }), {
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (error: any) {
     if (error instanceof Response) return error;

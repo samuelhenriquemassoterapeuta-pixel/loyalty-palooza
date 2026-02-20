@@ -3,7 +3,7 @@ import { createServiceClient, createUserClient } from "../_shared/supabase-clien
 import { jsonResponse, errorResponse, streamResponse } from "../_shared/response.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.89.0";
 
-const LOVABLE_AI_URL = "https://ai.gateway.lovable.dev/v1/chat/completions";
+const GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent";
 
 function buildSystemPrompt(servicos: string, terapeutas: string, horariosOcupados: string) {
   return `Você é o Assistente Virtual da Resinkra, especializado em bem-estar, massoterapia e terapias holísticas em Uberaba/MG. Seu tom é amigável, profissional e proativo, como um consultor de bem-estar confiável. Responda em português brasileiro com emojis moderados (😊👍🌿).
@@ -60,11 +60,8 @@ Deno.serve(async (req) => {
       return errorResponse("Não autorizado", 401);
     }
 
-    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-    const supabaseAnonKey = Deno.env.get("SUPABASE_ANON_KEY")!;
-    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-
-    if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY não configurada");
+    const GEMINI_API_KEY = Deno.env.get("GEMINI_API_KEY");
+    if (!GEMINI_API_KEY) throw new Error("GEMINI_API_KEY não configurada");
 
     // Validate user
     const supabaseUser = createUserClient(authHeader);
@@ -106,99 +103,54 @@ Deno.serve(async (req) => {
 
     const systemPrompt = buildSystemPrompt(servicosText, terapeutasText, horariosText);
 
-    const aiMessages = [
-      { role: "system", content: systemPrompt },
-      ...messages.slice(-20).map((m: any) => ({ role: m.role, content: m.content })),
-    ];
+    // Build Gemini conversation contents
+    const lastUserMessage = messages[messages.length - 1]?.content || "";
+    const conversationHistory = messages.slice(0, -1).map((m: any) => ({
+      role: m.role === "assistant" ? "model" : "user",
+      parts: [{ text: m.content }],
+    }));
 
-    // Non-streaming call to check for tool calls
-    const aiResponseNonStream = await fetch(LOVABLE_AI_URL, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${LOVABLE_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: "google/gemini-2.5-flash",
-        messages: aiMessages,
-        tools: aiTools,
-        tool_choice: "auto",
-      }),
-    });
+    // Check if the message requires scheduling (keyword detection)
+    const needsScheduling = /agendar|marcar|horário|sessão|disponibilidade/i.test(lastUserMessage);
 
-    if (!aiResponseNonStream.ok) {
-      if (aiResponseNonStream.status === 429) return errorResponse("Limite de requisições excedido.", 429);
-      if (aiResponseNonStream.status === 402) return errorResponse("Créditos de IA insuficientes.", 402);
-      throw new Error(`AI retornou ${aiResponseNonStream.status}`);
-    }
+    if (needsScheduling) {
+      // Try to extract scheduling details and process
+      const scheduleCheckPrompt = `${systemPrompt}\n\nO cliente diz: "${lastUserMessage}"\n\nSe o cliente quer agendar, extraia: serviço desejado, data/horário preferido e terapeuta (se mencionado). Responda em JSON: {"wants_scheduling": true/false, "servico": "...", "data_hora_sugerida": "...", "terapeuta": "..."} ou apenas confirme em texto se não for possível extrair.`;
 
-    const aiResult = await aiResponseNonStream.json();
-    const choice = aiResult.choices?.[0];
-
-    // Handle tool calls
-    if (choice?.message?.tool_calls?.length > 0) {
-      const toolResults: string[] = [];
-
-      for (const tc of choice.message.tool_calls) {
-        const fn = tc.function;
-        const args = JSON.parse(fn.arguments);
-
-        if (fn.name === "agendar_sessao") {
-          const result = await processarAgendamento(supabase, args, userId);
-          toolResults.push(result);
-        }
-      }
-
-      // Follow-up call with tool results (streaming)
-      const followUpMessages = [
-        ...aiMessages,
-        choice.message,
-        ...choice.message.tool_calls.map((tc: any, i: number) => ({
-          role: "tool",
-          tool_call_id: tc.id,
-          content: toolResults[i] || "OK",
-        })),
-      ];
-
-      const followUpResponse = await fetch(LOVABLE_AI_URL, {
+      const checkRes = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
         method: "POST",
-        headers: {
-          Authorization: `Bearer ${LOVABLE_API_KEY}`,
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          model: "google/gemini-2.5-flash",
-          messages: followUpMessages,
-          stream: true,
+          contents: [{ role: "user", parts: [{ text: scheduleCheckPrompt }] }],
+          generationConfig: { temperature: 0.1, maxOutputTokens: 300 },
         }),
       });
 
-      if (followUpResponse.ok) {
-        return streamResponse(followUpResponse.body);
+      if (checkRes.ok) {
+        const checkData = await checkRes.json();
+        const checkText = checkData.candidates?.[0]?.content?.parts?.[0]?.text || "";
+        try {
+          const jsonMatch = checkText.match(/\{[\s\S]*\}/);
+          if (jsonMatch) {
+            const parsed = JSON.parse(jsonMatch[0]);
+            if (parsed.wants_scheduling && parsed.servico && parsed.data_hora_sugerida) {
+              const agendResult = await processarAgendamento(supabase, {
+                servico: parsed.servico,
+                data_hora: parsed.data_hora_sugerida,
+                terapeuta_nome: parsed.terapeuta,
+              }, userId);
+              const finalResponse = await callGeminiDirect(GEMINI_API_KEY, systemPrompt, conversationHistory, `${lastUserMessage}\n\n[RESULTADO DO AGENDAMENTO: ${agendResult}]`);
+              return jsonResponse({ content: finalResponse });
+            }
+          }
+        } catch { /* Proceed with normal response */ }
       }
-
-      return jsonResponse({ content: "Agendamento processado! ✅" });
     }
 
-    // No tool calls — stream directly
-    const streamRes = await fetch(LOVABLE_AI_URL, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${LOVABLE_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: "google/gemini-2.5-flash",
-        messages: aiMessages,
-        stream: true,
-      }),
-    });
+    // Normal Gemini response
+    const reply = await callGeminiDirect(GEMINI_API_KEY, systemPrompt, conversationHistory, lastUserMessage);
+    return jsonResponse({ content: reply });
 
-    if (!streamRes.ok) {
-      throw new Error(`AI stream retornou ${streamRes.status}`);
-    }
-
-    return streamResponse(streamRes.body);
   } catch (error: unknown) {
     const msg = error instanceof Error ? error.message : "Erro desconhecido";
     console.error("Chat error:", msg);
@@ -206,6 +158,43 @@ Deno.serve(async (req) => {
     return errorResponse(msg, 500);
   }
 });
+
+async function callGeminiDirect(
+  apiKey: string,
+  systemPrompt: string,
+  history: any[],
+  userMessage: string
+): Promise<string> {
+  const contents = [
+    { role: "user", parts: [{ text: `INSTRUÇÕES DO SISTEMA:\n\n${systemPrompt}` }] },
+    { role: "model", parts: [{ text: "Entendido! Estou pronto para ajudar. 🌿" }] },
+    ...history,
+    { role: "user", parts: [{ text: userMessage }] },
+  ];
+
+  const res = await fetch(`${GEMINI_API_URL}?key=${apiKey}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      contents,
+      generationConfig: { temperature: 0.7, topK: 40, topP: 0.95, maxOutputTokens: 800 },
+      safetySettings: [
+        { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_NONE" },
+        { category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_NONE" },
+        { category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_NONE" },
+      ],
+    }),
+  });
+
+  if (!res.ok) {
+    const errText = await res.text();
+    console.error("Gemini error:", res.status, errText);
+    throw new Error(`Gemini retornou ${res.status}`);
+  }
+
+  const data = await res.json();
+  return data.candidates?.[0]?.content?.parts?.[0]?.text || "Desculpe, não consegui processar sua mensagem. Tente novamente!";
+}
 
 async function processarAgendamento(
   supabase: any,
