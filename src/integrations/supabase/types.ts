@@ -4834,7 +4834,7 @@ export type Database = {
           created_at?: string | null
           description?: string | null
           emoji?: string | null
-          id: string
+          id?: string
           is_active?: boolean | null
           keywords?: string[] | null
           menu_option?: string | null
