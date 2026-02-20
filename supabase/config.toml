@@ -101,3 +101,6 @@ verify_jwt = false
 
 [functions.admin-create-user]
 verify_jwt = false
+
+[functions.resi-agent-router]
+verify_jwt = false

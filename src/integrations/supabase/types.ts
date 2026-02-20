@@ -1523,6 +1523,41 @@ export type Database = {
           },
         ]
       }
+      daily_missions: {
+        Row: {
+          assigned_date: string
+          completed_at: string | null
+          created_at: string
+          id: string
+          mission_type_id: string
+          user_id: string
+        }
+        Insert: {
+          assigned_date?: string
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          mission_type_id: string
+          user_id: string
+        }
+        Update: {
+          assigned_date?: string
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          mission_type_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "daily_missions_mission_type_id_fkey"
+            columns: ["mission_type_id"]
+            isOneToOne: false
+            referencedRelation: "mission_types"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       desafio_participantes: {
         Row: {
           concluido: boolean
@@ -3113,6 +3148,45 @@ export type Database = {
           },
         ]
       }
+      mission_types: {
+        Row: {
+          ativo: boolean
+          condition_type: string
+          condition_value: number | null
+          created_at: string
+          credits_reward: number
+          description: string | null
+          icon: string | null
+          id: string
+          title: string
+          xp_reward: number
+        }
+        Insert: {
+          ativo?: boolean
+          condition_type?: string
+          condition_value?: number | null
+          created_at?: string
+          credits_reward?: number
+          description?: string | null
+          icon?: string | null
+          id?: string
+          title: string
+          xp_reward?: number
+        }
+        Update: {
+          ativo?: boolean
+          condition_type?: string
+          condition_value?: number | null
+          created_at?: string
+          credits_reward?: number
+          description?: string | null
+          icon?: string | null
+          id?: string
+          title?: string
+          xp_reward?: number
+        }
+        Relationships: []
+      }
       moments_destaques: {
         Row: {
           created_at: string | null
@@ -4595,6 +4669,36 @@ export type Database = {
           priority?: number | null
           system_prompt?: string | null
           updated_at?: string | null
+        }
+        Relationships: []
+      }
+      resi_conversations: {
+        Row: {
+          agent_id: string
+          content: string
+          created_at: string
+          id: string
+          role: string
+          session_id: string
+          user_id: string
+        }
+        Insert: {
+          agent_id: string
+          content: string
+          created_at?: string
+          id?: string
+          role: string
+          session_id: string
+          user_id: string
+        }
+        Update: {
+          agent_id?: string
+          content?: string
+          created_at?: string
+          id?: string
+          role?: string
+          session_id?: string
+          user_id?: string
         }
         Relationships: []
       }
