@@ -402,6 +402,7 @@ export type Database = {
       }
       avaliacoes_posturais: {
         Row: {
+          angulos: Json | null
           created_at: string
           data: string
           foto_anterior: string | null
@@ -410,9 +411,11 @@ export type Database = {
           foto_posterior: string | null
           id: string
           observacoes: string | null
+          relatorio: string | null
           user_id: string
         }
         Insert: {
+          angulos?: Json | null
           created_at?: string
           data?: string
           foto_anterior?: string | null
@@ -421,9 +424,11 @@ export type Database = {
           foto_posterior?: string | null
           id?: string
           observacoes?: string | null
+          relatorio?: string | null
           user_id: string
         }
         Update: {
+          angulos?: Json | null
           created_at?: string
           data?: string
           foto_anterior?: string | null
@@ -432,6 +437,7 @@ export type Database = {
           foto_posterior?: string | null
           id?: string
           observacoes?: string | null
+          relatorio?: string | null
           user_id?: string
         }
         Relationships: []
@@ -1514,26 +1520,35 @@ export type Database = {
       curso_progresso: {
         Row: {
           aula_id: string
+          checklist_itens: Json | null
           concluida: boolean
           concluida_em: string | null
           created_at: string
           id: string
+          quiz_respostas: Json | null
+          quiz_score: number | null
           user_id: string
         }
         Insert: {
           aula_id: string
+          checklist_itens?: Json | null
           concluida?: boolean
           concluida_em?: string | null
           created_at?: string
           id?: string
+          quiz_respostas?: Json | null
+          quiz_score?: number | null
           user_id: string
         }
         Update: {
           aula_id?: string
+          checklist_itens?: Json | null
           concluida?: boolean
           concluida_em?: string | null
           created_at?: string
           id?: string
+          quiz_respostas?: Json | null
+          quiz_score?: number | null
           user_id?: string
         }
         Relationships: [
@@ -3160,6 +3175,74 @@ export type Database = {
           },
         ]
       }
+      materiais: {
+        Row: {
+          arquivo_url: string
+          categoria: string | null
+          created_at: string | null
+          descricao: string | null
+          downloads_count: number | null
+          id: string
+          tamanho_bytes: number | null
+          tipo_arquivo: string | null
+          titulo: string
+          updated_at: string | null
+        }
+        Insert: {
+          arquivo_url: string
+          categoria?: string | null
+          created_at?: string | null
+          descricao?: string | null
+          downloads_count?: number | null
+          id?: string
+          tamanho_bytes?: number | null
+          tipo_arquivo?: string | null
+          titulo: string
+          updated_at?: string | null
+        }
+        Update: {
+          arquivo_url?: string
+          categoria?: string | null
+          created_at?: string | null
+          descricao?: string | null
+          downloads_count?: number | null
+          id?: string
+          tamanho_bytes?: number | null
+          tipo_arquivo?: string | null
+          titulo?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      material_downloads: {
+        Row: {
+          downloaded_at: string | null
+          id: string
+          material_id: string
+          user_id: string | null
+        }
+        Insert: {
+          downloaded_at?: string | null
+          id?: string
+          material_id: string
+          user_id?: string | null
+        }
+        Update: {
+          downloaded_at?: string | null
+          id?: string
+          material_id?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "material_downloads_material_id_fkey"
+            columns: ["material_id"]
+            isOneToOne: false
+            referencedRelation: "materiais"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       metas_semanais: {
         Row: {
           concluida: boolean
@@ -4503,6 +4586,48 @@ export type Database = {
           recompensa_valor?: number
           terra_requerido?: number
           usos_maximos?: number | null
+        }
+        Relationships: []
+      }
+      receitas_favoritas: {
+        Row: {
+          blend: Json
+          concentracao: number
+          created_at: string | null
+          id: string
+          nome: string
+          total_gotas: number
+          updated_at: string | null
+          user_id: string
+          uso: string
+          vegetal: string
+          volume_ml: number
+        }
+        Insert: {
+          blend: Json
+          concentracao: number
+          created_at?: string | null
+          id?: string
+          nome: string
+          total_gotas: number
+          updated_at?: string | null
+          user_id: string
+          uso: string
+          vegetal: string
+          volume_ml: number
+        }
+        Update: {
+          blend?: Json
+          concentracao?: number
+          created_at?: string | null
+          id?: string
+          nome?: string
+          total_gotas?: number
+          updated_at?: string | null
+          user_id?: string
+          uso?: string
+          vegetal?: string
+          volume_ml?: number
         }
         Relationships: []
       }
@@ -6389,6 +6514,10 @@ export type Database = {
           _user_id: string
         }
         Returns: boolean
+      }
+      increment_material_downloads: {
+        Args: { material_id: string }
+        Returns: undefined
       }
       incrementar_voto_sugestao: {
         Args: { sugestao_id: string }

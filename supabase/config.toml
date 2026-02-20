@@ -107,3 +107,18 @@ verify_jwt = false
 
 [functions.analisar-refeicao]
 verify_jwt = false
+
+[functions.generate-quiz]
+verify_jwt = false
+
+[functions.generate-summary]
+verify_jwt = false
+
+[functions.registrar-download]
+verify_jwt = false
+
+[functions.voice-assistant]
+verify_jwt = false
+
+[functions.analisar-postura]
+verify_jwt = false
