@@ -53,6 +53,7 @@ import VendaPlataformaTab from "@/features/admin/components/VendaPlataformaTab";
 import AnalyticsDashboardTab from "@/features/admin/components/AnalyticsDashboardTab";
 import AnamneseAdminTab from "@/features/admin/components/AnamneseAdminTab";
 import { MateriaisAdminTab } from "@/features/admin/components/MateriaisAdminTab";
+import { AdminResiHandoff } from "@/features/admin/components/AdminResiHandoff";
 
 const tabContentVariants = {
   hidden: { opacity: 0, y: 12 },
@@ -408,6 +409,8 @@ const Admin = () => {
         return <CursosAdminTab />;
       case "materiais-admin":
         return <MateriaisAdminTab />;
+      case "resi-handoff":
+        return <AdminResiHandoff />;
       case "relatorio-tecnico":
         return <RelatorioTecnicoTab />;
       case "apresentacao":
