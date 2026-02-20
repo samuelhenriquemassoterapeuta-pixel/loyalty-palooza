@@ -1,7 +1,7 @@
 // ============================================================
 // 🌿 RESINKRA - Resi Agent Router
-// Substitui o resi-router — roteador central dos agentes Resi
-// Usa Gemini via configuração compartilhada
+// Roteador central dos agentes Resi — carrega configuração
+// dinamicamente da tabela resi_agents_config (com fallback estático)
 // ============================================================
 
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
@@ -23,6 +23,43 @@ const corsHeaders = {
 // Cache de histórico em memória por sessão
 const sessionCache = new Map<string, { history: ChatMessage[]; agent: string | null }>()
 
+// Cache dos agentes do banco (TTL: 5 minutos)
+let agentsDbCache: Record<string, { systemPrompt: string; keywords: string[]; name: string; emoji: string; description: string }> | null = null
+let agentsCacheExpiry = 0
+
+async function loadAgentsFromDb(supabase: ReturnType<typeof createClient>) {
+  const now = Date.now()
+  if (agentsDbCache && now < agentsCacheExpiry) return agentsDbCache
+
+  try {
+    const { data, error } = await supabase
+      .from('resi_agents_config')
+      .select('agent_key, system_prompt, keywords, name, emoji, description')
+      .eq('is_active', true)
+
+    if (error || !data?.length) return null
+
+    const map: typeof agentsDbCache = {}
+    for (const row of data) {
+      if (row.agent_key) {
+        map[row.agent_key] = {
+          systemPrompt: row.system_prompt,
+          keywords: row.keywords ?? [],
+          name: row.name,
+          emoji: row.emoji,
+          description: row.description ?? '',
+        }
+      }
+    }
+
+    agentsDbCache = map
+    agentsCacheExpiry = now + 5 * 60 * 1000 // 5 minutos
+    return map
+  } catch {
+    return null
+  }
+}
+
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders })
@@ -37,10 +74,17 @@ serve(async (req) => {
       })
     }
 
+    // Cliente com anon key + JWT do usuário (para perfil)
     const supabaseClient = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_ANON_KEY') ?? '',
       { global: { headers: { Authorization: authHeader } } }
+    )
+
+    // Cliente service_role para ler resi_agents_config (bypassa RLS de admin)
+    const supabaseService = createClient(
+      Deno.env.get('SUPABASE_URL') ?? '',
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     )
 
     // Validar usuário
@@ -55,8 +99,6 @@ serve(async (req) => {
     const userId = authData.claims.sub
 
     const { user_id, agent_id, session_id, message } = await req.json()
-
-    // Garantir user_id — usa o do token se não enviado
     const resolvedUserId = user_id || userId
 
     if (!message || typeof message !== 'string') {
@@ -66,10 +108,29 @@ serve(async (req) => {
       })
     }
 
-    // Gerar session_id se não fornecido
     const resolvedSessionId = session_id || crypto.randomUUID()
     const cacheKey = `${resolvedUserId}:${resolvedSessionId}`
     const trimmedMessage = message.trim()
+
+    // Carregar agentes do banco (com fallback ao config estático)
+    const dbAgents = await loadAgentsFromDb(supabaseService)
+
+    // Mesclar: DB sobrescreve prompts e keywords do config estático
+    const mergedAgents = { ...RESI_AGENTS }
+    if (dbAgents) {
+      for (const [key, dbAgent] of Object.entries(dbAgents)) {
+        if (mergedAgents[key as keyof typeof RESI_AGENTS]) {
+          mergedAgents[key as keyof typeof RESI_AGENTS] = {
+            ...mergedAgents[key as keyof typeof RESI_AGENTS],
+            name: dbAgent.name,
+            emoji: dbAgent.emoji,
+            description: dbAgent.description,
+            systemPrompt: dbAgent.systemPrompt,
+            keywords: dbAgent.keywords.length > 0 ? dbAgent.keywords : mergedAgents[key as keyof typeof RESI_AGENTS].keywords,
+          }
+        }
+      }
+    }
 
     // ========================================
     // ROTEAMENTO: voltar ao menu
@@ -104,7 +165,7 @@ serve(async (req) => {
         session = { history: [], agent: selectedAgentKey }
         sessionCache.set(cacheKey, session)
 
-        const agent = RESI_AGENTS[selectedAgentKey]
+        const agent = mergedAgents[selectedAgentKey]
         const welcomeMsg = `${agent.emoji} *${agent.name}* ao seu dispor!\n\n${agent.description}\n\nComo posso te ajudar? 💚\n\n_(Digite 0 a qualquer momento para voltar ao menu)_`
 
         return new Response(
@@ -121,8 +182,16 @@ serve(async (req) => {
         )
       }
 
-      // Tentar detectar agente por palavra-chave
-      const detected = detectAgentFromMessage(trimmedMessage)
+      // Tentar detectar agente por palavra-chave (usa keywords mescladas)
+      let detected: string | null = null
+      const lowerMsg = trimmedMessage.toLowerCase()
+      for (const [agentKey, agent] of Object.entries(mergedAgents)) {
+        if (agent.keywords.some((kw) => lowerMsg.includes(kw.toLowerCase()))) {
+          detected = agentKey
+          break
+        }
+      }
+
       if (detected) {
         session.agent = detected
         sessionCache.set(cacheKey, session)
@@ -143,8 +212,8 @@ serve(async (req) => {
     // ========================================
     // PROCESSAR COM O AGENTE (GEMINI)
     // ========================================
-    const agentKey = session.agent as keyof typeof RESI_AGENTS
-    const currentAgent = RESI_AGENTS[agentKey]
+    const agentKey = session.agent as keyof typeof mergedAgents
+    const currentAgent = mergedAgents[agentKey]
 
     // Buscar contexto do usuário
     let userContext = ''
@@ -197,12 +266,12 @@ serve(async (req) => {
           content: assistantMessage,
         },
       ])
-    } catch (e) {
-      // Fallback: salvar em chat_interactions se resi_conversations não existir
+    } catch {
+      // Fallback: chat_interactions
       try {
-        await supabaseClient.from('chat_interactions').insert({
+        await supabaseService.from('chat_interactions').insert({
           user_id: resolvedUserId,
-          agent: currentAgent.id,
+          agent: currentAgent.id ?? agentKey,
           user_message: trimmedMessage,
           assistant_message: assistantMessage,
           platform: 'web',
