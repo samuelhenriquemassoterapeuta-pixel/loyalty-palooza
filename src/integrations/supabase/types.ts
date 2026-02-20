@@ -4816,36 +4816,42 @@ export type Database = {
       }
       resi_agents_config: {
         Row: {
+          agent_key: string | null
           created_at: string | null
           description: string | null
           emoji: string | null
           id: string
           is_active: boolean | null
           keywords: string[] | null
+          menu_option: string | null
           name: string
           priority: number | null
           system_prompt: string | null
           updated_at: string | null
         }
         Insert: {
+          agent_key?: string | null
           created_at?: string | null
           description?: string | null
           emoji?: string | null
           id: string
           is_active?: boolean | null
           keywords?: string[] | null
+          menu_option?: string | null
           name: string
           priority?: number | null
           system_prompt?: string | null
           updated_at?: string | null
         }
         Update: {
+          agent_key?: string | null
           created_at?: string | null
           description?: string | null
           emoji?: string | null
           id?: string
           is_active?: boolean | null
           keywords?: string[] | null
+          menu_option?: string | null
           name?: string
           priority?: number | null
           system_prompt?: string | null
