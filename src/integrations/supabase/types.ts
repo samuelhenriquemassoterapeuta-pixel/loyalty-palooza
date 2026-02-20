@@ -5089,6 +5089,8 @@ export type Database = {
       social_posts: {
         Row: {
           agendamento_id: string | null
+          ai_verified: boolean | null
+          approved_by_users: string[] | null
           aprovado_em: string | null
           aprovado_por: string | null
           cashback_valor: number
@@ -5110,6 +5112,8 @@ export type Database = {
         }
         Insert: {
           agendamento_id?: string | null
+          ai_verified?: boolean | null
+          approved_by_users?: string[] | null
           aprovado_em?: string | null
           aprovado_por?: string | null
           cashback_valor?: number
@@ -5131,6 +5135,8 @@ export type Database = {
         }
         Update: {
           agendamento_id?: string | null
+          ai_verified?: boolean | null
+          approved_by_users?: string[] | null
           aprovado_em?: string | null
           aprovado_por?: string | null
           cashback_valor?: number
