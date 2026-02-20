@@ -43,6 +43,8 @@ serve(async (req) => {
     const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const supabase = createClient(supabaseUrl, supabaseKey);
 
+    // Usar cache de sessão em memória
+
     // Buscar ou criar sessão
     let session = sessions.get(userId);
     if (!session) {
@@ -129,14 +131,17 @@ serve(async (req) => {
     // Buscar contexto do usuário
     let userContext = '';
     try {
-      const { data: profile } = await supabase
+    const { data: profile } = await supabase
         .from('profiles')
-        .select('nome')
+        .select('nome, tier, cashback_saldo')
         .eq('id', userId)
         .single();
 
       if (profile) {
-        userContext = `\n\n[CONTEXTO DO USUÁRIO]\n- Nome: ${profile.nome || 'Não informado'}`;
+        userContext = `\n\n[CONTEXTO DO USUÁRIO]
+- Nome: ${profile.nome || 'Não informado'}
+- Tier: ${profile.tier || 'Bronze'}
+- Saldo Cashback: R$ ${profile.cashback_saldo || 0}`;
       }
     } catch (e) {
       console.log('Contexto do usuário não disponível');
@@ -153,7 +158,7 @@ serve(async (req) => {
 
     const responseTime = Date.now() - startTime;
 
-    // Atualizar histórico no formato Gemini
+    // Atualizar histórico no formato Gemini (user antes de model)
     session.conversationHistory.push(
       { role: 'user', parts: [{ text: trimmedMessage }] },
       { role: 'model', parts: [{ text: assistantMessage }] }
@@ -168,7 +173,6 @@ serve(async (req) => {
         assistant_message: assistantMessage,
         platform: platform,
         response_time_ms: responseTime,
-        tokens_used: 0,
         created_at: new Date().toISOString()
       });
     } catch (e) {
@@ -182,7 +186,8 @@ serve(async (req) => {
         currentAgent: session.currentAgent,
         agentName: currentAgent.name,
         agentEmoji: currentAgent.emoji,
-        showMenu: false
+        showMenu: false,
+        responseTimeMs: responseTime
       }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
