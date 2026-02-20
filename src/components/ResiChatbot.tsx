@@ -42,6 +42,7 @@ export function ResiChatbot() {
   const [loading, setLoading] = useState(false);
   const [currentAgent, setCurrentAgent] = useState<string | null>(null);
   const [showMenu, setShowMenu] = useState(true);
+  const [sessionId] = useState(() => crypto.randomUUID());
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { user } = useAuth();
 
@@ -77,11 +78,10 @@ export function ResiChatbot() {
     setShowMenu(false);
 
     try {
-      const { data, error } = await supabase.functions.invoke("resi-router", {
+      const { data, error } = await supabase.functions.invoke("resi-agent-router", {
         body: {
-          userId: user?.id || "anonymous",
           message: messageText.trim(),
-          platform: "web",
+          session_id: sessionId,
         },
       });
 
@@ -91,14 +91,14 @@ export function ResiChatbot() {
         id: (Date.now() + 1).toString(),
         role: "assistant",
         content: data?.response || "Desculpe, tente novamente! 🌿",
-        agentName: data?.agentName,
-        agentEmoji: data?.agentEmoji,
+        agentName: data?.agent_name,
+        agentEmoji: data?.agent_emoji,
         timestamp: new Date(),
       };
 
       setMessages(prev => [...prev, reply]);
-      setCurrentAgent(data?.currentAgent || null);
-      setShowMenu(data?.showMenu || false);
+      setCurrentAgent(data?.current_agent || null);
+      setShowMenu(data?.show_menu || false);
     } catch {
       setMessages(prev => [
         ...prev,
