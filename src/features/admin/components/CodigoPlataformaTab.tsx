@@ -415,12 +415,83 @@ export const CodigoPlataformaTab = () => {
       {/* Export Full Platform Markdown */}
       <PlatformMarkdownBlock />
 
+      {/* 🆕 Código Atualizado 19-02 */}
+      <SectionCollapsible
+        title="Código Atualizado dia 19-02"
+        subtitle="Snapshot da plataforma com sistema multi-agente Resi implementado"
+        icon={Bot}
+        badge="19/02/2026"
+        defaultOpen={false}
+      >
+        <div className="space-y-3">
+          <p className="text-xs text-muted-foreground">
+            Versão atualizada em 19/02/2026 incluindo o sistema multi-agente Resi (resi-router, 5 agentes, AdminResiAgents, ResiChat) e as políticas RLS da tabela resi_agents_config.
+          </p>
+          <CodeBlock
+            title="Sistema Multi-Agente Resi — Implementado em 19/02/2026"
+            language="markdown"
+            code={`# 🤖 Resi — Sistema Multi-Agente (Atualização 19/02/2026)
+
+## O que foi implementado
+
+### Novas Edge Functions (2)
+| Função | Descrição |
+|---|---|
+| resi-router | Roteador central: analisa intenção e delega ao agente correto via Gemini 1.5 Flash |
+| resi-whatsapp | Agente Resi no WhatsApp via Z-API (recebe e responde mensagens) |
+
+### Nova Tabela
+- **resi_agents_config** — armazena nome, emoji, prompt, palavras-chave, prioridade e is_active de cada agente
+- RLS: apenas admins podem SELECT e UPDATE
+
+### Novos Componentes React
+| Componente | Caminho | Descrição |
+|---|---|---|
+| ResiChat | src/components/ResiChat.tsx | Widget flutuante de chat com menu de agentes |
+| ResiChat (re-export) | src/components/chat/ResiChat.tsx | Re-exporta ResiChat para uso em App.tsx |
+| AdminResiAgents | src/components/AdminResiAgents.tsx | Painel admin para ativar/desativar agentes |
+
+### 5 Agentes Especializados
+| # | Agente | Emoji | Especialidade |
+|---|---|---|---|
+| 1 | Core | 💬 | Dúvidas gerais, cashback, plataforma |
+| 2 | Agenda | 📅 | Agendamentos, sessões, horários |
+| 3 | Creator | 🎬 | Roteiros e ideias para redes sociais |
+| 4 | Loja | 🛒 | Produtos, pacotes, compras |
+| 5 | Wellness | 🧘 | Saúde, bem-estar, protocolos |
+
+### Integração App.tsx
+\`\`\`typescript
+import { ResiChat } from '@/components/chat/ResiChat';
+// Widget flutuante adicionado globalmente no App
+<ResiChat />
+\`\`\`
+
+### Invocar resi-router
+\`\`\`typescript
+const { data } = await supabase.functions.invoke('resi-router', {
+  body: { userId: user.id, message: 'Quero agendar', platform: 'web' }
+});
+// Retorna: data.response, data.agentName, data.agentEmoji, data.currentAgent, data.showMenu
+\`\`\`
+
+### Métricas Atualizadas
+| Item | Antes | Depois |
+|---|---|---|
+| Edge Functions | 44 | 46 |
+| Tabelas DB | 134 | 137 |
+| Políticas RLS | 366 | 368 |
+| Agentes Resi IA | 0 | 5 |`}
+          />
+        </div>
+      </SectionCollapsible>
+
       {/* Métricas resumo */}
       <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
         {[
-          { label: "Tabelas DB", value: "134" },
-          { label: "Políticas RLS", value: "366" },
-          { label: "Edge Functions", value: "44" },
+          { label: "Tabelas DB", value: "137" },
+          { label: "Políticas RLS", value: "368" },
+          { label: "Edge Functions", value: "46" },
           { label: "Permissões", value: "30" },
           { label: "Componentes", value: "300+" },
           { label: "Funções SQL", value: "51" },
