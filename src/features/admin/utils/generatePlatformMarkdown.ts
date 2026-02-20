@@ -10,7 +10,7 @@ export function generatePlatformMarkdown(): string {
   md += `| Métrica | Valor |\n|---|---|\n`;
   md += `| Tabelas no Banco | 134 |\n`;
   md += `| Políticas RLS | 366 |\n`;
-  md += `| Edge Functions | 44 |\n`;
+  md += `| Edge Functions | 46 |\n`;
   md += `| Permissões RBAC | 30 |\n`;
   md += `| Componentes React | 300+ |\n`;
   md += `| Funções SQL | 51 |\n`;
@@ -139,6 +139,7 @@ export function generatePlatformMarkdown(): string {
     { group: "Avaliações", tables: "avaliacoes, avaliacoes_playlist, feedback_rapido, exames_usuario, fotos_evolucao", count: 5 },
     { group: "Head SPA", tables: "headspa_imagens", count: 1 },
     { group: "Recompensas Social", tables: "social_rewards_config", count: 1 },
+    { group: "Resi IA", tables: "resi_agents_config, chat_interactions, chat_sessions", count: 3 },
   ];
   md += `| Grupo | Tabelas | Qtd |\n|---|---|---|\n`;
   dbGroups.forEach(g => {
@@ -201,7 +202,7 @@ export function generatePlatformMarkdown(): string {
   md += `\n`;
 
   // ── 7. Edge Functions ──
-  md += `---\n\n## 🖥️ Edge Functions (44 funções serverless)\n\n`;
+  md += `---\n\n## 🖥️ Edge Functions (46 funções serverless)\n\n`;
 
   md += `### 💳 Pagamentos (Asaas)\n\n`;
   md += `| Função | Descrição |\n|---|---|\n`;
@@ -227,6 +228,8 @@ export function generatePlatformMarkdown(): string {
   md += `| Função | Descrição |\n|---|---|\n`;
   md += `| chat-assistente | Assistente IA conversacional 24/7 |\n`;
   md += `| resi-chat | Chat contextual da Resi |\n`;
+  md += `| resi-router | 🆕 Roteador multi-agente Resi (Gemini 1.5 Flash) |\n`;
+  md += `| resi-whatsapp | 🆕 Agente Resi integrado ao WhatsApp via Z-API |\n`;
   md += `| generate-script | Gera roteiros para Reels/Stories |\n`;
   md += `| generate-hooks | Ganchos virais com score de poder |\n`;
   md += `| generate-ideas | 10 ideias por nicho e funil |\n`;
@@ -344,6 +347,30 @@ export function generatePlatformMarkdown(): string {
   md += `5. Feedback pós-sessão (emoji + comentário)\n`;
   md += `6. Cashback creditado\n\n`;
 
+  // ── 11b. Sistema Multi-Agente Resi ──
+  md += `---\n\n## 🤖 Sistema Multi-Agente Resi (NOVO — 19/02/2026)\n\n`;
+  md += `Arquitetura de IA orquestrada por roteador central integrado à API Google Gemini.\n\n`;
+  md += `### Componentes\n\n`;
+  md += `| Componente | Descrição |\n|---|---|\n`;
+  md += `| \`resi-router\` (Edge Function) | Roteador central — analisa intenção e delega ao agente correto |\n`;
+  md += `| \`resi-whatsapp\` (Edge Function) | Recebe mensagens WhatsApp via Z-API e encaminha ao router |\n`;
+  md += `| \`ResiChat.tsx\` | Widget flutuante no frontend com menu de seleção de agentes |\n`;
+  md += `| \`AdminResiAgents.tsx\` | Interface admin para ativar/desativar agentes |\n`;
+  md += `| \`resi_agents_config\` (tabela) | Configuração de prompts, palavras-chave e prioridade dos agentes |\n\n`;
+  md += `### 5 Agentes Especializados\n\n`;
+  md += `| # | Agente | Especialidade |\n|---|---|---|\n`;
+  md += `| 1 | 💬 Core | Dúvidas gerais, cashback, plataforma |\n`;
+  md += `| 2 | 📅 Agenda | Agendamentos, sessões, horários |\n`;
+  md += `| 3 | 🎬 Creator | Roteiros e ideias para redes sociais |\n`;
+  md += `| 4 | 🛒 Loja | Produtos, pacotes, compras |\n`;
+  md += `| 5 | 🧘 Wellness | Saúde, bem-estar, protocolos |\n\n`;
+  md += `### Modelo de IA\n`;
+  md += `- **Google Gemini 1.5 Flash** — via Lovable AI (sem API key adicional)\n`;
+  md += `- Roteamento por palavras-chave + prioridade configurável\n`;
+  md += `- Comando \`0\` retorna ao menu principal\n`;
+  md += `- Interações salvas em \`chat_interactions\` e \`chat_sessions\`\n`;
+  md += `- Monitoramento admin via RPC \`get_resi_stats\`\n\n`;
+
   // ── 12. Painel Administrativo ──
   md += `---\n\n## 🎛️ Painel Administrativo (15+ abas)\n\n`;
   const adminTabs = [
@@ -370,6 +397,7 @@ export function generatePlatformMarkdown(): string {
     { name: "Apresentação", desc: "Pitch deck e estratégia de negócios" },
     { name: "Materiais", desc: "Upload e gerenciamento de mídia" },
     { name: "Analytics", desc: "Dashboard analítico de uso" },
+    { name: "Agentes Resi 🆕", desc: "Ativar/desativar e monitorar os 5 agentes de IA da Resi" },
   ];
   md += `| Aba | Descrição |\n|---|---|\n`;
   adminTabs.forEach(t => {
@@ -492,23 +520,31 @@ export function generatePlatformMarkdown(): string {
   md += `const channel = supabase\n  .channel('notificacoes')\n  .on('postgres_changes', {\n    event: 'INSERT', schema: 'public',\n    table: 'notificacoes',\n    filter: \`user_id=eq.\${userId}\`\n  }, (payload) => {\n    toast.info(payload.new.titulo);\n  })\n  .subscribe();\n`;
   md += "```\n\n";
 
+  md += `### Invocar Edge Function (resi-router)\n\n`;
+  md += "```typescript\n";
+  md += `const { data } = await supabase.functions.invoke('resi-router', {\n  body: { userId: user.id, message: 'Quero agendar', platform: 'web' }\n});\n// data.response, data.agentName, data.agentEmoji, data.currentAgent, data.showMenu\n`;
+  md += "```\n\n";
+
   // ── Footer ──
   md += `---\n\n`;
-  md += `## 📊 Resumo Final\n\n`;
+  md += `## 📊 Resumo Final (Atualizado 19/02/2026)\n\n`;
   md += `| Item | Quantidade |\n|---|---|\n`;
   md += `| Feature Folders | 29 |\n`;
-  md += `| Tabelas DB | 134 |\n`;
-  md += `| Políticas RLS | 366 |\n`;
-  md += `| Edge Functions | 44 |\n`;
+  md += `| Tabelas DB | 137 |\n`;
+  md += `| Políticas RLS | 368 |\n`;
+  md += `| Edge Functions | 46 |\n`;
   md += `| Funções SQL | 51 |\n`;
   md += `| Triggers | 57 |\n`;
   md += `| Permissões RBAC | 30 |\n`;
   md += `| Storage Buckets | 11 |\n`;
   md += `| Cursos | 35 |\n`;
-  md += `| Abas Admin | 35+ |\n`;
+  md += `| Agentes Resi IA | 5 |\n`;
+  md += `| Abas Admin | 24+ |\n`;
   md += `| Integrações | 6 |\n`;
   md += `| Secrets | 7 |\n\n`;
   md += `> Resinkra — Plataforma completa de saúde, bem-estar e educação com gamificação, IA e B2B.\n`;
+  md += `> 🆕 **19/02/2026**: Sistema multi-agente Resi (resi-router + 5 agentes + AdminResiAgents + ResiChat)\n`;
 
   return md;
 }
+
