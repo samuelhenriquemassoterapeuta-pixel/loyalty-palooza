@@ -695,6 +695,181 @@ export function generateAcademyMarkdown(): string {
   return md;
 }
 
+// ── Calculadora de Diluição (código completo) ──
+export function generateCalculadoraDiluicaoMarkdown(): string {
+  return `# 🧪 Calculadora de Diluição — \`CalculadoraDiluicao.tsx\`
+
+> Rota: \`/calculadora-diluicao\` · Acesso: \`admin\` e \`terapeuta\`
+> Arquivo: \`src/features/academy/pages/CalculadoraDiluicao.tsx\`
+
+---
+
+## 📋 Visão Geral
+
+Ferramenta interativa para calcular a diluição segura de óleos essenciais em veículos carreadores.
+A fórmula central é: **gotas = (volume_ml × concentração%) ÷ 0.05** (onde 1 gota ≈ 0.05 ml).
+
+---
+
+## 🔧 Tipos de Uso e Concentrações Máximas
+
+| Tipo | Concentração Máx | Descrição |
+|---|---|---|
+| \`facial\` | 1% | Pele sensível |
+| \`corporal\` | 3% | Uso geral |
+| \`pontual\` | 5% | Área localizada |
+| \`capilar\` | 2% | Couro cabeludo |
+| \`banho\` | 2% | Imersão |
+| \`difusor\` | 100% | Gotas puras no aparelho |
+| \`inalacao\` | 100% | 1-3 gotas em água quente |
+
+---
+
+## 🌿 Óleos Essenciais Disponíveis (20)
+
+\`\`\`
+Lavanda, Tea Tree, Eucalipto, Hortelã-pimenta, Alecrim,
+Limão, Laranja doce, Ylang Ylang, Gerânio, Camomila,
+Cedro, Sândalo, Olíbano, Rosa, Bergamota,
+Palmarosa, Patchouli, Copaíba, Lemongrass, Cipreste
+\`\`\`
+
+---
+
+## 🫙 Óleos Vegetais Carreadores (12)
+
+\`\`\`
+Amêndoas doces, Jojoba, Coco fracionado, Semente de uva,
+Abacate, Rosa Mosqueta, Argan, Girassol, Gergelim,
+Calêndula, Prímula, Macadâmia
+\`\`\`
+
+---
+
+## 🔄 Interfaces TypeScript
+
+\`\`\`typescript
+interface BlendItem {
+  oleo: string;    // Nome do óleo essencial
+  gotas: number;   // Número de gotas no blend
+}
+
+interface HistoryEntry {
+  date: string;        // Data do registro (pt-BR)
+  uso: string;         // Tipo de uso (facial, corporal...)
+  vegetal: string;     // Óleo vegetal carreador
+  volumeMl: number;    // Volume total em ml
+  concentracao: number;// Concentração em %
+  blend: BlendItem[];  // Lista de óleos no blend
+  totalGotas: number;  // Total de gotas no blend
+}
+\`\`\`
+
+---
+
+## ⚙️ Lógica Principal
+
+\`\`\`typescript
+// Fórmula de cálculo (1 gota ≈ 0.05ml)
+const totalGotasRecomendadas = useMemo(() => {
+  if (uso === "difusor" || uso === "inalacao") return 0;
+  return Math.round((volumeMl * (concentracao / 100)) / 0.05);
+}, [volumeMl, concentracao, uso]);
+
+// Distribuição automática igualitária
+const autoDistribute = () => {
+  const perOleo = Math.floor(totalGotasRecomendadas / blend.length);
+  const remainder = totalGotasRecomendadas % blend.length;
+  setBlend(prev =>
+    prev.map((b, i) => ({ ...b, gotas: perOleo + (i < remainder ? 1 : 0) }))
+  );
+};
+
+// Persistência em localStorage
+const STORAGE_KEY = "resinkra_calc_diluicao_history";
+// Máximo de 20 entradas no histórico
+const updated = [entry, ...history].slice(0, 20);
+localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+\`\`\`
+
+---
+
+## 🖥️ Estrutura de Estado (useState)
+
+| Estado | Tipo | Default | Descrição |
+|---|---|---|---|
+| \`uso\` | string | \`"corporal"\` | Tipo de uso selecionado |
+| \`vegetal\` | string | \`"Amêndoas doces"\` | Óleo carreador |
+| \`volumeMl\` | number | \`30\` | Volume em ml |
+| \`concentracao\` | number | \`2\` | % de concentração |
+| \`blend\` | BlendItem[] | 1 óleo inicial | Lista do blend atual |
+| \`showHistory\` | boolean | \`false\` | Alterna visualização |
+| \`history\` | HistoryEntry[] | loadHistory() | Histórico persistido |
+
+---
+
+## 🎨 Funcionalidades da UI
+
+- **Selector de Tipo de Uso**: Pills/botões para cada modo; ajusta \`concentracao\` máxima ao trocar
+- **Óleo Vegetal + Volume**: Select + inputs numéricos para ml e %
+- **Resultado Destacado**: Card com gradiente exibindo total de gotas recomendadas
+- **Blend Builder**: Lista dinâmica de óleos com selector e input de gotas
+- **Distribuir Igual**: Divide automaticamente as gotas entre todos os óleos do blend
+- **Aviso de Excesso**: Alerta vermelho quando \`totalGotasBlend > totalGotasRecomendadas\`
+- **Histórico**: Até 20 entradas persistidas, acessíveis via botão com badge contador
+- **Modo Difusor/Inalação**: Oculta campos de volume/veículo (não aplicável)
+
+---
+
+## 📦 Dependências
+
+\`\`\`typescript
+import { useState, useMemo } from "react";
+import { motion } from "framer-motion";
+import { ArrowLeft, Droplets, FlaskConical, Calculator, History, Plus, Trash2 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { Button, Card, Input, Select } from "@/components/ui/...";
+import { AppLayout } from "@/components/AppLayout";
+\`\`\`
+
+---
+
+## 🔐 Controle de Acesso
+
+\`\`\`tsx
+// AnimatedRoutes.tsx
+<Route 
+  path="/calculadora-diluicao" 
+  element={
+    <ProtectedRoute allowRoles={["admin", "terapeuta"]}>
+      <LazyPage><CalculadoraDiluicao /></LazyPage>
+    </ProtectedRoute>
+  } 
+/>
+\`\`\`
+
+---
+
+## 📊 Exemplo de Cálculo
+
+\`\`\`
+Tipo: Corporal (máx 3%)
+Volume: 30ml
+Concentração: 2%
+→ Total recomendado = (30 × 0.02) / 0.05 = 12 gotas
+
+Blend com 3 óleos (distribuição igual):
+→ Lavanda: 4 gotas
+→ Gerânio: 4 gotas  
+→ Alecrim: 4 gotas (total = 12 ✓)
+\`\`\`
+
+---
+
+*Arquivo: \`src/features/academy/pages/CalculadoraDiluicao.tsx\` — 346 linhas*
+`;
+}
+
 // ── Liga ──
 export function generateLigaMarkdown(): string {
   let md = `# ⚔️ Módulo: Liga de Bem-Estar\n\n`;

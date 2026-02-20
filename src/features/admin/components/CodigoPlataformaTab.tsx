@@ -46,8 +46,9 @@ import { Card } from "@/components/ui/card";
 import { toast } from "sonner";
 import { generateAllCoursesMarkdown } from "@/features/cursos/utils/generateCourseMarkdown";
 import { generatePlatformMarkdown } from "@/features/admin/utils/generatePlatformMarkdown";
-import { allDomainMarkdowns } from "@/features/admin/utils/generateDomainMarkdowns";
+import { allDomainMarkdowns, generateCalculadoraDiluicaoMarkdown } from "@/features/admin/utils/generateDomainMarkdowns";
 import { generateMediaMarkdown } from "@/features/admin/utils/generateMediaMarkdown";
+import { FlaskConical } from "lucide-react";
 
 // ── Reusable Components ──
 
@@ -326,6 +327,31 @@ const MediaMarkdownBlock = () => {
         </Button>
       </div>
       <CodeBlock title="Catálogo de Imagens & Vídeos (Markdown)" language="markdown" code={markdown} />
+    </div>
+  );
+};
+
+const CalculadoraDiluicaoMarkdownBlock = () => {
+  const [copied, setCopied] = useState(false);
+  const markdown = generateCalculadoraDiluicaoMarkdown();
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(markdown);
+    setCopied(true);
+    toast.success("Markdown da Calculadora copiado!");
+    setTimeout(() => setCopied(false), 3000);
+  };
+
+  return (
+    <div className="space-y-3">
+      <div className="flex items-center justify-between">
+        <p className="text-xs text-muted-foreground">Documentação técnica completa do componente CalculadoraDiluicao.tsx</p>
+        <Button size="sm" variant="outline" onClick={handleCopy} className="gap-2">
+          {copied ? <Check size={14} className="text-green-500" /> : <Copy size={14} />}
+          {copied ? "Copiado!" : "Copiar Tudo"}
+        </Button>
+      </div>
+      <CodeBlock title="CalculadoraDiluicao.tsx (Markdown)" language="markdown" code={markdown} />
     </div>
   );
 };
@@ -1005,6 +1031,16 @@ ALQUIMIA (Cromos)
         icon={GraduationCap}
       >
         <CourseMarkdownBlock />
+      </SectionCollapsible>
+
+      {/* 11b. Calculadora de Diluição — Código Completo */}
+      <SectionCollapsible
+        title="Calculadora de Diluição"
+        subtitle="Documentação técnica completa do componente"
+        icon={FlaskConical}
+        badge="346 linhas"
+      >
+        <CalculadoraDiluicaoMarkdownBlock />
       </SectionCollapsible>
 
       {/* 12. Imagens & Vídeos */}
