@@ -742,36 +742,50 @@ export type Database = {
       }
       chat_sessions: {
         Row: {
+          assigned_admin_id: string | null
           conversation_history: Json | null
           created_at: string | null
           current_agent: string | null
           id: string
           last_activity: string | null
+          needs_human: boolean | null
           platform: string | null
           updated_at: string | null
           user_id: string
         }
         Insert: {
+          assigned_admin_id?: string | null
           conversation_history?: Json | null
           created_at?: string | null
           current_agent?: string | null
           id?: string
           last_activity?: string | null
+          needs_human?: boolean | null
           platform?: string | null
           updated_at?: string | null
           user_id: string
         }
         Update: {
+          assigned_admin_id?: string | null
           conversation_history?: Json | null
           created_at?: string | null
           current_agent?: string | null
           id?: string
           last_activity?: string | null
+          needs_human?: boolean | null
           platform?: string | null
           updated_at?: string | null
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "chat_sessions_assigned_admin_id_fkey"
+            columns: ["assigned_admin_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       checkins: {
         Row: {
