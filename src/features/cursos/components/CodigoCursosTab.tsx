@@ -85,35 +85,60 @@ const TODOS_OS_CURSOS: CursoEntry[] = [
   { nome: "Dietética Chinesa", modulos: cursoAlimentacaoChinesaData },
 ];
 
-// ── Gera markdown completo de um curso ─────────────────────────────────────
-function gerarMarkdownCurso(curso: CursoEntry): string {
+// ── Remove sintaxe markdown para texto limpo (ChatGPT-friendly) ─────────────
+function limparConteudo(texto: string): string {
+  return texto
+    .replace(/^#{1,6}\s+/gm, "")          // remove headings (#, ##, etc.)
+    .replace(/\*\*(.+?)\*\*/g, "$1")        // remove negrito **texto**
+    .replace(/\*(.+?)\*/g, "$1")            // remove itálico *texto*
+    .replace(/^>\s+/gm, "")               // remove blockquotes >
+    .replace(/^-\s+/gm, "• ")             // transforma - em bullet •
+    .replace(/^\|\s*/gm, "")              // remove pipes de tabela inicial
+    .replace(/\s*\|\s*/g, " | ")          // normaliza separadores de tabela
+    .replace(/^[-=]{3,}\s*$/gm, "")       // remove linhas separadoras --- ===
+    .replace(/\n{3,}/g, "\n\n")           // máximo 2 quebras de linha seguidas
+    .trim();
+}
+
+// ── Gera texto limpo de um curso (otimizado para colar no ChatGPT) ──────────
+function gerarTextoCurso(curso: CursoEntry): string {
+  const totalAulas = curso.modulos.reduce((a, m) => a + m.aulas.length, 0);
   const linhas: string[] = [];
-  linhas.push(`# ${curso.nome}`);
+
+  linhas.push(`CURSO: ${curso.nome.toUpperCase()}`);
+  linhas.push(`Módulos: ${curso.modulos.length} | Aulas: ${totalAulas}`);
+  linhas.push("=".repeat(60));
   linhas.push("");
 
   curso.modulos.forEach((modulo, mi) => {
-    linhas.push(`## ${mi + 1}. ${modulo.titulo}`);
-    if (modulo.descricao) linhas.push(`> ${modulo.descricao}`);
+    linhas.push(`MÓDULO ${mi + 1}: ${modulo.titulo}`);
+    if (modulo.descricao) linhas.push(`Descrição: ${modulo.descricao}`);
+    linhas.push("-".repeat(50));
     linhas.push("");
 
     modulo.aulas.forEach((aula, ai) => {
-      linhas.push(`### ${mi + 1}.${ai + 1} ${aula.titulo}`);
-      if (aula.descricao) linhas.push(`*${aula.descricao}*`);
-      if (aula.duracaoMinutos) linhas.push(`⏱ ${aula.duracaoMinutos} min`);
+      linhas.push(`Aula ${mi + 1}.${ai + 1} — ${aula.titulo}`);
+      if (aula.descricao) linhas.push(`Objetivo: ${aula.descricao}`);
+      if (aula.duracaoMinutos) linhas.push(`Duração: ${aula.duracaoMinutos} minutos`);
       linhas.push("");
-      linhas.push(aula.conteudo);
+      linhas.push(limparConteudo(aula.conteudo));
       linhas.push("");
-      linhas.push("---");
+      linhas.push("· · ·");
       linhas.push("");
     });
+
+    linhas.push("");
   });
+
+  linhas.push("=".repeat(60));
+  linhas.push(`Fim do curso: ${curso.nome}`);
 
   return linhas.join("\n");
 }
 
-// ── Gera markdown de TODOS os cursos concatenados ──────────────────────────
-function gerarMarkdownCompleto(): string {
-  return TODOS_OS_CURSOS.map((c) => gerarMarkdownCurso(c)).join("\n\n\n");
+// ── Gera texto de TODOS os cursos concatenados ──────────────────────────────
+function gerarTextoCompleto(): string {
+  return TODOS_OS_CURSOS.map((c) => gerarTextoCurso(c)).join("\n\n\n");
 }
 
 // ── Componente de um único curso expandível ─────────────────────────────────
@@ -121,12 +146,12 @@ function CursoCodeBlock({ curso }: { curso: CursoEntry }) {
   const [expanded, setExpanded] = useState(false);
   const [copied, setCopied] = useState(false);
 
-  const markdown = useMemo(() => gerarMarkdownCurso(curso), [curso]);
+  const texto = useMemo(() => gerarTextoCurso(curso), [curso]);
   const totalAulas = curso.modulos.reduce((a, m) => a + m.aulas.length, 0);
-  const totalChars = markdown.length;
+  const totalChars = texto.length;
 
   const handleCopy = async () => {
-    await navigator.clipboard.writeText(markdown);
+    await navigator.clipboard.writeText(texto);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -159,7 +184,10 @@ function CursoCodeBlock({ curso }: { curso: CursoEntry }) {
       {/* Expanded content */}
       {expanded && (
         <div className="border-t border-border">
-          <div className="flex justify-end px-3 pt-2 pb-1">
+          <div className="flex items-center justify-between px-3 pt-2 pb-1">
+            <span className="text-[10px] text-muted-foreground">
+              Texto pronto para colar no ChatGPT
+            </span>
             <Button
               size="sm"
               variant="outline"
@@ -169,12 +197,12 @@ function CursoCodeBlock({ curso }: { curso: CursoEntry }) {
               {copied ? (
                 <><Check className="w-3 h-3" /> Copiado!</>
               ) : (
-                <><Copy className="w-3 h-3" /> Copiar</>
+                <><Copy className="w-3 h-3" /> Copiar curso</>
               )}
             </Button>
           </div>
           <pre className="text-[11px] leading-relaxed font-mono text-foreground/80 bg-muted/30 rounded-b-xl p-4 overflow-x-auto max-h-[500px] overflow-y-auto whitespace-pre-wrap">
-            {markdown}
+            {texto}
           </pre>
         </div>
       )}
@@ -187,12 +215,12 @@ export function CodigoCursosTab() {
   const [copiedAll, setCopiedAll] = useState(false);
   const [search, setSearch] = useState("");
 
-  const markdownCompleto = useMemo(() => gerarMarkdownCompleto(), []);
+  const textoCompleto = useMemo(() => gerarTextoCompleto(), []);
   const totalAulas = TODOS_OS_CURSOS.reduce(
     (a, c) => a + c.modulos.reduce((b, m) => b + m.aulas.length, 0),
     0
   );
-  const totalChars = markdownCompleto.length;
+  const totalChars = textoCompleto.length;
 
   const filteredCursos = useMemo(() =>
     TODOS_OS_CURSOS.filter((c) =>
@@ -202,7 +230,7 @@ export function CodigoCursosTab() {
   );
 
   const handleCopyAll = async () => {
-    await navigator.clipboard.writeText(markdownCompleto);
+    await navigator.clipboard.writeText(textoCompleto);
     setCopiedAll(true);
     setTimeout(() => setCopiedAll(false), 3000);
   };
@@ -215,19 +243,19 @@ export function CodigoCursosTab() {
           <Code2 className="w-5 h-5 text-primary" />
         </div>
         <div>
-          <h2 className="font-semibold text-foreground text-base">Código Markdown dos Cursos</h2>
+          <h2 className="font-semibold text-foreground text-base">Conteúdo dos Cursos para ChatGPT</h2>
           <p className="text-xs text-muted-foreground">
-            {TODOS_OS_CURSOS.length} cursos · {totalAulas} aulas · {(totalChars / 1000).toFixed(0)}k caracteres
+            {TODOS_OS_CURSOS.length} cursos · {totalAulas} aulas · {(totalChars / 1000).toFixed(0)}k chars · texto limpo
           </p>
         </div>
       </div>
 
-      {/* Stats + copy all */}
+      {/* Info + copy all */}
       <div className="flex items-center justify-between p-4 rounded-xl bg-muted/40 border border-border">
         <div className="flex items-center gap-2">
           <BookOpen className="w-4 h-4 text-muted-foreground" />
           <span className="text-sm text-muted-foreground">
-            Markdown completo de todos os cursos da plataforma
+            Texto limpo, sem sintaxe — cole curso a curso no ChatGPT
           </span>
         </div>
         <Button
