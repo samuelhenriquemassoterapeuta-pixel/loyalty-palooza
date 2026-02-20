@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   ChevronLeft, ChevronRight, Rocket, DollarSign, Clock, Users, 
@@ -586,6 +586,142 @@ const InvestimentoContent = () => (
   </div>
 );
 
+/* ─── Pitch Estratégico Component ─── */
+const PitchSection = ({ emoji, title, children }: { emoji: string; title: string; children: React.ReactNode }) => {
+  const [open, setOpen] = useState(true);
+  return (
+    <div className="rounded-xl border border-border overflow-hidden">
+      <button
+        onClick={() => setOpen(v => !v)}
+        className="w-full flex items-center gap-2.5 px-3 py-2.5 bg-muted/40 hover:bg-muted/70 transition-colors text-left"
+      >
+        <span className="text-base">{emoji}</span>
+        <span className="flex-1 text-[11px] font-bold text-foreground uppercase tracking-wide">{title}</span>
+        <ChevronDown className={`w-3.5 h-3.5 text-muted-foreground transition-transform ${open ? "rotate-180" : ""}`} />
+      </button>
+      <AnimatePresence initial={false}>
+        {open && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.22 }}
+            className="overflow-hidden"
+          >
+            <div className="p-2.5 space-y-1.5 bg-card">
+              {children}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
+
+const PitchRow = ({ icon, label, desc }: { icon: string; label: string; desc: string }) => (
+  <div className="flex items-start gap-2.5 rounded-lg bg-background/60 border border-border/60 px-3 py-2">
+    <span className="text-base mt-0.5 shrink-0">{icon}</span>
+    <div>
+      <p className="text-[10px] font-semibold text-foreground">{label}</p>
+      <p className="text-[9px] text-muted-foreground leading-snug">{desc}</p>
+    </div>
+  </div>
+);
+
+const PitchEstrategico = () => (
+  <div className="space-y-2.5">
+    {/* Hero quote */}
+    <div className="relative rounded-2xl overflow-hidden bg-gradient-to-br from-primary/10 via-accent/5 to-primary/5 border border-primary/20 p-4 text-center">
+      <Globe className="w-8 h-8 text-primary/30 mx-auto mb-2" />
+      <p className="text-sm font-bold text-primary leading-snug italic">
+        "Deixamos de ser uma clínica para nos tornarmos uma plataforma global de bem-estar."
+      </p>
+      <p className="text-[9px] text-muted-foreground mt-1">— Visão Estratégica Resinkra 2026</p>
+    </div>
+
+    {/* Métricas hero */}
+    <div className="grid grid-cols-3 gap-1.5">
+      {[
+        { value: "366", label: "Políticas RLS", icon: Shield },
+        { value: "46", label: "Edge Functions", icon: Zap },
+        { value: "5", label: "Agentes IA", icon: Bot },
+      ].map(({ value, label, icon: Icon }) => (
+        <div key={label} className="bg-card border rounded-xl p-2.5 text-center space-y-1">
+          <Icon className="w-4 h-4 text-primary mx-auto" />
+          <p className="text-lg font-black text-primary leading-none">{value}</p>
+          <p className="text-[8px] text-muted-foreground leading-tight">{label}</p>
+        </div>
+      ))}
+    </div>
+
+    {/* Pilares tecnologia */}
+    <PitchSection emoji="🏗️" title="Pilares da Tecnologia">
+      <PitchRow icon="🔐" label="Segurança Máxima" desc="366 políticas RLS protegendo todos os dados da plataforma" />
+      <PitchRow icon="⚡" label="Automação Total" desc="46 Edge Functions: pagamentos, notificações, IA e muito mais" />
+      <PitchRow icon="🤖" label="Inteligência Artificial" desc="Roteador Multi-Agente integrado com Google Gemini 2.0 Flash" />
+    </PitchSection>
+
+    {/* Resi AI */}
+    <PitchSection emoji="🤖" title="Resi AI — 5 Frentes Estratégicas">
+      {[
+        { num: "1", nome: "Agente Agenda", desc: "Gerencia horários e sessões sem erro humano" },
+        { num: "2", nome: "Agente Creator", desc: "Cria roteiros virais e ganchos de venda para redes sociais" },
+        { num: "3", nome: "Agente Wellness", desc: "Insights de saúde baseados nos dados das pacientes" },
+        { num: "4", nome: "Agente Loja", desc: "Recomenda produtos e pacotes de forma personalizada" },
+        { num: "5", nome: "Agente Core", desc: "Suporte 24/7 para cashback, plataforma e dúvidas gerais" },
+      ].map(a => (
+        <div key={a.num} className="flex items-start gap-2.5 rounded-lg bg-background/60 border border-border/60 px-3 py-2">
+          <span className="w-5 h-5 rounded-full bg-primary/15 text-primary text-[9px] font-black flex items-center justify-center shrink-0 mt-0.5">{a.num}</span>
+          <div>
+            <p className="text-[10px] font-semibold text-foreground">{a.nome}</p>
+            <p className="text-[9px] text-muted-foreground leading-snug">{a.desc}</p>
+          </div>
+        </div>
+      ))}
+    </PitchSection>
+
+    {/* Gamificação */}
+    <PitchSection emoji="🏆" title="Máquina de Fidelização">
+      <PitchRow icon="💎" label="Cashback Inteligente" desc="Tiers Bronze → Prata → Ouro que premia a fidelidade" />
+      <PitchRow icon="📸" label="Resinkra Moments" desc="Rede social interna onde posts geram recompensas reais" />
+      <PitchRow icon="🎮" label="Desafios & Conquistas" desc="Gamificação completa com XP, Badges e Cromos Éther" />
+    </PitchSection>
+
+    {/* Monetização */}
+    <PitchSection emoji="💰" title="Potencial de Monetização (ROI)">
+      <PitchRow icon="🏢" label="B2B Corporativo" desc="Portal pronto para vender planos QVT para grandes empresas" />
+      <PitchRow icon="🎓" label="Resinkra Academy" desc="17 cursos prontos para certificação e monetização" />
+      <PitchRow icon="🛒" label="E-commerce Integrado" desc="Produtos, pacotes e vales-presente digitais" />
+      <PitchRow icon="👑" label="Assinaturas VIP" desc="Modelo de receita recorrente com Clube VIP" />
+    </PitchSection>
+
+    {/* Próximos passos */}
+    <div className="bg-accent/5 border border-accent/20 rounded-xl p-3 space-y-2">
+      <p className="text-[10px] font-bold text-accent uppercase tracking-wide flex items-center gap-1.5">
+        <Rocket className="w-3 h-3" /> Próximos Passos
+      </p>
+      {[
+        "Lançamento do App Mobile (Capacitor iOS & Android)",
+        "Ativação das campanhas de IA com Resi Multi-Agente",
+        "Expansão para o mercado B2B Corporativo",
+      ].map((s, i) => (
+        <div key={i} className="flex items-center gap-2">
+          <ArrowRight className="w-3 h-3 text-accent shrink-0" />
+          <span className="text-[10px] text-foreground">{s}</span>
+        </div>
+      ))}
+    </div>
+
+    {/* Legado */}
+    <div className="bg-primary/5 border border-primary/20 rounded-xl p-3 text-center">
+      <p className="text-[10px] text-primary font-semibold leading-relaxed">
+        O ecossistema Resinkra não é apenas um software — é o{" "}
+        <strong>maior ativo da empresa</strong>, escalável para qualquer lugar do mundo. 🌍
+      </p>
+    </div>
+  </div>
+);
+
 /* ─── Slide Data ─── */
 const slides = [
   {
@@ -935,109 +1071,7 @@ const slides = [
     id: "pitch-estrategico",
     title: "Pitch Estratégico",
     subtitle: "A Nova Era da Resinkra — Do consultório ao ecossistema global",
-    content: (
-      <div className="space-y-3 max-h-[60vh] overflow-y-auto pr-1">
-        {/* Quote hero */}
-        <div className="bg-primary/5 border border-primary/20 rounded-xl p-4 text-center">
-          <p className="text-sm font-semibold text-primary italic">"Deixamos de ser uma clínica para nos tornarmos uma plataforma global de bem-estar."</p>
-        </div>
-
-        {/* Pilares tecnológicos */}
-        <div className="space-y-1">
-          <p className="text-[10px] font-bold text-foreground uppercase tracking-wide">🏗 Pilares da Tecnologia</p>
-          {[
-            { icon: "🔐", label: "Segurança Máxima", desc: "366 políticas RLS protegendo todos os dados" },
-            { icon: "⚡", label: "Automação Total", desc: "46 Edge Functions (pagamentos, notificações, IA)" },
-            { icon: "🤖", label: "Inteligência Artificial", desc: "Roteador Multi-Agente com Google Gemini 2.0 Flash" },
-          ].map(p => (
-            <div key={p.label} className="flex items-center gap-2.5 bg-card border rounded-lg px-3 py-2">
-              <span className="text-base">{p.icon}</span>
-              <div>
-                <p className="text-[10px] font-semibold text-foreground">{p.label}</p>
-                <p className="text-[9px] text-muted-foreground">{p.desc}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Resi AI 5 frentes */}
-        <div className="space-y-1">
-          <p className="text-[10px] font-bold text-foreground uppercase tracking-wide">🤖 Resi AI — 5 Frentes Estratégicas</p>
-          {[
-            { num: "1", nome: "Agente Agenda", desc: "Gerencia horários e sessões sem erro humano" },
-            { num: "2", nome: "Agente Creator", desc: "Cria roteiros virais e ganchos de venda para redes sociais" },
-            { num: "3", nome: "Agente Wellness", desc: "Insights de saúde baseados nos dados das pacientes" },
-            { num: "4", nome: "Agente Loja", desc: "Recomenda produtos e pacotes personalizados" },
-            { num: "5", nome: "Agente Core", desc: "Suporte 24/7 para cashback, plataforma e dúvidas gerais" },
-          ].map(a => (
-            <div key={a.num} className="flex items-center gap-2.5 bg-card border rounded-lg px-3 py-1.5">
-              <span className="w-5 h-5 rounded-full bg-primary/10 text-primary text-[9px] font-bold flex items-center justify-center shrink-0">{a.num}</span>
-              <div>
-                <p className="text-[10px] font-semibold text-foreground">{a.nome}</p>
-                <p className="text-[9px] text-muted-foreground">{a.desc}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Gamificação */}
-        <div className="space-y-1">
-          <p className="text-[10px] font-bold text-foreground uppercase tracking-wide">🏆 Máquina de Fidelização</p>
-          {[
-            { icon: "💎", label: "Cashback Inteligente", desc: "Tiers Bronze → Prata → Ouro que premia a fidelidade" },
-            { icon: "📸", label: "Resinkra Moments", desc: "Rede social interna onde posts geram recompensas reais" },
-            { icon: "🎮", label: "Desafios & Conquistas", desc: "Gamificação completa com XP, Badges e Cromos Éther" },
-          ].map(g => (
-            <div key={g.label} className="flex items-center gap-2.5 bg-card border rounded-lg px-3 py-2">
-              <span className="text-base">{g.icon}</span>
-              <div>
-                <p className="text-[10px] font-semibold text-foreground">{g.label}</p>
-                <p className="text-[9px] text-muted-foreground">{g.desc}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Monetização */}
-        <div className="space-y-1">
-          <p className="text-[10px] font-bold text-foreground uppercase tracking-wide">💰 Potencial de Monetização (ROI)</p>
-          {[
-            { icon: "🏢", label: "B2B Corporativo", desc: "Portal pronto para vender planos QVT para grandes empresas" },
-            { icon: "🎓", label: "Resinkra Academy", desc: "17 cursos prontos para certificação e monetização" },
-            { icon: "🛒", label: "E-commerce Integrado", desc: "Produtos, pacotes e vales-presente digitais" },
-            { icon: "👑", label: "Assinaturas VIP", desc: "Modelo de receita recorrente com Clube VIP" },
-          ].map(m => (
-            <div key={m.label} className="flex items-center gap-2.5 bg-card border rounded-lg px-3 py-2">
-              <span className="text-base">{m.icon}</span>
-              <div>
-                <p className="text-[10px] font-semibold text-foreground">{m.label}</p>
-                <p className="text-[9px] text-muted-foreground">{m.desc}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Próximos passos */}
-        <div className="bg-accent/5 border border-accent/20 rounded-xl p-3 space-y-2">
-          <p className="text-[10px] font-bold text-accent uppercase tracking-wide">🚀 Próximos Passos</p>
-          {[
-            "Lançamento do App Mobile (Capacitor iOS & Android)",
-            "Ativação das campanhas de IA com Resi Multi-Agente",
-            "Expansão para o mercado B2B Corporativo",
-          ].map((s, i) => (
-            <div key={i} className="flex items-center gap-2">
-              <ArrowRight className="w-3 h-3 text-accent shrink-0" />
-              <span className="text-[10px] text-foreground">{s}</span>
-            </div>
-          ))}
-        </div>
-
-        {/* Legado */}
-        <div className="bg-primary/5 border border-primary/20 rounded-xl p-3 text-center">
-          <p className="text-[10px] text-primary font-semibold leading-relaxed">O ecossistema Resinkra não é apenas um software — é o <strong>maior ativo da empresa</strong>, escalável para qualquer lugar do mundo. 🌍</p>
-        </div>
-      </div>
-    ),
+    content: <PitchEstrategico />,
     icon: Target,
     color: "accent",
   },
