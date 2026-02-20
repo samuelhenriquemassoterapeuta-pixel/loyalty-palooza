@@ -512,7 +512,89 @@ const { data } = await supabase.functions.invoke('resi-router', {
         </div>
       </SectionCollapsible>
 
-      {/* Métricas resumo */}
+      {/* 🔄 Código Atualizado 20-02 (atualizado) */}
+      <SectionCollapsible
+        title="Código Atualizado dia 20-02 (atualizado)"
+        subtitle="Implementações concluídas em 20/02/2026: resi-agent-router, sessões, cache e correções"
+        icon={Bot}
+        badge="20/02/2026"
+        defaultOpen={false}
+      >
+        <div className="space-y-3">
+          <p className="text-xs text-muted-foreground">
+            Versão atualizada em 20/02/2026 com todas as correções e implementações finais do sistema multi-agente Resi.
+          </p>
+          <CodeBlock
+            title="Sistema Multi-Agente Resi — Atualização 20/02/2026 (atualizado)"
+            language="markdown"
+            code={`# 🔄 Resi — Correções & Implementações (20/02/2026 — atualizado)
+
+## O que foi implementado/corrigido
+
+### Edge Function: resi-agent-router (reescrita completa)
+- Cache de 5 minutos para configurações dos agentes (agentsDbCache)
+- Sessões persistentes com histórico por sessionId
+- Roteamento dinâmico via banco: palavras-chave + prioridade
+- Resposta inclui: agentName, agentEmoji, currentAgent, showMenu
+- Logging automático em resi_conversations e chat_interactions
+- Injeção de contexto do usuário (nome, tier, saldo Resinks)
+
+### Frontend: ResiChatbot.tsx
+- sessionId estável via crypto.randomUUID() (persiste na sessão)
+- Invoca resi-agent-router (não mais resi-router)
+- Exibe agentName, agentEmoji, showMenu no chat
+- Histórico de conversas por sessão
+
+### Frontend: AdminResiAgents.tsx (correções)
+- Importação de toast corrigida: @/hooks/use-toast
+- Interface Agent alinhada ao schema da tabela resi_agents_config
+- Campos: id, name, emoji, system_prompt, keywords, is_active, priority, menu_option
+
+### Banco de Dados: resi_agents_config (populado)
+- id: gen_random_uuid() definido como DEFAULT (schema fix)
+- 5 agentes inseridos com system_prompt, keywords, priority e menu_option
+
+### Tabelas de Suporte ao Resi
+| Tabela | Descrição |
+|---|---|
+| resi_agents_config | Configuração dos 5 agentes (prompt, keywords, priority) |
+| chat_interactions | Log de todas as interações (agent, user_message, response) |
+| chat_sessions | Sessões com histórico completo (conversation_history JSON) |
+| resi_conversations | Histórico por sessionId com agent atual |
+| resi_memory | Memória de longo prazo por usuário |
+
+## Fluxo Completo do resi-agent-router
+\`\`\`
+1. Recebe: { userId, message, sessionId, platform }
+2. Carrega agentes do banco (cache 5 min)
+3. Detecta agente por palavras-chave da mensagem
+4. Recupera histórico da sessão (últimas 10 msgs)
+5. Injeta contexto do usuário (tier, saldo)
+6. Chama Gemini 1.5 Flash com system_prompt do agente
+7. Salva interação em chat_interactions e chat_sessions
+8. Retorna: { response, agentName, agentEmoji, currentAgent, showMenu }
+\`\`\`
+
+## Arquivos Modificados
+| Arquivo | Mudança |
+|---|---|
+| supabase/functions/resi-agent-router/index.ts | Reescrita completa |
+| src/components/ResiChatbot.tsx | sessionId + novos campos de resposta |
+| src/components/AdminResiAgents.tsx | Correção de imports e interface |
+| supabase/migrations/...sql | ALTER TABLE resi_agents_config SET DEFAULT |
+
+## Métricas Atualizadas
+| Item | Antes | Depois |
+|---|---|---|
+| Edge Functions | 44 | 46 |
+| Tabelas DB | 134 | 137 |
+| Políticas RLS | 366 | 368 |
+| Agentes Resi IA | 0 | 5 |`}
+          />
+        </div>
+      </SectionCollapsible>
+
+
       <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
         {[
           { label: "Tabelas DB", value: "137" },
