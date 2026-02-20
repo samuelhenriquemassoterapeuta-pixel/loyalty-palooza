@@ -1,6 +1,7 @@
 // ============================================================
 // 🌿 RESINKRA - Resi Router (Roteador Central)
 // Edge Function que gerencia o menu e roteia para os agentes
+// 🆓 Usando Google Gemini API (GRATUITO!)
 // ============================================================
 
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
@@ -10,7 +11,7 @@ import {
   MENU_MESSAGE, 
   MENU_OPTIONS, 
   detectAgentFromMessage,
-  API_CONFIG,
+  callGemini,
   ChatMessage,
   UserSession
 } from "../_shared/resi-config.ts";
@@ -120,15 +121,10 @@ serve(async (req) => {
     }
 
     // ========================================
-    // PROCESSAR MENSAGEM COM O AGENTE
+    // PROCESSAR MENSAGEM COM O AGENTE (GEMINI)
     // ========================================
 
     const currentAgent = RESI_AGENTS[session.currentAgent!];
-    
-    session.conversationHistory.push({
-      role: 'user',
-      content: trimmedMessage
-    });
 
     // Buscar contexto do usuário
     let userContext = '';
@@ -146,47 +142,22 @@ serve(async (req) => {
       console.log('Contexto do usuário não disponível');
     }
 
-    // Montar mensagens para a API
-    const messages: ChatMessage[] = [
-      {
-        role: 'system',
-        content: currentAgent.systemPrompt + userContext
-      },
-      ...session.conversationHistory.slice(-10)
-    ];
-
     const startTime = Date.now();
 
-    // Chamar API via OpenRouter
-    const aiResponse = await fetch(API_CONFIG.apiUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${API_CONFIG.apiKey}`,
-        'HTTP-Referer': 'https://resinkra.com',
-      },
-      body: JSON.stringify({
-        model: API_CONFIG.model,
-        messages: messages,
-        max_tokens: API_CONFIG.maxTokens,
-        temperature: API_CONFIG.temperature
-      })
-    });
-
-    if (!aiResponse.ok) {
-      throw new Error(`Erro na API: ${aiResponse.status}`);
-    }
-
-    const aiData = await aiResponse.json();
-    const assistantMessage = aiData.choices?.[0]?.message?.content || 
-      'Desculpe, tive um problema ao processar sua mensagem. Pode tentar novamente? 🌿';
+    // Chamar Gemini com histórico no formato nativo
+    const assistantMessage = await callGemini(
+      currentAgent.systemPrompt + userContext,
+      session.conversationHistory.slice(-10),
+      trimmedMessage
+    );
 
     const responseTime = Date.now() - startTime;
 
-    session.conversationHistory.push({
-      role: 'assistant',
-      content: assistantMessage
-    });
+    // Atualizar histórico no formato Gemini
+    session.conversationHistory.push(
+      { role: 'user', parts: [{ text: trimmedMessage }] },
+      { role: 'model', parts: [{ text: assistantMessage }] }
+    );
 
     // Salvar interação no banco
     try {
@@ -197,7 +168,7 @@ serve(async (req) => {
         assistant_message: assistantMessage,
         platform: platform,
         response_time_ms: responseTime,
-        tokens_used: aiData.usage?.total_tokens || 0,
+        tokens_used: 0,
         created_at: new Date().toISOString()
       });
     } catch (e) {
