@@ -37,11 +37,14 @@ export type Database = {
           created_at: string
           data_hora: string
           id: string
+          is_online: boolean | null
+          meeting_url: string | null
           observacoes: string | null
           playlist_id: string | null
           servico: string
           servico_id: string | null
           status: string
+          status_sala: string | null
           terapeuta_id: string | null
           user_id: string
         }
@@ -49,11 +52,14 @@ export type Database = {
           created_at?: string
           data_hora: string
           id?: string
+          is_online?: boolean | null
+          meeting_url?: string | null
           observacoes?: string | null
           playlist_id?: string | null
           servico: string
           servico_id?: string | null
           status?: string
+          status_sala?: string | null
           terapeuta_id?: string | null
           user_id: string
         }
@@ -61,11 +67,14 @@ export type Database = {
           created_at?: string
           data_hora?: string
           id?: string
+          is_online?: boolean | null
+          meeting_url?: string | null
           observacoes?: string | null
           playlist_id?: string | null
           servico?: string
           servico_id?: string | null
           status?: string
+          status_sala?: string | null
           terapeuta_id?: string | null
           user_id?: string
         }
