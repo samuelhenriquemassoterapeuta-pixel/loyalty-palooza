@@ -5,7 +5,7 @@ import { ChevronDown, ChevronRight,
   Dumbbell, Sparkles, ClipboardList, StretchHorizontal, Salad, BookOpen,
   Stethoscope, Globe, Ticket, Crown, Building2, CreditCard, Handshake,
   Camera, Trophy, DollarSign, Target, Megaphone, Send, Rocket, GraduationCap,
-  Bell, UserCog, Settings2, Code2, FilePlus2, Search
+  Bell, UserCog, Settings2, Code2, FilePlus2, Search, Headphones
 } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Input } from "@/components/ui/input";
@@ -117,6 +117,14 @@ export const adminNavGroups: NavGroup[] = [
       { id: "social-config", label: "Config Moments", icon: Settings2 },
       { id: "cursos-admin", label: "Cursos", icon: GraduationCap },
       { id: "materiais-admin", label: "Materiais", icon: FileText },
+    ],
+  },
+  {
+    id: "atendimento",
+    label: "Atendimento",
+    icon: Headphones,
+    items: [
+      { id: "resi-handoff", label: "Handoff Resi → Humano", icon: Headphones },
     ],
   },
   {
