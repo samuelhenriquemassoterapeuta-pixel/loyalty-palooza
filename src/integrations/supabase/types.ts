@@ -36,6 +36,7 @@ export type Database = {
         Row: {
           created_at: string
           data_hora: string
+          empresa_id: string | null
           id: string
           is_online: boolean | null
           meeting_url: string | null
@@ -51,6 +52,7 @@ export type Database = {
         Insert: {
           created_at?: string
           data_hora: string
+          empresa_id?: string | null
           id?: string
           is_online?: boolean | null
           meeting_url?: string | null
@@ -66,6 +68,7 @@ export type Database = {
         Update: {
           created_at?: string
           data_hora?: string
+          empresa_id?: string | null
           id?: string
           is_online?: boolean | null
           meeting_url?: string | null
@@ -79,6 +82,13 @@ export type Database = {
           user_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "agendamentos_empresa_id_fkey"
+            columns: ["empresa_id"]
+            isOneToOne: false
+            referencedRelation: "empresas_corporativas"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "agendamentos_playlist_id_fkey"
             columns: ["playlist_id"]
@@ -1140,6 +1150,71 @@ export type Database = {
         }
         Relationships: []
       }
+      corporativo_contratos: {
+        Row: {
+          asaas_subscription_id: string | null
+          created_at: string | null
+          data_fim: string | null
+          data_inicio: string
+          empresa_id: string
+          id: string
+          max_colaboradores: number
+          observacoes: string | null
+          renovacao_automatica: boolean | null
+          status: string | null
+          termos_aceitos: boolean | null
+          termos_aceitos_em: string | null
+          termos_aceitos_por: string | null
+          tipo_plano: string
+          updated_at: string | null
+          valor_mensal: number
+        }
+        Insert: {
+          asaas_subscription_id?: string | null
+          created_at?: string | null
+          data_fim?: string | null
+          data_inicio: string
+          empresa_id: string
+          id?: string
+          max_colaboradores?: number
+          observacoes?: string | null
+          renovacao_automatica?: boolean | null
+          status?: string | null
+          termos_aceitos?: boolean | null
+          termos_aceitos_em?: string | null
+          termos_aceitos_por?: string | null
+          tipo_plano: string
+          updated_at?: string | null
+          valor_mensal: number
+        }
+        Update: {
+          asaas_subscription_id?: string | null
+          created_at?: string | null
+          data_fim?: string | null
+          data_inicio?: string
+          empresa_id?: string
+          id?: string
+          max_colaboradores?: number
+          observacoes?: string | null
+          renovacao_automatica?: boolean | null
+          status?: string | null
+          termos_aceitos?: boolean | null
+          termos_aceitos_em?: string | null
+          termos_aceitos_por?: string | null
+          tipo_plano?: string
+          updated_at?: string | null
+          valor_mensal?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "corporativo_contratos_empresa_id_fkey"
+            columns: ["empresa_id"]
+            isOneToOne: false
+            referencedRelation: "empresas_corporativas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       corporativo_depoimentos: {
         Row: {
           ativo: boolean
@@ -1412,6 +1487,44 @@ export type Database = {
           video_url?: string | null
         }
         Relationships: []
+      }
+      corporativo_termos_log: {
+        Row: {
+          aceito_em: string | null
+          empresa_id: string
+          id: string
+          ip_address: string | null
+          user_agent: string | null
+          user_id: string
+          versao_termos: string
+        }
+        Insert: {
+          aceito_em?: string | null
+          empresa_id: string
+          id?: string
+          ip_address?: string | null
+          user_agent?: string | null
+          user_id: string
+          versao_termos?: string
+        }
+        Update: {
+          aceito_em?: string | null
+          empresa_id?: string
+          id?: string
+          ip_address?: string | null
+          user_agent?: string | null
+          user_id?: string
+          versao_termos?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "corporativo_termos_log_empresa_id_fkey"
+            columns: ["empresa_id"]
+            isOneToOne: false
+            referencedRelation: "empresas_corporativas"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       cromos_usuarios: {
         Row: {
@@ -2084,44 +2197,53 @@ export type Database = {
       }
       empresas_corporativas: {
         Row: {
+          asaas_customer_id: string | null
           ativa: boolean
           cnpj: string | null
           contato_email: string | null
           contato_nome: string | null
           contato_telefone: string | null
           created_at: string
+          email_financeiro: string | null
           id: string
           max_colaboradores: number
           nome: string
           plano_qvt: string
+          razao_social: string | null
           updated_at: string
           valor_mensal: number
         }
         Insert: {
+          asaas_customer_id?: string | null
           ativa?: boolean
           cnpj?: string | null
           contato_email?: string | null
           contato_nome?: string | null
           contato_telefone?: string | null
           created_at?: string
+          email_financeiro?: string | null
           id?: string
           max_colaboradores?: number
           nome: string
           plano_qvt?: string
+          razao_social?: string | null
           updated_at?: string
           valor_mensal?: number
         }
         Update: {
+          asaas_customer_id?: string | null
           ativa?: boolean
           cnpj?: string | null
           contato_email?: string | null
           contato_nome?: string | null
           contato_telefone?: string | null
           created_at?: string
+          email_financeiro?: string | null
           id?: string
           max_colaboradores?: number
           nome?: string
           plano_qvt?: string
+          razao_social?: string | null
           updated_at?: string
           valor_mensal?: number
         }
@@ -6058,6 +6180,7 @@ export type Database = {
         Row: {
           created_at: string
           descricao: string | null
+          empresa_id: string | null
           expira_em: string | null
           id: string
           referencia_id: string | null
@@ -6068,6 +6191,7 @@ export type Database = {
         Insert: {
           created_at?: string
           descricao?: string | null
+          empresa_id?: string | null
           expira_em?: string | null
           id?: string
           referencia_id?: string | null
@@ -6078,6 +6202,7 @@ export type Database = {
         Update: {
           created_at?: string
           descricao?: string | null
+          empresa_id?: string | null
           expira_em?: string | null
           id?: string
           referencia_id?: string | null
@@ -6085,7 +6210,15 @@ export type Database = {
           user_id?: string
           valor?: number
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "transacoes_empresa_id_fkey"
+            columns: ["empresa_id"]
+            isOneToOne: false
+            referencedRelation: "empresas_corporativas"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       transacoes_cromos: {
         Row: {
@@ -6898,6 +7031,18 @@ export type Database = {
         Returns: Json
       }
       executar_alquimia: { Args: { p_receita_id: string }; Returns: Json }
+      export_colaboradores_csv: {
+        Args: { p_empresa_id: string }
+        Returns: {
+          data_entrada: string
+          departamento: string
+          email: string
+          nome: string
+          status: string
+          total_agendamentos: number
+          ultimo_agendamento: string
+        }[]
+      }
       get_achievements_ranking: {
         Args: { p_limit?: number }
         Returns: {
@@ -6979,6 +7124,14 @@ export type Database = {
           total_errors: number
         }[]
       }
+      get_relatorio_empresa: {
+        Args: {
+          p_data_fim?: string
+          p_data_inicio?: string
+          p_empresa_id: string
+        }
+        Returns: Json
+      }
       get_resi_stats: {
         Args: { days_back?: number }
         Returns: {
@@ -7032,6 +7185,7 @@ export type Database = {
           nome: string
         }[]
       }
+      get_user_empresa_id: { Args: { p_user_id: string }; Returns: string }
       get_user_features: {
         Args: { p_user_id: string }
         Returns: {
