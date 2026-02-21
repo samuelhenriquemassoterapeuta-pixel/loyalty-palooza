@@ -1437,6 +1437,42 @@ export type Database = {
         }
         Relationships: []
       }
+      curso_aula_historico: {
+        Row: {
+          assistido_em: string | null
+          aula_id: string
+          completou: boolean | null
+          curso_id: string
+          id: string
+          modulo_id: string
+          nota_quiz: number | null
+          tempo_gasto_segundos: number | null
+          user_id: string
+        }
+        Insert: {
+          assistido_em?: string | null
+          aula_id: string
+          completou?: boolean | null
+          curso_id: string
+          id?: string
+          modulo_id: string
+          nota_quiz?: number | null
+          tempo_gasto_segundos?: number | null
+          user_id: string
+        }
+        Update: {
+          assistido_em?: string | null
+          aula_id?: string
+          completou?: boolean | null
+          curso_id?: string
+          id?: string
+          modulo_id?: string
+          nota_quiz?: number | null
+          tempo_gasto_segundos?: number | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       curso_aulas: {
         Row: {
           ativo: boolean
@@ -1483,6 +1519,45 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      curso_certificados: {
+        Row: {
+          codigo_verificacao: string
+          curso_id: string
+          curso_nome: string
+          emitido_em: string | null
+          horas_totais: number | null
+          id: string
+          nota_media: number | null
+          percentual_final: number
+          user_id: string
+          usuario_nome: string
+        }
+        Insert: {
+          codigo_verificacao?: string
+          curso_id: string
+          curso_nome: string
+          emitido_em?: string | null
+          horas_totais?: number | null
+          id?: string
+          nota_media?: number | null
+          percentual_final: number
+          user_id: string
+          usuario_nome: string
+        }
+        Update: {
+          codigo_verificacao?: string
+          curso_id?: string
+          curso_nome?: string
+          emitido_em?: string | null
+          horas_totais?: number | null
+          id?: string
+          nota_media?: number | null
+          percentual_final?: number
+          user_id?: string
+          usuario_nome?: string
+        }
+        Relationships: []
       }
       curso_modulos: {
         Row: {
@@ -1560,6 +1635,72 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      curso_progresso_geral: {
+        Row: {
+          aula_atual: string | null
+          aulas_completas: string[] | null
+          certificado_gerado: boolean | null
+          certificado_url: string | null
+          checklists_completos: Json | null
+          concluido_em: string | null
+          created_at: string | null
+          curso_id: string
+          id: string
+          iniciado_em: string | null
+          migrated_from_local: boolean | null
+          modulo_atual: string | null
+          modulos_completos: string[] | null
+          percentual_completo: number | null
+          quizzes_completos: Json | null
+          tempo_total_minutos: number | null
+          ultimo_acesso: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          aula_atual?: string | null
+          aulas_completas?: string[] | null
+          certificado_gerado?: boolean | null
+          certificado_url?: string | null
+          checklists_completos?: Json | null
+          concluido_em?: string | null
+          created_at?: string | null
+          curso_id: string
+          id?: string
+          iniciado_em?: string | null
+          migrated_from_local?: boolean | null
+          modulo_atual?: string | null
+          modulos_completos?: string[] | null
+          percentual_completo?: number | null
+          quizzes_completos?: Json | null
+          tempo_total_minutos?: number | null
+          ultimo_acesso?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          aula_atual?: string | null
+          aulas_completas?: string[] | null
+          certificado_gerado?: boolean | null
+          certificado_url?: string | null
+          checklists_completos?: Json | null
+          concluido_em?: string | null
+          created_at?: string | null
+          curso_id?: string
+          id?: string
+          iniciado_em?: string | null
+          migrated_from_local?: boolean | null
+          modulo_atual?: string | null
+          modulos_completos?: string[] | null
+          percentual_completo?: number | null
+          quizzes_completos?: Json | null
+          tempo_total_minutos?: number | null
+          ultimo_acesso?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
       }
       daily_missions: {
         Row: {
@@ -6427,6 +6568,10 @@ export type Database = {
         }[]
       }
       cleanup_old_chat_sessions: { Args: never; Returns: number }
+      emitir_certificado: {
+        Args: { p_curso_id: string; p_curso_nome: string; p_user_id: string }
+        Returns: Json
+      }
       executar_alquimia: { Args: { p_receita_id: string }; Returns: Json }
       get_achievements_ranking: {
         Args: { p_limit?: number }
@@ -6437,6 +6582,17 @@ export type Database = {
           tier_nome: string
           total_gasto: number
           total_sessoes: number
+        }[]
+      }
+      get_cursos_em_andamento: {
+        Args: { p_user_id: string }
+        Returns: {
+          aula_atual: string
+          curso_id: string
+          modulo_atual: string
+          percentual_completo: number
+          tempo_total_minutos: number
+          ultimo_acesso: string
         }[]
       }
       get_empresa_stats: { Args: { p_empresa_id: string }; Returns: Json }
@@ -6564,6 +6720,19 @@ export type Database = {
         Returns: Json
       }
       resgatar_vale_presente: { Args: { p_codigo: string }; Returns: Json }
+      update_curso_progresso_geral: {
+        Args: {
+          p_aula_id: string
+          p_completou?: boolean
+          p_curso_id: string
+          p_modulo_id: string
+          p_nota_quiz?: number
+          p_tempo_segundos?: number
+          p_total_aulas?: number
+          p_user_id: string
+        }
+        Returns: Json
+      }
     }
     Enums: {
       app_role: "admin" | "user" | "parceiro" | "terapeuta"
