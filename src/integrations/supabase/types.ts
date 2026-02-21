@@ -1945,6 +1945,48 @@ export type Database = {
         }
         Relationships: []
       }
+      edge_function_logs: {
+        Row: {
+          created_at: string | null
+          duration_ms: number | null
+          error_stack: string | null
+          function_name: string
+          id: string
+          ip_address: string | null
+          level: string
+          message: string | null
+          metadata: Json | null
+          status_code: number | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          duration_ms?: number | null
+          error_stack?: string | null
+          function_name: string
+          id?: string
+          ip_address?: string | null
+          level?: string
+          message?: string | null
+          metadata?: Json | null
+          status_code?: number | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          duration_ms?: number | null
+          error_stack?: string | null
+          function_name?: string
+          id?: string
+          ip_address?: string | null
+          level?: string
+          message?: string | null
+          metadata?: Json | null
+          status_code?: number | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       empresas_corporativas: {
         Row: {
           ativa: boolean
@@ -5571,6 +5613,90 @@ export type Database = {
         }
         Relationships: []
       }
+      system_alerts: {
+        Row: {
+          alert_type: string
+          created_at: string | null
+          description: string | null
+          id: string
+          metadata: Json | null
+          notified: boolean | null
+          resolved: boolean | null
+          resolved_at: string | null
+          resolved_by: string | null
+          severity: string
+          title: string
+        }
+        Insert: {
+          alert_type: string
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          metadata?: Json | null
+          notified?: boolean | null
+          resolved?: boolean | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          severity?: string
+          title: string
+        }
+        Update: {
+          alert_type?: string
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          metadata?: Json | null
+          notified?: boolean | null
+          resolved?: boolean | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          severity?: string
+          title?: string
+        }
+        Relationships: []
+      }
+      system_health_snapshots: {
+        Row: {
+          active_users_24h: number | null
+          cashback_expiring_7d: number | null
+          created_at: string | null
+          edge_functions_with_errors: string[] | null
+          failed_logins_1h: number | null
+          id: string
+          metadata: Json | null
+          pending_payments: number | null
+          total_errors_1h: number | null
+          total_errors_24h: number | null
+          webhook_failures_1h: number | null
+        }
+        Insert: {
+          active_users_24h?: number | null
+          cashback_expiring_7d?: number | null
+          created_at?: string | null
+          edge_functions_with_errors?: string[] | null
+          failed_logins_1h?: number | null
+          id?: string
+          metadata?: Json | null
+          pending_payments?: number | null
+          total_errors_1h?: number | null
+          total_errors_24h?: number | null
+          webhook_failures_1h?: number | null
+        }
+        Update: {
+          active_users_24h?: number | null
+          cashback_expiring_7d?: number | null
+          created_at?: string | null
+          edge_functions_with_errors?: string[] | null
+          failed_logins_1h?: number | null
+          id?: string
+          metadata?: Json | null
+          pending_payments?: number | null
+          total_errors_1h?: number | null
+          total_errors_24h?: number | null
+          webhook_failures_1h?: number | null
+        }
+        Relationships: []
+      }
       team_members: {
         Row: {
           brand_id: string | null
@@ -6607,6 +6733,8 @@ export type Database = {
         }[]
       }
       cleanup_old_chat_sessions: { Args: never; Returns: number }
+      cleanup_old_logs: { Args: never; Returns: undefined }
+      collect_system_health: { Args: never; Returns: Json }
       emitir_certificado: {
         Args: { p_curso_id: string; p_curso_nome: string; p_user_id: string }
         Returns: Json
@@ -6649,7 +6777,37 @@ export type Database = {
           ultimo_acesso: string
         }[]
       }
+      get_edge_function_logs: {
+        Args: {
+          p_function_name?: string
+          p_hours?: number
+          p_level?: string
+          p_limit?: number
+        }
+        Returns: {
+          created_at: string
+          duration_ms: number
+          error_stack: string
+          function_name: string
+          id: string
+          level: string
+          message: string
+          metadata: Json
+          status_code: number
+        }[]
+      }
       get_empresa_stats: { Args: { p_empresa_id: string }; Returns: Json }
+      get_error_dashboard: {
+        Args: { p_hours?: number }
+        Returns: {
+          avg_duration_ms: number
+          error_rate: number
+          function_name: string
+          last_error: string
+          total_calls: number
+          total_errors: number
+        }[]
+      }
       get_resi_stats: {
         Args: { days_back?: number }
         Returns: {
