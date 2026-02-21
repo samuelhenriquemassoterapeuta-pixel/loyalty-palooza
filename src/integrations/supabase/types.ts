@@ -2117,6 +2117,45 @@ export type Database = {
           },
         ]
       }
+      feature_flags: {
+        Row: {
+          allowed_empresa_ids: string[] | null
+          allowed_roles: string[] | null
+          allowed_user_ids: string[] | null
+          created_at: string | null
+          description: string | null
+          enabled: boolean | null
+          id: string
+          key: string
+          metadata: Json | null
+          updated_at: string | null
+        }
+        Insert: {
+          allowed_empresa_ids?: string[] | null
+          allowed_roles?: string[] | null
+          allowed_user_ids?: string[] | null
+          created_at?: string | null
+          description?: string | null
+          enabled?: boolean | null
+          id?: string
+          key: string
+          metadata?: Json | null
+          updated_at?: string | null
+        }
+        Update: {
+          allowed_empresa_ids?: string[] | null
+          allowed_roles?: string[] | null
+          allowed_user_ids?: string[] | null
+          created_at?: string | null
+          description?: string | null
+          enabled?: boolean | null
+          id?: string
+          key?: string
+          metadata?: Json | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       feedback_rapido: {
         Row: {
           agendamento_id: string
@@ -6584,6 +6623,21 @@ export type Database = {
           total_sessoes: number
         }[]
       }
+      get_all_feature_flags: {
+        Args: never
+        Returns: {
+          allowed_empresa_ids: string[]
+          allowed_roles: string[]
+          allowed_user_ids: string[]
+          created_at: string
+          description: string
+          enabled: boolean
+          id: string
+          key: string
+          metadata: Json
+          updated_at: string
+        }[]
+      }
       get_cursos_em_andamento: {
         Args: { p_user_id: string }
         Returns: {
@@ -6648,6 +6702,14 @@ export type Database = {
           nome: string
         }[]
       }
+      get_user_features: {
+        Args: { p_user_id: string }
+        Returns: {
+          description: string
+          feature_key: string
+          is_enabled: boolean
+        }[]
+      }
       get_user_permissions: {
         Args: { p_user_id: string }
         Returns: {
@@ -6684,6 +6746,10 @@ export type Database = {
       incrementar_voto_sugestao: {
         Args: { sugestao_id: string }
         Returns: undefined
+      }
+      is_feature_enabled: {
+        Args: { p_key: string; p_user_id?: string }
+        Returns: boolean
       }
       is_parceiro: { Args: { _user_id: string }; Returns: boolean }
       is_terapeuta: { Args: { _user_id: string }; Returns: boolean }
