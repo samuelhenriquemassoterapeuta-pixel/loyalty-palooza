@@ -1476,37 +1476,61 @@ export type Database = {
       curso_aulas: {
         Row: {
           ativo: boolean
+          content_source: string | null
           conteudo: string
           created_at: string
+          curso_id: string | null
           descricao: string | null
+          disclaimer_required: boolean | null
           duracao_minutos: number | null
           id: string
           modulo_id: string
           ordem: number
+          published: boolean | null
+          review_notes: string | null
+          review_status: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
           titulo: string
           video_url: string | null
         }
         Insert: {
           ativo?: boolean
+          content_source?: string | null
           conteudo: string
           created_at?: string
+          curso_id?: string | null
           descricao?: string | null
+          disclaimer_required?: boolean | null
           duracao_minutos?: number | null
           id?: string
           modulo_id: string
           ordem?: number
+          published?: boolean | null
+          review_notes?: string | null
+          review_status?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
           titulo: string
           video_url?: string | null
         }
         Update: {
           ativo?: boolean
+          content_source?: string | null
           conteudo?: string
           created_at?: string
+          curso_id?: string | null
           descricao?: string | null
+          disclaimer_required?: boolean | null
           duracao_minutos?: number | null
           id?: string
           modulo_id?: string
           ordem?: number
+          published?: boolean | null
+          review_notes?: string | null
+          review_status?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
           titulo?: string
           video_url?: string | null
         }
@@ -1556,6 +1580,30 @@ export type Database = {
           percentual_final?: number
           user_id?: string
           usuario_nome?: string
+        }
+        Relationships: []
+      }
+      curso_disclaimers: {
+        Row: {
+          categoria: string
+          created_at: string | null
+          id: string
+          obrigatorio: boolean | null
+          texto_disclaimer: string
+        }
+        Insert: {
+          categoria: string
+          created_at?: string | null
+          id?: string
+          obrigatorio?: boolean | null
+          texto_disclaimer: string
+        }
+        Update: {
+          categoria?: string
+          created_at?: string | null
+          id?: string
+          obrigatorio?: boolean | null
+          texto_disclaimer?: string
         }
         Relationships: []
       }
@@ -1701,6 +1749,53 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      curso_review_log: {
+        Row: {
+          action: string
+          aula_id: string
+          created_at: string | null
+          curso_id: string
+          id: string
+          new_status: string | null
+          notes: string | null
+          previous_status: string | null
+          reviewer_id: string
+          reviewer_name: string | null
+        }
+        Insert: {
+          action: string
+          aula_id: string
+          created_at?: string | null
+          curso_id: string
+          id?: string
+          new_status?: string | null
+          notes?: string | null
+          previous_status?: string | null
+          reviewer_id: string
+          reviewer_name?: string | null
+        }
+        Update: {
+          action?: string
+          aula_id?: string
+          created_at?: string | null
+          curso_id?: string
+          id?: string
+          new_status?: string | null
+          notes?: string | null
+          previous_status?: string | null
+          reviewer_id?: string
+          reviewer_name?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "curso_review_log_aula_id_fkey"
+            columns: ["aula_id"]
+            isOneToOne: false
+            referencedRelation: "curso_aulas"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       daily_missions: {
         Row: {
@@ -4422,6 +4517,69 @@ export type Database = {
           },
         ]
       }
+      playlist_faixas: {
+        Row: {
+          artista: string | null
+          ativo: boolean | null
+          audio_url: string | null
+          categoria: string
+          created_at: string | null
+          descricao: string | null
+          duracao_segundos: number | null
+          frequencia_hz: number | null
+          health_status: string | null
+          id: string
+          last_health_check: string | null
+          ordem: number | null
+          spotify_embed_url: string | null
+          tags: string[] | null
+          thumbnail_url: string | null
+          titulo: string
+          updated_at: string | null
+          youtube_id: string | null
+        }
+        Insert: {
+          artista?: string | null
+          ativo?: boolean | null
+          audio_url?: string | null
+          categoria: string
+          created_at?: string | null
+          descricao?: string | null
+          duracao_segundos?: number | null
+          frequencia_hz?: number | null
+          health_status?: string | null
+          id?: string
+          last_health_check?: string | null
+          ordem?: number | null
+          spotify_embed_url?: string | null
+          tags?: string[] | null
+          thumbnail_url?: string | null
+          titulo: string
+          updated_at?: string | null
+          youtube_id?: string | null
+        }
+        Update: {
+          artista?: string | null
+          ativo?: boolean | null
+          audio_url?: string | null
+          categoria?: string
+          created_at?: string | null
+          descricao?: string | null
+          duracao_segundos?: number | null
+          frequencia_hz?: number | null
+          health_status?: string | null
+          id?: string
+          last_health_check?: string | null
+          ordem?: number | null
+          spotify_embed_url?: string | null
+          tags?: string[] | null
+          thumbnail_url?: string | null
+          titulo?: string
+          updated_at?: string | null
+          youtube_id?: string | null
+        }
+        Relationships: []
+      }
       playlists: {
         Row: {
           artista: string | null
@@ -6766,6 +6924,19 @@ export type Database = {
           updated_at: string
         }[]
       }
+      get_broken_playlists: {
+        Args: never
+        Returns: {
+          audio_url: string
+          categoria: string
+          health_status: string
+          id: string
+          last_health_check: string
+          spotify_embed_url: string
+          titulo: string
+          youtube_id: string
+        }[]
+      }
       get_cursos_em_andamento: {
         Args: { p_user_id: string }
         Returns: {
@@ -6818,6 +6989,7 @@ export type Database = {
           unique_users: number
         }[]
       }
+      get_review_dashboard: { Args: never; Returns: Json }
       get_segmentacao_clientes: {
         Args: never
         Returns: {
@@ -6944,6 +7116,15 @@ export type Database = {
         Returns: Json
       }
       resgatar_vale_presente: { Args: { p_codigo: string }; Returns: Json }
+      review_aula: {
+        Args: {
+          p_action: string
+          p_aula_id: string
+          p_notes?: string
+          p_reviewer_id: string
+        }
+        Returns: Json
+      }
       update_curso_progresso_geral: {
         Args: {
           p_aula_id: string
