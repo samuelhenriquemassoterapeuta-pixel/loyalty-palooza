@@ -65,8 +65,48 @@ Análise do cliente "${nome}":
 })()}
 `;
 
+    // --- Fallback: generate rule-based suggestions without AI ---
+    const generateFallbackSuggestions = () => {
+      const sugestoes: any[] = [];
+
+      // Streak suggestion
+      if (streak.streak_atual === 0) {
+        sugestoes.push({ titulo: "Comece sua sequência semanal", descricao: "Agende uma sessão esta semana e inicie seu streak de cashback!", tipo: "streak", prioridade: "alta" });
+      } else if (streak.streak_atual > 0 && streak.streak_atual < 4) {
+        sugestoes.push({ titulo: `Mantenha seu streak de ${streak.streak_atual} semanas!`, descricao: `Faltam ${4 - streak.streak_atual} semanas para o bônus de ℜ 10!`, tipo: "streak", prioridade: "alta" });
+      }
+
+      // Tier suggestion
+      if (tier.tier_name === "Bronze") {
+        const falta = 200 - Number(tier.total_gasto);
+        sugestoes.push({ titulo: "Avance para o tier Prata", descricao: `Faltam R$ ${Math.max(falta, 0).toFixed(0)} para ganhar 1,5x de cashback.`, tipo: "tier", prioridade: "media" });
+      } else if (tier.tier_name === "Prata") {
+        const falta = 500 - Number(tier.total_gasto);
+        sugestoes.push({ titulo: "Rumo ao tier Ouro!", descricao: `Faltam R$ ${Math.max(falta, 0).toFixed(0)} para multiplicar seu cashback por 2x!`, tipo: "tier", prioridade: "media" });
+      }
+
+      // Referral
+      sugestoes.push({ titulo: "Indique um amigo", descricao: "Ganhe ℜ 10 por cada indicação convertida!", tipo: "indicacao", prioridade: "media" });
+
+      // Scheduling
+      if (agendamentos.length === 0) {
+        sugestoes.push({ titulo: "Agende sua primeira sessão", descricao: "Comece a acumular Resinks com cashback por sessão concluída.", tipo: "agendamento", prioridade: "alta" });
+      } else {
+        sugestoes.push({ titulo: "Agende sua próxima sessão", descricao: "Cada sessão concluída gera cashback automático.", tipo: "agendamento", prioridade: "baixa" });
+      }
+
+      const mensagem_motivacional = streak.streak_atual > 0
+        ? `${nome}, você está mandando bem com ${streak.streak_atual} semanas de streak! Continue assim! 🔥`
+        : `${nome}, comece hoje a acumular seus Resinks! 🌿`;
+
+      return { sugestoes: sugestoes.slice(0, 4), mensagem_motivacional };
+    };
+
+    // Try AI, fallback to rules if unavailable
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-    if (!LOVABLE_API_KEY) return errorResponse("Chave de IA não configurada", 500);
+    if (!LOVABLE_API_KEY) {
+      return jsonResponse({ success: true, ...generateFallbackSuggestions() });
+    }
 
     const aiResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
@@ -82,7 +122,6 @@ Análise do cliente "${nome}":
             content: `Você é o assistente de cashback da Resinkra, uma clínica de bem-estar.
 Analise o perfil do cliente e gere 3-4 sugestões personalizadas de como ele pode maximizar seus Resinks (ℜ).
 Cada sugestão deve ter: titulo (curto, max 40 chars), descricao (1-2 frases, max 100 chars), tipo (um de: agendamento, compra, indicacao, streak, tier), prioridade (alta, media, baixa).
-Responda APENAS em JSON no formato: { "sugestoes": [...], "mensagem_motivacional": "..." }
 A mensagem motivacional deve ser pessoal, curta e usar o nome do cliente.
 Considere o dia da semana atual, o tier do cliente, padrões de uso e oportunidades de crescimento.`
           },
@@ -120,17 +159,15 @@ Considere o dia da semana atual, o tier do cliente, padrões de uso e oportunida
     });
 
     if (!aiResponse.ok) {
-      if (aiResponse.status === 429) return errorResponse("Limite de requisições atingido, tente novamente em breve.", 429);
-      if (aiResponse.status === 402) return errorResponse("Créditos de IA insuficientes.", 402);
-      console.error("AI error:", aiResponse.status, await aiResponse.text());
-      return errorResponse("Erro ao gerar sugestões", 500);
+      console.warn("AI gateway error:", aiResponse.status, "— using fallback suggestions");
+      return jsonResponse({ success: true, ...generateFallbackSuggestions() });
     }
 
     const aiData = await aiResponse.json();
     const toolCall = aiData.choices?.[0]?.message?.tool_calls?.[0];
 
     if (!toolCall) {
-      return errorResponse("Resposta inesperada da IA", 500);
+      return jsonResponse({ success: true, ...generateFallbackSuggestions() });
     }
 
     const result = JSON.parse(toolCall.function.arguments);
