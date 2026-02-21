@@ -44,8 +44,26 @@ export function NarracaoPlayer({ texto, titulo }: NarracaoPlayerProps) {
         URL.revokeObjectURL(blobUrlRef.current);
         blobUrlRef.current = null;
       }
+      window.speechSynthesis.cancel();
     };
   }, [texto]);
+
+  const playWithWebSpeech = useCallback((text: string) => {
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(text);
+    const voices = window.speechSynthesis.getVoices();
+    const ptVoice = voices.find((v) => v.lang.startsWith("pt")) || voices[0];
+    if (ptVoice) utterance.voice = ptVoice;
+    utterance.lang = "pt-BR";
+    utterance.rate = 0.95;
+    utterance.onend = () => setStatus("idle");
+    utterance.onerror = () => {
+      setStatus("idle");
+      toast({ title: "Erro ao reproduzir narração", variant: "destructive" });
+    };
+    window.speechSynthesis.speak(utterance);
+    setStatus("playing");
+  }, []);
 
   const generateAndPlay = useCallback(async () => {
     // If we already have audio cached, just play/pause
@@ -57,13 +75,19 @@ export function NarracaoPlayer({ texto, titulo }: NarracaoPlayerProps) {
       return;
     }
 
+    // If using Web Speech fallback and paused, resume
+    if (status === "paused" && !blobUrlRef.current) {
+      window.speechSynthesis.resume();
+      setStatus("playing");
+      return;
+    }
+
     setStatus("loading");
 
-    try {
-      const cleanText = cleanTextForTTS(texto);
-      // Prepend a natural intro
-      const fullText = `${titulo}. ${cleanText}`;
+    const cleanText = cleanTextForTTS(texto);
+    const fullText = `${titulo}. ${cleanText}`;
 
+    try {
       const { data: { session } } = await supabase.auth.getSession();
       const accessToken = session?.access_token;
       if (!accessToken) {
@@ -86,9 +110,11 @@ export function NarracaoPlayer({ texto, titulo }: NarracaoPlayerProps) {
       if (!response.ok) {
         const errData = await response.json().catch(() => ({}));
         const errMsg = errData.error || `Erro ${response.status}`;
-        // Friendly message for quota exceeded
         if (response.status === 503 || errMsg.includes("quota") || errMsg.includes("Cota")) {
-          throw new Error("A narração está temporariamente indisponível. Leia o conteúdo da aula abaixo.");
+          // Fallback to Web Speech API
+          console.warn("ElevenLabs quota exceeded, falling back to Web Speech API");
+          playWithWebSpeech(fullText);
+          return;
         }
         throw new Error(errMsg);
       }
@@ -110,22 +136,29 @@ export function NarracaoPlayer({ texto, titulo }: NarracaoPlayerProps) {
       setStatus("playing");
     } catch (error) {
       console.error("TTS error:", error);
-      setStatus("idle");
-      toast({
-        title: "Erro na narração",
-        description: error instanceof Error ? error.message : "Tente novamente.",
-        variant: "destructive",
-      });
+      // Final fallback to Web Speech API for any error
+      try {
+        playWithWebSpeech(fullText);
+      } catch {
+        setStatus("idle");
+        toast({
+          title: "Erro na narração",
+          description: error instanceof Error ? error.message : "Tente novamente.",
+          variant: "destructive",
+        });
+      }
     }
-  }, [texto, titulo, status]);
+  }, [texto, titulo, status, playWithWebSpeech]);
 
   const togglePlayPause = useCallback(() => {
-    if (status === "playing" && audioRef.current) {
-      audioRef.current.pause();
+    if (status === "playing") {
+      if (audioRef.current) {
+        audioRef.current.pause();
+      } else {
+        window.speechSynthesis.pause();
+      }
       setStatus("paused");
-    } else if (status === "paused") {
-      generateAndPlay();
-    } else if (status === "idle") {
+    } else if (status === "paused" || status === "idle") {
       generateAndPlay();
     }
   }, [status, generateAndPlay]);
@@ -135,6 +168,7 @@ export function NarracaoPlayer({ texto, titulo }: NarracaoPlayerProps) {
       audioRef.current.pause();
       audioRef.current.currentTime = 0;
     }
+    window.speechSynthesis.cancel();
     setStatus("idle");
   }, []);
 
