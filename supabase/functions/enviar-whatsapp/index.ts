@@ -25,10 +25,12 @@ import { jsonResponse, errorResponse } from "../_shared/response.ts";
 interface WhatsAppPayload {
   telefone: string;
   mensagem: string;
-  tipo?: string; // Categoria do envio (ex: "lembrete", "campanha")
-  user_id?: string; // Para vincular ao log
-  referencia_id?: string; // ID da entidade relacionada (ex: agendamento_id)
-  referencia_tipo?: string; // Tipo da entidade (ex: "agendamento")
+  imagem_base64?: string; // Base64 da imagem (sem prefixo data:)
+  imagem_caption?: string; // Legenda da imagem
+  tipo?: string;
+  user_id?: string;
+  referencia_id?: string;
+  referencia_tipo?: string;
 }
 
 Deno.serve(async (req) => {
@@ -55,10 +57,10 @@ Deno.serve(async (req) => {
 
     // 3. Processamento Sequencial
     for (const msg of messages) {
-      const { telefone, mensagem, tipo = "geral", user_id, referencia_id, referencia_tipo } = msg;
+      const { telefone, mensagem, imagem_base64, imagem_caption, tipo = "geral", user_id, referencia_id, referencia_tipo } = msg;
 
-      if (!telefone || !mensagem) {
-        results.push({ telefone, status: "erro", erro: "Telefone e mensagem são obrigatórios" });
+      if (!telefone || (!mensagem && !imagem_base64)) {
+        results.push({ telefone, status: "erro", erro: "Telefone e mensagem (ou imagem) são obrigatórios" });
         continue;
       }
 
@@ -86,16 +88,31 @@ Deno.serve(async (req) => {
       logId = logData?.id || null;
 
       try {
-        // 5. Chamada à Z-API
-        const zapiUrl = `https://api.z-api.io/instances/${ZAPI_INSTANCE_ID}/token/${ZAPI_TOKEN}/send-text`;
+        // 5. Chamada à Z-API (texto ou imagem)
+        let zapiUrl: string;
+        let zapiBody: Record<string, unknown>;
+
+        if (imagem_base64) {
+          // Envio de imagem
+          zapiUrl = `https://api.z-api.io/instances/${ZAPI_INSTANCE_ID}/token/${ZAPI_TOKEN}/send-image`;
+          zapiBody = {
+            phone: phoneFormatted,
+            image: `data:image/png;base64,${imagem_base64}`,
+            caption: imagem_caption || mensagem || "",
+          };
+        } else {
+          // Envio de texto
+          zapiUrl = `https://api.z-api.io/instances/${ZAPI_INSTANCE_ID}/token/${ZAPI_TOKEN}/send-text`;
+          zapiBody = {
+            phone: phoneFormatted,
+            message: mensagem,
+          };
+        }
         
         const zapiResponse = await fetch(zapiUrl, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            phone: phoneFormatted,
-            message: mensagem,
-          }),
+          body: JSON.stringify(zapiBody),
         });
 
         const zapiResult = await zapiResponse.json();
