@@ -1,18 +1,33 @@
 import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Gift, Ban, Search, TrendingUp } from "lucide-react";
+import { Gift, Ban, Search, TrendingUp, Plus, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { useAuth } from "@/contexts/AuthContext";
 
 const ValesPresenteTab = () => {
+  const { user } = useAuth();
   const queryClient = useQueryClient();
   const [search, setSearch] = useState("");
+  const [showForm, setShowForm] = useState(false);
+  const [creating, setCreating] = useState(false);
+  const [form, setForm] = useState({
+    destinatario_nome: "",
+    destinatario_email: "",
+    valor: "",
+    mensagem: "",
+    tema: "classico",
+    tipo: "monetario",
+  });
 
   const { data: vales = [], isLoading } = useQuery({
     queryKey: ["admin-vales"],
@@ -38,6 +53,37 @@ const ValesPresenteTab = () => {
     }
     toast.success("Vale cancelado!");
     queryClient.invalidateQueries({ queryKey: ["admin-vales"] });
+  };
+
+  const criarValeAdmin = async () => {
+    const valor = parseFloat(form.valor);
+    if (!form.destinatario_nome.trim() || isNaN(valor) || valor <= 0) {
+      toast.error("Preencha o nome e um valor válido");
+      return;
+    }
+    setCreating(true);
+    try {
+      const { error } = await supabase
+        .from("vale_presentes")
+        .insert({
+          comprador_id: user!.id,
+          destinatario_nome: form.destinatario_nome.trim(),
+          destinatario_email: form.destinatario_email.trim() || null,
+          valor,
+          mensagem: form.mensagem.trim() || null,
+          tema: form.tema,
+          tipo: form.tipo,
+        } as any);
+      if (error) throw error;
+      toast.success("Vale presente gerado com sucesso! 🎁");
+      queryClient.invalidateQueries({ queryKey: ["admin-vales"] });
+      setForm({ destinatario_nome: "", destinatario_email: "", valor: "", mensagem: "", tema: "classico", tipo: "monetario" });
+      setShowForm(false);
+    } catch (err: any) {
+      toast.error(err.message || "Erro ao gerar vale");
+    } finally {
+      setCreating(false);
+    }
   };
 
   const filtered = vales.filter(
@@ -110,6 +156,102 @@ const ValesPresenteTab = () => {
           </CardContent>
         </Card>
       </div>
+
+      {/* Admin Create Button */}
+      <Button
+        onClick={() => setShowForm(!showForm)}
+        variant={showForm ? "outline" : "default"}
+        className="w-full gap-2"
+      >
+        {showForm ? <X size={16} /> : <Plus size={16} />}
+        {showForm ? "Cancelar" : "Gerar Vale Presente (Admin)"}
+      </Button>
+
+      {/* Admin Create Form */}
+      {showForm && (
+        <Card className="shadow-card border-primary/20">
+          <CardContent className="p-4 space-y-3">
+            <p className="text-xs text-muted-foreground">
+              Gere um vale presente sem necessidade de pagamento. O código será gerado automaticamente.
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="space-y-1.5">
+                <Label className="text-xs">Nome do destinatário *</Label>
+                <Input
+                  placeholder="Ex: Maria Silva"
+                  value={form.destinatario_nome}
+                  onChange={(e) => setForm((f) => ({ ...f, destinatario_nome: e.target.value }))}
+                />
+              </div>
+              <div className="space-y-1.5">
+                <Label className="text-xs">Email (opcional)</Label>
+                <Input
+                  type="email"
+                  placeholder="email@exemplo.com"
+                  value={form.destinatario_email}
+                  onChange={(e) => setForm((f) => ({ ...f, destinatario_email: e.target.value }))}
+                />
+              </div>
+              <div className="space-y-1.5">
+                <Label className="text-xs">Valor (R$) *</Label>
+                <Input
+                  type="number"
+                  min="1"
+                  step="0.01"
+                  placeholder="50.00"
+                  value={form.valor}
+                  onChange={(e) => setForm((f) => ({ ...f, valor: e.target.value }))}
+                />
+              </div>
+              <div className="space-y-1.5">
+                <Label className="text-xs">Tipo</Label>
+                <Select value={form.tipo} onValueChange={(v) => setForm((f) => ({ ...f, tipo: v }))}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="monetario">💰 Monetário</SelectItem>
+                    <SelectItem value="experiencia">🎯 Experiência</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-1.5">
+                <Label className="text-xs">Tema</Label>
+                <Select value={form.tema} onValueChange={(v) => setForm((f) => ({ ...f, tema: v }))}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="classico">🎁 Clássico</SelectItem>
+                    <SelectItem value="aniversario">🎂 Aniversário</SelectItem>
+                    <SelectItem value="natal">🎄 Natal</SelectItem>
+                    <SelectItem value="dia_das_maes">💐 Dia das Mães</SelectItem>
+                    <SelectItem value="zen">🧘 Zen</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            <div className="space-y-1.5">
+              <Label className="text-xs">Mensagem (opcional)</Label>
+              <Textarea
+                placeholder="Mensagem personalizada..."
+                value={form.mensagem}
+                onChange={(e) => setForm((f) => ({ ...f, mensagem: e.target.value }))}
+                rows={2}
+                maxLength={200}
+              />
+            </div>
+            <Button
+              onClick={criarValeAdmin}
+              disabled={creating}
+              className="w-full gap-2"
+            >
+              <Gift size={16} />
+              {creating ? "Gerando..." : "Gerar Vale Presente"}
+            </Button>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Search */}
       <div className="relative">
