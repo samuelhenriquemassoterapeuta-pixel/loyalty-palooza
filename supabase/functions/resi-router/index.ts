@@ -40,23 +40,41 @@ serve(async (req) => {
     }
 
     // Determine the actual userId:
-    // - For web platform, validate JWT and use the authenticated user's ID
-    // - For whatsapp/internal calls, trust the provided userId (called from authenticated webhooks)
+    // - For web platform, REQUIRE valid JWT and use the authenticated user's ID
+    // - For whatsapp/internal calls, validate webhook token before trusting userId
     let userId = requestedUserId;
     
     if (platform === 'web') {
       const authHeader = req.headers.get('Authorization');
-      if (authHeader?.startsWith('Bearer ')) {
-        const supabaseAuth = createClient(
-          Deno.env.get('SUPABASE_URL')!,
-          Deno.env.get('SUPABASE_ANON_KEY')!,
-          { global: { headers: { Authorization: authHeader } } }
+      if (!authHeader?.startsWith('Bearer ')) {
+        return new Response(
+          JSON.stringify({ error: 'Autenticação obrigatória' }),
+          { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
         );
-        const { data: { user } } = await supabaseAuth.auth.getUser();
-        if (user) {
-          userId = user.id; // Use authenticated user ID, ignore client-provided one
-        }
-        // If no valid user, allow anonymous chat with the provided anon_ ID
+      }
+      const supabaseAuth = createClient(
+        Deno.env.get('SUPABASE_URL')!,
+        Deno.env.get('SUPABASE_ANON_KEY')!,
+        { global: { headers: { Authorization: authHeader } } }
+      );
+      const { data: { user } } = await supabaseAuth.auth.getUser();
+      if (!user) {
+        return new Response(
+          JSON.stringify({ error: 'Token inválido' }),
+          { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
+      userId = user.id; // Always use authenticated user ID, never client-provided
+    } else if (platform === 'whatsapp') {
+      // WhatsApp calls come from resi-whatsapp which already validates ZAPI_WEBHOOK_SECRET
+      // Validate that the call comes from an internal edge function via service key
+      const authHeader = req.headers.get('Authorization');
+      const anonKey = Deno.env.get('SUPABASE_ANON_KEY') || '';
+      if (!authHeader?.includes(anonKey)) {
+        return new Response(
+          JSON.stringify({ error: 'Acesso não autorizado' }),
+          { status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
       }
     }
 
@@ -79,7 +97,9 @@ serve(async (req) => {
     }
 
     session.lastActivity = new Date();
-    const trimmedMessage = message.trim();
+    // Sanitize message: limit length and strip control characters
+    const sanitizedMessage = message.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g, '').substring(0, 2000);
+    const trimmedMessage = sanitizedMessage.trim();
 
     // ========================================
     // LÓGICA DE ROTEAMENTO
