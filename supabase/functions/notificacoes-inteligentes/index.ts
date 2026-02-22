@@ -88,6 +88,7 @@ Deno.serve(async (req) => {
 
     return jsonResponse({ success: true, results });
   } catch (error: any) {
-    return errorResponse(error.message, 500);
+    console.error("Erro notificacoes-inteligentes:", error);
+    return errorResponse("Erro interno do servidor", 500);
   }
 });

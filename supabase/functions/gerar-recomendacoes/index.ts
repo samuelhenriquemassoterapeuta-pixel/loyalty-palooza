@@ -145,7 +145,8 @@ PROTOCOLOS DISPONÍVEIS: ${(protocolosDisp || []).map((p: any) => `${p.nome} (${
     return jsonResponse({ count: recommendations.length, method: "rules" });
   } catch (error: any) {
     if (error instanceof Response) return error;
-    return errorResponse(error.message);
+    console.error("Erro gerar-recomendacoes:", error);
+    return errorResponse("Erro interno do servidor", 500);
   }
 });
 

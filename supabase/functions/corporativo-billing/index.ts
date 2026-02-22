@@ -1,44 +1,43 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2.89.0";
+import { handleCors } from "../_shared/cors.ts";
+import { createServiceClient } from "../_shared/supabase-client.ts";
+import { requireAuth } from "../_shared/auth.ts";
+import { jsonResponse, errorResponse } from "../_shared/response.ts";
 import { createLogger } from "../_shared/logger.ts";
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-};
-
-serve(async (req: Request) => {
-  if (req.method === "OPTIONS") {
-    return new Response(null, { headers: corsHeaders });
-  }
+Deno.serve(async (req: Request) => {
+  const corsResponse = handleCors(req);
+  if (corsResponse) return corsResponse;
 
   const log = createLogger("corporativo-billing");
 
   try {
+    // 1. Require authentication
+    const { userId } = await requireAuth(req);
+    const supabase = createServiceClient();
+
+    // 2. Verify admin role
+    const { data: isAdmin } = await supabase.rpc("has_role", {
+      _user_id: userId,
+      _role: "admin",
+    });
+
+    if (!isAdmin) {
+      return errorResponse("Acesso restrito a administradores", 403);
+    }
+
     const { action, empresa_id, plano } = await req.json();
     const ASAAS_API_KEY = Deno.env.get("ASAAS_API_KEY");
     const ASAAS_BASE = "https://api.asaas.com/v3";
 
     if (!ASAAS_API_KEY) {
       log.warn("ASAAS_API_KEY não configurada");
-      return new Response(
-        JSON.stringify({ error: "Integração de pagamento não configurada" }),
-        { status: 503, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
+      return errorResponse("Integração de pagamento não configurada", 503);
     }
-
-    const supabase = createClient(
-      Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
-    );
 
     switch (action) {
       case "criar_assinatura": {
         if (!empresa_id || !plano) {
-          return new Response(
-            JSON.stringify({ error: "empresa_id e plano são obrigatórios" }),
-            { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-          );
+          return errorResponse("empresa_id e plano são obrigatórios", 400);
         }
 
         // Buscar dados da empresa
@@ -48,7 +47,9 @@ serve(async (req: Request) => {
           .eq("id", empresa_id)
           .single();
 
-        if (!empresa) throw new Error("Empresa não encontrada");
+        if (!empresa) {
+          return errorResponse("Empresa não encontrada", 404);
+        }
 
         // Criar cliente no Asaas (se não existir)
         let customerId = empresa.asaas_customer_id;
@@ -67,7 +68,10 @@ serve(async (req: Request) => {
           });
 
           const customer = await customerResp.json();
-          if (!customer.id) throw new Error("Falha ao criar cliente no Asaas: " + JSON.stringify(customer));
+          if (!customer.id) {
+            log.error("Falha ao criar cliente no Asaas", { response: customer });
+            return errorResponse("Falha ao criar cliente no sistema de pagamento", 502);
+          }
           customerId = customer.id;
 
           await supabase
@@ -95,7 +99,10 @@ serve(async (req: Request) => {
         });
 
         const subscription = await subscriptionResp.json();
-        if (!subscription.id) throw new Error("Falha ao criar assinatura: " + JSON.stringify(subscription));
+        if (!subscription.id) {
+          log.error("Falha ao criar assinatura no Asaas", { response: subscription });
+          return errorResponse("Falha ao criar assinatura no sistema de pagamento", 502);
+        }
 
         // Salvar contrato
         await supabase.from("corporativo_contratos").insert({
@@ -113,23 +120,15 @@ serve(async (req: Request) => {
           subscriptionId: subscription.id,
         });
 
-        return new Response(
-          JSON.stringify({ success: true, subscriptionId: subscription.id }),
-          { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-        );
+        return jsonResponse({ success: true, subscriptionId: subscription.id });
       }
 
       default:
-        return new Response(
-          JSON.stringify({ error: "Ação não suportada" }),
-          { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-        );
+        return errorResponse("Ação não suportada", 400);
     }
   } catch (error) {
+    if (error instanceof Response) return error;
     log.error("Erro no billing corporativo", {}, error as Error);
-    return new Response(
-      JSON.stringify({ error: (error as Error).message }),
-      { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-    );
+    return errorResponse("Erro interno do servidor", 500);
   }
 });

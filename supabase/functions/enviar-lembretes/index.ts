@@ -59,6 +59,6 @@ Deno.serve(async (req) => {
     return jsonResponse({ success: true, message: `${notificacoesEnviadas} lembretes enviados` });
   } catch (error: any) {
     console.error("Erro ao enviar lembretes:", error);
-    return errorResponse(error.message, 500);
+    return errorResponse("Erro interno do servidor", 500);
   }
 });
