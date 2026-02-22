@@ -2153,6 +2153,44 @@ export type Database = {
         }
         Relationships: []
       }
+      documentation_versions: {
+        Row: {
+          changes_summary: string | null
+          content: string
+          created_at: string | null
+          created_by: string | null
+          id: string
+          is_current: boolean | null
+          version: string
+        }
+        Insert: {
+          changes_summary?: string | null
+          content: string
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          is_current?: boolean | null
+          version: string
+        }
+        Update: {
+          changes_summary?: string | null
+          content?: string
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          is_current?: boolean | null
+          version?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "documentation_versions_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       edge_function_logs: {
         Row: {
           created_at: string | null

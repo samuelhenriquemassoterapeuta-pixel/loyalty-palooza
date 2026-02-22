@@ -49,6 +49,7 @@ import { generatePlatformMarkdown } from "@/features/admin/utils/generatePlatfor
 import { allDomainMarkdowns, generateCalculadoraDiluicaoMarkdown } from "@/features/admin/utils/generateDomainMarkdowns";
 import { generateMediaMarkdown } from "@/features/admin/utils/generateMediaMarkdown";
 import { FlaskConical } from "lucide-react";
+import { DocumentationViewer } from "./DocumentationViewer";
 
 // ── Reusable Components ──
 
@@ -437,6 +438,9 @@ export const CodigoPlataformaTab = () => {
         <h3 className="text-lg font-bold text-foreground">Código da Plataforma</h3>
         <p className="text-xs text-muted-foreground">Arquitetura, banco de dados, backend e integrações</p>
       </div>
+
+      {/* 📚 Documentation Viewer — Markdown Completo */}
+      <DocumentationViewer />
 
       {/* Export Full Platform Markdown */}
       <PlatformMarkdownBlock />
