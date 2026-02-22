@@ -368,8 +368,8 @@ export function detectAgentFromMessage(message: string): keyof typeof RESI_AGENT
 // Modelos em ordem de fallback para garantir disponibilidade máxima
 const GEMINI_FALLBACK_MODELS = [
   'gemini-2.0-flash',
-  'gemini-1.5-flash',
-  'gemini-1.5-flash-8b',
+  'gemini-2.0-flash-lite',
+  'gemini-2.0-flash-thinking-exp',
 ];
 
 export const GEMINI_CONFIG = {
