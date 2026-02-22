@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, Gift, Send, Ticket, Copy, Check, Share2, Sparkles, Calendar } from "lucide-react";
+import { ArrowLeft, Gift, Send, Ticket, Copy, Check, Share2, Sparkles, Calendar, Download, ChevronDown, ChevronUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -44,6 +44,7 @@ const ValePresente = () => {
   const [tema, setTema] = useState("classico");
   const [codigoResgate, setCodigoResgate] = useState("");
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [expandedExportId, setExpandedExportId] = useState<string | null>(null);
   const [valeCreated, setValeCreated] = useState<any>(null);
   const [paymentVale, setPaymentVale] = useState<{ id: string; valor: number } | null>(null);
   const [tipoVale, setTipoVale] = useState<"monetario" | "experiencia">("monetario");
@@ -398,10 +399,35 @@ const ValePresente = () => {
                           <Button size="sm" variant="ghost" className="h-7 px-2" onClick={() => compartilhar(vale)}>
                             <Share2 size={12} />
                           </Button>
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            className="h-7 px-2"
+                            onClick={() => setExpandedExportId(expandedExportId === vale.id ? null : vale.id)}
+                          >
+                            <Download size={12} />
+                            {expandedExportId === vale.id ? <ChevronUp size={10} /> : <ChevronDown size={10} />}
+                          </Button>
                         </>
                       )}
                     </div>
                   </div>
+                  {/* Expandable export section */}
+                  <AnimatePresence>
+                    {expandedExportId === vale.id && vale.status === "ativo" && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: "auto" }}
+                        exit={{ opacity: 0, height: 0 }}
+                        className="overflow-hidden"
+                      >
+                        <div className="border-t border-border/50 pt-3 mt-1">
+                          <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">Exportar como imagem</p>
+                          <GiftCardExport vale={vale} />
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </motion.div>
               ))
             )}
