@@ -132,6 +132,7 @@ export const adminNavGroups: NavGroup[] = [
     label: "Plataforma",
     icon: Rocket,
     items: [
+      { id: "editor-plataforma", label: "Editor Plataforma", icon: Settings2 },
       { id: "relatorio-tecnico", label: "Relatório Técnico", icon: FileText },
       { id: "apresentacao", label: "Apresentação", icon: Rocket },
       { id: "codigo", label: "Código", icon: Code2 },

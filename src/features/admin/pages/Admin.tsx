@@ -54,6 +54,7 @@ import AnalyticsDashboardTab from "@/features/admin/components/AnalyticsDashboar
 import AnamneseAdminTab from "@/features/admin/components/AnamneseAdminTab";
 import { MateriaisAdminTab } from "@/features/admin/components/MateriaisAdminTab";
 import { AdminResiHandoff } from "@/features/admin/components/AdminResiHandoff";
+import { PlatformEditorTab } from "@/features/admin/components/PlatformEditorTab";
 
 const tabContentVariants = {
   hidden: { opacity: 0, y: 12 },
@@ -411,6 +412,8 @@ const Admin = () => {
         return <MateriaisAdminTab />;
       case "resi-handoff":
         return <AdminResiHandoff />;
+      case "editor-plataforma":
+        return <PlatformEditorTab />;
       case "relatorio-tecnico":
         return <RelatorioTecnicoTab />;
       case "apresentacao":
