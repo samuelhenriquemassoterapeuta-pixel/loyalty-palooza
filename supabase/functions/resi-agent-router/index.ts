@@ -99,7 +99,7 @@ serve(async (req) => {
     const userId = user.id
 
     const { user_id, agent_id, session_id, message } = await req.json()
-    const resolvedUserId = user_id || userId
+    const resolvedUserId = userId // Always use authenticated user ID, ignore client-provided user_id
 
     if (!message || typeof message !== 'string') {
       return new Response(JSON.stringify({ error: 'Campo message é obrigatório' }), {
@@ -108,9 +108,17 @@ serve(async (req) => {
       })
     }
 
+    // Sanitize message: limit length and strip prompt injection patterns
+    const sanitizedMessage = message
+      .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g, '')
+      .replace(/\[INSTRUÇÃO\]/gi, '')
+      .replace(/\[SISTEMA\]/gi, '')
+      .replace(/\[CONTEXTO\]/gi, '')
+      .substring(0, 2000)
+
     const resolvedSessionId = session_id || crypto.randomUUID()
     const cacheKey = `${resolvedUserId}:${resolvedSessionId}`
-    const trimmedMessage = message.trim()
+    const trimmedMessage = sanitizedMessage.trim()
 
     // Carregar agentes do banco (com fallback ao config estático)
     const dbAgents = await loadAgentsFromDb(supabaseService)

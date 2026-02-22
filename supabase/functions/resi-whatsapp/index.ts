@@ -115,7 +115,9 @@ serve(async (req) => {
         userId = `whatsapp_${phone}`;
       }
 
-      const messageToProcess = buttonId || message;
+      // Sanitize message to prevent prompt injection patterns
+      const sanitizedMessage = (buttonId || message).replace(/\[INSTRUÇÃO\]/gi, '').replace(/\[SISTEMA\]/gi, '').replace(/\[CONTEXTO\]/gi, '').trim();
+      const messageToProcess = sanitizedMessage;
 
       // Chamar o resi-router
       const routerResponse = await fetch(`${supabaseUrl}/functions/v1/resi-router`, {
