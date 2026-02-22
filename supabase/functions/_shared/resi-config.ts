@@ -363,13 +363,17 @@ export function detectAgentFromMessage(message: string): keyof typeof RESI_AGENT
 }
 
 // ============================================================
-// 🆓 CONFIGURAÇÃO GOOGLE GEMINI (GRATUITO!)
+// 🚀 CONFIGURAÇÃO OPENROUTER (PRINCIPAL) + GEMINI + LOVABLE AI (FALLBACKS)
 // ============================================================
-// Modelos em ordem de fallback para garantir disponibilidade máxima
+
+const OPENROUTER_MODELS = [
+  'nvidia/nemotron-nano-9b-v2:free',
+  'arcee-ai/trinity-mini:free',
+];
+
 const GEMINI_FALLBACK_MODELS = [
   'gemini-2.0-flash',
   'gemini-2.0-flash-lite',
-  'gemini-2.0-flash-thinking-exp',
 ];
 
 export const GEMINI_CONFIG = {
@@ -401,55 +405,100 @@ export interface UserSession {
   lastActivity: Date;
 }
 
-// Função para chamar o Gemini
-export async function callGemini(
-  systemPrompt: string, 
-  conversationHistory: ChatMessage[], 
+// ========== OPENROUTER ==========
+async function callOpenRouter(
+  systemPrompt: string,
+  conversationHistory: ChatMessage[],
   userMessage: string
-): Promise<string> {
-  const apiKey = GEMINI_CONFIG.apiKey;
-  
-  if (!apiKey) {
-    throw new Error('GEMINI_API_KEY não configurada');
-  }
+): Promise<string | null> {
+  const apiKey = Deno.env.get('OPENROUTER_API_KEY');
+  if (!apiKey) return null;
 
-  const contents: ChatMessage[] = [
-    {
-      role: 'user',
-      parts: [{ text: `INSTRUÇÕES DO SISTEMA (siga sempre):\n\n${systemPrompt}\n\n---\n\nAgora responda à conversa abaixo:` }]
-    },
-    {
-      role: 'model', 
-      parts: [{ text: 'Entendido! Estou pronta para ajudar seguindo todas as instruções. 🌿' }]
-    },
-    ...conversationHistory,
-    {
-      role: 'user',
-      parts: [{ text: userMessage }]
-    }
+  const messages = [
+    { role: 'system', content: systemPrompt },
+    ...conversationHistory.map(m => ({
+      role: m.role === 'model' ? 'assistant' : 'user',
+      content: m.parts.map(p => p.text).join('\n'),
+    })),
+    { role: 'user', content: userMessage },
   ];
 
-  const requestBody = {
-    contents,
-    generationConfig: GEMINI_CONFIG.generationConfig,
-    safetySettings: GEMINI_CONFIG.safetySettings,
-  };
+  for (const model of OPENROUTER_MODELS) {
+    try {
+      const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${apiKey}`,
+          'Content-Type': 'application/json',
+          'HTTP-Referer': 'https://resinkra.com',
+          'X-Title': 'Agentes Resi IA',
+        },
+        body: JSON.stringify({
+          model,
+          messages,
+          max_tokens: 1500,
+          temperature: 0.7,
+        }),
+      });
 
-  // Tenta modelos em ordem até um funcionar (fallback automático em caso de rate limit)
+      if (response.status === 429) {
+        console.log(`OpenRouter ${model} rate limited, tentando próximo...`);
+        continue;
+      }
+
+      if (!response.ok) {
+        const errText = await response.text();
+        console.error(`OpenRouter ${model} erro ${response.status}:`, errText);
+        continue;
+      }
+
+      const data = await response.json();
+      const text = data.choices?.[0]?.message?.content;
+      if (text) {
+        console.log(`✅ Respondido via OpenRouter: ${model}`);
+        return text;
+      }
+    } catch (e) {
+      console.error(`Erro OpenRouter ${model}:`, e);
+      continue;
+    }
+  }
+  return null;
+}
+
+// ========== GEMINI (FALLBACK 1) ==========
+async function callGeminiFallback(
+  systemPrompt: string,
+  conversationHistory: ChatMessage[],
+  userMessage: string
+): Promise<string | null> {
+  const apiKey = GEMINI_CONFIG.apiKey;
+  if (!apiKey) return null;
+
+  const contents: ChatMessage[] = [
+    { role: 'user', parts: [{ text: `INSTRUÇÕES DO SISTEMA (siga sempre):\n\n${systemPrompt}\n\n---\n\nAgora responda à conversa abaixo:` }] },
+    { role: 'model', parts: [{ text: 'Entendido! Estou pronta para ajudar seguindo todas as instruções. 🌿' }] },
+    ...conversationHistory,
+    { role: 'user', parts: [{ text: userMessage }] },
+  ];
+
   for (const model of GEMINI_FALLBACK_MODELS) {
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`;
     try {
       const response = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'x-goog-api-key': apiKey },
-        body: JSON.stringify(requestBody),
+        body: JSON.stringify({
+          contents,
+          generationConfig: GEMINI_CONFIG.generationConfig,
+          safetySettings: GEMINI_CONFIG.safetySettings,
+        }),
       });
 
       if (response.status === 429) {
-        console.log(`Modelo ${model} rate limited, tentando próximo...`);
+        console.log(`Gemini ${model} rate limited, tentando próximo...`);
         continue;
       }
-
       if (!response.ok) {
         const errorText = await response.text();
         console.error(`Gemini ${model} erro ${response.status}:`, errorText);
@@ -457,14 +506,91 @@ export async function callGemini(
       }
 
       const data = await response.json();
-      const generatedText = data.candidates?.[0]?.content?.parts?.[0]?.text;
-      
-      if (generatedText) return generatedText;
+      const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+      if (text) {
+        console.log(`✅ Respondido via Gemini (fallback): ${model}`);
+        return text;
+      }
     } catch (e) {
-      console.error(`Erro ao chamar modelo ${model}:`, e);
+      console.error(`Erro Gemini ${model}:`, e);
       continue;
     }
   }
+  return null;
+}
 
-  throw new Error('Todos os modelos Gemini falharam ou atingiram rate limit');
+// ========== LOVABLE AI (FALLBACK 2) ==========
+async function callLovableAIFallback(
+  systemPrompt: string,
+  conversationHistory: ChatMessage[],
+  userMessage: string
+): Promise<string | null> {
+  const apiKey = Deno.env.get('LOVABLE_API_KEY');
+  if (!apiKey) return null;
+
+  const messages = [
+    { role: 'system', content: systemPrompt },
+    ...conversationHistory.map(m => ({
+      role: m.role === 'model' ? 'assistant' : 'user',
+      content: m.parts.map(p => p.text).join('\n'),
+    })),
+    { role: 'user', content: userMessage },
+  ];
+
+  try {
+    const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'google/gemini-2.5-flash-lite',
+        messages,
+        max_tokens: 1500,
+        temperature: 0.7,
+      }),
+    });
+
+    if (!response.ok) {
+      const errText = await response.text();
+      console.error(`Lovable AI fallback erro ${response.status}:`, errText);
+      return null;
+    }
+
+    const data = await response.json();
+    const text = data.choices?.[0]?.message?.content;
+    if (text) {
+      console.log('✅ Respondido via Lovable AI Gateway (fallback final)');
+      return text;
+    }
+  } catch (e) {
+    console.error('Erro Lovable AI:', e);
+  }
+  return null;
+}
+
+// ========== FUNÇÃO PRINCIPAL COM CADEIA DE FALLBACK ==========
+export async function callGemini(
+  systemPrompt: string, 
+  conversationHistory: ChatMessage[], 
+  userMessage: string
+): Promise<string> {
+  // 1. OpenRouter (principal)
+  const openRouterResult = await callOpenRouter(systemPrompt, conversationHistory, userMessage);
+  if (openRouterResult) return openRouterResult;
+
+  console.log('⚠️ OpenRouter falhou, tentando Gemini...');
+
+  // 2. Gemini (fallback 1)
+  const geminiResult = await callGeminiFallback(systemPrompt, conversationHistory, userMessage);
+  if (geminiResult) return geminiResult;
+
+  console.log('⚠️ Gemini falhou, tentando Lovable AI...');
+
+  // 3. Lovable AI (fallback 2)
+  const lovableResult = await callLovableAIFallback(systemPrompt, conversationHistory, userMessage);
+  if (lovableResult) return lovableResult;
+
+  throw new Error('Todos os provedores de IA falharam (OpenRouter → Gemini → Lovable AI)');
 }
