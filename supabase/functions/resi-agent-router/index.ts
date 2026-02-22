@@ -1,7 +1,6 @@
 // ============================================================
 // 🌿 RESINKRA - Resi Agent Router
-// Roteador central dos agentes Resi — carrega configuração
-// dinamicamente da tabela resi_agents_config (com fallback estático)
+// Roteador central dos agentes Resi — sessões persistentes no banco
 // ============================================================
 
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
@@ -10,7 +9,6 @@ import {
   RESI_AGENTS,
   MENU_MESSAGE,
   MENU_OPTIONS,
-  detectAgentFromMessage,
   callGemini,
   ChatMessage,
 } from '../_shared/resi-config.ts'
@@ -19,9 +17,6 @@ const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
-
-// Cache de histórico em memória por sessão
-const sessionCache = new Map<string, { history: ChatMessage[]; agent: string | null }>()
 
 // Cache dos agentes do banco (TTL: 5 minutos)
 let agentsDbCache: Record<string, { systemPrompt: string; keywords: string[]; name: string; emoji: string; description: string }> | null = null
@@ -53,10 +48,117 @@ async function loadAgentsFromDb(supabase: ReturnType<typeof createClient>) {
     }
 
     agentsDbCache = map
-    agentsCacheExpiry = now + 5 * 60 * 1000 // 5 minutos
+    agentsCacheExpiry = now + 5 * 60 * 1000
     return map
   } catch {
     return null
+  }
+}
+
+// Detecção de agente melhorada com keywords expandidas
+const EXTENDED_KEYWORDS: Record<string, string[]> = {
+  agenda: [
+    'agendar', 'marcar', 'sessão', 'horário', 'terapeuta', 'remarcar', 'cancelar',
+    'disponibilidade', 'check-in', 'massagem', 'drenagem', 'reflexologia',
+    'head spa', 'shiatsu', 'ventosa', 'pedras quentes', 'aromaterapia',
+    'dry needling', 'seitai', 'amanhã', 'hoje', 'semana que vem',
+    'samuel', 'henrique', 'agenda', 'consulta', 'atendimento',
+  ],
+  core: [
+    'dúvida', 'ajuda', 'cashback', 'tier', 'indicação', 'badge', 'conquista',
+    'cromo', 'vale presente', 'cupom', 'plataforma', 'como funciona',
+    'resink', 'xp', 'nível', 'ranking', 'gamificação',
+  ],
+  creator: [
+    'roteiro', 'reels', 'tiktok', 'instagram', 'stories', 'hook', 'viral',
+    'conteúdo', 'ideia', 'post', 'vídeo', 'rede social', 'criar conteúdo',
+  ],
+  loja: [
+    'produto', 'comprar', 'óleo', 'pacote', 'preço', 'promoção', 'desconto',
+    'carrinho', 'pagar', 'pix', 'boleto', 'loja', 'catálogo',
+  ],
+  wellness: [
+    'alongamento', 'estresse', 'sono', 'relaxar', 'respiração', 'postura',
+    'bem-estar', 'saúde', 'dica', 'exercício', 'ansiedade', 'meditação',
+    'mindfulness', 'autocuidado',
+  ],
+}
+
+function detectAgent(message: string, mergedAgents: typeof RESI_AGENTS): string | null {
+  const lower = message.toLowerCase()
+
+  // 1. Tentar com keywords do banco (mergedAgents)
+  for (const [agentKey, agent] of Object.entries(mergedAgents)) {
+    if (agent.keywords.some((kw: string) => lower.includes(kw.toLowerCase()))) {
+      return agentKey
+    }
+  }
+
+  // 2. Tentar com keywords estendidas
+  for (const [agentKey, keywords] of Object.entries(EXTENDED_KEYWORDS)) {
+    if (keywords.some(kw => lower.includes(kw))) {
+      return agentKey
+    }
+  }
+
+  return null
+}
+
+// ========================================
+// Sessão persistente via chat_sessions
+// ========================================
+async function loadSession(
+  supabase: ReturnType<typeof createClient>,
+  userId: string,
+  sessionId: string
+): Promise<{ agent: string | null; history: ChatMessage[] }> {
+  try {
+    const { data } = await supabase
+      .from('chat_sessions')
+      .select('current_agent, conversation_history')
+      .eq('id', sessionId)
+      .eq('user_id', userId)
+      .single()
+
+    if (data) {
+      return {
+        agent: data.current_agent || null,
+        history: (data.conversation_history as ChatMessage[]) || [],
+      }
+    }
+  } catch {
+    // Session not found, create new
+  }
+  return { agent: null, history: [] }
+}
+
+async function saveSession(
+  supabase: ReturnType<typeof createClient>,
+  userId: string,
+  sessionId: string,
+  agent: string | null,
+  history: ChatMessage[]
+) {
+  try {
+    // Keep only last 20 messages to avoid bloat
+    const trimmedHistory = history.slice(-20)
+
+    await supabase
+      .from('chat_sessions')
+      .upsert(
+        {
+          id: sessionId,
+          user_id: userId,
+          current_agent: agent,
+          conversation_history: trimmedHistory,
+          platform: 'web',
+          last_activity: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        },
+        { onConflict: 'id' }
+      )
+  } catch (e) {
+    console.error('Erro ao salvar sessão:', e)
   }
 }
 
@@ -74,23 +176,20 @@ serve(async (req) => {
       })
     }
 
-    // Cliente com anon key + JWT do usuário (para perfil)
     const supabaseClient = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_ANON_KEY') ?? '',
       { global: { headers: { Authorization: authHeader } } }
     )
 
-    // Cliente service_role para ler resi_agents_config (bypassa RLS de admin)
     const supabaseService = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     )
 
-    // Validar usuário — getUser() usa o header Authorization do client
+    // Validar usuário
     const { data: { user }, error: authError } = await supabaseClient.auth.getUser()
     if (authError || !user) {
-      console.error('Auth error:', authError?.message, 'Header:', authHeader?.substring(0, 30))
       return new Response(JSON.stringify({ error: 'Token inválido' }), {
         status: 401,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -98,8 +197,7 @@ serve(async (req) => {
     }
     const userId = user.id
 
-    const { user_id, agent_id, session_id, message } = await req.json()
-    const resolvedUserId = userId // Always use authenticated user ID, ignore client-provided user_id
+    const { session_id, message } = await req.json()
 
     if (!message || typeof message !== 'string') {
       return new Response(JSON.stringify({ error: 'Campo message é obrigatório' }), {
@@ -108,7 +206,7 @@ serve(async (req) => {
       })
     }
 
-    // Sanitize message: limit length and strip prompt injection patterns
+    // Sanitize message
     const sanitizedMessage = message
       .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g, '')
       .replace(/\[INSTRUÇÃO\]/gi, '')
@@ -117,28 +215,30 @@ serve(async (req) => {
       .substring(0, 2000)
 
     const resolvedSessionId = session_id || crypto.randomUUID()
-    const cacheKey = `${resolvedUserId}:${resolvedSessionId}`
     const trimmedMessage = sanitizedMessage.trim()
 
-    // Carregar agentes do banco (com fallback ao config estático)
+    // Carregar agentes do banco
     const dbAgents = await loadAgentsFromDb(supabaseService)
-
-    // Mesclar: DB sobrescreve prompts e keywords do config estático
-    const mergedAgents = { ...RESI_AGENTS }
+    const mergedAgents = { ...RESI_AGENTS } as any
     if (dbAgents) {
       for (const [key, dbAgent] of Object.entries(dbAgents)) {
-        if (mergedAgents[key as keyof typeof RESI_AGENTS]) {
-          mergedAgents[key as keyof typeof RESI_AGENTS] = {
-            ...mergedAgents[key as keyof typeof RESI_AGENTS],
+        if (mergedAgents[key]) {
+          mergedAgents[key] = {
+            ...mergedAgents[key],
             name: dbAgent.name,
             emoji: dbAgent.emoji,
             description: dbAgent.description,
             systemPrompt: dbAgent.systemPrompt,
-            keywords: dbAgent.keywords.length > 0 ? dbAgent.keywords : mergedAgents[key as keyof typeof RESI_AGENTS].keywords,
+            keywords: dbAgent.keywords.length > 0 ? dbAgent.keywords : mergedAgents[key].keywords,
           }
         }
       }
     }
+
+    // ========================================
+    // Carregar sessão PERSISTENTE do banco
+    // ========================================
+    let session = await loadSession(supabaseService, userId, resolvedSessionId)
 
     // ========================================
     // ROTEAMENTO: voltar ao menu
@@ -148,7 +248,7 @@ serve(async (req) => {
       trimmedMessage.toLowerCase() === 'menu' ||
       trimmedMessage.toLowerCase() === 'voltar'
     ) {
-      sessionCache.delete(cacheKey)
+      await saveSession(supabaseService, userId, resolvedSessionId, null, [])
       return new Response(
         JSON.stringify({
           success: true,
@@ -161,9 +261,6 @@ serve(async (req) => {
       )
     }
 
-    // Recuperar sessão do cache
-    let session = sessionCache.get(cacheKey) || { history: [], agent: agent_id || null }
-
     // ========================================
     // ROTEAMENTO: selecionar agente pelo menu
     // ========================================
@@ -171,7 +268,7 @@ serve(async (req) => {
       const selectedAgentKey = MENU_OPTIONS[trimmedMessage]
       if (selectedAgentKey) {
         session = { history: [], agent: selectedAgentKey }
-        sessionCache.set(cacheKey, session)
+        await saveSession(supabaseService, userId, resolvedSessionId, selectedAgentKey, [])
 
         const agent = mergedAgents[selectedAgentKey]
         const welcomeMsg = `${agent.emoji} *${agent.name}* ao seu dispor!\n\n${agent.description}\n\nComo posso te ajudar? 💚\n\n_(Digite 0 a qualquer momento para voltar ao menu)_`
@@ -190,19 +287,11 @@ serve(async (req) => {
         )
       }
 
-      // Tentar detectar agente por palavra-chave (usa keywords mescladas)
-      let detected: string | null = null
-      const lowerMsg = trimmedMessage.toLowerCase()
-      for (const [agentKey, agent] of Object.entries(mergedAgents)) {
-        if (agent.keywords.some((kw) => lowerMsg.includes(kw.toLowerCase()))) {
-          detected = agentKey
-          break
-        }
-      }
+      // Tentar detectar agente por palavra-chave melhorada
+      const detected = detectAgent(trimmedMessage, mergedAgents)
 
       if (detected) {
         session.agent = detected
-        sessionCache.set(cacheKey, session)
       } else {
         return new Response(
           JSON.stringify({
@@ -218,7 +307,7 @@ serve(async (req) => {
     }
 
     // ========================================
-    // PROCESSAR COM O AGENTE (GEMINI)
+    // PROCESSAR COM O AGENTE (IA)
     // ========================================
     const agentKey = session.agent as keyof typeof mergedAgents
     const currentAgent = mergedAgents[agentKey]
@@ -229,18 +318,19 @@ serve(async (req) => {
       const { data: profile } = await supabaseClient
         .from('profiles')
         .select('nome, tier, cashback_saldo')
-        .eq('id', resolvedUserId)
+        .eq('id', userId)
         .single()
 
       if (profile) {
         userContext = `\n\n[CONTEXTO DO USUÁRIO]\n- Nome: ${profile.nome || 'Não informado'}\n- Tier: ${profile.tier || 'Bronze'}\n- Saldo Cashback: R$ ${profile.cashback_saldo || 0}`
       }
     } catch {
-      console.log('Contexto do usuário não disponível')
+      // ignore
     }
 
     const startTime = Date.now()
 
+    // Usar histórico PERSISTENTE do banco (últimas 10 mensagens)
     const assistantMessage = await callGemini(
       currentAgent.systemPrompt + userContext,
       session.history.slice(-10),
@@ -249,45 +339,25 @@ serve(async (req) => {
 
     const responseTimeMs = Date.now() - startTime
 
-    // Atualizar histórico em cache
+    // Atualizar histórico e salvar no banco
     session.history.push(
       { role: 'user', parts: [{ text: trimmedMessage }] },
       { role: 'model', parts: [{ text: assistantMessage }] }
     )
-    sessionCache.set(cacheKey, session)
+    await saveSession(supabaseService, userId, resolvedSessionId, session.agent, session.history)
 
-    // Salvar conversa no banco
+    // Salvar interação
     try {
-      await supabaseClient.from('resi_conversations').insert([
-        {
-          user_id: resolvedUserId,
-          agent_id: currentAgent.id,
-          session_id: resolvedSessionId,
-          role: 'user',
-          content: trimmedMessage,
-        },
-        {
-          user_id: resolvedUserId,
-          agent_id: currentAgent.id,
-          session_id: resolvedSessionId,
-          role: 'assistant',
-          content: assistantMessage,
-        },
-      ])
+      await supabaseService.from('chat_interactions').insert({
+        user_id: userId,
+        agent: currentAgent.id ?? agentKey,
+        user_message: trimmedMessage,
+        assistant_message: assistantMessage,
+        platform: 'web',
+        response_time_ms: responseTimeMs,
+      })
     } catch {
-      // Fallback: chat_interactions
-      try {
-        await supabaseService.from('chat_interactions').insert({
-          user_id: resolvedUserId,
-          agent: currentAgent.id ?? agentKey,
-          user_message: trimmedMessage,
-          assistant_message: assistantMessage,
-          platform: 'web',
-          response_time_ms: responseTimeMs,
-        })
-      } catch {
-        console.log('Erro ao salvar interação')
-      }
+      // ignore
     }
 
     return new Response(

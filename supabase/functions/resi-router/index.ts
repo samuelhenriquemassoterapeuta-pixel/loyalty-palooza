@@ -10,7 +10,6 @@ import {
   RESI_AGENTS, 
   MENU_MESSAGE, 
   MENU_OPTIONS, 
-  detectAgentFromMessage,
   callGemini,
   ChatMessage,
   UserSession
@@ -145,8 +144,23 @@ serve(async (req) => {
         );
       }
       
-      // Tentar detectar agente pela mensagem
-      const detectedAgent = detectAgentFromMessage(trimmedMessage);
+      // Tentar detectar agente pela mensagem (detecção expandida)
+      const lowerMsg = trimmedMessage.toLowerCase();
+      const EXTENDED_KW: Record<string, string[]> = {
+        agenda: ['agendar','marcar','sessão','horário','terapeuta','remarcar','cancelar','massagem','drenagem','reflexologia','head spa','shiatsu','ventosa','pedras quentes','aromaterapia','dry needling','seitai','amanhã','hoje','semana que vem','samuel','henrique','agenda','consulta','atendimento'],
+        core: ['dúvida','ajuda','cashback','tier','indicação','badge','conquista','cromo','vale presente','cupom','plataforma','como funciona','resink','xp','nível','ranking'],
+        creator: ['roteiro','reels','tiktok','instagram','stories','hook','viral','conteúdo','ideia','post','vídeo','rede social'],
+        loja: ['produto','comprar','óleo','pacote','preço','promoção','desconto','carrinho','pagar','pix','boleto','loja','catálogo'],
+        wellness: ['alongamento','estresse','sono','relaxar','respiração','postura','bem-estar','saúde','dica','exercício','ansiedade','meditação','mindfulness'],
+      };
+      
+      let detectedAgent: keyof typeof RESI_AGENTS | null = null;
+      for (const [agentKey, keywords] of Object.entries(EXTENDED_KW)) {
+        if (keywords.some(kw => lowerMsg.includes(kw))) {
+          detectedAgent = agentKey as keyof typeof RESI_AGENTS;
+          break;
+        }
+      }
       
       if (detectedAgent) {
         session.currentAgent = detectedAgent;

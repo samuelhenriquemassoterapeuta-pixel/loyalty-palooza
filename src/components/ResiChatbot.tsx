@@ -42,7 +42,8 @@ export function ResiChatbot() {
   const [loading, setLoading] = useState(false);
   const [currentAgent, setCurrentAgent] = useState<string | null>(null);
   const [showMenu, setShowMenu] = useState(true);
-  const [sessionId] = useState(() => crypto.randomUUID());
+  // Sessão estável: persiste entre re-renders mas reseta ao fechar/reabrir o chat
+  const [sessionId, setSessionId] = useState(() => crypto.randomUUID());
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { user } = useAuth();
 
