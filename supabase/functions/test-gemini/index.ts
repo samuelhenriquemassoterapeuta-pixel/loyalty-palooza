@@ -11,11 +11,11 @@ Deno.serve(async (req) => {
       return errorResponse("GEMINI_API_KEY não configurada. Adicione em Cloud → Secrets.", 500);
     }
 
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent`;
 
     const response = await fetch(url, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", "x-goog-api-key": GEMINI_API_KEY },
       body: JSON.stringify({
         contents: [{ parts: [{ text: "Diga 'Olá, a chave está funcionando!' em uma frase curta." }] }],
       }),

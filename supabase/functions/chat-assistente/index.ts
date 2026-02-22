@@ -117,9 +117,9 @@ Deno.serve(async (req) => {
       // Try to extract scheduling details and process
       const scheduleCheckPrompt = `${systemPrompt}\n\nO cliente diz: "${lastUserMessage}"\n\nSe o cliente quer agendar, extraia: serviço desejado, data/horário preferido e terapeuta (se mencionado). Responda em JSON: {"wants_scheduling": true/false, "servico": "...", "data_hora_sugerida": "...", "terapeuta": "..."} ou apenas confirme em texto se não for possível extrair.`;
 
-      const checkRes = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
+      const checkRes = await fetch(GEMINI_API_URL, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", "x-goog-api-key": GEMINI_API_KEY },
         body: JSON.stringify({
           contents: [{ role: "user", parts: [{ text: scheduleCheckPrompt }] }],
           generationConfig: { temperature: 0.1, maxOutputTokens: 300 },
@@ -172,9 +172,9 @@ async function callGeminiDirect(
     { role: "user", parts: [{ text: userMessage }] },
   ];
 
-  const res = await fetch(`${GEMINI_API_URL}?key=${apiKey}`, {
+  const res = await fetch(GEMINI_API_URL, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", "x-goog-api-key": apiKey },
     body: JSON.stringify({
       contents,
       generationConfig: { temperature: 0.7, topK: 40, topP: 0.95, maxOutputTokens: 800 },

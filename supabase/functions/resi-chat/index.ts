@@ -16,7 +16,7 @@ const GEMINI_MODELS = [
 async function callGeminiWithFallback(apiKey: string, contents: any[], config: any): Promise<string> {
   for (let i = 0; i < GEMINI_MODELS.length; i++) {
     const { model, version } = GEMINI_MODELS[i];
-    const url = `https://generativelanguage.googleapis.com/${version}/models/${model}:generateContent?key=${apiKey}`;
+    const url = `https://generativelanguage.googleapis.com/${version}/models/${model}:generateContent`;
     
     // Pequeno delay entre tentativas para evitar burst de rate limit
     if (i > 0) {
@@ -26,7 +26,7 @@ async function callGeminiWithFallback(apiKey: string, contents: any[], config: a
     try {
       const response = await fetch(url, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", "x-goog-api-key": apiKey },
         body: JSON.stringify({ contents, ...config }),
       });
 
