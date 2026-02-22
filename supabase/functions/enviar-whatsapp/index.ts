@@ -38,6 +38,35 @@ Deno.serve(async (req) => {
   if (corsResponse) return corsResponse;
 
   try {
+    // Require admin authentication - only admins/system can send WhatsApp
+    const authHeader = req.headers.get("Authorization");
+    if (!authHeader?.startsWith("Bearer ")) {
+      return errorResponse("Não autorizado", 401);
+    }
+    // Validate the caller is either service role or authenticated admin
+    const supabase = createServiceClient();
+    const { createClient } = await import("https://esm.sh/@supabase/supabase-js@2.89.0");
+    const anonKey = Deno.env.get("SUPABASE_ANON_KEY") || "";
+    const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") || "";
+    const token = authHeader.replace("Bearer ", "");
+    
+    // Allow internal service calls (from other edge functions using anon/service key)
+    const isInternalCall = token === anonKey || token === serviceKey;
+    
+    if (!isInternalCall) {
+      // For external calls, verify admin role
+      const userClient = createClient(
+        Deno.env.get("SUPABASE_URL")!,
+        anonKey,
+        { global: { headers: { Authorization: authHeader } } }
+      );
+      const { data: { user }, error: authError } = await userClient.auth.getUser();
+      if (authError || !user) return errorResponse("Não autorizado", 401);
+      
+      const { data: isAdmin } = await supabase.rpc("has_role", { _user_id: user.id, _role: "admin" });
+      if (!isAdmin) return errorResponse("Acesso restrito a administradores", 403);
+    }
+
     // 1. Validação de Secrets
     const ZAPI_INSTANCE_ID = Deno.env.get("ZAPI_INSTANCE_ID");
     const ZAPI_TOKEN = Deno.env.get("ZAPI_TOKEN");
@@ -45,8 +74,6 @@ Deno.serve(async (req) => {
     if (!ZAPI_INSTANCE_ID || !ZAPI_TOKEN) {
       throw new Error("Credenciais Z-API não configuradas (ZAPI_INSTANCE_ID ou ZAPI_TOKEN).");
     }
-
-    const supabase = createServiceClient();
 
     // 2. Parsing e Normalização do Payload
     const body = await req.json();

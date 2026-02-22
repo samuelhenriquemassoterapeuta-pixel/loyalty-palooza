@@ -1,10 +1,11 @@
 import { createLogger } from "../_shared/logger.ts";
 import { createServiceClient } from "../_shared/supabase-client.ts";
+import { requireAuth } from "../_shared/auth.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type",
+    "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
 Deno.serve(async (req: Request) => {
@@ -15,7 +16,20 @@ Deno.serve(async (req: Request) => {
   const log = createLogger("alerta-sistema");
 
   try {
+    // Require admin authentication
+    const { userId } = await requireAuth(req);
     const supabase = createServiceClient();
+
+    const { data: isAdmin } = await supabase.rpc("has_role", {
+      _user_id: userId,
+      _role: "admin",
+    });
+    if (!isAdmin) {
+      return new Response(JSON.stringify({ error: "Acesso restrito" }), {
+        status: 403,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
 
     // Coletar métricas de saúde
     const { data: health, error } = await supabase.rpc("collect_system_health");
@@ -138,6 +152,7 @@ Deno.serve(async (req: Request) => {
       }
     );
   } catch (error) {
+    if (error instanceof Response) return error;
     log.error("Erro fatal no alerta", {}, error as Error);
     return new Response(JSON.stringify({ error: "Internal error" }), {
       status: 500,

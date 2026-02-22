@@ -1,5 +1,6 @@
 import { handleCors } from "../_shared/cors.ts";
 import { createServiceClient } from "../_shared/supabase-client.ts";
+import { requireAuth } from "../_shared/auth.ts";
 import { jsonResponse, errorResponse } from "../_shared/response.ts";
 
 Deno.serve(async (req) => {
@@ -7,7 +8,17 @@ Deno.serve(async (req) => {
   if (corsRes) return corsRes;
 
   try {
+    // Require admin authentication
+    const { userId } = await requireAuth(req);
     const supabase = createServiceClient();
+
+    const { data: isAdmin } = await supabase.rpc("has_role", {
+      _user_id: userId,
+      _role: "admin",
+    });
+    if (!isAdmin) {
+      return errorResponse("Acesso restrito a administradores", 403);
+    }
 
     // 1. Process expired cashback
     const { data: expired, error: expiredError } = await supabase.rpc("process_expired_cashback");

@@ -164,7 +164,7 @@ Se não conseguir identificar alimentos na imagem, retorne o JSON com descricao 
     console.error("analisar-refeicao error:", err);
     return new Response(
       JSON.stringify({
-        error: err instanceof Error ? err.message : "Erro interno",
+        error: "Erro interno do servidor",
       }),
       {
         status: 500,

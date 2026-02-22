@@ -175,8 +175,7 @@ serve(async (req) => {
   } catch (err) {
     console.error("analisar-postura error:", err);
     if (err instanceof Response) return err; // 401 do requireAuth
-    const message = err instanceof Error ? err.message : "Erro interno";
-    return new Response(JSON.stringify({ error: message }), {
+    return new Response(JSON.stringify({ error: "Erro interno do servidor" }), {
       status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });

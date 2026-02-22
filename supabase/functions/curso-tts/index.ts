@@ -39,6 +39,6 @@ Deno.serve(async (req) => {
   } catch (e) {
     console.error("curso-tts error:", e);
     if (e instanceof Response) return e;
-    return errorResponse(e instanceof Error ? e.message : "Unknown error", 500);
+    return errorResponse("Erro interno do servidor", 500);
   }
 });
