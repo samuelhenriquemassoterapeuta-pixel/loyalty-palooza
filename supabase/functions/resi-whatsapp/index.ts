@@ -61,15 +61,29 @@ serve(async (req) => {
   }
 
   try {
+    // Webhook authentication: validate Z-API webhook token
+    const ZAPI_WEBHOOK_SECRET = Deno.env.get('ZAPI_WEBHOOK_SECRET');
+    if (ZAPI_WEBHOOK_SECRET) {
+      const providedToken = req.headers.get('x-webhook-token') || new URL(req.url).searchParams.get('token');
+      if (providedToken !== ZAPI_WEBHOOK_SECRET) {
+        console.warn('Webhook auth failed: invalid token');
+        return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+          status: 401,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        });
+      }
+    }
+
     const payload = await req.json();
-    console.log('WhatsApp Webhook recebido:', JSON.stringify(payload));
+    console.log('WhatsApp Webhook recebido');
 
     if (!payload.isFromMe && payload.type === 'ReceivedCallback') {
-      const phone = payload.phone;
-      const message = payload.text?.message || payload.listResponseMessage?.title || '';
+      const phone = (payload.phone || '').replace(/\D/g, '');
+      const message = (payload.text?.message || payload.listResponseMessage?.title || '').substring(0, 2000).trim();
       const buttonId = payload.listResponseMessage?.selectedButtonId || null;
 
-      if (!phone || !message) {
+      // Validate phone format
+      if (!phone || !/^\d{10,15}$/.test(phone) || !message) {
         return new Response(JSON.stringify({ status: 'ignored' }), { 
           headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
         });

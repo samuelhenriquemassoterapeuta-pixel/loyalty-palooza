@@ -110,6 +110,16 @@ Deno.serve(async (req) => {
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY não configurada");
     if (!ZAPI_INSTANCE_ID || !ZAPI_TOKEN) throw new Error("Credenciais Z-API não configuradas");
 
+    // Webhook authentication: validate Z-API webhook token
+    const ZAPI_WEBHOOK_SECRET = Deno.env.get('ZAPI_WEBHOOK_SECRET');
+    if (ZAPI_WEBHOOK_SECRET) {
+      const providedToken = req.headers.get('x-webhook-token') || new URL(req.url).searchParams.get('token');
+      if (providedToken !== ZAPI_WEBHOOK_SECRET) {
+        console.warn('Webhook auth failed: invalid token');
+        return errorResponse('Unauthorized', 401);
+      }
+    }
+
     const supabase = createServiceClient();
     const body = await req.json();
 
@@ -118,15 +128,16 @@ Deno.serve(async (req) => {
       return jsonResponse({ ok: true, skipped: true });
     }
 
-    const phone = body.phone || body.chatId?.replace("@c.us", "") || "";
-    const userMessage = body.text.message;
-    const senderName = body.senderName || body.chatName || "";
+    // Input validation: sanitize phone and message
+    const phone = (body.phone || body.chatId?.replace("@c.us", "") || "").replace(/\D/g, '');
+    const userMessage = (body.text.message || "").substring(0, 2000).trim();
+    const senderName = (body.senderName || body.chatName || "").substring(0, 100).trim();
 
-    if (!phone || !userMessage) {
-      return jsonResponse({ ok: true, skipped: true });
+    if (!phone || !/^\d{10,15}$/.test(phone) || !userMessage) {
+      return jsonResponse({ ok: true, skipped: true, reason: 'invalid_input' });
     }
 
-    console.log(`📩 Mensagem de ${phone}: ${userMessage.substring(0, 100)}`);
+    console.log(`📩 Mensagem de ${phone.substring(0, 4)}****: ${userMessage.substring(0, 50)}`);
 
     // ── 1. Buscar ou criar conversa ──
     let { data: conversa } = await supabase
@@ -285,7 +296,7 @@ Deno.serve(async (req) => {
   } catch (error: unknown) {
     const msg = error instanceof Error ? error.message : "Erro desconhecido";
     console.error("Erro no webhook WhatsApp:", msg);
-    return jsonResponse({ error: msg });
+    return errorResponse("Erro interno ao processar webhook", 500);
   }
 });
 
