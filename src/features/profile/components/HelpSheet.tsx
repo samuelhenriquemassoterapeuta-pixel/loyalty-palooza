@@ -52,7 +52,7 @@ const contactOptions = [
     icon: MessageCircle,
     label: "WhatsApp",
     description: "Resposta rápida",
-    action: () => window.open("https://wa.me/5511999999999", "_blank"),
+    action: () => window.open("https://wa.me/5534991614928", "_blank"),
   },
   {
     icon: Mail,
