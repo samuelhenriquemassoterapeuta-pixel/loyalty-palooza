@@ -62,9 +62,9 @@ Deno.serve(async (req) => {
 
     return jsonResponse({ success: true, destinatarios: destinatarios.length, enviados, erros });
   } catch (error: unknown) {
+    if (error instanceof Response) return error;
     const msg = error instanceof Error ? error.message : "Erro desconhecido";
     console.error("Erro enviar-campanha:", msg);
-    if (error instanceof Response) return error;
-    return errorResponse(msg, 500);
+    return errorResponse("Erro interno do servidor", 500);
   }
 });

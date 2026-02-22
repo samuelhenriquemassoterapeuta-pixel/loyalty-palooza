@@ -197,8 +197,10 @@ Deno.serve(async (req) => {
       pagamentoId: pagamento?.id,
     });
   } catch (error: any) {
-    console.error("Error:", error);
     if (error instanceof Response) return error;
-    return errorResponse(error.message);
+    const msg = error instanceof Error ? error.message : "Erro desconhecido";
+    console.error("Error asaas-criar-cobranca:", msg);
+    // Never leak internal API error details to client
+    return errorResponse("Erro ao processar pagamento. Tente novamente.", 500);
   }
 });

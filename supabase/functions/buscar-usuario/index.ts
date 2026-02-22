@@ -55,8 +55,8 @@ Deno.serve(async (req) => {
     });
   } catch (error) {
     if (error instanceof Response) return error;
-    const msg = error instanceof Error ? error.message : "Erro interno do servidor";
+    const msg = error instanceof Error ? error.message : "Erro desconhecido";
     console.error("Erro ao buscar usuário:", msg);
-    return errorResponse(msg, msg.includes("inválido") ? 400 : 500);
+    return errorResponse("Erro interno do servidor", 500);
   }
 });
