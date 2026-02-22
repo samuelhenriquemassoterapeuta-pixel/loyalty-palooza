@@ -6370,33 +6370,39 @@ export type Database = {
       }
       transacoes: {
         Row: {
+          compartilhado_whatsapp: boolean | null
           created_at: string
           descricao: string | null
           empresa_id: string | null
           expira_em: string | null
           id: string
+          imagem_exportada: boolean | null
           referencia_id: string | null
           tipo: string
           user_id: string
           valor: number
         }
         Insert: {
+          compartilhado_whatsapp?: boolean | null
           created_at?: string
           descricao?: string | null
           empresa_id?: string | null
           expira_em?: string | null
           id?: string
+          imagem_exportada?: boolean | null
           referencia_id?: string | null
           tipo: string
           user_id: string
           valor: number
         }
         Update: {
+          compartilhado_whatsapp?: boolean | null
           created_at?: string
           descricao?: string | null
           empresa_id?: string | null
           expira_em?: string | null
           id?: string
+          imagem_exportada?: boolean | null
           referencia_id?: string | null
           tipo?: string
           user_id?: string
