@@ -151,16 +151,27 @@ Deno.serve(async (req) => {
         const zapiHeaders: Record<string, string> = { "Content-Type": "application/json" };
         if (ZAPI_CLIENT_TOKEN) zapiHeaders["Client-Token"] = ZAPI_CLIENT_TOKEN;
 
+        console.log(`Z-API Request URL: ${zapiUrl}`);
+        console.log(`Z-API Headers: ${JSON.stringify(Object.keys(zapiHeaders))}`);
+        
         const zapiResponse = await fetch(zapiUrl, {
           method: "POST",
           headers: zapiHeaders,
           body: JSON.stringify(zapiBody),
         });
 
-        const zapiResult = await zapiResponse.json();
+        const zapiResponseText = await zapiResponse.text();
+        console.log(`Z-API Response Status: ${zapiResponse.status}, Body: ${zapiResponseText.substring(0, 500)}`);
+        
+        let zapiResult: Record<string, unknown>;
+        try {
+          zapiResult = JSON.parse(zapiResponseText);
+        } catch {
+          throw new Error(`Z-API retornou resposta inválida (status ${zapiResponse.status}): ${zapiResponseText.substring(0, 200)}`);
+        }
 
         if (!zapiResponse.ok) {
-          throw new Error(zapiResult?.message || `Z-API retornou status ${zapiResponse.status}`);
+          throw new Error(zapiResult?.message as string || `Z-API retornou status ${zapiResponse.status}: ${zapiResponseText.substring(0, 200)}`);
         }
 
         // 6. Atualização do Log (Status: Enviado)
