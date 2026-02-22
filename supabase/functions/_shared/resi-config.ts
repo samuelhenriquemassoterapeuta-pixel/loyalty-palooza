@@ -437,11 +437,11 @@ export async function callGemini(
 
   // Tenta modelos em ordem até um funcionar (fallback automático em caso de rate limit)
   for (const model of GEMINI_FALLBACK_MODELS) {
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`;
     try {
       const response = await fetch(url, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'x-goog-api-key': apiKey },
         body: JSON.stringify(requestBody),
       });
 
