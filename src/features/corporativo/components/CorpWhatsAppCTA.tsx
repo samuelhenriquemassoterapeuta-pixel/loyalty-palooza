@@ -7,7 +7,7 @@ export const CorpWhatsAppCTA = forwardRef<HTMLButtonElement>((_, ref) => {
     const msg = encodeURIComponent(
       "Olá! Gostaria de saber mais sobre os programas de massoterapia corporativa da Resinkra."
     );
-    window.open(`https://wa.me/5511999999999?text=${msg}`, "_blank");
+    window.open(`https://wa.me/5534991614928?text=${msg}`, "_blank");
   };
 
   return (

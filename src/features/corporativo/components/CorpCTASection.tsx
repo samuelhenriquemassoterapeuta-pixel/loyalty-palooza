@@ -45,7 +45,7 @@ export const CorpCTASection = () => {
       `*Mensagem:* ${formData.mensagem || "Sem mensagem adicional"}`
     );
 
-    window.open(`https://wa.me/5511999999999?text=${msg}`, "_blank");
+    window.open(`https://wa.me/5534991614928?text=${msg}`, "_blank");
     setEnviado(true);
 
     toast({

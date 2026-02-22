@@ -7,7 +7,7 @@ export const FloatingContactButtons = () => {
   const [open, setOpen] = useState(false);
   const { config } = useLandingConfig("contato");
 
-  const whatsapp = config?.whatsapp || "5511999999999";
+  const whatsapp = config?.whatsapp || "5534991614928";
   const instagram = config?.instagram || "@resinkra";
   const instagramUser = instagram.replace("@", "");
 
