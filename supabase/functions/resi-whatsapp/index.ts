@@ -16,11 +16,15 @@ const corsHeaders = {
 async function sendWhatsAppMessage(phone: string, message: string) {
   const ZAPI_INSTANCE_ID = Deno.env.get('ZAPI_INSTANCE_ID')!;
   const ZAPI_TOKEN = Deno.env.get('ZAPI_TOKEN')!;
+  const ZAPI_CLIENT_TOKEN = Deno.env.get('ZAPI_CLIENT_TOKEN') || '';
   const baseUrl = `https://api.z-api.io/instances/${ZAPI_INSTANCE_ID}/token/${ZAPI_TOKEN}`;
+
+  const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+  if (ZAPI_CLIENT_TOKEN) headers['Client-Token'] = ZAPI_CLIENT_TOKEN;
 
   const response = await fetch(`${baseUrl}/send-text`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers,
     body: JSON.stringify({ phone, message })
   });
 
@@ -31,11 +35,15 @@ async function sendWhatsAppMessage(phone: string, message: string) {
 async function sendWhatsAppList(phone: string) {
   const ZAPI_INSTANCE_ID = Deno.env.get('ZAPI_INSTANCE_ID')!;
   const ZAPI_TOKEN = Deno.env.get('ZAPI_TOKEN')!;
+  const ZAPI_CLIENT_TOKEN = Deno.env.get('ZAPI_CLIENT_TOKEN') || '';
   const baseUrl = `https://api.z-api.io/instances/${ZAPI_INSTANCE_ID}/token/${ZAPI_TOKEN}`;
+
+  const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+  if (ZAPI_CLIENT_TOKEN) headers['Client-Token'] = ZAPI_CLIENT_TOKEN;
 
   const response = await fetch(`${baseUrl}/send-button-list`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers,
     body: JSON.stringify({
       phone,
       message: "🌿 Olá! Sou a Resi, sua assistente da Resinkra!",

@@ -34,13 +34,17 @@ Deno.serve(async (req) => {
       const ZAPI_TOKEN = Deno.env.get("ZAPI_TOKEN");
       if (!ZAPI_INSTANCE_ID || !ZAPI_TOKEN) throw new Error("Credenciais Z-API não configuradas");
 
+      const ZAPI_CLIENT_TOKEN = Deno.env.get("ZAPI_CLIENT_TOKEN") || "";
+
       for (const dest of destinatarios) {
         if (!dest.telefone) continue;
         try {
           const phoneClean = dest.telefone.replace(/\D/g, "");
           const phoneFormatted = phoneClean.startsWith("55") ? phoneClean : `55${phoneClean}`;
           const zapiUrl = `https://api.z-api.io/instances/${ZAPI_INSTANCE_ID}/token/${ZAPI_TOKEN}/send-text`;
-          const zapiRes = await fetch(zapiUrl, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ phone: phoneFormatted, message: campanha.mensagem }) });
+          const zapiHeaders: Record<string, string> = { "Content-Type": "application/json" };
+          if (ZAPI_CLIENT_TOKEN) zapiHeaders["Client-Token"] = ZAPI_CLIENT_TOKEN;
+          const zapiRes = await fetch(zapiUrl, { method: "POST", headers: zapiHeaders, body: JSON.stringify({ phone: phoneFormatted, message: campanha.mensagem }) });
           if (zapiRes.ok) { enviados++; } else { erros++; }
           await supabase.from("whatsapp_logs").insert({ user_id: dest.user_id || null, telefone: phoneFormatted, tipo: "campanha", mensagem: campanha.mensagem, status: zapiRes.ok ? "enviado" : "erro", referencia_id: campanha_id, referencia_tipo: "campanha_marketing" });
         } catch { erros++; }

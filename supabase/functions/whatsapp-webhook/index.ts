@@ -275,9 +275,12 @@ Deno.serve(async (req) => {
 
     // ── 7. Enviar resposta via Z-API ──
     const zapiUrl = `https://api.z-api.io/instances/${ZAPI_INSTANCE_ID}/token/${ZAPI_TOKEN}/send-text`;
+    const ZAPI_CLIENT_TOKEN = Deno.env.get("ZAPI_CLIENT_TOKEN") || "";
+    const zapiHeaders: Record<string, string> = { "Content-Type": "application/json" };
+    if (ZAPI_CLIENT_TOKEN) zapiHeaders["Client-Token"] = ZAPI_CLIENT_TOKEN;
     const zapiResponse = await fetch(zapiUrl, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: zapiHeaders,
       body: JSON.stringify({ phone, message: replyText }),
     });
 

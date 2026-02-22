@@ -38,12 +38,11 @@ Deno.serve(async (req) => {
   if (corsResponse) return corsResponse;
 
   try {
-    // Require admin authentication - only admins/system can send WhatsApp
+    // Require authentication - admins or authenticated users for specific types
     const authHeader = req.headers.get("Authorization");
     if (!authHeader?.startsWith("Bearer ")) {
       return errorResponse("Não autorizado", 401);
     }
-    // Validate the caller is either service role or authenticated admin
     const supabase = createServiceClient();
     const { createClient } = await import("https://esm.sh/@supabase/supabase-js@2.89.0");
     const anonKey = Deno.env.get("SUPABASE_ANON_KEY") || "";
@@ -53,8 +52,10 @@ Deno.serve(async (req) => {
     // Allow internal service calls (from other edge functions using anon/service key)
     const isInternalCall = token === anonKey || token === serviceKey;
     
+    // For external calls, verify authenticated user
+    let callerUserId: string | null = null;
+    let callerIsAdmin = false;
     if (!isInternalCall) {
-      // For external calls, verify admin role
       const userClient = createClient(
         Deno.env.get("SUPABASE_URL")!,
         anonKey,
@@ -62,9 +63,10 @@ Deno.serve(async (req) => {
       );
       const { data: { user }, error: authError } = await userClient.auth.getUser();
       if (authError || !user) return errorResponse("Não autorizado", 401);
+      callerUserId = user.id;
       
       const { data: isAdmin } = await supabase.rpc("has_role", { _user_id: user.id, _role: "admin" });
-      if (!isAdmin) return errorResponse("Acesso restrito a administradores", 403);
+      callerIsAdmin = !!isAdmin;
     }
 
     // 1. Validação de Secrets
@@ -79,6 +81,15 @@ Deno.serve(async (req) => {
     const body = await req.json();
     // Suporta envio único (objeto) ou em lote (array)
     const messages: WhatsAppPayload[] = Array.isArray(body.messages) ? body.messages : [body];
+
+    // Non-admin users can only send specific types (vale_presente, cupom)
+    const ALLOWED_USER_TYPES = ["vale_presente", "cupom", "cartao_visita"];
+    if (!isInternalCall && !callerIsAdmin) {
+      const allAllowed = messages.every(m => ALLOWED_USER_TYPES.includes(m.tipo || ""));
+      if (!allAllowed) {
+        return errorResponse("Acesso restrito a administradores para este tipo de envio", 403);
+      }
+    }
 
     const results = [];
 
@@ -136,9 +147,13 @@ Deno.serve(async (req) => {
           };
         }
         
+        const ZAPI_CLIENT_TOKEN = Deno.env.get("ZAPI_CLIENT_TOKEN") || "";
+        const zapiHeaders: Record<string, string> = { "Content-Type": "application/json" };
+        if (ZAPI_CLIENT_TOKEN) zapiHeaders["Client-Token"] = ZAPI_CLIENT_TOKEN;
+
         const zapiResponse = await fetch(zapiUrl, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: zapiHeaders,
           body: JSON.stringify(zapiBody),
         });
 
