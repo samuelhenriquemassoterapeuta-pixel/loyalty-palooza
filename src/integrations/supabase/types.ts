@@ -7471,6 +7471,16 @@ export type Database = {
         }
         Returns: Json
       }
+      transferir_saldo: {
+        Args: {
+          p_destinatario_id: string
+          p_destinatario_nome: string
+          p_remetente_id: string
+          p_remetente_nome: string
+          p_valor: number
+        }
+        Returns: Json
+      }
       update_curso_progresso_geral: {
         Args: {
           p_aula_id: string

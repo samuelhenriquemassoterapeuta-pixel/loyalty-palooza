@@ -138,7 +138,9 @@ Deno.serve(async (req) => {
       },
     });
 
-    // 9. (Opcional) Envio de email de boas-vindas
+    // 9. (Opcional) Envio de notificação de boas-vindas
+    // SECURITY: Never send passwords via WhatsApp or any messaging channel.
+    // The admin should communicate the temporary password directly to the user.
     if (enviar_email) {
       try {
         await supabaseAdmin.functions.invoke("enviar-whatsapp", {
@@ -146,12 +148,11 @@ Deno.serve(async (req) => {
             tipo: "boas_vindas_admin",
             email: email.toLowerCase().trim(),
             nome: nome.trim(),
-            senha_temporaria: senha,
+            // Password is NOT sent — admin must communicate it securely
           },
         });
       } catch (_emailErr) {
-        // Não bloquear o fluxo por falha no email
-        console.warn("Falha ao enviar email de boas-vindas:", _emailErr);
+        console.warn("Falha ao enviar notificação de boas-vindas:", _emailErr);
       }
     }
 
