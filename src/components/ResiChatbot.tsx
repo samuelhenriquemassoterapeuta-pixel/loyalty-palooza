@@ -65,6 +65,22 @@ export function ResiChatbot() {
   const sendMessage = async (messageText: string) => {
     if (!messageText.trim() || loading) return;
 
+    if (!user) {
+      setMessages(prev => [...prev, {
+        id: Date.now().toString(),
+        role: "user",
+        content: messageText.trim(),
+        timestamp: new Date(),
+      }, {
+        id: (Date.now() + 1).toString(),
+        role: "assistant",
+        content: "🔒 Para conversar comigo, você precisa estar logado(a). Crie sua conta ou faça login para acessar todas as funcionalidades! 🌿",
+        timestamp: new Date(),
+      }]);
+      setInput("");
+      return;
+    }
+
     const userMsg: Message = {
       id: Date.now().toString(),
       role: "user",
