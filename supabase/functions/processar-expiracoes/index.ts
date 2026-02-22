@@ -34,6 +34,6 @@ Deno.serve(async (req) => {
     });
   } catch (error: any) {
     console.error("Error in processar-expiracoes:", error);
-    return errorResponse(error.message, 500);
+    return errorResponse("Erro interno do servidor", 500);
   }
 });

@@ -175,6 +175,6 @@ Considere o dia da semana atual, o tier do cliente, padrões de uso e oportunida
     return jsonResponse({ success: true, ...result });
   } catch (error: any) {
     console.error("cashback-inteligente error:", error);
-    return errorResponse(error.message || "Erro interno", 500);
+    return errorResponse("Erro interno do servidor", 500);
   }
 });

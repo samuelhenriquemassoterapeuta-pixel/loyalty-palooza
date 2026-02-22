@@ -40,6 +40,7 @@ Deno.serve(async (req) => {
     });
   } catch (error: any) {
     if (error instanceof Response) return error;
-    return errorResponse(error.message);
+    console.error("Erro asaas-status:", error);
+    return errorResponse("Erro interno do servidor", 500);
   }
 });

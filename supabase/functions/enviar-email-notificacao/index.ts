@@ -152,6 +152,6 @@ Deno.serve(async (req) => {
   } catch (error: unknown) {
     const msg = error instanceof Error ? error.message : "Erro desconhecido";
     console.error("Erro enviar-email-notificacao:", msg);
-    return errorResponse(msg, 500);
+    return errorResponse("Erro interno do servidor", 500);
   }
 });

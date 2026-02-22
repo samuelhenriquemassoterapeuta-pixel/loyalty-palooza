@@ -22,7 +22,7 @@ Deno.serve(async (req: Request) => {
 
     if (error) {
       log.error("Erro ao coletar métricas", { error: error.message });
-      return new Response(JSON.stringify({ error: error.message }), {
+      return new Response(JSON.stringify({ error: "Erro ao coletar métricas do sistema" }), {
         status: 500,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });

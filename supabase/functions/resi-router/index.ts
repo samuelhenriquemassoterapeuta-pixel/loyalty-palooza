@@ -30,13 +30,34 @@ serve(async (req) => {
   }
 
   try {
-    const { userId, message, platform = 'web' } = await req.json();
+    const { userId: requestedUserId, message, platform = 'web' } = await req.json();
 
-    if (!userId || !message) {
+    if (!requestedUserId || !message) {
       return new Response(
         JSON.stringify({ error: 'userId e message são obrigatórios' }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
+    }
+
+    // Determine the actual userId:
+    // - For web platform, validate JWT and use the authenticated user's ID
+    // - For whatsapp/internal calls, trust the provided userId (called from authenticated webhooks)
+    let userId = requestedUserId;
+    
+    if (platform === 'web') {
+      const authHeader = req.headers.get('Authorization');
+      if (authHeader?.startsWith('Bearer ')) {
+        const supabaseAuth = createClient(
+          Deno.env.get('SUPABASE_URL')!,
+          Deno.env.get('SUPABASE_ANON_KEY')!,
+          { global: { headers: { Authorization: authHeader } } }
+        );
+        const { data: { user } } = await supabaseAuth.auth.getUser();
+        if (user) {
+          userId = user.id; // Use authenticated user ID, ignore client-provided one
+        }
+        // If no valid user, allow anonymous chat with the provided anon_ ID
+      }
     }
 
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;

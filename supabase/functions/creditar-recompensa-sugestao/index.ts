@@ -1,5 +1,6 @@
-import { corsHeaders, handleCors } from "../_shared/cors.ts";
+import { handleCors } from "../_shared/cors.ts";
 import { createServiceClient } from "../_shared/supabase-client.ts";
+import { requireAuth } from "../_shared/auth.ts";
 import { jsonResponse, errorResponse } from "../_shared/response.ts";
 
 Deno.serve(async (req) => {
@@ -7,13 +8,25 @@ Deno.serve(async (req) => {
   if (corsResp) return corsResp;
 
   try {
+    // 1. Require authentication
+    const { userId } = await requireAuth(req);
+    const supabase = createServiceClient();
+
+    // 2. Verify admin role
+    const { data: isAdmin } = await supabase.rpc("has_role", {
+      _user_id: userId,
+      _role: "admin",
+    });
+
+    if (!isAdmin) {
+      return errorResponse("Acesso restrito a administradores", 403);
+    }
+
     const { sugestao_id } = await req.json();
 
     if (!sugestao_id) {
       return errorResponse("sugestao_id é obrigatório");
     }
-
-    const supabase = createServiceClient();
 
     const { data: sugestao, error } = await supabase
       .from("sugestoes_playlist")
@@ -68,6 +81,8 @@ Deno.serve(async (req) => {
 
     return jsonResponse({ success: true, cashback, badge: "curador_bronze" });
   } catch (error) {
-    return errorResponse((error as Error).message, 500);
+    if (error instanceof Response) return error;
+    console.error("Erro creditar-recompensa-sugestao:", error);
+    return errorResponse("Erro interno do servidor", 500);
   }
 });

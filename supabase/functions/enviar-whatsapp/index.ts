@@ -155,6 +155,6 @@ Deno.serve(async (req) => {
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : "Erro desconhecido";
     console.error("Erro na função enviar-whatsapp:", errorMessage);
-    return errorResponse(errorMessage, 500);
+    return errorResponse("Erro interno do servidor", 500);
   }
 });

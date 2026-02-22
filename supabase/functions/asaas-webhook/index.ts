@@ -151,6 +151,6 @@ Deno.serve(async (req) => {
   } catch (error: any) {
     console.error("Webhook error:", error);
     // Retorna 500 para que o Asaas tente enviar novamente
-    return errorResponse(error.message, 500);
+    return errorResponse("Internal server error", 500);
   }
 });
