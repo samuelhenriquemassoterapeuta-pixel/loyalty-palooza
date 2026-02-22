@@ -98,12 +98,15 @@ Deno.serve(async (req: Request) => {
       const adminPhone = Deno.env.get("ADMIN_PHONE_NUMBER");
 
       if (zapiInstanceId && zapiToken && adminPhone) {
+        const zapiClientToken = Deno.env.get("ZAPI_CLIENT_TOKEN") || "";
         try {
+          const zapiHeaders: Record<string, string> = { "Content-Type": "application/json" };
+          if (zapiClientToken) zapiHeaders["Client-Token"] = zapiClientToken;
           const response = await fetch(
             `https://api.z-api.io/instances/${zapiInstanceId}/token/${zapiToken}/send-text`,
             {
               method: "POST",
-              headers: { "Content-Type": "application/json" },
+              headers: zapiHeaders,
               body: JSON.stringify({ phone: adminPhone, message }),
             }
           );
