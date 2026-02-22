@@ -123,6 +123,6 @@ ${userContext}`;
   } catch (error: any) {
     if (error instanceof Response) return error;
     console.error("assistente-saude error:", error);
-    return errorResponse(error.message || "Erro interno", 500);
+    return errorResponse("Erro interno do servidor", 500);
   }
 });

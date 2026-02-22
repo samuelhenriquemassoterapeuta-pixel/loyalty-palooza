@@ -96,7 +96,8 @@ Gere uma reflexão empática e útil usando a tool fornecida.`;
     });
   } catch (e) {
     console.error("reflexao-diario error:", e);
-    return new Response(JSON.stringify({ error: e.message }), {
+    if (e instanceof Response) return e;
+    return new Response(JSON.stringify({ error: "Erro interno do servidor" }), {
       status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
