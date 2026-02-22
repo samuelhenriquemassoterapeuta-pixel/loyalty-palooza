@@ -1,5 +1,6 @@
 import { handleCors } from "../_shared/cors.ts";
 import { createServiceClient } from "../_shared/supabase-client.ts";
+import { requireAuth } from "../_shared/auth.ts";
 import { jsonResponse, errorResponse } from "../_shared/response.ts";
 
 interface EmailPayload {
@@ -82,10 +83,15 @@ Deno.serve(async (req) => {
   if (corsResponse) return corsResponse;
 
   try {
+    // Require admin authentication
+    const { userId: callerId } = await requireAuth(req);
+    const supabase = createServiceClient();
+    const { data: isAdmin } = await supabase.rpc("has_role", { _user_id: callerId, _role: "admin" });
+    if (!isAdmin) return errorResponse("Acesso restrito a administradores", 403);
+
     const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
     if (!RESEND_API_KEY) throw new Error("RESEND_API_KEY não configurada");
 
-    const supabase = createServiceClient();
     const body = await req.json();
     const { user_id, template, template_data, subject, html } = body;
 

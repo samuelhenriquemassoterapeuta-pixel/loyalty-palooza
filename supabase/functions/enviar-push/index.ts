@@ -1,5 +1,6 @@
 import { handleCors } from "../_shared/cors.ts";
 import { createServiceClient } from "../_shared/supabase-client.ts";
+import { requireAuth } from "../_shared/auth.ts";
 import { jsonResponse, errorResponse } from "../_shared/response.ts";
 
 // Web Push using the web-push library via npm: specifier
@@ -10,6 +11,11 @@ Deno.serve(async (req) => {
   if (corsResponse) return corsResponse;
 
   try {
+    // Require admin authentication - only admins/system can trigger push
+    const { userId: callerId } = await requireAuth(req);
+    const supabase = createServiceClient();
+    const { data: isAdmin } = await supabase.rpc("has_role", { _user_id: callerId, _role: "admin" });
+    if (!isAdmin) return errorResponse("Acesso restrito a administradores", 403);
     const VAPID_PUBLIC_KEY = Deno.env.get("VAPID_PUBLIC_KEY");
     const VAPID_PRIVATE_KEY = Deno.env.get("VAPID_PRIVATE_KEY");
 
@@ -83,8 +89,9 @@ Deno.serve(async (req) => {
     console.log(`Push: ${sent} sent, ${failed} failed for user ${user_id.substring(0, 8)}`);
     return jsonResponse({ success: true, sent, failed });
   } catch (error: unknown) {
+    if (error instanceof Response) return error;
     const msg = error instanceof Error ? error.message : "Erro desconhecido";
     console.error("Erro enviar-push:", msg);
-    return errorResponse(msg, 500);
+    return errorResponse("Erro interno do servidor", 500);
   }
 });

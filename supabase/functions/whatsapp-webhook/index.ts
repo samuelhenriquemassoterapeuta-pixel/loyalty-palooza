@@ -314,10 +314,12 @@ async function processarAgendamento(
     const { servico, data_hora, terapeuta_nome, nome_cliente } = args;
 
     // Busca serviço
+    // Sanitize servico to prevent SQL wildcard injection
+    const sanitizedServico = servico.replace(/[%_\\]/g, "");
     const { data: servicoData } = await supabase
       .from("servicos")
       .select("nome, preco")
-      .ilike("nome", `%${servico}%`)
+      .ilike("nome", `%${sanitizedServico}%`)
       .eq("ativo", true)
       .limit(1)
       .single();
@@ -329,10 +331,11 @@ async function processarAgendamento(
     // Busca terapeuta (opcional)
     let terapeutaId: string | null = null;
     if (terapeuta_nome) {
+      const sanitizedTerapeuta = terapeuta_nome.replace(/[%_\\]/g, "");
       const { data: terapeuta } = await supabase
         .from("terapeutas")
         .select("id, nome")
-        .ilike("nome", `%${terapeuta_nome}%`)
+        .ilike("nome", `%${sanitizedTerapeuta}%`)
         .eq("disponivel", true)
         .limit(1)
         .single();
@@ -398,13 +401,13 @@ async function processarAgendamento(
 
     if (agError) {
       console.error("Erro ao criar agendamento:", agError);
-      return `Erro ao criar agendamento: ${agError.message}`;
+      return `Erro ao criar agendamento. Por favor tente novamente.`;
     }
 
-    return `Agendamento criado com sucesso! ID: ${agendamento.id}. Serviço: ${servicoData.nome}, Horário: ${dataHora.toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" })}. O cliente receberá notificação no app.`;
+    return `Agendamento criado com sucesso! Serviço: ${servicoData.nome}, Horário: ${dataHora.toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" })}. O cliente receberá notificação no app.`;
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : "Erro desconhecido";
     console.error("Erro ao processar agendamento:", msg);
-    return `Erro ao processar agendamento: ${msg}`;
+    return `Erro ao processar agendamento. Por favor tente novamente.`;
   }
 }
