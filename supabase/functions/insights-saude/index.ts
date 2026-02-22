@@ -112,6 +112,6 @@ Seja objetivo e baseado nos dados. Use a tool "generate_health_insights".`
   } catch (error: any) {
     if (error instanceof Response) return error;
     console.error("insights-saude error:", error);
-    return errorResponse(error.message || "Erro interno", 500);
+    return errorResponse("Erro interno do servidor", 500);
   }
 });

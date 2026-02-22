@@ -173,6 +173,6 @@ Retorne usando a tool "generate_wellness_plan".`
   } catch (error: any) {
     if (error instanceof Response) return error;
     console.error("plano-bem-estar error:", error);
-    return errorResponse(error.message || "Erro interno", 500);
+    return errorResponse("Erro interno do servidor", 500);
   }
 });

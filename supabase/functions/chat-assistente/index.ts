@@ -152,10 +152,9 @@ Deno.serve(async (req) => {
     return jsonResponse({ content: reply });
 
   } catch (error: unknown) {
-    const msg = error instanceof Error ? error.message : "Erro desconhecido";
-    console.error("Chat error:", msg);
+    console.error("Chat error:", error instanceof Error ? error.message : "Erro desconhecido");
     if (error instanceof Response) return error;
-    return errorResponse(msg, 500);
+    return errorResponse("Erro interno do servidor", 500);
   }
 });
 

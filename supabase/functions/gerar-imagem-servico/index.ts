@@ -1,4 +1,5 @@
 import { handleCors } from "../_shared/cors.ts";
+import { requireAuth } from "../_shared/auth.ts";
 import { jsonResponse, errorResponse } from "../_shared/response.ts";
 
 Deno.serve(async (req) => {
@@ -6,6 +7,8 @@ Deno.serve(async (req) => {
   if (corsResponse) return corsResponse;
 
   try {
+    await requireAuth(req);
+
     const { prompt } = await req.json();
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
@@ -31,7 +34,8 @@ Deno.serve(async (req) => {
 
     return jsonResponse({ imageUrl });
   } catch (e) {
+    if (e instanceof Response) return e;
     console.error("Error:", e);
-    return errorResponse(e instanceof Error ? e.message : "Erro desconhecido", 500);
+    return errorResponse("Erro interno do servidor", 500);
   }
 });

@@ -1,5 +1,6 @@
 import { handleCors } from "../_shared/cors.ts";
 import { createServiceClient } from "../_shared/supabase-client.ts";
+import { requireAuth } from "../_shared/auth.ts";
 import { jsonResponse, errorResponse } from "../_shared/response.ts";
 
 Deno.serve(async (req) => {
@@ -7,10 +8,21 @@ Deno.serve(async (req) => {
   if (corsResponse) return corsResponse;
 
   try {
+    // Require authentication - admin-only scheduled function
+    const { userId } = await requireAuth(req);
+    const supabase = createServiceClient();
+
+    // Verify admin role
+    const { data: isAdmin } = await supabase.rpc("has_role", {
+      _user_id: userId,
+      _role: "admin",
+    });
+    if (!isAdmin) {
+      return errorResponse("Acesso restrito a administradores", 403);
+    }
+
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY not configured");
-
-    const supabase = createServiceClient();
 
     // Buscar todos os brand_profiles ativos (admins que usam o Resinkra)
     const { data: profiles, error: profErr } = await supabase
