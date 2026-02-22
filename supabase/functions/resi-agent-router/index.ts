@@ -89,14 +89,15 @@ serve(async (req) => {
 
     // Validar usuário
     const token = authHeader.replace('Bearer ', '')
-    const { data: authData, error: authError } = await supabaseClient.auth.getClaims(token)
-    if (authError || !authData?.claims) {
+    const { data: { user }, error: authError } = await supabaseClient.auth.getUser(token)
+    if (authError || !user) {
+      console.error('Auth error:', authError?.message)
       return new Response(JSON.stringify({ error: 'Token inválido' }), {
         status: 401,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       })
     }
-    const userId = authData.claims.sub
+    const userId = user.id
 
     const { user_id, agent_id, session_id, message } = await req.json()
     const resolvedUserId = user_id || userId
