@@ -9,16 +9,14 @@ const corsHeaders = {
 const GEMINI_MODELS = [
   { model: "gemini-2.0-flash", version: "v1beta" },
   { model: "gemini-2.0-flash-lite", version: "v1beta" },
-  { model: "gemini-1.5-flash", version: "v1beta" },
-  { model: "gemini-1.5-flash-8b", version: "v1beta" },
 ];
 
 async function callGeminiWithFallback(apiKey: string, contents: any[], config: any): Promise<string> {
+  // Try Gemini models first (free)
   for (let i = 0; i < GEMINI_MODELS.length; i++) {
     const { model, version } = GEMINI_MODELS[i];
     const url = `https://generativelanguage.googleapis.com/${version}/models/${model}:generateContent`;
     
-    // Pequeno delay entre tentativas para evitar burst de rate limit
     if (i > 0) {
       await new Promise(resolve => setTimeout(resolve, 1000));
     }
@@ -52,7 +50,44 @@ async function callGeminiWithFallback(apiKey: string, contents: any[], config: a
       continue;
     }
   }
-  throw new Error("Todos os modelos Gemini falharam ou estão com rate limit");
+
+  // Fallback: Lovable AI Gateway
+  console.log("⚡ Todos Gemini falharam, usando Lovable AI Gateway como fallback...");
+  const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
+  if (!LOVABLE_API_KEY) {
+    throw new Error("Todos os modelos Gemini falharam e LOVABLE_API_KEY não configurada");
+  }
+
+  const messages = contents.map((c: any) => ({
+    role: c.role === "model" ? "assistant" : "user",
+    content: c.parts.map((p: any) => p.text).join("\n"),
+  }));
+
+  const lovableRes = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+    method: "POST",
+    headers: { Authorization: `Bearer ${LOVABLE_API_KEY}`, "Content-Type": "application/json" },
+    body: JSON.stringify({
+      model: "google/gemini-2.5-flash-lite",
+      messages,
+      max_tokens: config.generationConfig?.maxOutputTokens || 500,
+      temperature: config.generationConfig?.temperature || 0.7,
+    }),
+  });
+
+  if (!lovableRes.ok) {
+    const errText = await lovableRes.text();
+    console.error("Lovable AI fallback error:", lovableRes.status, errText);
+    throw new Error("Todos os modelos falharam");
+  }
+
+  const lovableData = await lovableRes.json();
+  const text = lovableData.choices?.[0]?.message?.content;
+  if (text) {
+    console.log("✅ Respondido via Lovable AI Gateway (fallback)");
+    return text;
+  }
+
+  throw new Error("Todos os modelos Gemini e Lovable AI falharam");
 }
 
 serve(async (req) => {
