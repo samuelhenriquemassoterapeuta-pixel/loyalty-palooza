@@ -112,12 +112,14 @@ Deno.serve(async (req) => {
 
     // Webhook authentication: validate Z-API webhook token
     const ZAPI_WEBHOOK_SECRET = Deno.env.get('ZAPI_WEBHOOK_SECRET');
-    if (ZAPI_WEBHOOK_SECRET) {
-      const providedToken = req.headers.get('x-webhook-token') || new URL(req.url).searchParams.get('token');
-      if (providedToken !== ZAPI_WEBHOOK_SECRET) {
-        console.warn('Webhook auth failed: invalid token');
-        return errorResponse('Unauthorized', 401);
-      }
+    if (!ZAPI_WEBHOOK_SECRET) {
+      console.error('ZAPI_WEBHOOK_SECRET not configured — rejecting request for security');
+      return errorResponse('Webhook authentication not configured', 500);
+    }
+    const providedToken = req.headers.get('x-webhook-token') || new URL(req.url).searchParams.get('token');
+    if (providedToken !== ZAPI_WEBHOOK_SECRET) {
+      console.warn('Webhook auth failed: invalid token');
+      return errorResponse('Unauthorized', 401);
     }
 
     const supabase = createServiceClient();

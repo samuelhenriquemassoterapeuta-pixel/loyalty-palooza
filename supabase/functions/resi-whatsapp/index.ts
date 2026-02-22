@@ -63,15 +63,20 @@ serve(async (req) => {
   try {
     // Webhook authentication: validate Z-API webhook token
     const ZAPI_WEBHOOK_SECRET = Deno.env.get('ZAPI_WEBHOOK_SECRET');
-    if (ZAPI_WEBHOOK_SECRET) {
-      const providedToken = req.headers.get('x-webhook-token') || new URL(req.url).searchParams.get('token');
-      if (providedToken !== ZAPI_WEBHOOK_SECRET) {
-        console.warn('Webhook auth failed: invalid token');
-        return new Response(JSON.stringify({ error: 'Unauthorized' }), {
-          status: 401,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-        });
-      }
+    if (!ZAPI_WEBHOOK_SECRET) {
+      console.error('ZAPI_WEBHOOK_SECRET not configured — rejecting request for security');
+      return new Response(JSON.stringify({ error: 'Webhook authentication not configured' }), {
+        status: 500,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      });
+    }
+    const providedToken = req.headers.get('x-webhook-token') || new URL(req.url).searchParams.get('token');
+    if (providedToken !== ZAPI_WEBHOOK_SECRET) {
+      console.warn('Webhook auth failed: invalid token');
+      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+        status: 401,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      });
     }
 
     const payload = await req.json();
