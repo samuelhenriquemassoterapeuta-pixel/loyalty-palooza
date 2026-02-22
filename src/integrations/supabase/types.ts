@@ -4639,6 +4639,160 @@ export type Database = {
           },
         ]
       }
+      platform_edit_history: {
+        Row: {
+          action: string | null
+          created_at: string | null
+          editor_id: string | null
+          id: string
+          new_value: string | null
+          old_value: string | null
+          target: string | null
+        }
+        Insert: {
+          action?: string | null
+          created_at?: string | null
+          editor_id?: string | null
+          id?: string
+          new_value?: string | null
+          old_value?: string | null
+          target?: string | null
+        }
+        Update: {
+          action?: string | null
+          created_at?: string | null
+          editor_id?: string | null
+          id?: string
+          new_value?: string | null
+          old_value?: string | null
+          target?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "platform_edit_history_editor_id_fkey"
+            columns: ["editor_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      platform_media: {
+        Row: {
+          alt_text: string | null
+          id: string
+          key: string
+          section: string
+          type: string
+          updated_at: string | null
+          url: string
+        }
+        Insert: {
+          alt_text?: string | null
+          id?: string
+          key: string
+          section: string
+          type?: string
+          updated_at?: string | null
+          url: string
+        }
+        Update: {
+          alt_text?: string | null
+          id?: string
+          key?: string
+          section?: string
+          type?: string
+          updated_at?: string | null
+          url?: string
+        }
+        Relationships: []
+      }
+      platform_modules: {
+        Row: {
+          id: string
+          is_active: boolean | null
+          module_name: string
+          settings: Json | null
+          updated_at: string | null
+          visible_for_roles: string[] | null
+        }
+        Insert: {
+          id?: string
+          is_active?: boolean | null
+          module_name: string
+          settings?: Json | null
+          updated_at?: string | null
+          visible_for_roles?: string[] | null
+        }
+        Update: {
+          id?: string
+          is_active?: boolean | null
+          module_name?: string
+          settings?: Json | null
+          updated_at?: string | null
+          visible_for_roles?: string[] | null
+        }
+        Relationships: []
+      }
+      platform_texts: {
+        Row: {
+          description: string | null
+          id: string
+          key: string
+          section: string
+          updated_at: string | null
+          updated_by: string | null
+          value: string
+        }
+        Insert: {
+          description?: string | null
+          id?: string
+          key: string
+          section: string
+          updated_at?: string | null
+          updated_by?: string | null
+          value: string
+        }
+        Update: {
+          description?: string | null
+          id?: string
+          key?: string
+          section?: string
+          updated_at?: string | null
+          updated_by?: string | null
+          value?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "platform_texts_updated_by_fkey"
+            columns: ["updated_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      platform_theme: {
+        Row: {
+          category: string | null
+          id: string
+          key: string
+          value: string
+        }
+        Insert: {
+          category?: string | null
+          id?: string
+          key: string
+          value: string
+        }
+        Update: {
+          category?: string | null
+          id?: string
+          key?: string
+          value?: string
+        }
+        Relationships: []
+      }
       playlist_faixas: {
         Row: {
           artista: string | null
