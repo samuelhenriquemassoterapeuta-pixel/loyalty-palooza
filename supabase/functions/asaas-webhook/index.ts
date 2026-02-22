@@ -32,14 +32,14 @@ Deno.serve(async (req) => {
   try {
     // 1. Validação de Segurança (Token do Webhook)
     const webhookToken = Deno.env.get("ASAAS_WEBHOOK_TOKEN");
-    if (webhookToken) {
-      const providedToken = req.headers.get("asaas-access-token");
-      if (providedToken !== webhookToken) {
-        console.error("Webhook auth failed: invalid or missing access token");
-        return errorResponse("Unauthorized", 401);
-      }
-    } else {
-      console.warn("ASAAS_WEBHOOK_TOKEN not configured — webhook authentication disabled");
+    if (!webhookToken) {
+      console.error("ASAAS_WEBHOOK_TOKEN not configured — rejecting request for security");
+      return errorResponse("Webhook authentication not configured", 500);
+    }
+    const providedToken = req.headers.get("asaas-access-token");
+    if (providedToken !== webhookToken) {
+      console.error("Webhook auth failed: invalid or missing access token");
+      return errorResponse("Unauthorized", 401);
     }
 
     const supabase = createServiceClient(); // Service role para atualizar qualquer registro
