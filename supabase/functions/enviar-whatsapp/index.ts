@@ -1,6 +1,6 @@
 /**
  * @module edge-functions/enviar-whatsapp
- * @description Serviço de envio de mensagens via WhatsApp usando a Z-API.
+ * @description Serviço de envio de mensagens via WhatsApp usando a UAZAPI (free.uazapi.com).
  *
  * Utilizado por todo o sistema para:
  * - Notificações de agendamento
@@ -14,19 +14,20 @@
  * - Formata números automaticamente (adiciona 55 se necessário)
  *
  * Secrets:
- * - `ZAPI_INSTANCE_ID`: ID da instância Z-API
- * - `ZAPI_TOKEN`: Token de segurança Z-API
+ * - `UAZAPI_INSTANCE_NAME`: Nome da instância UAZAPI
  */
 
 import { handleCors } from "../_shared/cors.ts";
 import { createServiceClient } from "../_shared/supabase-client.ts";
 import { jsonResponse, errorResponse } from "../_shared/response.ts";
 
+const UAZAPI_SERVER_URL = "https://free.uazapi.com";
+
 interface WhatsAppPayload {
   telefone: string;
   mensagem: string;
-  imagem_base64?: string; // Base64 da imagem (sem prefixo data:)
-  imagem_caption?: string; // Legenda da imagem
+  imagem_base64?: string;
+  imagem_caption?: string;
   tipo?: string;
   user_id?: string;
   referencia_id?: string;
@@ -70,11 +71,10 @@ Deno.serve(async (req) => {
     }
 
     // 1. Validação de Secrets
-    const ZAPI_INSTANCE_ID = Deno.env.get("ZAPI_INSTANCE_ID");
-    const ZAPI_TOKEN = Deno.env.get("ZAPI_TOKEN");
+    const UAZAPI_INSTANCE_NAME = Deno.env.get("UAZAPI_INSTANCE_NAME");
 
-    if (!ZAPI_INSTANCE_ID || !ZAPI_TOKEN) {
-      throw new Error("Credenciais Z-API não configuradas (ZAPI_INSTANCE_ID ou ZAPI_TOKEN).");
+    if (!UAZAPI_INSTANCE_NAME) {
+      throw new Error("UAZAPI_INSTANCE_NAME não configurada.");
     }
 
     // 2. Parsing e Normalização do Payload
@@ -126,52 +126,51 @@ Deno.serve(async (req) => {
       logId = logData?.id || null;
 
       try {
-        // 5. Chamada à Z-API (texto ou imagem)
-        let zapiUrl: string;
-        let zapiBody: Record<string, unknown>;
+        // 5. Chamada à UAZAPI (texto ou imagem)
+        let uazapiUrl: string;
+        let uazapiBody: Record<string, unknown>;
 
         if (imagem_base64) {
-          // Envio de imagem
-          zapiUrl = `https://api.z-api.io/instances/${ZAPI_INSTANCE_ID}/token/${ZAPI_TOKEN}/send-image`;
-          zapiBody = {
-            phone: phoneFormatted,
+          // Envio de imagem via UAZAPI
+          uazapiUrl = `${UAZAPI_SERVER_URL}/message/sendImage/${UAZAPI_INSTANCE_NAME}`;
+          uazapiBody = {
+            number: phoneFormatted,
             image: `data:image/png;base64,${imagem_base64}`,
             caption: imagem_caption || mensagem || "",
           };
         } else {
-          // Envio de texto
-          zapiUrl = `https://api.z-api.io/instances/${ZAPI_INSTANCE_ID}/token/${ZAPI_TOKEN}/send-text`;
-          zapiBody = {
-            phone: phoneFormatted,
-            message: mensagem,
+          // Envio de texto via UAZAPI
+          uazapiUrl = `${UAZAPI_SERVER_URL}/message/sendText/${UAZAPI_INSTANCE_NAME}`;
+          uazapiBody = {
+            number: phoneFormatted,
+            text: mensagem,
+            options: {
+              delay: 1000,
+              linkPreview: true,
+            },
           };
         }
-        
-        const ZAPI_CLIENT_TOKEN = Deno.env.get("ZAPI_CLIENT_TOKEN") || "";
-        const zapiHeaders: Record<string, string> = { "Content-Type": "application/json" };
-        if (ZAPI_CLIENT_TOKEN) zapiHeaders["Client-Token"] = ZAPI_CLIENT_TOKEN;
 
-        console.log(`Z-API Request URL: ${zapiUrl}`);
-        console.log(`Z-API Headers: ${JSON.stringify(Object.keys(zapiHeaders))}`);
+        console.log(`UAZAPI Request URL: ${uazapiUrl}`);
         
-        const zapiResponse = await fetch(zapiUrl, {
+        const uazapiResponse = await fetch(uazapiUrl, {
           method: "POST",
-          headers: zapiHeaders,
-          body: JSON.stringify(zapiBody),
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(uazapiBody),
         });
 
-        const zapiResponseText = await zapiResponse.text();
-        console.log(`Z-API Response Status: ${zapiResponse.status}, Body: ${zapiResponseText.substring(0, 500)}`);
+        const uazapiResponseText = await uazapiResponse.text();
+        console.log(`UAZAPI Response Status: ${uazapiResponse.status}, Body: ${uazapiResponseText.substring(0, 500)}`);
         
-        let zapiResult: Record<string, unknown>;
+        let uazapiResult: Record<string, unknown>;
         try {
-          zapiResult = JSON.parse(zapiResponseText);
+          uazapiResult = JSON.parse(uazapiResponseText);
         } catch {
-          throw new Error(`Z-API retornou resposta inválida (status ${zapiResponse.status}): ${zapiResponseText.substring(0, 200)}`);
+          throw new Error(`UAZAPI retornou resposta inválida (status ${uazapiResponse.status}): ${uazapiResponseText.substring(0, 200)}`);
         }
 
-        if (!zapiResponse.ok) {
-          throw new Error(zapiResult?.message as string || `Z-API retornou status ${zapiResponse.status}: ${zapiResponseText.substring(0, 200)}`);
+        if (!uazapiResponse.ok) {
+          throw new Error(uazapiResult?.error as string || `UAZAPI retornou status ${uazapiResponse.status}: ${uazapiResponseText.substring(0, 200)}`);
         }
 
         // 6. Atualização do Log (Status: Enviado)

@@ -65,7 +65,7 @@ serve(async (req) => {
       }
       userId = user.id; // Always use authenticated user ID, never client-provided
     } else if (platform === 'whatsapp') {
-      // WhatsApp calls come from resi-whatsapp which already validates ZAPI_WEBHOOK_SECRET
+      // WhatsApp calls come from resi-whatsapp which already validates UAZAPI_WEBHOOK_SECRET
       // Validate that the call comes from an internal edge function via service key
       const authHeader = req.headers.get('Authorization');
       const anonKey = Deno.env.get('SUPABASE_ANON_KEY') || '';

@@ -1,6 +1,6 @@
 // ============================================================
 // 🌿 RESINKRA - Resi WhatsApp Webhook
-// Edge Function para integração com WhatsApp via Z-API
+// Edge Function para integração com WhatsApp via UAZAPI
 // ============================================================
 
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
@@ -12,51 +12,49 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-// Função para enviar mensagem via Z-API
+const UAZAPI_SERVER_URL = "https://free.uazapi.com";
+
+// Função para enviar mensagem via UAZAPI
 async function sendWhatsAppMessage(phone: string, message: string) {
-  const ZAPI_INSTANCE_ID = Deno.env.get('ZAPI_INSTANCE_ID')!;
-  const ZAPI_TOKEN = Deno.env.get('ZAPI_TOKEN')!;
-  const ZAPI_CLIENT_TOKEN = Deno.env.get('ZAPI_CLIENT_TOKEN') || '';
-  const baseUrl = `https://api.z-api.io/instances/${ZAPI_INSTANCE_ID}/token/${ZAPI_TOKEN}`;
+  const UAZAPI_INSTANCE_NAME = Deno.env.get('UAZAPI_INSTANCE_NAME')!;
 
-  const headers: Record<string, string> = { 'Content-Type': 'application/json' };
-  if (ZAPI_CLIENT_TOKEN) headers['Client-Token'] = ZAPI_CLIENT_TOKEN;
-
-  const response = await fetch(`${baseUrl}/send-text`, {
+  const response = await fetch(`${UAZAPI_SERVER_URL}/message/sendText/${UAZAPI_INSTANCE_NAME}`, {
     method: 'POST',
-    headers,
-    body: JSON.stringify({ phone, message })
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      number: phone,
+      text: message,
+      options: { delay: 1000, linkPreview: true },
+    })
   });
 
   return response.json();
 }
 
-// Função para enviar lista de botões
+// Função para enviar lista de botões via UAZAPI
 async function sendWhatsAppList(phone: string) {
-  const ZAPI_INSTANCE_ID = Deno.env.get('ZAPI_INSTANCE_ID')!;
-  const ZAPI_TOKEN = Deno.env.get('ZAPI_TOKEN')!;
-  const ZAPI_CLIENT_TOKEN = Deno.env.get('ZAPI_CLIENT_TOKEN') || '';
-  const baseUrl = `https://api.z-api.io/instances/${ZAPI_INSTANCE_ID}/token/${ZAPI_TOKEN}`;
+  const UAZAPI_INSTANCE_NAME = Deno.env.get('UAZAPI_INSTANCE_NAME')!;
 
-  const headers: Record<string, string> = { 'Content-Type': 'application/json' };
-  if (ZAPI_CLIENT_TOKEN) headers['Client-Token'] = ZAPI_CLIENT_TOKEN;
-
-  const response = await fetch(`${baseUrl}/send-button-list`, {
+  const response = await fetch(`${UAZAPI_SERVER_URL}/message/sendList/${UAZAPI_INSTANCE_NAME}`, {
     method: 'POST',
-    headers,
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      phone,
-      message: "🌿 Olá! Sou a Resi, sua assistente da Resinkra!",
-      buttonList: {
-        title: "Como posso ajudar?",
-        buttons: [
-          { id: "1", title: "💬 Dúvidas Gerais" },
-          { id: "2", title: "📅 Agendamentos" },
-          { id: "3", title: "🎬 Criar Conteúdo" },
-          { id: "4", title: "🛒 Produtos/Pacotes" },
-          { id: "5", title: "🧘 Bem-estar" }
-        ]
-      }
+      number: phone,
+      title: "Como posso ajudar?",
+      description: "🌿 Olá! Sou a Resi, sua assistente da Resinkra!",
+      buttonText: "Escolha uma opção",
+      sections: [
+        {
+          title: "Opções",
+          rows: [
+            { title: "💬 Dúvidas Gerais", rowId: "1" },
+            { title: "📅 Agendamentos", rowId: "2" },
+            { title: "🎬 Criar Conteúdo", rowId: "3" },
+            { title: "🛒 Produtos/Pacotes", rowId: "4" },
+            { title: "🧘 Bem-estar", rowId: "5" },
+          ]
+        }
+      ]
     })
   });
 
@@ -69,17 +67,17 @@ serve(async (req) => {
   }
 
   try {
-    // Webhook authentication: validate Z-API webhook token
-    const ZAPI_WEBHOOK_SECRET = Deno.env.get('ZAPI_WEBHOOK_SECRET');
-    if (!ZAPI_WEBHOOK_SECRET) {
-      console.error('ZAPI_WEBHOOK_SECRET not configured — rejecting request for security');
+    // Webhook authentication: validate webhook token
+    const UAZAPI_WEBHOOK_SECRET = Deno.env.get('UAZAPI_WEBHOOK_SECRET');
+    if (!UAZAPI_WEBHOOK_SECRET) {
+      console.error('UAZAPI_WEBHOOK_SECRET not configured — rejecting request for security');
       return new Response(JSON.stringify({ error: 'Webhook authentication not configured' }), {
         status: 500,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }
       });
     }
     const providedToken = req.headers.get('x-webhook-token') || new URL(req.url).searchParams.get('token');
-    if (providedToken !== ZAPI_WEBHOOK_SECRET) {
+    if (providedToken !== UAZAPI_WEBHOOK_SECRET) {
       console.warn('Webhook auth failed: invalid token');
       return new Response(JSON.stringify({ error: 'Unauthorized' }), {
         status: 401,
@@ -88,12 +86,16 @@ serve(async (req) => {
     }
 
     const payload = await req.json();
-    console.log('WhatsApp Webhook recebido');
+    console.log('WhatsApp Webhook recebido (UAZAPI)');
 
-    if (!payload.isFromMe && payload.type === 'ReceivedCallback') {
-      const phone = (payload.phone || '').replace(/\D/g, '');
-      const message = (payload.text?.message || payload.listResponseMessage?.title || '').substring(0, 2000).trim();
-      const buttonId = payload.listResponseMessage?.selectedButtonId || null;
+    // UAZAPI payload format: data.from, data.text/data.body, data.messageId
+    const msgData = payload?.data || payload;
+    const isFromMe = payload?.fromMe || msgData?.fromMe || false;
+
+    if (!isFromMe && (msgData?.text || msgData?.body)) {
+      const phone = (msgData.from || msgData.phone || '').replace(/\D/g, '');
+      const message = (msgData.text || msgData.body || '').substring(0, 2000).trim();
+      const listRowId = msgData?.listResponseMessage?.selectedRowId || msgData?.selectedRowId || null;
 
       // Validate phone format
       if (!phone || !/^\d{10,15}$/.test(phone) || !message) {
@@ -124,7 +126,7 @@ serve(async (req) => {
       }
 
       // Sanitize message to prevent prompt injection patterns
-      const sanitizedMessage = (buttonId || message).replace(/\[INSTRUÇÃO\]/gi, '').replace(/\[SISTEMA\]/gi, '').replace(/\[CONTEXTO\]/gi, '').trim();
+      const sanitizedMessage = (listRowId || message).replace(/\[INSTRUÇÃO\]/gi, '').replace(/\[SISTEMA\]/gi, '').replace(/\[CONTEXTO\]/gi, '').trim();
       const messageToProcess = sanitizedMessage;
 
       // Chamar o resi-router
