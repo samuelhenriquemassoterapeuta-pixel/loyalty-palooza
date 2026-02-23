@@ -71,7 +71,7 @@ export const GiftCardVisual = React.forwardRef<HTMLDivElement, GiftCardVisualPro
         initial={{ rotateY: -5, scale: 0.95 }}
         animate={{ rotateY: 0, scale: 1 }}
         transition={{ type: "spring", stiffness: 200, damping: 20 }}
-        className={`relative overflow-hidden rounded-2xl bg-gradient-to-br ${config.gradient} ${compact ? "p-4" : "p-6"} shadow-elevated ${fillContainer ? "w-full h-full" : ""}`}
+        className={`relative overflow-hidden rounded-2xl bg-gradient-to-br ${config.gradient} ${compact ? "p-4" : fillContainer ? "p-4" : "p-6"} shadow-elevated ${fillContainer ? "w-full h-full flex flex-col" : ""}`}
         style={{ perspective: "1000px" }}
       >
         {/* Pattern overlay */}
@@ -92,9 +92,9 @@ export const GiftCardVisual = React.forwardRef<HTMLDivElement, GiftCardVisualPro
           style={{ width: "50%", skewX: "-15deg" }}
         />
 
-        <div className="relative z-10">
+        <div className={`relative z-10 ${fillContainer ? "flex flex-col flex-1 min-h-0" : ""}`}>
           {/* Header */}
-          <div className="flex items-center justify-between mb-4">
+          <div className={`flex items-center justify-between ${fillContainer ? "mb-2" : "mb-4"}`}>
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 rounded-lg bg-white/10 backdrop-blur-sm flex items-center justify-center">
                 <Icon className={`w-4 h-4 ${config.accent}`} />
@@ -117,7 +117,7 @@ export const GiftCardVisual = React.forwardRef<HTMLDivElement, GiftCardVisualPro
           </div>
 
           {/* Value / Experience */}
-          <div className={compact ? "mb-3" : "mb-5"}>
+          <div className={compact ? "mb-3" : fillContainer ? "mb-2" : "mb-5"}>
             {isExperiencia && experienciaNome ? (
               <>
                 <p className="text-[10px] uppercase tracking-wider text-white/40 mb-1">Experiência</p>
@@ -131,7 +131,7 @@ export const GiftCardVisual = React.forwardRef<HTMLDivElement, GiftCardVisualPro
             ) : (
               <>
                 <p className="text-[10px] uppercase tracking-wider text-white/40 mb-1">Valor</p>
-                <p className={`font-bold text-white ${compact ? "text-2xl" : "text-3xl"}`} style={{ fontFamily: "var(--font-serif)" }}>
+                <p className={`font-bold text-white ${compact ? "text-2xl" : fillContainer ? "text-2xl" : "text-3xl"}`} style={{ fontFamily: "var(--font-serif)" }}>
                   R$ {valor.toFixed(2).replace(".", ",")}
                 </p>
               </>
@@ -139,7 +139,7 @@ export const GiftCardVisual = React.forwardRef<HTMLDivElement, GiftCardVisualPro
           </div>
 
           {/* Destinatário + Code/QR */}
-          <div className="flex items-end justify-between gap-2">
+          <div className={`flex items-end justify-between gap-2 ${fillContainer ? "mt-auto" : ""}`}>
             <div className="flex-1 min-w-0">
               <p className="text-[10px] uppercase tracking-wider text-white/40 mb-0.5">Para</p>
               <p className="text-sm font-semibold text-white truncate">{destinatario || "..."}</p>
