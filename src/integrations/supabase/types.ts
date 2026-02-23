@@ -1021,6 +1021,56 @@ export type Database = {
           },
         ]
       }
+      conciliacoes: {
+        Row: {
+          conciliado_em: string | null
+          conciliado_por: string | null
+          diferenca: number | null
+          extrato_id: string
+          id: string
+          lancamento_id: string
+          observacoes: string | null
+          status: string | null
+          tipo_lancamento: string
+          valor_extrato: number
+          valor_lancamento: number
+        }
+        Insert: {
+          conciliado_em?: string | null
+          conciliado_por?: string | null
+          diferenca?: number | null
+          extrato_id: string
+          id?: string
+          lancamento_id: string
+          observacoes?: string | null
+          status?: string | null
+          tipo_lancamento: string
+          valor_extrato: number
+          valor_lancamento: number
+        }
+        Update: {
+          conciliado_em?: string | null
+          conciliado_por?: string | null
+          diferenca?: number | null
+          extrato_id?: string
+          id?: string
+          lancamento_id?: string
+          observacoes?: string | null
+          status?: string | null
+          tipo_lancamento?: string
+          valor_extrato?: number
+          valor_lancamento?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "conciliacoes_extrato_id_fkey"
+            columns: ["extrato_id"]
+            isOneToOne: false
+            referencedRelation: "extrato_bancario"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       conquistas: {
         Row: {
           ativo: boolean
@@ -1103,6 +1153,45 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      contas_bancarias: {
+        Row: {
+          agencia: string | null
+          ativo: boolean | null
+          banco: string | null
+          conta: string | null
+          created_at: string | null
+          id: string
+          nome: string
+          saldo_atual: number | null
+          tipo: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          agencia?: string | null
+          ativo?: boolean | null
+          banco?: string | null
+          conta?: string | null
+          created_at?: string | null
+          id?: string
+          nome: string
+          saldo_atual?: number | null
+          tipo?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          agencia?: string | null
+          ativo?: boolean | null
+          banco?: string | null
+          conta?: string | null
+          created_at?: string | null
+          id?: string
+          nome?: string
+          saldo_atual?: number | null
+          tipo?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
       }
       contas_pagar: {
         Row: {
@@ -2733,6 +2822,66 @@ export type Database = {
           video_url?: string | null
         }
         Relationships: []
+      }
+      extrato_bancario: {
+        Row: {
+          conciliacao_id: string | null
+          conciliado: boolean | null
+          conta_bancaria_id: string
+          data_transacao: string
+          descricao: string
+          id: string
+          importado_em: string | null
+          importado_por: string | null
+          referencia_externa: string | null
+          saldo_parcial: number | null
+          tipo: string
+          valor: number
+        }
+        Insert: {
+          conciliacao_id?: string | null
+          conciliado?: boolean | null
+          conta_bancaria_id: string
+          data_transacao: string
+          descricao: string
+          id?: string
+          importado_em?: string | null
+          importado_por?: string | null
+          referencia_externa?: string | null
+          saldo_parcial?: number | null
+          tipo: string
+          valor: number
+        }
+        Update: {
+          conciliacao_id?: string | null
+          conciliado?: boolean | null
+          conta_bancaria_id?: string
+          data_transacao?: string
+          descricao?: string
+          id?: string
+          importado_em?: string | null
+          importado_por?: string | null
+          referencia_externa?: string | null
+          saldo_parcial?: number | null
+          tipo?: string
+          valor?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "extrato_bancario_conta_bancaria_id_fkey"
+            columns: ["conta_bancaria_id"]
+            isOneToOne: false
+            referencedRelation: "contas_bancarias"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_extrato_conciliacao"
+            columns: ["conciliacao_id"]
+            isOneToOne: false
+            referencedRelation: "conciliacoes"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       favoritos: {
         Row: {
@@ -8140,6 +8289,10 @@ export type Database = {
           p_notes?: string
           p_reviewer_id: string
         }
+        Returns: Json
+      }
+      sugerir_conciliacoes: {
+        Args: { p_conta_bancaria_id: string }
         Returns: Json
       }
       transferir_saldo: {
