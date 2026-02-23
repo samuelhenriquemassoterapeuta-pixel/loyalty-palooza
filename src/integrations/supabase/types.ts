@@ -729,6 +729,56 @@ export type Database = {
         }
         Relationships: []
       }
+      categorias_financeiras: {
+        Row: {
+          ativo: boolean | null
+          categoria_pai_id: string | null
+          cor: string | null
+          created_at: string | null
+          descricao: string | null
+          icone: string | null
+          id: string
+          nome: string
+          ordem: number | null
+          tipo: string
+          updated_at: string | null
+        }
+        Insert: {
+          ativo?: boolean | null
+          categoria_pai_id?: string | null
+          cor?: string | null
+          created_at?: string | null
+          descricao?: string | null
+          icone?: string | null
+          id?: string
+          nome: string
+          ordem?: number | null
+          tipo: string
+          updated_at?: string | null
+        }
+        Update: {
+          ativo?: boolean | null
+          categoria_pai_id?: string | null
+          cor?: string | null
+          created_at?: string | null
+          descricao?: string | null
+          icone?: string | null
+          id?: string
+          nome?: string
+          ordem?: number | null
+          tipo?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "categorias_financeiras_categoria_pai_id_fkey"
+            columns: ["categoria_pai_id"]
+            isOneToOne: false
+            referencedRelation: "categorias_financeiras"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       chat_interactions: {
         Row: {
           agent: string
@@ -1009,6 +1059,109 @@ export type Database = {
             columns: ["badge_id"]
             isOneToOne: false
             referencedRelation: "badges"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      contas_pagar: {
+        Row: {
+          anexos: string[] | null
+          categoria_id: string | null
+          codigo_barras: string | null
+          comprovante_url: string | null
+          created_at: string | null
+          criado_por: string | null
+          data_emissao: string
+          data_pagamento: string | null
+          data_vencimento: string
+          descricao: string
+          despesa_recorrente_id: string | null
+          forma_pagamento: string | null
+          fornecedor_id: string | null
+          id: string
+          numero_documento: string | null
+          observacoes: string | null
+          pago_por: string | null
+          parcela_atual: number | null
+          status: string
+          tags: string[] | null
+          total_parcelas: number | null
+          updated_at: string | null
+          valor: number
+          valor_pago: number | null
+        }
+        Insert: {
+          anexos?: string[] | null
+          categoria_id?: string | null
+          codigo_barras?: string | null
+          comprovante_url?: string | null
+          created_at?: string | null
+          criado_por?: string | null
+          data_emissao?: string
+          data_pagamento?: string | null
+          data_vencimento: string
+          descricao: string
+          despesa_recorrente_id?: string | null
+          forma_pagamento?: string | null
+          fornecedor_id?: string | null
+          id?: string
+          numero_documento?: string | null
+          observacoes?: string | null
+          pago_por?: string | null
+          parcela_atual?: number | null
+          status?: string
+          tags?: string[] | null
+          total_parcelas?: number | null
+          updated_at?: string | null
+          valor: number
+          valor_pago?: number | null
+        }
+        Update: {
+          anexos?: string[] | null
+          categoria_id?: string | null
+          codigo_barras?: string | null
+          comprovante_url?: string | null
+          created_at?: string | null
+          criado_por?: string | null
+          data_emissao?: string
+          data_pagamento?: string | null
+          data_vencimento?: string
+          descricao?: string
+          despesa_recorrente_id?: string | null
+          forma_pagamento?: string | null
+          fornecedor_id?: string | null
+          id?: string
+          numero_documento?: string | null
+          observacoes?: string | null
+          pago_por?: string | null
+          parcela_atual?: number | null
+          status?: string
+          tags?: string[] | null
+          total_parcelas?: number | null
+          updated_at?: string | null
+          valor?: number
+          valor_pago?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "contas_pagar_categoria_id_fkey"
+            columns: ["categoria_id"]
+            isOneToOne: false
+            referencedRelation: "categorias_financeiras"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "contas_pagar_despesa_recorrente_id_fkey"
+            columns: ["despesa_recorrente_id"]
+            isOneToOne: false
+            referencedRelation: "despesas_recorrentes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "contas_pagar_fornecedor_id_fkey"
+            columns: ["fornecedor_id"]
+            isOneToOne: false
+            referencedRelation: "fornecedores"
             referencedColumns: ["id"]
           },
         ]
@@ -2034,6 +2187,78 @@ export type Database = {
         }
         Relationships: []
       }
+      despesas_recorrentes: {
+        Row: {
+          ativo: boolean | null
+          categoria_id: string | null
+          created_at: string | null
+          data_fim: string | null
+          data_inicio: string
+          descricao: string
+          dia_vencimento: number
+          forma_pagamento: string | null
+          fornecedor_id: string | null
+          frequencia: string
+          id: string
+          observacoes: string | null
+          total_gerado: number | null
+          ultima_geracao: string | null
+          updated_at: string | null
+          valor: number
+        }
+        Insert: {
+          ativo?: boolean | null
+          categoria_id?: string | null
+          created_at?: string | null
+          data_fim?: string | null
+          data_inicio?: string
+          descricao: string
+          dia_vencimento?: number
+          forma_pagamento?: string | null
+          fornecedor_id?: string | null
+          frequencia?: string
+          id?: string
+          observacoes?: string | null
+          total_gerado?: number | null
+          ultima_geracao?: string | null
+          updated_at?: string | null
+          valor: number
+        }
+        Update: {
+          ativo?: boolean | null
+          categoria_id?: string | null
+          created_at?: string | null
+          data_fim?: string | null
+          data_inicio?: string
+          descricao?: string
+          dia_vencimento?: number
+          forma_pagamento?: string | null
+          fornecedor_id?: string | null
+          frequencia?: string
+          id?: string
+          observacoes?: string | null
+          total_gerado?: number | null
+          ultima_geracao?: string | null
+          updated_at?: string | null
+          valor?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "despesas_recorrentes_categoria_id_fkey"
+            columns: ["categoria_id"]
+            isOneToOne: false
+            referencedRelation: "categorias_financeiras"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "despesas_recorrentes_fornecedor_id_fkey"
+            columns: ["fornecedor_id"]
+            isOneToOne: false
+            referencedRelation: "fornecedores"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       diario_alimentar: {
         Row: {
           agua_ml: number | null
@@ -2730,6 +2955,122 @@ export type Database = {
             columns: ["terapeuta_id"]
             isOneToOne: false
             referencedRelation: "terapeutas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      financeiro_audit_log: {
+        Row: {
+          acao: string
+          created_at: string | null
+          dados_anteriores: Json | null
+          dados_novos: Json | null
+          id: string
+          ip_address: string | null
+          registro_id: string
+          tabela: string
+          user_id: string | null
+          user_name: string | null
+        }
+        Insert: {
+          acao: string
+          created_at?: string | null
+          dados_anteriores?: Json | null
+          dados_novos?: Json | null
+          id?: string
+          ip_address?: string | null
+          registro_id: string
+          tabela: string
+          user_id?: string | null
+          user_name?: string | null
+        }
+        Update: {
+          acao?: string
+          created_at?: string | null
+          dados_anteriores?: Json | null
+          dados_novos?: Json | null
+          id?: string
+          ip_address?: string | null
+          registro_id?: string
+          tabela?: string
+          user_id?: string | null
+          user_name?: string | null
+        }
+        Relationships: []
+      }
+      fornecedores: {
+        Row: {
+          agencia: string | null
+          ativo: boolean | null
+          banco: string | null
+          categoria_padrao_id: string | null
+          cep: string | null
+          chave_pix: string | null
+          cidade: string | null
+          conta: string | null
+          cpf_cnpj: string | null
+          created_at: string | null
+          email: string | null
+          endereco: string | null
+          estado: string | null
+          id: string
+          nome: string
+          observacoes: string | null
+          telefone: string | null
+          tipo_conta: string | null
+          tipo_pessoa: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          agencia?: string | null
+          ativo?: boolean | null
+          banco?: string | null
+          categoria_padrao_id?: string | null
+          cep?: string | null
+          chave_pix?: string | null
+          cidade?: string | null
+          conta?: string | null
+          cpf_cnpj?: string | null
+          created_at?: string | null
+          email?: string | null
+          endereco?: string | null
+          estado?: string | null
+          id?: string
+          nome: string
+          observacoes?: string | null
+          telefone?: string | null
+          tipo_conta?: string | null
+          tipo_pessoa?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          agencia?: string | null
+          ativo?: boolean | null
+          banco?: string | null
+          categoria_padrao_id?: string | null
+          cep?: string | null
+          chave_pix?: string | null
+          cidade?: string | null
+          conta?: string | null
+          cpf_cnpj?: string | null
+          created_at?: string | null
+          email?: string | null
+          endereco?: string | null
+          estado?: string | null
+          id?: string
+          nome?: string
+          observacoes?: string | null
+          telefone?: string | null
+          tipo_conta?: string | null
+          tipo_pessoa?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fornecedores_categoria_padrao_id_fkey"
+            columns: ["categoria_padrao_id"]
+            isOneToOne: false
+            referencedRelation: "categorias_financeiras"
             referencedColumns: ["id"]
           },
         ]
@@ -6370,6 +6711,7 @@ export type Database = {
       }
       transacoes: {
         Row: {
+          categoria_id: string | null
           compartilhado_whatsapp: boolean | null
           created_at: string
           descricao: string | null
@@ -6377,12 +6719,16 @@ export type Database = {
           expira_em: string | null
           id: string
           imagem_exportada: boolean | null
+          metodo_pagamento: string | null
+          nota_fiscal: string | null
+          observacoes: string | null
           referencia_id: string | null
           tipo: string
           user_id: string
           valor: number
         }
         Insert: {
+          categoria_id?: string | null
           compartilhado_whatsapp?: boolean | null
           created_at?: string
           descricao?: string | null
@@ -6390,12 +6736,16 @@ export type Database = {
           expira_em?: string | null
           id?: string
           imagem_exportada?: boolean | null
+          metodo_pagamento?: string | null
+          nota_fiscal?: string | null
+          observacoes?: string | null
           referencia_id?: string | null
           tipo: string
           user_id: string
           valor: number
         }
         Update: {
+          categoria_id?: string | null
           compartilhado_whatsapp?: boolean | null
           created_at?: string
           descricao?: string | null
@@ -6403,12 +6753,22 @@ export type Database = {
           expira_em?: string | null
           id?: string
           imagem_exportada?: boolean | null
+          metodo_pagamento?: string | null
+          nota_fiscal?: string | null
+          observacoes?: string | null
           referencia_id?: string | null
           tipo?: string
           user_id?: string
           valor?: number
         }
         Relationships: [
+          {
+            foreignKeyName: "transacoes_categoria_id_fkey"
+            columns: ["categoria_id"]
+            isOneToOne: false
+            referencedRelation: "categorias_financeiras"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "transacoes_empresa_id_fkey"
             columns: ["empresa_id"]
@@ -7241,6 +7601,7 @@ export type Database = {
           ultimo_agendamento: string
         }[]
       }
+      gerar_contas_recorrentes: { Args: { p_mes?: string }; Returns: Json }
       get_achievements_ranking: {
         Args: { p_limit?: number }
         Returns: {
@@ -7280,6 +7641,7 @@ export type Database = {
           youtube_id: string
         }[]
       }
+      get_cat_ids: { Args: { p_nomes: string[] }; Returns: string[] }
       get_cursos_em_andamento: {
         Args: { p_user_id: string }
         Returns: {
@@ -7339,6 +7701,10 @@ export type Database = {
           total_conversations: number
           unique_users: number
         }[]
+      }
+      get_resumo_financeiro: {
+        Args: { p_data_fim?: string; p_data_inicio?: string }
+        Returns: Json
       }
       get_review_dashboard: { Args: never; Returns: Json }
       get_segmentacao_clientes: {
@@ -7435,6 +7801,33 @@ export type Database = {
       }
       is_parceiro: { Args: { _user_id: string }; Returns: boolean }
       is_terapeuta: { Args: { _user_id: string }; Returns: boolean }
+      listar_contas_pagar: {
+        Args: {
+          p_categoria_id?: string
+          p_data_fim?: string
+          p_data_inicio?: string
+          p_fornecedor_id?: string
+          p_limit?: number
+          p_offset?: number
+          p_status?: string
+        }
+        Returns: {
+          categoria_cor: string
+          categoria_nome: string
+          created_at: string
+          data_pagamento: string
+          data_vencimento: string
+          descricao: string
+          despesa_recorrente: boolean
+          dias_vencimento: number
+          forma_pagamento: string
+          fornecedor_nome: string
+          id: string
+          status: string
+          valor: number
+          valor_pago: number
+        }[]
+      }
       notify_expiring_cashback: {
         Args: never
         Returns: {
@@ -7442,6 +7835,16 @@ export type Database = {
           total_expirando: number
           user_id: string
         }[]
+      }
+      pagar_conta: {
+        Args: {
+          p_comprovante_url?: string
+          p_conta_id: string
+          p_data_pagamento?: string
+          p_forma_pagamento?: string
+          p_valor_pago?: number
+        }
+        Returns: Json
       }
       process_expired_cashback: {
         Args: never
@@ -7487,6 +7890,7 @@ export type Database = {
         }
         Returns: Json
       }
+      ultimo_dia_mes: { Args: { p_data: string }; Returns: number }
       update_curso_progresso_geral: {
         Args: {
           p_aula_id: string
