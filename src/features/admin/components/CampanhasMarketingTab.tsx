@@ -6,10 +6,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
+import { Card } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { toast } from "sonner";
-import { Plus, Send, Clock, CheckCircle2, XCircle, MessageSquare, Mail, Megaphone } from "lucide-react";
+import { Plus, Send, Clock, CheckCircle2, XCircle, MessageSquare, Mail, Megaphone, Calendar, TrendingUp, Users } from "lucide-react";
 
 const SEGMENTOS = [
   { value: "fiel", label: "Fiéis (10+ sessões)" },
@@ -37,11 +38,13 @@ const CampanhasMarketingTab = () => {
   const { user } = useAuth();
   const queryClient = useQueryClient();
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [statusFilter, setStatusFilter] = useState("todos");
   const [form, setForm] = useState({
     titulo: "",
     tipo: "whatsapp",
     segmentos: [] as string[],
     mensagem: "",
+    agendada_para: "",
   });
 
   const { data: campanhas = [], isLoading } = useQuery({
@@ -55,6 +58,8 @@ const CampanhasMarketingTab = () => {
       return data;
     },
   });
+
+  const filteredCampanhas = statusFilter === "todos" ? campanhas : campanhas.filter((c: any) => c.status === statusFilter);
 
   const toggleSegmento = (seg: string) => {
     setForm((prev) => ({
@@ -71,18 +76,23 @@ const CampanhasMarketingTab = () => {
       return;
     }
     try {
-      const { error } = await supabase.from("campanhas_marketing").insert({
+      const insertData: any = {
         titulo: form.titulo,
         tipo: form.tipo,
         segmentos: form.segmentos,
         mensagem: form.mensagem,
         created_by: user!.id,
-      });
+      };
+      if (form.agendada_para) {
+        insertData.agendada_para = form.agendada_para;
+        insertData.status = "agendada";
+      }
+      const { error } = await supabase.from("campanhas_marketing").insert(insertData);
       if (error) throw error;
-      toast.success("Campanha criada como rascunho!");
+      toast.success(form.agendada_para ? "Campanha agendada!" : "Campanha criada como rascunho!");
       queryClient.invalidateQueries({ queryKey: ["admin-campanhas"] });
       setDialogOpen(false);
-      setForm({ titulo: "", tipo: "whatsapp", segmentos: [], mensagem: "" });
+      setForm({ titulo: "", tipo: "whatsapp", segmentos: [], mensagem: "", agendada_para: "" });
     } catch (err: any) {
       toast.error(err.message);
     }
@@ -115,14 +125,51 @@ const CampanhasMarketingTab = () => {
     }
   };
 
+  // KPIs
+  const totalCampanhas = campanhas.length;
+  const enviadas = campanhas.filter((c: any) => c.status === "enviada").length;
+  const totalEnviados = campanhas.reduce((acc: number, c: any) => acc + (c.total_enviados || 0), 0);
+  const totalDestinatarios = campanhas.reduce((acc: number, c: any) => acc + (c.total_destinatarios || 0), 0);
+  const taxaEntrega = totalDestinatarios > 0 ? ((totalEnviados / totalDestinatarios) * 100).toFixed(1) : "0";
+
   if (isLoading) return <p className="text-center text-muted-foreground py-8">Carregando...</p>;
 
   return (
     <div className="space-y-6">
+      {/* KPIs */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <Card className="p-3 text-center">
+          <p className="text-2xl font-bold text-foreground">{totalCampanhas}</p>
+          <p className="text-xs text-muted-foreground">Total</p>
+        </Card>
+        <Card className="p-3 text-center">
+          <p className="text-2xl font-bold text-highlight">{enviadas}</p>
+          <p className="text-xs text-muted-foreground">Enviadas</p>
+        </Card>
+        <Card className="p-3 text-center">
+          <p className="text-2xl font-bold text-primary">{totalEnviados.toLocaleString("pt-BR")}</p>
+          <p className="text-xs text-muted-foreground">Msgs Entregues</p>
+        </Card>
+        <Card className="p-3 text-center">
+          <p className="text-2xl font-bold text-accent-foreground">{taxaEntrega}%</p>
+          <p className="text-xs text-muted-foreground">Taxa Entrega</p>
+        </Card>
+      </div>
+
       <div className="flex items-center justify-between">
-        <div>
-          <h3 className="text-lg font-semibold text-foreground">Campanhas de Marketing</h3>
-          <p className="text-sm text-muted-foreground">WhatsApp, Email e Banners segmentados</p>
+        <div className="flex items-center gap-2">
+          <Select value={statusFilter} onValueChange={setStatusFilter}>
+            <SelectTrigger className="w-[140px] h-8 text-xs">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="todos">Todos</SelectItem>
+              <SelectItem value="rascunho">Rascunho</SelectItem>
+              <SelectItem value="agendada">Agendada</SelectItem>
+              <SelectItem value="enviada">Enviada</SelectItem>
+              <SelectItem value="cancelada">Cancelada</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger asChild>
@@ -141,16 +188,27 @@ const CampanhasMarketingTab = () => {
                 onChange={(e) => setForm({ ...form, titulo: e.target.value })}
               />
 
-              <Select value={form.tipo} onValueChange={(v) => setForm({ ...form, tipo: v })}>
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="whatsapp">WhatsApp</SelectItem>
-                  <SelectItem value="email">Email</SelectItem>
-                  <SelectItem value="banner">Banner in-app</SelectItem>
-                </SelectContent>
-              </Select>
+              <div className="grid grid-cols-2 gap-3">
+                <Select value={form.tipo} onValueChange={(v) => setForm({ ...form, tipo: v })}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="whatsapp">WhatsApp</SelectItem>
+                    <SelectItem value="email">Email</SelectItem>
+                    <SelectItem value="banner">Banner in-app</SelectItem>
+                  </SelectContent>
+                </Select>
+
+                <div>
+                  <Input
+                    type="datetime-local"
+                    value={form.agendada_para}
+                    onChange={(e) => setForm({ ...form, agendada_para: e.target.value })}
+                    placeholder="Agendar envio"
+                  />
+                </div>
+              </div>
 
               <div>
                 <p className="text-sm font-medium mb-2">Segmentos alvo</p>
@@ -178,19 +236,22 @@ const CampanhasMarketingTab = () => {
                 rows={4}
               />
 
-              <Button onClick={handleCreate} className="w-full gap-2">
-                <Plus size={14} /> Criar Rascunho
-              </Button>
+              <div className="flex gap-2">
+                <Button onClick={handleCreate} className="flex-1 gap-2">
+                  {form.agendada_para ? <Calendar size={14} /> : <Plus size={14} />}
+                  {form.agendada_para ? "Agendar" : "Criar Rascunho"}
+                </Button>
+              </div>
             </div>
           </DialogContent>
         </Dialog>
       </div>
 
-      {campanhas.length === 0 ? (
-        <p className="text-sm text-muted-foreground text-center py-8">Nenhuma campanha criada ainda</p>
+      {filteredCampanhas.length === 0 ? (
+        <p className="text-sm text-muted-foreground text-center py-8">Nenhuma campanha encontrada</p>
       ) : (
         <div className="space-y-3">
-          {campanhas.map((c: any) => {
+          {filteredCampanhas.map((c: any) => {
             const tipoCfg = TIPO_CONFIG[c.tipo] || TIPO_CONFIG.whatsapp;
             const Icon = tipoCfg.icon;
             return (
@@ -211,6 +272,13 @@ const CampanhasMarketingTab = () => {
                     {c.status}
                   </Badge>
                 </div>
+
+                {c.agendada_para && (
+                  <div className="flex items-center gap-1 text-xs text-primary">
+                    <Calendar size={12} />
+                    Agendada para {new Date(c.agendada_para).toLocaleString("pt-BR")}
+                  </div>
+                )}
 
                 <div className="flex flex-wrap gap-1">
                   {(c.segmentos || []).map((s: string) => (
@@ -244,6 +312,11 @@ const CampanhasMarketingTab = () => {
                       </span>
                     )}
                     <span className="text-muted-foreground">{c.total_destinatarios || 0} destinatários</span>
+                    {(c.taxa_abertura || 0) > 0 && (
+                      <span className="flex items-center gap-1 text-primary">
+                        <TrendingUp size={12} /> {c.taxa_abertura}% abertura
+                      </span>
+                    )}
                   </div>
                 )}
               </div>

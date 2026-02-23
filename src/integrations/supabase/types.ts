@@ -323,6 +323,54 @@ export type Database = {
         }
         Relationships: []
       }
+      automacoes_marketing: {
+        Row: {
+          ativo: boolean | null
+          canal: string
+          created_at: string | null
+          delay_horas: number | null
+          gatilho: string
+          id: string
+          mensagem: string
+          nome: string
+          segmentos: string[] | null
+          tipo: string
+          total_conversoes: number | null
+          total_disparos: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          ativo?: boolean | null
+          canal?: string
+          created_at?: string | null
+          delay_horas?: number | null
+          gatilho: string
+          id?: string
+          mensagem: string
+          nome: string
+          segmentos?: string[] | null
+          tipo?: string
+          total_conversoes?: number | null
+          total_disparos?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          ativo?: boolean | null
+          canal?: string
+          created_at?: string | null
+          delay_horas?: number | null
+          gatilho?: string
+          id?: string
+          mensagem?: string
+          nome?: string
+          segmentos?: string[] | null
+          tipo?: string
+          total_conversoes?: number | null
+          total_disparos?: number | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       avaliacoes: {
         Row: {
           agendamento_id: string | null
@@ -688,6 +736,8 @@ export type Database = {
           mensagem: string
           segmentos: string[]
           status: string
+          taxa_abertura: number | null
+          taxa_clique: number | null
           tipo: string
           titulo: string
           total_destinatarios: number | null
@@ -704,6 +754,8 @@ export type Database = {
           mensagem: string
           segmentos?: string[]
           status?: string
+          taxa_abertura?: number | null
+          taxa_clique?: number | null
           tipo?: string
           titulo: string
           total_destinatarios?: number | null
@@ -720,6 +772,8 @@ export type Database = {
           mensagem?: string
           segmentos?: string[]
           status?: string
+          taxa_abertura?: number | null
+          taxa_clique?: number | null
           tipo?: string
           titulo?: string
           total_destinatarios?: number | null
