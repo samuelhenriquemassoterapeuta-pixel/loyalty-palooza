@@ -1166,6 +1166,89 @@ export type Database = {
           },
         ]
       }
+      contas_receber: {
+        Row: {
+          categoria_id: string | null
+          cliente_id: string | null
+          cliente_nome: string | null
+          created_at: string | null
+          criado_por: string | null
+          data_emissao: string
+          data_recebimento: string | null
+          data_vencimento: string
+          descricao: string
+          forma_recebimento: string | null
+          id: string
+          numero_documento: string | null
+          observacoes: string | null
+          parcela_atual: number | null
+          referencia_id: string | null
+          referencia_tipo: string | null
+          status: string
+          tags: string[] | null
+          total_parcelas: number | null
+          updated_at: string | null
+          valor: number
+          valor_recebido: number | null
+        }
+        Insert: {
+          categoria_id?: string | null
+          cliente_id?: string | null
+          cliente_nome?: string | null
+          created_at?: string | null
+          criado_por?: string | null
+          data_emissao?: string
+          data_recebimento?: string | null
+          data_vencimento: string
+          descricao: string
+          forma_recebimento?: string | null
+          id?: string
+          numero_documento?: string | null
+          observacoes?: string | null
+          parcela_atual?: number | null
+          referencia_id?: string | null
+          referencia_tipo?: string | null
+          status?: string
+          tags?: string[] | null
+          total_parcelas?: number | null
+          updated_at?: string | null
+          valor: number
+          valor_recebido?: number | null
+        }
+        Update: {
+          categoria_id?: string | null
+          cliente_id?: string | null
+          cliente_nome?: string | null
+          created_at?: string | null
+          criado_por?: string | null
+          data_emissao?: string
+          data_recebimento?: string | null
+          data_vencimento?: string
+          descricao?: string
+          forma_recebimento?: string | null
+          id?: string
+          numero_documento?: string | null
+          observacoes?: string | null
+          parcela_atual?: number | null
+          referencia_id?: string | null
+          referencia_tipo?: string | null
+          status?: string
+          tags?: string[] | null
+          total_parcelas?: number | null
+          updated_at?: string | null
+          valor?: number
+          valor_recebido?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "contas_receber_categoria_id_fkey"
+            columns: ["categoria_id"]
+            isOneToOne: false
+            referencedRelation: "categorias_financeiras"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       content_ideas: {
         Row: {
           brand_id: string | null

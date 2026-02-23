@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { LayoutDashboard, FileText, RotateCcw, Users, BarChart3, ArrowLeftRight } from "lucide-react";
+import { LayoutDashboard, FileText, RotateCcw, Users, BarChart3, ArrowLeftRight, Receipt } from "lucide-react";
 import AdminFinanceiroDashboard from "@/components/admin/financeiro/AdminFinanceiroDashboard";
 import AdminContasPagar from "@/components/admin/financeiro/AdminContasPagar";
+import AdminContasReceber from "@/components/admin/financeiro/AdminContasReceber";
 import AdminDespesasRecorrentes from "@/components/admin/financeiro/AdminDespesasRecorrentes";
 import AdminFornecedores from "@/components/admin/financeiro/AdminFornecedores";
 import AdminDRE from "@/components/admin/financeiro/AdminDRE";
@@ -30,6 +31,10 @@ const FinanceiroTab = () => {
           <FileText size={14} />
           Contas a Pagar
         </TabsTrigger>
+        <TabsTrigger value="receber" className="gap-1.5 text-xs">
+          <Receipt size={14} />
+          Contas a Receber
+        </TabsTrigger>
         <TabsTrigger value="recorrentes" className="gap-1.5 text-xs">
           <RotateCcw size={14} />
           Recorrentes
@@ -51,6 +56,9 @@ const FinanceiroTab = () => {
       </TabsContent>
       <TabsContent value="contas">
         <AdminContasPagar />
+      </TabsContent>
+      <TabsContent value="receber">
+        <AdminContasReceber />
       </TabsContent>
       <TabsContent value="recorrentes">
         <AdminDespesasRecorrentes />
