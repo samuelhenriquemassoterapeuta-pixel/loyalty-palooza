@@ -3,7 +3,9 @@ import { useDRE } from "@/hooks/financeiro/useDRE";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { RefreshCw, TrendingUp, TrendingDown, Minus } from "lucide-react";
+import { RefreshCw, TrendingUp, TrendingDown, Minus, Download } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 export default function AdminDRE() {
   const hoje = new Date();
@@ -14,10 +16,35 @@ export default function AdminDRE() {
 
   const [dataInicio, setDataInicio] = useState(primeiroDia);
   const [dataFim, setDataFim] = useState(ultimoDia);
+  const [isExporting, setIsExporting] = useState(false);
   const { dre, isLoading, refetch } = useDRE(dataInicio, dataFim);
 
   const fmt = (v: number) =>
     new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(v);
+
+  const handleExport = async () => {
+    setIsExporting(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("financeiro-relatorio", {
+        body: { data_inicio: dataInicio, data_fim: dataFim },
+      });
+      if (error) throw error;
+      if (data?.csv) {
+        const blob = new Blob([data.csv], { type: "text/csv;charset=utf-8;" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = `relatorio-financeiro-${dataInicio}-${dataFim}.csv`;
+        link.click();
+        URL.revokeObjectURL(url);
+        toast.success("Relatório exportado!");
+      }
+    } catch {
+      toast.error("Erro ao exportar relatório");
+    } finally {
+      setIsExporting(false);
+    }
+  };
 
   if (isLoading) {
     return (
@@ -31,7 +58,16 @@ export default function AdminDRE() {
 
   if (!dre) return null;
 
-  const lines = [
+  const lines: Array<{
+    label: string;
+    value?: number;
+    bold?: boolean;
+    positive?: boolean;
+    negative?: boolean;
+    highlight?: boolean;
+    separator?: boolean;
+    icon?: React.ComponentType<{ className?: string }>;
+  }> = [
     { label: "RECEITAS", bold: true, icon: TrendingUp },
     { label: "  Serviços", value: dre.receitas.servicos },
     { label: "  Produtos", value: dre.receitas.produtos },
@@ -67,6 +103,9 @@ export default function AdminDRE() {
           <Button size="sm" variant="outline" onClick={() => refetch()}>
             <RefreshCw className="h-3.5 w-3.5" />
           </Button>
+          <Button size="sm" variant="outline" onClick={handleExport} disabled={isExporting}>
+            <Download className="h-3.5 w-3.5" />
+          </Button>
         </div>
       </div>
 
@@ -98,7 +137,7 @@ export default function AdminDRE() {
               if (line.separator) {
                 return <div key={i} className="h-px" />;
               }
-              const Icon = (line as any).icon;
+              const Icon = line.icon;
               return (
                 <div
                   key={i}
