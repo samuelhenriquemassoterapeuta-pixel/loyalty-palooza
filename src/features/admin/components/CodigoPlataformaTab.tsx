@@ -601,14 +601,14 @@ const { data } = await supabase.functions.invoke('resi-router', {
 
       <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
         {[
-          { label: "Tabelas DB", value: "137" },
-          { label: "Políticas RLS", value: "368" },
-          { label: "Edge Functions", value: "46" },
+          { label: "Tabelas DB", value: "175" },
+          { label: "Políticas RLS", value: "450" },
+          { label: "Edge Functions", value: "61" },
           { label: "Permissões", value: "30" },
-          { label: "Componentes", value: "300+" },
-          { label: "Funções SQL", value: "51" },
-          { label: "Storage", value: "11" },
-          { label: "Triggers", value: "57" },
+          { label: "Componentes", value: "350+" },
+          { label: "Funções SQL", value: "88" },
+          { label: "Storage", value: "12" },
+          { label: "Triggers", value: "77" },
         ].map((m) => (
           <Card key={m.label} className="p-2.5 text-center">
             <div className="text-base font-bold text-primary">{m.value}</div>
@@ -721,9 +721,9 @@ SELECT * FROM get_user_permissions('user-uuid');
       {/* 3. Banco de Dados */}
       <SectionCollapsible
         title="Banco de Dados"
-        subtitle="134 tabelas com RLS em todas, 366 políticas"
+        subtitle="134→175 tabelas, 366→450 RLS, 51→88 funções, 46→61 edge functions"
         icon={Database}
-        badge="134 tabelas"
+        badge="175 tabelas"
       >
         <div className="space-y-2">
           {[
@@ -761,9 +761,9 @@ SELECT * FROM get_user_permissions('user-uuid');
       {/* 4. Funções SQL & Triggers */}
       <SectionCollapsible
         title="Funções SQL & Triggers"
-        subtitle="51 funções e 57 triggers automáticos"
+        subtitle="88 funções e 77 triggers automáticos"
         icon={Terminal}
-        badge="51 funções"
+        badge="88 funções"
       >
         <FeatureGrid items={[
           { icon: CreditCard, title: "credit_cashback_on_order()", desc: "Cashback automático em pedidos com multiplicador de tier" },
@@ -798,9 +798,9 @@ END; $$;`}
       {/* 5. Edge Functions */}
       <SectionCollapsible
         title="Edge Functions (Backend)"
-        subtitle="44 funções serverless em Deno/TypeScript"
+        subtitle="61 funções serverless em Deno/TypeScript"
         icon={Server}
-        badge="44 funções"
+        badge="61 funções"
       >
         <div className="space-y-2">
           <p className="text-[11px] font-semibold text-foreground">💳 Pagamentos (Asaas)</p>
