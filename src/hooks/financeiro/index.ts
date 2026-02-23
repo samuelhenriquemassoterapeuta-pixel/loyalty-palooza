@@ -12,3 +12,5 @@ export { useDRE } from "./useDRE";
 export type { DREData } from "./useDRE";
 export { useFluxoCaixa } from "./useFluxoCaixa";
 export type { FluxoCaixaMes } from "./useFluxoCaixa";
+export { useContasReceber, useContaReceberMutations } from "./useContasReceber";
+export type { ContaReceber, ContaReceberComCategoria } from "./useContasReceber";
