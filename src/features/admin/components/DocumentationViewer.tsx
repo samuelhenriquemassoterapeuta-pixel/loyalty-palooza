@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import DOMPurify from "dompurify";
 import { motion } from "framer-motion";
 import { Download, Copy, Check, RefreshCw, FileText, Hash, AlignLeft, Layers } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -39,7 +40,7 @@ const MarkdownRenderer = ({ content }: { content: string }) => {
               <tr key={ri} className="border-b border-border/40 hover:bg-muted/20">
                 {row.map((cell, ci) => (
                   <td key={ci} className="p-2 text-muted-foreground">
-                    <span dangerouslySetInnerHTML={{ __html: cell.trim().replace(/\*\*(.*?)\*\*/g, '<strong class="text-foreground">$1</strong>').replace(/`(.*?)`/g, '<code class="px-1 py-0.5 rounded bg-muted text-[10px] font-mono text-primary">$1</code>') }} />
+                    <span dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(cell.trim().replace(/\*\*(.*?)\*\*/g, '<strong class="text-foreground">$1</strong>').replace(/`(.*?)`/g, '<code class="px-1 py-0.5 rounded bg-muted text-[10px] font-mono text-primary">$1</code>'), { ALLOWED_TAGS: ['strong', 'code', 'em', 'b', 'i'], ALLOWED_ATTR: ['class'] }) }} />
                   </td>
                 ))}
               </tr>
@@ -125,7 +126,7 @@ const MarkdownRenderer = ({ content }: { content: string }) => {
       elements.push(
         <div key={key} className="flex items-start gap-2 ml-2 text-xs text-muted-foreground">
           <span className="text-primary mt-0.5">•</span>
-          <span dangerouslySetInnerHTML={{ __html: line.replace(/^- /, "").replace(/\*\*(.*?)\*\*/g, '<strong class="text-foreground">$1</strong>').replace(/`(.*?)`/g, '<code class="px-1 py-0.5 rounded bg-muted text-[10px] font-mono text-primary">$1</code>') }} />
+          <span dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(line.replace(/^- /, "").replace(/\*\*(.*?)\*\*/g, '<strong class="text-foreground">$1</strong>').replace(/`(.*?)`/g, '<code class="px-1 py-0.5 rounded bg-muted text-[10px] font-mono text-primary">$1</code>'), { ALLOWED_TAGS: ['strong', 'code', 'em', 'b', 'i'], ALLOWED_ATTR: ['class'] }) }} />
         </div>
       );
     } else if (line.startsWith("---")) {
@@ -135,7 +136,7 @@ const MarkdownRenderer = ({ content }: { content: string }) => {
     } else {
       elements.push(
         <p key={key} className="text-xs text-muted-foreground leading-relaxed">
-          <span dangerouslySetInnerHTML={{ __html: line.replace(/\*\*(.*?)\*\*/g, '<strong class="text-foreground">$1</strong>').replace(/`(.*?)`/g, '<code class="px-1 py-0.5 rounded bg-muted text-[10px] font-mono text-primary">$1</code>') }} />
+          <span dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(line.replace(/\*\*(.*?)\*\*/g, '<strong class="text-foreground">$1</strong>').replace(/`(.*?)`/g, '<code class="px-1 py-0.5 rounded bg-muted text-[10px] font-mono text-primary">$1</code>'), { ALLOWED_TAGS: ['strong', 'code', 'em', 'b', 'i'], ALLOWED_ATTR: ['class'] }) }} />
         </p>
       );
     }
