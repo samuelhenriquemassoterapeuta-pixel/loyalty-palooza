@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { Image, FileText, Printer, Monitor, BookOpen } from "lucide-react";
+import { Image, FileText, Printer, Monitor, BookOpen, CreditCard } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { GiftCardVisual } from "./GiftCardVisual";
 import { CupomExportMenu } from "@/features/cupom/components/CupomExportMenu";
@@ -20,6 +20,7 @@ const formatoLabels = {
   stories: { label: "Stories", icon: Image, desc: "9:16" },
   feed: { label: "Feed", icon: FileText, desc: "1:1" },
   impressao: { label: "Cartão", icon: Printer, desc: "Horizontal" },
+  cartao_visita: { label: "Visita", icon: CreditCard, desc: "85×55mm" },
   banner: { label: "Banner", icon: Monitor, desc: "16:9" },
   flyer: { label: "Flyer", icon: BookOpen, desc: "A5" },
 };
@@ -28,6 +29,7 @@ const formatoSizes: Record<string, { width: number; height: number; className: s
   stories: { width: 1080, height: 1920, className: "w-[270px] h-[480px]" },
   feed: { width: 1080, height: 1080, className: "w-[320px] h-[320px]" },
   impressao: { width: 600, height: 400, className: "w-[360px] h-[240px]" },
+  cartao_visita: { width: 1050, height: 600, className: "w-[350px] h-[200px]" },
   banner: { width: 1200, height: 628, className: "w-[360px] h-[188px]" },
   flyer: { width: 1748, height: 2480, className: "w-[250px] h-[354px]" },
 };
@@ -41,7 +43,7 @@ export const GiftCardExport = ({ vale }: GiftCardExportProps) => {
     <div className="space-y-3">
       {/* Format selector */}
       <Tabs value={formato} onValueChange={(v) => setFormato(v as keyof typeof formatoLabels)} className="w-full">
-        <TabsList className="grid grid-cols-5 w-full">
+        <TabsList className="grid grid-cols-6 w-full">
           {Object.entries(formatoLabels).map(([key, { label, icon: Icon }]) => (
             <TabsTrigger key={key} value={key} className="gap-1 text-xs px-1">
               <Icon className="w-3.5 h-3.5" />
