@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { LayoutDashboard, FileText, RotateCcw, Users } from "lucide-react";
+import { LayoutDashboard, FileText, RotateCcw, Users, BarChart3, ArrowLeftRight } from "lucide-react";
 import AdminFinanceiroDashboard from "@/components/admin/financeiro/AdminFinanceiroDashboard";
 import AdminContasPagar from "@/components/admin/financeiro/AdminContasPagar";
 import AdminDespesasRecorrentes from "@/components/admin/financeiro/AdminDespesasRecorrentes";
 import AdminFornecedores from "@/components/admin/financeiro/AdminFornecedores";
+import AdminDRE from "@/components/admin/financeiro/AdminDRE";
+import AdminFluxoCaixa from "@/components/admin/financeiro/AdminFluxoCaixa";
 
 const FinanceiroTab = () => {
   const [subTab, setSubTab] = useState("dashboard");
@@ -15,6 +17,14 @@ const FinanceiroTab = () => {
         <TabsTrigger value="dashboard" className="gap-1.5 text-xs">
           <LayoutDashboard size={14} />
           Dashboard
+        </TabsTrigger>
+        <TabsTrigger value="dre" className="gap-1.5 text-xs">
+          <BarChart3 size={14} />
+          DRE
+        </TabsTrigger>
+        <TabsTrigger value="fluxo" className="gap-1.5 text-xs">
+          <ArrowLeftRight size={14} />
+          Fluxo de Caixa
         </TabsTrigger>
         <TabsTrigger value="contas" className="gap-1.5 text-xs">
           <FileText size={14} />
@@ -32,6 +42,12 @@ const FinanceiroTab = () => {
 
       <TabsContent value="dashboard">
         <AdminFinanceiroDashboard />
+      </TabsContent>
+      <TabsContent value="dre">
+        <AdminDRE />
+      </TabsContent>
+      <TabsContent value="fluxo">
+        <AdminFluxoCaixa />
       </TabsContent>
       <TabsContent value="contas">
         <AdminContasPagar />
