@@ -14,3 +14,5 @@ export { useFluxoCaixa } from "./useFluxoCaixa";
 export type { FluxoCaixaMes } from "./useFluxoCaixa";
 export { useContasReceber, useContaReceberMutations } from "./useContasReceber";
 export type { ContaReceber, ContaReceberComCategoria } from "./useContasReceber";
+export { useRepasses, useCalcularRepasse, useRepasseMutations } from "./useRepasses";
+export type { Repasse, RepasseComTerapeuta } from "./useRepasses";
