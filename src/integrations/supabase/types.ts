@@ -980,6 +980,47 @@ export type Database = {
           },
         ]
       }
+      comissoes_terapeutas: {
+        Row: {
+          ativo: boolean | null
+          created_at: string | null
+          id: string
+          percentual_comissao: number
+          terapeuta_id: string
+          tipo_calculo: string
+          updated_at: string | null
+          valor_fixo_sessao: number | null
+        }
+        Insert: {
+          ativo?: boolean | null
+          created_at?: string | null
+          id?: string
+          percentual_comissao?: number
+          terapeuta_id: string
+          tipo_calculo?: string
+          updated_at?: string | null
+          valor_fixo_sessao?: number | null
+        }
+        Update: {
+          ativo?: boolean | null
+          created_at?: string | null
+          id?: string
+          percentual_comissao?: number
+          terapeuta_id?: string
+          tipo_calculo?: string
+          updated_at?: string | null
+          valor_fixo_sessao?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "comissoes_terapeutas_terapeuta_id_fkey"
+            columns: ["terapeuta_id"]
+            isOneToOne: true
+            referencedRelation: "terapeutas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       conquistas: {
         Row: {
           ativo: boolean
@@ -5878,6 +5919,131 @@ export type Database = {
           },
         ]
       }
+      repasse_itens: {
+        Row: {
+          agendamento_id: string | null
+          created_at: string | null
+          data_sessao: string
+          id: string
+          percentual_comissao: number
+          repasse_id: string
+          servico_nome: string
+          valor_comissao: number
+          valor_servico: number
+        }
+        Insert: {
+          agendamento_id?: string | null
+          created_at?: string | null
+          data_sessao: string
+          id?: string
+          percentual_comissao: number
+          repasse_id: string
+          servico_nome: string
+          valor_comissao: number
+          valor_servico: number
+        }
+        Update: {
+          agendamento_id?: string | null
+          created_at?: string | null
+          data_sessao?: string
+          id?: string
+          percentual_comissao?: number
+          repasse_id?: string
+          servico_nome?: string
+          valor_comissao?: number
+          valor_servico?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "repasse_itens_agendamento_id_fkey"
+            columns: ["agendamento_id"]
+            isOneToOne: false
+            referencedRelation: "agendamentos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "repasse_itens_repasse_id_fkey"
+            columns: ["repasse_id"]
+            isOneToOne: false
+            referencedRelation: "repasses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      repasses: {
+        Row: {
+          aprovado_por: string | null
+          comprovante_url: string | null
+          created_at: string | null
+          criado_por: string | null
+          data_pagamento: string | null
+          forma_pagamento: string | null
+          id: string
+          observacoes: string | null
+          percentual_comissao: number
+          periodo_fim: string
+          periodo_inicio: string
+          status: string
+          terapeuta_id: string
+          total_sessoes: number
+          updated_at: string | null
+          valor_bruto: number
+          valor_comissao: number
+          valor_descontos: number | null
+          valor_liquido: number
+        }
+        Insert: {
+          aprovado_por?: string | null
+          comprovante_url?: string | null
+          created_at?: string | null
+          criado_por?: string | null
+          data_pagamento?: string | null
+          forma_pagamento?: string | null
+          id?: string
+          observacoes?: string | null
+          percentual_comissao: number
+          periodo_fim: string
+          periodo_inicio: string
+          status?: string
+          terapeuta_id: string
+          total_sessoes?: number
+          updated_at?: string | null
+          valor_bruto?: number
+          valor_comissao?: number
+          valor_descontos?: number | null
+          valor_liquido?: number
+        }
+        Update: {
+          aprovado_por?: string | null
+          comprovante_url?: string | null
+          created_at?: string | null
+          criado_por?: string | null
+          data_pagamento?: string | null
+          forma_pagamento?: string | null
+          id?: string
+          observacoes?: string | null
+          percentual_comissao?: number
+          periodo_fim?: string
+          periodo_inicio?: string
+          status?: string
+          terapeuta_id?: string
+          total_sessoes?: number
+          updated_at?: string | null
+          valor_bruto?: number
+          valor_comissao?: number
+          valor_descontos?: number | null
+          valor_liquido?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "repasses_terapeuta_id_fkey"
+            columns: ["terapeuta_id"]
+            isOneToOne: false
+            referencedRelation: "terapeutas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       resgates_cromos: {
         Row: {
           codigo_resgate: string
@@ -7641,6 +7807,14 @@ export type Database = {
           total_escolhas: number
           usuario_id: string
         }[]
+      }
+      calcular_repasse: {
+        Args: {
+          p_periodo_fim: string
+          p_periodo_inicio: string
+          p_terapeuta_id: string
+        }
+        Returns: Json
       }
       check_and_unlock_achievements: {
         Args: { p_user_id: string }
