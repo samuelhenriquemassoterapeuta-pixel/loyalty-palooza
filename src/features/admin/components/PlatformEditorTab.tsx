@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
@@ -8,7 +8,8 @@ import {
   FileText, Image, ToggleLeft, Palette, History,
   Save, Search, Edit3, Check, X, Upload,
   Loader2, Trash2, Layout, ShoppingBag, Megaphone,
-  Bot, Plus, DollarSign, Clock, Tag
+  Bot, Plus, DollarSign, Clock, Tag, Building2,
+  Phone, Mail, MapPin, Globe, Instagram, Hash
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -17,6 +18,8 @@ import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Label } from "@/components/ui/label";
+import { Card } from "@/components/ui/card";
 
 // ─── Types ───────────────────────────────────────────────────────
 interface PlatformText {
@@ -39,6 +42,7 @@ interface EditHistoryItem {
 
 // ─── Sub-tabs ────────────────────────────────────────────────────
 const tabs = [
+  { id: "empresa", label: "Empresa", icon: Building2 },
   { id: "textos", label: "Textos", icon: FileText },
   { id: "midia", label: "Mídia", icon: Image },
   { id: "modulos", label: "Módulos", icon: ToggleLeft },
@@ -52,13 +56,13 @@ const tabs = [
 
 // ─── Main Component ──────────────────────────────────────────────
 export const PlatformEditorTab = () => {
-  const [activeSubTab, setActiveSubTab] = useState("textos");
+  const [activeSubTab, setActiveSubTab] = useState("empresa");
 
   return (
     <div className="space-y-4">
       <div>
         <h3 className="text-lg font-semibold text-foreground">Editor da Plataforma</h3>
-        <p className="text-sm text-muted-foreground">Gerencie textos, mídias, módulos, landing page, serviços, banners, agentes IA e tema</p>
+        <p className="text-sm text-muted-foreground">Gerencie dados da empresa, textos, mídias, módulos, landing page, serviços, banners, agentes IA e tema</p>
       </div>
 
       <Tabs value={activeSubTab} onValueChange={setActiveSubTab}>
@@ -71,6 +75,7 @@ export const PlatformEditorTab = () => {
           ))}
         </TabsList>
 
+        <TabsContent value="empresa"><EmpresaEditor /></TabsContent>
         <TabsContent value="textos"><TextsEditor /></TabsContent>
         <TabsContent value="midia"><MediaEditor /></TabsContent>
         <TabsContent value="modulos"><ModulesEditor /></TabsContent>
@@ -81,6 +86,105 @@ export const PlatformEditorTab = () => {
         <TabsContent value="tema"><ThemeEditor /></TabsContent>
         <TabsContent value="historico"><EditHistory /></TabsContent>
       </Tabs>
+    </div>
+  );
+};
+
+// ─── Empresa Editor ──────────────────────────────────────────────
+const EMPRESA_FIELDS = [
+  { key: "empresa.nome", label: "Nome da Empresa", icon: Building2 },
+  { key: "empresa.telefone", label: "Telefone", icon: Phone },
+  { key: "empresa.whatsapp", label: "WhatsApp", icon: Phone },
+  { key: "empresa.email", label: "E-mail", icon: Mail },
+  { key: "empresa.instagram", label: "Instagram", icon: Instagram },
+  { key: "empresa.facebook", label: "Facebook", icon: Globe },
+  { key: "empresa.site", label: "Site", icon: Globe },
+  { key: "empresa.cnpj", label: "CNPJ", icon: Hash },
+  { key: "empresa.endereco_rua", label: "Rua / Número", icon: MapPin },
+  { key: "empresa.endereco_bairro", label: "Bairro", icon: MapPin },
+  { key: "empresa.endereco_cidade", label: "Cidade", icon: MapPin },
+  { key: "empresa.endereco_estado", label: "Estado", icon: MapPin },
+  { key: "empresa.endereco_cep", label: "CEP", icon: MapPin },
+  { key: "empresa.horario_funcionamento", label: "Horário de Funcionamento", icon: Clock },
+];
+
+const EmpresaEditor = () => {
+  const queryClient = useQueryClient();
+  const { user } = useAuth();
+  const [values, setValues] = useState<Record<string, { id: string; value: string }>>({});
+  const [saving, setSaving] = useState(false);
+  const [initialized, setInitialized] = useState(false);
+
+  const { data: texts = [], isLoading } = useQuery({
+    queryKey: ["platform-texts-empresa"],
+    queryFn: async () => {
+      const { data, error } = await supabase.from("platform_texts" as any).select("*").eq("section", "empresa");
+      if (error) throw error;
+      return data as unknown as PlatformText[];
+    },
+  });
+
+  // Initialize form values from DB
+  if (texts.length > 0 && !initialized) {
+    const v: Record<string, { id: string; value: string }> = {};
+    texts.forEach((t) => { v[t.key] = { id: t.id, value: t.value }; });
+    setValues(v);
+    setInitialized(true);
+  }
+
+  const handleSave = async () => {
+    setSaving(true);
+    try {
+      const updates = Object.entries(values).map(([key, { id, value }]) =>
+        supabase.from("platform_texts" as any).update({ value, updated_at: new Date().toISOString(), updated_by: user?.id } as any).eq("id", id)
+      );
+      await Promise.all(updates);
+      await supabase.from("platform_edit_history" as any).insert({
+        editor_id: user?.id, action: "update_empresa", target: "empresa", new_value: JSON.stringify(Object.fromEntries(Object.entries(values).map(([k, v]) => [k, v.value])))
+      } as any);
+      queryClient.invalidateQueries({ queryKey: ["platform-texts-empresa"] });
+      queryClient.invalidateQueries({ queryKey: ["platform-texts"] });
+      toast.success("Dados da empresa salvos!");
+    } catch (e: any) { toast.error(e.message); }
+    setSaving(false);
+  };
+
+  if (isLoading) return <LoadingState />;
+
+  return (
+    <div className="space-y-4 mt-4">
+      <Card className="p-4">
+        <div className="flex items-center gap-2 mb-4">
+          <Building2 size={18} className="text-primary" />
+          <h4 className="font-semibold text-foreground">Dados de Contato & Endereço</h4>
+        </div>
+        <div className="grid gap-3 sm:grid-cols-2">
+          {EMPRESA_FIELDS.map((field) => {
+            const val = values[field.key]?.value ?? "";
+            return (
+              <div key={field.key} className="space-y-1">
+                <Label className="text-xs flex items-center gap-1.5">
+                  <field.icon size={12} className="text-muted-foreground" />
+                  {field.label}
+                </Label>
+                <Input
+                  value={val}
+                  onChange={(e) => setValues((prev) => ({
+                    ...prev,
+                    [field.key]: { ...prev[field.key], value: e.target.value },
+                  }))}
+                  className="h-9 text-sm"
+                  placeholder={field.label}
+                />
+              </div>
+            );
+          })}
+        </div>
+        <Button onClick={handleSave} disabled={saving} className="mt-4 gap-2">
+          {saving ? <Loader2 size={14} className="animate-spin" /> : <Save size={14} />}
+          Salvar Dados da Empresa
+        </Button>
+      </Card>
     </div>
   );
 };
@@ -139,6 +243,7 @@ const TextsEditor = () => {
 
   const sections = [...new Set(texts.map((t) => t.section))];
   const filtered = texts.filter((t) => {
+    if (t.section === "empresa") return false; // handled in Empresa tab
     const matchSearch = !search || t.key.toLowerCase().includes(search.toLowerCase()) || t.value.toLowerCase().includes(search.toLowerCase());
     const matchSection = filterSection === "all" || t.section === filterSection;
     return matchSearch && matchSection;
@@ -160,7 +265,7 @@ const TextsEditor = () => {
 
       <div className="flex gap-1 flex-wrap">
         <Badge variant={filterSection === "all" ? "default" : "outline"} className="cursor-pointer text-xs" onClick={() => setFilterSection("all")}>Todos</Badge>
-        {sections.map((s) => (
+        {sections.filter(s => s !== "empresa").map((s) => (
           <Badge key={s} variant={filterSection === s ? "default" : "outline"} className="cursor-pointer text-xs capitalize" onClick={() => setFilterSection(s)}>{s}</Badge>
         ))}
       </div>
@@ -219,7 +324,8 @@ const MediaEditor = () => {
   const queryClient = useQueryClient();
   const [newKey, setNewKey] = useState("");
   const [newSection, setNewSection] = useState("geral");
-  const [uploading, setUploading] = useState(false);
+  const [uploading, setUploading] = useState<string | null>(null);
+  const [search, setSearch] = useState("");
 
   const { data: mediaList = [], isLoading } = useQuery({
     queryKey: ["platform-media-admin"],
@@ -231,7 +337,7 @@ const MediaEditor = () => {
   });
 
   const handleUpload = async (file: File, existingId?: string) => {
-    setUploading(true);
+    setUploading(existingId || "new");
     try {
       const ext = file.name.split(".").pop();
       const path = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
@@ -240,14 +346,15 @@ const MediaEditor = () => {
       const { data: { publicUrl } } = supabase.storage.from("platform-media").getPublicUrl(path);
       if (existingId) {
         await supabase.from("platform_media" as any).update({ url: publicUrl, updated_at: new Date().toISOString() } as any).eq("id", existingId);
+        toast.success("Mídia substituída!");
       } else if (newKey.trim()) {
         await supabase.from("platform_media" as any).insert({ key: newKey.trim(), url: publicUrl, type: file.type.startsWith("video") ? "video" : "image", section: newSection } as any);
         setNewKey("");
+        toast.success("Mídia adicionada!");
       }
       queryClient.invalidateQueries({ queryKey: ["platform-media-admin"] });
-      toast.success("Mídia atualizada!");
     } catch (e: any) { toast.error(e.message); }
-    setUploading(false);
+    setUploading(null);
   };
 
   const deleteMedia = async (id: string) => {
@@ -257,39 +364,71 @@ const MediaEditor = () => {
     toast.success("Mídia excluída!");
   };
 
+  const filtered = mediaList.filter((m) =>
+    !search || m.key.toLowerCase().includes(search.toLowerCase()) || m.section.toLowerCase().includes(search.toLowerCase())
+  );
+
   if (isLoading) return <LoadingState />;
 
   return (
     <div className="space-y-4 mt-4">
-      <div className="p-3 rounded-xl border border-dashed border-border bg-muted/30">
+      <div className="flex flex-col sm:flex-row gap-2">
+        <div className="relative flex-1">
+          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+          <Input placeholder="Buscar mídia..." value={search} onChange={(e) => setSearch(e.target.value)} className="pl-9 h-9 text-sm" />
+        </div>
+      </div>
+
+      <Card className="p-3">
         <p className="text-xs font-medium text-muted-foreground mb-2">Adicionar nova mídia</p>
         <div className="flex gap-2 flex-wrap">
           <Input placeholder="Chave (ex: logo_principal)" value={newKey} onChange={(e) => setNewKey(e.target.value)} className="h-8 text-xs flex-1 min-w-[150px]" />
           <Input placeholder="Seção" value={newSection} onChange={(e) => setNewSection(e.target.value)} className="h-8 text-xs w-24" />
           <label className="cursor-pointer">
-            <input type="file" accept="image/*,video/*" className="hidden" onChange={(e) => { if (e.target.files?.[0] && newKey.trim()) handleUpload(e.target.files[0]); }} />
-            <Button size="sm" variant="outline" className="h-8 text-xs gap-1" asChild disabled={uploading || !newKey.trim()}><span><Upload size={12} /> Upload</span></Button>
+            <input type="file" accept="image/*,video/*" className="hidden" onChange={(e) => { if (e.target.files?.[0] && newKey.trim()) handleUpload(e.target.files[0]); e.target.value = ""; }} />
+            <Button size="sm" variant="outline" className="h-8 text-xs gap-1" asChild disabled={!!uploading || !newKey.trim()}><span><Upload size={12} /> Upload</span></Button>
           </label>
         </div>
-      </div>
-      <div className="grid gap-3 sm:grid-cols-2">
-        {mediaList.map((m) => (
-          <div key={m.id} className="p-3 rounded-xl border border-border bg-card">
+      </Card>
+
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        {filtered.map((m) => (
+          <Card key={m.id} className="p-3 group relative">
             <div className="flex items-center justify-between mb-2">
-              <code className="text-xs text-muted-foreground bg-muted px-1.5 py-0.5 rounded">{m.key}</code>
-              <div className="flex gap-1">
+              <div className="min-w-0 flex-1">
+                <code className="text-xs text-muted-foreground bg-muted px-1.5 py-0.5 rounded truncate block">{m.key}</code>
+              </div>
+              <div className="flex gap-1 shrink-0 ml-2">
                 <label className="cursor-pointer">
-                  <input type="file" accept="image/*,video/*" className="hidden" onChange={(e) => { if (e.target.files?.[0]) handleUpload(e.target.files[0], m.id); }} />
-                  <Button size="sm" variant="ghost" className="h-6 w-6 p-0" asChild><span><Upload size={12} /></span></Button>
+                  <input type="file" accept="image/*,video/*" className="hidden" onChange={(e) => { if (e.target.files?.[0]) handleUpload(e.target.files[0], m.id); e.target.value = ""; }} />
+                  <Button size="sm" variant="ghost" className="h-7 w-7 p-0" asChild title="Substituir mídia">
+                    <span>{uploading === m.id ? <Loader2 size={12} className="animate-spin" /> : <Upload size={12} />}</span>
+                  </Button>
                 </label>
-                <Button size="sm" variant="ghost" className="h-6 w-6 p-0 text-destructive" onClick={() => deleteMedia(m.id)}><Trash2 size={12} /></Button>
+                <Button size="sm" variant="ghost" className="h-7 w-7 p-0 text-destructive" onClick={() => deleteMedia(m.id)} title="Excluir">
+                  <Trash2 size={12} />
+                </Button>
               </div>
             </div>
-            {m.type === "video" ? <video src={m.url} className="w-full h-28 rounded-lg object-cover" controls /> : <img src={m.url} alt={m.alt_text || m.key} className="w-full h-28 rounded-lg object-cover" loading="lazy" />}
-            <Badge variant="outline" className="text-[10px] capitalize mt-2">{m.section}</Badge>
-          </div>
+            {m.type === "video" ? (
+              <video src={m.url} className="w-full h-32 rounded-lg object-cover bg-muted" controls />
+            ) : (
+              <img src={m.url} alt={m.alt_text || m.key} className="w-full h-32 rounded-lg object-cover bg-muted" loading="lazy" />
+            )}
+            <div className="flex items-center justify-between mt-2">
+              <Badge variant="outline" className="text-[10px] capitalize">{m.section}</Badge>
+              <Badge variant="secondary" className="text-[10px]">{m.type}</Badge>
+            </div>
+          </Card>
         ))}
       </div>
+
+      {filtered.length === 0 && (
+        <div className="text-center py-12 text-muted-foreground">
+          <Image className="h-10 w-10 mx-auto mb-3 opacity-50" />
+          <p className="text-sm">Nenhuma mídia cadastrada. Adicione imagens e vídeos acima.</p>
+        </div>
+      )}
     </div>
   );
 };
@@ -446,41 +585,21 @@ const ServicosEditor = () => {
               <Button size="sm" variant="ghost" className="h-7 w-7 p-0" onClick={() => { setEditingId(s.id === editingId ? null : s.id); setEditFields({ nome: s.nome, descricao: s.descricao || "", preco: s.preco, duracao: s.duracao, cashback_percentual: s.cashback_percentual || 0, categoria: s.categoria || "" }); }}><Edit3 size={13} /></Button>
             </div>
           </div>
-
           <div className="flex gap-3 text-xs text-muted-foreground">
             <span className="flex items-center gap-1"><DollarSign size={12} /> R$ {s.preco}</span>
             <span className="flex items-center gap-1"><Clock size={12} /> {s.duracao} min</span>
             <span className="flex items-center gap-1"><Tag size={12} /> {s.cashback_percentual || 0}% cashback</span>
           </div>
-
           {editingId === s.id && (
             <div className="mt-3 pt-3 border-t border-border space-y-2">
               <div className="grid grid-cols-2 gap-2">
-                <div>
-                  <label className="text-[10px] text-muted-foreground">Nome</label>
-                  <Input value={editFields.nome} onChange={(e) => setEditFields(p => ({ ...p, nome: e.target.value }))} className="h-8 text-xs" />
-                </div>
-                <div>
-                  <label className="text-[10px] text-muted-foreground">Categoria</label>
-                  <Input value={editFields.categoria} onChange={(e) => setEditFields(p => ({ ...p, categoria: e.target.value }))} className="h-8 text-xs" />
-                </div>
-                <div>
-                  <label className="text-[10px] text-muted-foreground">Preço (R$)</label>
-                  <Input type="number" value={editFields.preco} onChange={(e) => setEditFields(p => ({ ...p, preco: parseFloat(e.target.value) }))} className="h-8 text-xs" />
-                </div>
-                <div>
-                  <label className="text-[10px] text-muted-foreground">Duração (min)</label>
-                  <Input value={editFields.duracao} onChange={(e) => setEditFields(p => ({ ...p, duracao: e.target.value }))} className="h-8 text-xs" />
-                </div>
-                <div>
-                  <label className="text-[10px] text-muted-foreground">Cashback %</label>
-                  <Input type="number" value={editFields.cashback_percentual} onChange={(e) => setEditFields(p => ({ ...p, cashback_percentual: parseFloat(e.target.value) }))} className="h-8 text-xs" />
-                </div>
+                <div><label className="text-[10px] text-muted-foreground">Nome</label><Input value={editFields.nome} onChange={(e) => setEditFields(p => ({ ...p, nome: e.target.value }))} className="h-8 text-xs" /></div>
+                <div><label className="text-[10px] text-muted-foreground">Categoria</label><Input value={editFields.categoria} onChange={(e) => setEditFields(p => ({ ...p, categoria: e.target.value }))} className="h-8 text-xs" /></div>
+                <div><label className="text-[10px] text-muted-foreground">Preço (R$)</label><Input type="number" value={editFields.preco} onChange={(e) => setEditFields(p => ({ ...p, preco: parseFloat(e.target.value) }))} className="h-8 text-xs" /></div>
+                <div><label className="text-[10px] text-muted-foreground">Duração (min)</label><Input value={editFields.duracao} onChange={(e) => setEditFields(p => ({ ...p, duracao: e.target.value }))} className="h-8 text-xs" /></div>
+                <div><label className="text-[10px] text-muted-foreground">Cashback %</label><Input type="number" value={editFields.cashback_percentual} onChange={(e) => setEditFields(p => ({ ...p, cashback_percentual: parseFloat(e.target.value) }))} className="h-8 text-xs" /></div>
               </div>
-              <div>
-                <label className="text-[10px] text-muted-foreground">Descrição</label>
-                <Textarea value={editFields.descricao} onChange={(e) => setEditFields(p => ({ ...p, descricao: e.target.value }))} className="text-xs min-h-[60px]" />
-              </div>
+              <div><label className="text-[10px] text-muted-foreground">Descrição</label><Textarea value={editFields.descricao} onChange={(e) => setEditFields(p => ({ ...p, descricao: e.target.value }))} className="text-xs min-h-[60px]" /></div>
               <div className="flex gap-2">
                 <Button size="sm" className="h-7 text-xs gap-1" onClick={() => updateServico.mutate({ id: s.id, fields: editFields })} disabled={updateServico.isPending}><Check size={12} /> Salvar</Button>
                 <Button size="sm" variant="ghost" className="h-7 text-xs" onClick={() => setEditingId(null)}><X size={12} /> Cancelar</Button>
@@ -543,10 +662,8 @@ const BannersEditor = () => {
               <Button size="sm" variant="ghost" className="h-7 w-7 p-0" onClick={() => { setEditingId(b.id === editingId ? null : b.id); setEditFields({ titulo: b.titulo, subtitulo: b.subtitulo || "", imagem_url: b.imagem_url || "", link_destino: b.link_destino || "", cor_fundo: b.cor_fundo || "", prioridade: b.prioridade || 0, tipo: b.tipo || "banner" }); }}><Edit3 size={13} /></Button>
             </div>
           </div>
-
           {b.imagem_url && <img src={b.imagem_url} alt={b.titulo} className="w-full h-20 rounded-lg object-cover mb-2" />}
           {b.subtitulo && <p className="text-xs text-muted-foreground">{b.subtitulo}</p>}
-
           {editingId === b.id && (
             <div className="mt-3 pt-3 border-t border-border space-y-2">
               <div className="grid grid-cols-2 gap-2">
@@ -606,7 +723,7 @@ const AgentesEditor = () => {
 
   return (
     <div className="space-y-3 mt-4">
-      <p className="text-xs text-muted-foreground">Edite nome, emoji, descrição, palavras-chave e prompt dos 5 agentes IA</p>
+      <p className="text-xs text-muted-foreground">Edite nome, emoji, descrição, palavras-chave e prompt dos agentes IA</p>
       {agentes.map((a: any) => (
         <div key={a.id} className="p-3 rounded-xl border border-border bg-card">
           <div className="flex items-center justify-between mb-2">
@@ -626,14 +743,12 @@ const AgentesEditor = () => {
               }}><Edit3 size={13} /></Button>
             </div>
           </div>
-
           {a.keywords?.length > 0 && (
             <div className="flex gap-1 flex-wrap mb-1">
               {a.keywords.slice(0, 6).map((kw: string) => <Badge key={kw} variant="outline" className="text-[10px]">{kw}</Badge>)}
               {a.keywords.length > 6 && <Badge variant="outline" className="text-[10px]">+{a.keywords.length - 6}</Badge>}
             </div>
           )}
-
           {editingId === a.id && (
             <div className="mt-3 pt-3 border-t border-border space-y-2">
               <div className="grid grid-cols-3 gap-2">
