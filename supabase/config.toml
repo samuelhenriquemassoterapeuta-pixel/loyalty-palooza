@@ -122,3 +122,9 @@ verify_jwt = false
 
 [functions.analisar-postura]
 verify_jwt = false
+
+[functions.financeiro-recorrentes-cron]
+verify_jwt = false
+
+[functions.financeiro-relatorio]
+verify_jwt = false
