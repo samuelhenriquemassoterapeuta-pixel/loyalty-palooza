@@ -100,9 +100,11 @@ export const adminNavGroups: NavGroup[] = [
     label: "Marketing",
     icon: Megaphone,
     items: [
+      { id: "marketing-dashboard", label: "Dashboard", icon: BarChart3 },
       { id: "landing", label: "Landing Page", icon: Globe },
       { id: "segmentacao", label: "Segmentação", icon: Target },
       { id: "campanhas", label: "Campanhas", icon: Send },
+      { id: "automacoes", label: "Automações", icon: Rocket },
       { id: "banners", label: "Banners", icon: Megaphone },
       { id: "google-ads", label: "Google Ads", icon: BarChart3 },
       { id: "notificacoes-admin", label: "Notificações", icon: Bell },

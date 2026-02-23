@@ -41,6 +41,8 @@ import { ServicosDetalhesTab } from "@/features/admin/components/ServicosDetalhe
 import SegmentacaoClientesTab from "@/features/admin/components/SegmentacaoClientesTab";
 import CampanhasMarketingTab from "@/features/admin/components/CampanhasMarketingTab";
 import BannersPromocionaisTab from "@/features/admin/components/BannersPromocionaisTab";
+import MarketingDashboardTab from "@/features/admin/components/MarketingDashboardTab";
+import AutomacoesMarketingTab from "@/features/admin/components/AutomacoesMarketingTab";
 import CorporativoConteudoTab from "@/features/admin/components/CorporativoConteudoTab";
 import RelatorioTecnicoTab from "@/features/admin/components/RelatorioTecnicoTab";
 import ApresentacaoPlataformaTab from "@/features/admin/components/ApresentacaoPlataformaTab";
@@ -377,12 +379,16 @@ const Admin = () => {
         return <CorporativoConteudoTab />;
       case "parceiros":
         return <ParceirosTab />;
+      case "marketing-dashboard":
+        return <MarketingDashboardTab />;
       case "landing":
         return <LandingPageTab />;
       case "segmentacao":
         return <SegmentacaoClientesTab />;
       case "campanhas":
         return <CampanhasMarketingTab />;
+      case "automacoes":
+        return <AutomacoesMarketingTab />;
       case "banners":
         return <BannersPromocionaisTab />;
       case "google-ads":
