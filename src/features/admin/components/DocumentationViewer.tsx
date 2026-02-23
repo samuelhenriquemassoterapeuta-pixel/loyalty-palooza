@@ -156,7 +156,7 @@ export const DocumentationViewer = () => {
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
   const [syncing, setSyncing] = useState(false);
-  const lastUpdated = "22/02/2026";
+  const lastUpdated = "23/02/2026";
 
   useEffect(() => {
     loadDocumentation();
@@ -318,10 +318,13 @@ export const DocumentationViewer = () => {
         <p className="text-[11px] font-semibold text-foreground mb-2">🔄 Últimas Atualizações</p>
         <div className="space-y-1">
           {[
+            { date: "23/02/2026", text: "Atualização completa: 175 tabelas, 450 RLS, 88 funções, 61 edge functions, 12 buckets" },
+            { date: "23/02/2026", text: "Marketing: Dashboard + Automações + Segmentação de banners" },
+            { date: "23/02/2026", text: "Platform Editor: dados da empresa (contato, endereço, redes sociais)" },
             { date: "22/02/2026", text: "Editor da Plataforma + Versionamento de docs" },
             { date: "20/02/2026", text: "Sistema Multi-Agente Resi (reescrita)" },
             { date: "20/02/2026", text: "35 cursos completos com certificados" },
-            { date: "19/02/2026", text: "46 Edge Functions operacionais" },
+            { date: "19/02/2026", text: "61 Edge Functions operacionais" },
           ].map((log, i) => (
             <div key={i} className="flex items-center gap-2 text-[10px]">
               <Badge variant="outline" className="text-[9px] shrink-0">{log.date}</Badge>
