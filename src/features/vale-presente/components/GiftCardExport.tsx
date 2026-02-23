@@ -56,7 +56,7 @@ export const GiftCardExport = ({ vale }: GiftCardExportProps) => {
         <div className="transform scale-[0.85] sm:scale-100 origin-center">
           <div
             ref={cardRef}
-            className={`${size.className}`}
+            className={`${size.className} overflow-hidden rounded-2xl`}
             data-export-width={size.width}
             data-export-height={size.height}
           >
