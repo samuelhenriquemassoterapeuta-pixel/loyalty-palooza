@@ -81,7 +81,7 @@ Deno.serve(async (req: Request) => {
       );
     }
 
-    // Se há alertas, enviar via WhatsApp (Z-API)
+    // Se há alertas, enviar via WhatsApp (UAZAPI)
     if (alerts.length > 0) {
       const message =
         `🏥 *Resinkra — Alerta do Sistema*\n\n` +
@@ -93,21 +93,21 @@ Deno.serve(async (req: Request) => {
         `• Usuários ativos 24h: ${health.active_users_24h}\n` +
         `\n⏰ ${new Date().toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" })}`;
 
-      const zapiInstanceId = Deno.env.get("ZAPI_INSTANCE_ID");
-      const zapiToken = Deno.env.get("ZAPI_TOKEN");
+      const uazapiInstanceName = Deno.env.get("UAZAPI_INSTANCE_NAME");
       const adminPhone = Deno.env.get("ADMIN_PHONE_NUMBER");
 
-      if (zapiInstanceId && zapiToken && adminPhone) {
-        const zapiClientToken = Deno.env.get("ZAPI_CLIENT_TOKEN") || "";
+      if (uazapiInstanceName && adminPhone) {
         try {
-          const zapiHeaders: Record<string, string> = { "Content-Type": "application/json" };
-          if (zapiClientToken) zapiHeaders["Client-Token"] = zapiClientToken;
           const response = await fetch(
-            `https://api.z-api.io/instances/${zapiInstanceId}/token/${zapiToken}/send-text`,
+            `https://free.uazapi.com/message/sendText/${uazapiInstanceName}`,
             {
               method: "POST",
-              headers: zapiHeaders,
-              body: JSON.stringify({ phone: adminPhone, message }),
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                number: adminPhone,
+                text: message,
+                options: { delay: 1000, linkPreview: false },
+              }),
             }
           );
 
@@ -122,7 +122,7 @@ Deno.serve(async (req: Request) => {
           }
         } catch (whatsappError) {
           log.error(
-            "Erro ao conectar Z-API",
+            "Erro ao conectar UAZAPI",
             {},
             whatsappError as Error
           );

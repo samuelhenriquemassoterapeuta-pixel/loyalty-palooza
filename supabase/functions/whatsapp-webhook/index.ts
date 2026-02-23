@@ -1,6 +1,6 @@
 /**
  * @module edge-functions/whatsapp-webhook
- * @description Webhook para receber mensagens e eventos do WhatsApp (via Z-API).
+ * @description Webhook para receber mensagens e eventos do WhatsApp (via UAZAPI).
  *
  * Funciona como o "cérebro" do chatbot da Resinkra.
  *
@@ -22,10 +22,10 @@ import { createServiceClient } from "../_shared/supabase-client.ts";
 import { jsonResponse, errorResponse } from "../_shared/response.ts";
 
 const LOVABLE_AI_URL = "https://ai.gateway.lovable.dev/v1/chat/completions";
-const MAX_HISTORY = 20; // Limite de mensagens mantidas no contexto para a IA
+const MAX_HISTORY = 20;
+const UAZAPI_SERVER_URL = "https://free.uazapi.com";
 
 // ── System prompt do assistente ──
-// Define a personalidade e conhecimento base do bot
 function buildSystemPrompt(servicos: string, terapeutas: string, horariosOcupados: string) {
   return `Você é o Assistente Virtual da Resinkra, especializado em bem-estar, massoterapia e terapias holísticas em Uberaba/MG. Seu tom é amigável, profissional e proativo, como um consultor de bem-estar confiável. Responda em português brasileiro com emojis moderados (😊👍🌿).
 
@@ -61,7 +61,6 @@ ${horariosOcupados}
 }
 
 // ── Tools para a IA ──
-// Definição das ações que a IA pode executar
 const aiTools = [
   {
     type: "function",
@@ -104,20 +103,19 @@ Deno.serve(async (req) => {
 
   try {
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-    const ZAPI_INSTANCE_ID = Deno.env.get("ZAPI_INSTANCE_ID");
-    const ZAPI_TOKEN = Deno.env.get("ZAPI_TOKEN");
+    const UAZAPI_INSTANCE_NAME = Deno.env.get("UAZAPI_INSTANCE_NAME");
 
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY não configurada");
-    if (!ZAPI_INSTANCE_ID || !ZAPI_TOKEN) throw new Error("Credenciais Z-API não configuradas");
+    if (!UAZAPI_INSTANCE_NAME) throw new Error("UAZAPI_INSTANCE_NAME não configurada");
 
-    // Webhook authentication: validate Z-API webhook token
-    const ZAPI_WEBHOOK_SECRET = Deno.env.get('ZAPI_WEBHOOK_SECRET');
-    if (!ZAPI_WEBHOOK_SECRET) {
-      console.error('ZAPI_WEBHOOK_SECRET not configured — rejecting request for security');
+    // Webhook authentication: validate webhook token
+    const UAZAPI_WEBHOOK_SECRET = Deno.env.get('UAZAPI_WEBHOOK_SECRET');
+    if (!UAZAPI_WEBHOOK_SECRET) {
+      console.error('UAZAPI_WEBHOOK_SECRET not configured — rejecting request for security');
       return errorResponse('Webhook authentication not configured', 500);
     }
     const providedToken = req.headers.get('x-webhook-token') || new URL(req.url).searchParams.get('token');
-    if (providedToken !== ZAPI_WEBHOOK_SECRET) {
+    if (providedToken !== UAZAPI_WEBHOOK_SECRET) {
       console.warn('Webhook auth failed: invalid token');
       return errorResponse('Unauthorized', 401);
     }
@@ -125,15 +123,19 @@ Deno.serve(async (req) => {
     const supabase = createServiceClient();
     const body = await req.json();
 
-    // Ignora mensagens enviadas por mim ou atualizações de status
-    if (body.fromMe || body.status || !body.text?.message) {
+    // UAZAPI payload: data.from, data.text/data.body, data.fromMe
+    const msgData = body.data || body;
+    const isFromMe = body.fromMe || msgData.fromMe || false;
+
+    // Ignora mensagens enviadas por mim ou sem texto
+    if (isFromMe || (!msgData.text && !msgData.body && !body.text?.message)) {
       return jsonResponse({ ok: true, skipped: true });
     }
 
     // Input validation: sanitize phone and message
-    const phone = (body.phone || body.chatId?.replace("@c.us", "") || "").replace(/\D/g, '');
-    const userMessage = (body.text.message || "").substring(0, 2000).trim();
-    const senderName = (body.senderName || body.chatName || "").substring(0, 100).trim();
+    const phone = (msgData.from || msgData.phone || body.phone || body.chatId?.replace("@c.us", "") || "").replace(/\D/g, '');
+    const userMessage = (msgData.text || msgData.body || body.text?.message || "").substring(0, 2000).trim();
+    const senderName = (msgData.pushName || msgData.senderName || body.senderName || body.chatName || "").substring(0, 100).trim();
 
     if (!phone || !/^\d{10,15}$/.test(phone) || !userMessage) {
       return jsonResponse({ ok: true, skipped: true, reason: 'invalid_input' });
@@ -162,7 +164,7 @@ Deno.serve(async (req) => {
     mensagens.push({ role: "user", content: userMessage, ts: new Date().toISOString() });
     const recentMessages = mensagens.slice(-MAX_HISTORY);
 
-    // ── 3. Buscar contexto de negócio (Catálogo em tempo real) ──
+    // ── 3. Buscar contexto de negócio ──
     const [servicosRes, terapeutasRes, agendamentosRes] = await Promise.all([
       supabase.from("servicos").select("nome, preco, descricao, duracao_minutos, cashback_percentual, categoria").eq("ativo", true),
       supabase.rpc("get_terapeutas_publicos"),
@@ -173,7 +175,6 @@ Deno.serve(async (req) => {
         .in("status", ["confirmado", "agendado"]),
     ]);
 
-    // Formata o contexto para o prompt
     const servicosText = (servicosRes.data || [])
       .map((s: any) => `- ${s.nome}: R$ ${s.preco.toFixed(2)} (${s.duracao_minutos || 60}min, ${s.cashback_percentual || 0}% cashback) — ${s.descricao || ""}`)
       .join("\n");
@@ -217,7 +218,7 @@ Deno.serve(async (req) => {
     let replyText = "";
     let toolResults: string[] = [];
 
-    // ── 5. Processar Tool Calls (Agendamento Automático) ──
+    // ── 5. Processar Tool Calls ──
     if (choice?.message?.tool_calls?.length > 0) {
       for (const tc of choice.message.tool_calls) {
         const fn = tc.function;
@@ -235,7 +236,6 @@ Deno.serve(async (req) => {
         }
       }
 
-      // Reenvia o resultado da tool para a IA gerar a resposta final
       const followUpMessages = [
         ...aiMessages,
         choice.message,
@@ -273,27 +273,28 @@ Deno.serve(async (req) => {
       .update({ mensagens: recentMessages, nome: senderName || conversa.nome })
       .eq("id", conversa.id);
 
-    // ── 7. Enviar resposta via Z-API ──
-    const zapiUrl = `https://api.z-api.io/instances/${ZAPI_INSTANCE_ID}/token/${ZAPI_TOKEN}/send-text`;
-    const ZAPI_CLIENT_TOKEN = Deno.env.get("ZAPI_CLIENT_TOKEN") || "";
-    const zapiHeaders: Record<string, string> = { "Content-Type": "application/json" };
-    if (ZAPI_CLIENT_TOKEN) zapiHeaders["Client-Token"] = ZAPI_CLIENT_TOKEN;
-    const zapiResponse = await fetch(zapiUrl, {
+    // ── 7. Enviar resposta via UAZAPI ──
+    const uazapiUrl = `${UAZAPI_SERVER_URL}/message/sendText/${UAZAPI_INSTANCE_NAME}`;
+    const uazapiResponse = await fetch(uazapiUrl, {
       method: "POST",
-      headers: zapiHeaders,
-      body: JSON.stringify({ phone, message: replyText }),
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        number: phone,
+        text: replyText,
+        options: { delay: 1000, linkPreview: true },
+      }),
     });
 
-    if (!zapiResponse.ok) {
-      const zapiErr = await zapiResponse.text();
-      console.error("Z-API send error:", zapiErr);
+    if (!uazapiResponse.ok) {
+      const uazapiErr = await uazapiResponse.text();
+      console.error("UAZAPI send error:", uazapiErr);
     }
 
     await supabase.from("whatsapp_logs").insert({
       telefone: phone,
       tipo: "assistente_ia",
       mensagem: replyText,
-      status: zapiResponse.ok ? "enviado" : "erro",
+      status: uazapiResponse.ok ? "enviado" : "erro",
     });
 
     console.log(`✅ Resposta enviada para ${phone}`);
@@ -306,7 +307,6 @@ Deno.serve(async (req) => {
 });
 
 // ── Função auxiliar: processarAgendamento ──
-// Lógica de agendamento: verifica conflitos, busca usuário, cria registro
 async function processarAgendamento(
   supabase: any,
   args: { servico: string; data_hora: string; terapeuta_nome?: string; nome_cliente: string },
@@ -316,8 +316,6 @@ async function processarAgendamento(
   try {
     const { servico, data_hora, terapeuta_nome, nome_cliente } = args;
 
-    // Busca serviço
-    // Sanitize servico to prevent SQL wildcard injection
     const sanitizedServico = servico.replace(/[%_\\]/g, "");
     const { data: servicoData } = await supabase
       .from("servicos")
@@ -331,7 +329,6 @@ async function processarAgendamento(
       return `Serviço "${servico}" não encontrado no catálogo.`;
     }
 
-    // Busca terapeuta (opcional)
     let terapeutaId: string | null = null;
     if (terapeuta_nome) {
       const sanitizedTerapeuta = terapeuta_nome.replace(/[%_\\]/g, "");
@@ -345,7 +342,6 @@ async function processarAgendamento(
       terapeutaId = terapeuta?.id || null;
     }
 
-    // Valida conflito de horário
     const dataHora = new Date(data_hora);
     const inicio = new Date(dataHora.getTime() - 30 * 60000).toISOString();
     const fim = new Date(dataHora.getTime() + 30 * 60000).toISOString();
@@ -367,7 +363,6 @@ async function processarAgendamento(
       return `Horário ${dataHora.toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" })} indisponível. Sugira outro horário ao cliente.`;
     }
 
-    // Identifica usuário pelo telefone
     const { data: profile } = await supabase
       .from("profiles")
       .select("id")
@@ -375,7 +370,6 @@ async function processarAgendamento(
       .limit(1)
       .single();
 
-    // Se usuário não existe, marca como pendente no metadata da conversa
     if (!profile) {
       await supabase
         .from("whatsapp_conversas")
@@ -388,7 +382,6 @@ async function processarAgendamento(
       return `Cliente "${nome_cliente}" não possui conta no app. Agendamento salvo como pendente para confirmação manual pela equipe. Serviço: ${servicoData.nome}, Horário: ${dataHora.toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" })}.`;
     }
 
-    // Cria agendamento real
     const { data: agendamento, error: agError } = await supabase
       .from("agendamentos")
       .insert({
