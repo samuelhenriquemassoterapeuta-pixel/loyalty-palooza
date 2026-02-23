@@ -8,3 +8,7 @@ export type { ContaPagar, ContaPagarComRelacionamentos } from "./useContasPagar"
 export { useDespesasRecorrentes } from "./useDespesasRecorrentes";
 export type { DespesaRecorrente } from "./useDespesasRecorrentes";
 export { useResumoFinanceiro } from "./useResumoFinanceiro";
+export { useDRE } from "./useDRE";
+export type { DREData } from "./useDRE";
+export { useFluxoCaixa } from "./useFluxoCaixa";
+export type { FluxoCaixaMes } from "./useFluxoCaixa";

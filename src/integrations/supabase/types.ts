@@ -7653,6 +7653,10 @@ export type Database = {
           ultimo_acesso: string
         }[]
       }
+      get_dre: {
+        Args: { p_data_fim?: string; p_data_inicio?: string }
+        Returns: Json
+      }
       get_edge_function_logs: {
         Args: {
           p_function_name?: string
@@ -7684,6 +7688,7 @@ export type Database = {
           total_errors: number
         }[]
       }
+      get_fluxo_caixa: { Args: { p_meses?: number }; Returns: Json }
       get_relatorio_empresa: {
         Args: {
           p_data_fim?: string
