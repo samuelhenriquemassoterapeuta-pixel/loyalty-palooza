@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { LayoutDashboard, FileText, RotateCcw, Users, BarChart3, ArrowLeftRight, Receipt, HandCoins } from "lucide-react";
+import { LayoutDashboard, FileText, RotateCcw, Users, BarChart3, ArrowLeftRight, Receipt, HandCoins, Landmark } from "lucide-react";
 import AdminFinanceiroDashboard from "@/components/admin/financeiro/AdminFinanceiroDashboard";
 import AdminContasPagar from "@/components/admin/financeiro/AdminContasPagar";
 import AdminContasReceber from "@/components/admin/financeiro/AdminContasReceber";
@@ -9,6 +9,7 @@ import AdminFornecedores from "@/components/admin/financeiro/AdminFornecedores";
 import AdminDRE from "@/components/admin/financeiro/AdminDRE";
 import AdminFluxoCaixa from "@/components/admin/financeiro/AdminFluxoCaixa";
 import AdminRepasses from "@/components/admin/financeiro/AdminRepasses";
+import AdminConciliacao from "@/components/admin/financeiro/AdminConciliacao";
 
 const FinanceiroTab = () => {
   const [subTab, setSubTab] = useState("dashboard");
@@ -48,6 +49,10 @@ const FinanceiroTab = () => {
           <Users size={14} />
           Fornecedores
         </TabsTrigger>
+        <TabsTrigger value="conciliacao" className="gap-1.5 text-xs">
+          <Landmark size={14} />
+          Conciliação
+        </TabsTrigger>
       </TabsList>
 
       <TabsContent value="dashboard">
@@ -73,6 +78,9 @@ const FinanceiroTab = () => {
       </TabsContent>
       <TabsContent value="repasses">
         <AdminRepasses />
+      </TabsContent>
+      <TabsContent value="conciliacao">
+        <AdminConciliacao />
       </TabsContent>
     </Tabs>
   );
