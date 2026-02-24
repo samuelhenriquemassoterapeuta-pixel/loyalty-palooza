@@ -13,6 +13,7 @@ import { CorpFAQSection } from "@/features/corporativo/components/CorpFAQSection
 import { CorpCTASection } from "@/features/corporativo/components/CorpCTASection";
 import { CorpWhatsAppCTA } from "@/features/corporativo/components/CorpWhatsAppCTA";
 import { Heart, Camera, Quote, Building2, CreditCard, HelpCircle, Send, Layers } from "lucide-react";
+import { EditableText } from "@/components/edit-mode";
 
 const Corporativo = () => {
   return (
@@ -27,13 +28,14 @@ const Corporativo = () => {
           }
           title={
             <h2 className="text-3xl lg:text-4xl font-bold text-foreground">
-              Tudo sobre <span className="font-serif italic text-gradient">nossos serviços</span>
+              <EditableText storageKey="corp_secoes_titulo" table="platform_texts" section="corporativo" as="span">Tudo sobre</EditableText>{" "}
+              <EditableText storageKey="corp_secoes_destaque" table="platform_texts" section="corporativo" as="span" className="font-serif italic text-gradient">nossos serviços</EditableText>
             </h2>
           }
           subtitle={
-            <p className="text-muted-foreground">
+            <EditableText storageKey="corp_secoes_subtitulo" table="platform_texts" section="corporativo" as="p" className="text-muted-foreground" multiline>
               Clique em cada seção para expandir e conhecer em profundidade nossos programas corporativos.
-            </p>
+            </EditableText>
           }
         >
           <CorpSecoesSection />
@@ -44,13 +46,14 @@ const Corporativo = () => {
           }
           title={
             <h2 className="text-3xl lg:text-4xl font-bold text-foreground">
-              Benefícios <span className="font-serif italic text-gradient">comprovados</span>
+              <EditableText storageKey="corp_beneficios_titulo" table="platform_texts" section="corporativo" as="span">Benefícios</EditableText>{" "}
+              <EditableText storageKey="corp_beneficios_destaque" table="platform_texts" section="corporativo" as="span" className="font-serif italic text-gradient">comprovados</EditableText>
             </h2>
           }
           subtitle={
-            <p className="text-muted-foreground">
+            <EditableText storageKey="corp_beneficios_subtitulo" table="platform_texts" section="corporativo" as="p" className="text-muted-foreground" multiline>
               Dados reais de pesquisas sobre o impacto da massoterapia corporativa.
-            </p>
+            </EditableText>
           }
         >
           <CorpBeneficiosSection />
@@ -62,13 +65,14 @@ const Corporativo = () => {
           }
           title={
             <h2 className="text-3xl lg:text-4xl font-bold text-foreground">
-              Nossos <span className="font-serif italic text-gradient">momentos</span>
+              <EditableText storageKey="corp_galeria_titulo" table="platform_texts" section="corporativo" as="span">Nossos</EditableText>{" "}
+              <EditableText storageKey="corp_galeria_destaque" table="platform_texts" section="corporativo" as="span" className="font-serif italic text-gradient">momentos</EditableText>
             </h2>
           }
           subtitle={
-            <p className="text-muted-foreground">
+            <EditableText storageKey="corp_galeria_subtitulo" table="platform_texts" section="corporativo" as="p" className="text-muted-foreground" multiline>
               Registros dos nossos atendimentos em empresas e eventos especiais.
-            </p>
+            </EditableText>
           }
         >
           <CorpGaleriaSection />
@@ -80,13 +84,14 @@ const Corporativo = () => {
           }
           title={
             <h2 className="text-3xl lg:text-4xl font-bold text-foreground">
-              O que dizem os <span className="font-serif italic text-gradient">gestores de RH</span>
+              <EditableText storageKey="corp_depoimentos_titulo" table="platform_texts" section="corporativo" as="span">O que dizem os</EditableText>{" "}
+              <EditableText storageKey="corp_depoimentos_destaque" table="platform_texts" section="corporativo" as="span" className="font-serif italic text-gradient">gestores de RH</EditableText>
             </h2>
           }
           subtitle={
-            <p className="text-muted-foreground">
+            <EditableText storageKey="corp_depoimentos_subtitulo" table="platform_texts" section="corporativo" as="p" className="text-muted-foreground" multiline>
               Profissionais de RH compartilham suas experiências com nossos programas.
-            </p>
+            </EditableText>
           }
         >
           <CorpTestimonialsSection />
@@ -98,13 +103,14 @@ const Corporativo = () => {
           }
           title={
             <h2 className="text-3xl lg:text-4xl font-bold text-foreground">
-              Empresas que <span className="font-serif italic text-gradient">investem em bem-estar</span>
+              <EditableText storageKey="corp_cases_titulo" table="platform_texts" section="corporativo" as="span">Empresas que</EditableText>{" "}
+              <EditableText storageKey="corp_cases_destaque" table="platform_texts" section="corporativo" as="span" className="font-serif italic text-gradient">investem em bem-estar</EditableText>
             </h2>
           }
           subtitle={
-            <p className="text-muted-foreground">
+            <EditableText storageKey="corp_cases_subtitulo" table="platform_texts" section="corporativo" as="p" className="text-muted-foreground" multiline>
               Grandes organizações que adotaram a massoterapia corporativa.
-            </p>
+            </EditableText>
           }
         >
           <CorpCasesSection />
@@ -117,13 +123,14 @@ const Corporativo = () => {
           }
           title={
             <h2 className="text-3xl lg:text-4xl font-bold text-foreground">
-              Escolha o plano <span className="font-serif italic text-gradient">ideal</span>
+              <EditableText storageKey="corp_planos_titulo" table="platform_texts" section="corporativo" as="span">Escolha o plano</EditableText>{" "}
+              <EditableText storageKey="corp_planos_destaque" table="platform_texts" section="corporativo" as="span" className="font-serif italic text-gradient">ideal</EditableText>
             </h2>
           }
           subtitle={
-            <p className="text-muted-foreground">
+            <EditableText storageKey="corp_planos_subtitulo" table="platform_texts" section="corporativo" as="p" className="text-muted-foreground" multiline>
               Contratos flexíveis que se adaptam ao tamanho e necessidade da sua empresa.
-            </p>
+            </EditableText>
           }
         >
           <CorpPlanosSection />
@@ -135,7 +142,8 @@ const Corporativo = () => {
           }
           title={
             <h2 className="text-3xl lg:text-4xl font-bold text-foreground">
-              Tire suas <span className="font-serif italic text-gradient">dúvidas</span>
+              <EditableText storageKey="corp_faq_titulo" table="platform_texts" section="corporativo" as="span">Tire suas</EditableText>{" "}
+              <EditableText storageKey="corp_faq_destaque" table="platform_texts" section="corporativo" as="span" className="font-serif italic text-gradient">dúvidas</EditableText>
             </h2>
           }
         >
@@ -149,13 +157,14 @@ const Corporativo = () => {
           }
           title={
             <h2 className="text-3xl lg:text-4xl font-bold text-foreground">
-              Solicite um <span className="font-serif italic text-gradient">orçamento</span>
+              <EditableText storageKey="corp_cta_titulo" table="platform_texts" section="corporativo" as="span">Solicite um</EditableText>{" "}
+              <EditableText storageKey="corp_cta_destaque" table="platform_texts" section="corporativo" as="span" className="font-serif italic text-gradient">orçamento</EditableText>
             </h2>
           }
           subtitle={
-            <p className="text-muted-foreground">
+            <EditableText storageKey="corp_cta_subtitulo" table="platform_texts" section="corporativo" as="p" className="text-muted-foreground" multiline>
               Preencha o formulário e nossa equipe comercial entrará em contato em até 24h.
-            </p>
+            </EditableText>
           }
         >
           <CorpCTASection />

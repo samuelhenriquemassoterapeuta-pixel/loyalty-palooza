@@ -3,6 +3,7 @@ import { Leaf, Search } from "lucide-react";
 import { useState } from "react";
 import { useTerapias } from "@/features/terapias/hooks/useTerapias";
 import { TerapiaCard } from "@/features/terapias/components/TerapiaCard";
+import { EditableText } from "@/components/edit-mode";
 
 const Terapias = () => {
   const { terapias, isLoading } = useTerapias();
@@ -30,12 +31,12 @@ const Terapias = () => {
               <span className="text-xs font-semibold text-primary">Nossas Terapias</span>
             </div>
             <h1 className="text-3xl sm:text-4xl font-bold text-foreground mb-3">
-              Conheça nossas{" "}
-              <span className="font-serif italic text-gradient">terapias</span>
+              <EditableText storageKey="terapias_titulo" table="platform_texts" section="terapias" as="span">Conheça nossas</EditableText>{" "}
+              <EditableText storageKey="terapias_titulo_destaque" table="platform_texts" section="terapias" as="span" className="font-serif italic text-gradient">terapias</EditableText>
             </h1>
-            <p className="text-muted-foreground max-w-xl mx-auto text-sm sm:text-base">
+            <EditableText storageKey="terapias_subtitulo" table="platform_texts" section="terapias" as="p" className="text-muted-foreground max-w-xl mx-auto text-sm sm:text-base" multiline>
               Descubra cada técnica em detalhes: benefícios, indicações, contraindicações e como funcionam.
-            </p>
+            </EditableText>
           </motion.div>
 
           {/* Search */}

@@ -8,6 +8,7 @@ import { CollapsibleSection } from "./CollapsibleSection";
 import { Button } from "@/components/ui/button";
 import { useLandingConfig } from "@/features/landing/hooks/useLandingConfig";
 import servicosBannerDefault from "@/assets/landing/servicos-banner.jpg";
+import { EditableText, EditableImage } from "@/components/edit-mode";
 
 const containerVariants = {
   hidden: {},
@@ -91,20 +92,23 @@ export const ServicosSection = () => {
           }
           title={
             <h2 className="text-3xl lg:text-4xl font-bold text-foreground">
-              Terapias que{" "}
-              <span className="font-serif italic text-gradient">transformam</span>
+              <EditableText storageKey="servicos_titulo" table="landing_config" section="servicos" field="titulo" as="span" value={config?.titulo || "Terapias que"}>
+                {config?.titulo || "Terapias que"}
+              </EditableText>{" "}
+              <EditableText storageKey="servicos_titulo_destaque" table="landing_config" section="servicos" field="titulo_destaque" as="span" className="font-serif italic text-gradient" value={config?.titulo_destaque || "transformam"}>
+                {config?.titulo_destaque || "transformam"}
+              </EditableText>
             </h2>
           }
           subtitle={
-            <p className="text-muted-foreground">
-              Descubra nossas terapias naturais e ganhe cashback em cada sessão.
-              Seu bem-estar é recompensado.
-            </p>
+            <EditableText storageKey="servicos_subtitulo" table="landing_config" section="servicos" field="subtitulo" as="p" className="text-muted-foreground" multiline value={config?.subtitulo_texto || "Descubra nossas terapias naturais e ganhe cashback em cada sessão. Seu bem-estar é recompensado."}>
+              {config?.subtitulo_texto || "Descubra nossas terapias naturais e ganhe cashback em cada sessão. Seu bem-estar é recompensado."}
+            </EditableText>
           }
         >
           {/* Rich banner */}
           <div className="mb-8 rounded-2xl overflow-hidden relative aspect-[21/9]">
-            <img src={servicosBanner} alt="Sala de terapia" className="w-full h-full object-cover" loading="lazy" />
+            <EditableImage src={servicosBanner} alt="Sala de terapia" storageKey="servicos_banner" table="landing_config" section="servicos" field="banner_url" className="w-full h-full" />
             <div className="absolute inset-0 bg-gradient-to-r from-background/80 via-background/40 to-transparent" />
             <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-6">
               <div className="flex flex-wrap items-center gap-4">

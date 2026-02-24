@@ -9,6 +9,7 @@ import { AutocuidadoSection } from "@/features/guia-clinico/components/Autocuida
 import { TimingCirurgicoSection } from "@/features/guia-clinico/components/TimingCirurgicoSection";
 import { ChecklistAvaliacao } from "@/features/guia-clinico/components/ChecklistAvaliacao";
 import { EducativoSection } from "@/features/guia-clinico/components/EducativoSection";
+import { EditableText } from "@/components/edit-mode";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 16 },
@@ -52,12 +53,14 @@ const GuiaClinico = () => {
               <div className="flex items-center gap-2 mb-1">
                 <BookOpen size={22} className="text-primary" />
                 <h1 className="text-xl font-bold text-foreground">
-                  Guia Clínico
+                  <EditableText storageKey="guia_clinico_titulo" table="platform_texts" section="guia_clinico" as="span">
+                    Guia Clínico
+                  </EditableText>
                 </h1>
               </div>
-              <p className="text-sm text-muted-foreground">
+              <EditableText storageKey="guia_clinico_subtitulo" table="platform_texts" section="guia_clinico" as="p" className="text-sm text-muted-foreground" multiline>
                 Orientações, protocolos e material educativo para drenagem linfática
-              </p>
+              </EditableText>
             </motion.div>
 
             {/* Tabs */}
