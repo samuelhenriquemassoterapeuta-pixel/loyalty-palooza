@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useParallax } from "@/hooks/useParallax";
 import { useLandingConfig } from "@/features/landing/hooks/useLandingConfig";
+import { EditableText } from "@/components/edit-mode";
 
 const contactItemVariants = {
   hidden: { opacity: 0, x: 20 },
@@ -47,12 +48,10 @@ export const ContatoSection = () => {
             transition={{ duration: 0.7, ease: "easeOut" }}
           >
             <h2 className="text-3xl lg:text-4xl font-bold text-foreground">
-              {tituloParte1}{" "}
-              <span className="font-serif italic text-gradient">{tituloDestaque}</span>?
+              <EditableText storageKey="contato_titulo_parte1" table="landing_config" section="contato" field="titulo_parte1" as="span" value={tituloParte1}>{tituloParte1}</EditableText>{" "}
+              <EditableText storageKey="contato_titulo_destaque" table="landing_config" section="contato" field="titulo_destaque" as="span" className="font-serif italic text-gradient" value={tituloDestaque}>{tituloDestaque}</EditableText>?
             </h2>
-            <p className="mt-4 text-muted-foreground leading-relaxed max-w-md">
-              {subtitulo}
-            </p>
+            <EditableText storageKey="contato_subtitulo" table="landing_config" section="contato" field="subtitulo" as="p" className="mt-4 text-muted-foreground leading-relaxed max-w-md" multiline value={subtitulo}>{subtitulo}</EditableText>
 
             <div className="mt-8 flex flex-col sm:flex-row gap-4">
               <Button size="xl" onClick={() => navigate("/auth")} className="group">

@@ -9,6 +9,7 @@ import { ReceitasSection } from "@/features/dietas/components/ReceitasSection";
 import { DietasGamificacao } from "@/features/dietas/components/DietasGamificacao";
 import { DietasSection } from "@/features/protocolos/components/DietasSection";
 import { AppCollapsibleSection } from "@/components/AppCollapsibleSection";
+import { EditableText } from "@/components/edit-mode";
 
 const stagger = {
   hidden: { opacity: 0 },
@@ -36,11 +37,13 @@ const Dietas = () => {
             <motion.div variants={fadeUp}>
               <div className="flex items-center gap-2 mb-1">
                 <Apple size={22} className="text-primary" />
-                <h1 className="text-xl font-bold text-foreground">Dietas</h1>
+                <h1 className="text-xl font-bold text-foreground">
+                  <EditableText storageKey="dietas_titulo" table="platform_texts" section="dietas" as="span">Dietas</EditableText>
+                </h1>
               </div>
-              <p className="text-sm text-muted-foreground">
+              <EditableText storageKey="dietas_subtitulo" table="platform_texts" section="dietas" as="p" className="text-sm text-muted-foreground" multiline>
                 Nutrição personalizada, planos e diário alimentar
-              </p>
+              </EditableText>
             </motion.div>
 
             {/* Dashboard cards - always visible */}

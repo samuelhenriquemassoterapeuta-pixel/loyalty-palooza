@@ -6,6 +6,7 @@ import { useParallax } from "@/hooks/useParallax";
 import { CollapsibleSection } from "./CollapsibleSection";
 import { useLandingConfig } from "@/features/landing/hooks/useLandingConfig";
 import depoimentosBannerDefault from "@/assets/landing/depoimentos-banner.jpg";
+import { EditableText, EditableImage } from "@/components/edit-mode";
 
 interface Depoimento {
   nome: string;
@@ -95,20 +96,20 @@ export const DepoimentosSection = () => {
           badge={
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/10 border border-accent/20">
               <Quote size={14} className="text-accent" />
-              <span className="text-xs font-semibold text-accent">{badgeText}</span>
+              <EditableText storageKey="depoimentos_badge" table="landing_config" section="depoimentos" field="badge" as="span" className="text-xs font-semibold text-accent" value={badgeText}>{badgeText}</EditableText>
             </div>
           }
           title={
             <h2 className="text-3xl lg:text-4xl font-bold text-foreground">
-              {tituloParte1}{" "}
-              <span className="font-serif italic text-gradient">{tituloDestaque}</span>
+              <EditableText storageKey="depoimentos_titulo_parte1" table="landing_config" section="depoimentos" field="titulo_parte1" as="span" value={tituloParte1}>{tituloParte1}</EditableText>{" "}
+              <EditableText storageKey="depoimentos_titulo_destaque" table="landing_config" section="depoimentos" field="titulo_destaque" as="span" className="font-serif italic text-gradient" value={tituloDestaque}>{tituloDestaque}</EditableText>
             </h2>
           }
-          subtitle={<p className="text-muted-foreground">{subtitulo}</p>}
+          subtitle={<EditableText storageKey="depoimentos_subtitulo" table="landing_config" section="depoimentos" field="subtitulo" as="p" className="text-muted-foreground" multiline value={subtitulo}>{subtitulo}</EditableText>}
         >
           {/* Banner */}
           <div className="mb-8 rounded-2xl overflow-hidden relative aspect-[21/9]">
-            <img src={depoimentosBanner} alt="Comunidade Resinkra" className="w-full h-full object-cover" loading="lazy" />
+            <EditableImage src={depoimentosBanner} alt="Comunidade Resinkra" storageKey="depoimentos_banner" table="landing_config" section="depoimentos" field="banner_url" className="w-full h-full" />
             <div className="absolute inset-0 bg-gradient-to-r from-background/70 to-background/30" />
             <div className="absolute inset-0 flex items-center justify-center gap-6 sm:gap-10">
               {socialProof.map((item, i) => (

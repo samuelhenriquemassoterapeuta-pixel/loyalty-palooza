@@ -8,6 +8,7 @@ import { useParallax } from "@/hooks/useParallax";
 import { CollapsibleSection } from "./CollapsibleSection";
 import { useLandingConfig } from "@/features/landing/hooks/useLandingConfig";
 import pacotesBannerDefault from "@/assets/landing/pacotes-banner.jpg";
+import { EditableText, EditableImage } from "@/components/edit-mode";
 
 interface Pacote {
   id: string;
@@ -94,20 +95,23 @@ export const PacotesSection = () => {
           }
           title={
             <h2 className="text-3xl lg:text-4xl font-bold text-foreground">
-              Planos que cabem no seu{" "}
-              <span className="font-serif italic text-gradient">bem-estar</span>
+              <EditableText storageKey="pacotes_titulo" table="landing_config" section="pacotes" field="titulo" as="span" value={config?.titulo || "Planos que cabem no seu"}>
+                {config?.titulo || "Planos que cabem no seu"}
+              </EditableText>{" "}
+              <EditableText storageKey="pacotes_titulo_destaque" table="landing_config" section="pacotes" field="titulo_destaque" as="span" className="font-serif italic text-gradient" value={config?.titulo_destaque || "bem-estar"}>
+                {config?.titulo_destaque || "bem-estar"}
+              </EditableText>
             </h2>
           }
           subtitle={
-            <p className="text-muted-foreground">
-              Economize com nossos pacotes de sessões e aproveite cashback em
-              todas as terapias.
-            </p>
+            <EditableText storageKey="pacotes_subtitulo" table="landing_config" section="pacotes" field="subtitulo" as="p" className="text-muted-foreground" multiline value={config?.subtitulo || "Economize com nossos pacotes de sessões e aproveite cashback em todas as terapias."}>
+              {config?.subtitulo || "Economize com nossos pacotes de sessões e aproveite cashback em todas as terapias."}
+            </EditableText>
           }
         >
           {/* Banner */}
           <div className="mb-8 rounded-2xl overflow-hidden relative aspect-[21/9]">
-            <img src={pacotesBanner} alt="Pacotes de bem-estar" className="w-full h-full object-cover" loading="lazy" />
+            <EditableImage src={pacotesBanner} alt="Pacotes de bem-estar" storageKey="pacotes_banner" table="landing_config" section="pacotes" field="banner_url" className="w-full h-full" />
             <div className="absolute inset-0 bg-gradient-to-r from-background/70 via-background/30 to-transparent" />
             <div className="absolute bottom-0 left-0 p-5 sm:p-6">
               <p className="text-lg font-bold text-foreground drop-shadow-sm">Invista no seu bem-estar</p>

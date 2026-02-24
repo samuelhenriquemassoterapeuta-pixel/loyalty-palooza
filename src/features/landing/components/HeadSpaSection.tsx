@@ -4,6 +4,7 @@ import { Sparkles, ArrowRight, Leaf, Heart, Brain } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import heroImage from "@/assets/headspa-hero.jpg";
 import { CollapsibleSection } from "./CollapsibleSection";
+import { EditableText, EditableImage } from "@/components/edit-mode";
 
 const highlights = [
   { icon: Leaf, text: "Saúde capilar profunda" },
@@ -25,14 +26,14 @@ export const HeadSpaSection = () => {
           }
           title={
             <h2 className="text-3xl lg:text-4xl font-bold text-foreground">
-              Head SPA{" "}
-              <span className="font-serif italic text-primary">Coreano</span>
+              <EditableText storageKey="headspa_titulo" table="platform_texts" section="headspa" as="span">Head SPA</EditableText>{" "}
+              <EditableText storageKey="headspa_titulo_destaque" table="platform_texts" section="headspa" as="span" className="font-serif italic text-primary">Coreano</EditableText>
             </h2>
           }
           subtitle={
-            <p className="text-muted-foreground">
+            <EditableText storageKey="headspa_subtitulo" table="platform_texts" section="headspa" as="p" className="text-muted-foreground" multiline>
               Um ritual de beleza que vai além do cuidado capilar.
-            </p>
+            </EditableText>
           }
         >
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-14 items-center">
@@ -78,11 +79,13 @@ export const HeadSpaSection = () => {
               className="relative"
             >
               <div className="rounded-2xl overflow-hidden shadow-xl aspect-[4/3]">
-                <img
+                <EditableImage
                   src={heroImage}
                   alt="Head SPA Coreano"
-                  className="w-full h-full object-cover"
-                  loading="lazy"
+                  storageKey="headspa_hero_image"
+                  table="platform_media"
+                  section="headspa"
+                  className="w-full h-full"
                 />
               </div>
               <div className="absolute -bottom-3 -right-3 sm:-bottom-4 sm:-right-4 bg-card rounded-xl border border-border/60 p-3 sm:p-4 shadow-lg">
