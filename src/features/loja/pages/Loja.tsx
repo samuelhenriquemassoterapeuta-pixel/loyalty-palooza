@@ -20,6 +20,7 @@ import { PaymentDialog } from "@/features/pagamento/components/PaymentDialog";
 import { useLandingConfig } from "@/features/landing/hooks/useLandingConfig";
 import { CollapsibleDashboardSection } from "@/components/home/CollapsibleDashboardSection";
 import homeBgFallback from "@/assets/home-bg.jpg";
+import { EditableText } from "@/components/edit-mode";
 
 interface CarrinhoItem {
   produto: Produto;
@@ -244,8 +245,8 @@ export default function Loja() {
             <ArrowLeft size={22} className="text-foreground" />
           </button>
           <div className="flex-1">
-            <h1 className="text-xl font-bold text-foreground">Loja Resinkra</h1>
-            <p className="text-xs text-muted-foreground">Produtos exclusivos</p>
+            <EditableText storageKey="loja_titulo" table="platform_texts" section="loja" as="h1" className="text-xl font-bold text-foreground">Loja Resinkra</EditableText>
+            <EditableText storageKey="loja_subtitulo" table="platform_texts" section="loja" as="p" className="text-xs text-muted-foreground">Produtos exclusivos</EditableText>
           </div>
           <CarrinhoSheet
             carrinho={carrinho}

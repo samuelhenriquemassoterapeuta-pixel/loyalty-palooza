@@ -9,6 +9,7 @@ import { ConfirmDialog } from "@/components/ConfirmDialog";
 import { PaymentDialog } from "@/features/pagamento/components/PaymentDialog";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { EditableText } from "@/components/edit-mode";
 
 const iconMap: Record<string, React.ElementType> = {
   crown: Crown,
@@ -66,14 +67,14 @@ const ClubeVip = () => {
         >
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/10 text-accent">
             <Crown size={20} />
-            <span className="font-semibold text-sm">Clube VIP Resinkra</span>
+            <EditableText storageKey="clube_vip_badge" table="platform_texts" section="clube_vip" as="span" className="font-semibold text-sm">Clube VIP Resinkra</EditableText>
           </div>
-          <h2 className="text-2xl font-bold text-foreground font-[family-name:var(--font-serif)]">
+          <EditableText storageKey="clube_vip_titulo" table="platform_texts" section="clube_vip" as="h2" className="text-2xl font-bold text-foreground font-[family-name:var(--font-serif)]">
             Benefícios exclusivos para você
-          </h2>
-          <p className="text-muted-foreground text-sm max-w-md mx-auto">
+          </EditableText>
+          <EditableText storageKey="clube_vip_subtitulo" table="platform_texts" section="clube_vip" as="p" className="text-muted-foreground text-sm max-w-md mx-auto" multiline>
             Assine um plano e aproveite cashback extra, descontos e prioridade no agendamento.
-          </p>
+          </EditableText>
         </motion.div>
 
         {/* Current subscription */}

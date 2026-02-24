@@ -3,6 +3,7 @@ import { Search, Filter, Percent } from "lucide-react";
 import { AppLayout } from "@/components/AppLayout";
 import { AnimatedPageBackground } from "@/components/AnimatedPageBackground";
 import { Button } from "@/components/ui/button";
+import { EditableText } from "@/components/edit-mode";
 
 const stagger = {
   hidden: { opacity: 0 },
@@ -46,12 +47,11 @@ const Offers = () => {
             animate="show"
             className="space-y-5"
           >
-            <motion.h1
-              variants={fadeUp}
-              className="text-2xl font-bold text-foreground"
-            >
-              Ofertas
-            </motion.h1>
+            <motion.div variants={fadeUp}>
+              <EditableText storageKey="ofertas_titulo" table="platform_texts" section="ofertas" as="h1" className="text-2xl font-bold text-foreground">
+                Ofertas
+              </EditableText>
+            </motion.div>
 
             {/* Search */}
             <motion.div variants={fadeUp} className="relative">

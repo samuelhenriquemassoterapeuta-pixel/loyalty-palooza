@@ -19,6 +19,7 @@ import { AppLayout } from "@/components/AppLayout";
 import { useIndicacoes } from "@/hooks/useIndicacoes";
 import { toast } from "sonner";
 import { ButtonLoader } from "@/components/LoadingSpinner";
+import { EditableText } from "@/components/edit-mode";
 
 const APP_URL = "https://loyalty-palooza.lovable.app";
 
@@ -142,7 +143,7 @@ const Indicacoes = () => {
             >
               <ArrowLeft size={22} className="text-foreground" />
             </button>
-            <h1 className="text-xl font-bold text-foreground">Indicações</h1>
+            <EditableText storageKey="indicacoes_titulo" table="platform_texts" section="indicacoes" as="h1" className="text-xl font-bold text-foreground">Indicações</EditableText>
           </motion.div>
 
           <motion.div
@@ -163,13 +164,12 @@ const Indicacoes = () => {
                     <Gift size={32} />
                   </div>
                   <div>
-                    <h2 className="text-lg font-bold font-serif">
+                    <EditableText storageKey="indicacoes_hero_titulo" table="platform_texts" section="indicacoes" as="h2" className="text-lg font-bold font-serif">
                       Indique e Ganhe!
-                    </h2>
-                    <p className="text-sm opacity-90 mt-1">
-                      Ganhe R$ 10 de cashback para cada amigo que usar seu
-                      código
-                    </p>
+                    </EditableText>
+                    <EditableText storageKey="indicacoes_hero_subtitulo" table="platform_texts" section="indicacoes" as="p" className="text-sm opacity-90 mt-1" multiline>
+                      Ganhe R$ 10 de cashback para cada amigo que usar seu código
+                    </EditableText>
                   </div>
 
                   {/* Código do usuário com animação glow */}

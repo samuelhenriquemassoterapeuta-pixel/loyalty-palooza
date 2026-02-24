@@ -16,6 +16,7 @@ import { XpLevelCard } from "@/features/conquistas/components/XpLevelCard";
 import { LevelRewardsCard } from "@/features/conquistas/components/LevelRewardsCard";
 import { calculateXpFromAchievements, getLevelFromXp } from "@/features/conquistas/components/xpLevelUtils";
 import { AppCollapsibleSection } from "@/components/AppCollapsibleSection";
+import { EditableText } from "@/components/edit-mode";
 
 type FilterMode = "todos" | "desbloqueados" | "em_progresso";
 
@@ -116,11 +117,11 @@ const Conquistas = () => {
             <motion.div variants={fadeUp}>
               <div className="flex items-center gap-2 mb-1">
                 <Trophy size={22} className="text-primary" />
-                <h1 className="text-xl font-bold text-foreground">Conquistas</h1>
+                <EditableText storageKey="conquistas_titulo" table="platform_texts" section="conquistas" as="h1" className="text-xl font-bold text-foreground">Conquistas</EditableText>
               </div>
-              <p className="text-sm text-muted-foreground">
+              <EditableText storageKey="conquistas_subtitulo" table="platform_texts" section="conquistas" as="p" className="text-sm text-muted-foreground">
                 Seu progresso e ranking na comunidade
-              </p>
+              </EditableText>
             </motion.div>
 
             <Tabs defaultValue="conquistas">

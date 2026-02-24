@@ -12,6 +12,7 @@ import { useUsuarioProtocolos, useFichas, useFotos } from "@/features/protocolos
 import { useSocialPosts, SocialPost } from "@/features/social/hooks/useSocialPosts";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { EditableText } from "@/components/edit-mode";
 
 interface TimelineEvent {
   id: string;
@@ -141,7 +142,7 @@ const MinhaJornada = () => {
           <Button variant="ghost" size="icon" onClick={() => navigate(-1)}>
             <ArrowLeft size={20} />
           </Button>
-          <h1 className="text-xl font-bold text-foreground">Minha Jornada</h1>
+          <EditableText storageKey="jornada_titulo" table="platform_texts" section="jornada" as="h1" className="text-xl font-bold text-foreground">Minha Jornada</EditableText>
         </div>
 
         {/* Stats summary */}

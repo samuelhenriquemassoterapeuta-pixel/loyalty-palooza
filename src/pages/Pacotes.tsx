@@ -14,6 +14,7 @@ import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { MeusPacotesListSkeleton, PacotesListSkeleton } from "@/components/skeletons";
 import { ButtonLoader } from "@/components/LoadingSpinner";
+import { EditableText } from "@/components/edit-mode";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -95,8 +96,8 @@ const Pacotes = () => {
                 <ArrowLeft size={22} className="text-foreground" />
               </button>
               <div>
-                <h1 className="text-xl font-bold text-foreground">Plano de Horas</h1>
-                <p className="text-xs text-muted-foreground">Gerencie seus pacotes e sessões</p>
+                <EditableText storageKey="pacotes_titulo" table="platform_texts" section="pacotes" as="h1" className="text-xl font-bold text-foreground">Plano de Horas</EditableText>
+                <EditableText storageKey="pacotes_subtitulo" table="platform_texts" section="pacotes" as="p" className="text-xs text-muted-foreground">Gerencie seus pacotes e sessões</EditableText>
               </div>
             </motion.div>
 
