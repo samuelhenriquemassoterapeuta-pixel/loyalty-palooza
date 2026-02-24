@@ -6,9 +6,11 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter } from "react-router-dom";
 import { ThemeProvider } from "next-themes";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { EditModeProvider } from "@/contexts/EditModeContext";
 import { AnimatedRoutes } from "@/components/AnimatedRoutes";
 import { SplashScreen } from "@/components/SplashScreen";
 import { ResiChat } from "@/components/chat/ResiChat";
+import { EditModeFAB } from "@/components/edit-mode";
 
 const queryClient = new QueryClient();
 
@@ -37,13 +39,16 @@ const App = () => {
       <QueryClientProvider client={queryClient}>
         <TooltipProvider>
           <AuthProvider>
-            <SplashScreen isVisible={showSplash} />
-            <Toaster />
-            <Sonner />
-            <BrowserRouter>
-              <AnimatedRoutes />
-              <ResiChat />
-            </BrowserRouter>
+            <EditModeProvider>
+              <SplashScreen isVisible={showSplash} />
+              <Toaster />
+              <Sonner />
+              <BrowserRouter>
+                <AnimatedRoutes />
+                <ResiChat />
+                <EditModeFAB />
+              </BrowserRouter>
+            </EditModeProvider>
           </AuthProvider>
         </TooltipProvider>
       </QueryClientProvider>

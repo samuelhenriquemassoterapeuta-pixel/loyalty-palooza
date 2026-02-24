@@ -5,6 +5,7 @@ import seloCompleto from "@/assets/selo-completo.png";
 import sobreBannerDefault from "@/assets/landing/sobre-banner.jpg";
 import { CollapsibleSection } from "./CollapsibleSection";
 import { useLandingConfig } from "@/features/landing/hooks/useLandingConfig";
+import { EditableText, EditableImage } from "@/components/edit-mode";
 
 const defaultFeatures = [
   { icon: Heart, titulo: "Humanização em cada detalhe", descricao: "Escuta, acolhimento e cuidado genuíno. Cada pessoa é única e merece uma experiência feita sob medida." },
@@ -55,15 +56,15 @@ export const SobreSection = () => {
           id="sobre"
           title={
             <h2 className="text-3xl lg:text-4xl font-bold text-foreground">
-              {tituloParte1}{" "}
-              <span className="font-serif italic text-gradient">{tituloDestaque}</span>
+              <EditableText storageKey="sobre_titulo_parte1" table="landing_config" section="sobre" field="titulo_parte1" as="span" value={tituloParte1}>{tituloParte1}</EditableText>{" "}
+              <EditableText storageKey="sobre_titulo_destaque" table="landing_config" section="sobre" field="titulo_destaque" as="span" className="font-serif italic text-gradient" value={tituloDestaque}>{tituloDestaque}</EditableText>
             </h2>
           }
-          subtitle={<p className="text-muted-foreground">{subtitulo}</p>}
+          subtitle={<EditableText storageKey="sobre_subtitulo" table="landing_config" section="sobre" field="subtitulo" as="p" className="text-muted-foreground" multiline value={subtitulo}>{subtitulo}</EditableText>}
         >
           {/* Banner image */}
           <div className="mb-8 rounded-2xl overflow-hidden relative aspect-[21/9]">
-            <img src={sobreBanner} alt="Espaço Resinkra" className="w-full h-full object-cover" loading="lazy" />
+            <EditableImage src={sobreBanner} alt="Espaço Resinkra" storageKey="sobre_banner" table="landing_config" section="sobre" field="banner_url" className="w-full h-full" />
             <div className="absolute inset-0 bg-gradient-to-t from-background/60 to-transparent" />
             <div className="absolute bottom-4 left-4 right-4 flex items-center gap-3">
               <img src={seloCompleto} alt="Selo Resinkra" className="w-12 h-12 object-contain" />

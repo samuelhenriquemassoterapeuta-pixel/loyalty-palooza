@@ -5,6 +5,7 @@ import { useRef } from "react";
 import { Button } from "@/components/ui/button";
 import heroBg from "@/assets/hero-options/hero-spa-resinkra.jpg";
 import { useLandingConfig } from "@/features/landing/hooks/useLandingConfig";
+import { EditableText, EditableImage } from "@/components/edit-mode";
 
 const socialProof = [
   { icon: Users, value: "2.500+", label: "Clientes atendidos" },
@@ -40,11 +41,14 @@ export const HeroSection = () => {
     <section id="inicio" ref={heroRef}>
       {/* Background image with parallax */}
       <div className="relative pt-16 h-[50vh] sm:h-[55vh] lg:h-[65vh] overflow-hidden">
-        <motion.img
+        <EditableImage
           src={imagemFundo}
-          alt=""
-          className="absolute inset-0 w-full h-full object-cover will-change-transform"
-          style={{ y: imageY, scale: imageScale }}
+          alt="Hero background"
+          storageKey="hero_imagem_fundo"
+          table="landing_config"
+          section="hero"
+          field="imagem_fundo"
+          className="absolute inset-0 w-full h-full"
         />
         <motion.div
           className="absolute inset-0 bg-gradient-to-b from-background/30 via-transparent to-background"
@@ -80,7 +84,7 @@ export const HeroSection = () => {
                 <motion.div animate={{ rotate: [0, 15, -15, 0] }} transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}>
                   <Sparkles size={14} className="text-primary" />
                 </motion.div>
-                <span className="text-xs font-semibold text-foreground">{badge}</span>
+                <EditableText storageKey="hero_badge" table="landing_config" section="hero" field="badge" as="span" className="text-xs font-semibold text-foreground" value={badge}>{badge}</EditableText>
               </div>
             </motion.div>
 
@@ -91,9 +95,9 @@ export const HeroSection = () => {
               transition={{ duration: 0.8, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
               className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground leading-tight"
             >
-              {tituloParte1}{" "}
-              <span className="text-gradient font-serif italic">{tituloDestaque}</span>{" "}
-              {tituloParte2}
+              <EditableText storageKey="hero_titulo_parte1" table="landing_config" section="hero" field="titulo_parte1" as="span" value={tituloParte1}>{tituloParte1}</EditableText>{" "}
+              <EditableText storageKey="hero_titulo_destaque" table="landing_config" section="hero" field="titulo_destaque" as="span" className="text-gradient font-serif italic" value={tituloDestaque}>{tituloDestaque}</EditableText>{" "}
+              <EditableText storageKey="hero_titulo_parte2" table="landing_config" section="hero" field="titulo_parte2" as="span" value={tituloParte2}>{tituloParte2}</EditableText>
             </motion.h1>
 
             {/* Subtitle — always visible */}
@@ -103,7 +107,7 @@ export const HeroSection = () => {
               transition={{ delay: 0.3, duration: 0.5 }}
               className="mt-5 text-lg text-muted-foreground leading-relaxed max-w-2xl"
             >
-              {subtitulo}
+              <EditableText storageKey="hero_subtitulo" table="landing_config" section="hero" field="subtitulo" as="span" multiline value={subtitulo}>{subtitulo}</EditableText>
             </motion.p>
 
             {/* CTA Buttons — always visible */}
