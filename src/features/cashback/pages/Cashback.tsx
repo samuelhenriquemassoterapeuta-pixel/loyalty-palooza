@@ -15,6 +15,7 @@ import { StreakCard } from "@/features/cashback/components/StreakCard";
 import { CashbackInteligenteSection } from "@/features/cashback/components/CashbackInteligenteSection";
 import { AppCollapsibleSection } from "@/components/AppCollapsibleSection";
 import { Skeleton } from "@/components/ui/skeleton";
+import { EditableText } from "@/components/edit-mode";
 
 const stagger = {
   hidden: { opacity: 0 },
@@ -75,7 +76,7 @@ const Cashback = () => {
               >
                 <ArrowLeft size={22} className="text-foreground" />
               </button>
-              <h1 className="text-xl font-bold text-foreground">Meus Resinks</h1>
+              <EditableText storageKey="cashback_titulo" table="platform_texts" section="cashback" as="h1" className="text-xl font-bold text-foreground">Meus Resinks</EditableText>
             </div>
             <button
               onClick={() => setShowValues(!showValues)}

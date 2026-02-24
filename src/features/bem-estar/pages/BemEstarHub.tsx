@@ -55,6 +55,7 @@ import WellnessCalendar from "@/features/bem-estar/components/WellnessCalendar";
 import WeeklyComparison from "@/features/bem-estar/components/WeeklyComparison";
 import WellnessCorrelations from "@/features/bem-estar/components/WellnessCorrelations";
 import WellnessAchievements from "@/features/bem-estar/components/WellnessAchievements";
+import { EditableText } from "@/components/edit-mode";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 14 },
@@ -159,8 +160,8 @@ const BemEstarHub = () => {
                 <Heart size={22} className="text-primary" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-foreground font-serif">Bem-Estar</h1>
-                <p className="text-xs text-muted-foreground">Seu centro de saúde e autocuidado</p>
+                <EditableText storageKey="bem_estar_titulo" table="platform_texts" section="bem_estar" as="h1" className="text-xl font-bold text-foreground font-serif">Bem-Estar</EditableText>
+                <EditableText storageKey="bem_estar_subtitulo" table="platform_texts" section="bem_estar" as="p" className="text-xs text-muted-foreground">Seu centro de saúde e autocuidado</EditableText>
               </div>
             </div>
           </motion.div>

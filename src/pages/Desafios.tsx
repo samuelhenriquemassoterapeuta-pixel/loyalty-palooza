@@ -8,6 +8,7 @@ import { Progress } from "@/components/ui/progress";
 import { AppLayout } from "@/components/AppLayout";
 import { useNavigate } from "react-router-dom";
 import { useDesafios } from "@/hooks/useDesafios";
+import { EditableText } from "@/components/edit-mode";
 import { format, differenceInDays, isPast } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
@@ -59,12 +60,12 @@ const Desafios = () => {
         >
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/10 text-accent">
             <Trophy size={20} />
-            <span className="font-semibold text-sm">Desafios Temáticos</span>
+            <EditableText storageKey="desafios_badge" table="platform_texts" section="desafios" as="span" className="font-semibold text-sm">Desafios Temáticos</EditableText>
           </div>
-          <h2 className="text-lg font-bold text-foreground">Complete desafios e ganhe recompensas!</h2>
-          <p className="text-muted-foreground text-sm">
+          <EditableText storageKey="desafios_titulo" table="platform_texts" section="desafios" as="h2" className="text-lg font-bold text-foreground">Complete desafios e ganhe recompensas!</EditableText>
+          <EditableText storageKey="desafios_subtitulo" table="platform_texts" section="desafios" as="p" className="text-muted-foreground text-sm" multiline>
             Participe dos desafios mensais para ganhar cashback e XP extras.
-          </p>
+          </EditableText>
         </motion.div>
 
         {/* Desafios ativos */}

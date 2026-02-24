@@ -8,6 +8,7 @@ import { AnamneseForm } from "../components/AnamneseForm";
 import { AnamneseViewer } from "../components/AnamneseViewer";
 import { useFichasAnamnese, FichaAnamnese } from "../hooks/useFichasAnamnese";
 import { useAnamneseTemplates, AnamneseTemplate } from "../hooks/useAnamneseTemplates";
+import { EditableText } from "@/components/edit-mode";
 
 type View = "list" | "select-service" | "form" | "viewer";
 
@@ -65,8 +66,8 @@ const Anamnese = () => {
                 <FileText size={20} className="text-primary" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-foreground">Fichas de Anamnese</h1>
-                <p className="text-xs text-muted-foreground">Avaliação clínica por terapia</p>
+                <EditableText storageKey="anamnese_titulo" table="platform_texts" section="anamnese" as="h1" className="text-xl font-bold text-foreground">Fichas de Anamnese</EditableText>
+                <EditableText storageKey="anamnese_subtitulo" table="platform_texts" section="anamnese" as="p" className="text-xs text-muted-foreground">Avaliação clínica por terapia</EditableText>
               </div>
             </div>
           </motion.div>
