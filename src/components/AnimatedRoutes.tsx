@@ -110,6 +110,7 @@ const Offers = lazy(() => import("@/pages/Offers"));
 const ChatAssistente = lazy(() => import("@/pages/ChatAssistente"));
 const ChatWhatsApp = lazy(() => import("@/pages/ChatWhatsApp"));
 const NotFound = lazy(() => import("@/pages/NotFound"));
+const ResetPassword = lazy(() => import("@/pages/ResetPassword"));
 
 // Marketplace
 const Marketplace = lazy(() => import("@/features/marketplace/pages/Marketplace"));
@@ -184,6 +185,7 @@ export const AnimatedRoutes = () => {
     <AnimatePresence mode="wait">
       <Routes location={location} key={location.pathname}>
         <Route path="/auth" element={<PageTransition><Auth /></PageTransition>} />
+        <Route path="/reset-password" element={<LazyPage><ResetPassword /></LazyPage>} />
         <Route path="/instalar" element={<LazyPage><Instalar /></LazyPage>} />
         <Route path="/qrcode" element={<LazyPage><QRCodePrint /></LazyPage>} />
         <Route path="/" element={<PageTransition><HomeRoute /></PageTransition>} />
