@@ -34,12 +34,15 @@ export const EditableText = ({
   multiline = false,
   value,
 }: EditableTextProps) => {
-  const { isEditMode, addChange } = useEditMode();
+  const { isEditMode, addChange, pendingChanges } = useEditMode();
   const [isEditing, setIsEditing] = useState(false);
   const [localValue, setLocalValue] = useState("");
   const inputRef = useRef<HTMLInputElement | HTMLTextAreaElement>(null);
 
+  const changeKey = `${table}:${storageKey}`;
+  const pendingValue = pendingChanges.get(changeKey)?.value as string | undefined;
   const displayValue = value ?? (typeof children === "string" ? children : "");
+  const visualValue = pendingValue ?? displayValue;
 
   useEffect(() => {
     if (isEditing && inputRef.current) {
@@ -50,14 +53,14 @@ export const EditableText = ({
 
   const handleClick = () => {
     if (!isEditMode) return;
-    setLocalValue(displayValue);
+    setLocalValue(visualValue);
     setIsEditing(true);
   };
 
   const handleSave = () => {
     setIsEditing(false);
     if (localValue !== displayValue) {
-      addChange(`${table}:${storageKey}`, {
+      addChange(changeKey, {
         table,
         key: storageKey,
         field: field || storageKey,
@@ -106,7 +109,7 @@ export const EditableText = ({
       onClick={handleClick}
       className={`${className} relative cursor-pointer group/edit`}
     >
-      {children}
+      {pendingValue !== undefined ? pendingValue : children}
       <span className="absolute -top-2 -right-2 opacity-0 group-hover/edit:opacity-100 transition-opacity bg-accent text-accent-foreground rounded-full p-1 shadow-sm">
         <Pencil size={10} />
       </span>
