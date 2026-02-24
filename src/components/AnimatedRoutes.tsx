@@ -111,6 +111,7 @@ const ChatAssistente = lazy(() => import("@/pages/ChatAssistente"));
 const ChatWhatsApp = lazy(() => import("@/pages/ChatWhatsApp"));
 const NotFound = lazy(() => import("@/pages/NotFound"));
 const ResetPassword = lazy(() => import("@/pages/ResetPassword"));
+const ApiTestDashboard = lazy(() => import("@/pages/ApiTestDashboard"));
 
 // Marketplace
 const Marketplace = lazy(() => import("@/features/marketplace/pages/Marketplace"));
@@ -324,6 +325,7 @@ export const AnimatedRoutes = () => {
         <Route path="/resinkra-ai/ideas" element={<AdminRoute><LazyPage><ResinkraAIIdeas /></LazyPage></AdminRoute>} />
         <Route path="/resinkra-ai/templates" element={<AdminRoute><LazyPage><ResinkraAITemplates /></LazyPage></AdminRoute>} />
         <Route path="/resinkra-ai/settings" element={<AdminRoute><LazyPage><ResinkraAISettings /></LazyPage></AdminRoute>} />
+        <Route path="/api-test-dashboard" element={<ProtectedRoute requireAdmin><LazyPage><ApiTestDashboard /></LazyPage></ProtectedRoute>} />
 
         <Route path="*" element={<LazyPage><NotFound /></LazyPage>} />
       </Routes>
