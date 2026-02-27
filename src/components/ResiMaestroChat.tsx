@@ -1,217 +1,314 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Send, Bot, User } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { motion, AnimatePresence } from 'framer-motion';
+// ============================================================
+// 🌿 RESINKRA - Resi Maestro Chat (Global Floating Widget)
+// ============================================================
+
+import { useState, useRef, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Send, X, Bot, User, Sparkles, Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
 
 interface Message {
   id: string;
-  role: 'user' | 'assistant';
+  role: "user" | "assistant";
   content: string;
+  agentName?: string;
+  agentEmoji?: string;
   timestamp: Date;
 }
 
-interface ResiMaestroChatProps {
-  userId: string;
+interface MenuOption {
+  id: string;
+  emoji: string;
+  title: string;
+  description: string;
 }
 
-const EDGE_FUNCTION_URL = 'https://isskzxlwjznrrizwkoxm.supabase.co/functions/v1/resi-maestro';
+const MENU_OPTIONS: MenuOption[] = [
+  { id: "1", emoji: "💬", title: "Dúvidas Gerais", description: "Cashback, indicações, plataforma" },
+  { id: "2", emoji: "📅", title: "Agendamentos", description: "Marcar, remarcar ou cancelar sessões" },
+  { id: "3", emoji: "🎬", title: "Criar Conteúdo", description: "Roteiros e ideias para redes sociais" },
+  { id: "4", emoji: "🛒", title: "Produtos e Pacotes", description: "Comprar óleos, pacotes de sessões" },
+  { id: "5", emoji: "🧘", title: "Bem-estar", description: "Dicas de saúde e relaxamento" },
+];
 
-export function ResiMaestroChat({ userId }: ResiMaestroChatProps) {
+export function ResiMaestroChat() {
+  const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [currentAgent, setCurrentAgent] = useState<string | null>(null);
   const [agentDebug, setAgentDebug] = useState<{ name?: string; emoji?: string; confidence?: number } | null>(null);
-  const scrollRef = useRef<HTMLDivElement>(null);
+  const [showMenu, setShowMenu] = useState(true);
+  const [sessionId] = useState(() => crypto.randomUUID());
+  const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const { user } = useAuth();
 
   useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-    }
-  }, [messages, isLoading]);
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
-  const sendMessage = async (text: string) => {
-    if (!text.trim() || isLoading) return;
+  useEffect(() => {
+    if (isOpen && messages.length === 0) {
+      setMessages([{
+        id: "welcome",
+        role: "assistant",
+        content: "🌿 Olá! Sou a Resi Maestro, sua assistente da Resinkra!\n\nComo posso te ajudar hoje?",
+        timestamp: new Date(),
+      }]);
+      setShowMenu(true);
+    }
+  }, [isOpen]);
+
+  const sendMessage = async (messageText: string) => {
+    if (!messageText.trim() || isLoading) return;
+
+    if (!user) {
+      setMessages(prev => [...prev, {
+        id: crypto.randomUUID(),
+        role: "user",
+        content: messageText.trim(),
+        timestamp: new Date(),
+      }, {
+        id: crypto.randomUUID(),
+        role: "assistant",
+        content: "🔒 Para conversar comigo, você precisa estar logado(a). Crie sua conta ou faça login! 🌿",
+        timestamp: new Date(),
+      }]);
+      setInput("");
+      return;
+    }
 
     const userMsg: Message = {
       id: crypto.randomUUID(),
-      role: 'user',
-      content: text,
+      role: "user",
+      content: messageText.trim(),
       timestamp: new Date(),
     };
 
-    setMessages((prev) => [...prev, userMsg]);
-    setInput('');
+    setMessages(prev => [...prev, userMsg]);
+    setInput("");
     setIsLoading(true);
+    setShowMenu(false);
 
     try {
-      const res = await fetch(EDGE_FUNCTION_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          userId,
-          message: text,
+      const { data, error } = await supabase.functions.invoke("resi-agent-router", {
+        body: {
+          message: messageText.trim(),
+          session_id: sessionId,
           currentAgent,
-          history: messages.map((m) => ({ role: m.role, content: m.content })),
-        }),
+        },
       });
 
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const data = await res.json();
+      if (error) throw error;
 
-      setCurrentAgent(data.currentAgent ?? null);
+      setCurrentAgent(data?.current_agent || null);
       setAgentDebug({
-        name: data.agentName,
-        emoji: data.agentEmoji,
-        confidence: data.confidence ?? (data.currentAgent ? 95 : 0),
+        name: data?.agent_name,
+        emoji: data?.agent_emoji,
+        confidence: data?.confidence ?? (data?.current_agent ? 95 : 0),
       });
+      setShowMenu(data?.show_menu || false);
 
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: crypto.randomUUID(),
-          role: 'assistant',
-          content: data.response ?? data.content ?? 'Sem resposta.',
-          timestamp: new Date(),
-        },
-      ]);
+      setMessages(prev => [...prev, {
+        id: crypto.randomUUID(),
+        role: "assistant",
+        content: data?.response || "Desculpe, tente novamente! 🌿",
+        agentName: data?.agent_name,
+        agentEmoji: data?.agent_emoji,
+        timestamp: new Date(),
+      }]);
     } catch (err) {
-      console.error('ResiMaestro error:', err);
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: crypto.randomUUID(),
-          role: 'assistant',
-          content: '😔 Erro ao conectar com o Maestro. Tente novamente.',
-          timestamp: new Date(),
-        },
-      ]);
+      console.error("ResiMaestro error:", err);
+      setMessages(prev => [...prev, {
+        id: crypto.randomUUID(),
+        role: "assistant",
+        content: "😔 Ops! Tive um probleminha. Pode tentar novamente?",
+        timestamp: new Date(),
+      }]);
     } finally {
       setIsLoading(false);
       inputRef.current?.focus();
     }
   };
 
+  const backToMenu = () => sendMessage("0");
+
   const formatTime = (d: Date) =>
-    d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+    d.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
 
   return (
-    <div className="flex flex-col w-full max-w-2xl mx-auto h-[600px] rounded-2xl overflow-hidden shadow-2xl border border-purple-200/40 bg-gradient-to-br from-purple-950/90 via-purple-900/80 to-pink-900/70">
-      {/* Header */}
-      <div className="flex items-center gap-3 px-5 py-4 bg-gradient-to-r from-purple-700 to-pink-600 shrink-0">
-        <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
-          <Bot size={22} className="text-white" />
-        </div>
-        <div>
-          <h2 className="text-white font-bold text-base leading-tight">Resi Maestro</h2>
-          <span className="text-purple-200 text-xs">Assistente IA</span>
-        </div>
-      </div>
-
-      {/* Agent indicator */}
-      {agentDebug && agentDebug.name && (
-        <div className="px-4 py-1.5 bg-purple-900/50 border-b border-purple-500/20 flex items-center gap-2 text-xs text-purple-200 shrink-0">
-          <span>{agentDebug.emoji || '🤖'} {agentDebug.name}</span>
-          <span className="text-purple-400/60">(confiança: {agentDebug.confidence}%)</span>
-        </div>
-      )}
-
-      {/* Messages */}
-      <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 py-4 space-y-3">
-        {messages.length === 0 && (
-          <p className="text-center text-purple-300/70 text-sm mt-10">
-            Envie uma mensagem para começar 💬
-          </p>
+    <>
+      {/* FAB */}
+      <AnimatePresence>
+        {!isOpen && (
+          <motion.button
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0, opacity: 0 }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => setIsOpen(true)}
+            className="fixed bottom-24 lg:bottom-6 right-4 z-50 w-14 h-14 rounded-full bg-primary text-primary-foreground shadow-lg flex items-center justify-center"
+          >
+            <Bot size={24} />
+            <span className="absolute -top-1 -right-1 w-3 h-3 bg-highlight rounded-full animate-pulse" />
+          </motion.button>
         )}
+      </AnimatePresence>
 
-        <AnimatePresence initial={false}>
-          {messages.map((msg) => {
-            const isUser = msg.role === 'user';
-            return (
-              <motion.div
-                key={msg.id}
-                initial={{ opacity: 0, y: 6 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.15 }}
-                className={`flex ${isUser ? 'justify-end' : 'justify-start'}`}
-              >
-                <div className={`flex items-end gap-2 max-w-[80%] ${isUser ? 'flex-row-reverse' : ''}`}>
-                  <div
-                    className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 ${
-                      isUser
-                        ? 'bg-pink-500/80'
-                        : 'bg-purple-500/80'
-                    }`}
+      {/* Chat window */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: 20, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 20, scale: 0.95 }}
+            transition={{ type: "spring", stiffness: 300, damping: 25 }}
+            className="fixed bottom-24 lg:bottom-6 right-4 z-50 w-80 lg:w-96 h-[520px] bg-background border border-border rounded-2xl shadow-2xl flex flex-col overflow-hidden"
+          >
+            {/* Header */}
+            <div className="p-3 border-b border-border/50 flex items-center gap-2 bg-primary/5">
+              <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center">
+                <Sparkles size={16} className="text-primary" />
+              </div>
+              <div className="flex-1">
+                <p className="text-sm font-semibold text-foreground">Resi Maestro</p>
+                <p className="text-[10px] text-muted-foreground">
+                  {agentDebug?.name
+                    ? `${agentDebug.emoji || "🤖"} ${agentDebug.name}`
+                    : "Assistente Resinkra • Online"}
+                </p>
+              </div>
+              <div className="flex items-center gap-1">
+                {currentAgent && (
+                  <button
+                    onClick={backToMenu}
+                    className="text-[10px] px-2 py-1 rounded-full bg-muted text-muted-foreground hover:bg-muted/80 transition-colors"
                   >
-                    {isUser ? <User size={14} className="text-white" /> : <Bot size={14} className="text-white" />}
+                    Menu
+                  </button>
+                )}
+                <button onClick={() => setIsOpen(false)} className="p-1.5 rounded-lg hover:bg-muted/50 transition-colors">
+                  <X size={16} className="text-muted-foreground" />
+                </button>
+              </div>
+            </div>
+
+            {/* Agent debug indicator */}
+            {agentDebug?.name && (
+              <div className="px-3 py-1 bg-primary/5 border-b border-border/30 flex items-center gap-2 text-[10px] text-muted-foreground shrink-0">
+                <span>{agentDebug.emoji || "🤖"} {agentDebug.name}</span>
+                <span className="opacity-60">(confiança: {agentDebug.confidence}%)</span>
+              </div>
+            )}
+
+            {/* Messages */}
+            <div className="flex-1 overflow-y-auto p-3 space-y-3 scrollbar-none">
+              {messages.map((msg) => (
+                <motion.div
+                  key={msg.id}
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className={`flex gap-2 ${msg.role === "user" ? "flex-row-reverse" : ""}`}
+                >
+                  <div className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 ${
+                    msg.role === "assistant" ? "bg-primary/20" : "bg-muted"
+                  }`}>
+                    {msg.role === "assistant" ? (
+                      msg.agentEmoji ? (
+                        <span className="text-xs">{msg.agentEmoji}</span>
+                      ) : (
+                        <Sparkles size={12} className="text-primary" />
+                      )
+                    ) : (
+                      <User size={12} className="text-muted-foreground" />
+                    )}
                   </div>
-                  <div>
-                    <div
-                      className={`rounded-2xl px-4 py-2.5 text-sm leading-relaxed whitespace-pre-wrap break-words ${
-                        isUser
-                          ? 'bg-gradient-to-br from-pink-500 to-purple-500 text-white rounded-br-sm'
-                          : 'bg-white/10 text-purple-100 border border-purple-400/20 rounded-bl-sm backdrop-blur-sm'
-                      }`}
-                    >
-                      {msg.content}
+                  <div className="max-w-[75%]">
+                    <div className={`px-3 py-2 rounded-2xl text-sm ${
+                      msg.role === "user"
+                        ? "bg-primary text-primary-foreground rounded-tr-sm"
+                        : "bg-muted text-foreground rounded-tl-sm"
+                    }`}>
+                      {msg.role === "assistant" && msg.agentName && (
+                        <div className="text-[10px] font-medium text-primary mb-0.5">
+                          {msg.agentEmoji} {msg.agentName}
+                        </div>
+                      )}
+                      <p className="whitespace-pre-wrap">{msg.content}</p>
                     </div>
-                    <span className={`text-[10px] text-purple-400/60 mt-0.5 block ${isUser ? 'text-right mr-1' : 'ml-1'}`}>
+                    <span className={`text-[9px] text-muted-foreground/50 mt-0.5 block ${msg.role === "user" ? "text-right mr-1" : "ml-1"}`}>
                       {formatTime(msg.timestamp)}
                     </span>
                   </div>
-                </div>
-              </motion.div>
-            );
-          })}
-        </AnimatePresence>
+                </motion.div>
+              ))}
 
-        {isLoading && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex justify-start">
-            <div className="bg-white/10 border border-purple-400/20 rounded-2xl rounded-bl-sm px-4 py-3 backdrop-blur-sm">
-              <div className="flex gap-1.5">
-                {[0, 150, 300].map((delay) => (
-                  <span
-                    key={delay}
-                    className="w-2 h-2 bg-purple-400 rounded-full animate-bounce"
-                    style={{ animationDelay: `${delay}ms` }}
-                  />
-                ))}
-              </div>
+              {/* Menu de opções */}
+              {showMenu && !isLoading && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="space-y-1.5"
+                >
+                  {MENU_OPTIONS.map((option) => (
+                    <button
+                      key={option.id}
+                      onClick={() => sendMessage(option.id)}
+                      className="w-full flex items-center gap-2.5 p-2.5 bg-muted/50 border border-border rounded-xl hover:bg-primary/5 hover:border-primary/30 transition-all text-left group"
+                    >
+                      <span className="text-lg">{option.emoji}</span>
+                      <div>
+                        <div className="text-xs font-medium text-foreground group-hover:text-primary">{option.title}</div>
+                        <div className="text-[10px] text-muted-foreground">{option.description}</div>
+                      </div>
+                    </button>
+                  ))}
+                </motion.div>
+              )}
+
+              {isLoading && (
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex gap-2">
+                  <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center shrink-0">
+                    <Sparkles size={12} className="text-primary" />
+                  </div>
+                  <div className="bg-muted px-3 py-2 rounded-2xl rounded-tl-sm">
+                    <Loader2 size={14} className="animate-spin text-muted-foreground" />
+                  </div>
+                </motion.div>
+              )}
+
+              <div ref={messagesEndRef} />
+            </div>
+
+            {/* Input */}
+            <div className="p-3 border-t border-border/50">
+              <form onSubmit={(e) => { e.preventDefault(); sendMessage(input); }} className="flex gap-2">
+                <Input
+                  ref={inputRef}
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  placeholder="Digite sua mensagem..."
+                  className="rounded-xl text-sm"
+                  maxLength={500}
+                  disabled={isLoading}
+                />
+                <Button type="submit" size="icon" disabled={!input.trim() || isLoading} className="rounded-xl shrink-0">
+                  <Send size={16} />
+                </Button>
+              </form>
+              <p className="text-[9px] text-muted-foreground text-center mt-1.5">
+                Resi Maestro • Digite 0 para voltar ao menu
+              </p>
             </div>
           </motion.div>
         )}
-      </div>
-
-      {/* Input */}
-      <div className="px-4 py-3 bg-purple-950/60 border-t border-purple-500/20 shrink-0">
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            sendMessage(input);
-          }}
-          className="flex gap-2"
-        >
-          <Input
-            ref={inputRef}
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="Digite sua mensagem..."
-            disabled={isLoading}
-            className="flex-1 rounded-full bg-white/10 border-purple-400/30 text-purple-100 placeholder:text-purple-400/50 focus:border-pink-400 focus:ring-pink-400/30 text-sm"
-          />
-          <Button
-            type="submit"
-            disabled={isLoading || !input.trim()}
-            className="rounded-full w-10 h-10 p-0 bg-gradient-to-br from-pink-500 to-purple-600 hover:from-pink-400 hover:to-purple-500 shrink-0"
-          >
-            <Send size={16} className="text-white" />
-          </Button>
-        </form>
-      </div>
-    </div>
+      </AnimatePresence>
+    </>
   );
 }
 

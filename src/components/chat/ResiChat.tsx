@@ -1,5 +1,5 @@
 // ============================================================
-// 🌿 RESINKRA - Componente React do Chat Resi (Multi-agente)
+// 🌿 RESINKRA - Re-export do Resi Maestro Chat (Global)
 // ============================================================
 
-export { ResiChatbot as ResiChat } from "@/components/ResiChatbot";
+export { ResiMaestroChat as ResiChat } from "@/components/ResiMaestroChat";
