@@ -22,6 +22,8 @@ export function ResiMaestroChat({ userId }: ResiMaestroChatProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [currentAgent, setCurrentAgent] = useState<string | null>(null);
+  const [agentDebug, setAgentDebug] = useState<{ name?: string; emoji?: string; confidence?: number } | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -52,12 +54,20 @@ export function ResiMaestroChat({ userId }: ResiMaestroChatProps) {
         body: JSON.stringify({
           userId,
           message: text,
+          currentAgent,
           history: messages.map((m) => ({ role: m.role, content: m.content })),
         }),
       });
 
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
+
+      setCurrentAgent(data.currentAgent ?? null);
+      setAgentDebug({
+        name: data.agentName,
+        emoji: data.agentEmoji,
+        confidence: data.confidence ?? (data.currentAgent ? 95 : 0),
+      });
 
       setMessages((prev) => [
         ...prev,
@@ -100,6 +110,14 @@ export function ResiMaestroChat({ userId }: ResiMaestroChatProps) {
           <span className="text-purple-200 text-xs">Assistente IA</span>
         </div>
       </div>
+
+      {/* Agent indicator */}
+      {agentDebug && agentDebug.name && (
+        <div className="px-4 py-1.5 bg-purple-900/50 border-b border-purple-500/20 flex items-center gap-2 text-xs text-purple-200 shrink-0">
+          <span>{agentDebug.emoji || '🤖'} {agentDebug.name}</span>
+          <span className="text-purple-400/60">(confiança: {agentDebug.confidence}%)</span>
+        </div>
+      )}
 
       {/* Messages */}
       <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 py-4 space-y-3">
